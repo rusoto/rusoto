@@ -106,12 +106,13 @@ pub struct DescribeTunnelResponse {
 /// <p>The destination configuration.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct DestinationConfig {
-    /// <p>A list of service names that identity the target application. Currently, you can only specify a single name. The AWS IoT client running on the destination device reads this value and uses it to look up a port or an IP address and a port. The AWS IoT client instantiates the local proxy which uses this information to connect to the destination application.</p>
+    /// <p>A list of service names that identity the target application. The AWS IoT client running on the destination device reads this value and uses it to look up a port or an IP address and a port. The AWS IoT client instantiates the local proxy which uses this information to connect to the destination application.</p>
     #[serde(rename = "services")]
     pub services: Vec<String>,
     /// <p>The name of the IoT thing to which you want to connect.</p>
     #[serde(rename = "thingName")]
-    pub thing_name: String,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub thing_name: Option<String>,
 }
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
@@ -564,7 +565,7 @@ pub trait IoTSecureTunneling {
         input: ListTunnelsRequest,
     ) -> Result<ListTunnelsResponse, RusotoError<ListTunnelsError>>;
 
-    /// <p>Creates a new tunnel, and returns two client access tokens for clients to use to connect to the AWS IoT Secure Tunneling proxy server. .</p>
+    /// <p>Creates a new tunnel, and returns two client access tokens for clients to use to connect to the AWS IoT Secure Tunneling proxy server.</p>
     async fn open_tunnel(
         &self,
         input: OpenTunnelRequest,
@@ -694,7 +695,7 @@ impl IoTSecureTunneling for IoTSecureTunnelingClient {
         proto::json::ResponsePayload::new(&response).deserialize::<ListTunnelsResponse, _>()
     }
 
-    /// <p>Creates a new tunnel, and returns two client access tokens for clients to use to connect to the AWS IoT Secure Tunneling proxy server. .</p>
+    /// <p>Creates a new tunnel, and returns two client access tokens for clients to use to connect to the AWS IoT Secure Tunneling proxy server.</p>
     async fn open_tunnel(
         &self,
         input: OpenTunnelRequest,

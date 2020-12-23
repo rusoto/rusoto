@@ -25,6 +25,19 @@ use rusoto_core::signature::SignedRequest;
 #[allow(unused_imports)]
 use serde::{Deserialize, Serialize};
 use serde_json;
+/// <p>Specifies a location in AWS.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
+pub struct AWSLocation {
+    /// <p>The Amazon Resource Name (ARN) of the subnet the device is located in.</p>
+    #[serde(rename = "SubnetArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub subnet_arn: Option<String>,
+    /// <p>The Zone the device is located in. This can be the ID of an Availability Zone, Local Zone, Wavelength Zone, or an Outpost.</p>
+    #[serde(rename = "Zone")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub zone: Option<String>,
+}
+
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct AssociateCustomerGatewayRequest {
@@ -75,6 +88,33 @@ pub struct AssociateLinkResponse {
     pub link_association: Option<LinkAssociation>,
 }
 
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct AssociateTransitGatewayConnectPeerRequest {
+    /// <p>The ID of the device.</p>
+    #[serde(rename = "DeviceId")]
+    pub device_id: String,
+    /// <p>The ID of the global network.</p>
+    #[serde(rename = "GlobalNetworkId")]
+    pub global_network_id: String,
+    /// <p>The ID of the link.</p>
+    #[serde(rename = "LinkId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub link_id: Option<String>,
+    /// <p>The Amazon Resource Name (ARN) of the Connect peer.</p>
+    #[serde(rename = "TransitGatewayConnectPeerArn")]
+    pub transit_gateway_connect_peer_arn: String,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct AssociateTransitGatewayConnectPeerResponse {
+    /// <p>The transit gateway Connect peer association.</p>
+    #[serde(rename = "TransitGatewayConnectPeerAssociation")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub transit_gateway_connect_peer_association: Option<TransitGatewayConnectPeerAssociation>,
+}
+
 /// <p>Describes bandwidth information.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct Bandwidth {
@@ -88,9 +128,102 @@ pub struct Bandwidth {
     pub upload_speed: Option<i64>,
 }
 
+/// <p>Describes a connection.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct Connection {
+    /// <p>The ID of the second device in the connection.</p>
+    #[serde(rename = "ConnectedDeviceId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub connected_device_id: Option<String>,
+    /// <p>The ID of the link for the second device in the connection.</p>
+    #[serde(rename = "ConnectedLinkId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub connected_link_id: Option<String>,
+    /// <p>The Amazon Resource Name (ARN) of the connection.</p>
+    #[serde(rename = "ConnectionArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub connection_arn: Option<String>,
+    /// <p>The ID of the connection.</p>
+    #[serde(rename = "ConnectionId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub connection_id: Option<String>,
+    /// <p>The date and time that the connection was created.</p>
+    #[serde(rename = "CreatedAt")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub created_at: Option<f64>,
+    /// <p>The description of the connection.</p>
+    #[serde(rename = "Description")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub description: Option<String>,
+    /// <p>The ID of the first device in the connection.</p>
+    #[serde(rename = "DeviceId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub device_id: Option<String>,
+    /// <p>The ID of the global network.</p>
+    #[serde(rename = "GlobalNetworkId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub global_network_id: Option<String>,
+    /// <p>The ID of the link for the first device in the connection.</p>
+    #[serde(rename = "LinkId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub link_id: Option<String>,
+    /// <p>The state of the connection.</p>
+    #[serde(rename = "State")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub state: Option<String>,
+    /// <p>The tags for the connection.</p>
+    #[serde(rename = "Tags")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub tags: Option<Vec<Tag>>,
+}
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct CreateConnectionRequest {
+    /// <p>The ID of the second device in the connection.</p>
+    #[serde(rename = "ConnectedDeviceId")]
+    pub connected_device_id: String,
+    /// <p>The ID of the link for the second device.</p>
+    #[serde(rename = "ConnectedLinkId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub connected_link_id: Option<String>,
+    /// <p>A description of the connection.</p> <p>Length Constraints: Maximum length of 256 characters.</p>
+    #[serde(rename = "Description")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub description: Option<String>,
+    /// <p>The ID of the first device in the connection.</p>
+    #[serde(rename = "DeviceId")]
+    pub device_id: String,
+    /// <p>The ID of the global network.</p>
+    #[serde(rename = "GlobalNetworkId")]
+    pub global_network_id: String,
+    /// <p>The ID of the link for the first device.</p>
+    #[serde(rename = "LinkId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub link_id: Option<String>,
+    /// <p>The tags to apply to the resource during creation.</p>
+    #[serde(rename = "Tags")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub tags: Option<Vec<Tag>>,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct CreateConnectionResponse {
+    /// <p>Information about the connection.</p>
+    #[serde(rename = "Connection")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub connection: Option<Connection>,
+}
+
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateDeviceRequest {
+    /// <p>The AWS location of the device.</p>
+    #[serde(rename = "AWSLocation")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub aws_location: Option<AWSLocation>,
     /// <p>A description of the device.</p> <p>Length Constraints: Maximum length of 256 characters.</p>
     #[serde(rename = "Description")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -255,6 +388,26 @@ pub struct CustomerGatewayAssociation {
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct DeleteConnectionRequest {
+    /// <p>The ID of the connection.</p>
+    #[serde(rename = "ConnectionId")]
+    pub connection_id: String,
+    /// <p>The ID of the global network.</p>
+    #[serde(rename = "GlobalNetworkId")]
+    pub global_network_id: String,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct DeleteConnectionResponse {
+    /// <p>Information about the connection.</p>
+    #[serde(rename = "Connection")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub connection: Option<Connection>,
+}
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteDeviceRequest {
     /// <p>The ID of the device.</p>
     #[serde(rename = "DeviceId")]
@@ -384,6 +537,10 @@ pub struct DescribeGlobalNetworksResponse {
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct Device {
+    /// <p>The AWS location of the device.</p>
+    #[serde(rename = "AWSLocation")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub aws_location: Option<AWSLocation>,
     /// <p>The date and time that the site was created.</p>
     #[serde(rename = "CreatedAt")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -479,6 +636,63 @@ pub struct DisassociateLinkResponse {
     #[serde(rename = "LinkAssociation")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub link_association: Option<LinkAssociation>,
+}
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct DisassociateTransitGatewayConnectPeerRequest {
+    /// <p>The ID of the global network.</p>
+    #[serde(rename = "GlobalNetworkId")]
+    pub global_network_id: String,
+    /// <p>The Amazon Resource Name (ARN) of the transit gateway Connect peer.</p>
+    #[serde(rename = "TransitGatewayConnectPeerArn")]
+    pub transit_gateway_connect_peer_arn: String,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct DisassociateTransitGatewayConnectPeerResponse {
+    /// <p>The transit gateway Connect peer association.</p>
+    #[serde(rename = "TransitGatewayConnectPeerAssociation")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub transit_gateway_connect_peer_association: Option<TransitGatewayConnectPeerAssociation>,
+}
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct GetConnectionsRequest {
+    /// <p>One or more connection IDs.</p>
+    #[serde(rename = "ConnectionIds")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub connection_ids: Option<Vec<String>>,
+    /// <p>The ID of the device.</p>
+    #[serde(rename = "DeviceId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub device_id: Option<String>,
+    /// <p>The ID of the global network.</p>
+    #[serde(rename = "GlobalNetworkId")]
+    pub global_network_id: String,
+    /// <p>The maximum number of results to return.</p>
+    #[serde(rename = "MaxResults")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub max_results: Option<i64>,
+    /// <p>The token for the next page of results.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct GetConnectionsResponse {
+    /// <p>Information about the connections.</p>
+    #[serde(rename = "Connections")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub connections: Option<Vec<Connection>>,
+    /// <p>The token to use for the next page of results.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
 }
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
@@ -664,6 +878,40 @@ pub struct GetSitesResponse {
     #[serde(rename = "Sites")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub sites: Option<Vec<Site>>,
+}
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct GetTransitGatewayConnectPeerAssociationsRequest {
+    /// <p>The ID of the global network.</p>
+    #[serde(rename = "GlobalNetworkId")]
+    pub global_network_id: String,
+    /// <p>The maximum number of results to return.</p>
+    #[serde(rename = "MaxResults")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub max_results: Option<i64>,
+    /// <p>The token for the next page of results.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+    /// <p>One or more transit gateway Connect peer Amazon Resource Names (ARNs).</p>
+    #[serde(rename = "TransitGatewayConnectPeerArns")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub transit_gateway_connect_peer_arns: Option<Vec<String>>,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct GetTransitGatewayConnectPeerAssociationsResponse {
+    /// <p>The token to use for the next page of results.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+    /// <p>Information about the transit gateway Connect peer associations.</p>
+    #[serde(rename = "TransitGatewayConnectPeerAssociations")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub transit_gateway_connect_peer_associations:
+        Option<Vec<TransitGatewayConnectPeerAssociation>>,
 }
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
@@ -921,6 +1169,32 @@ pub struct TagResourceRequest {
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct TagResourceResponse {}
 
+/// <p>Describes a transit gateway Connect peer association.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct TransitGatewayConnectPeerAssociation {
+    /// <p>The ID of the device.</p>
+    #[serde(rename = "DeviceId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub device_id: Option<String>,
+    /// <p>The ID of the global network.</p>
+    #[serde(rename = "GlobalNetworkId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub global_network_id: Option<String>,
+    /// <p>The ID of the link.</p>
+    #[serde(rename = "LinkId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub link_id: Option<String>,
+    /// <p>The state of the association.</p>
+    #[serde(rename = "State")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub state: Option<String>,
+    /// <p>The Amazon Resource Name (ARN) of the transit gateway Connect peer.</p>
+    #[serde(rename = "TransitGatewayConnectPeerArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub transit_gateway_connect_peer_arn: Option<String>,
+}
+
 /// <p>Describes the registration of a transit gateway to a global network.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
@@ -970,7 +1244,43 @@ pub struct UntagResourceResponse {}
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct UpdateConnectionRequest {
+    /// <p>The ID of the link for the second device in the connection.</p>
+    #[serde(rename = "ConnectedLinkId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub connected_link_id: Option<String>,
+    /// <p>The ID of the connection.</p>
+    #[serde(rename = "ConnectionId")]
+    pub connection_id: String,
+    /// <p>A description of the connection.</p> <p>Length Constraints: Maximum length of 256 characters.</p>
+    #[serde(rename = "Description")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub description: Option<String>,
+    /// <p>The ID of the global network.</p>
+    #[serde(rename = "GlobalNetworkId")]
+    pub global_network_id: String,
+    /// <p>The ID of the link for the first device in the connection.</p>
+    #[serde(rename = "LinkId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub link_id: Option<String>,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct UpdateConnectionResponse {
+    /// <p>Information about the connection.</p>
+    #[serde(rename = "Connection")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub connection: Option<Connection>,
+}
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateDeviceRequest {
+    /// <p>The AWS location of the device.</p>
+    #[serde(rename = "AWSLocation")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub aws_location: Option<AWSLocation>,
     /// <p>A description of the device.</p> <p>Length Constraints: Maximum length of 256 characters.</p>
     #[serde(rename = "Description")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1239,6 +1549,146 @@ impl fmt::Display for AssociateLinkError {
     }
 }
 impl Error for AssociateLinkError {}
+/// Errors returned by AssociateTransitGatewayConnectPeer
+#[derive(Debug, PartialEq)]
+pub enum AssociateTransitGatewayConnectPeerError {
+    /// <p>You do not have sufficient access to perform this action.</p>
+    AccessDenied(String),
+    /// <p>There was a conflict processing the request. Updating or deleting the resource can cause an inconsistent state.</p>
+    Conflict(String),
+    /// <p>The request has failed due to an internal error.</p>
+    InternalServer(String),
+    /// <p>The specified resource could not be found.</p>
+    ResourceNotFound(String),
+    /// <p>A service limit was exceeded.</p>
+    ServiceQuotaExceeded(String),
+    /// <p>The request was denied due to request throttling.</p>
+    Throttling(String),
+}
+
+impl AssociateTransitGatewayConnectPeerError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<AssociateTransitGatewayConnectPeerError> {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
+                "AccessDeniedException" => {
+                    return RusotoError::Service(
+                        AssociateTransitGatewayConnectPeerError::AccessDenied(err.msg),
+                    )
+                }
+                "ConflictException" => {
+                    return RusotoError::Service(AssociateTransitGatewayConnectPeerError::Conflict(
+                        err.msg,
+                    ))
+                }
+                "InternalServerException" => {
+                    return RusotoError::Service(
+                        AssociateTransitGatewayConnectPeerError::InternalServer(err.msg),
+                    )
+                }
+                "ResourceNotFoundException" => {
+                    return RusotoError::Service(
+                        AssociateTransitGatewayConnectPeerError::ResourceNotFound(err.msg),
+                    )
+                }
+                "ServiceQuotaExceededException" => {
+                    return RusotoError::Service(
+                        AssociateTransitGatewayConnectPeerError::ServiceQuotaExceeded(err.msg),
+                    )
+                }
+                "ThrottlingException" => {
+                    return RusotoError::Service(
+                        AssociateTransitGatewayConnectPeerError::Throttling(err.msg),
+                    )
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for AssociateTransitGatewayConnectPeerError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            AssociateTransitGatewayConnectPeerError::AccessDenied(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            AssociateTransitGatewayConnectPeerError::Conflict(ref cause) => write!(f, "{}", cause),
+            AssociateTransitGatewayConnectPeerError::InternalServer(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            AssociateTransitGatewayConnectPeerError::ResourceNotFound(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            AssociateTransitGatewayConnectPeerError::ServiceQuotaExceeded(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            AssociateTransitGatewayConnectPeerError::Throttling(ref cause) => {
+                write!(f, "{}", cause)
+            }
+        }
+    }
+}
+impl Error for AssociateTransitGatewayConnectPeerError {}
+/// Errors returned by CreateConnection
+#[derive(Debug, PartialEq)]
+pub enum CreateConnectionError {
+    /// <p>You do not have sufficient access to perform this action.</p>
+    AccessDenied(String),
+    /// <p>There was a conflict processing the request. Updating or deleting the resource can cause an inconsistent state.</p>
+    Conflict(String),
+    /// <p>The request has failed due to an internal error.</p>
+    InternalServer(String),
+    /// <p>A service limit was exceeded.</p>
+    ServiceQuotaExceeded(String),
+    /// <p>The request was denied due to request throttling.</p>
+    Throttling(String),
+}
+
+impl CreateConnectionError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateConnectionError> {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
+                "AccessDeniedException" => {
+                    return RusotoError::Service(CreateConnectionError::AccessDenied(err.msg))
+                }
+                "ConflictException" => {
+                    return RusotoError::Service(CreateConnectionError::Conflict(err.msg))
+                }
+                "InternalServerException" => {
+                    return RusotoError::Service(CreateConnectionError::InternalServer(err.msg))
+                }
+                "ServiceQuotaExceededException" => {
+                    return RusotoError::Service(CreateConnectionError::ServiceQuotaExceeded(
+                        err.msg,
+                    ))
+                }
+                "ThrottlingException" => {
+                    return RusotoError::Service(CreateConnectionError::Throttling(err.msg))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for CreateConnectionError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            CreateConnectionError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            CreateConnectionError::Conflict(ref cause) => write!(f, "{}", cause),
+            CreateConnectionError::InternalServer(ref cause) => write!(f, "{}", cause),
+            CreateConnectionError::ServiceQuotaExceeded(ref cause) => write!(f, "{}", cause),
+            CreateConnectionError::Throttling(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for CreateConnectionError {}
 /// Errors returned by CreateDevice
 #[derive(Debug, PartialEq)]
 pub enum CreateDeviceError {
@@ -1475,6 +1925,60 @@ impl fmt::Display for CreateSiteError {
     }
 }
 impl Error for CreateSiteError {}
+/// Errors returned by DeleteConnection
+#[derive(Debug, PartialEq)]
+pub enum DeleteConnectionError {
+    /// <p>You do not have sufficient access to perform this action.</p>
+    AccessDenied(String),
+    /// <p>There was a conflict processing the request. Updating or deleting the resource can cause an inconsistent state.</p>
+    Conflict(String),
+    /// <p>The request has failed due to an internal error.</p>
+    InternalServer(String),
+    /// <p>The specified resource could not be found.</p>
+    ResourceNotFound(String),
+    /// <p>The request was denied due to request throttling.</p>
+    Throttling(String),
+}
+
+impl DeleteConnectionError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteConnectionError> {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
+                "AccessDeniedException" => {
+                    return RusotoError::Service(DeleteConnectionError::AccessDenied(err.msg))
+                }
+                "ConflictException" => {
+                    return RusotoError::Service(DeleteConnectionError::Conflict(err.msg))
+                }
+                "InternalServerException" => {
+                    return RusotoError::Service(DeleteConnectionError::InternalServer(err.msg))
+                }
+                "ResourceNotFoundException" => {
+                    return RusotoError::Service(DeleteConnectionError::ResourceNotFound(err.msg))
+                }
+                "ThrottlingException" => {
+                    return RusotoError::Service(DeleteConnectionError::Throttling(err.msg))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for DeleteConnectionError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            DeleteConnectionError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            DeleteConnectionError::Conflict(ref cause) => write!(f, "{}", cause),
+            DeleteConnectionError::InternalServer(ref cause) => write!(f, "{}", cause),
+            DeleteConnectionError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            DeleteConnectionError::Throttling(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for DeleteConnectionError {}
 /// Errors returned by DeleteDevice
 #[derive(Debug, PartialEq)]
 pub enum DeleteDeviceError {
@@ -1925,6 +2429,130 @@ impl fmt::Display for DisassociateLinkError {
     }
 }
 impl Error for DisassociateLinkError {}
+/// Errors returned by DisassociateTransitGatewayConnectPeer
+#[derive(Debug, PartialEq)]
+pub enum DisassociateTransitGatewayConnectPeerError {
+    /// <p>You do not have sufficient access to perform this action.</p>
+    AccessDenied(String),
+    /// <p>There was a conflict processing the request. Updating or deleting the resource can cause an inconsistent state.</p>
+    Conflict(String),
+    /// <p>The request has failed due to an internal error.</p>
+    InternalServer(String),
+    /// <p>The specified resource could not be found.</p>
+    ResourceNotFound(String),
+    /// <p>The request was denied due to request throttling.</p>
+    Throttling(String),
+}
+
+impl DisassociateTransitGatewayConnectPeerError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<DisassociateTransitGatewayConnectPeerError> {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
+                "AccessDeniedException" => {
+                    return RusotoError::Service(
+                        DisassociateTransitGatewayConnectPeerError::AccessDenied(err.msg),
+                    )
+                }
+                "ConflictException" => {
+                    return RusotoError::Service(
+                        DisassociateTransitGatewayConnectPeerError::Conflict(err.msg),
+                    )
+                }
+                "InternalServerException" => {
+                    return RusotoError::Service(
+                        DisassociateTransitGatewayConnectPeerError::InternalServer(err.msg),
+                    )
+                }
+                "ResourceNotFoundException" => {
+                    return RusotoError::Service(
+                        DisassociateTransitGatewayConnectPeerError::ResourceNotFound(err.msg),
+                    )
+                }
+                "ThrottlingException" => {
+                    return RusotoError::Service(
+                        DisassociateTransitGatewayConnectPeerError::Throttling(err.msg),
+                    )
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for DisassociateTransitGatewayConnectPeerError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            DisassociateTransitGatewayConnectPeerError::AccessDenied(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DisassociateTransitGatewayConnectPeerError::Conflict(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DisassociateTransitGatewayConnectPeerError::InternalServer(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DisassociateTransitGatewayConnectPeerError::ResourceNotFound(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DisassociateTransitGatewayConnectPeerError::Throttling(ref cause) => {
+                write!(f, "{}", cause)
+            }
+        }
+    }
+}
+impl Error for DisassociateTransitGatewayConnectPeerError {}
+/// Errors returned by GetConnections
+#[derive(Debug, PartialEq)]
+pub enum GetConnectionsError {
+    /// <p>You do not have sufficient access to perform this action.</p>
+    AccessDenied(String),
+    /// <p>The request has failed due to an internal error.</p>
+    InternalServer(String),
+    /// <p>The specified resource could not be found.</p>
+    ResourceNotFound(String),
+    /// <p>The request was denied due to request throttling.</p>
+    Throttling(String),
+}
+
+impl GetConnectionsError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetConnectionsError> {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
+                "AccessDeniedException" => {
+                    return RusotoError::Service(GetConnectionsError::AccessDenied(err.msg))
+                }
+                "InternalServerException" => {
+                    return RusotoError::Service(GetConnectionsError::InternalServer(err.msg))
+                }
+                "ResourceNotFoundException" => {
+                    return RusotoError::Service(GetConnectionsError::ResourceNotFound(err.msg))
+                }
+                "ThrottlingException" => {
+                    return RusotoError::Service(GetConnectionsError::Throttling(err.msg))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for GetConnectionsError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            GetConnectionsError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            GetConnectionsError::InternalServer(ref cause) => write!(f, "{}", cause),
+            GetConnectionsError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            GetConnectionsError::Throttling(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for GetConnectionsError {}
 /// Errors returned by GetCustomerGatewayAssociations
 #[derive(Debug, PartialEq)]
 pub enum GetCustomerGatewayAssociationsError {
@@ -2189,6 +2817,82 @@ impl fmt::Display for GetSitesError {
     }
 }
 impl Error for GetSitesError {}
+/// Errors returned by GetTransitGatewayConnectPeerAssociations
+#[derive(Debug, PartialEq)]
+pub enum GetTransitGatewayConnectPeerAssociationsError {
+    /// <p>You do not have sufficient access to perform this action.</p>
+    AccessDenied(String),
+    /// <p>There was a conflict processing the request. Updating or deleting the resource can cause an inconsistent state.</p>
+    Conflict(String),
+    /// <p>The request has failed due to an internal error.</p>
+    InternalServer(String),
+    /// <p>The specified resource could not be found.</p>
+    ResourceNotFound(String),
+    /// <p>The request was denied due to request throttling.</p>
+    Throttling(String),
+}
+
+impl GetTransitGatewayConnectPeerAssociationsError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<GetTransitGatewayConnectPeerAssociationsError> {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
+                "AccessDeniedException" => {
+                    return RusotoError::Service(
+                        GetTransitGatewayConnectPeerAssociationsError::AccessDenied(err.msg),
+                    )
+                }
+                "ConflictException" => {
+                    return RusotoError::Service(
+                        GetTransitGatewayConnectPeerAssociationsError::Conflict(err.msg),
+                    )
+                }
+                "InternalServerException" => {
+                    return RusotoError::Service(
+                        GetTransitGatewayConnectPeerAssociationsError::InternalServer(err.msg),
+                    )
+                }
+                "ResourceNotFoundException" => {
+                    return RusotoError::Service(
+                        GetTransitGatewayConnectPeerAssociationsError::ResourceNotFound(err.msg),
+                    )
+                }
+                "ThrottlingException" => {
+                    return RusotoError::Service(
+                        GetTransitGatewayConnectPeerAssociationsError::Throttling(err.msg),
+                    )
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for GetTransitGatewayConnectPeerAssociationsError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            GetTransitGatewayConnectPeerAssociationsError::AccessDenied(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            GetTransitGatewayConnectPeerAssociationsError::Conflict(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            GetTransitGatewayConnectPeerAssociationsError::InternalServer(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            GetTransitGatewayConnectPeerAssociationsError::ResourceNotFound(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            GetTransitGatewayConnectPeerAssociationsError::Throttling(ref cause) => {
+                write!(f, "{}", cause)
+            }
+        }
+    }
+}
+impl Error for GetTransitGatewayConnectPeerAssociationsError {}
 /// Errors returned by GetTransitGatewayRegistrations
 #[derive(Debug, PartialEq)]
 pub enum GetTransitGatewayRegistrationsError {
@@ -2473,6 +3177,60 @@ impl fmt::Display for UntagResourceError {
     }
 }
 impl Error for UntagResourceError {}
+/// Errors returned by UpdateConnection
+#[derive(Debug, PartialEq)]
+pub enum UpdateConnectionError {
+    /// <p>You do not have sufficient access to perform this action.</p>
+    AccessDenied(String),
+    /// <p>There was a conflict processing the request. Updating or deleting the resource can cause an inconsistent state.</p>
+    Conflict(String),
+    /// <p>The request has failed due to an internal error.</p>
+    InternalServer(String),
+    /// <p>The specified resource could not be found.</p>
+    ResourceNotFound(String),
+    /// <p>The request was denied due to request throttling.</p>
+    Throttling(String),
+}
+
+impl UpdateConnectionError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateConnectionError> {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
+                "AccessDeniedException" => {
+                    return RusotoError::Service(UpdateConnectionError::AccessDenied(err.msg))
+                }
+                "ConflictException" => {
+                    return RusotoError::Service(UpdateConnectionError::Conflict(err.msg))
+                }
+                "InternalServerException" => {
+                    return RusotoError::Service(UpdateConnectionError::InternalServer(err.msg))
+                }
+                "ResourceNotFoundException" => {
+                    return RusotoError::Service(UpdateConnectionError::ResourceNotFound(err.msg))
+                }
+                "ThrottlingException" => {
+                    return RusotoError::Service(UpdateConnectionError::Throttling(err.msg))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for UpdateConnectionError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            UpdateConnectionError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            UpdateConnectionError::Conflict(ref cause) => write!(f, "{}", cause),
+            UpdateConnectionError::InternalServer(ref cause) => write!(f, "{}", cause),
+            UpdateConnectionError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            UpdateConnectionError::Throttling(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for UpdateConnectionError {}
 /// Errors returned by UpdateDevice
 #[derive(Debug, PartialEq)]
 pub enum UpdateDeviceError {
@@ -2712,6 +3470,21 @@ pub trait NetworkManager {
         input: AssociateLinkRequest,
     ) -> Result<AssociateLinkResponse, RusotoError<AssociateLinkError>>;
 
+    /// <p>Associates a transit gateway Connect peer with a device, and optionally, with a link. If you specify a link, it must be associated with the specified device. </p> <p>You can only associate transit gateway Connect peers that have been created on a transit gateway that's registered in your global network.</p> <p>You cannot associate a transit gateway Connect peer with more than one device and link. </p>
+    async fn associate_transit_gateway_connect_peer(
+        &self,
+        input: AssociateTransitGatewayConnectPeerRequest,
+    ) -> Result<
+        AssociateTransitGatewayConnectPeerResponse,
+        RusotoError<AssociateTransitGatewayConnectPeerError>,
+    >;
+
+    /// <p>Creates a connection between two devices. The devices can be a physical or virtual appliance that connects to a third-party appliance in a VPC, or a physical appliance that connects to another physical appliance in an on-premises network.</p>
+    async fn create_connection(
+        &self,
+        input: CreateConnectionRequest,
+    ) -> Result<CreateConnectionResponse, RusotoError<CreateConnectionError>>;
+
     /// <p>Creates a new device in a global network. If you specify both a site ID and a location, the location of the site is used for visualization in the Network Manager console.</p>
     async fn create_device(
         &self,
@@ -2735,6 +3508,12 @@ pub trait NetworkManager {
         &self,
         input: CreateSiteRequest,
     ) -> Result<CreateSiteResponse, RusotoError<CreateSiteError>>;
+
+    /// <p>Deletes the specified connection in your global network.</p>
+    async fn delete_connection(
+        &self,
+        input: DeleteConnectionRequest,
+    ) -> Result<DeleteConnectionResponse, RusotoError<DeleteConnectionError>>;
 
     /// <p>Deletes an existing device. You must first disassociate the device from any links and customer gateways.</p>
     async fn delete_device(
@@ -2784,6 +3563,21 @@ pub trait NetworkManager {
         input: DisassociateLinkRequest,
     ) -> Result<DisassociateLinkResponse, RusotoError<DisassociateLinkError>>;
 
+    /// <p>Disassociates a transit gateway Connect peer from a device and link.</p>
+    async fn disassociate_transit_gateway_connect_peer(
+        &self,
+        input: DisassociateTransitGatewayConnectPeerRequest,
+    ) -> Result<
+        DisassociateTransitGatewayConnectPeerResponse,
+        RusotoError<DisassociateTransitGatewayConnectPeerError>,
+    >;
+
+    /// <p>Gets information about one or more of your connections in a global network.</p>
+    async fn get_connections(
+        &self,
+        input: GetConnectionsRequest,
+    ) -> Result<GetConnectionsResponse, RusotoError<GetConnectionsError>>;
+
     /// <p>Gets the association information for customer gateways that are associated with devices and links in your global network.</p>
     async fn get_customer_gateway_associations(
         &self,
@@ -2817,6 +3611,15 @@ pub trait NetworkManager {
         input: GetSitesRequest,
     ) -> Result<GetSitesResponse, RusotoError<GetSitesError>>;
 
+    /// <p>Gets information about one or more of your transit gateway Connect peer associations in a global network.</p>
+    async fn get_transit_gateway_connect_peer_associations(
+        &self,
+        input: GetTransitGatewayConnectPeerAssociationsRequest,
+    ) -> Result<
+        GetTransitGatewayConnectPeerAssociationsResponse,
+        RusotoError<GetTransitGatewayConnectPeerAssociationsError>,
+    >;
+
     /// <p>Gets information about the transit gateway registrations in a specified global network.</p>
     async fn get_transit_gateway_registrations(
         &self,
@@ -2849,6 +3652,12 @@ pub trait NetworkManager {
         &self,
         input: UntagResourceRequest,
     ) -> Result<UntagResourceResponse, RusotoError<UntagResourceError>>;
+
+    /// <p>Updates the information for an existing connection. To remove information for any of the parameters, specify an empty string.</p>
+    async fn update_connection(
+        &self,
+        input: UpdateConnectionRequest,
+    ) -> Result<UpdateConnectionResponse, RusotoError<UpdateConnectionError>>;
 
     /// <p>Updates the details for an existing device. To remove information for any of the parameters, specify an empty string.</p>
     async fn update_device(
@@ -2982,6 +3791,79 @@ impl NetworkManager for NetworkManagerClient {
         }
     }
 
+    /// <p>Associates a transit gateway Connect peer with a device, and optionally, with a link. If you specify a link, it must be associated with the specified device. </p> <p>You can only associate transit gateway Connect peers that have been created on a transit gateway that's registered in your global network.</p> <p>You cannot associate a transit gateway Connect peer with more than one device and link. </p>
+    #[allow(unused_mut)]
+    async fn associate_transit_gateway_connect_peer(
+        &self,
+        input: AssociateTransitGatewayConnectPeerRequest,
+    ) -> Result<
+        AssociateTransitGatewayConnectPeerResponse,
+        RusotoError<AssociateTransitGatewayConnectPeerError>,
+    > {
+        let request_uri = format!(
+            "/global-networks/{global_network_id}/transit-gateway-connect-peer-associations",
+            global_network_id = input.global_network_id
+        );
+
+        let mut request = SignedRequest::new("POST", "networkmanager", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        request.set_payload(encoded);
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<AssociateTransitGatewayConnectPeerResponse, _>()?;
+
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(AssociateTransitGatewayConnectPeerError::from_response(
+                response,
+            ))
+        }
+    }
+
+    /// <p>Creates a connection between two devices. The devices can be a physical or virtual appliance that connects to a third-party appliance in a VPC, or a physical appliance that connects to another physical appliance in an on-premises network.</p>
+    #[allow(unused_mut)]
+    async fn create_connection(
+        &self,
+        input: CreateConnectionRequest,
+    ) -> Result<CreateConnectionResponse, RusotoError<CreateConnectionError>> {
+        let request_uri = format!(
+            "/global-networks/{global_network_id}/connections",
+            global_network_id = input.global_network_id
+        );
+
+        let mut request = SignedRequest::new("POST", "networkmanager", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        request.set_payload(encoded);
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<CreateConnectionResponse, _>()?;
+
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(CreateConnectionError::from_response(response))
+        }
+    }
+
     /// <p>Creates a new device in a global network. If you specify both a site ID and a location, the location of the site is used for visualization in the Network Manager console.</p>
     #[allow(unused_mut)]
     async fn create_device(
@@ -3112,6 +3994,39 @@ impl NetworkManager for NetworkManagerClient {
         } else {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             Err(CreateSiteError::from_response(response))
+        }
+    }
+
+    /// <p>Deletes the specified connection in your global network.</p>
+    #[allow(unused_mut)]
+    async fn delete_connection(
+        &self,
+        input: DeleteConnectionRequest,
+    ) -> Result<DeleteConnectionResponse, RusotoError<DeleteConnectionError>> {
+        let request_uri = format!(
+            "/global-networks/{global_network_id}/connections/{connection_id}",
+            connection_id = input.connection_id,
+            global_network_id = input.global_network_id
+        );
+
+        let mut request =
+            SignedRequest::new("DELETE", "networkmanager", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<DeleteConnectionResponse, _>()?;
+
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(DeleteConnectionError::from_response(response))
         }
     }
 
@@ -3384,6 +4299,88 @@ impl NetworkManager for NetworkManagerClient {
         }
     }
 
+    /// <p>Disassociates a transit gateway Connect peer from a device and link.</p>
+    #[allow(unused_mut)]
+    async fn disassociate_transit_gateway_connect_peer(
+        &self,
+        input: DisassociateTransitGatewayConnectPeerRequest,
+    ) -> Result<
+        DisassociateTransitGatewayConnectPeerResponse,
+        RusotoError<DisassociateTransitGatewayConnectPeerError>,
+    > {
+        let request_uri = format!("/global-networks/{global_network_id}/transit-gateway-connect-peer-associations/{transit_gateway_connect_peer_arn}", global_network_id = input.global_network_id, transit_gateway_connect_peer_arn = input.transit_gateway_connect_peer_arn);
+
+        let mut request =
+            SignedRequest::new("DELETE", "networkmanager", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<DisassociateTransitGatewayConnectPeerResponse, _>()?;
+
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(DisassociateTransitGatewayConnectPeerError::from_response(
+                response,
+            ))
+        }
+    }
+
+    /// <p>Gets information about one or more of your connections in a global network.</p>
+    #[allow(unused_mut)]
+    async fn get_connections(
+        &self,
+        input: GetConnectionsRequest,
+    ) -> Result<GetConnectionsResponse, RusotoError<GetConnectionsError>> {
+        let request_uri = format!(
+            "/global-networks/{global_network_id}/connections",
+            global_network_id = input.global_network_id
+        );
+
+        let mut request = SignedRequest::new("GET", "networkmanager", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        let mut params = Params::new();
+        if let Some(ref x) = input.connection_ids {
+            for item in x.iter() {
+                params.put("connectionIds", item);
+            }
+        }
+        if let Some(ref x) = input.device_id {
+            params.put("deviceId", x);
+        }
+        if let Some(ref x) = input.max_results {
+            params.put("maxResults", x);
+        }
+        if let Some(ref x) = input.next_token {
+            params.put("nextToken", x);
+        }
+        request.set_params(params);
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<GetConnectionsResponse, _>()?;
+
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(GetConnectionsError::from_response(response))
+        }
+    }
+
     /// <p>Gets the association information for customer gateways that are associated with devices and links in your global network.</p>
     #[allow(unused_mut)]
     async fn get_customer_gateway_associations(
@@ -3625,6 +4622,54 @@ impl NetworkManager for NetworkManagerClient {
         }
     }
 
+    /// <p>Gets information about one or more of your transit gateway Connect peer associations in a global network.</p>
+    #[allow(unused_mut)]
+    async fn get_transit_gateway_connect_peer_associations(
+        &self,
+        input: GetTransitGatewayConnectPeerAssociationsRequest,
+    ) -> Result<
+        GetTransitGatewayConnectPeerAssociationsResponse,
+        RusotoError<GetTransitGatewayConnectPeerAssociationsError>,
+    > {
+        let request_uri = format!(
+            "/global-networks/{global_network_id}/transit-gateway-connect-peer-associations",
+            global_network_id = input.global_network_id
+        );
+
+        let mut request = SignedRequest::new("GET", "networkmanager", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        let mut params = Params::new();
+        if let Some(ref x) = input.max_results {
+            params.put("maxResults", x);
+        }
+        if let Some(ref x) = input.next_token {
+            params.put("nextToken", x);
+        }
+        if let Some(ref x) = input.transit_gateway_connect_peer_arns {
+            for item in x.iter() {
+                params.put("transitGatewayConnectPeerArns", item);
+            }
+        }
+        request.set_params(params);
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<GetTransitGatewayConnectPeerAssociationsResponse, _>()?;
+
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(GetTransitGatewayConnectPeerAssociationsError::from_response(response))
+        }
+    }
+
     /// <p>Gets information about the transit gateway registrations in a specified global network.</p>
     #[allow(unused_mut)]
     async fn get_transit_gateway_registrations(
@@ -3798,6 +4843,41 @@ impl NetworkManager for NetworkManagerClient {
         } else {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             Err(UntagResourceError::from_response(response))
+        }
+    }
+
+    /// <p>Updates the information for an existing connection. To remove information for any of the parameters, specify an empty string.</p>
+    #[allow(unused_mut)]
+    async fn update_connection(
+        &self,
+        input: UpdateConnectionRequest,
+    ) -> Result<UpdateConnectionResponse, RusotoError<UpdateConnectionError>> {
+        let request_uri = format!(
+            "/global-networks/{global_network_id}/connections/{connection_id}",
+            connection_id = input.connection_id,
+            global_network_id = input.global_network_id
+        );
+
+        let mut request = SignedRequest::new("PATCH", "networkmanager", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        request.set_payload(encoded);
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<UpdateConnectionResponse, _>()?;
+
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(UpdateConnectionError::from_response(response))
         }
     }
 

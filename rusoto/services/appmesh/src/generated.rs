@@ -34,27 +34,21 @@ pub struct AccessLog {
     pub file: Option<FileAccessLog>,
 }
 
-/// <p>An object that represents the AWS Cloud Map attribute information for your virtual
-/// node.</p>
+/// <p><p>An object that represents the AWS Cloud Map attribute information for your virtual node.</p> <note> <p>AWS Cloud Map is not available in the eu-south-1 Region.</p> </note></p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct AwsCloudMapInstanceAttribute {
-    /// <p>The name of an AWS Cloud Map service instance attribute key. Any AWS Cloud Map service
-    /// instance that contains the specified key and value is returned.</p>
+    /// <p>The name of an AWS Cloud Map service instance attribute key. Any AWS Cloud Map service instance that contains the specified key and value is returned.</p>
     #[serde(rename = "key")]
     pub key: String,
-    /// <p>The value of an AWS Cloud Map service instance attribute key. Any AWS Cloud Map service
-    /// instance that contains the specified key and value is returned.</p>
+    /// <p>The value of an AWS Cloud Map service instance attribute key. Any AWS Cloud Map service instance that contains the specified key and value is returned.</p>
     #[serde(rename = "value")]
     pub value: String,
 }
 
-/// <p>An object that represents the AWS Cloud Map service discovery information for your virtual
-/// node.</p>
+/// <p><p>An object that represents the AWS Cloud Map service discovery information for your virtual node.</p> <note> <p>AWS Cloud Map is not available in the eu-south-1 Region.</p> </note></p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct AwsCloudMapServiceDiscovery {
-    /// <p>A string map that contains attributes with values that you can use to filter instances
-    /// by any custom attribute that you specified when you registered the instance. Only instances
-    /// that match all of the specified key/value pairs will be returned.</p>
+    /// <p>A string map that contains attributes with values that you can use to filter instances by any custom attribute that you specified when you registered the instance. Only instances that match all of the specified key/value pairs will be returned.</p>
     #[serde(rename = "attributes")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub attributes: Option<Vec<AwsCloudMapInstanceAttribute>>,
@@ -66,11 +60,10 @@ pub struct AwsCloudMapServiceDiscovery {
     pub service_name: String,
 }
 
-/// <p>An object that represents the backends that a virtual node is expected to send outbound
-/// traffic to. </p>
+/// <p>An object that represents the backends that a virtual node is expected to send outbound traffic to.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct Backend {
-    /// <p>Specifies a virtual service to use as a backend for a virtual node. </p>
+    /// <p>Specifies a virtual service to use as a backend. </p>
     #[serde(rename = "virtualService")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub virtual_service: Option<VirtualServiceBackend>,
@@ -94,11 +87,10 @@ pub struct ClientPolicy {
     pub tls: Option<ClientPolicyTls>,
 }
 
-/// <p>An object that represents a Transport Layer Security (TLS) client policy.</p>
+/// <p>A reference to an object that represents a Transport Layer Security (TLS) client policy.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct ClientPolicyTls {
-    /// <p>Whether the policy is enforced. The default is <code>True</code>, if a value isn't
-    /// specified.</p>
+    /// <p>Whether the policy is enforced. The default is <code>True</code>, if a value isn't specified.</p>
     #[serde(rename = "enforce")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub enforce: Option<bool>,
@@ -114,8 +106,7 @@ pub struct ClientPolicyTls {
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateGatewayRouteInput {
-    /// <p>Unique, case-sensitive identifier that you provide to ensure the idempotency of the
-    /// request. Up to 36 letters, numbers, hyphens, and underscores are allowed.</p>
+    /// <p>Unique, case-sensitive identifier that you provide to ensure the idempotency of the request. Up to 36 letters, numbers, hyphens, and underscores are allowed.</p>
     #[serde(rename = "clientToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub client_token: Option<String>,
@@ -125,25 +116,18 @@ pub struct CreateGatewayRouteInput {
     /// <p>The name of the service mesh to create the gateway route in.</p>
     #[serde(rename = "meshName")]
     pub mesh_name: String,
-    /// <p>The AWS IAM account ID of the service mesh owner. If the account ID is not your own, then
-    /// the account that you specify must share the mesh with your account before you can create
-    /// the resource in the service mesh. For more information about mesh sharing, see <a href="https://docs.aws.amazon.com/app-mesh/latest/userguide/sharing.html">Working with shared meshes</a>.</p>
+    /// <p>The AWS IAM account ID of the service mesh owner. If the account ID is not your own, then the account that you specify must share the mesh with your account before you can create the resource in the service mesh. For more information about mesh sharing, see <a href="https://docs.aws.amazon.com/app-mesh/latest/userguide/sharing.html">Working with shared meshes</a>.</p>
     #[serde(rename = "meshOwner")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub mesh_owner: Option<String>,
     /// <p>The gateway route specification to apply.</p>
     #[serde(rename = "spec")]
     pub spec: GatewayRouteSpec,
-    /// <p>Optional metadata that you can apply to the gateway route to assist with categorization
-    /// and organization. Each tag consists of a key and an optional value, both of which you
-    /// define. Tag keys can have a maximum character length of 128 characters, and tag values can have
-    /// a maximum length of 256 characters.</p>
+    /// <p>Optional metadata that you can apply to the gateway route to assist with categorization and organization. Each tag consists of a key and an optional value, both of which you define. Tag keys can have a maximum character length of 128 characters, and tag values can have a maximum length of 256 characters.</p>
     #[serde(rename = "tags")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub tags: Option<Vec<TagRef>>,
-    /// <p>The name of the virtual gateway to associate the gateway route with. If the virtual
-    /// gateway is in a shared mesh, then you must be the owner of the virtual gateway
-    /// resource.</p>
+    /// <p>The name of the virtual gateway to associate the gateway route with. If the virtual gateway is in a shared mesh, then you must be the owner of the virtual gateway resource.</p>
     #[serde(rename = "virtualGatewayName")]
     pub virtual_gateway_name: String,
 }
@@ -156,11 +140,11 @@ pub struct CreateGatewayRouteOutput {
     pub gateway_route: GatewayRouteData,
 }
 
+/// <p><zonbook></zonbook><xhtml></xhtml></p>
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateMeshInput {
-    /// <p>Unique, case-sensitive identifier that you provide to ensure the idempotency of the
-    /// request. Up to 36 letters, numbers, hyphens, and underscores are allowed.</p>
+    /// <p>Unique, case-sensitive identifier that you provide to ensure the idempotency of the request. Up to 36 letters, numbers, hyphens, and underscores are allowed.</p>
     #[serde(rename = "clientToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub client_token: Option<String>,
@@ -171,15 +155,13 @@ pub struct CreateMeshInput {
     #[serde(rename = "spec")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub spec: Option<MeshSpec>,
-    /// <p>Optional metadata that you can apply to the service mesh to assist with categorization
-    /// and organization. Each tag consists of a key and an optional value, both of which you
-    /// define. Tag keys can have a maximum character length of 128 characters, and tag values can have
-    /// a maximum length of 256 characters.</p>
+    /// <p>Optional metadata that you can apply to the service mesh to assist with categorization and organization. Each tag consists of a key and an optional value, both of which you define. Tag keys can have a maximum character length of 128 characters, and tag values can have a maximum length of 256 characters.</p>
     #[serde(rename = "tags")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub tags: Option<Vec<TagRef>>,
 }
 
+/// <p><zonbook></zonbook><xhtml></xhtml></p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateMeshOutput {
@@ -188,20 +170,18 @@ pub struct CreateMeshOutput {
     pub mesh: MeshData,
 }
 
+/// <p><zonbook></zonbook><xhtml></xhtml></p>
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateRouteInput {
-    /// <p>Unique, case-sensitive identifier that you provide to ensure the idempotency of the
-    /// request. Up to 36 letters, numbers, hyphens, and underscores are allowed.</p>
+    /// <p>Unique, case-sensitive identifier that you provide to ensure the idempotency of the request. Up to 36 letters, numbers, hyphens, and underscores are allowed.</p>
     #[serde(rename = "clientToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub client_token: Option<String>,
     /// <p>The name of the service mesh to create the route in.</p>
     #[serde(rename = "meshName")]
     pub mesh_name: String,
-    /// <p>The AWS IAM account ID of the service mesh owner. If the account ID is not your own, then
-    /// the account that you specify must share the mesh with your account before you can create
-    /// the resource in the service mesh. For more information about mesh sharing, see <a href="https://docs.aws.amazon.com/app-mesh/latest/userguide/sharing.html">Working with shared meshes</a>.</p>
+    /// <p>The AWS IAM account ID of the service mesh owner. If the account ID is not your own, then the account that you specify must share the mesh with your account before you can create the resource in the service mesh. For more information about mesh sharing, see <a href="https://docs.aws.amazon.com/app-mesh/latest/userguide/sharing.html">Working with shared meshes</a>.</p>
     #[serde(rename = "meshOwner")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub mesh_owner: Option<String>,
@@ -211,19 +191,16 @@ pub struct CreateRouteInput {
     /// <p>The route specification to apply.</p>
     #[serde(rename = "spec")]
     pub spec: RouteSpec,
-    /// <p>Optional metadata that you can apply to the route to assist with categorization and
-    /// organization. Each tag consists of a key and an optional value, both of which you define.
-    /// Tag keys can have a maximum character length of 128 characters, and tag values can have
-    /// a maximum length of 256 characters.</p>
+    /// <p>Optional metadata that you can apply to the route to assist with categorization and organization. Each tag consists of a key and an optional value, both of which you define. Tag keys can have a maximum character length of 128 characters, and tag values can have a maximum length of 256 characters.</p>
     #[serde(rename = "tags")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub tags: Option<Vec<TagRef>>,
-    /// <p>The name of the virtual router in which to create the route. If the virtual router is in
-    /// a shared mesh, then you must be the owner of the virtual router resource.</p>
+    /// <p>The name of the virtual router in which to create the route. If the virtual router is in a shared mesh, then you must be the owner of the virtual router resource.</p>
     #[serde(rename = "virtualRouterName")]
     pub virtual_router_name: String,
 }
 
+/// <p><zonbook></zonbook><xhtml></xhtml></p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateRouteOutput {
@@ -235,27 +212,21 @@ pub struct CreateRouteOutput {
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateVirtualGatewayInput {
-    /// <p>Unique, case-sensitive identifier that you provide to ensure the idempotency of the
-    /// request. Up to 36 letters, numbers, hyphens, and underscores are allowed.</p>
+    /// <p>Unique, case-sensitive identifier that you provide to ensure the idempotency of the request. Up to 36 letters, numbers, hyphens, and underscores are allowed.</p>
     #[serde(rename = "clientToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub client_token: Option<String>,
     /// <p>The name of the service mesh to create the virtual gateway in.</p>
     #[serde(rename = "meshName")]
     pub mesh_name: String,
-    /// <p>The AWS IAM account ID of the service mesh owner. If the account ID is not your own, then
-    /// the account that you specify must share the mesh with your account before you can create
-    /// the resource in the service mesh. For more information about mesh sharing, see <a href="https://docs.aws.amazon.com/app-mesh/latest/userguide/sharing.html">Working with shared meshes</a>.</p>
+    /// <p>The AWS IAM account ID of the service mesh owner. If the account ID is not your own, then the account that you specify must share the mesh with your account before you can create the resource in the service mesh. For more information about mesh sharing, see <a href="https://docs.aws.amazon.com/app-mesh/latest/userguide/sharing.html">Working with shared meshes</a>.</p>
     #[serde(rename = "meshOwner")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub mesh_owner: Option<String>,
     /// <p>The virtual gateway specification to apply.</p>
     #[serde(rename = "spec")]
     pub spec: VirtualGatewaySpec,
-    /// <p>Optional metadata that you can apply to the virtual gateway to assist with
-    /// categorization and organization. Each tag consists of a key and an optional value, both of
-    /// which you define. Tag keys can have a maximum character length of 128 characters, and tag values can have
-    /// a maximum length of 256 characters.</p>
+    /// <p>Optional metadata that you can apply to the virtual gateway to assist with categorization and organization. Each tag consists of a key and an optional value, both of which you define. Tag keys can have a maximum character length of 128 characters, and tag values can have a maximum length of 256 characters.</p>
     #[serde(rename = "tags")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub tags: Option<Vec<TagRef>>,
@@ -272,30 +243,25 @@ pub struct CreateVirtualGatewayOutput {
     pub virtual_gateway: VirtualGatewayData,
 }
 
+/// <p><zonbook></zonbook><xhtml></xhtml></p>
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateVirtualNodeInput {
-    /// <p>Unique, case-sensitive identifier that you provide to ensure the idempotency of the
-    /// request. Up to 36 letters, numbers, hyphens, and underscores are allowed.</p>
+    /// <p>Unique, case-sensitive identifier that you provide to ensure the idempotency of the request. Up to 36 letters, numbers, hyphens, and underscores are allowed.</p>
     #[serde(rename = "clientToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub client_token: Option<String>,
     /// <p>The name of the service mesh to create the virtual node in.</p>
     #[serde(rename = "meshName")]
     pub mesh_name: String,
-    /// <p>The AWS IAM account ID of the service mesh owner. If the account ID is not your own, then
-    /// the account that you specify must share the mesh with your account before you can create
-    /// the resource in the service mesh. For more information about mesh sharing, see <a href="https://docs.aws.amazon.com/app-mesh/latest/userguide/sharing.html">Working with shared meshes</a>.</p>
+    /// <p>The AWS IAM account ID of the service mesh owner. If the account ID is not your own, then the account that you specify must share the mesh with your account before you can create the resource in the service mesh. For more information about mesh sharing, see <a href="https://docs.aws.amazon.com/app-mesh/latest/userguide/sharing.html">Working with shared meshes</a>.</p>
     #[serde(rename = "meshOwner")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub mesh_owner: Option<String>,
     /// <p>The virtual node specification to apply.</p>
     #[serde(rename = "spec")]
     pub spec: VirtualNodeSpec,
-    /// <p>Optional metadata that you can apply to the virtual node to assist with categorization
-    /// and organization. Each tag consists of a key and an optional value, both of which you
-    /// define. Tag keys can have a maximum character length of 128 characters, and tag values can have
-    /// a maximum length of 256 characters.</p>
+    /// <p>Optional metadata that you can apply to the virtual node to assist with categorization and organization. Each tag consists of a key and an optional value, both of which you define. Tag keys can have a maximum character length of 128 characters, and tag values can have a maximum length of 256 characters.</p>
     #[serde(rename = "tags")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub tags: Option<Vec<TagRef>>,
@@ -304,6 +270,7 @@ pub struct CreateVirtualNodeInput {
     pub virtual_node_name: String,
 }
 
+/// <p><zonbook></zonbook><xhtml></xhtml></p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateVirtualNodeOutput {
@@ -312,30 +279,25 @@ pub struct CreateVirtualNodeOutput {
     pub virtual_node: VirtualNodeData,
 }
 
+/// <p><zonbook></zonbook><xhtml></xhtml></p>
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateVirtualRouterInput {
-    /// <p>Unique, case-sensitive identifier that you provide to ensure the idempotency of the
-    /// request. Up to 36 letters, numbers, hyphens, and underscores are allowed.</p>
+    /// <p>Unique, case-sensitive identifier that you provide to ensure the idempotency of the request. Up to 36 letters, numbers, hyphens, and underscores are allowed.</p>
     #[serde(rename = "clientToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub client_token: Option<String>,
     /// <p>The name of the service mesh to create the virtual router in.</p>
     #[serde(rename = "meshName")]
     pub mesh_name: String,
-    /// <p>The AWS IAM account ID of the service mesh owner. If the account ID is not your own, then
-    /// the account that you specify must share the mesh with your account before you can create
-    /// the resource in the service mesh. For more information about mesh sharing, see <a href="https://docs.aws.amazon.com/app-mesh/latest/userguide/sharing.html">Working with shared meshes</a>.</p>
+    /// <p>The AWS IAM account ID of the service mesh owner. If the account ID is not your own, then the account that you specify must share the mesh with your account before you can create the resource in the service mesh. For more information about mesh sharing, see <a href="https://docs.aws.amazon.com/app-mesh/latest/userguide/sharing.html">Working with shared meshes</a>.</p>
     #[serde(rename = "meshOwner")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub mesh_owner: Option<String>,
     /// <p>The virtual router specification to apply.</p>
     #[serde(rename = "spec")]
     pub spec: VirtualRouterSpec,
-    /// <p>Optional metadata that you can apply to the virtual router to assist with categorization
-    /// and organization. Each tag consists of a key and an optional value, both of which you
-    /// define. Tag keys can have a maximum character length of 128 characters, and tag values can have
-    /// a maximum length of 256 characters.</p>
+    /// <p>Optional metadata that you can apply to the virtual router to assist with categorization and organization. Each tag consists of a key and an optional value, both of which you define. Tag keys can have a maximum character length of 128 characters, and tag values can have a maximum length of 256 characters.</p>
     #[serde(rename = "tags")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub tags: Option<Vec<TagRef>>,
@@ -344,6 +306,7 @@ pub struct CreateVirtualRouterInput {
     pub virtual_router_name: String,
 }
 
+/// <p><zonbook></zonbook><xhtml></xhtml></p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateVirtualRouterOutput {
@@ -352,30 +315,25 @@ pub struct CreateVirtualRouterOutput {
     pub virtual_router: VirtualRouterData,
 }
 
+/// <p><zonbook></zonbook><xhtml></xhtml></p>
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateVirtualServiceInput {
-    /// <p>Unique, case-sensitive identifier that you provide to ensure the idempotency of the
-    /// request. Up to 36 letters, numbers, hyphens, and underscores are allowed.</p>
+    /// <p>Unique, case-sensitive identifier that you provide to ensure the idempotency of the request. Up to 36 letters, numbers, hyphens, and underscores are allowed.</p>
     #[serde(rename = "clientToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub client_token: Option<String>,
     /// <p>The name of the service mesh to create the virtual service in.</p>
     #[serde(rename = "meshName")]
     pub mesh_name: String,
-    /// <p>The AWS IAM account ID of the service mesh owner. If the account ID is not your own, then
-    /// the account that you specify must share the mesh with your account before you can create
-    /// the resource in the service mesh. For more information about mesh sharing, see <a href="https://docs.aws.amazon.com/app-mesh/latest/userguide/sharing.html">Working with shared meshes</a>.</p>
+    /// <p>The AWS IAM account ID of the service mesh owner. If the account ID is not your own, then the account that you specify must share the mesh with your account before you can create the resource in the service mesh. For more information about mesh sharing, see <a href="https://docs.aws.amazon.com/app-mesh/latest/userguide/sharing.html">Working with shared meshes</a>.</p>
     #[serde(rename = "meshOwner")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub mesh_owner: Option<String>,
     /// <p>The virtual service specification to apply.</p>
     #[serde(rename = "spec")]
     pub spec: VirtualServiceSpec,
-    /// <p>Optional metadata that you can apply to the virtual service to assist with
-    /// categorization and organization. Each tag consists of a key and an optional value, both of
-    /// which you define. Tag keys can have a maximum character length of 128 characters, and tag values can have
-    /// a maximum length of 256 characters.</p>
+    /// <p>Optional metadata that you can apply to the virtual service to assist with categorization and organization. Each tag consists of a key and an optional value, both of which you define. Tag keys can have a maximum character length of 128 characters, and tag values can have a maximum length of 256 characters.</p>
     #[serde(rename = "tags")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub tags: Option<Vec<TagRef>>,
@@ -384,6 +342,7 @@ pub struct CreateVirtualServiceInput {
     pub virtual_service_name: String,
 }
 
+/// <p><zonbook></zonbook><xhtml></xhtml></p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateVirtualServiceOutput {
@@ -401,8 +360,7 @@ pub struct DeleteGatewayRouteInput {
     /// <p>The name of the service mesh to delete the gateway route from.</p>
     #[serde(rename = "meshName")]
     pub mesh_name: String,
-    /// <p>The AWS IAM account ID of the service mesh owner. If the account ID is not your own, then it's
-    /// the ID of the account that shared the mesh with your account. For more information about mesh sharing, see <a href="https://docs.aws.amazon.com/app-mesh/latest/userguide/sharing.html">Working with shared meshes</a>.</p>
+    /// <p>The AWS IAM account ID of the service mesh owner. If the account ID is not your own, then it's the ID of the account that shared the mesh with your account. For more information about mesh sharing, see <a href="https://docs.aws.amazon.com/app-mesh/latest/userguide/sharing.html">Working with shared meshes</a>.</p>
     #[serde(rename = "meshOwner")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub mesh_owner: Option<String>,
@@ -419,6 +377,7 @@ pub struct DeleteGatewayRouteOutput {
     pub gateway_route: GatewayRouteData,
 }
 
+/// <p><zonbook></zonbook><xhtml></xhtml></p>
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteMeshInput {
@@ -427,6 +386,7 @@ pub struct DeleteMeshInput {
     pub mesh_name: String,
 }
 
+/// <p><zonbook></zonbook><xhtml></xhtml></p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteMeshOutput {
@@ -435,14 +395,14 @@ pub struct DeleteMeshOutput {
     pub mesh: MeshData,
 }
 
+/// <p><zonbook></zonbook><xhtml></xhtml></p>
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteRouteInput {
     /// <p>The name of the service mesh to delete the route in.</p>
     #[serde(rename = "meshName")]
     pub mesh_name: String,
-    /// <p>The AWS IAM account ID of the service mesh owner. If the account ID is not your own, then it's
-    /// the ID of the account that shared the mesh with your account. For more information about mesh sharing, see <a href="https://docs.aws.amazon.com/app-mesh/latest/userguide/sharing.html">Working with shared meshes</a>.</p>
+    /// <p>The AWS IAM account ID of the service mesh owner. If the account ID is not your own, then it's the ID of the account that shared the mesh with your account. For more information about mesh sharing, see <a href="https://docs.aws.amazon.com/app-mesh/latest/userguide/sharing.html">Working with shared meshes</a>.</p>
     #[serde(rename = "meshOwner")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub mesh_owner: Option<String>,
@@ -454,6 +414,7 @@ pub struct DeleteRouteInput {
     pub virtual_router_name: String,
 }
 
+/// <p><zonbook></zonbook><xhtml></xhtml></p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteRouteOutput {
@@ -468,8 +429,7 @@ pub struct DeleteVirtualGatewayInput {
     /// <p>The name of the service mesh to delete the virtual gateway from.</p>
     #[serde(rename = "meshName")]
     pub mesh_name: String,
-    /// <p>The AWS IAM account ID of the service mesh owner. If the account ID is not your own, then it's
-    /// the ID of the account that shared the mesh with your account. For more information about mesh sharing, see <a href="https://docs.aws.amazon.com/app-mesh/latest/userguide/sharing.html">Working with shared meshes</a>.</p>
+    /// <p>The AWS IAM account ID of the service mesh owner. If the account ID is not your own, then it's the ID of the account that shared the mesh with your account. For more information about mesh sharing, see <a href="https://docs.aws.amazon.com/app-mesh/latest/userguide/sharing.html">Working with shared meshes</a>.</p>
     #[serde(rename = "meshOwner")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub mesh_owner: Option<String>,
@@ -486,14 +446,14 @@ pub struct DeleteVirtualGatewayOutput {
     pub virtual_gateway: VirtualGatewayData,
 }
 
+/// <p><zonbook></zonbook><xhtml></xhtml></p>
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteVirtualNodeInput {
     /// <p>The name of the service mesh to delete the virtual node in.</p>
     #[serde(rename = "meshName")]
     pub mesh_name: String,
-    /// <p>The AWS IAM account ID of the service mesh owner. If the account ID is not your own, then it's
-    /// the ID of the account that shared the mesh with your account. For more information about mesh sharing, see <a href="https://docs.aws.amazon.com/app-mesh/latest/userguide/sharing.html">Working with shared meshes</a>.</p>
+    /// <p>The AWS IAM account ID of the service mesh owner. If the account ID is not your own, then it's the ID of the account that shared the mesh with your account. For more information about mesh sharing, see <a href="https://docs.aws.amazon.com/app-mesh/latest/userguide/sharing.html">Working with shared meshes</a>.</p>
     #[serde(rename = "meshOwner")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub mesh_owner: Option<String>,
@@ -502,6 +462,7 @@ pub struct DeleteVirtualNodeInput {
     pub virtual_node_name: String,
 }
 
+/// <p><zonbook></zonbook><xhtml></xhtml></p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteVirtualNodeOutput {
@@ -510,14 +471,14 @@ pub struct DeleteVirtualNodeOutput {
     pub virtual_node: VirtualNodeData,
 }
 
+/// <p><zonbook></zonbook><xhtml></xhtml></p>
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteVirtualRouterInput {
     /// <p>The name of the service mesh to delete the virtual router in.</p>
     #[serde(rename = "meshName")]
     pub mesh_name: String,
-    /// <p>The AWS IAM account ID of the service mesh owner. If the account ID is not your own, then it's
-    /// the ID of the account that shared the mesh with your account. For more information about mesh sharing, see <a href="https://docs.aws.amazon.com/app-mesh/latest/userguide/sharing.html">Working with shared meshes</a>.</p>
+    /// <p>The AWS IAM account ID of the service mesh owner. If the account ID is not your own, then it's the ID of the account that shared the mesh with your account. For more information about mesh sharing, see <a href="https://docs.aws.amazon.com/app-mesh/latest/userguide/sharing.html">Working with shared meshes</a>.</p>
     #[serde(rename = "meshOwner")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub mesh_owner: Option<String>,
@@ -526,6 +487,7 @@ pub struct DeleteVirtualRouterInput {
     pub virtual_router_name: String,
 }
 
+/// <p><zonbook></zonbook><xhtml></xhtml></p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteVirtualRouterOutput {
@@ -534,14 +496,14 @@ pub struct DeleteVirtualRouterOutput {
     pub virtual_router: VirtualRouterData,
 }
 
+/// <p><zonbook></zonbook><xhtml></xhtml></p>
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteVirtualServiceInput {
     /// <p>The name of the service mesh to delete the virtual service in.</p>
     #[serde(rename = "meshName")]
     pub mesh_name: String,
-    /// <p>The AWS IAM account ID of the service mesh owner. If the account ID is not your own, then it's
-    /// the ID of the account that shared the mesh with your account. For more information about mesh sharing, see <a href="https://docs.aws.amazon.com/app-mesh/latest/userguide/sharing.html">Working with shared meshes</a>.</p>
+    /// <p>The AWS IAM account ID of the service mesh owner. If the account ID is not your own, then it's the ID of the account that shared the mesh with your account. For more information about mesh sharing, see <a href="https://docs.aws.amazon.com/app-mesh/latest/userguide/sharing.html">Working with shared meshes</a>.</p>
     #[serde(rename = "meshOwner")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub mesh_owner: Option<String>,
@@ -550,6 +512,7 @@ pub struct DeleteVirtualServiceInput {
     pub virtual_service_name: String,
 }
 
+/// <p><zonbook></zonbook><xhtml></xhtml></p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteVirtualServiceOutput {
@@ -567,8 +530,7 @@ pub struct DescribeGatewayRouteInput {
     /// <p>The name of the service mesh that the gateway route resides in.</p>
     #[serde(rename = "meshName")]
     pub mesh_name: String,
-    /// <p>The AWS IAM account ID of the service mesh owner. If the account ID is not your own, then it's
-    /// the ID of the account that shared the mesh with your account. For more information about mesh sharing, see <a href="https://docs.aws.amazon.com/app-mesh/latest/userguide/sharing.html">Working with shared meshes</a>.</p>
+    /// <p>The AWS IAM account ID of the service mesh owner. If the account ID is not your own, then it's the ID of the account that shared the mesh with your account. For more information about mesh sharing, see <a href="https://docs.aws.amazon.com/app-mesh/latest/userguide/sharing.html">Working with shared meshes</a>.</p>
     #[serde(rename = "meshOwner")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub mesh_owner: Option<String>,
@@ -585,19 +547,20 @@ pub struct DescribeGatewayRouteOutput {
     pub gateway_route: GatewayRouteData,
 }
 
+/// <p><zonbook></zonbook><xhtml></xhtml></p>
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeMeshInput {
     /// <p>The name of the service mesh to describe.</p>
     #[serde(rename = "meshName")]
     pub mesh_name: String,
-    /// <p>The AWS IAM account ID of the service mesh owner. If the account ID is not your own, then it's
-    /// the ID of the account that shared the mesh with your account. For more information about mesh sharing, see <a href="https://docs.aws.amazon.com/app-mesh/latest/userguide/sharing.html">Working with shared meshes</a>.</p>
+    /// <p>The AWS IAM account ID of the service mesh owner. If the account ID is not your own, then it's the ID of the account that shared the mesh with your account. For more information about mesh sharing, see <a href="https://docs.aws.amazon.com/app-mesh/latest/userguide/sharing.html">Working with shared meshes</a>.</p>
     #[serde(rename = "meshOwner")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub mesh_owner: Option<String>,
 }
 
+/// <p><zonbook></zonbook><xhtml></xhtml></p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeMeshOutput {
@@ -606,14 +569,14 @@ pub struct DescribeMeshOutput {
     pub mesh: MeshData,
 }
 
+/// <p><zonbook></zonbook><xhtml></xhtml></p>
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeRouteInput {
     /// <p>The name of the service mesh that the route resides in.</p>
     #[serde(rename = "meshName")]
     pub mesh_name: String,
-    /// <p>The AWS IAM account ID of the service mesh owner. If the account ID is not your own, then it's
-    /// the ID of the account that shared the mesh with your account. For more information about mesh sharing, see <a href="https://docs.aws.amazon.com/app-mesh/latest/userguide/sharing.html">Working with shared meshes</a>.</p>
+    /// <p>The AWS IAM account ID of the service mesh owner. If the account ID is not your own, then it's the ID of the account that shared the mesh with your account. For more information about mesh sharing, see <a href="https://docs.aws.amazon.com/app-mesh/latest/userguide/sharing.html">Working with shared meshes</a>.</p>
     #[serde(rename = "meshOwner")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub mesh_owner: Option<String>,
@@ -625,6 +588,7 @@ pub struct DescribeRouteInput {
     pub virtual_router_name: String,
 }
 
+/// <p><zonbook></zonbook><xhtml></xhtml></p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeRouteOutput {
@@ -639,8 +603,7 @@ pub struct DescribeVirtualGatewayInput {
     /// <p>The name of the service mesh that the gateway route resides in.</p>
     #[serde(rename = "meshName")]
     pub mesh_name: String,
-    /// <p>The AWS IAM account ID of the service mesh owner. If the account ID is not your own, then it's
-    /// the ID of the account that shared the mesh with your account. For more information about mesh sharing, see <a href="https://docs.aws.amazon.com/app-mesh/latest/userguide/sharing.html">Working with shared meshes</a>.</p>
+    /// <p>The AWS IAM account ID of the service mesh owner. If the account ID is not your own, then it's the ID of the account that shared the mesh with your account. For more information about mesh sharing, see <a href="https://docs.aws.amazon.com/app-mesh/latest/userguide/sharing.html">Working with shared meshes</a>.</p>
     #[serde(rename = "meshOwner")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub mesh_owner: Option<String>,
@@ -657,14 +620,14 @@ pub struct DescribeVirtualGatewayOutput {
     pub virtual_gateway: VirtualGatewayData,
 }
 
+/// <p><zonbook></zonbook><xhtml></xhtml></p>
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeVirtualNodeInput {
     /// <p>The name of the service mesh that the virtual node resides in.</p>
     #[serde(rename = "meshName")]
     pub mesh_name: String,
-    /// <p>The AWS IAM account ID of the service mesh owner. If the account ID is not your own, then it's
-    /// the ID of the account that shared the mesh with your account. For more information about mesh sharing, see <a href="https://docs.aws.amazon.com/app-mesh/latest/userguide/sharing.html">Working with shared meshes</a>.</p>
+    /// <p>The AWS IAM account ID of the service mesh owner. If the account ID is not your own, then it's the ID of the account that shared the mesh with your account. For more information about mesh sharing, see <a href="https://docs.aws.amazon.com/app-mesh/latest/userguide/sharing.html">Working with shared meshes</a>.</p>
     #[serde(rename = "meshOwner")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub mesh_owner: Option<String>,
@@ -673,6 +636,7 @@ pub struct DescribeVirtualNodeInput {
     pub virtual_node_name: String,
 }
 
+/// <p><zonbook></zonbook><xhtml></xhtml></p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeVirtualNodeOutput {
@@ -681,14 +645,14 @@ pub struct DescribeVirtualNodeOutput {
     pub virtual_node: VirtualNodeData,
 }
 
+/// <p><zonbook></zonbook><xhtml></xhtml></p>
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeVirtualRouterInput {
     /// <p>The name of the service mesh that the virtual router resides in.</p>
     #[serde(rename = "meshName")]
     pub mesh_name: String,
-    /// <p>The AWS IAM account ID of the service mesh owner. If the account ID is not your own, then it's
-    /// the ID of the account that shared the mesh with your account. For more information about mesh sharing, see <a href="https://docs.aws.amazon.com/app-mesh/latest/userguide/sharing.html">Working with shared meshes</a>.</p>
+    /// <p>The AWS IAM account ID of the service mesh owner. If the account ID is not your own, then it's the ID of the account that shared the mesh with your account. For more information about mesh sharing, see <a href="https://docs.aws.amazon.com/app-mesh/latest/userguide/sharing.html">Working with shared meshes</a>.</p>
     #[serde(rename = "meshOwner")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub mesh_owner: Option<String>,
@@ -697,6 +661,7 @@ pub struct DescribeVirtualRouterInput {
     pub virtual_router_name: String,
 }
 
+/// <p><zonbook></zonbook><xhtml></xhtml></p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeVirtualRouterOutput {
@@ -705,14 +670,14 @@ pub struct DescribeVirtualRouterOutput {
     pub virtual_router: VirtualRouterData,
 }
 
+/// <p><zonbook></zonbook><xhtml></xhtml></p>
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeVirtualServiceInput {
     /// <p>The name of the service mesh that the virtual service resides in.</p>
     #[serde(rename = "meshName")]
     pub mesh_name: String,
-    /// <p>The AWS IAM account ID of the service mesh owner. If the account ID is not your own, then it's
-    /// the ID of the account that shared the mesh with your account. For more information about mesh sharing, see <a href="https://docs.aws.amazon.com/app-mesh/latest/userguide/sharing.html">Working with shared meshes</a>.</p>
+    /// <p>The AWS IAM account ID of the service mesh owner. If the account ID is not your own, then it's the ID of the account that shared the mesh with your account. For more information about mesh sharing, see <a href="https://docs.aws.amazon.com/app-mesh/latest/userguide/sharing.html">Working with shared meshes</a>.</p>
     #[serde(rename = "meshOwner")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub mesh_owner: Option<String>,
@@ -721,6 +686,7 @@ pub struct DescribeVirtualServiceInput {
     pub virtual_service_name: String,
 }
 
+/// <p><zonbook></zonbook><xhtml></xhtml></p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeVirtualServiceOutput {
@@ -729,8 +695,7 @@ pub struct DescribeVirtualServiceOutput {
     pub virtual_service: VirtualServiceData,
 }
 
-/// <p>An object that represents the DNS service discovery information for your virtual
-/// node.</p>
+/// <p>An object that represents the DNS service discovery information for your virtual node.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct DnsServiceDiscovery {
     /// <p>Specifies the DNS service discovery hostname for the virtual node. </p>
@@ -754,11 +719,7 @@ pub struct Duration {
 /// <p>An object that represents the egress filter rules for a service mesh.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct EgressFilter {
-    /// <p>The egress filter type. By default, the type is <code>DROP_ALL</code>, which allows
-    /// egress only from virtual nodes to other defined resources in the service mesh (and any
-    /// traffic to <code>*.amazonaws.com</code> for AWS API calls). You can set the egress filter
-    /// type to <code>ALLOW_ALL</code> to allow egress to any endpoint inside or outside of the
-    /// service mesh.</p>
+    /// <p>The egress filter type. By default, the type is <code>DROP_ALL</code>, which allows egress only from virtual nodes to other defined resources in the service mesh (and any traffic to <code>*.amazonaws.com</code> for AWS API calls). You can set the egress filter type to <code>ALLOW_ALL</code> to allow egress to any endpoint inside or outside of the service mesh.</p>
     #[serde(rename = "type")]
     pub type_: String,
 }
@@ -766,17 +727,7 @@ pub struct EgressFilter {
 /// <p>An object that represents an access log file.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct FileAccessLog {
-    /// <p>The file path to write access logs to. You can use <code>/dev/stdout</code> to send
-    /// access logs to standard out and configure your Envoy container to use a log driver, such as
-    /// <code>awslogs</code>, to export the access logs to a log storage service such as Amazon
-    /// CloudWatch Logs. You can also specify a path in the Envoy container's file system to write
-    /// the files to disk.</p>
-    ///
-    /// <pre><code>     &lt;note&gt;
-    /// &lt;p&gt;The Envoy process must have write permissions to the path that you specify here.
-    /// Otherwise, Envoy fails to bootstrap properly.&lt;/p&gt;
-    /// &lt;/note&gt;
-    /// </code></pre>
+    /// <p><p>The file path to write access logs to. You can use <code>/dev/stdout</code> to send access logs to standard out and configure your Envoy container to use a log driver, such as <code>awslogs</code>, to export the access logs to a log storage service such as Amazon CloudWatch Logs. You can also specify a path in the Envoy container&#39;s file system to write the files to disk.</p> <note> <p>The Envoy process must have write permissions to the path that you specify here. Otherwise, Envoy fails to bootstrap properly.</p> </note></p>
     #[serde(rename = "path")]
     pub path: String,
 }
@@ -823,12 +774,10 @@ pub struct GatewayRouteRef {
     /// <p>The name of the service mesh that the resource resides in. </p>
     #[serde(rename = "meshName")]
     pub mesh_name: String,
-    /// <p>The AWS IAM account ID of the service mesh owner. If the account ID is not your own, then it's
-    /// the ID of the account that shared the mesh with your account. For more information about mesh sharing, see <a href="https://docs.aws.amazon.com/app-mesh/latest/userguide/sharing.html">Working with shared meshes</a>.</p>
+    /// <p>The AWS IAM account ID of the service mesh owner. If the account ID is not your own, then it's the ID of the account that shared the mesh with your account. For more information about mesh sharing, see <a href="https://docs.aws.amazon.com/app-mesh/latest/userguide/sharing.html">Working with shared meshes</a>.</p>
     #[serde(rename = "meshOwner")]
     pub mesh_owner: String,
-    /// <p>The AWS IAM account ID of the resource owner. If the account ID is not your own, then it's
-    /// the ID of the mesh owner or of another account that the mesh is shared with. For more information about mesh sharing, see <a href="https://docs.aws.amazon.com/app-mesh/latest/userguide/sharing.html">Working with shared meshes</a>.</p>
+    /// <p>The AWS IAM account ID of the resource owner. If the account ID is not your own, then it's the ID of the mesh owner or of another account that the mesh is shared with. For more information about mesh sharing, see <a href="https://docs.aws.amazon.com/app-mesh/latest/userguide/sharing.html">Working with shared meshes</a>.</p>
     #[serde(rename = "resourceOwner")]
     pub resource_owner: String,
     /// <p>The version of the resource. Resources are created at version 1, and this version is incremented each time that they're updated.</p>
@@ -839,8 +788,7 @@ pub struct GatewayRouteRef {
     pub virtual_gateway_name: String,
 }
 
-/// <p>An object that represents a gateway route specification. Specify one gateway route
-/// type.</p>
+/// <p>An object that represents a gateway route specification. Specify one gateway route type.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct GatewayRouteSpec {
     /// <p>An object that represents the specification of a gRPC gateway route.</p>
@@ -917,40 +865,17 @@ pub struct GrpcRetryPolicy {
     #[serde(rename = "grpcRetryEvents")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub grpc_retry_events: Option<Vec<String>>,
-    /// <p>Specify at least one of the following values.</p>
-    ///
-    /// <pre><code>     &lt;ul&gt;
-    /// &lt;li&gt;
-    /// &lt;p&gt;
-    /// &lt;b&gt;server-error&lt;/b&gt; – HTTP status codes 500, 501,
-    /// 502, 503, 504, 505, 506, 507, 508, 510, and 511&lt;/p&gt;
-    /// &lt;/li&gt;
-    /// &lt;li&gt;
-    /// &lt;p&gt;
-    /// &lt;b&gt;gateway-error&lt;/b&gt; – HTTP status codes 502,
-    /// 503, and 504&lt;/p&gt;
-    /// &lt;/li&gt;
-    /// &lt;li&gt;
-    /// &lt;p&gt;
-    /// &lt;b&gt;client-error&lt;/b&gt; – HTTP status code 409&lt;/p&gt;
-    /// &lt;/li&gt;
-    /// &lt;li&gt;
-    /// &lt;p&gt;
-    /// &lt;b&gt;stream-error&lt;/b&gt; – Retry on refused
-    /// stream&lt;/p&gt;
-    /// &lt;/li&gt;
-    /// &lt;/ul&gt;
-    /// </code></pre>
+    /// <p><p>Specify at least one of the following values.</p> <ul> <li> <p> <b>server-error</b> – HTTP status codes 500, 501, 502, 503, 504, 505, 506, 507, 508, 510, and 511</p> </li> <li> <p> <b>gateway-error</b> – HTTP status codes 502, 503, and 504</p> </li> <li> <p> <b>client-error</b> – HTTP status code 409</p> </li> <li> <p> <b>stream-error</b> – Retry on refused stream</p> </li> </ul></p>
     #[serde(rename = "httpRetryEvents")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub http_retry_events: Option<Vec<String>>,
     /// <p>The maximum number of retry attempts.</p>
     #[serde(rename = "maxRetries")]
     pub max_retries: i64,
-    /// <p>An object that represents a duration of time.</p>
+    /// <p>The timeout for each retry attempt.</p>
     #[serde(rename = "perRetryTimeout")]
     pub per_retry_timeout: Duration,
-    /// <p>Specify a valid value.</p>
+    /// <p>Specify a valid value. The event occurs before any processing of a request has started and is encountered when the upstream is temporarily or permanently unavailable.</p>
     #[serde(rename = "tcpRetryEvents")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub tcp_retry_events: Option<Vec<String>>,
@@ -990,8 +915,7 @@ pub struct GrpcRouteMatch {
     #[serde(rename = "metadata")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub metadata: Option<Vec<GrpcRouteMetadata>>,
-    /// <p>The method name to match from the request. If you specify a name, you must also specify
-    /// a <code>serviceName</code>.</p>
+    /// <p>The method name to match from the request. If you specify a name, you must also specify a <code>serviceName</code>.</p>
     #[serde(rename = "methodName")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub method_name: Option<String>,
@@ -1055,8 +979,7 @@ pub struct GrpcTimeout {
     pub per_request: Option<Duration>,
 }
 
-/// <p>An object that represents the method and value to match with the header value sent in a
-/// request. Specify one match method.</p>
+/// <p>An object that represents the method and value to match with the header value sent in a request. Specify one match method.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct HeaderMatchMethod {
     /// <p>The value sent by the client must match the specified value exactly.</p>
@@ -1084,34 +1007,27 @@ pub struct HeaderMatchMethod {
 /// <p>An object that represents the health check policy for a virtual node's listener.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct HealthCheckPolicy {
-    /// <p>The number of consecutive successful health checks that must occur before declaring
-    /// listener healthy.</p>
+    /// <p>The number of consecutive successful health checks that must occur before declaring listener healthy.</p>
     #[serde(rename = "healthyThreshold")]
     pub healthy_threshold: i64,
     /// <p>The time period in milliseconds between each health check execution.</p>
     #[serde(rename = "intervalMillis")]
     pub interval_millis: i64,
-    /// <p>The destination path for the health check request. This value is only used if the
-    /// specified protocol is HTTP or HTTP/2. For any other protocol, this value is ignored.</p>
+    /// <p>The destination path for the health check request. This value is only used if the specified protocol is HTTP or HTTP/2. For any other protocol, this value is ignored.</p>
     #[serde(rename = "path")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub path: Option<String>,
-    /// <p>The destination port for the health check request. This port must match the port defined
-    /// in the <a>PortMapping</a> for the listener.</p>
+    /// <p>The destination port for the health check request. This port must match the port defined in the <a>PortMapping</a> for the listener.</p>
     #[serde(rename = "port")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub port: Option<i64>,
-    /// <p>The protocol for the health check request. If you specify <code>grpc</code>, then your
-    /// service must conform to the <a href="https://github.com/grpc/grpc/blob/master/doc/health-checking.md">GRPC Health
-    /// Checking Protocol</a>.</p>
+    /// <p>The protocol for the health check request. If you specify <code>grpc</code>, then your service must conform to the <a href="https://github.com/grpc/grpc/blob/master/doc/health-checking.md">GRPC Health Checking Protocol</a>.</p>
     #[serde(rename = "protocol")]
     pub protocol: String,
-    /// <p>The amount of time to wait when receiving a response from the health check, in
-    /// milliseconds.</p>
+    /// <p>The amount of time to wait when receiving a response from the health check, in milliseconds.</p>
     #[serde(rename = "timeoutMillis")]
     pub timeout_millis: i64,
-    /// <p>The number of consecutive failed health checks that must occur before declaring a
-    /// virtual node unhealthy. </p>
+    /// <p>The number of consecutive failed health checks that must occur before declaring a virtual node unhealthy. </p>
     #[serde(rename = "unhealthyThreshold")]
     pub unhealthy_threshold: i64,
 }
@@ -1138,12 +1054,7 @@ pub struct HttpGatewayRouteAction {
 /// <p>An object that represents the criteria for determining a request match.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct HttpGatewayRouteMatch {
-    /// <p>Specifies the path to match requests with. This parameter must always start with
-    /// <code>/</code>, which by itself matches all requests to the virtual service name. You
-    /// can also match for path-based routing of requests. For example, if your virtual service
-    /// name is <code>my-service.local</code> and you want the route to match requests to
-    /// <code>my-service.local/metrics</code>, your prefix should be
-    /// <code>/metrics</code>.</p>
+    /// <p>Specifies the path to match requests with. This parameter must always start with <code>/</code>, which by itself matches all requests to the virtual service name. You can also match for path-based routing of requests. For example, if your virtual service name is <code>my-service.local</code> and you want the route to match requests to <code>my-service.local/metrics</code>, your prefix should be <code>/metrics</code>.</p>
     #[serde(rename = "prefix")]
     pub prefix: String,
 }
@@ -1151,40 +1062,17 @@ pub struct HttpGatewayRouteMatch {
 /// <p>An object that represents a retry policy. Specify at least one value for at least one of the types of <code>RetryEvents</code>, a value for <code>maxRetries</code>, and a value for <code>perRetryTimeout</code>.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct HttpRetryPolicy {
-    /// <p>Specify at least one of the following values.</p>
-    ///
-    /// <pre><code>     &lt;ul&gt;
-    /// &lt;li&gt;
-    /// &lt;p&gt;
-    /// &lt;b&gt;server-error&lt;/b&gt; – HTTP status codes 500, 501,
-    /// 502, 503, 504, 505, 506, 507, 508, 510, and 511&lt;/p&gt;
-    /// &lt;/li&gt;
-    /// &lt;li&gt;
-    /// &lt;p&gt;
-    /// &lt;b&gt;gateway-error&lt;/b&gt; – HTTP status codes 502,
-    /// 503, and 504&lt;/p&gt;
-    /// &lt;/li&gt;
-    /// &lt;li&gt;
-    /// &lt;p&gt;
-    /// &lt;b&gt;client-error&lt;/b&gt; – HTTP status code 409&lt;/p&gt;
-    /// &lt;/li&gt;
-    /// &lt;li&gt;
-    /// &lt;p&gt;
-    /// &lt;b&gt;stream-error&lt;/b&gt; – Retry on refused
-    /// stream&lt;/p&gt;
-    /// &lt;/li&gt;
-    /// &lt;/ul&gt;
-    /// </code></pre>
+    /// <p><p>Specify at least one of the following values.</p> <ul> <li> <p> <b>server-error</b> – HTTP status codes 500, 501, 502, 503, 504, 505, 506, 507, 508, 510, and 511</p> </li> <li> <p> <b>gateway-error</b> – HTTP status codes 502, 503, and 504</p> </li> <li> <p> <b>client-error</b> – HTTP status code 409</p> </li> <li> <p> <b>stream-error</b> – Retry on refused stream</p> </li> </ul></p>
     #[serde(rename = "httpRetryEvents")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub http_retry_events: Option<Vec<String>>,
     /// <p>The maximum number of retry attempts.</p>
     #[serde(rename = "maxRetries")]
     pub max_retries: i64,
-    /// <p>An object that represents a duration of time.</p>
+    /// <p>The timeout for each retry attempt.</p>
     #[serde(rename = "perRetryTimeout")]
     pub per_retry_timeout: Duration,
-    /// <p>Specify a valid value.</p>
+    /// <p>Specify a valid value. The event occurs before any processing of a request has started and is encountered when the upstream is temporarily or permanently unavailable.</p>
     #[serde(rename = "tcpRetryEvents")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub tcp_retry_events: Option<Vec<String>>,
@@ -1233,8 +1121,7 @@ pub struct HttpRouteHeader {
     pub name: String,
 }
 
-/// <p>An object that represents the requirements for a route to match HTTP requests for a
-/// virtual router.</p>
+/// <p>An object that represents the requirements for a route to match HTTP requests for a virtual router.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct HttpRouteMatch {
     /// <p>An object that represents the client request headers to match on.</p>
@@ -1245,12 +1132,7 @@ pub struct HttpRouteMatch {
     #[serde(rename = "method")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub method: Option<String>,
-    /// <p>Specifies the path to match requests with. This parameter must always start with
-    /// <code>/</code>, which by itself matches all requests to the virtual service name. You
-    /// can also match for path-based routing of requests. For example, if your virtual service
-    /// name is <code>my-service.local</code> and you want the route to match requests to
-    /// <code>my-service.local/metrics</code>, your prefix should be
-    /// <code>/metrics</code>.</p>
+    /// <p>Specifies the path to match requests with. This parameter must always start with <code>/</code>, which by itself matches all requests to the virtual service name. You can also match for path-based routing of requests. For example, if your virtual service name is <code>my-service.local</code> and you want the route to match requests to <code>my-service.local/metrics</code>, your prefix should be <code>/metrics</code>.</p>
     #[serde(rename = "prefix")]
     pub prefix: String,
     /// <p>The client request scheme to match on. Specify only one.</p>
@@ -1262,9 +1144,11 @@ pub struct HttpRouteMatch {
 /// <p>An object that represents types of timeouts. </p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct HttpTimeout {
+    /// <p>An object that represents an idle timeout. An idle timeout bounds the amount of time that a connection may be idle. The default value is none.</p>
     #[serde(rename = "idle")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub idle: Option<Duration>,
+    /// <p>An object that represents a per request timeout. The default value is 15 seconds. If you set a higher timeout, then make sure that the higher value is set for each App Mesh resource in a conversation. For example, if a virtual node backend uses a virtual router provider to route to another virtual node, then the timeout should be greater than 15 seconds for the source and destination virtual node and the route.</p>
     #[serde(rename = "perRequest")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub per_request: Option<Duration>,
@@ -1273,29 +1157,18 @@ pub struct HttpTimeout {
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListGatewayRoutesInput {
-    /// <p>The maximum number of results returned by <code>ListGatewayRoutes</code> in paginated
-    /// output. When you use this parameter, <code>ListGatewayRoutes</code> returns only
-    /// <code>limit</code> results in a single page along with a <code>nextToken</code> response
-    /// element. You can see the remaining results of the initial request by sending another
-    /// <code>ListGatewayRoutes</code> request with the returned <code>nextToken</code> value.
-    /// This value can be between 1 and 100. If you don't use this
-    /// parameter, <code>ListGatewayRoutes</code> returns up to 100 results and a
-    /// <code>nextToken</code> value if applicable.</p>
+    /// <p>The maximum number of results returned by <code>ListGatewayRoutes</code> in paginated output. When you use this parameter, <code>ListGatewayRoutes</code> returns only <code>limit</code> results in a single page along with a <code>nextToken</code> response element. You can see the remaining results of the initial request by sending another <code>ListGatewayRoutes</code> request with the returned <code>nextToken</code> value. This value can be between 1 and 100. If you don't use this parameter, <code>ListGatewayRoutes</code> returns up to 100 results and a <code>nextToken</code> value if applicable.</p>
     #[serde(rename = "limit")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub limit: Option<i64>,
     /// <p>The name of the service mesh to list gateway routes in.</p>
     #[serde(rename = "meshName")]
     pub mesh_name: String,
-    /// <p>The AWS IAM account ID of the service mesh owner. If the account ID is not your own, then it's
-    /// the ID of the account that shared the mesh with your account. For more information about mesh sharing, see <a href="https://docs.aws.amazon.com/app-mesh/latest/userguide/sharing.html">Working with shared meshes</a>.</p>
+    /// <p>The AWS IAM account ID of the service mesh owner. If the account ID is not your own, then it's the ID of the account that shared the mesh with your account. For more information about mesh sharing, see <a href="https://docs.aws.amazon.com/app-mesh/latest/userguide/sharing.html">Working with shared meshes</a>.</p>
     #[serde(rename = "meshOwner")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub mesh_owner: Option<String>,
-    /// <p>The <code>nextToken</code> value returned from a previous paginated
-    /// <code>ListGatewayRoutes</code> request where <code>limit</code> was used and the results
-    /// exceeded the value of that parameter. Pagination continues from the end of the previous
-    /// results that returned the <code>nextToken</code> value.</p>
+    /// <p>The <code>nextToken</code> value returned from a previous paginated <code>ListGatewayRoutes</code> request where <code>limit</code> was used and the results exceeded the value of that parameter. Pagination continues from the end of the previous results that returned the <code>nextToken</code> value.</p>
     #[serde(rename = "nextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
@@ -1307,89 +1180,58 @@ pub struct ListGatewayRoutesInput {
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListGatewayRoutesOutput {
-    /// <p>The list of existing gateway routes for the specified service mesh and virtual
-    /// gateway.</p>
+    /// <p>The list of existing gateway routes for the specified service mesh and virtual gateway.</p>
     #[serde(rename = "gatewayRoutes")]
     pub gateway_routes: Vec<GatewayRouteRef>,
-    /// <p>The <code>nextToken</code> value to include in a future <code>ListGatewayRoutes</code>
-    /// request. When the results of a <code>ListGatewayRoutes</code> request exceed
-    /// <code>limit</code>, you can use this value to retrieve the next page of results. This
-    /// value is <code>null</code> when there are no more results to return.</p>
+    /// <p>The <code>nextToken</code> value to include in a future <code>ListGatewayRoutes</code> request. When the results of a <code>ListGatewayRoutes</code> request exceed <code>limit</code>, you can use this value to retrieve the next page of results. This value is <code>null</code> when there are no more results to return.</p>
     #[serde(rename = "nextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
 }
 
+/// <p><zonbook></zonbook><xhtml></xhtml></p>
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListMeshesInput {
-    /// <p>The maximum number of results returned by <code>ListMeshes</code> in paginated output.
-    /// When you use this parameter, <code>ListMeshes</code> returns only <code>limit</code>
-    /// results in a single page along with a <code>nextToken</code> response element. You can see
-    /// the remaining results of the initial request by sending another <code>ListMeshes</code>
-    /// request with the returned <code>nextToken</code> value. This value can be between
-    /// 1 and 100. If you don't use this parameter,
-    /// <code>ListMeshes</code> returns up to 100 results and a
-    /// <code>nextToken</code> value if applicable.</p>
+    /// <p>The maximum number of results returned by <code>ListMeshes</code> in paginated output. When you use this parameter, <code>ListMeshes</code> returns only <code>limit</code> results in a single page along with a <code>nextToken</code> response element. You can see the remaining results of the initial request by sending another <code>ListMeshes</code> request with the returned <code>nextToken</code> value. This value can be between 1 and 100. If you don't use this parameter, <code>ListMeshes</code> returns up to 100 results and a <code>nextToken</code> value if applicable.</p>
     #[serde(rename = "limit")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub limit: Option<i64>,
-    /// <p>The <code>nextToken</code> value returned from a previous paginated
-    /// <code>ListMeshes</code> request where <code>limit</code> was used and the results
-    /// exceeded the value of that parameter. Pagination continues from the end of the previous
-    /// results that returned the <code>nextToken</code> value.</p>
-    ///
-    /// <pre><code>     &lt;note&gt;
-    /// &lt;p&gt;This token should be treated as an opaque identifier that is used only to
-    /// retrieve the next items in a list and not for other programmatic purposes.&lt;/p&gt;
-    /// &lt;/note&gt;
-    /// </code></pre>
+    /// <p><p>The <code>nextToken</code> value returned from a previous paginated <code>ListMeshes</code> request where <code>limit</code> was used and the results exceeded the value of that parameter. Pagination continues from the end of the previous results that returned the <code>nextToken</code> value.</p> <note> <p>This token should be treated as an opaque identifier that is used only to retrieve the next items in a list and not for other programmatic purposes.</p> </note></p>
     #[serde(rename = "nextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
 }
 
+/// <p><zonbook></zonbook><xhtml></xhtml></p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListMeshesOutput {
     /// <p>The list of existing service meshes.</p>
     #[serde(rename = "meshes")]
     pub meshes: Vec<MeshRef>,
-    /// <p>The <code>nextToken</code> value to include in a future <code>ListMeshes</code> request.
-    /// When the results of a <code>ListMeshes</code> request exceed <code>limit</code>, you can
-    /// use this value to retrieve the next page of results. This value is <code>null</code> when
-    /// there are no more results to return.</p>
+    /// <p>The <code>nextToken</code> value to include in a future <code>ListMeshes</code> request. When the results of a <code>ListMeshes</code> request exceed <code>limit</code>, you can use this value to retrieve the next page of results. This value is <code>null</code> when there are no more results to return.</p>
     #[serde(rename = "nextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
 }
 
+/// <p><zonbook></zonbook><xhtml></xhtml></p>
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListRoutesInput {
-    /// <p>The maximum number of results returned by <code>ListRoutes</code> in paginated output.
-    /// When you use this parameter, <code>ListRoutes</code> returns only <code>limit</code>
-    /// results in a single page along with a <code>nextToken</code> response element. You can see
-    /// the remaining results of the initial request by sending another <code>ListRoutes</code>
-    /// request with the returned <code>nextToken</code> value. This value can be between
-    /// 1 and 100. If you don't use this parameter,
-    /// <code>ListRoutes</code> returns up to 100 results and a
-    /// <code>nextToken</code> value if applicable.</p>
+    /// <p>The maximum number of results returned by <code>ListRoutes</code> in paginated output. When you use this parameter, <code>ListRoutes</code> returns only <code>limit</code> results in a single page along with a <code>nextToken</code> response element. You can see the remaining results of the initial request by sending another <code>ListRoutes</code> request with the returned <code>nextToken</code> value. This value can be between 1 and 100. If you don't use this parameter, <code>ListRoutes</code> returns up to 100 results and a <code>nextToken</code> value if applicable.</p>
     #[serde(rename = "limit")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub limit: Option<i64>,
     /// <p>The name of the service mesh to list routes in.</p>
     #[serde(rename = "meshName")]
     pub mesh_name: String,
-    /// <p>The AWS IAM account ID of the service mesh owner. If the account ID is not your own, then it's
-    /// the ID of the account that shared the mesh with your account. For more information about mesh sharing, see <a href="https://docs.aws.amazon.com/app-mesh/latest/userguide/sharing.html">Working with shared meshes</a>.</p>
+    /// <p>The AWS IAM account ID of the service mesh owner. If the account ID is not your own, then it's the ID of the account that shared the mesh with your account. For more information about mesh sharing, see <a href="https://docs.aws.amazon.com/app-mesh/latest/userguide/sharing.html">Working with shared meshes</a>.</p>
     #[serde(rename = "meshOwner")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub mesh_owner: Option<String>,
-    /// <p>The <code>nextToken</code> value returned from a previous paginated
-    /// <code>ListRoutes</code> request where <code>limit</code> was used and the results
-    /// exceeded the value of that parameter. Pagination continues from the end of the previous
-    /// results that returned the <code>nextToken</code> value.</p>
+    /// <p>The <code>nextToken</code> value returned from a previous paginated <code>ListRoutes</code> request where <code>limit</code> was used and the results exceeded the value of that parameter. Pagination continues from the end of the previous results that returned the <code>nextToken</code> value.</p>
     #[serde(rename = "nextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
@@ -1398,13 +1240,11 @@ pub struct ListRoutesInput {
     pub virtual_router_name: String,
 }
 
+/// <p><zonbook></zonbook><xhtml></xhtml></p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListRoutesOutput {
-    /// <p>The <code>nextToken</code> value to include in a future <code>ListRoutes</code> request.
-    /// When the results of a <code>ListRoutes</code> request exceed <code>limit</code>, you can
-    /// use this value to retrieve the next page of results. This value is <code>null</code> when
-    /// there are no more results to return.</p>
+    /// <p>The <code>nextToken</code> value to include in a future <code>ListRoutes</code> request. When the results of a <code>ListRoutes</code> request exceed <code>limit</code>, you can use this value to retrieve the next page of results. This value is <code>null</code> when there are no more results to return.</p>
     #[serde(rename = "nextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
@@ -1413,24 +1253,15 @@ pub struct ListRoutesOutput {
     pub routes: Vec<RouteRef>,
 }
 
+/// <p><zonbook></zonbook><xhtml></xhtml></p>
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListTagsForResourceInput {
-    /// <p>The maximum number of tag results returned by <code>ListTagsForResource</code> in
-    /// paginated output. When this parameter is used, <code>ListTagsForResource</code> returns
-    /// only <code>limit</code> results in a single page along with a <code>nextToken</code>
-    /// response element. You can see the remaining results of the initial request by sending
-    /// another <code>ListTagsForResource</code> request with the returned <code>nextToken</code>
-    /// value. This value can be between 1 and 100. If you don't use
-    /// this parameter, <code>ListTagsForResource</code> returns up to 100
-    /// results and a <code>nextToken</code> value if applicable.</p>
+    /// <p>The maximum number of tag results returned by <code>ListTagsForResource</code> in paginated output. When this parameter is used, <code>ListTagsForResource</code> returns only <code>limit</code> results in a single page along with a <code>nextToken</code> response element. You can see the remaining results of the initial request by sending another <code>ListTagsForResource</code> request with the returned <code>nextToken</code> value. This value can be between 1 and 100. If you don't use this parameter, <code>ListTagsForResource</code> returns up to 100 results and a <code>nextToken</code> value if applicable.</p>
     #[serde(rename = "limit")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub limit: Option<i64>,
-    /// <p>The <code>nextToken</code> value returned from a previous paginated
-    /// <code>ListTagsForResource</code> request where <code>limit</code> was used and the
-    /// results exceeded the value of that parameter. Pagination continues from the end of the
-    /// previous results that returned the <code>nextToken</code> value.</p>
+    /// <p>The <code>nextToken</code> value returned from a previous paginated <code>ListTagsForResource</code> request where <code>limit</code> was used and the results exceeded the value of that parameter. Pagination continues from the end of the previous results that returned the <code>nextToken</code> value.</p>
     #[serde(rename = "nextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
@@ -1439,13 +1270,11 @@ pub struct ListTagsForResourceInput {
     pub resource_arn: String,
 }
 
+/// <p><zonbook></zonbook><xhtml></xhtml></p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListTagsForResourceOutput {
-    /// <p>The <code>nextToken</code> value to include in a future <code>ListTagsForResource</code>
-    /// request. When the results of a <code>ListTagsForResource</code> request exceed
-    /// <code>limit</code>, you can use this value to retrieve the next page of results. This
-    /// value is <code>null</code> when there are no more results to return.</p>
+    /// <p>The <code>nextToken</code> value to include in a future <code>ListTagsForResource</code> request. When the results of a <code>ListTagsForResource</code> request exceed <code>limit</code>, you can use this value to retrieve the next page of results. This value is <code>null</code> when there are no more results to return.</p>
     #[serde(rename = "nextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
@@ -1457,29 +1286,18 @@ pub struct ListTagsForResourceOutput {
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListVirtualGatewaysInput {
-    /// <p>The maximum number of results returned by <code>ListVirtualGateways</code> in paginated
-    /// output. When you use this parameter, <code>ListVirtualGateways</code> returns only
-    /// <code>limit</code> results in a single page along with a <code>nextToken</code> response
-    /// element. You can see the remaining results of the initial request by sending another
-    /// <code>ListVirtualGateways</code> request with the returned <code>nextToken</code> value.
-    /// This value can be between 1 and 100. If you don't use this
-    /// parameter, <code>ListVirtualGateways</code> returns up to 100 results and
-    /// a <code>nextToken</code> value if applicable.</p>
+    /// <p>The maximum number of results returned by <code>ListVirtualGateways</code> in paginated output. When you use this parameter, <code>ListVirtualGateways</code> returns only <code>limit</code> results in a single page along with a <code>nextToken</code> response element. You can see the remaining results of the initial request by sending another <code>ListVirtualGateways</code> request with the returned <code>nextToken</code> value. This value can be between 1 and 100. If you don't use this parameter, <code>ListVirtualGateways</code> returns up to 100 results and a <code>nextToken</code> value if applicable.</p>
     #[serde(rename = "limit")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub limit: Option<i64>,
     /// <p>The name of the service mesh to list virtual gateways in.</p>
     #[serde(rename = "meshName")]
     pub mesh_name: String,
-    /// <p>The AWS IAM account ID of the service mesh owner. If the account ID is not your own, then it's
-    /// the ID of the account that shared the mesh with your account. For more information about mesh sharing, see <a href="https://docs.aws.amazon.com/app-mesh/latest/userguide/sharing.html">Working with shared meshes</a>.</p>
+    /// <p>The AWS IAM account ID of the service mesh owner. If the account ID is not your own, then it's the ID of the account that shared the mesh with your account. For more information about mesh sharing, see <a href="https://docs.aws.amazon.com/app-mesh/latest/userguide/sharing.html">Working with shared meshes</a>.</p>
     #[serde(rename = "meshOwner")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub mesh_owner: Option<String>,
-    /// <p>The <code>nextToken</code> value returned from a previous paginated
-    /// <code>ListVirtualGateways</code> request where <code>limit</code> was used and the
-    /// results exceeded the value of that parameter. Pagination continues from the end of the
-    /// previous results that returned the <code>nextToken</code> value.</p>
+    /// <p>The <code>nextToken</code> value returned from a previous paginated <code>ListVirtualGateways</code> request where <code>limit</code> was used and the results exceeded the value of that parameter. Pagination continues from the end of the previous results that returned the <code>nextToken</code> value.</p>
     #[serde(rename = "nextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
@@ -1488,10 +1306,7 @@ pub struct ListVirtualGatewaysInput {
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListVirtualGatewaysOutput {
-    /// <p>The <code>nextToken</code> value to include in a future <code>ListVirtualGateways</code>
-    /// request. When the results of a <code>ListVirtualGateways</code> request exceed
-    /// <code>limit</code>, you can use this value to retrieve the next page of results. This
-    /// value is <code>null</code> when there are no more results to return.</p>
+    /// <p>The <code>nextToken</code> value to include in a future <code>ListVirtualGateways</code> request. When the results of a <code>ListVirtualGateways</code> request exceed <code>limit</code>, you can use this value to retrieve the next page of results. This value is <code>null</code> when there are no more results to return.</p>
     #[serde(rename = "nextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
@@ -1500,44 +1315,32 @@ pub struct ListVirtualGatewaysOutput {
     pub virtual_gateways: Vec<VirtualGatewayRef>,
 }
 
+/// <p><zonbook></zonbook><xhtml></xhtml></p>
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListVirtualNodesInput {
-    /// <p>The maximum number of results returned by <code>ListVirtualNodes</code> in paginated
-    /// output. When you use this parameter, <code>ListVirtualNodes</code> returns only
-    /// <code>limit</code> results in a single page along with a <code>nextToken</code> response
-    /// element. You can see the remaining results of the initial request by sending another
-    /// <code>ListVirtualNodes</code> request with the returned <code>nextToken</code> value.
-    /// This value can be between 1 and 100. If you don't use this
-    /// parameter, <code>ListVirtualNodes</code> returns up to 100 results and a
-    /// <code>nextToken</code> value if applicable.</p>
+    /// <p>The maximum number of results returned by <code>ListVirtualNodes</code> in paginated output. When you use this parameter, <code>ListVirtualNodes</code> returns only <code>limit</code> results in a single page along with a <code>nextToken</code> response element. You can see the remaining results of the initial request by sending another <code>ListVirtualNodes</code> request with the returned <code>nextToken</code> value. This value can be between 1 and 100. If you don't use this parameter, <code>ListVirtualNodes</code> returns up to 100 results and a <code>nextToken</code> value if applicable.</p>
     #[serde(rename = "limit")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub limit: Option<i64>,
     /// <p>The name of the service mesh to list virtual nodes in.</p>
     #[serde(rename = "meshName")]
     pub mesh_name: String,
-    /// <p>The AWS IAM account ID of the service mesh owner. If the account ID is not your own, then it's
-    /// the ID of the account that shared the mesh with your account. For more information about mesh sharing, see <a href="https://docs.aws.amazon.com/app-mesh/latest/userguide/sharing.html">Working with shared meshes</a>.</p>
+    /// <p>The AWS IAM account ID of the service mesh owner. If the account ID is not your own, then it's the ID of the account that shared the mesh with your account. For more information about mesh sharing, see <a href="https://docs.aws.amazon.com/app-mesh/latest/userguide/sharing.html">Working with shared meshes</a>.</p>
     #[serde(rename = "meshOwner")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub mesh_owner: Option<String>,
-    /// <p>The <code>nextToken</code> value returned from a previous paginated
-    /// <code>ListVirtualNodes</code> request where <code>limit</code> was used and the results
-    /// exceeded the value of that parameter. Pagination continues from the end of the previous
-    /// results that returned the <code>nextToken</code> value.</p>
+    /// <p>The <code>nextToken</code> value returned from a previous paginated <code>ListVirtualNodes</code> request where <code>limit</code> was used and the results exceeded the value of that parameter. Pagination continues from the end of the previous results that returned the <code>nextToken</code> value.</p>
     #[serde(rename = "nextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
 }
 
+/// <p><zonbook></zonbook><xhtml></xhtml></p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListVirtualNodesOutput {
-    /// <p>The <code>nextToken</code> value to include in a future <code>ListVirtualNodes</code>
-    /// request. When the results of a <code>ListVirtualNodes</code> request exceed
-    /// <code>limit</code>, you can use this value to retrieve the next page of results. This
-    /// value is <code>null</code> when there are no more results to return.</p>
+    /// <p>The <code>nextToken</code> value to include in a future <code>ListVirtualNodes</code> request. When the results of a <code>ListVirtualNodes</code> request exceed <code>limit</code>, you can use this value to retrieve the next page of results. This value is <code>null</code> when there are no more results to return.</p>
     #[serde(rename = "nextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
@@ -1546,44 +1349,32 @@ pub struct ListVirtualNodesOutput {
     pub virtual_nodes: Vec<VirtualNodeRef>,
 }
 
+/// <p><zonbook></zonbook><xhtml></xhtml></p>
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListVirtualRoutersInput {
-    /// <p>The maximum number of results returned by <code>ListVirtualRouters</code> in paginated
-    /// output. When you use this parameter, <code>ListVirtualRouters</code> returns only
-    /// <code>limit</code> results in a single page along with a <code>nextToken</code> response
-    /// element. You can see the remaining results of the initial request by sending another
-    /// <code>ListVirtualRouters</code> request with the returned <code>nextToken</code> value.
-    /// This value can be between 1 and 100. If you don't use this
-    /// parameter, <code>ListVirtualRouters</code> returns up to 100 results and
-    /// a <code>nextToken</code> value if applicable.</p>
+    /// <p>The maximum number of results returned by <code>ListVirtualRouters</code> in paginated output. When you use this parameter, <code>ListVirtualRouters</code> returns only <code>limit</code> results in a single page along with a <code>nextToken</code> response element. You can see the remaining results of the initial request by sending another <code>ListVirtualRouters</code> request with the returned <code>nextToken</code> value. This value can be between 1 and 100. If you don't use this parameter, <code>ListVirtualRouters</code> returns up to 100 results and a <code>nextToken</code> value if applicable.</p>
     #[serde(rename = "limit")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub limit: Option<i64>,
     /// <p>The name of the service mesh to list virtual routers in.</p>
     #[serde(rename = "meshName")]
     pub mesh_name: String,
-    /// <p>The AWS IAM account ID of the service mesh owner. If the account ID is not your own, then it's
-    /// the ID of the account that shared the mesh with your account. For more information about mesh sharing, see <a href="https://docs.aws.amazon.com/app-mesh/latest/userguide/sharing.html">Working with shared meshes</a>.</p>
+    /// <p>The AWS IAM account ID of the service mesh owner. If the account ID is not your own, then it's the ID of the account that shared the mesh with your account. For more information about mesh sharing, see <a href="https://docs.aws.amazon.com/app-mesh/latest/userguide/sharing.html">Working with shared meshes</a>.</p>
     #[serde(rename = "meshOwner")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub mesh_owner: Option<String>,
-    /// <p>The <code>nextToken</code> value returned from a previous paginated
-    /// <code>ListVirtualRouters</code> request where <code>limit</code> was used and the
-    /// results exceeded the value of that parameter. Pagination continues from the end of the
-    /// previous results that returned the <code>nextToken</code> value.</p>
+    /// <p>The <code>nextToken</code> value returned from a previous paginated <code>ListVirtualRouters</code> request where <code>limit</code> was used and the results exceeded the value of that parameter. Pagination continues from the end of the previous results that returned the <code>nextToken</code> value.</p>
     #[serde(rename = "nextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
 }
 
+/// <p><zonbook></zonbook><xhtml></xhtml></p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListVirtualRoutersOutput {
-    /// <p>The <code>nextToken</code> value to include in a future <code>ListVirtualRouters</code>
-    /// request. When the results of a <code>ListVirtualRouters</code> request exceed
-    /// <code>limit</code>, you can use this value to retrieve the next page of results. This
-    /// value is <code>null</code> when there are no more results to return.</p>
+    /// <p>The <code>nextToken</code> value to include in a future <code>ListVirtualRouters</code> request. When the results of a <code>ListVirtualRouters</code> request exceed <code>limit</code>, you can use this value to retrieve the next page of results. This value is <code>null</code> when there are no more results to return.</p>
     #[serde(rename = "nextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
@@ -1592,44 +1383,32 @@ pub struct ListVirtualRoutersOutput {
     pub virtual_routers: Vec<VirtualRouterRef>,
 }
 
+/// <p><zonbook></zonbook><xhtml></xhtml></p>
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListVirtualServicesInput {
-    /// <p>The maximum number of results returned by <code>ListVirtualServices</code> in paginated
-    /// output. When you use this parameter, <code>ListVirtualServices</code> returns only
-    /// <code>limit</code> results in a single page along with a <code>nextToken</code> response
-    /// element. You can see the remaining results of the initial request by sending another
-    /// <code>ListVirtualServices</code> request with the returned <code>nextToken</code> value.
-    /// This value can be between 1 and 100. If you don't use this
-    /// parameter, <code>ListVirtualServices</code> returns up to 100 results and
-    /// a <code>nextToken</code> value if applicable.</p>
+    /// <p>The maximum number of results returned by <code>ListVirtualServices</code> in paginated output. When you use this parameter, <code>ListVirtualServices</code> returns only <code>limit</code> results in a single page along with a <code>nextToken</code> response element. You can see the remaining results of the initial request by sending another <code>ListVirtualServices</code> request with the returned <code>nextToken</code> value. This value can be between 1 and 100. If you don't use this parameter, <code>ListVirtualServices</code> returns up to 100 results and a <code>nextToken</code> value if applicable.</p>
     #[serde(rename = "limit")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub limit: Option<i64>,
     /// <p>The name of the service mesh to list virtual services in.</p>
     #[serde(rename = "meshName")]
     pub mesh_name: String,
-    /// <p>The AWS IAM account ID of the service mesh owner. If the account ID is not your own, then it's
-    /// the ID of the account that shared the mesh with your account. For more information about mesh sharing, see <a href="https://docs.aws.amazon.com/app-mesh/latest/userguide/sharing.html">Working with shared meshes</a>.</p>
+    /// <p>The AWS IAM account ID of the service mesh owner. If the account ID is not your own, then it's the ID of the account that shared the mesh with your account. For more information about mesh sharing, see <a href="https://docs.aws.amazon.com/app-mesh/latest/userguide/sharing.html">Working with shared meshes</a>.</p>
     #[serde(rename = "meshOwner")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub mesh_owner: Option<String>,
-    /// <p>The <code>nextToken</code> value returned from a previous paginated
-    /// <code>ListVirtualServices</code> request where <code>limit</code> was used and the
-    /// results exceeded the value of that parameter. Pagination continues from the end of the
-    /// previous results that returned the <code>nextToken</code> value.</p>
+    /// <p>The <code>nextToken</code> value returned from a previous paginated <code>ListVirtualServices</code> request where <code>limit</code> was used and the results exceeded the value of that parameter. Pagination continues from the end of the previous results that returned the <code>nextToken</code> value.</p>
     #[serde(rename = "nextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
 }
 
+/// <p><zonbook></zonbook><xhtml></xhtml></p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListVirtualServicesOutput {
-    /// <p>The <code>nextToken</code> value to include in a future <code>ListVirtualServices</code>
-    /// request. When the results of a <code>ListVirtualServices</code> request exceed
-    /// <code>limit</code>, you can use this value to retrieve the next page of results. This
-    /// value is <code>null</code> when there are no more results to return.</p>
+    /// <p>The <code>nextToken</code> value to include in a future <code>ListVirtualServices</code> request. When the results of a <code>ListVirtualServices</code> request exceed <code>limit</code>, you can use this value to retrieve the next page of results. This value is <code>null</code> when there are no more results to return.</p>
     #[serde(rename = "nextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
@@ -1641,10 +1420,18 @@ pub struct ListVirtualServicesOutput {
 /// <p>An object that represents a listener for a virtual node.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct Listener {
+    /// <p>The connection pool information for the listener.</p>
+    #[serde(rename = "connectionPool")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub connection_pool: Option<VirtualNodeConnectionPool>,
     /// <p>The health check information for the listener.</p>
     #[serde(rename = "healthCheck")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub health_check: Option<HealthCheckPolicy>,
+    /// <p>The outlier detection information for the listener.</p>
+    #[serde(rename = "outlierDetection")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub outlier_detection: Option<OutlierDetection>,
     /// <p>The port mapping information for the listener.</p>
     #[serde(rename = "portMapping")]
     pub port_mapping: PortMapping,
@@ -1684,26 +1471,7 @@ pub struct ListenerTls {
     /// <p>A reference to an object that represents a listener's TLS certificate.</p>
     #[serde(rename = "certificate")]
     pub certificate: ListenerTlsCertificate,
-    /// <p>Specify one of the following modes.</p>
-    ///
-    /// <pre><code>     &lt;ul&gt;
-    /// &lt;li&gt;
-    /// &lt;p&gt;
-    /// &lt;b/&gt;STRICT – Listener only accepts connections with TLS
-    /// enabled. &lt;/p&gt;
-    /// &lt;/li&gt;
-    /// &lt;li&gt;
-    /// &lt;p&gt;
-    /// &lt;b/&gt;PERMISSIVE – Listener accepts connections with or
-    /// without TLS enabled.&lt;/p&gt;
-    /// &lt;/li&gt;
-    /// &lt;li&gt;
-    /// &lt;p&gt;
-    /// &lt;b/&gt;DISABLED – Listener only accepts connections without
-    /// TLS. &lt;/p&gt;
-    /// &lt;/li&gt;
-    /// &lt;/ul&gt;
-    /// </code></pre>
+    /// <p><p>Specify one of the following modes.</p> <ul> <li> <p> <b/>STRICT – Listener only accepts connections with TLS enabled. </p> </li> <li> <p> <b/>PERMISSIVE – Listener accepts connections with or without TLS enabled.</p> </li> <li> <p> <b/>DISABLED – Listener only accepts connections without TLS. </p> </li> </ul></p>
     #[serde(rename = "mode")]
     pub mode: String,
 }
@@ -1729,15 +1497,13 @@ pub struct ListenerTlsCertificate {
     pub file: Option<ListenerTlsFileCertificate>,
 }
 
-/// <p>An object that represents a local file certificate.
-/// The certificate must meet specific requirements and you must have proxy authorization enabled. For more information, see <a href="https://docs.aws.amazon.com/app-mesh/latest/userguide/tls.html#virtual-node-tls-prerequisites">Transport Layer Security (TLS)</a>.</p>
+/// <p>An object that represents a local file certificate. The certificate must meet specific requirements and you must have proxy authorization enabled. For more information, see <a href="https://docs.aws.amazon.com/app-mesh/latest/userguide/tls.html#virtual-node-tls-prerequisites">Transport Layer Security (TLS)</a>.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct ListenerTlsFileCertificate {
     /// <p>The certificate chain for the certificate.</p>
     #[serde(rename = "certificateChain")]
     pub certificate_chain: String,
-    /// <p>The private key for a certificate stored on the file system of the virtual node that the
-    /// proxy is running on.</p>
+    /// <p>The private key for a certificate stored on the file system of the virtual node that the proxy is running on.</p>
     #[serde(rename = "privateKey")]
     pub private_key: String,
 }
@@ -1796,12 +1562,10 @@ pub struct MeshRef {
     /// <p>The name of the service mesh.</p>
     #[serde(rename = "meshName")]
     pub mesh_name: String,
-    /// <p>The AWS IAM account ID of the service mesh owner. If the account ID is not your own, then it's
-    /// the ID of the account that shared the mesh with your account. For more information about mesh sharing, see <a href="https://docs.aws.amazon.com/app-mesh/latest/userguide/sharing.html">Working with shared meshes</a>.</p>
+    /// <p>The AWS IAM account ID of the service mesh owner. If the account ID is not your own, then it's the ID of the account that shared the mesh with your account. For more information about mesh sharing, see <a href="https://docs.aws.amazon.com/app-mesh/latest/userguide/sharing.html">Working with shared meshes</a>.</p>
     #[serde(rename = "meshOwner")]
     pub mesh_owner: String,
-    /// <p>The AWS IAM account ID of the resource owner. If the account ID is not your own, then it's
-    /// the ID of the mesh owner or of another account that the mesh is shared with. For more information about mesh sharing, see <a href="https://docs.aws.amazon.com/app-mesh/latest/userguide/sharing.html">Working with shared meshes</a>.</p>
+    /// <p>The AWS IAM account ID of the resource owner. If the account ID is not your own, then it's the ID of the mesh owner or of another account that the mesh is shared with. For more information about mesh sharing, see <a href="https://docs.aws.amazon.com/app-mesh/latest/userguide/sharing.html">Working with shared meshes</a>.</p>
     #[serde(rename = "resourceOwner")]
     pub resource_owner: String,
     /// <p>The version of the resource. Resources are created at version 1, and this version is incremented each time that they're updated.</p>
@@ -1828,6 +1592,23 @@ pub struct MeshStatus {
     pub status: Option<String>,
 }
 
+/// <p>An object that represents the outlier detection for a virtual node's listener.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
+pub struct OutlierDetection {
+    /// <p>The base amount of time for which a host is ejected.</p>
+    #[serde(rename = "baseEjectionDuration")]
+    pub base_ejection_duration: Duration,
+    /// <p>The time interval between ejection sweep analysis.</p>
+    #[serde(rename = "interval")]
+    pub interval: Duration,
+    /// <p>Maximum percentage of hosts in load balancing pool for upstream service that can be ejected. Will eject at least one host regardless of the value.</p>
+    #[serde(rename = "maxEjectionPercent")]
+    pub max_ejection_percent: i64,
+    /// <p>Number of consecutive <code>5xx</code> errors required for ejection. </p>
+    #[serde(rename = "maxServerErrors")]
+    pub max_server_errors: i64,
+}
+
 /// <p>An object that represents a port mapping.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct PortMapping {
@@ -1852,12 +1633,10 @@ pub struct ResourceMetadata {
     /// <p>The Unix epoch timestamp in seconds for when the resource was last updated.</p>
     #[serde(rename = "lastUpdatedAt")]
     pub last_updated_at: f64,
-    /// <p>The AWS IAM account ID of the service mesh owner. If the account ID is not your own, then it's
-    /// the ID of the account that shared the mesh with your account. For more information about mesh sharing, see <a href="https://docs.aws.amazon.com/app-mesh/latest/userguide/sharing.html">Working with shared meshes</a>.</p>
+    /// <p>The AWS IAM account ID of the service mesh owner. If the account ID is not your own, then it's the ID of the account that shared the mesh with your account. For more information about mesh sharing, see <a href="https://docs.aws.amazon.com/app-mesh/latest/userguide/sharing.html">Working with shared meshes</a>.</p>
     #[serde(rename = "meshOwner")]
     pub mesh_owner: String,
-    /// <p>The AWS IAM account ID of the resource owner. If the account ID is not your own, then it's
-    /// the ID of the mesh owner or of another account that the mesh is shared with. For more information about mesh sharing, see <a href="https://docs.aws.amazon.com/app-mesh/latest/userguide/sharing.html">Working with shared meshes</a>.</p>
+    /// <p>The AWS IAM account ID of the resource owner. If the account ID is not your own, then it's the ID of the mesh owner or of another account that the mesh is shared with. For more information about mesh sharing, see <a href="https://docs.aws.amazon.com/app-mesh/latest/userguide/sharing.html">Working with shared meshes</a>.</p>
     #[serde(rename = "resourceOwner")]
     pub resource_owner: String,
     /// <p>The unique identifier for the resource.</p>
@@ -1908,12 +1687,10 @@ pub struct RouteRef {
     /// <p>The name of the service mesh that the route resides in.</p>
     #[serde(rename = "meshName")]
     pub mesh_name: String,
-    /// <p>The AWS IAM account ID of the service mesh owner. If the account ID is not your own, then it's
-    /// the ID of the account that shared the mesh with your account. For more information about mesh sharing, see <a href="https://docs.aws.amazon.com/app-mesh/latest/userguide/sharing.html">Working with shared meshes</a>.</p>
+    /// <p>The AWS IAM account ID of the service mesh owner. If the account ID is not your own, then it's the ID of the account that shared the mesh with your account. For more information about mesh sharing, see <a href="https://docs.aws.amazon.com/app-mesh/latest/userguide/sharing.html">Working with shared meshes</a>.</p>
     #[serde(rename = "meshOwner")]
     pub mesh_owner: String,
-    /// <p>The AWS IAM account ID of the resource owner. If the account ID is not your own, then it's
-    /// the ID of the mesh owner or of another account that the mesh is shared with. For more information about mesh sharing, see <a href="https://docs.aws.amazon.com/app-mesh/latest/userguide/sharing.html">Working with shared meshes</a>.</p>
+    /// <p>The AWS IAM account ID of the resource owner. If the account ID is not your own, then it's the ID of the mesh owner or of another account that the mesh is shared with. For more information about mesh sharing, see <a href="https://docs.aws.amazon.com/app-mesh/latest/userguide/sharing.html">Working with shared meshes</a>.</p>
     #[serde(rename = "resourceOwner")]
     pub resource_owner: String,
     /// <p>The name of the route.</p>
@@ -1942,8 +1719,7 @@ pub struct RouteSpec {
     #[serde(rename = "httpRoute")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub http_route: Option<HttpRoute>,
-    /// <p>The priority for the route. Routes are matched based on the specified value, where 0 is
-    /// the highest priority.</p>
+    /// <p>The priority for the route. Routes are matched based on the specified value, where 0 is the highest priority.</p>
     #[serde(rename = "priority")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub priority: Option<i64>,
@@ -1975,36 +1751,30 @@ pub struct ServiceDiscovery {
     pub dns: Option<DnsServiceDiscovery>,
 }
 
-/// <p>Optional metadata that you apply to a resource to assist with categorization and
-/// organization. Each tag consists of a key and an optional value, both of which you define.
-/// Tag keys can have a maximum character length of 128 characters, and tag values can have
-/// a maximum length of 256 characters.</p>
+/// <p>Optional metadata that you apply to a resource to assist with categorization and organization. Each tag consists of a key and an optional value, both of which you define. Tag keys can have a maximum character length of 128 characters, and tag values can have a maximum length of 256 characters.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct TagRef {
-    /// <p>One part of a key-value pair that make up a tag. A <code>key</code> is a general label
-    /// that acts like a category for more specific tag values.</p>
+    /// <p>One part of a key-value pair that make up a tag. A <code>key</code> is a general label that acts like a category for more specific tag values.</p>
     #[serde(rename = "key")]
     pub key: String,
-    /// <p>The optional part of a key-value pair that make up a tag. A <code>value</code> acts as a
-    /// descriptor within a tag category (key).</p>
+    /// <p>The optional part of a key-value pair that make up a tag. A <code>value</code> acts as a descriptor within a tag category (key).</p>
     #[serde(rename = "value")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub value: Option<String>,
+    pub value: String,
 }
 
+/// <p><zonbook></zonbook><xhtml></xhtml></p>
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct TagResourceInput {
     /// <p>The Amazon Resource Name (ARN) of the resource to add tags to.</p>
     #[serde(rename = "resourceArn")]
     pub resource_arn: String,
-    /// <p>The tags to add to the resource. A tag is an array of key-value pairs.
-    /// Tag keys can have a maximum character length of 128 characters, and tag values can have
-    /// a maximum length of 256 characters.</p>
+    /// <p>The tags to add to the resource. A tag is an array of key-value pairs. Tag keys can have a maximum character length of 128 characters, and tag values can have a maximum length of 256 characters.</p>
     #[serde(rename = "tags")]
     pub tags: Vec<TagRef>,
 }
 
+/// <p><zonbook></zonbook><xhtml></xhtml></p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct TagResourceOutput {}
@@ -2032,6 +1802,7 @@ pub struct TcpRouteAction {
 /// <p>An object that represents types of timeouts. </p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct TcpTimeout {
+    /// <p>An object that represents an idle timeout. An idle timeout bounds the amount of time that a connection may be idle. The default value is none.</p>
     #[serde(rename = "idle")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub idle: Option<Duration>,
@@ -2045,8 +1816,7 @@ pub struct TlsValidationContext {
     pub trust: TlsValidationContextTrust,
 }
 
-/// <p>An object that represents a TLS validation context trust for an AWS Certicate Manager (ACM)
-/// certificate.</p>
+/// <p>An object that represents a TLS validation context trust for an AWS Certicate Manager (ACM) certificate.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct TlsValidationContextAcmTrust {
     /// <p>One or more ACM Amazon Resource Name (ARN)s.</p>
@@ -2057,8 +1827,7 @@ pub struct TlsValidationContextAcmTrust {
 /// <p>An object that represents a Transport Layer Security (TLS) validation context trust for a local file.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct TlsValidationContextFileTrust {
-    /// <p>The certificate trust chain for a certificate stored on the file system of the virtual
-    /// node that the proxy is running on.</p>
+    /// <p>The certificate trust chain for a certificate stored on the file system of the virtual node that the proxy is running on.</p>
     #[serde(rename = "certificateChain")]
     pub certificate_chain: String,
 }
@@ -2066,8 +1835,7 @@ pub struct TlsValidationContextFileTrust {
 /// <p>An object that represents a Transport Layer Security (TLS) validation context trust.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct TlsValidationContextTrust {
-    /// <p>A reference to an object that represents a TLS validation context trust for an AWS Certicate Manager (ACM)
-    /// certificate.</p>
+    /// <p>A reference to an object that represents a TLS validation context trust for an AWS Certicate Manager (ACM) certificate.</p>
     #[serde(rename = "acm")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub acm: Option<TlsValidationContextAcmTrust>,
@@ -2077,6 +1845,7 @@ pub struct TlsValidationContextTrust {
     pub file: Option<TlsValidationContextFileTrust>,
 }
 
+/// <p><zonbook></zonbook><xhtml></xhtml></p>
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UntagResourceInput {
@@ -2088,6 +1857,7 @@ pub struct UntagResourceInput {
     pub tag_keys: Vec<String>,
 }
 
+/// <p><zonbook></zonbook><xhtml></xhtml></p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UntagResourceOutput {}
@@ -2095,8 +1865,7 @@ pub struct UntagResourceOutput {}
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateGatewayRouteInput {
-    /// <p>Unique, case-sensitive identifier that you provide to ensure the idempotency of the
-    /// request. Up to 36 letters, numbers, hyphens, and underscores are allowed.</p>
+    /// <p>Unique, case-sensitive identifier that you provide to ensure the idempotency of the request. Up to 36 letters, numbers, hyphens, and underscores are allowed.</p>
     #[serde(rename = "clientToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub client_token: Option<String>,
@@ -2106,8 +1875,7 @@ pub struct UpdateGatewayRouteInput {
     /// <p>The name of the service mesh that the gateway route resides in.</p>
     #[serde(rename = "meshName")]
     pub mesh_name: String,
-    /// <p>The AWS IAM account ID of the service mesh owner. If the account ID is not your own, then it's
-    /// the ID of the account that shared the mesh with your account. For more information about mesh sharing, see <a href="https://docs.aws.amazon.com/app-mesh/latest/userguide/sharing.html">Working with shared meshes</a>.</p>
+    /// <p>The AWS IAM account ID of the service mesh owner. If the account ID is not your own, then it's the ID of the account that shared the mesh with your account. For more information about mesh sharing, see <a href="https://docs.aws.amazon.com/app-mesh/latest/userguide/sharing.html">Working with shared meshes</a>.</p>
     #[serde(rename = "meshOwner")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub mesh_owner: Option<String>,
@@ -2127,11 +1895,11 @@ pub struct UpdateGatewayRouteOutput {
     pub gateway_route: GatewayRouteData,
 }
 
+/// <p><zonbook></zonbook><xhtml></xhtml></p>
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateMeshInput {
-    /// <p>Unique, case-sensitive identifier that you provide to ensure the idempotency of the
-    /// request. Up to 36 letters, numbers, hyphens, and underscores are allowed.</p>
+    /// <p>Unique, case-sensitive identifier that you provide to ensure the idempotency of the request. Up to 36 letters, numbers, hyphens, and underscores are allowed.</p>
     #[serde(rename = "clientToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub client_token: Option<String>,
@@ -2144,6 +1912,7 @@ pub struct UpdateMeshInput {
     pub spec: Option<MeshSpec>,
 }
 
+/// <p><zonbook></zonbook><xhtml></xhtml></p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateMeshOutput {
@@ -2151,19 +1920,18 @@ pub struct UpdateMeshOutput {
     pub mesh: MeshData,
 }
 
+/// <p><zonbook></zonbook><xhtml></xhtml></p>
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateRouteInput {
-    /// <p>Unique, case-sensitive identifier that you provide to ensure the idempotency of the
-    /// request. Up to 36 letters, numbers, hyphens, and underscores are allowed.</p>
+    /// <p>Unique, case-sensitive identifier that you provide to ensure the idempotency of the request. Up to 36 letters, numbers, hyphens, and underscores are allowed.</p>
     #[serde(rename = "clientToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub client_token: Option<String>,
     /// <p>The name of the service mesh that the route resides in.</p>
     #[serde(rename = "meshName")]
     pub mesh_name: String,
-    /// <p>The AWS IAM account ID of the service mesh owner. If the account ID is not your own, then it's
-    /// the ID of the account that shared the mesh with your account. For more information about mesh sharing, see <a href="https://docs.aws.amazon.com/app-mesh/latest/userguide/sharing.html">Working with shared meshes</a>.</p>
+    /// <p>The AWS IAM account ID of the service mesh owner. If the account ID is not your own, then it's the ID of the account that shared the mesh with your account. For more information about mesh sharing, see <a href="https://docs.aws.amazon.com/app-mesh/latest/userguide/sharing.html">Working with shared meshes</a>.</p>
     #[serde(rename = "meshOwner")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub mesh_owner: Option<String>,
@@ -2178,6 +1946,7 @@ pub struct UpdateRouteInput {
     pub virtual_router_name: String,
 }
 
+/// <p><zonbook></zonbook><xhtml></xhtml></p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateRouteOutput {
@@ -2189,21 +1958,18 @@ pub struct UpdateRouteOutput {
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateVirtualGatewayInput {
-    /// <p>Unique, case-sensitive identifier that you provide to ensure the idempotency of the
-    /// request. Up to 36 letters, numbers, hyphens, and underscores are allowed.</p>
+    /// <p>Unique, case-sensitive identifier that you provide to ensure the idempotency of the request. Up to 36 letters, numbers, hyphens, and underscores are allowed.</p>
     #[serde(rename = "clientToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub client_token: Option<String>,
     /// <p>The name of the service mesh that the virtual gateway resides in.</p>
     #[serde(rename = "meshName")]
     pub mesh_name: String,
-    /// <p>The AWS IAM account ID of the service mesh owner. If the account ID is not your own, then it's
-    /// the ID of the account that shared the mesh with your account. For more information about mesh sharing, see <a href="https://docs.aws.amazon.com/app-mesh/latest/userguide/sharing.html">Working with shared meshes</a>.</p>
+    /// <p>The AWS IAM account ID of the service mesh owner. If the account ID is not your own, then it's the ID of the account that shared the mesh with your account. For more information about mesh sharing, see <a href="https://docs.aws.amazon.com/app-mesh/latest/userguide/sharing.html">Working with shared meshes</a>.</p>
     #[serde(rename = "meshOwner")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub mesh_owner: Option<String>,
-    /// <p>The new virtual gateway specification to apply. This overwrites the existing
-    /// data.</p>
+    /// <p>The new virtual gateway specification to apply. This overwrites the existing data.</p>
     #[serde(rename = "spec")]
     pub spec: VirtualGatewaySpec,
     /// <p>The name of the virtual gateway to update.</p>
@@ -2219,19 +1985,18 @@ pub struct UpdateVirtualGatewayOutput {
     pub virtual_gateway: VirtualGatewayData,
 }
 
+/// <p><zonbook></zonbook><xhtml></xhtml></p>
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateVirtualNodeInput {
-    /// <p>Unique, case-sensitive identifier that you provide to ensure the idempotency of the
-    /// request. Up to 36 letters, numbers, hyphens, and underscores are allowed.</p>
+    /// <p>Unique, case-sensitive identifier that you provide to ensure the idempotency of the request. Up to 36 letters, numbers, hyphens, and underscores are allowed.</p>
     #[serde(rename = "clientToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub client_token: Option<String>,
     /// <p>The name of the service mesh that the virtual node resides in.</p>
     #[serde(rename = "meshName")]
     pub mesh_name: String,
-    /// <p>The AWS IAM account ID of the service mesh owner. If the account ID is not your own, then it's
-    /// the ID of the account that shared the mesh with your account. For more information about mesh sharing, see <a href="https://docs.aws.amazon.com/app-mesh/latest/userguide/sharing.html">Working with shared meshes</a>.</p>
+    /// <p>The AWS IAM account ID of the service mesh owner. If the account ID is not your own, then it's the ID of the account that shared the mesh with your account. For more information about mesh sharing, see <a href="https://docs.aws.amazon.com/app-mesh/latest/userguide/sharing.html">Working with shared meshes</a>.</p>
     #[serde(rename = "meshOwner")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub mesh_owner: Option<String>,
@@ -2243,6 +2008,7 @@ pub struct UpdateVirtualNodeInput {
     pub virtual_node_name: String,
 }
 
+/// <p><zonbook></zonbook><xhtml></xhtml></p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateVirtualNodeOutput {
@@ -2251,19 +2017,18 @@ pub struct UpdateVirtualNodeOutput {
     pub virtual_node: VirtualNodeData,
 }
 
+/// <p><zonbook></zonbook><xhtml></xhtml></p>
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateVirtualRouterInput {
-    /// <p>Unique, case-sensitive identifier that you provide to ensure the idempotency of the
-    /// request. Up to 36 letters, numbers, hyphens, and underscores are allowed.</p>
+    /// <p>Unique, case-sensitive identifier that you provide to ensure the idempotency of the request. Up to 36 letters, numbers, hyphens, and underscores are allowed.</p>
     #[serde(rename = "clientToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub client_token: Option<String>,
     /// <p>The name of the service mesh that the virtual router resides in.</p>
     #[serde(rename = "meshName")]
     pub mesh_name: String,
-    /// <p>The AWS IAM account ID of the service mesh owner. If the account ID is not your own, then it's
-    /// the ID of the account that shared the mesh with your account. For more information about mesh sharing, see <a href="https://docs.aws.amazon.com/app-mesh/latest/userguide/sharing.html">Working with shared meshes</a>.</p>
+    /// <p>The AWS IAM account ID of the service mesh owner. If the account ID is not your own, then it's the ID of the account that shared the mesh with your account. For more information about mesh sharing, see <a href="https://docs.aws.amazon.com/app-mesh/latest/userguide/sharing.html">Working with shared meshes</a>.</p>
     #[serde(rename = "meshOwner")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub mesh_owner: Option<String>,
@@ -2275,6 +2040,7 @@ pub struct UpdateVirtualRouterInput {
     pub virtual_router_name: String,
 }
 
+/// <p><zonbook></zonbook><xhtml></xhtml></p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateVirtualRouterOutput {
@@ -2283,24 +2049,22 @@ pub struct UpdateVirtualRouterOutput {
     pub virtual_router: VirtualRouterData,
 }
 
+/// <p><zonbook></zonbook><xhtml></xhtml></p>
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateVirtualServiceInput {
-    /// <p>Unique, case-sensitive identifier that you provide to ensure the idempotency of the
-    /// request. Up to 36 letters, numbers, hyphens, and underscores are allowed.</p>
+    /// <p>Unique, case-sensitive identifier that you provide to ensure the idempotency of the request. Up to 36 letters, numbers, hyphens, and underscores are allowed.</p>
     #[serde(rename = "clientToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub client_token: Option<String>,
     /// <p>The name of the service mesh that the virtual service resides in.</p>
     #[serde(rename = "meshName")]
     pub mesh_name: String,
-    /// <p>The AWS IAM account ID of the service mesh owner. If the account ID is not your own, then it's
-    /// the ID of the account that shared the mesh with your account. For more information about mesh sharing, see <a href="https://docs.aws.amazon.com/app-mesh/latest/userguide/sharing.html">Working with shared meshes</a>.</p>
+    /// <p>The AWS IAM account ID of the service mesh owner. If the account ID is not your own, then it's the ID of the account that shared the mesh with your account. For more information about mesh sharing, see <a href="https://docs.aws.amazon.com/app-mesh/latest/userguide/sharing.html">Working with shared meshes</a>.</p>
     #[serde(rename = "meshOwner")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub mesh_owner: Option<String>,
-    /// <p>The new virtual service specification to apply. This overwrites the existing
-    /// data.</p>
+    /// <p>The new virtual service specification to apply. This overwrites the existing data.</p>
     #[serde(rename = "spec")]
     pub spec: VirtualServiceSpec,
     /// <p>The name of the virtual service to update.</p>
@@ -2308,6 +2072,7 @@ pub struct UpdateVirtualServiceInput {
     pub virtual_service_name: String,
 }
 
+/// <p><zonbook></zonbook><xhtml></xhtml></p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateVirtualServiceOutput {
@@ -2346,8 +2111,7 @@ pub struct VirtualGatewayClientPolicy {
 /// <p>An object that represents a Transport Layer Security (TLS) client policy.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct VirtualGatewayClientPolicyTls {
-    /// <p>Whether the policy is enforced. The default is <code>True</code>, if a value isn't
-    /// specified.</p>
+    /// <p>Whether the policy is enforced. The default is <code>True</code>, if a value isn't specified.</p>
     #[serde(rename = "enforce")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub enforce: Option<bool>,
@@ -2358,6 +2122,23 @@ pub struct VirtualGatewayClientPolicyTls {
     /// <p>A reference to an object that represents a TLS validation context.</p>
     #[serde(rename = "validation")]
     pub validation: VirtualGatewayTlsValidationContext,
+}
+
+/// <p>An object that represents the type of virtual gateway connection pool.</p> <p>Only one protocol is used at a time and should be the same protocol as the one chosen under port mapping.</p> <p>If not present the default value for <code>maxPendingRequests</code> is <code>2147483647</code>.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
+pub struct VirtualGatewayConnectionPool {
+    /// <p>An object that represents a type of connection pool. </p>
+    #[serde(rename = "grpc")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub grpc: Option<VirtualGatewayGrpcConnectionPool>,
+    /// <p>An object that represents a type of connection pool.</p>
+    #[serde(rename = "http")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub http: Option<VirtualGatewayHttpConnectionPool>,
+    /// <p>An object that represents a type of connection pool.</p>
+    #[serde(rename = "http2")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub http_2: Option<VirtualGatewayHttp2ConnectionPool>,
 }
 
 /// <p>An object that represents a virtual gateway returned by a describe operation.</p>
@@ -2383,54 +2164,74 @@ pub struct VirtualGatewayData {
 /// <p>An object that represents an access log file.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct VirtualGatewayFileAccessLog {
-    /// <p>The file path to write access logs to. You can use <code>/dev/stdout</code> to send
-    /// access logs to standard out and configure your Envoy container to use a log driver, such as
-    /// <code>awslogs</code>, to export the access logs to a log storage service such as Amazon
-    /// CloudWatch Logs. You can also specify a path in the Envoy container's file system to write
-    /// the files to disk.</p>
+    /// <p>The file path to write access logs to. You can use <code>/dev/stdout</code> to send access logs to standard out and configure your Envoy container to use a log driver, such as <code>awslogs</code>, to export the access logs to a log storage service such as Amazon CloudWatch Logs. You can also specify a path in the Envoy container's file system to write the files to disk.</p>
     #[serde(rename = "path")]
     pub path: String,
 }
 
-/// <p>An object that represents the health check policy for a virtual gateway's
-/// listener.</p>
+/// <p>An object that represents a type of connection pool.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
+pub struct VirtualGatewayGrpcConnectionPool {
+    /// <p>Maximum number of inflight requests Envoy can concurrently support across hosts in upstream cluster.</p>
+    #[serde(rename = "maxRequests")]
+    pub max_requests: i64,
+}
+
+/// <p>An object that represents the health check policy for a virtual gateway's listener.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct VirtualGatewayHealthCheckPolicy {
-    /// <p>The number of consecutive successful health checks that must occur before declaring the
-    /// listener healthy.</p>
+    /// <p>The number of consecutive successful health checks that must occur before declaring the listener healthy.</p>
     #[serde(rename = "healthyThreshold")]
     pub healthy_threshold: i64,
     /// <p>The time period in milliseconds between each health check execution.</p>
     #[serde(rename = "intervalMillis")]
     pub interval_millis: i64,
-    /// <p>The destination path for the health check request. This value is only used if the
-    /// specified protocol is HTTP or HTTP/2. For any other protocol, this value is ignored.</p>
+    /// <p>The destination path for the health check request. This value is only used if the specified protocol is HTTP or HTTP/2. For any other protocol, this value is ignored.</p>
     #[serde(rename = "path")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub path: Option<String>,
-    /// <p>The destination port for the health check request. This port must match the port defined
-    /// in the <a>PortMapping</a> for the listener.</p>
+    /// <p>The destination port for the health check request. This port must match the port defined in the <a>PortMapping</a> for the listener.</p>
     #[serde(rename = "port")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub port: Option<i64>,
-    /// <p>The protocol for the health check request. If you specify <code>grpc</code>, then your
-    /// service must conform to the <a href="https://github.com/grpc/grpc/blob/master/doc/health-checking.md">GRPC Health
-    /// Checking Protocol</a>.</p>
+    /// <p>The protocol for the health check request. If you specify <code>grpc</code>, then your service must conform to the <a href="https://github.com/grpc/grpc/blob/master/doc/health-checking.md">GRPC Health Checking Protocol</a>.</p>
     #[serde(rename = "protocol")]
     pub protocol: String,
-    /// <p>The amount of time to wait when receiving a response from the health check, in
-    /// milliseconds.</p>
+    /// <p>The amount of time to wait when receiving a response from the health check, in milliseconds.</p>
     #[serde(rename = "timeoutMillis")]
     pub timeout_millis: i64,
-    /// <p>The number of consecutive failed health checks that must occur before declaring a
-    /// virtual gateway unhealthy.</p>
+    /// <p>The number of consecutive failed health checks that must occur before declaring a virtual gateway unhealthy.</p>
     #[serde(rename = "unhealthyThreshold")]
     pub unhealthy_threshold: i64,
+}
+
+/// <p>An object that represents a type of connection pool.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
+pub struct VirtualGatewayHttp2ConnectionPool {
+    /// <p>Maximum number of inflight requests Envoy can concurrently support across hosts in upstream cluster.</p>
+    #[serde(rename = "maxRequests")]
+    pub max_requests: i64,
+}
+
+/// <p>An object that represents a type of connection pool.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
+pub struct VirtualGatewayHttpConnectionPool {
+    /// <p>Maximum number of outbound TCP connections Envoy can establish concurrently with all hosts in upstream cluster.</p>
+    #[serde(rename = "maxConnections")]
+    pub max_connections: i64,
+    /// <p>Number of overflowing requests after <code>max_connections</code> Envoy will queue to upstream cluster.</p>
+    #[serde(rename = "maxPendingRequests")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub max_pending_requests: Option<i64>,
 }
 
 /// <p>An object that represents a listener for a virtual gateway.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct VirtualGatewayListener {
+    /// <p>The connection pool information for the virtual gateway listener.</p>
+    #[serde(rename = "connectionPool")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub connection_pool: Option<VirtualGatewayConnectionPool>,
     /// <p>The health check information for the listener.</p>
     #[serde(rename = "healthCheck")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -2450,26 +2251,7 @@ pub struct VirtualGatewayListenerTls {
     /// <p>An object that represents a Transport Layer Security (TLS) certificate.</p>
     #[serde(rename = "certificate")]
     pub certificate: VirtualGatewayListenerTlsCertificate,
-    /// <p>Specify one of the following modes.</p>
-    ///
-    /// <pre><code>     &lt;ul&gt;
-    /// &lt;li&gt;
-    /// &lt;p&gt;
-    /// &lt;b/&gt;STRICT – Listener only accepts connections with TLS
-    /// enabled. &lt;/p&gt;
-    /// &lt;/li&gt;
-    /// &lt;li&gt;
-    /// &lt;p&gt;
-    /// &lt;b/&gt;PERMISSIVE – Listener accepts connections with or
-    /// without TLS enabled.&lt;/p&gt;
-    /// &lt;/li&gt;
-    /// &lt;li&gt;
-    /// &lt;p&gt;
-    /// &lt;b/&gt;DISABLED – Listener only accepts connections without
-    /// TLS. &lt;/p&gt;
-    /// &lt;/li&gt;
-    /// &lt;/ul&gt;
-    /// </code></pre>
+    /// <p><p>Specify one of the following modes.</p> <ul> <li> <p> <b/>STRICT – Listener only accepts connections with TLS enabled. </p> </li> <li> <p> <b/>PERMISSIVE – Listener accepts connections with or without TLS enabled.</p> </li> <li> <p> <b/>DISABLED – Listener only accepts connections without TLS. </p> </li> </ul></p>
     #[serde(rename = "mode")]
     pub mode: String,
 }
@@ -2495,15 +2277,13 @@ pub struct VirtualGatewayListenerTlsCertificate {
     pub file: Option<VirtualGatewayListenerTlsFileCertificate>,
 }
 
-/// <p>An object that represents a local file certificate.
-/// The certificate must meet specific requirements and you must have proxy authorization enabled. For more information, see <a href="https://docs.aws.amazon.com/app-mesh/latest/userguide/tls.html#virtual-node-tls-prerequisites">Transport Layer Security (TLS)</a>.</p>
+/// <p>An object that represents a local file certificate. The certificate must meet specific requirements and you must have proxy authorization enabled. For more information, see <a href="https://docs.aws.amazon.com/app-mesh/latest/userguide/tls.html#virtual-node-tls-prerequisites">Transport Layer Security (TLS)</a>.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct VirtualGatewayListenerTlsFileCertificate {
     /// <p>The certificate chain for the certificate.</p>
     #[serde(rename = "certificateChain")]
     pub certificate_chain: String,
-    /// <p>The private key for a certificate stored on the file system of the mesh endpoint that
-    /// the proxy is running on.</p>
+    /// <p>The private key for a certificate stored on the file system of the mesh endpoint that the proxy is running on.</p>
     #[serde(rename = "privateKey")]
     pub private_key: String,
 }
@@ -2544,12 +2324,10 @@ pub struct VirtualGatewayRef {
     /// <p>The name of the service mesh that the resource resides in.</p>
     #[serde(rename = "meshName")]
     pub mesh_name: String,
-    /// <p>The AWS IAM account ID of the service mesh owner. If the account ID is not your own, then it's
-    /// the ID of the account that shared the mesh with your account. For more information about mesh sharing, see <a href="https://docs.aws.amazon.com/app-mesh/latest/userguide/sharing.html">Working with shared meshes</a>.</p>
+    /// <p>The AWS IAM account ID of the service mesh owner. If the account ID is not your own, then it's the ID of the account that shared the mesh with your account. For more information about mesh sharing, see <a href="https://docs.aws.amazon.com/app-mesh/latest/userguide/sharing.html">Working with shared meshes</a>.</p>
     #[serde(rename = "meshOwner")]
     pub mesh_owner: String,
-    /// <p>The AWS IAM account ID of the resource owner. If the account ID is not your own, then it's
-    /// the ID of the mesh owner or of another account that the mesh is shared with. For more information about mesh sharing, see <a href="https://docs.aws.amazon.com/app-mesh/latest/userguide/sharing.html">Working with shared meshes</a>.</p>
+    /// <p>The AWS IAM account ID of the resource owner. If the account ID is not your own, then it's the ID of the mesh owner or of another account that the mesh is shared with. For more information about mesh sharing, see <a href="https://docs.aws.amazon.com/app-mesh/latest/userguide/sharing.html">Working with shared meshes</a>.</p>
     #[serde(rename = "resourceOwner")]
     pub resource_owner: String,
     /// <p>The version of the resource. Resources are created at version 1, and this version is incremented each time that they're updated.</p>
@@ -2567,8 +2345,7 @@ pub struct VirtualGatewaySpec {
     #[serde(rename = "backendDefaults")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub backend_defaults: Option<VirtualGatewayBackendDefaults>,
-    /// <p>The listeners that the mesh endpoint is expected to receive inbound traffic from. You
-    /// can specify one listener.</p>
+    /// <p>The listeners that the mesh endpoint is expected to receive inbound traffic from. You can specify one listener.</p>
     #[serde(rename = "listeners")]
     pub listeners: Vec<VirtualGatewayListener>,
     #[serde(rename = "logging")]
@@ -2593,8 +2370,7 @@ pub struct VirtualGatewayTlsValidationContext {
     pub trust: VirtualGatewayTlsValidationContextTrust,
 }
 
-/// <p>An object that represents a TLS validation context trust for an AWS Certicate Manager (ACM)
-/// certificate.</p>
+/// <p>An object that represents a TLS validation context trust for an AWS Certicate Manager (ACM) certificate.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct VirtualGatewayTlsValidationContextAcmTrust {
     /// <p>One or more ACM Amazon Resource Name (ARN)s.</p>
@@ -2605,8 +2381,7 @@ pub struct VirtualGatewayTlsValidationContextAcmTrust {
 /// <p>An object that represents a Transport Layer Security (TLS) validation context trust for a local file.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct VirtualGatewayTlsValidationContextFileTrust {
-    /// <p>The certificate trust chain for a certificate stored on the file system of the virtual
-    /// node that the proxy is running on.</p>
+    /// <p>The certificate trust chain for a certificate stored on the file system of the virtual node that the proxy is running on.</p>
     #[serde(rename = "certificateChain")]
     pub certificate_chain: String,
 }
@@ -2614,8 +2389,7 @@ pub struct VirtualGatewayTlsValidationContextFileTrust {
 /// <p>An object that represents a Transport Layer Security (TLS) validation context trust.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct VirtualGatewayTlsValidationContextTrust {
-    /// <p>A reference to an object that represents a TLS validation context trust for an AWS Certicate Manager (ACM)
-    /// certificate.</p>
+    /// <p>A reference to an object that represents a TLS validation context trust for an AWS Certicate Manager (ACM) certificate.</p>
     #[serde(rename = "acm")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub acm: Option<VirtualGatewayTlsValidationContextAcmTrust>,
@@ -2623,6 +2397,27 @@ pub struct VirtualGatewayTlsValidationContextTrust {
     #[serde(rename = "file")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub file: Option<VirtualGatewayTlsValidationContextFileTrust>,
+}
+
+/// <p><p>An object that represents the type of virtual node connection pool.</p> <p>Only one protocol is used at a time and should be the same protocol as the one chosen under port mapping.</p> <p>If not present the default value for <code>maxPendingRequests</code> is <code>2147483647</code>.</p> <p/></p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
+pub struct VirtualNodeConnectionPool {
+    /// <p>An object that represents a type of connection pool.</p>
+    #[serde(rename = "grpc")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub grpc: Option<VirtualNodeGrpcConnectionPool>,
+    /// <p>An object that represents a type of connection pool.</p>
+    #[serde(rename = "http")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub http: Option<VirtualNodeHttpConnectionPool>,
+    /// <p>An object that represents a type of connection pool.</p>
+    #[serde(rename = "http2")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub http_2: Option<VirtualNodeHttp2ConnectionPool>,
+    /// <p>An object that represents a type of connection pool.</p>
+    #[serde(rename = "tcp")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub tcp: Option<VirtualNodeTcpConnectionPool>,
 }
 
 /// <p>An object that represents a virtual node returned by a describe operation.</p>
@@ -2646,6 +2441,34 @@ pub struct VirtualNodeData {
     pub virtual_node_name: String,
 }
 
+/// <p>An object that represents a type of connection pool.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
+pub struct VirtualNodeGrpcConnectionPool {
+    /// <p>Maximum number of inflight requests Envoy can concurrently support across hosts in upstream cluster.</p>
+    #[serde(rename = "maxRequests")]
+    pub max_requests: i64,
+}
+
+/// <p>An object that represents a type of connection pool.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
+pub struct VirtualNodeHttp2ConnectionPool {
+    /// <p>Maximum number of inflight requests Envoy can concurrently support across hosts in upstream cluster.</p>
+    #[serde(rename = "maxRequests")]
+    pub max_requests: i64,
+}
+
+/// <p>An object that represents a type of connection pool.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
+pub struct VirtualNodeHttpConnectionPool {
+    /// <p>Maximum number of outbound TCP connections Envoy can establish concurrently with all hosts in upstream cluster.</p>
+    #[serde(rename = "maxConnections")]
+    pub max_connections: i64,
+    /// <p>Number of overflowing requests after <code>max_connections</code> Envoy will queue to upstream cluster.</p>
+    #[serde(rename = "maxPendingRequests")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub max_pending_requests: Option<i64>,
+}
+
 /// <p>An object that represents a virtual node returned by a list operation.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
@@ -2662,12 +2485,10 @@ pub struct VirtualNodeRef {
     /// <p>The name of the service mesh that the virtual node resides in.</p>
     #[serde(rename = "meshName")]
     pub mesh_name: String,
-    /// <p>The AWS IAM account ID of the service mesh owner. If the account ID is not your own, then it's
-    /// the ID of the account that shared the mesh with your account. For more information about mesh sharing, see <a href="https://docs.aws.amazon.com/app-mesh/latest/userguide/sharing.html">Working with shared meshes</a>.</p>
+    /// <p>The AWS IAM account ID of the service mesh owner. If the account ID is not your own, then it's the ID of the account that shared the mesh with your account. For more information about mesh sharing, see <a href="https://docs.aws.amazon.com/app-mesh/latest/userguide/sharing.html">Working with shared meshes</a>.</p>
     #[serde(rename = "meshOwner")]
     pub mesh_owner: String,
-    /// <p>The AWS IAM account ID of the resource owner. If the account ID is not your own, then it's
-    /// the ID of the mesh owner or of another account that the mesh is shared with. For more information about mesh sharing, see <a href="https://docs.aws.amazon.com/app-mesh/latest/userguide/sharing.html">Working with shared meshes</a>.</p>
+    /// <p>The AWS IAM account ID of the resource owner. If the account ID is not your own, then it's the ID of the mesh owner or of another account that the mesh is shared with. For more information about mesh sharing, see <a href="https://docs.aws.amazon.com/app-mesh/latest/userguide/sharing.html">Working with shared meshes</a>.</p>
     #[serde(rename = "resourceOwner")]
     pub resource_owner: String,
     /// <p>The version of the resource. Resources are created at version 1, and this version is incremented each time that they're updated.</p>
@@ -2697,8 +2518,7 @@ pub struct VirtualNodeSpec {
     #[serde(rename = "backends")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub backends: Option<Vec<Backend>>,
-    /// <p>The listener that the virtual node is expected to receive inbound traffic from. You can
-    /// specify one listener.</p>
+    /// <p>The listener that the virtual node is expected to receive inbound traffic from. You can specify one listener.</p>
     #[serde(rename = "listeners")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub listeners: Option<Vec<Listener>>,
@@ -2706,9 +2526,7 @@ pub struct VirtualNodeSpec {
     #[serde(rename = "logging")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub logging: Option<Logging>,
-    /// <p>The service discovery information for the virtual node. If your virtual node does not
-    /// expect ingress traffic, you can omit this parameter. If you specify a
-    /// <code>listener</code>, then you must specify service discovery information.</p>
+    /// <p>The service discovery information for the virtual node. If your virtual node does not expect ingress traffic, you can omit this parameter. If you specify a <code>listener</code>, then you must specify service discovery information.</p>
     #[serde(rename = "serviceDiscovery")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub service_discovery: Option<ServiceDiscovery>,
@@ -2721,6 +2539,14 @@ pub struct VirtualNodeStatus {
     /// <p>The current status of the virtual node.</p>
     #[serde(rename = "status")]
     pub status: String,
+}
+
+/// <p>An object that represents a type of connection pool.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
+pub struct VirtualNodeTcpConnectionPool {
+    /// <p>Maximum number of outbound TCP connections Envoy can establish concurrently with all hosts in upstream cluster.</p>
+    #[serde(rename = "maxConnections")]
+    pub max_connections: i64,
 }
 
 /// <p>An object that represents a virtual router returned by a describe operation.</p>
@@ -2767,12 +2593,10 @@ pub struct VirtualRouterRef {
     /// <p>The name of the service mesh that the virtual router resides in.</p>
     #[serde(rename = "meshName")]
     pub mesh_name: String,
-    /// <p>The AWS IAM account ID of the service mesh owner. If the account ID is not your own, then it's
-    /// the ID of the account that shared the mesh with your account. For more information about mesh sharing, see <a href="https://docs.aws.amazon.com/app-mesh/latest/userguide/sharing.html">Working with shared meshes</a>.</p>
+    /// <p>The AWS IAM account ID of the service mesh owner. If the account ID is not your own, then it's the ID of the account that shared the mesh with your account. For more information about mesh sharing, see <a href="https://docs.aws.amazon.com/app-mesh/latest/userguide/sharing.html">Working with shared meshes</a>.</p>
     #[serde(rename = "meshOwner")]
     pub mesh_owner: String,
-    /// <p>The AWS IAM account ID of the resource owner. If the account ID is not your own, then it's
-    /// the ID of the mesh owner or of another account that the mesh is shared with. For more information about mesh sharing, see <a href="https://docs.aws.amazon.com/app-mesh/latest/userguide/sharing.html">Working with shared meshes</a>.</p>
+    /// <p>The AWS IAM account ID of the resource owner. If the account ID is not your own, then it's the ID of the mesh owner or of another account that the mesh is shared with. For more information about mesh sharing, see <a href="https://docs.aws.amazon.com/app-mesh/latest/userguide/sharing.html">Working with shared meshes</a>.</p>
     #[serde(rename = "resourceOwner")]
     pub resource_owner: String,
     /// <p>The version of the resource. Resources are created at version 1, and this version is incremented each time that they're updated.</p>
@@ -2794,8 +2618,7 @@ pub struct VirtualRouterServiceProvider {
 /// <p>An object that represents the specification of a virtual router.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct VirtualRouterSpec {
-    /// <p>The listeners that the virtual router is expected to receive inbound traffic from. You
-    /// can specify one listener.</p>
+    /// <p>The listeners that the virtual router is expected to receive inbound traffic from. You can specify one listener.</p>
     #[serde(rename = "listeners")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub listeners: Option<Vec<VirtualRouterListener>>,
@@ -2871,12 +2694,10 @@ pub struct VirtualServiceRef {
     /// <p>The name of the service mesh that the virtual service resides in.</p>
     #[serde(rename = "meshName")]
     pub mesh_name: String,
-    /// <p>The AWS IAM account ID of the service mesh owner. If the account ID is not your own, then it's
-    /// the ID of the account that shared the mesh with your account. For more information about mesh sharing, see <a href="https://docs.aws.amazon.com/app-mesh/latest/userguide/sharing.html">Working with shared meshes</a>.</p>
+    /// <p>The AWS IAM account ID of the service mesh owner. If the account ID is not your own, then it's the ID of the account that shared the mesh with your account. For more information about mesh sharing, see <a href="https://docs.aws.amazon.com/app-mesh/latest/userguide/sharing.html">Working with shared meshes</a>.</p>
     #[serde(rename = "meshOwner")]
     pub mesh_owner: String,
-    /// <p>The AWS IAM account ID of the resource owner. If the account ID is not your own, then it's
-    /// the ID of the mesh owner or of another account that the mesh is shared with. For more information about mesh sharing, see <a href="https://docs.aws.amazon.com/app-mesh/latest/userguide/sharing.html">Working with shared meshes</a>.</p>
+    /// <p>The AWS IAM account ID of the resource owner. If the account ID is not your own, then it's the ID of the mesh owner or of another account that the mesh is shared with. For more information about mesh sharing, see <a href="https://docs.aws.amazon.com/app-mesh/latest/userguide/sharing.html">Working with shared meshes</a>.</p>
     #[serde(rename = "resourceOwner")]
     pub resource_owner: String,
     /// <p>The version of the resource. Resources are created at version 1, and this version is incremented each time that they're updated.</p>
@@ -2890,8 +2711,7 @@ pub struct VirtualServiceRef {
 /// <p>An object that represents the specification of a virtual service.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct VirtualServiceSpec {
-    /// <p>The App Mesh object that is acting as the provider for a virtual service. You can specify
-    /// a single virtual node or virtual router.</p>
+    /// <p>The App Mesh object that is acting as the provider for a virtual service. You can specify a single virtual node or virtual router.</p>
     #[serde(rename = "provider")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub provider: Option<VirtualServiceProvider>,
@@ -2906,10 +2726,7 @@ pub struct VirtualServiceStatus {
     pub status: String,
 }
 
-/// <p>An object that represents a target and its relative weight. Traffic is distributed
-/// across targets according to their relative weight. For example, a weighted target with a
-/// relative weight of 50 receives five times as much traffic as one with a relative weight of
-/// 10. The total weight for all targets combined must be less than or equal to 100.</p>
+/// <p>An object that represents a target and its relative weight. Traffic is distributed across targets according to their relative weight. For example, a weighted target with a relative weight of 50 receives five times as much traffic as one with a relative weight of 10. The total weight for all targets combined must be less than or equal to 100.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct WeightedTarget {
     /// <p>The virtual node to associate with the weighted target.</p>
@@ -2925,24 +2742,19 @@ pub struct WeightedTarget {
 pub enum CreateGatewayRouteError {
     /// <p>The request syntax was malformed. Check your request syntax and try again.</p>
     BadRequest(String),
-    /// <p>The request contains a client token that was used for a previous update resource call
-    /// with different specifications. Try the request again with a new client token.</p>
+    /// <p>The request contains a client token that was used for a previous update resource call with different specifications. Try the request again with a new client token.</p>
     Conflict(String),
     /// <p>You don't have permissions to perform this action.</p>
     Forbidden(String),
-    /// <p>The request processing has failed because of an unknown error, exception, or
-    /// failure.</p>
+    /// <p>The request processing has failed because of an unknown error, exception, or failure.</p>
     InternalServerError(String),
-    /// <p>You have exceeded a service limit for your account. For more information, see <a href="https://docs.aws.amazon.com/app-mesh/latest/userguide/service-quotas.html">Service
-    /// Limits</a> in the <i>AWS App Mesh User Guide</i>.</p>
+    /// <p>You have exceeded a service limit for your account. For more information, see <a href="https://docs.aws.amazon.com/app-mesh/latest/userguide/service-quotas.html">Service Limits</a> in the <i>AWS App Mesh User Guide</i>.</p>
     LimitExceeded(String),
     /// <p>The specified resource doesn't exist. Check your request syntax and try again.</p>
     NotFound(String),
     /// <p>The request has failed due to a temporary failure of the service.</p>
     ServiceUnavailable(String),
-    /// <p>The maximum request rate permitted by the App Mesh APIs has been exceeded for your
-    /// account. For best results, use an increasing or variable sleep interval between
-    /// requests.</p>
+    /// <p>The maximum request rate permitted by the App Mesh APIs has been exceeded for your account. For best results, use an increasing or variable sleep interval between requests.</p>
     TooManyRequests(String),
 }
 
@@ -3006,24 +2818,19 @@ impl Error for CreateGatewayRouteError {}
 pub enum CreateMeshError {
     /// <p>The request syntax was malformed. Check your request syntax and try again.</p>
     BadRequest(String),
-    /// <p>The request contains a client token that was used for a previous update resource call
-    /// with different specifications. Try the request again with a new client token.</p>
+    /// <p>The request contains a client token that was used for a previous update resource call with different specifications. Try the request again with a new client token.</p>
     Conflict(String),
     /// <p>You don't have permissions to perform this action.</p>
     Forbidden(String),
-    /// <p>The request processing has failed because of an unknown error, exception, or
-    /// failure.</p>
+    /// <p>The request processing has failed because of an unknown error, exception, or failure.</p>
     InternalServerError(String),
-    /// <p>You have exceeded a service limit for your account. For more information, see <a href="https://docs.aws.amazon.com/app-mesh/latest/userguide/service-quotas.html">Service
-    /// Limits</a> in the <i>AWS App Mesh User Guide</i>.</p>
+    /// <p>You have exceeded a service limit for your account. For more information, see <a href="https://docs.aws.amazon.com/app-mesh/latest/userguide/service-quotas.html">Service Limits</a> in the <i>AWS App Mesh User Guide</i>.</p>
     LimitExceeded(String),
     /// <p>The specified resource doesn't exist. Check your request syntax and try again.</p>
     NotFound(String),
     /// <p>The request has failed due to a temporary failure of the service.</p>
     ServiceUnavailable(String),
-    /// <p>The maximum request rate permitted by the App Mesh APIs has been exceeded for your
-    /// account. For best results, use an increasing or variable sleep interval between
-    /// requests.</p>
+    /// <p>The maximum request rate permitted by the App Mesh APIs has been exceeded for your account. For best results, use an increasing or variable sleep interval between requests.</p>
     TooManyRequests(String),
 }
 
@@ -3083,24 +2890,19 @@ impl Error for CreateMeshError {}
 pub enum CreateRouteError {
     /// <p>The request syntax was malformed. Check your request syntax and try again.</p>
     BadRequest(String),
-    /// <p>The request contains a client token that was used for a previous update resource call
-    /// with different specifications. Try the request again with a new client token.</p>
+    /// <p>The request contains a client token that was used for a previous update resource call with different specifications. Try the request again with a new client token.</p>
     Conflict(String),
     /// <p>You don't have permissions to perform this action.</p>
     Forbidden(String),
-    /// <p>The request processing has failed because of an unknown error, exception, or
-    /// failure.</p>
+    /// <p>The request processing has failed because of an unknown error, exception, or failure.</p>
     InternalServerError(String),
-    /// <p>You have exceeded a service limit for your account. For more information, see <a href="https://docs.aws.amazon.com/app-mesh/latest/userguide/service-quotas.html">Service
-    /// Limits</a> in the <i>AWS App Mesh User Guide</i>.</p>
+    /// <p>You have exceeded a service limit for your account. For more information, see <a href="https://docs.aws.amazon.com/app-mesh/latest/userguide/service-quotas.html">Service Limits</a> in the <i>AWS App Mesh User Guide</i>.</p>
     LimitExceeded(String),
     /// <p>The specified resource doesn't exist. Check your request syntax and try again.</p>
     NotFound(String),
     /// <p>The request has failed due to a temporary failure of the service.</p>
     ServiceUnavailable(String),
-    /// <p>The maximum request rate permitted by the App Mesh APIs has been exceeded for your
-    /// account. For best results, use an increasing or variable sleep interval between
-    /// requests.</p>
+    /// <p>The maximum request rate permitted by the App Mesh APIs has been exceeded for your account. For best results, use an increasing or variable sleep interval between requests.</p>
     TooManyRequests(String),
 }
 
@@ -3160,24 +2962,19 @@ impl Error for CreateRouteError {}
 pub enum CreateVirtualGatewayError {
     /// <p>The request syntax was malformed. Check your request syntax and try again.</p>
     BadRequest(String),
-    /// <p>The request contains a client token that was used for a previous update resource call
-    /// with different specifications. Try the request again with a new client token.</p>
+    /// <p>The request contains a client token that was used for a previous update resource call with different specifications. Try the request again with a new client token.</p>
     Conflict(String),
     /// <p>You don't have permissions to perform this action.</p>
     Forbidden(String),
-    /// <p>The request processing has failed because of an unknown error, exception, or
-    /// failure.</p>
+    /// <p>The request processing has failed because of an unknown error, exception, or failure.</p>
     InternalServerError(String),
-    /// <p>You have exceeded a service limit for your account. For more information, see <a href="https://docs.aws.amazon.com/app-mesh/latest/userguide/service-quotas.html">Service
-    /// Limits</a> in the <i>AWS App Mesh User Guide</i>.</p>
+    /// <p>You have exceeded a service limit for your account. For more information, see <a href="https://docs.aws.amazon.com/app-mesh/latest/userguide/service-quotas.html">Service Limits</a> in the <i>AWS App Mesh User Guide</i>.</p>
     LimitExceeded(String),
     /// <p>The specified resource doesn't exist. Check your request syntax and try again.</p>
     NotFound(String),
     /// <p>The request has failed due to a temporary failure of the service.</p>
     ServiceUnavailable(String),
-    /// <p>The maximum request rate permitted by the App Mesh APIs has been exceeded for your
-    /// account. For best results, use an increasing or variable sleep interval between
-    /// requests.</p>
+    /// <p>The maximum request rate permitted by the App Mesh APIs has been exceeded for your account. For best results, use an increasing or variable sleep interval between requests.</p>
     TooManyRequests(String),
 }
 
@@ -3243,24 +3040,19 @@ impl Error for CreateVirtualGatewayError {}
 pub enum CreateVirtualNodeError {
     /// <p>The request syntax was malformed. Check your request syntax and try again.</p>
     BadRequest(String),
-    /// <p>The request contains a client token that was used for a previous update resource call
-    /// with different specifications. Try the request again with a new client token.</p>
+    /// <p>The request contains a client token that was used for a previous update resource call with different specifications. Try the request again with a new client token.</p>
     Conflict(String),
     /// <p>You don't have permissions to perform this action.</p>
     Forbidden(String),
-    /// <p>The request processing has failed because of an unknown error, exception, or
-    /// failure.</p>
+    /// <p>The request processing has failed because of an unknown error, exception, or failure.</p>
     InternalServerError(String),
-    /// <p>You have exceeded a service limit for your account. For more information, see <a href="https://docs.aws.amazon.com/app-mesh/latest/userguide/service-quotas.html">Service
-    /// Limits</a> in the <i>AWS App Mesh User Guide</i>.</p>
+    /// <p>You have exceeded a service limit for your account. For more information, see <a href="https://docs.aws.amazon.com/app-mesh/latest/userguide/service-quotas.html">Service Limits</a> in the <i>AWS App Mesh User Guide</i>.</p>
     LimitExceeded(String),
     /// <p>The specified resource doesn't exist. Check your request syntax and try again.</p>
     NotFound(String),
     /// <p>The request has failed due to a temporary failure of the service.</p>
     ServiceUnavailable(String),
-    /// <p>The maximum request rate permitted by the App Mesh APIs has been exceeded for your
-    /// account. For best results, use an increasing or variable sleep interval between
-    /// requests.</p>
+    /// <p>The maximum request rate permitted by the App Mesh APIs has been exceeded for your account. For best results, use an increasing or variable sleep interval between requests.</p>
     TooManyRequests(String),
 }
 
@@ -3324,24 +3116,19 @@ impl Error for CreateVirtualNodeError {}
 pub enum CreateVirtualRouterError {
     /// <p>The request syntax was malformed. Check your request syntax and try again.</p>
     BadRequest(String),
-    /// <p>The request contains a client token that was used for a previous update resource call
-    /// with different specifications. Try the request again with a new client token.</p>
+    /// <p>The request contains a client token that was used for a previous update resource call with different specifications. Try the request again with a new client token.</p>
     Conflict(String),
     /// <p>You don't have permissions to perform this action.</p>
     Forbidden(String),
-    /// <p>The request processing has failed because of an unknown error, exception, or
-    /// failure.</p>
+    /// <p>The request processing has failed because of an unknown error, exception, or failure.</p>
     InternalServerError(String),
-    /// <p>You have exceeded a service limit for your account. For more information, see <a href="https://docs.aws.amazon.com/app-mesh/latest/userguide/service-quotas.html">Service
-    /// Limits</a> in the <i>AWS App Mesh User Guide</i>.</p>
+    /// <p>You have exceeded a service limit for your account. For more information, see <a href="https://docs.aws.amazon.com/app-mesh/latest/userguide/service-quotas.html">Service Limits</a> in the <i>AWS App Mesh User Guide</i>.</p>
     LimitExceeded(String),
     /// <p>The specified resource doesn't exist. Check your request syntax and try again.</p>
     NotFound(String),
     /// <p>The request has failed due to a temporary failure of the service.</p>
     ServiceUnavailable(String),
-    /// <p>The maximum request rate permitted by the App Mesh APIs has been exceeded for your
-    /// account. For best results, use an increasing or variable sleep interval between
-    /// requests.</p>
+    /// <p>The maximum request rate permitted by the App Mesh APIs has been exceeded for your account. For best results, use an increasing or variable sleep interval between requests.</p>
     TooManyRequests(String),
 }
 
@@ -3405,24 +3192,19 @@ impl Error for CreateVirtualRouterError {}
 pub enum CreateVirtualServiceError {
     /// <p>The request syntax was malformed. Check your request syntax and try again.</p>
     BadRequest(String),
-    /// <p>The request contains a client token that was used for a previous update resource call
-    /// with different specifications. Try the request again with a new client token.</p>
+    /// <p>The request contains a client token that was used for a previous update resource call with different specifications. Try the request again with a new client token.</p>
     Conflict(String),
     /// <p>You don't have permissions to perform this action.</p>
     Forbidden(String),
-    /// <p>The request processing has failed because of an unknown error, exception, or
-    /// failure.</p>
+    /// <p>The request processing has failed because of an unknown error, exception, or failure.</p>
     InternalServerError(String),
-    /// <p>You have exceeded a service limit for your account. For more information, see <a href="https://docs.aws.amazon.com/app-mesh/latest/userguide/service-quotas.html">Service
-    /// Limits</a> in the <i>AWS App Mesh User Guide</i>.</p>
+    /// <p>You have exceeded a service limit for your account. For more information, see <a href="https://docs.aws.amazon.com/app-mesh/latest/userguide/service-quotas.html">Service Limits</a> in the <i>AWS App Mesh User Guide</i>.</p>
     LimitExceeded(String),
     /// <p>The specified resource doesn't exist. Check your request syntax and try again.</p>
     NotFound(String),
     /// <p>The request has failed due to a temporary failure of the service.</p>
     ServiceUnavailable(String),
-    /// <p>The maximum request rate permitted by the App Mesh APIs has been exceeded for your
-    /// account. For best results, use an increasing or variable sleep interval between
-    /// requests.</p>
+    /// <p>The maximum request rate permitted by the App Mesh APIs has been exceeded for your account. For best results, use an increasing or variable sleep interval between requests.</p>
     TooManyRequests(String),
 }
 
@@ -3490,19 +3272,15 @@ pub enum DeleteGatewayRouteError {
     BadRequest(String),
     /// <p>You don't have permissions to perform this action.</p>
     Forbidden(String),
-    /// <p>The request processing has failed because of an unknown error, exception, or
-    /// failure.</p>
+    /// <p>The request processing has failed because of an unknown error, exception, or failure.</p>
     InternalServerError(String),
     /// <p>The specified resource doesn't exist. Check your request syntax and try again.</p>
     NotFound(String),
-    /// <p>You can't delete the specified resource because it's in use or required by another
-    /// resource.</p>
+    /// <p>You can't delete the specified resource because it's in use or required by another resource.</p>
     ResourceInUse(String),
     /// <p>The request has failed due to a temporary failure of the service.</p>
     ServiceUnavailable(String),
-    /// <p>The maximum request rate permitted by the App Mesh APIs has been exceeded for your
-    /// account. For best results, use an increasing or variable sleep interval between
-    /// requests.</p>
+    /// <p>The maximum request rate permitted by the App Mesh APIs has been exceeded for your account. For best results, use an increasing or variable sleep interval between requests.</p>
     TooManyRequests(String),
 }
 
@@ -3564,19 +3342,15 @@ pub enum DeleteMeshError {
     BadRequest(String),
     /// <p>You don't have permissions to perform this action.</p>
     Forbidden(String),
-    /// <p>The request processing has failed because of an unknown error, exception, or
-    /// failure.</p>
+    /// <p>The request processing has failed because of an unknown error, exception, or failure.</p>
     InternalServerError(String),
     /// <p>The specified resource doesn't exist. Check your request syntax and try again.</p>
     NotFound(String),
-    /// <p>You can't delete the specified resource because it's in use or required by another
-    /// resource.</p>
+    /// <p>You can't delete the specified resource because it's in use or required by another resource.</p>
     ResourceInUse(String),
     /// <p>The request has failed due to a temporary failure of the service.</p>
     ServiceUnavailable(String),
-    /// <p>The maximum request rate permitted by the App Mesh APIs has been exceeded for your
-    /// account. For best results, use an increasing or variable sleep interval between
-    /// requests.</p>
+    /// <p>The maximum request rate permitted by the App Mesh APIs has been exceeded for your account. For best results, use an increasing or variable sleep interval between requests.</p>
     TooManyRequests(String),
 }
 
@@ -3634,19 +3408,15 @@ pub enum DeleteRouteError {
     BadRequest(String),
     /// <p>You don't have permissions to perform this action.</p>
     Forbidden(String),
-    /// <p>The request processing has failed because of an unknown error, exception, or
-    /// failure.</p>
+    /// <p>The request processing has failed because of an unknown error, exception, or failure.</p>
     InternalServerError(String),
     /// <p>The specified resource doesn't exist. Check your request syntax and try again.</p>
     NotFound(String),
-    /// <p>You can't delete the specified resource because it's in use or required by another
-    /// resource.</p>
+    /// <p>You can't delete the specified resource because it's in use or required by another resource.</p>
     ResourceInUse(String),
     /// <p>The request has failed due to a temporary failure of the service.</p>
     ServiceUnavailable(String),
-    /// <p>The maximum request rate permitted by the App Mesh APIs has been exceeded for your
-    /// account. For best results, use an increasing or variable sleep interval between
-    /// requests.</p>
+    /// <p>The maximum request rate permitted by the App Mesh APIs has been exceeded for your account. For best results, use an increasing or variable sleep interval between requests.</p>
     TooManyRequests(String),
 }
 
@@ -3704,19 +3474,15 @@ pub enum DeleteVirtualGatewayError {
     BadRequest(String),
     /// <p>You don't have permissions to perform this action.</p>
     Forbidden(String),
-    /// <p>The request processing has failed because of an unknown error, exception, or
-    /// failure.</p>
+    /// <p>The request processing has failed because of an unknown error, exception, or failure.</p>
     InternalServerError(String),
     /// <p>The specified resource doesn't exist. Check your request syntax and try again.</p>
     NotFound(String),
-    /// <p>You can't delete the specified resource because it's in use or required by another
-    /// resource.</p>
+    /// <p>You can't delete the specified resource because it's in use or required by another resource.</p>
     ResourceInUse(String),
     /// <p>The request has failed due to a temporary failure of the service.</p>
     ServiceUnavailable(String),
-    /// <p>The maximum request rate permitted by the App Mesh APIs has been exceeded for your
-    /// account. For best results, use an increasing or variable sleep interval between
-    /// requests.</p>
+    /// <p>The maximum request rate permitted by the App Mesh APIs has been exceeded for your account. For best results, use an increasing or variable sleep interval between requests.</p>
     TooManyRequests(String),
 }
 
@@ -3780,19 +3546,15 @@ pub enum DeleteVirtualNodeError {
     BadRequest(String),
     /// <p>You don't have permissions to perform this action.</p>
     Forbidden(String),
-    /// <p>The request processing has failed because of an unknown error, exception, or
-    /// failure.</p>
+    /// <p>The request processing has failed because of an unknown error, exception, or failure.</p>
     InternalServerError(String),
     /// <p>The specified resource doesn't exist. Check your request syntax and try again.</p>
     NotFound(String),
-    /// <p>You can't delete the specified resource because it's in use or required by another
-    /// resource.</p>
+    /// <p>You can't delete the specified resource because it's in use or required by another resource.</p>
     ResourceInUse(String),
     /// <p>The request has failed due to a temporary failure of the service.</p>
     ServiceUnavailable(String),
-    /// <p>The maximum request rate permitted by the App Mesh APIs has been exceeded for your
-    /// account. For best results, use an increasing or variable sleep interval between
-    /// requests.</p>
+    /// <p>The maximum request rate permitted by the App Mesh APIs has been exceeded for your account. For best results, use an increasing or variable sleep interval between requests.</p>
     TooManyRequests(String),
 }
 
@@ -3854,19 +3616,15 @@ pub enum DeleteVirtualRouterError {
     BadRequest(String),
     /// <p>You don't have permissions to perform this action.</p>
     Forbidden(String),
-    /// <p>The request processing has failed because of an unknown error, exception, or
-    /// failure.</p>
+    /// <p>The request processing has failed because of an unknown error, exception, or failure.</p>
     InternalServerError(String),
     /// <p>The specified resource doesn't exist. Check your request syntax and try again.</p>
     NotFound(String),
-    /// <p>You can't delete the specified resource because it's in use or required by another
-    /// resource.</p>
+    /// <p>You can't delete the specified resource because it's in use or required by another resource.</p>
     ResourceInUse(String),
     /// <p>The request has failed due to a temporary failure of the service.</p>
     ServiceUnavailable(String),
-    /// <p>The maximum request rate permitted by the App Mesh APIs has been exceeded for your
-    /// account. For best results, use an increasing or variable sleep interval between
-    /// requests.</p>
+    /// <p>The maximum request rate permitted by the App Mesh APIs has been exceeded for your account. For best results, use an increasing or variable sleep interval between requests.</p>
     TooManyRequests(String),
 }
 
@@ -3928,19 +3686,15 @@ pub enum DeleteVirtualServiceError {
     BadRequest(String),
     /// <p>You don't have permissions to perform this action.</p>
     Forbidden(String),
-    /// <p>The request processing has failed because of an unknown error, exception, or
-    /// failure.</p>
+    /// <p>The request processing has failed because of an unknown error, exception, or failure.</p>
     InternalServerError(String),
     /// <p>The specified resource doesn't exist. Check your request syntax and try again.</p>
     NotFound(String),
-    /// <p>You can't delete the specified resource because it's in use or required by another
-    /// resource.</p>
+    /// <p>You can't delete the specified resource because it's in use or required by another resource.</p>
     ResourceInUse(String),
     /// <p>The request has failed due to a temporary failure of the service.</p>
     ServiceUnavailable(String),
-    /// <p>The maximum request rate permitted by the App Mesh APIs has been exceeded for your
-    /// account. For best results, use an increasing or variable sleep interval between
-    /// requests.</p>
+    /// <p>The maximum request rate permitted by the App Mesh APIs has been exceeded for your account. For best results, use an increasing or variable sleep interval between requests.</p>
     TooManyRequests(String),
 }
 
@@ -4004,16 +3758,13 @@ pub enum DescribeGatewayRouteError {
     BadRequest(String),
     /// <p>You don't have permissions to perform this action.</p>
     Forbidden(String),
-    /// <p>The request processing has failed because of an unknown error, exception, or
-    /// failure.</p>
+    /// <p>The request processing has failed because of an unknown error, exception, or failure.</p>
     InternalServerError(String),
     /// <p>The specified resource doesn't exist. Check your request syntax and try again.</p>
     NotFound(String),
     /// <p>The request has failed due to a temporary failure of the service.</p>
     ServiceUnavailable(String),
-    /// <p>The maximum request rate permitted by the App Mesh APIs has been exceeded for your
-    /// account. For best results, use an increasing or variable sleep interval between
-    /// requests.</p>
+    /// <p>The maximum request rate permitted by the App Mesh APIs has been exceeded for your account. For best results, use an increasing or variable sleep interval between requests.</p>
     TooManyRequests(String),
 }
 
@@ -4073,16 +3824,13 @@ pub enum DescribeMeshError {
     BadRequest(String),
     /// <p>You don't have permissions to perform this action.</p>
     Forbidden(String),
-    /// <p>The request processing has failed because of an unknown error, exception, or
-    /// failure.</p>
+    /// <p>The request processing has failed because of an unknown error, exception, or failure.</p>
     InternalServerError(String),
     /// <p>The specified resource doesn't exist. Check your request syntax and try again.</p>
     NotFound(String),
     /// <p>The request has failed due to a temporary failure of the service.</p>
     ServiceUnavailable(String),
-    /// <p>The maximum request rate permitted by the App Mesh APIs has been exceeded for your
-    /// account. For best results, use an increasing or variable sleep interval between
-    /// requests.</p>
+    /// <p>The maximum request rate permitted by the App Mesh APIs has been exceeded for your account. For best results, use an increasing or variable sleep interval between requests.</p>
     TooManyRequests(String),
 }
 
@@ -4136,16 +3884,13 @@ pub enum DescribeRouteError {
     BadRequest(String),
     /// <p>You don't have permissions to perform this action.</p>
     Forbidden(String),
-    /// <p>The request processing has failed because of an unknown error, exception, or
-    /// failure.</p>
+    /// <p>The request processing has failed because of an unknown error, exception, or failure.</p>
     InternalServerError(String),
     /// <p>The specified resource doesn't exist. Check your request syntax and try again.</p>
     NotFound(String),
     /// <p>The request has failed due to a temporary failure of the service.</p>
     ServiceUnavailable(String),
-    /// <p>The maximum request rate permitted by the App Mesh APIs has been exceeded for your
-    /// account. For best results, use an increasing or variable sleep interval between
-    /// requests.</p>
+    /// <p>The maximum request rate permitted by the App Mesh APIs has been exceeded for your account. For best results, use an increasing or variable sleep interval between requests.</p>
     TooManyRequests(String),
 }
 
@@ -4199,16 +3944,13 @@ pub enum DescribeVirtualGatewayError {
     BadRequest(String),
     /// <p>You don't have permissions to perform this action.</p>
     Forbidden(String),
-    /// <p>The request processing has failed because of an unknown error, exception, or
-    /// failure.</p>
+    /// <p>The request processing has failed because of an unknown error, exception, or failure.</p>
     InternalServerError(String),
     /// <p>The specified resource doesn't exist. Check your request syntax and try again.</p>
     NotFound(String),
     /// <p>The request has failed due to a temporary failure of the service.</p>
     ServiceUnavailable(String),
-    /// <p>The maximum request rate permitted by the App Mesh APIs has been exceeded for your
-    /// account. For best results, use an increasing or variable sleep interval between
-    /// requests.</p>
+    /// <p>The maximum request rate permitted by the App Mesh APIs has been exceeded for your account. For best results, use an increasing or variable sleep interval between requests.</p>
     TooManyRequests(String),
 }
 
@@ -4268,16 +4010,13 @@ pub enum DescribeVirtualNodeError {
     BadRequest(String),
     /// <p>You don't have permissions to perform this action.</p>
     Forbidden(String),
-    /// <p>The request processing has failed because of an unknown error, exception, or
-    /// failure.</p>
+    /// <p>The request processing has failed because of an unknown error, exception, or failure.</p>
     InternalServerError(String),
     /// <p>The specified resource doesn't exist. Check your request syntax and try again.</p>
     NotFound(String),
     /// <p>The request has failed due to a temporary failure of the service.</p>
     ServiceUnavailable(String),
-    /// <p>The maximum request rate permitted by the App Mesh APIs has been exceeded for your
-    /// account. For best results, use an increasing or variable sleep interval between
-    /// requests.</p>
+    /// <p>The maximum request rate permitted by the App Mesh APIs has been exceeded for your account. For best results, use an increasing or variable sleep interval between requests.</p>
     TooManyRequests(String),
 }
 
@@ -4335,16 +4074,13 @@ pub enum DescribeVirtualRouterError {
     BadRequest(String),
     /// <p>You don't have permissions to perform this action.</p>
     Forbidden(String),
-    /// <p>The request processing has failed because of an unknown error, exception, or
-    /// failure.</p>
+    /// <p>The request processing has failed because of an unknown error, exception, or failure.</p>
     InternalServerError(String),
     /// <p>The specified resource doesn't exist. Check your request syntax and try again.</p>
     NotFound(String),
     /// <p>The request has failed due to a temporary failure of the service.</p>
     ServiceUnavailable(String),
-    /// <p>The maximum request rate permitted by the App Mesh APIs has been exceeded for your
-    /// account. For best results, use an increasing or variable sleep interval between
-    /// requests.</p>
+    /// <p>The maximum request rate permitted by the App Mesh APIs has been exceeded for your account. For best results, use an increasing or variable sleep interval between requests.</p>
     TooManyRequests(String),
 }
 
@@ -4404,16 +4140,13 @@ pub enum DescribeVirtualServiceError {
     BadRequest(String),
     /// <p>You don't have permissions to perform this action.</p>
     Forbidden(String),
-    /// <p>The request processing has failed because of an unknown error, exception, or
-    /// failure.</p>
+    /// <p>The request processing has failed because of an unknown error, exception, or failure.</p>
     InternalServerError(String),
     /// <p>The specified resource doesn't exist. Check your request syntax and try again.</p>
     NotFound(String),
     /// <p>The request has failed due to a temporary failure of the service.</p>
     ServiceUnavailable(String),
-    /// <p>The maximum request rate permitted by the App Mesh APIs has been exceeded for your
-    /// account. For best results, use an increasing or variable sleep interval between
-    /// requests.</p>
+    /// <p>The maximum request rate permitted by the App Mesh APIs has been exceeded for your account. For best results, use an increasing or variable sleep interval between requests.</p>
     TooManyRequests(String),
 }
 
@@ -4473,16 +4206,13 @@ pub enum ListGatewayRoutesError {
     BadRequest(String),
     /// <p>You don't have permissions to perform this action.</p>
     Forbidden(String),
-    /// <p>The request processing has failed because of an unknown error, exception, or
-    /// failure.</p>
+    /// <p>The request processing has failed because of an unknown error, exception, or failure.</p>
     InternalServerError(String),
     /// <p>The specified resource doesn't exist. Check your request syntax and try again.</p>
     NotFound(String),
     /// <p>The request has failed due to a temporary failure of the service.</p>
     ServiceUnavailable(String),
-    /// <p>The maximum request rate permitted by the App Mesh APIs has been exceeded for your
-    /// account. For best results, use an increasing or variable sleep interval between
-    /// requests.</p>
+    /// <p>The maximum request rate permitted by the App Mesh APIs has been exceeded for your account. For best results, use an increasing or variable sleep interval between requests.</p>
     TooManyRequests(String),
 }
 
@@ -4540,16 +4270,13 @@ pub enum ListMeshesError {
     BadRequest(String),
     /// <p>You don't have permissions to perform this action.</p>
     Forbidden(String),
-    /// <p>The request processing has failed because of an unknown error, exception, or
-    /// failure.</p>
+    /// <p>The request processing has failed because of an unknown error, exception, or failure.</p>
     InternalServerError(String),
     /// <p>The specified resource doesn't exist. Check your request syntax and try again.</p>
     NotFound(String),
     /// <p>The request has failed due to a temporary failure of the service.</p>
     ServiceUnavailable(String),
-    /// <p>The maximum request rate permitted by the App Mesh APIs has been exceeded for your
-    /// account. For best results, use an increasing or variable sleep interval between
-    /// requests.</p>
+    /// <p>The maximum request rate permitted by the App Mesh APIs has been exceeded for your account. For best results, use an increasing or variable sleep interval between requests.</p>
     TooManyRequests(String),
 }
 
@@ -4603,16 +4330,13 @@ pub enum ListRoutesError {
     BadRequest(String),
     /// <p>You don't have permissions to perform this action.</p>
     Forbidden(String),
-    /// <p>The request processing has failed because of an unknown error, exception, or
-    /// failure.</p>
+    /// <p>The request processing has failed because of an unknown error, exception, or failure.</p>
     InternalServerError(String),
     /// <p>The specified resource doesn't exist. Check your request syntax and try again.</p>
     NotFound(String),
     /// <p>The request has failed due to a temporary failure of the service.</p>
     ServiceUnavailable(String),
-    /// <p>The maximum request rate permitted by the App Mesh APIs has been exceeded for your
-    /// account. For best results, use an increasing or variable sleep interval between
-    /// requests.</p>
+    /// <p>The maximum request rate permitted by the App Mesh APIs has been exceeded for your account. For best results, use an increasing or variable sleep interval between requests.</p>
     TooManyRequests(String),
 }
 
@@ -4666,16 +4390,13 @@ pub enum ListTagsForResourceError {
     BadRequest(String),
     /// <p>You don't have permissions to perform this action.</p>
     Forbidden(String),
-    /// <p>The request processing has failed because of an unknown error, exception, or
-    /// failure.</p>
+    /// <p>The request processing has failed because of an unknown error, exception, or failure.</p>
     InternalServerError(String),
     /// <p>The specified resource doesn't exist. Check your request syntax and try again.</p>
     NotFound(String),
     /// <p>The request has failed due to a temporary failure of the service.</p>
     ServiceUnavailable(String),
-    /// <p>The maximum request rate permitted by the App Mesh APIs has been exceeded for your
-    /// account. For best results, use an increasing or variable sleep interval between
-    /// requests.</p>
+    /// <p>The maximum request rate permitted by the App Mesh APIs has been exceeded for your account. For best results, use an increasing or variable sleep interval between requests.</p>
     TooManyRequests(String),
 }
 
@@ -4733,16 +4454,13 @@ pub enum ListVirtualGatewaysError {
     BadRequest(String),
     /// <p>You don't have permissions to perform this action.</p>
     Forbidden(String),
-    /// <p>The request processing has failed because of an unknown error, exception, or
-    /// failure.</p>
+    /// <p>The request processing has failed because of an unknown error, exception, or failure.</p>
     InternalServerError(String),
     /// <p>The specified resource doesn't exist. Check your request syntax and try again.</p>
     NotFound(String),
     /// <p>The request has failed due to a temporary failure of the service.</p>
     ServiceUnavailable(String),
-    /// <p>The maximum request rate permitted by the App Mesh APIs has been exceeded for your
-    /// account. For best results, use an increasing or variable sleep interval between
-    /// requests.</p>
+    /// <p>The maximum request rate permitted by the App Mesh APIs has been exceeded for your account. For best results, use an increasing or variable sleep interval between requests.</p>
     TooManyRequests(String),
 }
 
@@ -4800,16 +4518,13 @@ pub enum ListVirtualNodesError {
     BadRequest(String),
     /// <p>You don't have permissions to perform this action.</p>
     Forbidden(String),
-    /// <p>The request processing has failed because of an unknown error, exception, or
-    /// failure.</p>
+    /// <p>The request processing has failed because of an unknown error, exception, or failure.</p>
     InternalServerError(String),
     /// <p>The specified resource doesn't exist. Check your request syntax and try again.</p>
     NotFound(String),
     /// <p>The request has failed due to a temporary failure of the service.</p>
     ServiceUnavailable(String),
-    /// <p>The maximum request rate permitted by the App Mesh APIs has been exceeded for your
-    /// account. For best results, use an increasing or variable sleep interval between
-    /// requests.</p>
+    /// <p>The maximum request rate permitted by the App Mesh APIs has been exceeded for your account. For best results, use an increasing or variable sleep interval between requests.</p>
     TooManyRequests(String),
 }
 
@@ -4865,16 +4580,13 @@ pub enum ListVirtualRoutersError {
     BadRequest(String),
     /// <p>You don't have permissions to perform this action.</p>
     Forbidden(String),
-    /// <p>The request processing has failed because of an unknown error, exception, or
-    /// failure.</p>
+    /// <p>The request processing has failed because of an unknown error, exception, or failure.</p>
     InternalServerError(String),
     /// <p>The specified resource doesn't exist. Check your request syntax and try again.</p>
     NotFound(String),
     /// <p>The request has failed due to a temporary failure of the service.</p>
     ServiceUnavailable(String),
-    /// <p>The maximum request rate permitted by the App Mesh APIs has been exceeded for your
-    /// account. For best results, use an increasing or variable sleep interval between
-    /// requests.</p>
+    /// <p>The maximum request rate permitted by the App Mesh APIs has been exceeded for your account. For best results, use an increasing or variable sleep interval between requests.</p>
     TooManyRequests(String),
 }
 
@@ -4932,16 +4644,13 @@ pub enum ListVirtualServicesError {
     BadRequest(String),
     /// <p>You don't have permissions to perform this action.</p>
     Forbidden(String),
-    /// <p>The request processing has failed because of an unknown error, exception, or
-    /// failure.</p>
+    /// <p>The request processing has failed because of an unknown error, exception, or failure.</p>
     InternalServerError(String),
     /// <p>The specified resource doesn't exist. Check your request syntax and try again.</p>
     NotFound(String),
     /// <p>The request has failed due to a temporary failure of the service.</p>
     ServiceUnavailable(String),
-    /// <p>The maximum request rate permitted by the App Mesh APIs has been exceeded for your
-    /// account. For best results, use an increasing or variable sleep interval between
-    /// requests.</p>
+    /// <p>The maximum request rate permitted by the App Mesh APIs has been exceeded for your account. For best results, use an increasing or variable sleep interval between requests.</p>
     TooManyRequests(String),
 }
 
@@ -4999,20 +4708,15 @@ pub enum TagResourceError {
     BadRequest(String),
     /// <p>You don't have permissions to perform this action.</p>
     Forbidden(String),
-    /// <p>The request processing has failed because of an unknown error, exception, or
-    /// failure.</p>
+    /// <p>The request processing has failed because of an unknown error, exception, or failure.</p>
     InternalServerError(String),
     /// <p>The specified resource doesn't exist. Check your request syntax and try again.</p>
     NotFound(String),
     /// <p>The request has failed due to a temporary failure of the service.</p>
     ServiceUnavailable(String),
-    /// <p>The maximum request rate permitted by the App Mesh APIs has been exceeded for your
-    /// account. For best results, use an increasing or variable sleep interval between
-    /// requests.</p>
+    /// <p>The maximum request rate permitted by the App Mesh APIs has been exceeded for your account. For best results, use an increasing or variable sleep interval between requests.</p>
     TooManyRequests(String),
-    /// <p>The request exceeds the maximum allowed number of tags allowed per resource. The current
-    /// limit is 50 user tags per resource. You must reduce the number of tags in the request. None
-    /// of the tags in this request were applied.</p>
+    /// <p>The request exceeds the maximum allowed number of tags allowed per resource. The current limit is 50 user tags per resource. You must reduce the number of tags in the request. None of the tags in this request were applied.</p>
     TooManyTags(String),
 }
 
@@ -5070,16 +4774,13 @@ pub enum UntagResourceError {
     BadRequest(String),
     /// <p>You don't have permissions to perform this action.</p>
     Forbidden(String),
-    /// <p>The request processing has failed because of an unknown error, exception, or
-    /// failure.</p>
+    /// <p>The request processing has failed because of an unknown error, exception, or failure.</p>
     InternalServerError(String),
     /// <p>The specified resource doesn't exist. Check your request syntax and try again.</p>
     NotFound(String),
     /// <p>The request has failed due to a temporary failure of the service.</p>
     ServiceUnavailable(String),
-    /// <p>The maximum request rate permitted by the App Mesh APIs has been exceeded for your
-    /// account. For best results, use an increasing or variable sleep interval between
-    /// requests.</p>
+    /// <p>The maximum request rate permitted by the App Mesh APIs has been exceeded for your account. For best results, use an increasing or variable sleep interval between requests.</p>
     TooManyRequests(String),
 }
 
@@ -5131,24 +4832,19 @@ impl Error for UntagResourceError {}
 pub enum UpdateGatewayRouteError {
     /// <p>The request syntax was malformed. Check your request syntax and try again.</p>
     BadRequest(String),
-    /// <p>The request contains a client token that was used for a previous update resource call
-    /// with different specifications. Try the request again with a new client token.</p>
+    /// <p>The request contains a client token that was used for a previous update resource call with different specifications. Try the request again with a new client token.</p>
     Conflict(String),
     /// <p>You don't have permissions to perform this action.</p>
     Forbidden(String),
-    /// <p>The request processing has failed because of an unknown error, exception, or
-    /// failure.</p>
+    /// <p>The request processing has failed because of an unknown error, exception, or failure.</p>
     InternalServerError(String),
-    /// <p>You have exceeded a service limit for your account. For more information, see <a href="https://docs.aws.amazon.com/app-mesh/latest/userguide/service-quotas.html">Service
-    /// Limits</a> in the <i>AWS App Mesh User Guide</i>.</p>
+    /// <p>You have exceeded a service limit for your account. For more information, see <a href="https://docs.aws.amazon.com/app-mesh/latest/userguide/service-quotas.html">Service Limits</a> in the <i>AWS App Mesh User Guide</i>.</p>
     LimitExceeded(String),
     /// <p>The specified resource doesn't exist. Check your request syntax and try again.</p>
     NotFound(String),
     /// <p>The request has failed due to a temporary failure of the service.</p>
     ServiceUnavailable(String),
-    /// <p>The maximum request rate permitted by the App Mesh APIs has been exceeded for your
-    /// account. For best results, use an increasing or variable sleep interval between
-    /// requests.</p>
+    /// <p>The maximum request rate permitted by the App Mesh APIs has been exceeded for your account. For best results, use an increasing or variable sleep interval between requests.</p>
     TooManyRequests(String),
 }
 
@@ -5212,21 +4908,17 @@ impl Error for UpdateGatewayRouteError {}
 pub enum UpdateMeshError {
     /// <p>The request syntax was malformed. Check your request syntax and try again.</p>
     BadRequest(String),
-    /// <p>The request contains a client token that was used for a previous update resource call
-    /// with different specifications. Try the request again with a new client token.</p>
+    /// <p>The request contains a client token that was used for a previous update resource call with different specifications. Try the request again with a new client token.</p>
     Conflict(String),
     /// <p>You don't have permissions to perform this action.</p>
     Forbidden(String),
-    /// <p>The request processing has failed because of an unknown error, exception, or
-    /// failure.</p>
+    /// <p>The request processing has failed because of an unknown error, exception, or failure.</p>
     InternalServerError(String),
     /// <p>The specified resource doesn't exist. Check your request syntax and try again.</p>
     NotFound(String),
     /// <p>The request has failed due to a temporary failure of the service.</p>
     ServiceUnavailable(String),
-    /// <p>The maximum request rate permitted by the App Mesh APIs has been exceeded for your
-    /// account. For best results, use an increasing or variable sleep interval between
-    /// requests.</p>
+    /// <p>The maximum request rate permitted by the App Mesh APIs has been exceeded for your account. For best results, use an increasing or variable sleep interval between requests.</p>
     TooManyRequests(String),
 }
 
@@ -5282,24 +4974,19 @@ impl Error for UpdateMeshError {}
 pub enum UpdateRouteError {
     /// <p>The request syntax was malformed. Check your request syntax and try again.</p>
     BadRequest(String),
-    /// <p>The request contains a client token that was used for a previous update resource call
-    /// with different specifications. Try the request again with a new client token.</p>
+    /// <p>The request contains a client token that was used for a previous update resource call with different specifications. Try the request again with a new client token.</p>
     Conflict(String),
     /// <p>You don't have permissions to perform this action.</p>
     Forbidden(String),
-    /// <p>The request processing has failed because of an unknown error, exception, or
-    /// failure.</p>
+    /// <p>The request processing has failed because of an unknown error, exception, or failure.</p>
     InternalServerError(String),
-    /// <p>You have exceeded a service limit for your account. For more information, see <a href="https://docs.aws.amazon.com/app-mesh/latest/userguide/service-quotas.html">Service
-    /// Limits</a> in the <i>AWS App Mesh User Guide</i>.</p>
+    /// <p>You have exceeded a service limit for your account. For more information, see <a href="https://docs.aws.amazon.com/app-mesh/latest/userguide/service-quotas.html">Service Limits</a> in the <i>AWS App Mesh User Guide</i>.</p>
     LimitExceeded(String),
     /// <p>The specified resource doesn't exist. Check your request syntax and try again.</p>
     NotFound(String),
     /// <p>The request has failed due to a temporary failure of the service.</p>
     ServiceUnavailable(String),
-    /// <p>The maximum request rate permitted by the App Mesh APIs has been exceeded for your
-    /// account. For best results, use an increasing or variable sleep interval between
-    /// requests.</p>
+    /// <p>The maximum request rate permitted by the App Mesh APIs has been exceeded for your account. For best results, use an increasing or variable sleep interval between requests.</p>
     TooManyRequests(String),
 }
 
@@ -5359,24 +5046,19 @@ impl Error for UpdateRouteError {}
 pub enum UpdateVirtualGatewayError {
     /// <p>The request syntax was malformed. Check your request syntax and try again.</p>
     BadRequest(String),
-    /// <p>The request contains a client token that was used for a previous update resource call
-    /// with different specifications. Try the request again with a new client token.</p>
+    /// <p>The request contains a client token that was used for a previous update resource call with different specifications. Try the request again with a new client token.</p>
     Conflict(String),
     /// <p>You don't have permissions to perform this action.</p>
     Forbidden(String),
-    /// <p>The request processing has failed because of an unknown error, exception, or
-    /// failure.</p>
+    /// <p>The request processing has failed because of an unknown error, exception, or failure.</p>
     InternalServerError(String),
-    /// <p>You have exceeded a service limit for your account. For more information, see <a href="https://docs.aws.amazon.com/app-mesh/latest/userguide/service-quotas.html">Service
-    /// Limits</a> in the <i>AWS App Mesh User Guide</i>.</p>
+    /// <p>You have exceeded a service limit for your account. For more information, see <a href="https://docs.aws.amazon.com/app-mesh/latest/userguide/service-quotas.html">Service Limits</a> in the <i>AWS App Mesh User Guide</i>.</p>
     LimitExceeded(String),
     /// <p>The specified resource doesn't exist. Check your request syntax and try again.</p>
     NotFound(String),
     /// <p>The request has failed due to a temporary failure of the service.</p>
     ServiceUnavailable(String),
-    /// <p>The maximum request rate permitted by the App Mesh APIs has been exceeded for your
-    /// account. For best results, use an increasing or variable sleep interval between
-    /// requests.</p>
+    /// <p>The maximum request rate permitted by the App Mesh APIs has been exceeded for your account. For best results, use an increasing or variable sleep interval between requests.</p>
     TooManyRequests(String),
 }
 
@@ -5442,24 +5124,19 @@ impl Error for UpdateVirtualGatewayError {}
 pub enum UpdateVirtualNodeError {
     /// <p>The request syntax was malformed. Check your request syntax and try again.</p>
     BadRequest(String),
-    /// <p>The request contains a client token that was used for a previous update resource call
-    /// with different specifications. Try the request again with a new client token.</p>
+    /// <p>The request contains a client token that was used for a previous update resource call with different specifications. Try the request again with a new client token.</p>
     Conflict(String),
     /// <p>You don't have permissions to perform this action.</p>
     Forbidden(String),
-    /// <p>The request processing has failed because of an unknown error, exception, or
-    /// failure.</p>
+    /// <p>The request processing has failed because of an unknown error, exception, or failure.</p>
     InternalServerError(String),
-    /// <p>You have exceeded a service limit for your account. For more information, see <a href="https://docs.aws.amazon.com/app-mesh/latest/userguide/service-quotas.html">Service
-    /// Limits</a> in the <i>AWS App Mesh User Guide</i>.</p>
+    /// <p>You have exceeded a service limit for your account. For more information, see <a href="https://docs.aws.amazon.com/app-mesh/latest/userguide/service-quotas.html">Service Limits</a> in the <i>AWS App Mesh User Guide</i>.</p>
     LimitExceeded(String),
     /// <p>The specified resource doesn't exist. Check your request syntax and try again.</p>
     NotFound(String),
     /// <p>The request has failed due to a temporary failure of the service.</p>
     ServiceUnavailable(String),
-    /// <p>The maximum request rate permitted by the App Mesh APIs has been exceeded for your
-    /// account. For best results, use an increasing or variable sleep interval between
-    /// requests.</p>
+    /// <p>The maximum request rate permitted by the App Mesh APIs has been exceeded for your account. For best results, use an increasing or variable sleep interval between requests.</p>
     TooManyRequests(String),
 }
 
@@ -5523,24 +5200,19 @@ impl Error for UpdateVirtualNodeError {}
 pub enum UpdateVirtualRouterError {
     /// <p>The request syntax was malformed. Check your request syntax and try again.</p>
     BadRequest(String),
-    /// <p>The request contains a client token that was used for a previous update resource call
-    /// with different specifications. Try the request again with a new client token.</p>
+    /// <p>The request contains a client token that was used for a previous update resource call with different specifications. Try the request again with a new client token.</p>
     Conflict(String),
     /// <p>You don't have permissions to perform this action.</p>
     Forbidden(String),
-    /// <p>The request processing has failed because of an unknown error, exception, or
-    /// failure.</p>
+    /// <p>The request processing has failed because of an unknown error, exception, or failure.</p>
     InternalServerError(String),
-    /// <p>You have exceeded a service limit for your account. For more information, see <a href="https://docs.aws.amazon.com/app-mesh/latest/userguide/service-quotas.html">Service
-    /// Limits</a> in the <i>AWS App Mesh User Guide</i>.</p>
+    /// <p>You have exceeded a service limit for your account. For more information, see <a href="https://docs.aws.amazon.com/app-mesh/latest/userguide/service-quotas.html">Service Limits</a> in the <i>AWS App Mesh User Guide</i>.</p>
     LimitExceeded(String),
     /// <p>The specified resource doesn't exist. Check your request syntax and try again.</p>
     NotFound(String),
     /// <p>The request has failed due to a temporary failure of the service.</p>
     ServiceUnavailable(String),
-    /// <p>The maximum request rate permitted by the App Mesh APIs has been exceeded for your
-    /// account. For best results, use an increasing or variable sleep interval between
-    /// requests.</p>
+    /// <p>The maximum request rate permitted by the App Mesh APIs has been exceeded for your account. For best results, use an increasing or variable sleep interval between requests.</p>
     TooManyRequests(String),
 }
 
@@ -5604,24 +5276,19 @@ impl Error for UpdateVirtualRouterError {}
 pub enum UpdateVirtualServiceError {
     /// <p>The request syntax was malformed. Check your request syntax and try again.</p>
     BadRequest(String),
-    /// <p>The request contains a client token that was used for a previous update resource call
-    /// with different specifications. Try the request again with a new client token.</p>
+    /// <p>The request contains a client token that was used for a previous update resource call with different specifications. Try the request again with a new client token.</p>
     Conflict(String),
     /// <p>You don't have permissions to perform this action.</p>
     Forbidden(String),
-    /// <p>The request processing has failed because of an unknown error, exception, or
-    /// failure.</p>
+    /// <p>The request processing has failed because of an unknown error, exception, or failure.</p>
     InternalServerError(String),
-    /// <p>You have exceeded a service limit for your account. For more information, see <a href="https://docs.aws.amazon.com/app-mesh/latest/userguide/service-quotas.html">Service
-    /// Limits</a> in the <i>AWS App Mesh User Guide</i>.</p>
+    /// <p>You have exceeded a service limit for your account. For more information, see <a href="https://docs.aws.amazon.com/app-mesh/latest/userguide/service-quotas.html">Service Limits</a> in the <i>AWS App Mesh User Guide</i>.</p>
     LimitExceeded(String),
     /// <p>The specified resource doesn't exist. Check your request syntax and try again.</p>
     NotFound(String),
     /// <p>The request has failed due to a temporary failure of the service.</p>
     ServiceUnavailable(String),
-    /// <p>The maximum request rate permitted by the App Mesh APIs has been exceeded for your
-    /// account. For best results, use an increasing or variable sleep interval between
-    /// requests.</p>
+    /// <p>The maximum request rate permitted by the App Mesh APIs has been exceeded for your account. For best results, use an increasing or variable sleep interval between requests.</p>
     TooManyRequests(String),
 }
 
@@ -5685,105 +5352,43 @@ impl Error for UpdateVirtualServiceError {}
 /// Trait representing the capabilities of the AWS App Mesh API. AWS App Mesh clients implement this trait.
 #[async_trait]
 pub trait AppMesh {
-    /// <p>Creates a gateway route.</p>
-    ///
-    /// <pre><code>     &lt;p&gt;A gateway route is attached to a virtual gateway and routes traffic to an existing
-    /// virtual service. If a route matches a request, it can distribute traffic to a target virtual service.&lt;/p&gt;
-    /// &lt;p&gt;For more information about gateway routes, see &lt;a href=&quot;https://docs.aws.amazon.com/app-mesh/latest/userguide/gateway-routes.html&quot;&gt;Gateway routes&lt;/a&gt;.&lt;/p&gt;
-    /// </code></pre>
+    /// <p>Creates a gateway route.</p> <p>A gateway route is attached to a virtual gateway and routes traffic to an existing virtual service. If a route matches a request, it can distribute traffic to a target virtual service.</p> <p>For more information about gateway routes, see <a href="https://docs.aws.amazon.com/app-mesh/latest/userguide/gateway-routes.html">Gateway routes</a>.</p>
     async fn create_gateway_route(
         &self,
         input: CreateGatewayRouteInput,
     ) -> Result<CreateGatewayRouteOutput, RusotoError<CreateGatewayRouteError>>;
 
-    /// <p>Creates a service mesh.</p>
-    ///
-    /// <pre><code>     &lt;p&gt; A service mesh is a logical boundary for network traffic between services that are
-    /// represented by resources within the mesh. After you create your service mesh, you can
-    /// create virtual services, virtual nodes, virtual routers, and routes to distribute traffic
-    /// between the applications in your mesh.&lt;/p&gt;
-    /// &lt;p&gt;For more information about service meshes, see &lt;a href=&quot;https://docs.aws.amazon.com/app-mesh/latest/userguide/meshes.html&quot;&gt;Service meshes&lt;/a&gt;.&lt;/p&gt;
-    /// </code></pre>
+    /// <p>Creates a service mesh.</p> <p> A service mesh is a logical boundary for network traffic between services that are represented by resources within the mesh. After you create your service mesh, you can create virtual services, virtual nodes, virtual routers, and routes to distribute traffic between the applications in your mesh.</p> <p>For more information about service meshes, see <a href="https://docs.aws.amazon.com/app-mesh/latest/userguide/meshes.html">Service meshes</a>.</p>
     async fn create_mesh(
         &self,
         input: CreateMeshInput,
     ) -> Result<CreateMeshOutput, RusotoError<CreateMeshError>>;
 
-    /// <p>Creates a route that is associated with a virtual router.</p>
-    ///
-    /// <pre><code>     &lt;p&gt; You can route several different protocols and define a retry policy for a route.
-    /// Traffic can be routed to one or more virtual nodes.&lt;/p&gt;
-    /// &lt;p&gt;For more information about routes, see &lt;a href=&quot;https://docs.aws.amazon.com/app-mesh/latest/userguide/routes.html&quot;&gt;Routes&lt;/a&gt;.&lt;/p&gt;
-    /// </code></pre>
+    /// <p>Creates a route that is associated with a virtual router.</p> <p> You can route several different protocols and define a retry policy for a route. Traffic can be routed to one or more virtual nodes.</p> <p>For more information about routes, see <a href="https://docs.aws.amazon.com/app-mesh/latest/userguide/routes.html">Routes</a>.</p>
     async fn create_route(
         &self,
         input: CreateRouteInput,
     ) -> Result<CreateRouteOutput, RusotoError<CreateRouteError>>;
 
-    /// <p>Creates a virtual gateway.</p>
-    ///
-    /// <pre><code>     &lt;p&gt;A virtual gateway allows resources outside your mesh to communicate to resources that
-    /// are inside your mesh. The virtual gateway represents an Envoy proxy running in an Amazon ECS
-    /// task, in a Kubernetes service, or on an Amazon EC2 instance. Unlike a virtual node, which
-    /// represents an Envoy running with an application, a virtual gateway represents Envoy deployed by itself.&lt;/p&gt;
-    /// &lt;p&gt;For more information about virtual gateways, see &lt;a href=&quot;https://docs.aws.amazon.com/app-mesh/latest/userguide/virtual_gateways.html&quot;&gt;Virtual gateways&lt;/a&gt;.&lt;/p&gt;
-    /// </code></pre>
+    /// <p>Creates a virtual gateway.</p> <p>A virtual gateway allows resources outside your mesh to communicate to resources that are inside your mesh. The virtual gateway represents an Envoy proxy running in an Amazon ECS task, in a Kubernetes service, or on an Amazon EC2 instance. Unlike a virtual node, which represents an Envoy running with an application, a virtual gateway represents Envoy deployed by itself.</p> <p>For more information about virtual gateways, see <a href="https://docs.aws.amazon.com/app-mesh/latest/userguide/virtual_gateways.html">Virtual gateways</a>. </p>
     async fn create_virtual_gateway(
         &self,
         input: CreateVirtualGatewayInput,
     ) -> Result<CreateVirtualGatewayOutput, RusotoError<CreateVirtualGatewayError>>;
 
-    /// <p>Creates a virtual node within a service mesh.</p>
-    ///
-    /// <pre><code>     &lt;p&gt; A virtual node acts as a logical pointer to a particular task group, such as an Amazon ECS
-    /// service or a Kubernetes deployment. When you create a virtual node, you can specify the
-    /// service discovery information for your task group, and whether the proxy running in a task
-    /// group will communicate with other proxies using Transport Layer Security (TLS).&lt;/p&gt;
-    /// &lt;p&gt;You define a &lt;code&gt;listener&lt;/code&gt; for any inbound traffic that your virtual node
-    /// expects. Any virtual service that your virtual node expects to communicate to is specified
-    /// as a &lt;code&gt;backend&lt;/code&gt;.&lt;/p&gt;
-    /// &lt;p&gt;The response metadata for your new virtual node contains the &lt;code&gt;arn&lt;/code&gt; that is
-    /// associated with the virtual node. Set this value (either the full ARN or the truncated
-    /// resource name: for example, &lt;code&gt;mesh/default/virtualNode/simpleapp&lt;/code&gt;) as the
-    /// &lt;code&gt;APPMESH_VIRTUAL_NODE_NAME&lt;/code&gt; environment variable for your task group&#39;s Envoy
-    /// proxy container in your task definition or pod spec. This is then mapped to the
-    /// &lt;code&gt;node.id&lt;/code&gt; and &lt;code&gt;node.cluster&lt;/code&gt; Envoy parameters.&lt;/p&gt;
-    /// &lt;note&gt;
-    /// &lt;p&gt;If you require your Envoy stats or tracing to use a different name, you can override
-    /// the &lt;code&gt;node.cluster&lt;/code&gt; value that is set by
-    /// &lt;code&gt;APPMESH_VIRTUAL_NODE_NAME&lt;/code&gt; with the
-    /// &lt;code&gt;APPMESH_VIRTUAL_NODE_CLUSTER&lt;/code&gt; environment variable.&lt;/p&gt;
-    /// &lt;/note&gt;
-    /// &lt;p&gt;For more information about virtual nodes, see &lt;a href=&quot;https://docs.aws.amazon.com/app-mesh/latest/userguide/virtual_nodes.html&quot;&gt;Virtual nodes&lt;/a&gt;.&lt;/p&gt;
-    /// </code></pre>
+    /// <p>Creates a virtual node within a service mesh.</p> <p> A virtual node acts as a logical pointer to a particular task group, such as an Amazon ECS service or a Kubernetes deployment. When you create a virtual node, you can specify the service discovery information for your task group, and whether the proxy running in a task group will communicate with other proxies using Transport Layer Security (TLS).</p> <p>You define a <code>listener</code> for any inbound traffic that your virtual node expects. Any virtual service that your virtual node expects to communicate to is specified as a <code>backend</code>.</p> <p>The response metadata for your new virtual node contains the <code>arn</code> that is associated with the virtual node. Set this value to the full ARN; for example, <code>arn:aws:appmesh:us-west-2:123456789012:myMesh/default/virtualNode/myApp</code>) as the <code>APPMESH_RESOURCE_ARN</code> environment variable for your task group's Envoy proxy container in your task definition or pod spec. This is then mapped to the <code>node.id</code> and <code>node.cluster</code> Envoy parameters.</p> <note> <p>By default, App Mesh uses the name of the resource you specified in <code>APPMESH_RESOURCE_ARN</code> when Envoy is referring to itself in metrics and traces. You can override this behavior by setting the <code>APPMESH_RESOURCE_CLUSTER</code> environment variable with your own name.</p> <p>AWS Cloud Map is not available in the eu-south-1 Region.</p> </note> <p>For more information about virtual nodes, see <a href="https://docs.aws.amazon.com/app-mesh/latest/userguide/virtual_nodes.html">Virtual nodes</a>. You must be using <code>1.15.0</code> or later of the Envoy image when setting these variables. For more information about App Mesh Envoy variables, see <a href="https://docs.aws.amazon.com/app-mesh/latest/userguide/envoy.html">Envoy image</a> in the AWS App Mesh User Guide.</p>
     async fn create_virtual_node(
         &self,
         input: CreateVirtualNodeInput,
     ) -> Result<CreateVirtualNodeOutput, RusotoError<CreateVirtualNodeError>>;
 
-    /// <p>Creates a virtual router within a service mesh.</p>
-    ///
-    /// <pre><code>     &lt;p&gt;Specify a &lt;code&gt;listener&lt;/code&gt; for any inbound traffic that your virtual router
-    /// receives. Create a virtual router for each protocol and port that you need to route.
-    /// Virtual routers handle traffic for one or more virtual services within your mesh. After you
-    /// create your virtual router, create and associate routes for your virtual router that direct
-    /// incoming requests to different virtual nodes.&lt;/p&gt;
-    /// &lt;p&gt;For more information about virtual routers, see &lt;a href=&quot;https://docs.aws.amazon.com/app-mesh/latest/userguide/virtual_routers.html&quot;&gt;Virtual routers&lt;/a&gt;.&lt;/p&gt;
-    /// </code></pre>
+    /// <p>Creates a virtual router within a service mesh.</p> <p>Specify a <code>listener</code> for any inbound traffic that your virtual router receives. Create a virtual router for each protocol and port that you need to route. Virtual routers handle traffic for one or more virtual services within your mesh. After you create your virtual router, create and associate routes for your virtual router that direct incoming requests to different virtual nodes.</p> <p>For more information about virtual routers, see <a href="https://docs.aws.amazon.com/app-mesh/latest/userguide/virtual_routers.html">Virtual routers</a>.</p>
     async fn create_virtual_router(
         &self,
         input: CreateVirtualRouterInput,
     ) -> Result<CreateVirtualRouterOutput, RusotoError<CreateVirtualRouterError>>;
 
-    /// <p>Creates a virtual service within a service mesh.</p>
-    ///
-    /// <pre><code>     &lt;p&gt;A virtual service is an abstraction of a real service that is provided by a virtual node
-    /// directly or indirectly by means of a virtual router. Dependent services call your virtual
-    /// service by its &lt;code&gt;virtualServiceName&lt;/code&gt;, and those requests are routed to the
-    /// virtual node or virtual router that is specified as the provider for the virtual
-    /// service.&lt;/p&gt;
-    /// &lt;p&gt;For more information about virtual services, see &lt;a href=&quot;https://docs.aws.amazon.com/app-mesh/latest/userguide/virtual_services.html&quot;&gt;Virtual services&lt;/a&gt;.&lt;/p&gt;
-    /// </code></pre>
+    /// <p>Creates a virtual service within a service mesh.</p> <p>A virtual service is an abstraction of a real service that is provided by a virtual node directly or indirectly by means of a virtual router. Dependent services call your virtual service by its <code>virtualServiceName</code>, and those requests are routed to the virtual node or virtual router that is specified as the provider for the virtual service.</p> <p>For more information about virtual services, see <a href="https://docs.aws.amazon.com/app-mesh/latest/userguide/virtual_services.html">Virtual services</a>.</p>
     async fn create_virtual_service(
         &self,
         input: CreateVirtualServiceInput,
@@ -5795,11 +5400,7 @@ pub trait AppMesh {
         input: DeleteGatewayRouteInput,
     ) -> Result<DeleteGatewayRouteOutput, RusotoError<DeleteGatewayRouteError>>;
 
-    /// <p>Deletes an existing service mesh.</p>
-    ///
-    /// <pre><code>     &lt;p&gt;You must delete all resources (virtual services, routes, virtual routers, and virtual
-    /// nodes) in the service mesh before you can delete the mesh itself.&lt;/p&gt;
-    /// </code></pre>
+    /// <p>Deletes an existing service mesh.</p> <p>You must delete all resources (virtual services, routes, virtual routers, and virtual nodes) in the service mesh before you can delete the mesh itself.</p>
     async fn delete_mesh(
         &self,
         input: DeleteMeshInput,
@@ -5811,28 +5412,19 @@ pub trait AppMesh {
         input: DeleteRouteInput,
     ) -> Result<DeleteRouteOutput, RusotoError<DeleteRouteError>>;
 
-    /// <p>Deletes an existing virtual gateway. You cannot delete a virtual gateway if any gateway
-    /// routes are associated to it.</p>
+    /// <p>Deletes an existing virtual gateway. You cannot delete a virtual gateway if any gateway routes are associated to it.</p>
     async fn delete_virtual_gateway(
         &self,
         input: DeleteVirtualGatewayInput,
     ) -> Result<DeleteVirtualGatewayOutput, RusotoError<DeleteVirtualGatewayError>>;
 
-    /// <p>Deletes an existing virtual node.</p>
-    ///
-    /// <pre><code>     &lt;p&gt;You must delete any virtual services that list a virtual node as a service provider
-    /// before you can delete the virtual node itself.&lt;/p&gt;
-    /// </code></pre>
+    /// <p>Deletes an existing virtual node.</p> <p>You must delete any virtual services that list a virtual node as a service provider before you can delete the virtual node itself.</p>
     async fn delete_virtual_node(
         &self,
         input: DeleteVirtualNodeInput,
     ) -> Result<DeleteVirtualNodeOutput, RusotoError<DeleteVirtualNodeError>>;
 
-    /// <p>Deletes an existing virtual router.</p>
-    ///
-    /// <pre><code>     &lt;p&gt;You must delete any routes associated with the virtual router before you can delete the
-    /// router itself.&lt;/p&gt;
-    /// </code></pre>
+    /// <p>Deletes an existing virtual router.</p> <p>You must delete any routes associated with the virtual router before you can delete the router itself.</p>
     async fn delete_virtual_router(
         &self,
         input: DeleteVirtualRouterInput,
@@ -5886,8 +5478,7 @@ pub trait AppMesh {
         input: DescribeVirtualServiceInput,
     ) -> Result<DescribeVirtualServiceOutput, RusotoError<DescribeVirtualServiceError>>;
 
-    /// <p>Returns a list of existing gateway routes that are associated to a virtual
-    /// gateway.</p>
+    /// <p>Returns a list of existing gateway routes that are associated to a virtual gateway.</p>
     async fn list_gateway_routes(
         &self,
         input: ListGatewayRoutesInput,
@@ -5935,10 +5526,7 @@ pub trait AppMesh {
         input: ListVirtualServicesInput,
     ) -> Result<ListVirtualServicesOutput, RusotoError<ListVirtualServicesError>>;
 
-    /// <p>Associates the specified tags to a resource with the specified <code>resourceArn</code>.
-    /// If existing tags on a resource aren't specified in the request parameters, they aren't
-    /// changed. When a resource is deleted, the tags associated with that resource are also
-    /// deleted.</p>
+    /// <p>Associates the specified tags to a resource with the specified <code>resourceArn</code>. If existing tags on a resource aren't specified in the request parameters, they aren't changed. When a resource is deleted, the tags associated with that resource are also deleted.</p>
     async fn tag_resource(
         &self,
         input: TagResourceInput,
@@ -5950,8 +5538,7 @@ pub trait AppMesh {
         input: UntagResourceInput,
     ) -> Result<UntagResourceOutput, RusotoError<UntagResourceError>>;
 
-    /// <p>Updates an existing gateway route that is associated to a specified virtual gateway in a
-    /// service mesh.</p>
+    /// <p>Updates an existing gateway route that is associated to a specified virtual gateway in a service mesh.</p>
     async fn update_gateway_route(
         &self,
         input: UpdateGatewayRouteInput,
@@ -6033,12 +5620,7 @@ impl AppMeshClient {
 
 #[async_trait]
 impl AppMesh for AppMeshClient {
-    /// <p>Creates a gateway route.</p>
-    ///
-    /// <pre><code>     &lt;p&gt;A gateway route is attached to a virtual gateway and routes traffic to an existing
-    /// virtual service. If a route matches a request, it can distribute traffic to a target virtual service.&lt;/p&gt;
-    /// &lt;p&gt;For more information about gateway routes, see &lt;a href=&quot;https://docs.aws.amazon.com/app-mesh/latest/userguide/gateway-routes.html&quot;&gt;Gateway routes&lt;/a&gt;.&lt;/p&gt;
-    /// </code></pre>
+    /// <p>Creates a gateway route.</p> <p>A gateway route is attached to a virtual gateway and routes traffic to an existing virtual service. If a route matches a request, it can distribute traffic to a target virtual service.</p> <p>For more information about gateway routes, see <a href="https://docs.aws.amazon.com/app-mesh/latest/userguide/gateway-routes.html">Gateway routes</a>.</p>
     #[allow(unused_mut)]
     async fn create_gateway_route(
         &self,
@@ -6079,14 +5661,7 @@ impl AppMesh for AppMeshClient {
         }
     }
 
-    /// <p>Creates a service mesh.</p>
-    ///
-    /// <pre><code>     &lt;p&gt; A service mesh is a logical boundary for network traffic between services that are
-    /// represented by resources within the mesh. After you create your service mesh, you can
-    /// create virtual services, virtual nodes, virtual routers, and routes to distribute traffic
-    /// between the applications in your mesh.&lt;/p&gt;
-    /// &lt;p&gt;For more information about service meshes, see &lt;a href=&quot;https://docs.aws.amazon.com/app-mesh/latest/userguide/meshes.html&quot;&gt;Service meshes&lt;/a&gt;.&lt;/p&gt;
-    /// </code></pre>
+    /// <p>Creates a service mesh.</p> <p> A service mesh is a logical boundary for network traffic between services that are represented by resources within the mesh. After you create your service mesh, you can create virtual services, virtual nodes, virtual routers, and routes to distribute traffic between the applications in your mesh.</p> <p>For more information about service meshes, see <a href="https://docs.aws.amazon.com/app-mesh/latest/userguide/meshes.html">Service meshes</a>.</p>
     #[allow(unused_mut)]
     async fn create_mesh(
         &self,
@@ -6117,12 +5692,7 @@ impl AppMesh for AppMeshClient {
         }
     }
 
-    /// <p>Creates a route that is associated with a virtual router.</p>
-    ///
-    /// <pre><code>     &lt;p&gt; You can route several different protocols and define a retry policy for a route.
-    /// Traffic can be routed to one or more virtual nodes.&lt;/p&gt;
-    /// &lt;p&gt;For more information about routes, see &lt;a href=&quot;https://docs.aws.amazon.com/app-mesh/latest/userguide/routes.html&quot;&gt;Routes&lt;/a&gt;.&lt;/p&gt;
-    /// </code></pre>
+    /// <p>Creates a route that is associated with a virtual router.</p> <p> You can route several different protocols and define a retry policy for a route. Traffic can be routed to one or more virtual nodes.</p> <p>For more information about routes, see <a href="https://docs.aws.amazon.com/app-mesh/latest/userguide/routes.html">Routes</a>.</p>
     #[allow(unused_mut)]
     async fn create_route(
         &self,
@@ -6163,14 +5733,7 @@ impl AppMesh for AppMeshClient {
         }
     }
 
-    /// <p>Creates a virtual gateway.</p>
-    ///
-    /// <pre><code>     &lt;p&gt;A virtual gateway allows resources outside your mesh to communicate to resources that
-    /// are inside your mesh. The virtual gateway represents an Envoy proxy running in an Amazon ECS
-    /// task, in a Kubernetes service, or on an Amazon EC2 instance. Unlike a virtual node, which
-    /// represents an Envoy running with an application, a virtual gateway represents Envoy deployed by itself.&lt;/p&gt;
-    /// &lt;p&gt;For more information about virtual gateways, see &lt;a href=&quot;https://docs.aws.amazon.com/app-mesh/latest/userguide/virtual_gateways.html&quot;&gt;Virtual gateways&lt;/a&gt;.&lt;/p&gt;
-    /// </code></pre>
+    /// <p>Creates a virtual gateway.</p> <p>A virtual gateway allows resources outside your mesh to communicate to resources that are inside your mesh. The virtual gateway represents an Envoy proxy running in an Amazon ECS task, in a Kubernetes service, or on an Amazon EC2 instance. Unlike a virtual node, which represents an Envoy running with an application, a virtual gateway represents Envoy deployed by itself.</p> <p>For more information about virtual gateways, see <a href="https://docs.aws.amazon.com/app-mesh/latest/userguide/virtual_gateways.html">Virtual gateways</a>. </p>
     #[allow(unused_mut)]
     async fn create_virtual_gateway(
         &self,
@@ -6210,29 +5773,7 @@ impl AppMesh for AppMeshClient {
         }
     }
 
-    /// <p>Creates a virtual node within a service mesh.</p>
-    ///
-    /// <pre><code>     &lt;p&gt; A virtual node acts as a logical pointer to a particular task group, such as an Amazon ECS
-    /// service or a Kubernetes deployment. When you create a virtual node, you can specify the
-    /// service discovery information for your task group, and whether the proxy running in a task
-    /// group will communicate with other proxies using Transport Layer Security (TLS).&lt;/p&gt;
-    /// &lt;p&gt;You define a &lt;code&gt;listener&lt;/code&gt; for any inbound traffic that your virtual node
-    /// expects. Any virtual service that your virtual node expects to communicate to is specified
-    /// as a &lt;code&gt;backend&lt;/code&gt;.&lt;/p&gt;
-    /// &lt;p&gt;The response metadata for your new virtual node contains the &lt;code&gt;arn&lt;/code&gt; that is
-    /// associated with the virtual node. Set this value (either the full ARN or the truncated
-    /// resource name: for example, &lt;code&gt;mesh/default/virtualNode/simpleapp&lt;/code&gt;) as the
-    /// &lt;code&gt;APPMESH_VIRTUAL_NODE_NAME&lt;/code&gt; environment variable for your task group&#39;s Envoy
-    /// proxy container in your task definition or pod spec. This is then mapped to the
-    /// &lt;code&gt;node.id&lt;/code&gt; and &lt;code&gt;node.cluster&lt;/code&gt; Envoy parameters.&lt;/p&gt;
-    /// &lt;note&gt;
-    /// &lt;p&gt;If you require your Envoy stats or tracing to use a different name, you can override
-    /// the &lt;code&gt;node.cluster&lt;/code&gt; value that is set by
-    /// &lt;code&gt;APPMESH_VIRTUAL_NODE_NAME&lt;/code&gt; with the
-    /// &lt;code&gt;APPMESH_VIRTUAL_NODE_CLUSTER&lt;/code&gt; environment variable.&lt;/p&gt;
-    /// &lt;/note&gt;
-    /// &lt;p&gt;For more information about virtual nodes, see &lt;a href=&quot;https://docs.aws.amazon.com/app-mesh/latest/userguide/virtual_nodes.html&quot;&gt;Virtual nodes&lt;/a&gt;.&lt;/p&gt;
-    /// </code></pre>
+    /// <p>Creates a virtual node within a service mesh.</p> <p> A virtual node acts as a logical pointer to a particular task group, such as an Amazon ECS service or a Kubernetes deployment. When you create a virtual node, you can specify the service discovery information for your task group, and whether the proxy running in a task group will communicate with other proxies using Transport Layer Security (TLS).</p> <p>You define a <code>listener</code> for any inbound traffic that your virtual node expects. Any virtual service that your virtual node expects to communicate to is specified as a <code>backend</code>.</p> <p>The response metadata for your new virtual node contains the <code>arn</code> that is associated with the virtual node. Set this value to the full ARN; for example, <code>arn:aws:appmesh:us-west-2:123456789012:myMesh/default/virtualNode/myApp</code>) as the <code>APPMESH_RESOURCE_ARN</code> environment variable for your task group's Envoy proxy container in your task definition or pod spec. This is then mapped to the <code>node.id</code> and <code>node.cluster</code> Envoy parameters.</p> <note> <p>By default, App Mesh uses the name of the resource you specified in <code>APPMESH_RESOURCE_ARN</code> when Envoy is referring to itself in metrics and traces. You can override this behavior by setting the <code>APPMESH_RESOURCE_CLUSTER</code> environment variable with your own name.</p> <p>AWS Cloud Map is not available in the eu-south-1 Region.</p> </note> <p>For more information about virtual nodes, see <a href="https://docs.aws.amazon.com/app-mesh/latest/userguide/virtual_nodes.html">Virtual nodes</a>. You must be using <code>1.15.0</code> or later of the Envoy image when setting these variables. For more information about App Mesh Envoy variables, see <a href="https://docs.aws.amazon.com/app-mesh/latest/userguide/envoy.html">Envoy image</a> in the AWS App Mesh User Guide.</p>
     #[allow(unused_mut)]
     async fn create_virtual_node(
         &self,
@@ -6272,15 +5813,7 @@ impl AppMesh for AppMeshClient {
         }
     }
 
-    /// <p>Creates a virtual router within a service mesh.</p>
-    ///
-    /// <pre><code>     &lt;p&gt;Specify a &lt;code&gt;listener&lt;/code&gt; for any inbound traffic that your virtual router
-    /// receives. Create a virtual router for each protocol and port that you need to route.
-    /// Virtual routers handle traffic for one or more virtual services within your mesh. After you
-    /// create your virtual router, create and associate routes for your virtual router that direct
-    /// incoming requests to different virtual nodes.&lt;/p&gt;
-    /// &lt;p&gt;For more information about virtual routers, see &lt;a href=&quot;https://docs.aws.amazon.com/app-mesh/latest/userguide/virtual_routers.html&quot;&gt;Virtual routers&lt;/a&gt;.&lt;/p&gt;
-    /// </code></pre>
+    /// <p>Creates a virtual router within a service mesh.</p> <p>Specify a <code>listener</code> for any inbound traffic that your virtual router receives. Create a virtual router for each protocol and port that you need to route. Virtual routers handle traffic for one or more virtual services within your mesh. After you create your virtual router, create and associate routes for your virtual router that direct incoming requests to different virtual nodes.</p> <p>For more information about virtual routers, see <a href="https://docs.aws.amazon.com/app-mesh/latest/userguide/virtual_routers.html">Virtual routers</a>.</p>
     #[allow(unused_mut)]
     async fn create_virtual_router(
         &self,
@@ -6320,15 +5853,7 @@ impl AppMesh for AppMeshClient {
         }
     }
 
-    /// <p>Creates a virtual service within a service mesh.</p>
-    ///
-    /// <pre><code>     &lt;p&gt;A virtual service is an abstraction of a real service that is provided by a virtual node
-    /// directly or indirectly by means of a virtual router. Dependent services call your virtual
-    /// service by its &lt;code&gt;virtualServiceName&lt;/code&gt;, and those requests are routed to the
-    /// virtual node or virtual router that is specified as the provider for the virtual
-    /// service.&lt;/p&gt;
-    /// &lt;p&gt;For more information about virtual services, see &lt;a href=&quot;https://docs.aws.amazon.com/app-mesh/latest/userguide/virtual_services.html&quot;&gt;Virtual services&lt;/a&gt;.&lt;/p&gt;
-    /// </code></pre>
+    /// <p>Creates a virtual service within a service mesh.</p> <p>A virtual service is an abstraction of a real service that is provided by a virtual node directly or indirectly by means of a virtual router. Dependent services call your virtual service by its <code>virtualServiceName</code>, and those requests are routed to the virtual node or virtual router that is specified as the provider for the virtual service.</p> <p>For more information about virtual services, see <a href="https://docs.aws.amazon.com/app-mesh/latest/userguide/virtual_services.html">Virtual services</a>.</p>
     #[allow(unused_mut)]
     async fn create_virtual_service(
         &self,
@@ -6402,11 +5927,7 @@ impl AppMesh for AppMeshClient {
         }
     }
 
-    /// <p>Deletes an existing service mesh.</p>
-    ///
-    /// <pre><code>     &lt;p&gt;You must delete all resources (virtual services, routes, virtual routers, and virtual
-    /// nodes) in the service mesh before you can delete the mesh itself.&lt;/p&gt;
-    /// </code></pre>
+    /// <p>Deletes an existing service mesh.</p> <p>You must delete all resources (virtual services, routes, virtual routers, and virtual nodes) in the service mesh before you can delete the mesh itself.</p>
     #[allow(unused_mut)]
     async fn delete_mesh(
         &self,
@@ -6473,8 +5994,7 @@ impl AppMesh for AppMeshClient {
         }
     }
 
-    /// <p>Deletes an existing virtual gateway. You cannot delete a virtual gateway if any gateway
-    /// routes are associated to it.</p>
+    /// <p>Deletes an existing virtual gateway. You cannot delete a virtual gateway if any gateway routes are associated to it.</p>
     #[allow(unused_mut)]
     async fn delete_virtual_gateway(
         &self,
@@ -6512,11 +6032,7 @@ impl AppMesh for AppMeshClient {
         }
     }
 
-    /// <p>Deletes an existing virtual node.</p>
-    ///
-    /// <pre><code>     &lt;p&gt;You must delete any virtual services that list a virtual node as a service provider
-    /// before you can delete the virtual node itself.&lt;/p&gt;
-    /// </code></pre>
+    /// <p>Deletes an existing virtual node.</p> <p>You must delete any virtual services that list a virtual node as a service provider before you can delete the virtual node itself.</p>
     #[allow(unused_mut)]
     async fn delete_virtual_node(
         &self,
@@ -6554,11 +6070,7 @@ impl AppMesh for AppMeshClient {
         }
     }
 
-    /// <p>Deletes an existing virtual router.</p>
-    ///
-    /// <pre><code>     &lt;p&gt;You must delete any routes associated with the virtual router before you can delete the
-    /// router itself.&lt;/p&gt;
-    /// </code></pre>
+    /// <p>Deletes an existing virtual router.</p> <p>You must delete any routes associated with the virtual router before you can delete the router itself.</p>
     #[allow(unused_mut)]
     async fn delete_virtual_router(
         &self,
@@ -6893,8 +6405,7 @@ impl AppMesh for AppMeshClient {
         }
     }
 
-    /// <p>Returns a list of existing gateway routes that are associated to a virtual
-    /// gateway.</p>
+    /// <p>Returns a list of existing gateway routes that are associated to a virtual gateway.</p>
     #[allow(unused_mut)]
     async fn list_gateway_routes(
         &self,
@@ -7229,10 +6740,7 @@ impl AppMesh for AppMeshClient {
         }
     }
 
-    /// <p>Associates the specified tags to a resource with the specified <code>resourceArn</code>.
-    /// If existing tags on a resource aren't specified in the request parameters, they aren't
-    /// changed. When a resource is deleted, the tags associated with that resource are also
-    /// deleted.</p>
+    /// <p>Associates the specified tags to a resource with the specified <code>resourceArn</code>. If existing tags on a resource aren't specified in the request parameters, they aren't changed. When a resource is deleted, the tags associated with that resource are also deleted.</p>
     #[allow(unused_mut)]
     async fn tag_resource(
         &self,
@@ -7302,8 +6810,7 @@ impl AppMesh for AppMeshClient {
         }
     }
 
-    /// <p>Updates an existing gateway route that is associated to a specified virtual gateway in a
-    /// service mesh.</p>
+    /// <p>Updates an existing gateway route that is associated to a specified virtual gateway in a service mesh.</p>
     #[allow(unused_mut)]
     async fn update_gateway_route(
         &self,

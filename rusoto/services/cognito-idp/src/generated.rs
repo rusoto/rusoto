@@ -192,7 +192,7 @@ pub struct AdminCreateUserRequest {
     #[serde(rename = "TemporaryPassword")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub temporary_password: Option<String>,
-    /// <p><p>An array of name-value pairs that contain user attributes and attribute values to be set for the user to be created. You can create a user without specifying any attributes other than <code>Username</code>. However, any attributes that you specify as required (in or in the <b>Attributes</b> tab of the console) must be supplied either by you (in your call to <code>AdminCreateUser</code>) or by the user (when he or she signs up in response to your welcome message).</p> <p>For custom attributes, you must prepend the <code>custom:</code> prefix to the attribute name.</p> <p>To send a message inviting the user to sign up, you must specify the user&#39;s email address or phone number. This can be done in your call to AdminCreateUser or in the <b>Users</b> tab of the Amazon Cognito console for managing your user pools.</p> <p>In your call to <code>AdminCreateUser</code>, you can set the <code>email<em>verified</code> attribute to <code>True</code>, and you can set the <code>phone</em>number<em>verified</code> attribute to <code>True</code>. (You can also do this by calling .)</p> <ul> <li> <p> <b>email</b>: The email address of the user to whom the message that contains the code and username will be sent. Required if the <code>email</em>verified</code> attribute is set to <code>True</code>, or if <code>&quot;EMAIL&quot;</code> is specified in the <code>DesiredDeliveryMediums</code> parameter.</p> </li> <li> <p> <b>phone<em>number</b>: The phone number of the user to whom the message that contains the code and username will be sent. Required if the <code>phone</em>number_verified</code> attribute is set to <code>True</code>, or if <code>&quot;SMS&quot;</code> is specified in the <code>DesiredDeliveryMediums</code> parameter.</p> </li> </ul></p>
+    /// <p><p>An array of name-value pairs that contain user attributes and attribute values to be set for the user to be created. You can create a user without specifying any attributes other than <code>Username</code>. However, any attributes that you specify as required (when creating a user pool or in the <b>Attributes</b> tab of the console) must be supplied either by you (in your call to <code>AdminCreateUser</code>) or by the user (when he or she signs up in response to your welcome message).</p> <p>For custom attributes, you must prepend the <code>custom:</code> prefix to the attribute name.</p> <p>To send a message inviting the user to sign up, you must specify the user&#39;s email address or phone number. This can be done in your call to AdminCreateUser or in the <b>Users</b> tab of the Amazon Cognito console for managing your user pools.</p> <p>In your call to <code>AdminCreateUser</code>, you can set the <code>email<em>verified</code> attribute to <code>True</code>, and you can set the <code>phone</em>number<em>verified</code> attribute to <code>True</code>. (You can also do this by calling &lt;a href=&quot;https://docs.aws.amazon.com/cognito-user-identity-pools/latest/APIReference/API</em>AdminUpdateUserAttributes.html&quot;&gt;AdminUpdateUserAttributes</a>.)</p> <ul> <li> <p> <b>email</b>: The email address of the user to whom the message that contains the code and username will be sent. Required if the <code>email<em>verified</code> attribute is set to <code>True</code>, or if <code>&quot;EMAIL&quot;</code> is specified in the <code>DesiredDeliveryMediums</code> parameter.</p> </li> <li> <p> <b>phone</em>number</b>: The phone number of the user to whom the message that contains the code and username will be sent. Required if the <code>phone<em>number</em>verified</code> attribute is set to <code>True</code>, or if <code>&quot;SMS&quot;</code> is specified in the <code>DesiredDeliveryMediums</code> parameter.</p> </li> </ul></p>
     #[serde(rename = "UserAttributes")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub user_attributes: Option<Vec<AttributeType>>,
@@ -358,7 +358,7 @@ pub struct AdminGetUserResponse {
     #[serde(rename = "Enabled")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub enabled: Option<bool>,
-    /// <p> <i>This response parameter is no longer supported.</i> It provides information only about SMS MFA configurations. It doesn't provide information about TOTP software token MFA configurations. To look up information about either type of MFA configuration, use the <a>AdminGetUserResponse$UserMFASettingList</a> response instead.</p>
+    /// <p> <i>This response parameter is no longer supported.</i> It provides information only about SMS MFA configurations. It doesn't provide information about TOTP software token MFA configurations. To look up information about either type of MFA configuration, use UserMFASettingList instead.</p>
     #[serde(rename = "MFAOptions")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub mfa_options: Option<Vec<MFAOptionType>>,
@@ -402,7 +402,7 @@ pub struct AdminInitiateAuthRequest {
     /// <p><p>The authentication flow for this call to execute. The API action will depend on this value. For example:</p> <ul> <li> <p> <code>REFRESH<em>TOKEN</em>AUTH</code> will take in a valid refresh token and return new tokens.</p> </li> <li> <p> <code>USER<em>SRP</em>AUTH</code> will take in <code>USERNAME</code> and <code>SRP<em>A</code> and return the SRP variables to be used for next challenge execution.</p> </li> <li> <p> <code>USER</em>PASSWORD<em>AUTH</code> will take in <code>USERNAME</code> and <code>PASSWORD</code> and return the next challenge or tokens.</p> </li> </ul> <p>Valid values include:</p> <ul> <li> <p> <code>USER</em>SRP<em>AUTH</code>: Authentication flow for the Secure Remote Password (SRP) protocol.</p> </li> <li> <p> <code>REFRESH</em>TOKEN<em>AUTH</code>/<code>REFRESH</em>TOKEN</code>: Authentication flow for refreshing the access token and ID token by supplying a valid refresh token.</p> </li> <li> <p> <code>CUSTOM<em>AUTH</code>: Custom authentication flow.</p> </li> <li> <p> <code>ADMIN</em>NO<em>SRP</em>AUTH</code>: Non-SRP authentication flow; you can pass in the USERNAME and PASSWORD directly if the flow is enabled for calling the app client.</p> </li> <li> <p> <code>USER<em>PASSWORD</em>AUTH</code>: Non-SRP authentication flow; USERNAME and PASSWORD are passed directly. If a user migration Lambda trigger is set, this flow will invoke the user migration Lambda if the USERNAME is not found in the user pool. </p> </li> <li> <p> <code>ADMIN<em>USER</em>PASSWORD<em>AUTH</code>: Admin-based user password authentication. This replaces the <code>ADMIN</em>NO<em>SRP</em>AUTH</code> authentication flow. In this flow, Cognito receives the password in the request instead of using the SRP process to verify passwords.</p> </li> </ul></p>
     #[serde(rename = "AuthFlow")]
     pub auth_flow: String,
-    /// <p><p>The authentication parameters. These are inputs corresponding to the <code>AuthFlow</code> that you are invoking. The required values depend on the value of <code>AuthFlow</code>:</p> <ul> <li> <p>For <code>USER<em>SRP</em>AUTH</code>: <code>USERNAME</code> (required), <code>SRP<em>A</code> (required), <code>SECRET</em>HASH</code> (required if the app client is configured with a client secret), <code>DEVICE<em>KEY</code> </p> </li> <li> <p>For <code>REFRESH</em>TOKEN<em>AUTH/REFRESH</em>TOKEN</code>: <code>REFRESH<em>TOKEN</code> (required), <code>SECRET</em>HASH</code> (required if the app client is configured with a client secret), <code>DEVICE<em>KEY</code> </p> </li> <li> <p>For <code>ADMIN</em>NO<em>SRP</em>AUTH</code>: <code>USERNAME</code> (required), <code>SECRET<em>HASH</code> (if app client is configured with client secret), <code>PASSWORD</code> (required), <code>DEVICE</em>KEY</code> </p> </li> <li> <p>For <code>CUSTOM<em>AUTH</code>: <code>USERNAME</code> (required), <code>SECRET</em>HASH</code> (if app client is configured with client secret), <code>DEVICE_KEY</code> </p> </li> </ul></p>
+    /// <p><p>The authentication parameters. These are inputs corresponding to the <code>AuthFlow</code> that you are invoking. The required values depend on the value of <code>AuthFlow</code>:</p> <ul> <li> <p>For <code>USER<em>SRP</em>AUTH</code>: <code>USERNAME</code> (required), <code>SRP<em>A</code> (required), <code>SECRET</em>HASH</code> (required if the app client is configured with a client secret), <code>DEVICE<em>KEY</code>.</p> </li> <li> <p>For <code>REFRESH</em>TOKEN<em>AUTH/REFRESH</em>TOKEN</code>: <code>REFRESH<em>TOKEN</code> (required), <code>SECRET</em>HASH</code> (required if the app client is configured with a client secret), <code>DEVICE<em>KEY</code>.</p> </li> <li> <p>For <code>ADMIN</em>NO<em>SRP</em>AUTH</code>: <code>USERNAME</code> (required), <code>SECRET<em>HASH</code> (if app client is configured with client secret), <code>PASSWORD</code> (required), <code>DEVICE</em>KEY</code>.</p> </li> <li> <p>For <code>CUSTOM<em>AUTH</code>: <code>USERNAME</code> (required), <code>SECRET</em>HASH</code> (if app client is configured with client secret), <code>DEVICE<em>KEY</code>. To start the authentication flow with password verification, include <code>ChallengeName: SRP</em>A</code> and <code>SRP<em>A: (The SRP</em>A Value)</code>.</p> </li> </ul></p>
     #[serde(rename = "AuthParameters")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub auth_parameters: Option<::std::collections::HashMap<String, String>>,
@@ -603,7 +603,7 @@ pub struct AdminRespondToAuthChallengeRequest {
     #[serde(rename = "AnalyticsMetadata")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub analytics_metadata: Option<AnalyticsMetadataType>,
-    /// <p>The challenge name. For more information, see .</p>
+    /// <p>The challenge name. For more information, see <a href="https://docs.aws.amazon.com/cognito-user-identity-pools/latest/APIReference/API_AdminInitiateAuth.html">AdminInitiateAuth</a>.</p>
     #[serde(rename = "ChallengeName")]
     pub challenge_name: String,
     /// <p>The challenge responses. These are inputs corresponding to the value of <code>ChallengeName</code>, for example:</p> <ul> <li> <p> <code>SMS_MFA</code>: <code>SMS_MFA_CODE</code>, <code>USERNAME</code>, <code>SECRET_HASH</code> (if app client is configured with client secret).</p> </li> <li> <p> <code>PASSWORD_VERIFIER</code>: <code>PASSWORD_CLAIM_SIGNATURE</code>, <code>PASSWORD_CLAIM_SECRET_BLOCK</code>, <code>TIMESTAMP</code>, <code>USERNAME</code>, <code>SECRET_HASH</code> (if app client is configured with client secret).</p> </li> <li> <p> <code>ADMIN_NO_SRP_AUTH</code>: <code>PASSWORD</code>, <code>USERNAME</code>, <code>SECRET_HASH</code> (if app client is configured with client secret). </p> </li> <li> <p> <code>NEW_PASSWORD_REQUIRED</code>: <code>NEW_PASSWORD</code>, any other required attributes, <code>USERNAME</code>, <code>SECRET_HASH</code> (if app client is configured with client secret). </p> </li> </ul> <p>The value of the <code>USERNAME</code> attribute must be the user's actual username, not an alias (such as email address or phone number). To make this easier, the <code>AdminInitiateAuth</code> response includes the actual username value in the <code>USERNAMEUSER_ID_FOR_SRP</code> attribute, even if you specified an alias in your call to <code>AdminInitiateAuth</code>.</p>
@@ -638,15 +638,15 @@ pub struct AdminRespondToAuthChallengeResponse {
     #[serde(rename = "AuthenticationResult")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub authentication_result: Option<AuthenticationResultType>,
-    /// <p>The name of the challenge. For more information, see .</p>
+    /// <p>The name of the challenge. For more information, see <a href="https://docs.aws.amazon.com/cognito-user-identity-pools/latest/APIReference/API_AdminInitiateAuth.html">AdminInitiateAuth</a>.</p>
     #[serde(rename = "ChallengeName")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub challenge_name: Option<String>,
-    /// <p>The challenge parameters. For more information, see .</p>
+    /// <p>The challenge parameters. For more information, see <a href="https://docs.aws.amazon.com/cognito-user-identity-pools/latest/APIReference/API_AdminInitiateAuth.html">AdminInitiateAuth</a>.</p>
     #[serde(rename = "ChallengeParameters")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub challenge_parameters: Option<::std::collections::HashMap<String, String>>,
-    /// <p>The session which should be passed both ways in challenge-response calls to the service. If the or API call determines that the caller needs to go through another challenge, they return a session with other challenge parameters. This session should be passed as it is to the next <code>RespondToAuthChallenge</code> API call.</p>
+    /// <p>The session which should be passed both ways in challenge-response calls to the service. If the caller needs to go through another challenge, they return a session with other challenge parameters. This session should be passed as it is to the next <code>RespondToAuthChallenge</code> API call.</p>
     #[serde(rename = "Session")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub session: Option<String>,
@@ -803,18 +803,25 @@ pub struct AdminUserGlobalSignOutRequest {
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct AdminUserGlobalSignOutResponse {}
 
-/// <p><p>The Amazon Pinpoint analytics configuration for collecting metrics for a user pool.</p> <note> <p>Cognito User Pools only supports sending events to Amazon Pinpoint projects in the US East (N. Virginia) us-east-1 Region, regardless of the region in which the user pool resides.</p> </note></p>
+/// <p><p>The Amazon Pinpoint analytics configuration for collecting metrics for a user pool.</p> <note> <p>In regions where Pinpoint is not available, Cognito User Pools only supports sending events to Amazon Pinpoint projects in us-east-1. In regions where Pinpoint is available, Cognito User Pools will support sending events to Amazon Pinpoint projects within that same region. </p> </note></p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct AnalyticsConfigurationType {
+    /// <p>The Amazon Resource Name (ARN) of an Amazon Pinpoint project. You can use the Amazon Pinpoint project for Pinpoint integration with the chosen User Pool Client. Amazon Cognito publishes events to the pinpoint project declared by the app ARN.</p>
+    #[serde(rename = "ApplicationArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub application_arn: Option<String>,
     /// <p>The application ID for an Amazon Pinpoint application.</p>
     #[serde(rename = "ApplicationId")]
-    pub application_id: String,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub application_id: Option<String>,
     /// <p>The external ID.</p>
     #[serde(rename = "ExternalId")]
-    pub external_id: String,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub external_id: Option<String>,
     /// <p>The ARN of an IAM role that authorizes Amazon Cognito to publish events to Amazon Pinpoint analytics.</p>
     #[serde(rename = "RoleArn")]
-    pub role_arn: String,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub role_arn: Option<String>,
     /// <p>If <code>UserDataShared</code> is <code>true</code>, Amazon Cognito will include user data in the events it publishes to Amazon Pinpoint analytics.</p>
     #[serde(rename = "UserDataShared")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1054,7 +1061,7 @@ pub struct ConfirmForgotPasswordRequest {
     #[serde(rename = "ClientMetadata")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub client_metadata: Option<::std::collections::HashMap<String, String>>,
-    /// <p>The confirmation code sent by a user's request to retrieve a forgotten password. For more information, see </p>
+    /// <p>The confirmation code sent by a user's request to retrieve a forgotten password. For more information, see <a href="https://docs.aws.amazon.com/cognito-user-identity-pools/latest/APIReference/API_ForgotPassword.html">ForgotPassword</a>.</p>
     #[serde(rename = "ConfirmationCode")]
     pub confirmation_code: String,
     /// <p>The password sent by a user's request to retrieve a forgotten password.</p>
@@ -1183,7 +1190,7 @@ pub struct CreateIdentityProviderRequest {
     #[serde(rename = "IdpIdentifiers")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub idp_identifiers: Option<Vec<String>>,
-    /// <p><p>The identity provider details. The following list describes the provider detail keys for each identity provider type.</p> <ul> <li> <p>For Google, Facebook and Login with Amazon:</p> <ul> <li> <p>client<em>id</p> </li> <li> <p>client</em>secret</p> </li> <li> <p>authorize<em>scopes</p> </li> </ul> </li> <li> <p>For Sign in with Apple:</p> <ul> <li> <p>client</em>id</p> </li> <li> <p>team<em>id</p> </li> <li> <p>key</em>id</p> </li> <li> <p>private<em>key</p> </li> <li> <p>authorize</em>scopes</p> </li> </ul> </li> <li> <p>For OIDC providers:</p> <ul> <li> <p>client<em>id</p> </li> <li> <p>client</em>secret</p> </li> <li> <p>attributes<em>request</em>method</p> </li> <li> <p>oidc<em>issuer</p> </li> <li> <p>authorize</em>scopes</p> </li> <li> <p>authorize<em>url <i>if not available from discovery URL specified by oidc</em>issuer key</i> </p> </li> <li> <p>token<em>url <i>if not available from discovery URL specified by oidc</em>issuer key</i> </p> </li> <li> <p>attributes<em>url <i>if not available from discovery URL specified by oidc</em>issuer key</i> </p> </li> <li> <p>jwks<em>uri <i>if not available from discovery URL specified by oidc</em>issuer key</i> </p> </li> <li> <p>authorize_scopes</p> </li> </ul> </li> <li> <p>For SAML providers:</p> <ul> <li> <p>MetadataFile OR MetadataURL</p> </li> <li> <p>IDPSignout <i>optional</i> </p> </li> </ul> </li> </ul></p>
+    /// <p><p>The identity provider details. The following list describes the provider detail keys for each identity provider type.</p> <ul> <li> <p>For Google and Login with Amazon:</p> <ul> <li> <p>client<em>id</p> </li> <li> <p>client</em>secret</p> </li> <li> <p>authorize<em>scopes</p> </li> </ul> </li> <li> <p>For Facebook:</p> <ul> <li> <p>client</em>id</p> </li> <li> <p>client<em>secret</p> </li> <li> <p>authorize</em>scopes</p> </li> <li> <p>api<em>version</p> </li> </ul> </li> <li> <p>For Sign in with Apple:</p> <ul> <li> <p>client</em>id</p> </li> <li> <p>team<em>id</p> </li> <li> <p>key</em>id</p> </li> <li> <p>private<em>key</p> </li> <li> <p>authorize</em>scopes</p> </li> </ul> </li> <li> <p>For OIDC providers:</p> <ul> <li> <p>client<em>id</p> </li> <li> <p>client</em>secret</p> </li> <li> <p>attributes<em>request</em>method</p> </li> <li> <p>oidc<em>issuer</p> </li> <li> <p>authorize</em>scopes</p> </li> <li> <p>authorize<em>url <i>if not available from discovery URL specified by oidc</em>issuer key</i> </p> </li> <li> <p>token<em>url <i>if not available from discovery URL specified by oidc</em>issuer key</i> </p> </li> <li> <p>attributes<em>url <i>if not available from discovery URL specified by oidc</em>issuer key</i> </p> </li> <li> <p>jwks<em>uri <i>if not available from discovery URL specified by oidc</em>issuer key</i> </p> </li> </ul> </li> <li> <p>For SAML providers:</p> <ul> <li> <p>MetadataFile OR MetadataURL</p> </li> <li> <p>IDPSignout <i>optional</i> </p> </li> </ul> </li> </ul></p>
     #[serde(rename = "ProviderDetails")]
     pub provider_details: ::std::collections::HashMap<String, String>,
     /// <p>The identity provider name.</p>
@@ -1260,6 +1267,10 @@ pub struct CreateUserImportJobResponse {
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateUserPoolClientRequest {
+    /// <p>The time limit, between 5 minutes and 1 day, after which the access token is no longer valid and cannot be used. This value will be overridden if you have entered a value in TokenValidityUnits.</p>
+    #[serde(rename = "AccessTokenValidity")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub access_token_validity: Option<i64>,
     /// <p>The allowed OAuth flows.</p> <p>Set to <code>code</code> to initiate a code grant flow, which provides an authorization code as the response. This code can be exchanged for access tokens with the token endpoint.</p> <p>Set to <code>implicit</code> to specify that the client should get the access token (and, optionally, ID token, based on scopes) directly.</p> <p>Set to <code>client_credentials</code> to specify that the client should get the access token (and, optionally, ID token, based on scopes) from the token endpoint using a combination of client and client_secret.</p>
     #[serde(rename = "AllowedOAuthFlows")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1272,7 +1283,7 @@ pub struct CreateUserPoolClientRequest {
     #[serde(rename = "AllowedOAuthScopes")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub allowed_o_auth_scopes: Option<Vec<String>>,
-    /// <p><p>The Amazon Pinpoint analytics configuration for collecting metrics for this user pool.</p> <note> <p>Cognito User Pools only supports sending events to Amazon Pinpoint projects in the US East (N. Virginia) us-east-1 Region, regardless of the region in which the user pool resides.</p> </note></p>
+    /// <p><p>The Amazon Pinpoint analytics configuration for collecting metrics for this user pool.</p> <note> <p>In regions where Pinpoint is not available, Cognito User Pools only supports sending events to Amazon Pinpoint projects in us-east-1. In regions where Pinpoint is available, Cognito User Pools will support sending events to Amazon Pinpoint projects within that same region. </p> </note></p>
     #[serde(rename = "AnalyticsConfiguration")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub analytics_configuration: Option<AnalyticsConfigurationType>,
@@ -1295,11 +1306,15 @@ pub struct CreateUserPoolClientRequest {
     #[serde(rename = "GenerateSecret")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub generate_secret: Option<bool>,
+    /// <p>The time limit, between 5 minutes and 1 day, after which the ID token is no longer valid and cannot be used. This value will be overridden if you have entered a value in TokenValidityUnits.</p>
+    #[serde(rename = "IdTokenValidity")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub id_token_validity: Option<i64>,
     /// <p>A list of allowed logout URLs for the identity providers.</p>
     #[serde(rename = "LogoutURLs")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub logout_ur_ls: Option<Vec<String>>,
-    /// <p><p>Use this setting to choose which errors and responses are returned by Cognito APIs during authentication, account confirmation, and password recovery when the user does not exist in the user pool. When set to <code>ENABLED</code> and the user does not exist, authentication returns an error indicating either the username or password was incorrect, and account confirmation and password recovery return a response indicating a code was sent to a simulated destination. When set to <code>LEGACY</code>, those APIs will return a <code>UserNotFoundException</code> exception if the user does not exist in the user pool.</p> <p>Valid values include:</p> <ul> <li> <p> <code>ENABLED</code> - This prevents user existence-related errors.</p> </li> <li> <p> <code>LEGACY</code> - This represents the old behavior of Cognito where user existence related errors are not prevented.</p> </li> </ul> <p>This setting affects the behavior of following APIs:</p> <ul> <li> <p> <a>AdminInitiateAuth</a> </p> </li> <li> <p> <a>AdminRespondToAuthChallenge</a> </p> </li> <li> <p> <a>InitiateAuth</a> </p> </li> <li> <p> <a>RespondToAuthChallenge</a> </p> </li> <li> <p> <a>ForgotPassword</a> </p> </li> <li> <p> <a>ConfirmForgotPassword</a> </p> </li> <li> <p> <a>ConfirmSignUp</a> </p> </li> <li> <p> <a>ResendConfirmationCode</a> </p> </li> </ul> <note> <p>After February 15th 2020, the value of <code>PreventUserExistenceErrors</code> will default to <code>ENABLED</code> for newly created user pool clients if no value is provided.</p> </note></p>
+    /// <p><p>Use this setting to choose which errors and responses are returned by Cognito APIs during authentication, account confirmation, and password recovery when the user does not exist in the user pool. When set to <code>ENABLED</code> and the user does not exist, authentication returns an error indicating either the username or password was incorrect, and account confirmation and password recovery return a response indicating a code was sent to a simulated destination. When set to <code>LEGACY</code>, those APIs will return a <code>UserNotFoundException</code> exception if the user does not exist in the user pool.</p> <p>Valid values include:</p> <ul> <li> <p> <code>ENABLED</code> - This prevents user existence-related errors.</p> </li> <li> <p> <code>LEGACY</code> - This represents the old behavior of Cognito where user existence related errors are not prevented.</p> </li> </ul> <note> <p>After February 15th 2020, the value of <code>PreventUserExistenceErrors</code> will default to <code>ENABLED</code> for newly created user pool clients if no value is provided.</p> </note></p>
     #[serde(rename = "PreventUserExistenceErrors")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub prevent_user_existence_errors: Option<String>,
@@ -1315,6 +1330,10 @@ pub struct CreateUserPoolClientRequest {
     #[serde(rename = "SupportedIdentityProviders")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub supported_identity_providers: Option<Vec<String>>,
+    /// <p>The units in which the validity times are represented in. Default for RefreshToken is days, and default for ID and access tokens are hours.</p>
+    #[serde(rename = "TokenValidityUnits")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub token_validity_units: Option<TokenValidityUnitsType>,
     /// <p>The user pool ID for the user pool where you want to create a user pool client.</p>
     #[serde(rename = "UserPoolId")]
     pub user_pool_id: String,
@@ -1362,7 +1381,7 @@ pub struct CreateUserPoolDomainResponse {
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateUserPoolRequest {
-    /// <p><p>Use this setting to define which verified available method a user can use to recover their password when they call <code>ForgotPassword</code>. It allows you to define a preferred method when a user has more than one method available. With this setting, SMS does not qualify for a valid password recovery mechanism if the user also has SMS MFA enabled. In the absence of this setting, Cognito uses the legacy behavior to determine the recovery method where SMS is preferred over email.</p> <note> <p>Starting February 1, 2020, the value of <code>AccountRecoverySetting</code> will default to <code>verified<em>email</code> first and <code>verified</em>phone_number</code> as the second option for newly created user pools if no value is provided.</p> </note></p>
+    /// <p>Use this setting to define which verified available method a user can use to recover their password when they call <code>ForgotPassword</code>. It allows you to define a preferred method when a user has more than one method available. With this setting, SMS does not qualify for a valid password recovery mechanism if the user also has SMS MFA enabled. In the absence of this setting, Cognito uses the legacy behavior to determine the recovery method where SMS is preferred over email.</p>
     #[serde(rename = "AccountRecoverySetting")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub account_recovery_setting: Option<AccountRecoverySettingType>,
@@ -1386,11 +1405,11 @@ pub struct CreateUserPoolRequest {
     #[serde(rename = "EmailConfiguration")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub email_configuration: Option<EmailConfigurationType>,
-    /// <p>A string representing the email verification message.</p>
+    /// <p>A string representing the email verification message. EmailVerificationMessage is allowed only if <a href="https://docs.aws.amazon.com/cognito-user-identity-pools/latest/APIReference/API_EmailConfigurationType.html#CognitoUserPools-Type-EmailConfigurationType-EmailSendingAccount">EmailSendingAccount</a> is DEVELOPER. </p>
     #[serde(rename = "EmailVerificationMessage")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub email_verification_message: Option<String>,
-    /// <p>A string representing the email verification subject.</p>
+    /// <p>A string representing the email verification subject. EmailVerificationSubject is allowed only if <a href="https://docs.aws.amazon.com/cognito-user-identity-pools/latest/APIReference/API_EmailConfigurationType.html#CognitoUserPools-Type-EmailConfigurationType-EmailSendingAccount">EmailSendingAccount</a> is DEVELOPER. </p>
     #[serde(rename = "EmailVerificationSubject")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub email_verification_subject: Option<String>,
@@ -1437,7 +1456,7 @@ pub struct CreateUserPoolRequest {
     #[serde(rename = "UsernameAttributes")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub username_attributes: Option<Vec<String>>,
-    /// <p>You can choose to set case sensitivity on the username input for the selected sign-in option. For example, when this is set to <code>False</code>, users will be able to sign in using either "username" or "Username". This configuration is immutable once it has been set. For more information, see .</p>
+    /// <p>You can choose to set case sensitivity on the username input for the selected sign-in option. For example, when this is set to <code>False</code>, users will be able to sign in using either "username" or "Username". This configuration is immutable once it has been set. For more information, see <a href="https://docs.aws.amazon.com/cognito-user-identity-pools/latest/APIReference/API_UsernameConfigurationType.html">UsernameConfigurationType</a>.</p>
     #[serde(rename = "UsernameConfiguration")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub username_configuration: Option<UsernameConfigurationType>,
@@ -1463,6 +1482,28 @@ pub struct CustomDomainConfigType {
     /// <p>The Amazon Resource Name (ARN) of an AWS Certificate Manager SSL certificate. You use this certificate for the subdomain of your custom domain.</p>
     #[serde(rename = "CertificateArn")]
     pub certificate_arn: String,
+}
+
+/// <p>A custom email sender Lambda configuration type.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
+pub struct CustomEmailLambdaVersionConfigType {
+    /// <p>The Lambda Amazon Resource Name of the Lambda function that Amazon Cognito triggers to send email notifications to users.</p>
+    #[serde(rename = "LambdaArn")]
+    pub lambda_arn: String,
+    /// <p>The Lambda version represents the signature of the "request" attribute in the "event" information Amazon Cognito passes to your custom email Lambda function. The only supported value is <code>V1_0</code>.</p>
+    #[serde(rename = "LambdaVersion")]
+    pub lambda_version: String,
+}
+
+/// <p>A custom SMS sender Lambda configuration type.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
+pub struct CustomSMSLambdaVersionConfigType {
+    /// <p>The Lambda Amazon Resource Name of the Lambda function that Amazon Cognito triggers to send SMS notifications to users.</p>
+    #[serde(rename = "LambdaArn")]
+    pub lambda_arn: String,
+    /// <p>The Lambda version represents the signature of the "request" attribute in the "event" information Amazon Cognito passes to your custom SMS Lambda function. The only supported value is <code>V1_0</code>.</p>
+    #[serde(rename = "LambdaVersion")]
+    pub lambda_version: String,
 }
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
@@ -1789,14 +1830,14 @@ pub struct DomainDescriptionType {
     pub version: Option<String>,
 }
 
-/// <p>The email configuration type.</p>
+/// <p><p>The email configuration type. </p> <note> <p>Amazon Cognito has specific regions for use with Amazon SES. For more information on the supported regions, see <a href="https://docs.aws.amazon.com/cognito/latest/developerguide/user-pool-email.html">Email Settings for Amazon Cognito User Pools</a>.</p> </note></p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct EmailConfigurationType {
     /// <p><p>The set of configuration rules that can be applied to emails sent using Amazon SES. A configuration set is applied to an email by including a reference to the configuration set in the headers of the email. Once applied, all of the rules in that configuration set are applied to the email. Configuration sets can be used to apply the following types of rules to emails: </p> <ul> <li> <p>Event publishing – Amazon SES can track the number of send, delivery, open, click, bounce, and complaint events for each email sent. Use event publishing to send information about these events to other AWS services such as SNS and CloudWatch.</p> </li> <li> <p>IP pool management – When leasing dedicated IP addresses with Amazon SES, you can create groups of IP addresses, called dedicated IP pools. You can then associate the dedicated IP pools with configuration sets.</p> </li> </ul></p>
     #[serde(rename = "ConfigurationSet")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub configuration_set: Option<String>,
-    /// <p><p>Specifies whether Amazon Cognito emails your users by using its built-in email functionality or your Amazon SES email configuration. Specify one of the following values:</p> <dl> <dt>COGNITO_DEFAULT</dt> <dd> <p>When Amazon Cognito emails your users, it uses its built-in email functionality. When you use the default option, Amazon Cognito allows only a limited number of emails each day for your user pool. For typical production environments, the default email limit is below the required delivery volume. To achieve a higher delivery volume, specify DEVELOPER to use your Amazon SES email configuration.</p> <p>To look up the email delivery limit for the default option, see <a href="https://docs.aws.amazon.com/cognito/latest/developerguide/limits.html">Limits in Amazon Cognito</a> in the <i>Amazon Cognito Developer Guide</i>.</p> <p>The default FROM address is no-reply@verificationemail.com. To customize the FROM address, provide the ARN of an Amazon SES verified email address for the <code>SourceArn</code> parameter.</p> </dd> <dt>DEVELOPER</dt> <dd> <p>When Amazon Cognito emails your users, it uses your Amazon SES configuration. Amazon Cognito calls Amazon SES on your behalf to send email from your verified email address. When you use this option, the email delivery limits are the same limits that apply to your Amazon SES verified email address in your AWS account.</p> <p>If you use this option, you must provide the ARN of an Amazon SES verified email address for the <code>SourceArn</code> parameter.</p> <p>Before Amazon Cognito can email your users, it requires additional permissions to call Amazon SES on your behalf. When you update your user pool with this option, Amazon Cognito creates a <i>service-linked role</i>, which is a type of IAM role, in your AWS account. This role contains the permissions that allow Amazon Cognito to access Amazon SES and send email messages with your address. For more information about the service-linked role that Amazon Cognito creates, see <a href="https://docs.aws.amazon.com/cognito/latest/developerguide/using-service-linked-roles.html">Using Service-Linked Roles for Amazon Cognito</a> in the <i>Amazon Cognito Developer Guide</i>.</p> </dd> </dl></p>
+    /// <p><p>Specifies whether Amazon Cognito emails your users by using its built-in email functionality or your Amazon SES email configuration. Specify one of the following values:</p> <dl> <dt>COGNITO<em>DEFAULT</dt> <dd> <p>When Amazon Cognito emails your users, it uses its built-in email functionality. When you use the default option, Amazon Cognito allows only a limited number of emails each day for your user pool. For typical production environments, the default email limit is below the required delivery volume. To achieve a higher delivery volume, specify DEVELOPER to use your Amazon SES email configuration.</p> <p>To look up the email delivery limit for the default option, see <a href="https://docs.aws.amazon.com/cognito/latest/developerguide/limits.html">Limits in Amazon Cognito</a> in the <i>Amazon Cognito Developer Guide</i>.</p> <p>The default FROM address is no-reply@verificationemail.com. To customize the FROM address, provide the ARN of an Amazon SES verified email address for the <code>SourceArn</code> parameter.</p> <p> If EmailSendingAccount is COGNITO</em>DEFAULT, the following parameters aren&#39;t allowed:</p> <ul> <li> <p>EmailVerificationMessage</p> </li> <li> <p>EmailVerificationSubject</p> </li> <li> <p>InviteMessageTemplate.EmailMessage</p> </li> <li> <p>InviteMessageTemplate.EmailSubject</p> </li> <li> <p>VerificationMessageTemplate.EmailMessage</p> </li> <li> <p>VerificationMessageTemplate.EmailMessageByLink</p> </li> <li> <p>VerificationMessageTemplate.EmailSubject,</p> </li> <li> <p>VerificationMessageTemplate.EmailSubjectByLink</p> </li> </ul> <note> <p>DEVELOPER EmailSendingAccount is required.</p> </note> </dd> <dt>DEVELOPER</dt> <dd> <p>When Amazon Cognito emails your users, it uses your Amazon SES configuration. Amazon Cognito calls Amazon SES on your behalf to send email from your verified email address. When you use this option, the email delivery limits are the same limits that apply to your Amazon SES verified email address in your AWS account.</p> <p>If you use this option, you must provide the ARN of an Amazon SES verified email address for the <code>SourceArn</code> parameter.</p> <p>Before Amazon Cognito can email your users, it requires additional permissions to call Amazon SES on your behalf. When you update your user pool with this option, Amazon Cognito creates a <i>service-linked role</i>, which is a type of IAM role, in your AWS account. This role contains the permissions that allow Amazon Cognito to access Amazon SES and send email messages with your address. For more information about the service-linked role that Amazon Cognito creates, see <a href="https://docs.aws.amazon.com/cognito/latest/developerguide/using-service-linked-roles.html">Using Service-Linked Roles for Amazon Cognito</a> in the <i>Amazon Cognito Developer Guide</i>.</p> </dd> </dl></p>
     #[serde(rename = "EmailSendingAccount")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub email_sending_account: Option<String>,
@@ -2112,7 +2153,7 @@ pub struct GetUserRequest {
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetUserResponse {
-    /// <p> <i>This response parameter is no longer supported.</i> It provides information only about SMS MFA configurations. It doesn't provide information about TOTP software token MFA configurations. To look up information about either type of MFA configuration, use the use the <a>GetUserResponse$UserMFASettingList</a> response instead.</p>
+    /// <p> <i>This response parameter is no longer supported.</i> It provides information only about SMS MFA configurations. It doesn't provide information about TOTP software token MFA configurations. To look up information about either type of MFA configuration, use UserMFASettingList instead.</p>
     #[serde(rename = "MFAOptions")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub mfa_options: Option<Vec<MFAOptionType>>,
@@ -2214,7 +2255,7 @@ pub struct IdentityProviderType {
     #[serde(rename = "LastModifiedDate")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub last_modified_date: Option<f64>,
-    /// <p><p>The identity provider details. The following list describes the provider detail keys for each identity provider type.</p> <ul> <li> <p>For Google, Facebook and Login with Amazon:</p> <ul> <li> <p>client<em>id</p> </li> <li> <p>client</em>secret</p> </li> <li> <p>authorize<em>scopes</p> </li> </ul> </li> <li> <p>For Sign in with Apple:</p> <ul> <li> <p>client</em>id</p> </li> <li> <p>team<em>id</p> </li> <li> <p>key</em>id</p> </li> <li> <p>private<em>key</p> </li> <li> <p>authorize</em>scopes</p> </li> </ul> </li> <li> <p>For OIDC providers:</p> <ul> <li> <p>client<em>id</p> </li> <li> <p>client</em>secret</p> </li> <li> <p>attributes<em>request</em>method</p> </li> <li> <p>oidc<em>issuer</p> </li> <li> <p>authorize</em>scopes</p> </li> <li> <p>authorize<em>url <i>if not available from discovery URL specified by oidc</em>issuer key</i> </p> </li> <li> <p>token<em>url <i>if not available from discovery URL specified by oidc</em>issuer key</i> </p> </li> <li> <p>attributes<em>url <i>if not available from discovery URL specified by oidc</em>issuer key</i> </p> </li> <li> <p>jwks<em>uri <i>if not available from discovery URL specified by oidc</em>issuer key</i> </p> </li> <li> <p>authorize_scopes</p> </li> </ul> </li> <li> <p>For SAML providers:</p> <ul> <li> <p>MetadataFile OR MetadataURL</p> </li> <li> <p>IDPSignOut <i>optional</i> </p> </li> </ul> </li> </ul></p>
+    /// <p><p>The identity provider details. The following list describes the provider detail keys for each identity provider type.</p> <ul> <li> <p>For Google and Login with Amazon:</p> <ul> <li> <p>client<em>id</p> </li> <li> <p>client</em>secret</p> </li> <li> <p>authorize<em>scopes</p> </li> </ul> </li> <li> <p>For Facebook:</p> <ul> <li> <p>client</em>id</p> </li> <li> <p>client<em>secret</p> </li> <li> <p>authorize</em>scopes</p> </li> <li> <p>api<em>version</p> </li> </ul> </li> <li> <p>For Sign in with Apple:</p> <ul> <li> <p>client</em>id</p> </li> <li> <p>team<em>id</p> </li> <li> <p>key</em>id</p> </li> <li> <p>private<em>key</p> </li> <li> <p>authorize</em>scopes</p> </li> </ul> </li> <li> <p>For OIDC providers:</p> <ul> <li> <p>client<em>id</p> </li> <li> <p>client</em>secret</p> </li> <li> <p>attributes<em>request</em>method</p> </li> <li> <p>oidc<em>issuer</p> </li> <li> <p>authorize</em>scopes</p> </li> <li> <p>authorize<em>url <i>if not available from discovery URL specified by oidc</em>issuer key</i> </p> </li> <li> <p>token<em>url <i>if not available from discovery URL specified by oidc</em>issuer key</i> </p> </li> <li> <p>attributes<em>url <i>if not available from discovery URL specified by oidc</em>issuer key</i> </p> </li> <li> <p>jwks<em>uri <i>if not available from discovery URL specified by oidc</em>issuer key</i> </p> </li> <li> <p>authorize_scopes</p> </li> </ul> </li> <li> <p>For SAML providers:</p> <ul> <li> <p>MetadataFile OR MetadataURL</p> </li> <li> <p>IDPSignOut <i>optional</i> </p> </li> </ul> </li> </ul></p>
     #[serde(rename = "ProviderDetails")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub provider_details: Option<::std::collections::HashMap<String, String>>,
@@ -2243,7 +2284,7 @@ pub struct InitiateAuthRequest {
     /// <p>The authentication flow for this call to execute. The API action will depend on this value. For example: </p> <ul> <li> <p> <code>REFRESH_TOKEN_AUTH</code> will take in a valid refresh token and return new tokens.</p> </li> <li> <p> <code>USER_SRP_AUTH</code> will take in <code>USERNAME</code> and <code>SRP_A</code> and return the SRP variables to be used for next challenge execution.</p> </li> <li> <p> <code>USER_PASSWORD_AUTH</code> will take in <code>USERNAME</code> and <code>PASSWORD</code> and return the next challenge or tokens.</p> </li> </ul> <p>Valid values include:</p> <ul> <li> <p> <code>USER_SRP_AUTH</code>: Authentication flow for the Secure Remote Password (SRP) protocol.</p> </li> <li> <p> <code>REFRESH_TOKEN_AUTH</code>/<code>REFRESH_TOKEN</code>: Authentication flow for refreshing the access token and ID token by supplying a valid refresh token.</p> </li> <li> <p> <code>CUSTOM_AUTH</code>: Custom authentication flow.</p> </li> <li> <p> <code>USER_PASSWORD_AUTH</code>: Non-SRP authentication flow; USERNAME and PASSWORD are passed directly. If a user migration Lambda trigger is set, this flow will invoke the user migration Lambda if the USERNAME is not found in the user pool. </p> </li> <li> <p> <code>ADMIN_USER_PASSWORD_AUTH</code>: Admin-based user password authentication. This replaces the <code>ADMIN_NO_SRP_AUTH</code> authentication flow. In this flow, Cognito receives the password in the request instead of using the SRP process to verify passwords.</p> </li> </ul> <p> <code>ADMIN_NO_SRP_AUTH</code> is not a valid value.</p>
     #[serde(rename = "AuthFlow")]
     pub auth_flow: String,
-    /// <p><p>The authentication parameters. These are inputs corresponding to the <code>AuthFlow</code> that you are invoking. The required values depend on the value of <code>AuthFlow</code>:</p> <ul> <li> <p>For <code>USER<em>SRP</em>AUTH</code>: <code>USERNAME</code> (required), <code>SRP<em>A</code> (required), <code>SECRET</em>HASH</code> (required if the app client is configured with a client secret), <code>DEVICE<em>KEY</code> </p> </li> <li> <p>For <code>REFRESH</em>TOKEN<em>AUTH/REFRESH</em>TOKEN</code>: <code>REFRESH<em>TOKEN</code> (required), <code>SECRET</em>HASH</code> (required if the app client is configured with a client secret), <code>DEVICE<em>KEY</code> </p> </li> <li> <p>For <code>CUSTOM</em>AUTH</code>: <code>USERNAME</code> (required), <code>SECRET<em>HASH</code> (if app client is configured with client secret), <code>DEVICE</em>KEY</code> </p> </li> </ul></p>
+    /// <p><p>The authentication parameters. These are inputs corresponding to the <code>AuthFlow</code> that you are invoking. The required values depend on the value of <code>AuthFlow</code>:</p> <ul> <li> <p>For <code>USER<em>SRP</em>AUTH</code>: <code>USERNAME</code> (required), <code>SRP<em>A</code> (required), <code>SECRET</em>HASH</code> (required if the app client is configured with a client secret), <code>DEVICE<em>KEY</code>.</p> </li> <li> <p>For <code>REFRESH</em>TOKEN<em>AUTH/REFRESH</em>TOKEN</code>: <code>REFRESH<em>TOKEN</code> (required), <code>SECRET</em>HASH</code> (required if the app client is configured with a client secret), <code>DEVICE<em>KEY</code>.</p> </li> <li> <p>For <code>CUSTOM</em>AUTH</code>: <code>USERNAME</code> (required), <code>SECRET<em>HASH</code> (if app client is configured with client secret), <code>DEVICE</em>KEY</code>. To start the authentication flow with password verification, include <code>ChallengeName: SRP<em>A</code> and <code>SRP</em>A: (The SRP_A Value)</code>.</p> </li> </ul></p>
     #[serde(rename = "AuthParameters")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub auth_parameters: Option<::std::collections::HashMap<String, String>>,
@@ -2276,7 +2317,7 @@ pub struct InitiateAuthResponse {
     #[serde(rename = "ChallengeParameters")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub challenge_parameters: Option<::std::collections::HashMap<String, String>>,
-    /// <p>The session which should be passed both ways in challenge-response calls to the service. If the or API call determines that the caller needs to go through another challenge, they return a session with other challenge parameters. This session should be passed as it is to the next <code>RespondToAuthChallenge</code> API call.</p>
+    /// <p>The session which should be passed both ways in challenge-response calls to the service. If the caller needs to go through another challenge, they return a session with other challenge parameters. This session should be passed as it is to the next <code>RespondToAuthChallenge</code> API call.</p>
     #[serde(rename = "Session")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub session: Option<String>,
@@ -2289,14 +2330,26 @@ pub struct LambdaConfigType {
     #[serde(rename = "CreateAuthChallenge")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub create_auth_challenge: Option<String>,
+    /// <p>A custom email sender AWS Lambda trigger.</p>
+    #[serde(rename = "CustomEmailSender")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub custom_email_sender: Option<CustomEmailLambdaVersionConfigType>,
     /// <p>A custom Message AWS Lambda trigger.</p>
     #[serde(rename = "CustomMessage")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub custom_message: Option<String>,
+    /// <p>A custom SMS sender AWS Lambda trigger.</p>
+    #[serde(rename = "CustomSMSSender")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub custom_sms_sender: Option<CustomSMSLambdaVersionConfigType>,
     /// <p>Defines the authentication challenge.</p>
     #[serde(rename = "DefineAuthChallenge")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub define_auth_challenge: Option<String>,
+    /// <p>The Amazon Resource Name of Key Management Service <a href="/kms/latest/developerguide/concepts.html#master_keys">Customer master keys</a> . Amazon Cognito uses the key to encrypt codes and temporary passwords sent to <code>CustomEmailSender</code> and <code>CustomSMSSender</code>.</p>
+    #[serde(rename = "KMSKeyID")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub kms_key_id: Option<String>,
     /// <p>A post-authentication AWS Lambda trigger.</p>
     #[serde(rename = "PostAuthentication")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -2619,7 +2672,7 @@ pub struct ListUsersResponse {
     pub users: Option<Vec<UserType>>,
 }
 
-/// <p> <i>This data type is no longer supported.</i> You can use it only for SMS MFA configurations. You can't use it for TOTP software token MFA configurations.</p> <p>To set either type of MFA configuration, use the <a>AdminSetUserMFAPreference</a> or <a>SetUserMFAPreference</a> actions.</p> <p>To look up information about either type of MFA configuration, use the <a>AdminGetUserResponse$UserMFASettingList</a> or <a>GetUserResponse$UserMFASettingList</a> responses.</p>
+/// <p> <i>This data type is no longer supported.</i> You can use it only for SMS MFA configurations. You can't use it for TOTP software token MFA configurations.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct MFAOptionType {
     /// <p>The attribute name of the MFA option type. The only valid value is <code>phone_number</code>.</p>
@@ -2635,11 +2688,11 @@ pub struct MFAOptionType {
 /// <p>The message template structure.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct MessageTemplateType {
-    /// <p>The message template for email messages.</p>
+    /// <p>The message template for email messages. EmailMessage is allowed only if <a href="https://docs.aws.amazon.com/cognito-user-identity-pools/latest/APIReference/API_EmailConfigurationType.html#CognitoUserPools-Type-EmailConfigurationType-EmailSendingAccount">EmailSendingAccount</a> is DEVELOPER. </p>
     #[serde(rename = "EmailMessage")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub email_message: Option<String>,
-    /// <p>The subject line for email messages.</p>
+    /// <p>The subject line for email messages. EmailSubject is allowed only if <a href="https://docs.aws.amazon.com/cognito-user-identity-pools/latest/APIReference/API_EmailConfigurationType.html#CognitoUserPools-Type-EmailConfigurationType-EmailSendingAccount">EmailSendingAccount</a> is DEVELOPER. </p>
     #[serde(rename = "EmailSubject")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub email_subject: Option<String>,
@@ -2879,7 +2932,7 @@ pub struct RespondToAuthChallengeRequest {
     #[serde(rename = "AnalyticsMetadata")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub analytics_metadata: Option<AnalyticsMetadataType>,
-    /// <p>The challenge name. For more information, see .</p> <p> <code>ADMIN_NO_SRP_AUTH</code> is not a valid value.</p>
+    /// <p>The challenge name. For more information, see <a href="https://docs.aws.amazon.com/cognito-user-identity-pools/latest/APIReference/API_InitiateAuth.html">InitiateAuth</a>.</p> <p> <code>ADMIN_NO_SRP_AUTH</code> is not a valid value.</p>
     #[serde(rename = "ChallengeName")]
     pub challenge_name: String,
     /// <p><p>The challenge responses. These are inputs corresponding to the value of <code>ChallengeName</code>, for example:</p> <note> <p> <code>SECRET<em>HASH</code> (if app client is configured with client secret) applies to all inputs below (including <code>SOFTWARE</em>TOKEN<em>MFA</code>).</p> </note> <ul> <li> <p> <code>SMS</em>MFA</code>: <code>SMS<em>MFA</em>CODE</code>, <code>USERNAME</code>.</p> </li> <li> <p> <code>PASSWORD<em>VERIFIER</code>: <code>PASSWORD</em>CLAIM<em>SIGNATURE</code>, <code>PASSWORD</em>CLAIM<em>SECRET</em>BLOCK</code>, <code>TIMESTAMP</code>, <code>USERNAME</code>.</p> </li> <li> <p> <code>NEW<em>PASSWORD</em>REQUIRED</code>: <code>NEW<em>PASSWORD</code>, any other required attributes, <code>USERNAME</code>. </p> </li> <li> <p> <code>SOFTWARE</em>TOKEN<em>MFA</code>: <code>USERNAME</code> and <code>SOFTWARE</em>TOKEN<em>MFA</em>CODE</code> are required attributes.</p> </li> <li> <p> <code>DEVICE<em>SRP</em>AUTH</code> requires <code>USERNAME</code>, <code>DEVICE<em>KEY</code>, <code>SRP</em>A</code> (and <code>SECRET<em>HASH</code>).</p> </li> <li> <p> <code>DEVICE</em>PASSWORD<em>VERIFIER</code> requires everything that <code>PASSWORD</em>VERIFIER</code> requires plus <code>DEVICE_KEY</code>.</p> </li> </ul></p>
@@ -2911,15 +2964,15 @@ pub struct RespondToAuthChallengeResponse {
     #[serde(rename = "AuthenticationResult")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub authentication_result: Option<AuthenticationResultType>,
-    /// <p>The challenge name. For more information, see .</p>
+    /// <p>The challenge name. For more information, see <a href="https://docs.aws.amazon.com/cognito-user-identity-pools/latest/APIReference/API_InitiateAuth.html">InitiateAuth</a>.</p>
     #[serde(rename = "ChallengeName")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub challenge_name: Option<String>,
-    /// <p>The challenge parameters. For more information, see .</p>
+    /// <p>The challenge parameters. For more information, see <a href="https://docs.aws.amazon.com/cognito-user-identity-pools/latest/APIReference/API_InitiateAuth.html">InitiateAuth</a>.</p>
     #[serde(rename = "ChallengeParameters")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub challenge_parameters: Option<::std::collections::HashMap<String, String>>,
-    /// <p>The session which should be passed both ways in challenge-response calls to the service. If the or API call determines that the caller needs to go through another challenge, they return a session with other challenge parameters. This session should be passed as it is to the next <code>RespondToAuthChallenge</code> API call.</p>
+    /// <p>The session which should be passed both ways in challenge-response calls to the service. If the caller needs to go through another challenge, they return a session with other challenge parameters. This session should be passed as it is to the next <code>RespondToAuthChallenge</code> API call.</p>
     #[serde(rename = "Session")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub session: Option<String>,
@@ -2969,11 +3022,11 @@ pub struct RiskExceptionConfigurationType {
     pub skipped_ip_range_list: Option<Vec<String>>,
 }
 
-/// <p>The type used for enabling SMS MFA at the user level.</p>
+/// <p>The type used for enabling SMS MFA at the user level. Phone numbers don't need to be verified to be used for SMS MFA. If an MFA type is enabled for a user, the user will be prompted for MFA during all sign in attempts, unless device tracking is turned on and the device has been trusted. If you would like MFA to be applied selectively based on the assessed risk level of sign in attempts, disable MFA for users and turn on Adaptive Authentication for the user pool.</p>
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct SMSMfaSettingsType {
-    /// <p>Specifies whether SMS text message MFA is enabled.</p>
+    /// <p>Specifies whether SMS text message MFA is enabled. If an MFA type is enabled for a user, the user will be prompted for MFA during all sign in attempts, unless device tracking is turned on and the device has been trusted.</p>
     #[serde(rename = "Enabled")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub enabled: Option<bool>,
@@ -2990,7 +3043,7 @@ pub struct SchemaAttributeType {
     #[serde(rename = "AttributeDataType")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub attribute_data_type: Option<String>,
-    /// <p><note> <p>We recommend that you use <a href="https://docs.aws.amazon.com/cognito-user-identity-pools/latest/APIReference/API_UserPoolClientType.html#CognitoUserPools-Type-UserPoolClientType-WriteAttributes">WriteAttributes</a> in the user pool client to control how attributes can be mutated for new use cases instead of using <code>DeveloperOnlyAttribute</code>.</p> </note> <p>Specifies whether the attribute type is developer only. This attribute can only be modified by an administrator. Users will not be able to modify this attribute using their access token. For example, <code>DeveloperOnlyAttribute</code> can be modified using the API but cannot be updated using the API.</p></p>
+    /// <p><note> <p>We recommend that you use <a href="https://docs.aws.amazon.com/cognito-user-identity-pools/latest/APIReference/API_UserPoolClientType.html#CognitoUserPools-Type-UserPoolClientType-WriteAttributes">WriteAttributes</a> in the user pool client to control how attributes can be mutated for new use cases instead of using <code>DeveloperOnlyAttribute</code>.</p> </note> <p>Specifies whether the attribute type is developer only. This attribute can only be modified by an administrator. Users will not be able to modify this attribute using their access token. For example, <code>DeveloperOnlyAttribute</code> can be modified using AdminUpdateUserAttributes but cannot be updated using UpdateUserAttributes.</p></p>
     #[serde(rename = "DeveloperOnlyAttribute")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub developer_only_attribute: Option<bool>,
@@ -3218,7 +3271,7 @@ pub struct SmsConfigurationType {
     #[serde(rename = "ExternalId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub external_id: Option<String>,
-    /// <p>The Amazon Resource Name (ARN) of the Amazon Simple Notification Service (SNS) caller. This is the ARN of the IAM role in your AWS account which Cognito will use to send SMS messages.</p>
+    /// <p>The Amazon Resource Name (ARN) of the Amazon Simple Notification Service (SNS) caller. This is the ARN of the IAM role in your AWS account which Cognito will use to send SMS messages. SMS messages are subject to a <a href="https://docs.aws.amazon.com/cognito/latest/developerguide/user-pool-settings-email-phone-verification.html">spending limit</a>. </p>
     #[serde(rename = "SnsCallerArn")]
     pub sns_caller_arn: String,
 }
@@ -3245,11 +3298,11 @@ pub struct SoftwareTokenMfaConfigType {
     pub enabled: Option<bool>,
 }
 
-/// <p>The type used for enabling software token MFA at the user level.</p>
+/// <p>The type used for enabling software token MFA at the user level. If an MFA type is enabled for a user, the user will be prompted for MFA during all sign in attempts, unless device tracking is turned on and the device has been trusted. If you would like MFA to be applied selectively based on the assessed risk level of sign in attempts, disable MFA for users and turn on Adaptive Authentication for the user pool.</p>
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct SoftwareTokenMfaSettingsType {
-    /// <p>Specifies whether software token MFA is enabled.</p>
+    /// <p>Specifies whether software token MFA is enabled. If an MFA type is enabled for a user, the user will be prompted for MFA during all sign in attempts, unless device tracking is turned on and the device has been trusted.</p>
     #[serde(rename = "Enabled")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub enabled: Option<bool>,
@@ -3330,6 +3383,23 @@ pub struct TagResourceRequest {
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct TagResourceResponse {}
+
+/// <p>The data type for TokenValidityUnits that specifics the time measurements for token validity.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
+pub struct TokenValidityUnitsType {
+    /// <p> A time unit in “seconds”, “minutes”, “hours” or “days” for the value in AccessTokenValidity, defaults to hours.</p>
+    #[serde(rename = "AccessToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub access_token: Option<String>,
+    /// <p>A time unit in “seconds”, “minutes”, “hours” or “days” for the value in IdTokenValidity, defaults to hours.</p>
+    #[serde(rename = "IdToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub id_token: Option<String>,
+    /// <p>A time unit in “seconds”, “minutes”, “hours” or “days” for the value in RefreshTokenValidity, defaults to days.</p>
+    #[serde(rename = "RefreshToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub refresh_token: Option<String>,
+}
 
 /// <p>A container for the UI customization information for a user pool's built-in app UI.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
@@ -3435,7 +3505,7 @@ pub struct UpdateGroupRequest {
     /// <p>The name of the group.</p>
     #[serde(rename = "GroupName")]
     pub group_name: String,
-    /// <p>The new precedence value for the group. For more information about this parameter, see .</p>
+    /// <p>The new precedence value for the group. For more information about this parameter, see <a href="https://docs.aws.amazon.com/cognito-user-identity-pools/latest/APIReference/API_CreateGroup.html">CreateGroup</a>.</p>
     #[serde(rename = "Precedence")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub precedence: Option<i64>,
@@ -3544,6 +3614,10 @@ pub struct UpdateUserAttributesResponse {
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateUserPoolClientRequest {
+    /// <p>The time limit, after which the access token is no longer valid and cannot be used.</p>
+    #[serde(rename = "AccessTokenValidity")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub access_token_validity: Option<i64>,
     /// <p>The allowed OAuth flows.</p> <p>Set to <code>code</code> to initiate a code grant flow, which provides an authorization code as the response. This code can be exchanged for access tokens with the token endpoint.</p> <p>Set to <code>implicit</code> to specify that the client should get the access token (and, optionally, ID token, based on scopes) directly.</p> <p>Set to <code>client_credentials</code> to specify that the client should get the access token (and, optionally, ID token, based on scopes) from the token endpoint using a combination of client and client_secret.</p>
     #[serde(rename = "AllowedOAuthFlows")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -3556,7 +3630,7 @@ pub struct UpdateUserPoolClientRequest {
     #[serde(rename = "AllowedOAuthScopes")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub allowed_o_auth_scopes: Option<Vec<String>>,
-    /// <p><p>The Amazon Pinpoint analytics configuration for collecting metrics for this user pool.</p> <note> <p>Cognito User Pools only supports sending events to Amazon Pinpoint projects in the US East (N. Virginia) us-east-1 Region, regardless of the region in which the user pool resides.</p> </note></p>
+    /// <p><p>The Amazon Pinpoint analytics configuration for collecting metrics for this user pool.</p> <note> <p>In regions where Pinpoint is not available, Cognito User Pools only supports sending events to Amazon Pinpoint projects in us-east-1. In regions where Pinpoint is available, Cognito User Pools will support sending events to Amazon Pinpoint projects within that same region. </p> </note></p>
     #[serde(rename = "AnalyticsConfiguration")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub analytics_configuration: Option<AnalyticsConfigurationType>,
@@ -3579,11 +3653,15 @@ pub struct UpdateUserPoolClientRequest {
     #[serde(rename = "ExplicitAuthFlows")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub explicit_auth_flows: Option<Vec<String>>,
+    /// <p>The time limit, after which the ID token is no longer valid and cannot be used.</p>
+    #[serde(rename = "IdTokenValidity")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub id_token_validity: Option<i64>,
     /// <p>A list of allowed logout URLs for the identity providers.</p>
     #[serde(rename = "LogoutURLs")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub logout_ur_ls: Option<Vec<String>>,
-    /// <p><p>Use this setting to choose which errors and responses are returned by Cognito APIs during authentication, account confirmation, and password recovery when the user does not exist in the user pool. When set to <code>ENABLED</code> and the user does not exist, authentication returns an error indicating either the username or password was incorrect, and account confirmation and password recovery return a response indicating a code was sent to a simulated destination. When set to <code>LEGACY</code>, those APIs will return a <code>UserNotFoundException</code> exception if the user does not exist in the user pool.</p> <p>Valid values include:</p> <ul> <li> <p> <code>ENABLED</code> - This prevents user existence-related errors.</p> </li> <li> <p> <code>LEGACY</code> - This represents the old behavior of Cognito where user existence related errors are not prevented.</p> </li> </ul> <p>This setting affects the behavior of following APIs:</p> <ul> <li> <p> <a>AdminInitiateAuth</a> </p> </li> <li> <p> <a>AdminRespondToAuthChallenge</a> </p> </li> <li> <p> <a>InitiateAuth</a> </p> </li> <li> <p> <a>RespondToAuthChallenge</a> </p> </li> <li> <p> <a>ForgotPassword</a> </p> </li> <li> <p> <a>ConfirmForgotPassword</a> </p> </li> <li> <p> <a>ConfirmSignUp</a> </p> </li> <li> <p> <a>ResendConfirmationCode</a> </p> </li> </ul> <note> <p>After February 15th 2020, the value of <code>PreventUserExistenceErrors</code> will default to <code>ENABLED</code> for newly created user pool clients if no value is provided.</p> </note></p>
+    /// <p><p>Use this setting to choose which errors and responses are returned by Cognito APIs during authentication, account confirmation, and password recovery when the user does not exist in the user pool. When set to <code>ENABLED</code> and the user does not exist, authentication returns an error indicating either the username or password was incorrect, and account confirmation and password recovery return a response indicating a code was sent to a simulated destination. When set to <code>LEGACY</code>, those APIs will return a <code>UserNotFoundException</code> exception if the user does not exist in the user pool.</p> <p>Valid values include:</p> <ul> <li> <p> <code>ENABLED</code> - This prevents user existence-related errors.</p> </li> <li> <p> <code>LEGACY</code> - This represents the old behavior of Cognito where user existence related errors are not prevented.</p> </li> </ul> <note> <p>After February 15th 2020, the value of <code>PreventUserExistenceErrors</code> will default to <code>ENABLED</code> for newly created user pool clients if no value is provided.</p> </note></p>
     #[serde(rename = "PreventUserExistenceErrors")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub prevent_user_existence_errors: Option<String>,
@@ -3599,6 +3677,10 @@ pub struct UpdateUserPoolClientRequest {
     #[serde(rename = "SupportedIdentityProviders")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub supported_identity_providers: Option<Vec<String>>,
+    /// <p>The units in which the validity times are represented in. Default for RefreshToken is days, and default for ID and access tokens are hours.</p>
+    #[serde(rename = "TokenValidityUnits")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub token_validity_units: Option<TokenValidityUnitsType>,
     /// <p>The user pool ID for the user pool where you want to update the user pool client.</p>
     #[serde(rename = "UserPoolId")]
     pub user_pool_id: String,
@@ -3819,6 +3901,10 @@ pub struct UserPoolClientDescription {
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UserPoolClientType {
+    /// <p>The time limit, specified by tokenValidityUnits, defaulting to hours, after which the access token is no longer valid and cannot be used.</p>
+    #[serde(rename = "AccessTokenValidity")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub access_token_validity: Option<i64>,
     /// <p>The allowed OAuth flows.</p> <p>Set to <code>code</code> to initiate a code grant flow, which provides an authorization code as the response. This code can be exchanged for access tokens with the token endpoint.</p> <p>Set to <code>implicit</code> to specify that the client should get the access token (and, optionally, ID token, based on scopes) directly.</p> <p>Set to <code>client_credentials</code> to specify that the client should get the access token (and, optionally, ID token, based on scopes) from the token endpoint using a combination of client and client_secret.</p>
     #[serde(rename = "AllowedOAuthFlows")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -3863,6 +3949,10 @@ pub struct UserPoolClientType {
     #[serde(rename = "ExplicitAuthFlows")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub explicit_auth_flows: Option<Vec<String>>,
+    /// <p>The time limit, specified by tokenValidityUnits, defaulting to hours, after which the refresh token is no longer valid and cannot be used.</p>
+    #[serde(rename = "IdTokenValidity")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub id_token_validity: Option<i64>,
     /// <p>The date the user pool client was last modified.</p>
     #[serde(rename = "LastModifiedDate")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -3871,7 +3961,7 @@ pub struct UserPoolClientType {
     #[serde(rename = "LogoutURLs")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub logout_ur_ls: Option<Vec<String>>,
-    /// <p><p>Use this setting to choose which errors and responses are returned by Cognito APIs during authentication, account confirmation, and password recovery when the user does not exist in the user pool. When set to <code>ENABLED</code> and the user does not exist, authentication returns an error indicating either the username or password was incorrect, and account confirmation and password recovery return a response indicating a code was sent to a simulated destination. When set to <code>LEGACY</code>, those APIs will return a <code>UserNotFoundException</code> exception if the user does not exist in the user pool.</p> <p>Valid values include:</p> <ul> <li> <p> <code>ENABLED</code> - This prevents user existence-related errors.</p> </li> <li> <p> <code>LEGACY</code> - This represents the old behavior of Cognito where user existence related errors are not prevented.</p> </li> </ul> <p>This setting affects the behavior of following APIs:</p> <ul> <li> <p> <a>AdminInitiateAuth</a> </p> </li> <li> <p> <a>AdminRespondToAuthChallenge</a> </p> </li> <li> <p> <a>InitiateAuth</a> </p> </li> <li> <p> <a>RespondToAuthChallenge</a> </p> </li> <li> <p> <a>ForgotPassword</a> </p> </li> <li> <p> <a>ConfirmForgotPassword</a> </p> </li> <li> <p> <a>ConfirmSignUp</a> </p> </li> <li> <p> <a>ResendConfirmationCode</a> </p> </li> </ul> <note> <p>After February 15th 2020, the value of <code>PreventUserExistenceErrors</code> will default to <code>ENABLED</code> for newly created user pool clients if no value is provided.</p> </note></p>
+    /// <p><p>Use this setting to choose which errors and responses are returned by Cognito APIs during authentication, account confirmation, and password recovery when the user does not exist in the user pool. When set to <code>ENABLED</code> and the user does not exist, authentication returns an error indicating either the username or password was incorrect, and account confirmation and password recovery return a response indicating a code was sent to a simulated destination. When set to <code>LEGACY</code>, those APIs will return a <code>UserNotFoundException</code> exception if the user does not exist in the user pool.</p> <p>Valid values include:</p> <ul> <li> <p> <code>ENABLED</code> - This prevents user existence-related errors.</p> </li> <li> <p> <code>LEGACY</code> - This represents the old behavior of Cognito where user existence related errors are not prevented.</p> </li> </ul> <note> <p>After February 15th 2020, the value of <code>PreventUserExistenceErrors</code> will default to <code>ENABLED</code> for newly created user pool clients if no value is provided.</p> </note></p>
     #[serde(rename = "PreventUserExistenceErrors")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub prevent_user_existence_errors: Option<String>,
@@ -3887,6 +3977,10 @@ pub struct UserPoolClientType {
     #[serde(rename = "SupportedIdentityProviders")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub supported_identity_providers: Option<Vec<String>>,
+    /// <p>The time units used to specify the token validity times of their respective token.</p>
+    #[serde(rename = "TokenValidityUnits")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub token_validity_units: Option<TokenValidityUnitsType>,
     /// <p>The user pool ID for the user pool client.</p>
     #[serde(rename = "UserPoolId")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -4056,7 +4150,7 @@ pub struct UserPoolType {
     #[serde(rename = "UsernameAttributes")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub username_attributes: Option<Vec<String>>,
-    /// <p>You can choose to enable case sensitivity on the username input for the selected sign-in option. For example, when this is set to <code>False</code>, users will be able to sign in using either "username" or "Username". This configuration is immutable once it has been set. For more information, see .</p>
+    /// <p>You can choose to enable case sensitivity on the username input for the selected sign-in option. For example, when this is set to <code>False</code>, users will be able to sign in using either "username" or "Username". This configuration is immutable once it has been set. For more information, see <a href="https://docs.aws.amazon.com/cognito-user-identity-pools/latest/APIReference/API_UsernameConfigurationType.html">UsernameConfigurationType</a>.</p>
     #[serde(rename = "UsernameConfiguration")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub username_configuration: Option<UsernameConfigurationType>,
@@ -4115,19 +4209,19 @@ pub struct VerificationMessageTemplateType {
     #[serde(rename = "DefaultEmailOption")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub default_email_option: Option<String>,
-    /// <p>The email message template.</p>
+    /// <p>The email message template. EmailMessage is allowed only if <a href="https://docs.aws.amazon.com/cognito-user-identity-pools/latest/APIReference/API_EmailConfigurationType.html#CognitoUserPools-Type-EmailConfigurationType-EmailSendingAccount"> EmailSendingAccount</a> is DEVELOPER. </p>
     #[serde(rename = "EmailMessage")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub email_message: Option<String>,
-    /// <p>The email message template for sending a confirmation link to the user.</p>
+    /// <p>The email message template for sending a confirmation link to the user. EmailMessageByLink is allowed only if <a href="https://docs.aws.amazon.com/cognito-user-identity-pools/latest/APIReference/API_EmailConfigurationType.html#CognitoUserPools-Type-EmailConfigurationType-EmailSendingAccount"> EmailSendingAccount</a> is DEVELOPER.</p>
     #[serde(rename = "EmailMessageByLink")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub email_message_by_link: Option<String>,
-    /// <p>The subject line for the email message template.</p>
+    /// <p>The subject line for the email message template. EmailSubject is allowed only if <a href="https://docs.aws.amazon.com/cognito-user-identity-pools/latest/APIReference/API_EmailConfigurationType.html#CognitoUserPools-Type-EmailConfigurationType-EmailSendingAccount">EmailSendingAccount</a> is DEVELOPER. </p>
     #[serde(rename = "EmailSubject")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub email_subject: Option<String>,
-    /// <p>The subject line for the email message template for sending a confirmation link to the user.</p>
+    /// <p>The subject line for the email message template for sending a confirmation link to the user. EmailSubjectByLink is allowed only <a href="https://docs.aws.amazon.com/cognito-user-identity-pools/latest/APIReference/API_EmailConfigurationType.html#CognitoUserPools-Type-EmailConfigurationType-EmailSendingAccount"> EmailSendingAccount</a> is DEVELOPER.</p>
     #[serde(rename = "EmailSubjectByLink")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub email_subject_by_link: Option<String>,
@@ -4152,7 +4246,7 @@ pub struct VerifySoftwareTokenRequest {
     #[serde(rename = "Session")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub session: Option<String>,
-    /// <p>The one time password computed using the secret code returned by </p>
+    /// <p>The one time password computed using the secret code returned by <a href="https://docs.aws.amazon.com/cognito-user-identity-pools/latest/APIReference/API_AssociateSoftwareToken.html">AssociateSoftwareToken"</a>.</p>
     #[serde(rename = "UserCode")]
     pub user_code: String,
 }
@@ -6509,6 +6603,8 @@ impl Error for AdminUserGlobalSignOutError {}
 /// Errors returned by AssociateSoftwareToken
 #[derive(Debug, PartialEq)]
 pub enum AssociateSoftwareTokenError {
+    /// <p>This exception is thrown if two or more modifications are happening concurrently.</p>
+    ConcurrentModification(String),
     /// <p>This exception is thrown when Amazon Cognito encounters an internal error.</p>
     InternalError(String),
     /// <p>This exception is thrown when the Amazon Cognito service encounters an invalid parameter.</p>
@@ -6525,6 +6621,11 @@ impl AssociateSoftwareTokenError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<AssociateSoftwareTokenError> {
         if let Some(err) = proto::json::Error::parse(&res) {
             match err.typ.as_str() {
+                "ConcurrentModificationException" => {
+                    return RusotoError::Service(
+                        AssociateSoftwareTokenError::ConcurrentModification(err.msg),
+                    )
+                }
                 "InternalErrorException" => {
                     return RusotoError::Service(AssociateSoftwareTokenError::InternalError(
                         err.msg,
@@ -6561,6 +6662,9 @@ impl fmt::Display for AssociateSoftwareTokenError {
     #[allow(unused_variables)]
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match *self {
+            AssociateSoftwareTokenError::ConcurrentModification(ref cause) => {
+                write!(f, "{}", cause)
+            }
             AssociateSoftwareTokenError::InternalError(ref cause) => write!(f, "{}", cause),
             AssociateSoftwareTokenError::InvalidParameter(ref cause) => write!(f, "{}", cause),
             AssociateSoftwareTokenError::NotAuthorized(ref cause) => write!(f, "{}", cause),
@@ -12129,7 +12233,7 @@ pub trait CognitoIdentityProvider {
         input: AdminConfirmSignUpRequest,
     ) -> Result<AdminConfirmSignUpResponse, RusotoError<AdminConfirmSignUpError>>;
 
-    /// <p>Creates a new user in the specified user pool.</p> <p>If <code>MessageAction</code> is not set, the default is to send a welcome message via email or phone (SMS).</p> <note> <p>This message is based on a template that you configured in your call to or . This template includes your custom sign-up instructions and placeholders for user name and temporary password.</p> </note> <p>Alternatively, you can call AdminCreateUser with “SUPPRESS” for the <code>MessageAction</code> parameter, and Amazon Cognito will not send any email. </p> <p>In either case, the user will be in the <code>FORCE_CHANGE_PASSWORD</code> state until they sign in and change their password.</p> <p>AdminCreateUser requires developer credentials.</p>
+    /// <p>Creates a new user in the specified user pool.</p> <p>If <code>MessageAction</code> is not set, the default is to send a welcome message via email or phone (SMS).</p> <p>This message is based on a template that you configured in your call to create or update a user pool. This template includes your custom sign-up instructions and placeholders for user name and temporary password.</p> <p>Alternatively, you can call <code>AdminCreateUser</code> with “SUPPRESS” for the <code>MessageAction</code> parameter, and Amazon Cognito will not send any email. </p> <p>In either case, the user will be in the <code>FORCE_CHANGE_PASSWORD</code> state until they sign in and change their password.</p> <p> <code>AdminCreateUser</code> requires developer credentials.</p>
     async fn admin_create_user(
         &self,
         input: AdminCreateUserRequest,
@@ -12147,7 +12251,7 @@ pub trait CognitoIdentityProvider {
         input: AdminDeleteUserAttributesRequest,
     ) -> Result<AdminDeleteUserAttributesResponse, RusotoError<AdminDeleteUserAttributesError>>;
 
-    /// <p>Disables the user from signing in with the specified external (SAML or social) identity provider. If the user to disable is a Cognito User Pools native username + password user, they are not permitted to use their password to sign-in. If the user to disable is a linked external IdP user, any link between that user and an existing user is removed. The next time the external user (no longer attached to the previously linked <code>DestinationUser</code>) signs in, they must create a new user account. See .</p> <p>This action is enabled only for admin access and requires developer credentials.</p> <p>The <code>ProviderName</code> must match the value specified when creating an IdP for the pool. </p> <p>To disable a native username + password user, the <code>ProviderName</code> value must be <code>Cognito</code> and the <code>ProviderAttributeName</code> must be <code>Cognito_Subject</code>, with the <code>ProviderAttributeValue</code> being the name that is used in the user pool for the user.</p> <p>The <code>ProviderAttributeName</code> must always be <code>Cognito_Subject</code> for social identity providers. The <code>ProviderAttributeValue</code> must always be the exact subject that was used when the user was originally linked as a source user.</p> <p>For de-linking a SAML identity, there are two scenarios. If the linked identity has not yet been used to sign-in, the <code>ProviderAttributeName</code> and <code>ProviderAttributeValue</code> must be the same values that were used for the <code>SourceUser</code> when the identities were originally linked in the call. (If the linking was done with <code>ProviderAttributeName</code> set to <code>Cognito_Subject</code>, the same applies here). However, if the user has already signed in, the <code>ProviderAttributeName</code> must be <code>Cognito_Subject</code> and <code>ProviderAttributeValue</code> must be the subject of the SAML assertion.</p>
+    /// <p>Disables the user from signing in with the specified external (SAML or social) identity provider. If the user to disable is a Cognito User Pools native username + password user, they are not permitted to use their password to sign-in. If the user to disable is a linked external IdP user, any link between that user and an existing user is removed. The next time the external user (no longer attached to the previously linked <code>DestinationUser</code>) signs in, they must create a new user account. See <a href="https://docs.aws.amazon.com/cognito-user-identity-pools/latest/APIReference/API_AdminLinkProviderForUser.html">AdminLinkProviderForUser</a>.</p> <p>This action is enabled only for admin access and requires developer credentials.</p> <p>The <code>ProviderName</code> must match the value specified when creating an IdP for the pool. </p> <p>To disable a native username + password user, the <code>ProviderName</code> value must be <code>Cognito</code> and the <code>ProviderAttributeName</code> must be <code>Cognito_Subject</code>, with the <code>ProviderAttributeValue</code> being the name that is used in the user pool for the user.</p> <p>The <code>ProviderAttributeName</code> must always be <code>Cognito_Subject</code> for social identity providers. The <code>ProviderAttributeValue</code> must always be the exact subject that was used when the user was originally linked as a source user.</p> <p>For de-linking a SAML identity, there are two scenarios. If the linked identity has not yet been used to sign-in, the <code>ProviderAttributeName</code> and <code>ProviderAttributeValue</code> must be the same values that were used for the <code>SourceUser</code> when the identities were originally linked using <code> AdminLinkProviderForUser</code> call. (If the linking was done with <code>ProviderAttributeName</code> set to <code>Cognito_Subject</code>, the same applies here). However, if the user has already signed in, the <code>ProviderAttributeName</code> must be <code>Cognito_Subject</code> and <code>ProviderAttributeValue</code> must be the subject of the SAML assertion.</p>
     async fn admin_disable_provider_for_user(
         &self,
         input: AdminDisableProviderForUserRequest,
@@ -12189,7 +12293,7 @@ pub trait CognitoIdentityProvider {
         input: AdminInitiateAuthRequest,
     ) -> Result<AdminInitiateAuthResponse, RusotoError<AdminInitiateAuthError>>;
 
-    /// <p>Links an existing user account in a user pool (<code>DestinationUser</code>) to an identity from an external identity provider (<code>SourceUser</code>) based on a specified attribute name and value from the external identity provider. This allows you to create a link from the existing user account to an external federated user identity that has not yet been used to sign in, so that the federated user identity can be used to sign in as the existing user account. </p> <p> For example, if there is an existing user with a username and password, this API links that user to a federated user identity, so that when the federated user identity is used, the user signs in as the existing user account. </p> <important> <p>Because this API allows a user with an external federated identity to sign in as an existing user in the user pool, it is critical that it only be used with external identity providers and provider attributes that have been trusted by the application owner.</p> </important> <p>See also .</p> <p>This action is enabled only for admin access and requires developer credentials.</p>
+    /// <p>Links an existing user account in a user pool (<code>DestinationUser</code>) to an identity from an external identity provider (<code>SourceUser</code>) based on a specified attribute name and value from the external identity provider. This allows you to create a link from the existing user account to an external federated user identity that has not yet been used to sign in, so that the federated user identity can be used to sign in as the existing user account. </p> <p> For example, if there is an existing user with a username and password, this API links that user to a federated user identity, so that when the federated user identity is used, the user signs in as the existing user account. </p> <note> <p>The maximum number of federated identities linked to a user is 5.</p> </note> <important> <p>Because this API allows a user with an external federated identity to sign in as an existing user in the user pool, it is critical that it only be used with external identity providers and provider attributes that have been trusted by the application owner.</p> </important> <p>This action is enabled only for admin access and requires developer credentials.</p>
     async fn admin_link_provider_for_user(
         &self,
         input: AdminLinkProviderForUserRequest,
@@ -12243,7 +12347,7 @@ pub trait CognitoIdentityProvider {
         input: AdminSetUserPasswordRequest,
     ) -> Result<AdminSetUserPasswordResponse, RusotoError<AdminSetUserPasswordError>>;
 
-    /// <p> <i>This action is no longer supported.</i> You can use it to configure only SMS MFA. You can't use it to configure TOTP software token MFA. To configure either type of MFA, use the <a>AdminSetUserMFAPreference</a> action instead.</p>
+    /// <p> <i>This action is no longer supported.</i> You can use it to configure only SMS MFA. You can't use it to configure TOTP software token MFA. To configure either type of MFA, use <a href="https://docs.aws.amazon.com/cognito-user-identity-pools/latest/APIReference/API_AdminSetUserMFAPreference.html">AdminSetUserMFAPreference</a> instead.</p>
     async fn admin_set_user_settings(
         &self,
         input: AdminSetUserSettingsRequest,
@@ -12441,7 +12545,7 @@ pub trait CognitoIdentityProvider {
         input: ForgetDeviceRequest,
     ) -> Result<(), RusotoError<ForgetDeviceError>>;
 
-    /// <p>Calling this API causes a message to be sent to the end user with a confirmation code that is required to change the user's password. For the <code>Username</code> parameter, you can use the username or user alias. The method used to send the confirmation code is sent according to the specified AccountRecoverySetting. For more information, see <a href="">Recovering User Accounts</a> in the <i>Amazon Cognito Developer Guide</i>. If neither a verified phone number nor a verified email exists, an <code>InvalidParameterException</code> is thrown. To use the confirmation code for resetting the password, call .</p>
+    /// <p>Calling this API causes a message to be sent to the end user with a confirmation code that is required to change the user's password. For the <code>Username</code> parameter, you can use the username or user alias. The method used to send the confirmation code is sent according to the specified AccountRecoverySetting. For more information, see <a href="https://docs.aws.amazon.com/cognito/latest/developerguide/how-to-recover-a-user-account.html">Recovering User Accounts</a> in the <i>Amazon Cognito Developer Guide</i>. If neither a verified phone number nor a verified email exists, an <code>InvalidParameterException</code> is thrown. To use the confirmation code for resetting the password, call <a href="https://docs.aws.amazon.com/cognito-user-identity-pools/latest/APIReference/API_ConfirmForgotPassword.html">ConfirmForgotPassword</a>.</p>
     async fn forgot_password(
         &self,
         input: ForgotPasswordRequest,
@@ -12591,7 +12695,7 @@ pub trait CognitoIdentityProvider {
         input: RespondToAuthChallengeRequest,
     ) -> Result<RespondToAuthChallengeResponse, RusotoError<RespondToAuthChallengeError>>;
 
-    /// <p>Configures actions on detected risks. To delete the risk configuration for <code>UserPoolId</code> or <code>ClientId</code>, pass null values for all four configuration types.</p> <p>To enable Amazon Cognito advanced security features, update the user pool to include the <code>UserPoolAddOns</code> key<code>AdvancedSecurityMode</code>.</p> <p>See .</p>
+    /// <p>Configures actions on detected risks. To delete the risk configuration for <code>UserPoolId</code> or <code>ClientId</code>, pass null values for all four configuration types.</p> <p>To enable Amazon Cognito advanced security features, update the user pool to include the <code>UserPoolAddOns</code> key<code>AdvancedSecurityMode</code>.</p>
     async fn set_risk_configuration(
         &self,
         input: SetRiskConfigurationRequest,
@@ -12603,7 +12707,7 @@ pub trait CognitoIdentityProvider {
         input: SetUICustomizationRequest,
     ) -> Result<SetUICustomizationResponse, RusotoError<SetUICustomizationError>>;
 
-    /// <p>Set the user's multi-factor authentication (MFA) method preference, including which MFA factors are enabled and if any are preferred. Only one factor can be set as preferred. The preferred MFA factor will be used to authenticate a user if multiple factors are enabled. If multiple options are enabled and no preference is set, a challenge to choose an MFA option will be returned during sign in.</p>
+    /// <p>Set the user's multi-factor authentication (MFA) method preference, including which MFA factors are enabled and if any are preferred. Only one factor can be set as preferred. The preferred MFA factor will be used to authenticate a user if multiple factors are enabled. If multiple options are enabled and no preference is set, a challenge to choose an MFA option will be returned during sign in. If an MFA type is enabled for a user, the user will be prompted for MFA during all sign in attempts, unless device tracking is turned on and the device has been trusted. If you would like MFA to be applied selectively based on the assessed risk level of sign in attempts, disable MFA for users and turn on Adaptive Authentication for the user pool.</p>
     async fn set_user_mfa_preference(
         &self,
         input: SetUserMFAPreferenceRequest,
@@ -12615,7 +12719,7 @@ pub trait CognitoIdentityProvider {
         input: SetUserPoolMfaConfigRequest,
     ) -> Result<SetUserPoolMfaConfigResponse, RusotoError<SetUserPoolMfaConfigError>>;
 
-    /// <p> <i>This action is no longer supported.</i> You can use it to configure only SMS MFA. You can't use it to configure TOTP software token MFA. To configure either type of MFA, use the <a>SetUserMFAPreference</a> action instead.</p>
+    /// <p> <i>This action is no longer supported.</i> You can use it to configure only SMS MFA. You can't use it to configure TOTP software token MFA. To configure either type of MFA, use <a href="https://docs.aws.amazon.com/cognito-user-identity-pools/latest/APIReference/API_SetUserMFAPreference.html">SetUserMFAPreference</a> instead.</p>
     async fn set_user_settings(
         &self,
         input: SetUserSettingsRequest,
@@ -12687,13 +12791,13 @@ pub trait CognitoIdentityProvider {
         input: UpdateUserAttributesRequest,
     ) -> Result<UpdateUserAttributesResponse, RusotoError<UpdateUserAttributesError>>;
 
-    /// <p><p>Updates the specified user pool with the specified attributes. You can get a list of the current user pool settings with .</p> <important> <p>If you don&#39;t provide a value for an attribute, it will be set to the default value.</p> </important></p>
+    /// <p><p>Updates the specified user pool with the specified attributes. You can get a list of the current user pool settings using <a href="https://docs.aws.amazon.com/cognito-user-identity-pools/latest/APIReference/API_DescribeUserPool.html">DescribeUserPool</a>.</p> <important> <p>If you don&#39;t provide a value for an attribute, it will be set to the default value.</p> </important></p>
     async fn update_user_pool(
         &self,
         input: UpdateUserPoolRequest,
     ) -> Result<UpdateUserPoolResponse, RusotoError<UpdateUserPoolError>>;
 
-    /// <p><p>Updates the specified user pool app client with the specified attributes. You can get a list of the current user pool app client settings with .</p> <important> <p>If you don&#39;t provide a value for an attribute, it will be set to the default value.</p> </important></p>
+    /// <p><p>Updates the specified user pool app client with the specified attributes. You can get a list of the current user pool app client settings using <a href="https://docs.aws.amazon.com/cognito-user-identity-pools/latest/APIReference/API_DescribeUserPoolClient.html">DescribeUserPoolClient</a>.</p> <important> <p>If you don&#39;t provide a value for an attribute, it will be set to the default value.</p> </important></p>
     async fn update_user_pool_client(
         &self,
         input: UpdateUserPoolClientRequest,
@@ -12822,7 +12926,7 @@ impl CognitoIdentityProvider for CognitoIdentityProviderClient {
         proto::json::ResponsePayload::new(&response).deserialize::<AdminConfirmSignUpResponse, _>()
     }
 
-    /// <p>Creates a new user in the specified user pool.</p> <p>If <code>MessageAction</code> is not set, the default is to send a welcome message via email or phone (SMS).</p> <note> <p>This message is based on a template that you configured in your call to or . This template includes your custom sign-up instructions and placeholders for user name and temporary password.</p> </note> <p>Alternatively, you can call AdminCreateUser with “SUPPRESS” for the <code>MessageAction</code> parameter, and Amazon Cognito will not send any email. </p> <p>In either case, the user will be in the <code>FORCE_CHANGE_PASSWORD</code> state until they sign in and change their password.</p> <p>AdminCreateUser requires developer credentials.</p>
+    /// <p>Creates a new user in the specified user pool.</p> <p>If <code>MessageAction</code> is not set, the default is to send a welcome message via email or phone (SMS).</p> <p>This message is based on a template that you configured in your call to create or update a user pool. This template includes your custom sign-up instructions and placeholders for user name and temporary password.</p> <p>Alternatively, you can call <code>AdminCreateUser</code> with “SUPPRESS” for the <code>MessageAction</code> parameter, and Amazon Cognito will not send any email. </p> <p>In either case, the user will be in the <code>FORCE_CHANGE_PASSWORD</code> state until they sign in and change their password.</p> <p> <code>AdminCreateUser</code> requires developer credentials.</p>
     async fn admin_create_user(
         &self,
         input: AdminCreateUserRequest,
@@ -12886,7 +12990,7 @@ impl CognitoIdentityProvider for CognitoIdentityProviderClient {
             .deserialize::<AdminDeleteUserAttributesResponse, _>()
     }
 
-    /// <p>Disables the user from signing in with the specified external (SAML or social) identity provider. If the user to disable is a Cognito User Pools native username + password user, they are not permitted to use their password to sign-in. If the user to disable is a linked external IdP user, any link between that user and an existing user is removed. The next time the external user (no longer attached to the previously linked <code>DestinationUser</code>) signs in, they must create a new user account. See .</p> <p>This action is enabled only for admin access and requires developer credentials.</p> <p>The <code>ProviderName</code> must match the value specified when creating an IdP for the pool. </p> <p>To disable a native username + password user, the <code>ProviderName</code> value must be <code>Cognito</code> and the <code>ProviderAttributeName</code> must be <code>Cognito_Subject</code>, with the <code>ProviderAttributeValue</code> being the name that is used in the user pool for the user.</p> <p>The <code>ProviderAttributeName</code> must always be <code>Cognito_Subject</code> for social identity providers. The <code>ProviderAttributeValue</code> must always be the exact subject that was used when the user was originally linked as a source user.</p> <p>For de-linking a SAML identity, there are two scenarios. If the linked identity has not yet been used to sign-in, the <code>ProviderAttributeName</code> and <code>ProviderAttributeValue</code> must be the same values that were used for the <code>SourceUser</code> when the identities were originally linked in the call. (If the linking was done with <code>ProviderAttributeName</code> set to <code>Cognito_Subject</code>, the same applies here). However, if the user has already signed in, the <code>ProviderAttributeName</code> must be <code>Cognito_Subject</code> and <code>ProviderAttributeValue</code> must be the subject of the SAML assertion.</p>
+    /// <p>Disables the user from signing in with the specified external (SAML or social) identity provider. If the user to disable is a Cognito User Pools native username + password user, they are not permitted to use their password to sign-in. If the user to disable is a linked external IdP user, any link between that user and an existing user is removed. The next time the external user (no longer attached to the previously linked <code>DestinationUser</code>) signs in, they must create a new user account. See <a href="https://docs.aws.amazon.com/cognito-user-identity-pools/latest/APIReference/API_AdminLinkProviderForUser.html">AdminLinkProviderForUser</a>.</p> <p>This action is enabled only for admin access and requires developer credentials.</p> <p>The <code>ProviderName</code> must match the value specified when creating an IdP for the pool. </p> <p>To disable a native username + password user, the <code>ProviderName</code> value must be <code>Cognito</code> and the <code>ProviderAttributeName</code> must be <code>Cognito_Subject</code>, with the <code>ProviderAttributeValue</code> being the name that is used in the user pool for the user.</p> <p>The <code>ProviderAttributeName</code> must always be <code>Cognito_Subject</code> for social identity providers. The <code>ProviderAttributeValue</code> must always be the exact subject that was used when the user was originally linked as a source user.</p> <p>For de-linking a SAML identity, there are two scenarios. If the linked identity has not yet been used to sign-in, the <code>ProviderAttributeName</code> and <code>ProviderAttributeValue</code> must be the same values that were used for the <code>SourceUser</code> when the identities were originally linked using <code> AdminLinkProviderForUser</code> call. (If the linking was done with <code>ProviderAttributeName</code> set to <code>Cognito_Subject</code>, the same applies here). However, if the user has already signed in, the <code>ProviderAttributeName</code> must be <code>Cognito_Subject</code> and <code>ProviderAttributeValue</code> must be the subject of the SAML assertion.</p>
     async fn admin_disable_provider_for_user(
         &self,
         input: AdminDisableProviderForUserRequest,
@@ -13034,7 +13138,7 @@ impl CognitoIdentityProvider for CognitoIdentityProviderClient {
         proto::json::ResponsePayload::new(&response).deserialize::<AdminInitiateAuthResponse, _>()
     }
 
-    /// <p>Links an existing user account in a user pool (<code>DestinationUser</code>) to an identity from an external identity provider (<code>SourceUser</code>) based on a specified attribute name and value from the external identity provider. This allows you to create a link from the existing user account to an external federated user identity that has not yet been used to sign in, so that the federated user identity can be used to sign in as the existing user account. </p> <p> For example, if there is an existing user with a username and password, this API links that user to a federated user identity, so that when the federated user identity is used, the user signs in as the existing user account. </p> <important> <p>Because this API allows a user with an external federated identity to sign in as an existing user in the user pool, it is critical that it only be used with external identity providers and provider attributes that have been trusted by the application owner.</p> </important> <p>See also .</p> <p>This action is enabled only for admin access and requires developer credentials.</p>
+    /// <p>Links an existing user account in a user pool (<code>DestinationUser</code>) to an identity from an external identity provider (<code>SourceUser</code>) based on a specified attribute name and value from the external identity provider. This allows you to create a link from the existing user account to an external federated user identity that has not yet been used to sign in, so that the federated user identity can be used to sign in as the existing user account. </p> <p> For example, if there is an existing user with a username and password, this API links that user to a federated user identity, so that when the federated user identity is used, the user signs in as the existing user account. </p> <note> <p>The maximum number of federated identities linked to a user is 5.</p> </note> <important> <p>Because this API allows a user with an external federated identity to sign in as an existing user in the user pool, it is critical that it only be used with external identity providers and provider attributes that have been trusted by the application owner.</p> </important> <p>This action is enabled only for admin access and requires developer credentials.</p>
     async fn admin_link_provider_for_user(
         &self,
         input: AdminLinkProviderForUserRequest,
@@ -13231,7 +13335,7 @@ impl CognitoIdentityProvider for CognitoIdentityProviderClient {
             .deserialize::<AdminSetUserPasswordResponse, _>()
     }
 
-    /// <p> <i>This action is no longer supported.</i> You can use it to configure only SMS MFA. You can't use it to configure TOTP software token MFA. To configure either type of MFA, use the <a>AdminSetUserMFAPreference</a> action instead.</p>
+    /// <p> <i>This action is no longer supported.</i> You can use it to configure only SMS MFA. You can't use it to configure TOTP software token MFA. To configure either type of MFA, use <a href="https://docs.aws.amazon.com/cognito-user-identity-pools/latest/APIReference/API_AdminSetUserMFAPreference.html">AdminSetUserMFAPreference</a> instead.</p>
     async fn admin_set_user_settings(
         &self,
         input: AdminSetUserSettingsRequest,
@@ -13939,7 +14043,7 @@ impl CognitoIdentityProvider for CognitoIdentityProviderClient {
         Ok(())
     }
 
-    /// <p>Calling this API causes a message to be sent to the end user with a confirmation code that is required to change the user's password. For the <code>Username</code> parameter, you can use the username or user alias. The method used to send the confirmation code is sent according to the specified AccountRecoverySetting. For more information, see <a href="">Recovering User Accounts</a> in the <i>Amazon Cognito Developer Guide</i>. If neither a verified phone number nor a verified email exists, an <code>InvalidParameterException</code> is thrown. To use the confirmation code for resetting the password, call .</p>
+    /// <p>Calling this API causes a message to be sent to the end user with a confirmation code that is required to change the user's password. For the <code>Username</code> parameter, you can use the username or user alias. The method used to send the confirmation code is sent according to the specified AccountRecoverySetting. For more information, see <a href="https://docs.aws.amazon.com/cognito/latest/developerguide/how-to-recover-a-user-account.html">Recovering User Accounts</a> in the <i>Amazon Cognito Developer Guide</i>. If neither a verified phone number nor a verified email exists, an <code>InvalidParameterException</code> is thrown. To use the confirmation code for resetting the password, call <a href="https://docs.aws.amazon.com/cognito-user-identity-pools/latest/APIReference/API_ConfirmForgotPassword.html">ConfirmForgotPassword</a>.</p>
     async fn forgot_password(
         &self,
         input: ForgotPasswordRequest,
@@ -14453,7 +14557,7 @@ impl CognitoIdentityProvider for CognitoIdentityProviderClient {
             .deserialize::<RespondToAuthChallengeResponse, _>()
     }
 
-    /// <p>Configures actions on detected risks. To delete the risk configuration for <code>UserPoolId</code> or <code>ClientId</code>, pass null values for all four configuration types.</p> <p>To enable Amazon Cognito advanced security features, update the user pool to include the <code>UserPoolAddOns</code> key<code>AdvancedSecurityMode</code>.</p> <p>See .</p>
+    /// <p>Configures actions on detected risks. To delete the risk configuration for <code>UserPoolId</code> or <code>ClientId</code>, pass null values for all four configuration types.</p> <p>To enable Amazon Cognito advanced security features, update the user pool to include the <code>UserPoolAddOns</code> key<code>AdvancedSecurityMode</code>.</p>
     async fn set_risk_configuration(
         &self,
         input: SetRiskConfigurationRequest,
@@ -14496,7 +14600,7 @@ impl CognitoIdentityProvider for CognitoIdentityProviderClient {
         proto::json::ResponsePayload::new(&response).deserialize::<SetUICustomizationResponse, _>()
     }
 
-    /// <p>Set the user's multi-factor authentication (MFA) method preference, including which MFA factors are enabled and if any are preferred. Only one factor can be set as preferred. The preferred MFA factor will be used to authenticate a user if multiple factors are enabled. If multiple options are enabled and no preference is set, a challenge to choose an MFA option will be returned during sign in.</p>
+    /// <p>Set the user's multi-factor authentication (MFA) method preference, including which MFA factors are enabled and if any are preferred. Only one factor can be set as preferred. The preferred MFA factor will be used to authenticate a user if multiple factors are enabled. If multiple options are enabled and no preference is set, a challenge to choose an MFA option will be returned during sign in. If an MFA type is enabled for a user, the user will be prompted for MFA during all sign in attempts, unless device tracking is turned on and the device has been trusted. If you would like MFA to be applied selectively based on the assessed risk level of sign in attempts, disable MFA for users and turn on Adaptive Authentication for the user pool.</p>
     async fn set_user_mfa_preference(
         &self,
         input: SetUserMFAPreferenceRequest,
@@ -14540,7 +14644,7 @@ impl CognitoIdentityProvider for CognitoIdentityProviderClient {
             .deserialize::<SetUserPoolMfaConfigResponse, _>()
     }
 
-    /// <p> <i>This action is no longer supported.</i> You can use it to configure only SMS MFA. You can't use it to configure TOTP software token MFA. To configure either type of MFA, use the <a>SetUserMFAPreference</a> action instead.</p>
+    /// <p> <i>This action is no longer supported.</i> You can use it to configure only SMS MFA. You can't use it to configure TOTP software token MFA. To configure either type of MFA, use <a href="https://docs.aws.amazon.com/cognito-user-identity-pools/latest/APIReference/API_SetUserMFAPreference.html">SetUserMFAPreference</a> instead.</p>
     async fn set_user_settings(
         &self,
         input: SetUserSettingsRequest,
@@ -14793,7 +14897,7 @@ impl CognitoIdentityProvider for CognitoIdentityProviderClient {
             .deserialize::<UpdateUserAttributesResponse, _>()
     }
 
-    /// <p><p>Updates the specified user pool with the specified attributes. You can get a list of the current user pool settings with .</p> <important> <p>If you don&#39;t provide a value for an attribute, it will be set to the default value.</p> </important></p>
+    /// <p><p>Updates the specified user pool with the specified attributes. You can get a list of the current user pool settings using <a href="https://docs.aws.amazon.com/cognito-user-identity-pools/latest/APIReference/API_DescribeUserPool.html">DescribeUserPool</a>.</p> <important> <p>If you don&#39;t provide a value for an attribute, it will be set to the default value.</p> </important></p>
     async fn update_user_pool(
         &self,
         input: UpdateUserPoolRequest,
@@ -14814,7 +14918,7 @@ impl CognitoIdentityProvider for CognitoIdentityProviderClient {
         proto::json::ResponsePayload::new(&response).deserialize::<UpdateUserPoolResponse, _>()
     }
 
-    /// <p><p>Updates the specified user pool app client with the specified attributes. You can get a list of the current user pool app client settings with .</p> <important> <p>If you don&#39;t provide a value for an attribute, it will be set to the default value.</p> </important></p>
+    /// <p><p>Updates the specified user pool app client with the specified attributes. You can get a list of the current user pool app client settings using <a href="https://docs.aws.amazon.com/cognito-user-identity-pools/latest/APIReference/API_DescribeUserPoolClient.html">DescribeUserPoolClient</a>.</p> <important> <p>If you don&#39;t provide a value for an attribute, it will be set to the default value.</p> </important></p>
     async fn update_user_pool_client(
         &self,
         input: UpdateUserPoolClientRequest,

@@ -37,10 +37,14 @@ async fn test_post_text_resposnse_serialization() {
     slots.insert("PickUpCity".to_owned(), Some("Boston".to_owned()));
 
     let expected = PostTextResponse {
+        active_contexts: None,
+        alternative_intents: None,
+        bot_version: None,
         dialog_state: Some("ElicitSlot".to_owned()),
         intent_name: Some("BookCar".to_owned()),
         message: Some("In what city do you need to rent a car?".to_owned()),
         message_format: Some("PlainText".to_owned()),
+        nlu_intent_confidence: None,
         slot_to_elicit: Some("PickUpCity".to_owned()),
         slots: Some(slots),
         response_card: None,

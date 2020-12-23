@@ -51,13 +51,91 @@ impl SageMakerClient {
 }
 
 use serde_json;
+/// <p>A structure describing the source of an action.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
+pub struct ActionSource {
+    /// <p>The ID of the source.</p>
+    #[serde(rename = "SourceId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub source_id: Option<String>,
+    /// <p>The type of the source.</p>
+    #[serde(rename = "SourceType")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub source_type: Option<String>,
+    /// <p>The URI of the source.</p>
+    #[serde(rename = "SourceUri")]
+    pub source_uri: String,
+}
+
+/// <p>Lists the properties of an <i>action</i>. An action represents an action or activity. Some examples are a workflow step and a model deployment. Generally, an action involves at least one input artifact or output artifact.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct ActionSummary {
+    /// <p>The Amazon Resource Name (ARN) of the action.</p>
+    #[serde(rename = "ActionArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub action_arn: Option<String>,
+    /// <p>The name of the action.</p>
+    #[serde(rename = "ActionName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub action_name: Option<String>,
+    /// <p>The type of the action.</p>
+    #[serde(rename = "ActionType")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub action_type: Option<String>,
+    /// <p>When the action was created.</p>
+    #[serde(rename = "CreationTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub creation_time: Option<f64>,
+    /// <p>When the action was last modified.</p>
+    #[serde(rename = "LastModifiedTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub last_modified_time: Option<f64>,
+    /// <p>The source of the action.</p>
+    #[serde(rename = "Source")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub source: Option<ActionSource>,
+    /// <p>The status of the action.</p>
+    #[serde(rename = "Status")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub status: Option<String>,
+}
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct AddAssociationRequest {
+    /// <p><p>The type of association. The following are suggested uses for each type. Amazon SageMaker places no restrictions on their use.</p> <ul> <li> <p>ContributedTo - The source contributed to the destination or had a part in enabling the destination. For example, the training data contributed to the training job.</p> </li> <li> <p>AssociatedWith - The source is connected to the destination. For example, an approval workflow is associated with a model deployment.</p> </li> <li> <p>DerivedFrom - The destination is a modification of the source. For example, a digest output of a channel input for a processing job is derived from the original inputs.</p> </li> <li> <p>Produced - The source generated the destination. For example, a training job produced a model artifact.</p> </li> </ul></p>
+    #[serde(rename = "AssociationType")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub association_type: Option<String>,
+    /// <p>The Amazon Resource Name (ARN) of the destination.</p>
+    #[serde(rename = "DestinationArn")]
+    pub destination_arn: String,
+    /// <p>The ARN of the source.</p>
+    #[serde(rename = "SourceArn")]
+    pub source_arn: String,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct AddAssociationResponse {
+    /// <p>The Amazon Resource Name (ARN) of the destination.</p>
+    #[serde(rename = "DestinationArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub destination_arn: Option<String>,
+    /// <p>The ARN of the source.</p>
+    #[serde(rename = "SourceArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub source_arn: Option<String>,
+}
+
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct AddTagsInput {
     /// <p>The Amazon Resource Name (ARN) of the resource that you want to tag.</p>
     #[serde(rename = "ResourceArn")]
     pub resource_arn: String,
-    /// <p>An array of <code>Tag</code> objects. Each tag is a key-value pair. Only the <code>key</code> parameter is required. If you don't specify a value, Amazon SageMaker sets the value to an empty string. </p>
+    /// <p>An array of key-value pairs. You can use tags to categorize your AWS resources in different ways, for example, by purpose, owner, or environment. For more information, see <a href="https://docs.aws.amazon.com/general/latest/gr/aws_tagging.html">Tagging AWS Resources</a>.</p>
     #[serde(rename = "Tags")]
     pub tags: Vec<Tag>,
 }
@@ -69,6 +147,27 @@ pub struct AddTagsOutput {
     #[serde(rename = "Tags")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub tags: Option<Vec<Tag>>,
+}
+
+/// <p>Edge Manager agent version.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct AgentVersion {
+    /// <p>The number of Edge Manager agents.</p>
+    #[serde(rename = "AgentCount")]
+    pub agent_count: i64,
+    /// <p>Version of the agent.</p>
+    #[serde(rename = "Version")]
+    pub version: String,
+}
+
+/// <p>This API is not supported.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
+pub struct Alarm {
+    /// <p><p/></p>
+    #[serde(rename = "AlarmName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub alarm_name: Option<String>,
 }
 
 /// <p>Specifies the training algorithm to use in a <a>CreateTrainingJob</a> request.</p> <p>For more information about algorithms provided by Amazon SageMaker, see <a href="https://docs.aws.amazon.com/sagemaker/latest/dg/algos.html">Algorithms</a>. For information about using your own algorithms, see <a href="https://docs.aws.amazon.com/sagemaker/latest/dg/your-algorithms.html">Using Your Own Algorithms with Amazon SageMaker</a>. </p>
@@ -176,12 +275,12 @@ pub struct AlgorithmValidationSpecification {
 /// <p>Configures how labels are consolidated across human workers and processes output data. </p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct AnnotationConsolidationConfig {
-    /// <p><p>The Amazon Resource Name (ARN) of a Lambda function implements the logic for <a href="https://docs.aws.amazon.com/sagemaker/latest/dg/sms-annotation-consolidation.html">annotation consolidation</a> and to process output data.</p> <p>This parameter is required for all labeling jobs. For <a href="https://docs.aws.amazon.com/sagemaker/latest/dg/sms-task-types.html">built-in task types</a>, use one of the following Amazon SageMaker Ground Truth Lambda function ARNs for <code>AnnotationConsolidationLambdaArn</code>. For custom labeling workflows, see <a href="https://docs.aws.amazon.com/sagemaker/latest/dg/sms-custom-templates-step3.html#sms-custom-templates-step3-postlambda">Post-annotation Lambda</a>. </p> <p> <b>Bounding box</b> - Finds the most similar boxes from different workers based on the Jaccard index of the boxes.</p> <ul> <li> <p> <code>arn:aws:lambda:us-east-1:432418664414:function:ACS-BoundingBox</code> </p> <p> <code>arn:aws:lambda:us-east-2:266458841044:function:ACS-BoundingBox</code> </p> <p> <code>arn:aws:lambda:us-west-2:081040173940:function:ACS-BoundingBox</code> </p> <p> <code>arn:aws:lambda:eu-west-1:568282634449:function:ACS-BoundingBox</code> </p> <p> <code>arn:aws:lambda:ap-northeast-1:477331159723:function:ACS-BoundingBox</code> </p> <p> <code>arn:aws:lambda:ap-southeast-2:454466003867:function:ACS-BoundingBox</code> </p> <p> <code>arn:aws:lambda:ap-south-1:565803892007:function:ACS-BoundingBox</code> </p> <p> <code>arn:aws:lambda:eu-central-1:203001061592:function:ACS-BoundingBox</code> </p> <p> <code>arn:aws:lambda:ap-northeast-2:845288260483:function:ACS-BoundingBox</code> </p> <p> <code>arn:aws:lambda:eu-west-2:487402164563:function:ACS-BoundingBox</code> </p> <p> <code>arn:aws:lambda:ap-southeast-1:377565633583:function:ACS-BoundingBox</code> </p> <p> <code>arn:aws:lambda:ca-central-1:918755190332:function:ACS-BoundingBox</code> </p> </li> </ul> <p> <b>Image classification</b> - Uses a variant of the Expectation Maximization approach to estimate the true class of an image based on annotations from individual workers.</p> <ul> <li> <p> <code>arn:aws:lambda:us-east-1:432418664414:function:ACS-ImageMultiClass</code> </p> <p> <code>arn:aws:lambda:us-east-2:266458841044:function:ACS-ImageMultiClass</code> </p> <p> <code>arn:aws:lambda:us-west-2:081040173940:function:ACS-ImageMultiClass</code> </p> <p> <code>arn:aws:lambda:eu-west-1:568282634449:function:ACS-ImageMultiClass</code> </p> <p> <code>arn:aws:lambda:ap-northeast-1:477331159723:function:ACS-ImageMultiClass</code> </p> <p> <code>arn:aws:lambda:ap-southeast-2:454466003867:function:ACS-ImageMultiClass</code> </p> <p> <code>arn:aws:lambda:ap-south-1:565803892007:function:ACS-ImageMultiClass</code> </p> <p> <code>arn:aws:lambda:eu-central-1:203001061592:function:ACS-ImageMultiClass</code> </p> <p> <code>arn:aws:lambda:ap-northeast-2:845288260483:function:ACS-ImageMultiClass</code> </p> <p> <code>arn:aws:lambda:eu-west-2:487402164563:function:ACS-ImageMultiClass</code> </p> <p> <code>arn:aws:lambda:ap-southeast-1:377565633583:function:ACS-ImageMultiClass</code> </p> <p> <code>arn:aws:lambda:ca-central-1:918755190332:function:ACS-ImageMultiClass</code> </p> </li> </ul> <p> <b>Multi-label image classification</b> - Uses a variant of the Expectation Maximization approach to estimate the true classes of an image based on annotations from individual workers.</p> <ul> <li> <p> <code>arn:aws:lambda:us-east-1:432418664414:function:ACS-ImageMultiClassMultiLabel</code> </p> <p> <code>arn:aws:lambda:us-east-2:266458841044:function:ACS-ImageMultiClassMultiLabel</code> </p> <p> <code>arn:aws:lambda:us-west-2:081040173940:function:ACS-ImageMultiClassMultiLabel</code> </p> <p> <code>arn:aws:lambda:eu-west-1:568282634449:function:ACS-ImageMultiClassMultiLabel</code> </p> <p> <code>arn:aws:lambda:ap-northeast-1:477331159723:function:ACS-ImageMultiClassMultiLabel</code> </p> <p> <code>arn:aws:lambda:ap-southeast-2:454466003867:function:ACS-ImageMultiClassMultiLabel</code> </p> <p> <code>arn:aws:lambda:ap-south-1:565803892007:function:ACS-ImageMultiClassMultiLabel</code> </p> <p> <code>arn:aws:lambda:eu-central-1:203001061592:function:ACS-ImageMultiClassMultiLabel</code> </p> <p> <code>arn:aws:lambda:ap-northeast-2:845288260483:function:ACS-ImageMultiClassMultiLabel</code> </p> <p> <code>arn:aws:lambda:eu-west-2:487402164563:function:ACS-ImageMultiClassMultiLabel</code> </p> <p> <code>arn:aws:lambda:ap-southeast-1:377565633583:function:ACS-ImageMultiClassMultiLabel</code> </p> <p> <code>arn:aws:lambda:ca-central-1:918755190332:function:ACS-ImageMultiClassMultiLabel</code> </p> </li> </ul> <p> <b>Semantic segmentation</b> - Treats each pixel in an image as a multi-class classification and treats pixel annotations from workers as &quot;votes&quot; for the correct label.</p> <ul> <li> <p> <code>arn:aws:lambda:us-east-1:432418664414:function:ACS-SemanticSegmentation</code> </p> <p> <code>arn:aws:lambda:us-east-2:266458841044:function:ACS-SemanticSegmentation</code> </p> <p> <code>arn:aws:lambda:us-west-2:081040173940:function:ACS-SemanticSegmentation</code> </p> <p> <code>arn:aws:lambda:eu-west-1:568282634449:function:ACS-SemanticSegmentation</code> </p> <p> <code>arn:aws:lambda:ap-northeast-1:477331159723:function:ACS-SemanticSegmentation</code> </p> <p> <code>arn:aws:lambda:ap-southeast-2:454466003867:function:ACS-SemanticSegmentation</code> </p> <p> <code>arn:aws:lambda:ap-south-1:565803892007:function:ACS-SemanticSegmentation</code> </p> <p> <code>arn:aws:lambda:eu-central-1:203001061592:function:ACS-SemanticSegmentation</code> </p> <p> <code>arn:aws:lambda:ap-northeast-2:845288260483:function:ACS-SemanticSegmentation</code> </p> <p> <code>arn:aws:lambda:eu-west-2:487402164563:function:ACS-SemanticSegmentation</code> </p> <p> <code>arn:aws:lambda:ap-southeast-1:377565633583:function:ACS-SemanticSegmentation</code> </p> <p> <code>arn:aws:lambda:ca-central-1:918755190332:function:ACS-SemanticSegmentation</code> </p> </li> </ul> <p> <b>Text classification</b> - Uses a variant of the Expectation Maximization approach to estimate the true class of text based on annotations from individual workers.</p> <ul> <li> <p> <code>arn:aws:lambda:us-east-1:432418664414:function:ACS-TextMultiClass</code> </p> <p> <code>arn:aws:lambda:us-east-2:266458841044:function:ACS-TextMultiClass</code> </p> <p> <code>arn:aws:lambda:us-west-2:081040173940:function:ACS-TextMultiClass</code> </p> <p> <code>arn:aws:lambda:eu-west-1:568282634449:function:ACS-TextMultiClass</code> </p> <p> <code>arn:aws:lambda:ap-northeast-1:477331159723:function:ACS-TextMultiClass</code> </p> <p> <code>arn:aws:lambda:ap-southeast-2:454466003867:function:ACS-TextMultiClass</code> </p> <p> <code>arn:aws:lambda:ap-south-1:565803892007:function:ACS-TextMultiClass</code> </p> <p> <code>arn:aws:lambda:eu-central-1:203001061592:function:ACS-TextMultiClass</code> </p> <p> <code>arn:aws:lambda:ap-northeast-2:845288260483:function:ACS-TextMultiClass</code> </p> <p> <code>arn:aws:lambda:eu-west-2:487402164563:function:ACS-TextMultiClass</code> </p> <p> <code>arn:aws:lambda:ap-southeast-1:377565633583:function:ACS-TextMultiClass</code> </p> <p> <code>arn:aws:lambda:ca-central-1:918755190332:function:ACS-TextMultiClass</code> </p> </li> </ul> <p> <b>Multi-label text classification</b> - Uses a variant of the Expectation Maximization approach to estimate the true classes of text based on annotations from individual workers.</p> <ul> <li> <p> <code>arn:aws:lambda:us-east-1:432418664414:function:ACS-TextMultiClassMultiLabel</code> </p> <p> <code>arn:aws:lambda:us-east-2:266458841044:function:ACS-TextMultiClassMultiLabel</code> </p> <p> <code>arn:aws:lambda:us-west-2:081040173940:function:ACS-TextMultiClassMultiLabel</code> </p> <p> <code>arn:aws:lambda:eu-west-1:568282634449:function:ACS-TextMultiClassMultiLabel</code> </p> <p> <code>arn:aws:lambda:ap-northeast-1:477331159723:function:ACS-TextMultiClassMultiLabel</code> </p> <p> <code>arn:aws:lambda:ap-southeast-2:454466003867:function:ACS-TextMultiClassMultiLabel</code> </p> <p> <code>arn:aws:lambda:ap-south-1:565803892007:function:ACS-TextMultiClassMultiLabel</code> </p> <p> <code>arn:aws:lambda:eu-central-1:203001061592:function:ACS-TextMultiClassMultiLabel</code> </p> <p> <code>arn:aws:lambda:ap-northeast-2:845288260483:function:ACS-TextMultiClassMultiLabel</code> </p> <p> <code>arn:aws:lambda:eu-west-2:487402164563:function:ACS-TextMultiClassMultiLabel</code> </p> <p> <code>arn:aws:lambda:ap-southeast-1:377565633583:function:ACS-TextMultiClassMultiLabel</code> </p> <p> <code>arn:aws:lambda:ca-central-1:918755190332:function:ACS-TextMultiClassMultiLabel</code> </p> </li> </ul> <p> <b>Named entity recognition</b> - Groups similar selections and calculates aggregate boundaries, resolving to most-assigned label.</p> <ul> <li> <p> <code>arn:aws:lambda:us-east-1:432418664414:function:ACS-NamedEntityRecognition</code> </p> <p> <code>arn:aws:lambda:us-east-2:266458841044:function:ACS-NamedEntityRecognition</code> </p> <p> <code>arn:aws:lambda:us-west-2:081040173940:function:ACS-NamedEntityRecognition</code> </p> <p> <code>arn:aws:lambda:eu-west-1:568282634449:function:ACS-NamedEntityRecognition</code> </p> <p> <code>arn:aws:lambda:ap-northeast-1:477331159723:function:ACS-NamedEntityRecognition</code> </p> <p> <code>arn:aws:lambda:ap-southeast-2:454466003867:function:ACS-NamedEntityRecognition</code> </p> <p> <code>arn:aws:lambda:ap-south-1:565803892007:function:ACS-NamedEntityRecognition</code> </p> <p> <code>arn:aws:lambda:eu-central-1:203001061592:function:ACS-NamedEntityRecognition</code> </p> <p> <code>arn:aws:lambda:ap-northeast-2:845288260483:function:ACS-NamedEntityRecognition</code> </p> <p> <code>arn:aws:lambda:eu-west-2:487402164563:function:ACS-NamedEntityRecognition</code> </p> <p> <code>arn:aws:lambda:ap-southeast-1:377565633583:function:ACS-NamedEntityRecognition</code> </p> <p> <code>arn:aws:lambda:ca-central-1:918755190332:function:ACS-NamedEntityRecognition</code> </p> </li> </ul> <p> <b>3D point cloud object detection</b> - Use this task type when you want workers to classify objects in a 3D point cloud by drawing 3D cuboids around objects. For example, you can use this task type to ask workers to identify different types of objects in a point cloud, such as cars, bikes, and pedestrians.</p> <ul> <li> <p> <code>arn:aws:lambda:us-east-1:432418664414:function:ACS-3DPointCloudObjectDetection</code> </p> <p> <code>arn:aws:lambda:us-east-2:266458841044:function:ACS-3DPointCloudObjectDetection</code> </p> <p> <code>arn:aws:lambda:us-west-2:081040173940:function:ACS-3DPointCloudObjectDetection</code> </p> <p> <code>arn:aws:lambda:eu-west-1:568282634449:function:ACS-3DPointCloudObjectDetection</code> </p> <p> <code>arn:aws:lambda:ap-northeast-1:477331159723:function:ACS-3DPointCloudObjectDetection</code> </p> <p> <code>arn:aws:lambda:ap-southeast-2:454466003867:function:ACS-3DPointCloudObjectDetection</code> </p> <p> <code>arn:aws:lambda:ap-south-1:565803892007:function:ACS-3DPointCloudObjectDetection</code> </p> <p> <code>arn:aws:lambda:eu-central-1:203001061592:function:ACS-3DPointCloudObjectDetection</code> </p> <p> <code>arn:aws:lambda:ap-northeast-2:845288260483:function:ACS-3DPointCloudObjectDetection</code> </p> <p> <code>arn:aws:lambda:eu-west-2:487402164563:function:ACS-3DPointCloudObjectDetection</code> </p> <p> <code>arn:aws:lambda:ap-southeast-1:377565633583:function:ACS-3DPointCloudObjectDetection</code> </p> <p> <code>arn:aws:lambda:ca-central-1:918755190332:function:ACS-3DPointCloudObjectDetection</code> </p> </li> </ul> <p> <b>3D point cloud object tracking</b> - Use this task type when you want workers to draw 3D cuboids around objects that appear in a sequence of 3D point cloud frames. For example, you can use this task type to ask workers to track the movement of vehicles across multiple point cloud frames. </p> <ul> <li> <p> <code>arn:aws:lambda:us-east-1:432418664414:function:ACS-3DPointCloudObjectTracking</code> </p> <p> <code>arn:aws:lambda:us-east-2:266458841044:function:ACS-3DPointCloudObjectTracking</code> </p> <p> <code>arn:aws:lambda:us-west-2:081040173940:function:ACS-3DPointCloudObjectTracking</code> </p> <p> <code>arn:aws:lambda:eu-west-1:568282634449:function:ACS-3DPointCloudObjectTracking</code> </p> <p> <code>arn:aws:lambda:ap-northeast-1:477331159723:function:ACS-3DPointCloudObjectTracking</code> </p> <p> <code>arn:aws:lambda:ap-southeast-2:454466003867:function:ACS-3DPointCloudObjectTracking</code> </p> <p> <code>arn:aws:lambda:ap-south-1:565803892007:function:ACS-3DPointCloudObjectTracking</code> </p> <p> <code>arn:aws:lambda:eu-central-1:203001061592:function:ACS-3DPointCloudObjectTracking</code> </p> <p> <code>arn:aws:lambda:ap-northeast-2:845288260483:function:ACS-3DPointCloudObjectTracking</code> </p> <p> <code>arn:aws:lambda:eu-west-2:487402164563:function:ACS-3DPointCloudObjectTracking</code> </p> <p> <code>arn:aws:lambda:ap-southeast-1:377565633583:function:ACS-3DPointCloudObjectTracking</code> </p> <p> <code>arn:aws:lambda:ca-central-1:918755190332:function:ACS-3DPointCloudObjectTracking</code> </p> </li> </ul> <p> <b>3D point cloud semantic segmentation</b> - Use this task type when you want workers to create a point-level semantic segmentation masks by painting objects in a 3D point cloud using different colors where each color is assigned to one of the classes you specify.</p> <ul> <li> <p> <code>arn:aws:lambda:us-east-1:432418664414:function:ACS-3DPointCloudSemanticSegmentation</code> </p> <p> <code>arn:aws:lambda:us-east-2:266458841044:function:ACS-3DPointCloudSemanticSegmentation</code> </p> <p> <code>arn:aws:lambda:us-west-2:081040173940:function:ACS-3DPointCloudSemanticSegmentation</code> </p> <p> <code>arn:aws:lambda:eu-west-1:568282634449:function:ACS-3DPointCloudSemanticSegmentation</code> </p> <p> <code>arn:aws:lambda:ap-northeast-1:477331159723:function:ACS-3DPointCloudSemanticSegmentation</code> </p> <p> <code>arn:aws:lambda:ap-southeast-2:454466003867:function:ACS-3DPointCloudSemanticSegmentation</code> </p> <p> <code>arn:aws:lambda:ap-south-1:565803892007:function:ACS-3DPointCloudSemanticSegmentation</code> </p> <p> <code>arn:aws:lambda:eu-central-1:203001061592:function:ACS-3DPointCloudSemanticSegmentation</code> </p> <p> <code>arn:aws:lambda:ap-northeast-2:845288260483:function:ACS-3DPointCloudSemanticSegmentation</code> </p> <p> <code>arn:aws:lambda:eu-west-2:487402164563:function:ACS-3DPointCloudSemanticSegmentation</code> </p> <p> <code>arn:aws:lambda:ap-southeast-1:377565633583:function:ACS-3DPointCloudSemanticSegmentation</code> </p> <p> <code>arn:aws:lambda:ca-central-1:918755190332:function:ACS-3DPointCloudSemanticSegmentation</code> </p> </li> </ul> <p> <b>Use the following ARNs for Label Verification and Adjustment Jobs</b> </p> <p>Use label verification and adjustment jobs to review and adjust labels. To learn more, see <a href="https://docs.aws.amazon.com/sagemaker/latest/dg/sms-verification-data.html">Verify and Adjust Labels </a>.</p> <p> <b>Semantic segmentation adjustment</b> - Treats each pixel in an image as a multi-class classification and treats pixel adjusted annotations from workers as &quot;votes&quot; for the correct label.</p> <ul> <li> <p> <code>arn:aws:lambda:us-east-1:432418664414:function:ACS-AdjustmentSemanticSegmentation</code> </p> <p> <code>arn:aws:lambda:us-east-2:266458841044:function:ACS-AdjustmentSemanticSegmentation</code> </p> <p> <code>arn:aws:lambda:us-west-2:081040173940:function:ACS-AdjustmentSemanticSegmentation</code> </p> <p> <code>arn:aws:lambda:eu-west-1:568282634449:function:ACS-AdjustmentSemanticSegmentation</code> </p> <p> <code>arn:aws:lambda:ap-northeast-1:477331159723:function:ACS-AdjustmentSemanticSegmentation</code> </p> <p> <code>arn:aws:lambda:ap-southeast-2:454466003867:function:ACS-AdjustmentSemanticSegmentation</code> </p> <p> <code>arn:aws:lambda:ap-south-1:565803892007:function:ACS-AdjustmentSemanticSegmentation</code> </p> <p> <code>arn:aws:lambda:eu-central-1:203001061592:function:ACS-AdjustmentSemanticSegmentation</code> </p> <p> <code>arn:aws:lambda:ap-northeast-2:845288260483:function:ACS-AdjustmentSemanticSegmentation</code> </p> <p> <code>arn:aws:lambda:eu-west-2:487402164563:function:ACS-AdjustmentSemanticSegmentation</code> </p> <p> <code>arn:aws:lambda:ap-southeast-1:377565633583:function:ACS-AdjustmentSemanticSegmentation</code> </p> <p> <code>arn:aws:lambda:ca-central-1:918755190332:function:ACS-AdjustmentSemanticSegmentation</code> </p> </li> </ul> <p> <b>Semantic segmentation verification</b> - Uses a variant of the Expectation Maximization approach to estimate the true class of verification judgment for semantic segmentation labels based on annotations from individual workers.</p> <ul> <li> <p> <code>arn:aws:lambda:us-east-1:432418664414:function:ACS-VerificationSemanticSegmentation</code> </p> <p> <code>arn:aws:lambda:us-east-2:266458841044:function:ACS-VerificationSemanticSegmentation</code> </p> <p> <code>arn:aws:lambda:us-west-2:081040173940:function:ACS-VerificationSemanticSegmentation</code> </p> <p> <code>arn:aws:lambda:eu-west-1:568282634449:function:ACS-VerificationSemanticSegmentation</code> </p> <p> <code>arn:aws:lambda:ap-northeast-1:477331159723:function:ACS-VerificationSemanticSegmentation</code> </p> <p> <code>arn:aws:lambda:ap-southeast-2:454466003867:function:ACS-VerificationSemanticSegmentation</code> </p> <p> <code>arn:aws:lambda:ap-south-1:565803892007:function:ACS-VerificationSemanticSegmentation</code> </p> <p> <code>arn:aws:lambda:eu-central-1:203001061592:function:ACS-VerificationSemanticSegmentation</code> </p> <p> <code>arn:aws:lambda:ap-northeast-2:845288260483:function:ACS-VerificationSemanticSegmentation</code> </p> <p> <code>arn:aws:lambda:eu-west-2:487402164563:function:ACS-VerificationSemanticSegmentation</code> </p> <p> <code>arn:aws:lambda:ap-southeast-1:377565633583:function:ACS-VerificationSemanticSegmentation</code> </p> <p> <code>arn:aws:lambda:ca-central-1:918755190332:function:ACS-VerificationSemanticSegmentation</code> </p> </li> </ul> <p> <b>Bounding box verification</b> - Uses a variant of the Expectation Maximization approach to estimate the true class of verification judgement for bounding box labels based on annotations from individual workers.</p> <ul> <li> <p> <code>arn:aws:lambda:us-east-1:432418664414:function:ACS-VerificationBoundingBox</code> </p> <p> <code>arn:aws:lambda:us-east-2:266458841044:function:ACS-VerificationBoundingBox</code> </p> <p> <code>arn:aws:lambda:us-west-2:081040173940:function:ACS-VerificationBoundingBox</code> </p> <p> <code>arn:aws:lambda:eu-west-1:568282634449:function:ACS-VerificationBoundingBox</code> </p> <p> <code>arn:aws:lambda:ap-northeast-1:477331159723:function:ACS-VerificationBoundingBox</code> </p> <p> <code>arn:aws:lambda:ap-southeast-2:454466003867:function:ACS-VerificationBoundingBox</code> </p> <p> <code>arn:aws:lambda:ap-south-1:565803892007:function:ACS-VerificationBoundingBox</code> </p> <p> <code>arn:aws:lambda:eu-central-1:203001061592:function:ACS-VerificationBoundingBox</code> </p> <p> <code>arn:aws:lambda:ap-northeast-2:845288260483:function:ACS-VerificationBoundingBox</code> </p> <p> <code>arn:aws:lambda:eu-west-2:487402164563:function:ACS-VerificationBoundingBox</code> </p> <p> <code>arn:aws:lambda:ap-southeast-1:377565633583:function:ACS-VerificationBoundingBox</code> </p> <p> <code>arn:aws:lambda:ca-central-1:918755190332:function:ACS-VerificationBoundingBox</code> </p> </li> </ul> <p> <b>Bounding box adjustment</b> - Finds the most similar boxes from different workers based on the Jaccard index of the adjusted annotations.</p> <ul> <li> <p> <code>arn:aws:lambda:us-east-1:432418664414:function:ACS-AdjustmentBoundingBox</code> </p> <p> <code>arn:aws:lambda:us-east-2:266458841044:function:ACS-AdjustmentBoundingBox</code> </p> <p> <code>arn:aws:lambda:us-west-2:081040173940:function:ACS-AdjustmentBoundingBox</code> </p> <p> <code>arn:aws:lambda:eu-west-1:568282634449:function:ACS-AdjustmentBoundingBox</code> </p> <p> <code>arn:aws:lambda:ap-northeast-1:477331159723:function:ACS-AdjustmentBoundingBox</code> </p> <p> <code>arn:aws:lambda:ap-southeast-2:454466003867:function:ACS-AdjustmentBoundingBox</code> </p> <p> <code>arn:aws:lambda:ap-south-1:565803892007:function:ACS-AdjustmentBoundingBox</code> </p> <p> <code>arn:aws:lambda:eu-central-1:203001061592:function:ACS-AdjustmentBoundingBox</code> </p> <p> <code>arn:aws:lambda:ap-northeast-2:845288260483:function:ACS-AdjustmentBoundingBox</code> </p> <p> <code>arn:aws:lambda:eu-west-2:487402164563:function:ACS-AdjustmentBoundingBox</code> </p> <p> <code>arn:aws:lambda:ap-southeast-1:377565633583:function:ACS-AdjustmentBoundingBox</code> </p> <p> <code>arn:aws:lambda:ca-central-1:918755190332:function:ACS-AdjustmentBoundingBox</code> </p> </li> </ul> <p> <b>3D point cloud object detection adjustment</b> - Use this task type when you want workers to adjust 3D cuboids around objects in a 3D point cloud. </p> <ul> <li> <p> <code>arn:aws:lambda:us-east-1:432418664414:function:ACS-Adjustment3DPointCloudObjectDetection</code> </p> <p> <code>arn:aws:lambda:us-east-2:266458841044:function:ACS-Adjustment3DPointCloudObjectDetection</code> </p> <p> <code>arn:aws:lambda:us-west-2:081040173940:function:ACS-Adjustment3DPointCloudObjectDetection</code> </p> <p> <code>arn:aws:lambda:eu-west-1:568282634449:function:ACS-Adjustment3DPointCloudObjectDetection</code> </p> <p> <code>arn:aws:lambda:ap-northeast-1:477331159723:function:ACS-Adjustment3DPointCloudObjectDetection</code> </p> <p> <code>arn:aws:lambda:ap-southeast-2:454466003867:function:ACS-Adjustment3DPointCloudObjectDetection</code> </p> <p> <code>arn:aws:lambda:ap-south-1:565803892007:function:ACS-Adjustment3DPointCloudObjectDetection</code> </p> <p> <code>arn:aws:lambda:eu-central-1:203001061592:function:ACS-Adjustment3DPointCloudObjectDetection</code> </p> <p> <code>arn:aws:lambda:ap-northeast-2:845288260483:function:ACS-Adjustment3DPointCloudObjectDetection</code> </p> <p> <code>arn:aws:lambda:eu-west-2:487402164563:function:ACS-Adjustment3DPointCloudObjectDetection</code> </p> <p> <code>arn:aws:lambda:ap-southeast-1:377565633583:function:ACS-Adjustment3DPointCloudObjectDetection</code> </p> <p> <code>arn:aws:lambda:ca-central-1:918755190332:function:ACS-Adjustment3DPointCloudObjectDetection</code> </p> </li> </ul> <p> <b>3D point cloud object tracking adjustment</b> - Use this task type when you want workers to adjust 3D cuboids around objects that appear in a sequence of 3D point cloud frames.</p> <ul> <li> <p> <code>arn:aws:lambda:us-east-1:432418664414:function:ACS-Adjustment3DPointCloudObjectTracking</code> </p> <p> <code>arn:aws:lambda:us-east-2:266458841044:function:ACS-Adjustment3DPointCloudObjectTracking</code> </p> <p> <code>arn:aws:lambda:us-west-2:081040173940:function:ACS-Adjustment3DPointCloudObjectTracking</code> </p> <p> <code>arn:aws:lambda:eu-west-1:568282634449:function:ACS-Adjustment3DPointCloudObjectTracking</code> </p> <p> <code>arn:aws:lambda:ap-northeast-1:477331159723:function:ACS-Adjustment3DPointCloudObjectTracking</code> </p> <p> <code>arn:aws:lambda:ap-southeast-2:454466003867:function:ACS-Adjustment3DPointCloudObjectTracking</code> </p> <p> <code>arn:aws:lambda:ap-south-1:565803892007:function:ACS-Adjustment3DPointCloudObjectTracking</code> </p> <p> <code>arn:aws:lambda:eu-central-1:203001061592:function:ACS-Adjustment3DPointCloudObjectTracking</code> </p> <p> <code>arn:aws:lambda:ap-northeast-2:845288260483:function:ACS-Adjustment3DPointCloudObjectTracking</code> </p> <p> <code>arn:aws:lambda:eu-west-2:487402164563:function:ACS-Adjustment3DPointCloudObjectTracking</code> </p> <p> <code>arn:aws:lambda:ap-southeast-1:377565633583:function:ACS-Adjustment3DPointCloudObjectTracking</code> </p> <p> <code>arn:aws:lambda:ca-central-1:918755190332:function:ACS-Adjustment3DPointCloudObjectTracking</code> </p> </li> </ul> <p> <b>3D point cloud semantic segmentation adjustment</b> - Use this task type when you want workers to adjust a point-level semantic segmentation masks using a paint tool.</p> <ul> <li> <p> <code>arn:aws:lambda:us-east-1:432418664414:function:ACS-Adjustment3DPointCloudSemanticSegmentation</code> </p> <p> <code>arn:aws:lambda:us-east-2:266458841044:function:ACS-Adjustment3DPointCloudSemanticSegmentation</code> </p> <p> <code>arn:aws:lambda:us-west-2:081040173940:function:ACS-Adjustment3DPointCloudSemanticSegmentation</code> </p> <p> <code>arn:aws:lambda:eu-west-1:568282634449:function:ACS-Adjustment3DPointCloudSemanticSegmentation</code> </p> <p> <code>arn:aws:lambda:ap-northeast-1:477331159723:function:ACS-Adjustment3DPointCloudSemanticSegmentation</code> </p> <p> <code>arn:aws:lambda:ap-southeast-2:454466003867:function:ACS-Adjustment3DPointCloudSemanticSegmentation</code> </p> <p> <code>arn:aws:lambda:ap-south-1:565803892007:function:ACS-Adjustment3DPointCloudSemanticSegmentation</code> </p> <p> <code>arn:aws:lambda:eu-central-1:203001061592:function:ACS-Adjustment3DPointCloudSemanticSegmentation</code> </p> <p> <code>arn:aws:lambda:ap-northeast-2:845288260483:function:ACS-Adjustment3DPointCloudSemanticSegmentation</code> </p> <p> <code>arn:aws:lambda:eu-west-2:487402164563:function:ACS-Adjustment3DPointCloudSemanticSegmentation</code> </p> <p> <code>arn:aws:lambda:ap-southeast-1:377565633583:function:ACS-Adjustment3DPointCloudSemanticSegmentation</code> </p> <p> <code>arn:aws:lambda:ca-central-1:918755190332:function:ACS-Adjustment3DPointCloudSemanticSegmentation</code> </p> </li> </ul></p>
+    /// <p><p>The Amazon Resource Name (ARN) of a Lambda function implements the logic for <a href="https://docs.aws.amazon.com/sagemaker/latest/dg/sms-annotation-consolidation.html">annotation consolidation</a> and to process output data.</p> <p>This parameter is required for all labeling jobs. For <a href="https://docs.aws.amazon.com/sagemaker/latest/dg/sms-task-types.html">built-in task types</a>, use one of the following Amazon SageMaker Ground Truth Lambda function ARNs for <code>AnnotationConsolidationLambdaArn</code>. For custom labeling workflows, see <a href="https://docs.aws.amazon.com/sagemaker/latest/dg/sms-custom-templates-step3.html#sms-custom-templates-step3-postlambda">Post-annotation Lambda</a>. </p> <p> <b>Bounding box</b> - Finds the most similar boxes from different workers based on the Jaccard index of the boxes.</p> <ul> <li> <p> <code>arn:aws:lambda:us-east-1:432418664414:function:ACS-BoundingBox</code> </p> <p> <code>arn:aws:lambda:us-east-2:266458841044:function:ACS-BoundingBox</code> </p> <p> <code>arn:aws:lambda:us-west-2:081040173940:function:ACS-BoundingBox</code> </p> <p> <code>arn:aws:lambda:eu-west-1:568282634449:function:ACS-BoundingBox</code> </p> <p> <code>arn:aws:lambda:ap-northeast-1:477331159723:function:ACS-BoundingBox</code> </p> <p> <code>arn:aws:lambda:ap-southeast-2:454466003867:function:ACS-BoundingBox</code> </p> <p> <code>arn:aws:lambda:ap-south-1:565803892007:function:ACS-BoundingBox</code> </p> <p> <code>arn:aws:lambda:eu-central-1:203001061592:function:ACS-BoundingBox</code> </p> <p> <code>arn:aws:lambda:ap-northeast-2:845288260483:function:ACS-BoundingBox</code> </p> <p> <code>arn:aws:lambda:eu-west-2:487402164563:function:ACS-BoundingBox</code> </p> <p> <code>arn:aws:lambda:ap-southeast-1:377565633583:function:ACS-BoundingBox</code> </p> <p> <code>arn:aws:lambda:ca-central-1:918755190332:function:ACS-BoundingBox</code> </p> </li> </ul> <p> <b>Image classification</b> - Uses a variant of the Expectation Maximization approach to estimate the true class of an image based on annotations from individual workers.</p> <ul> <li> <p> <code>arn:aws:lambda:us-east-1:432418664414:function:ACS-ImageMultiClass</code> </p> <p> <code>arn:aws:lambda:us-east-2:266458841044:function:ACS-ImageMultiClass</code> </p> <p> <code>arn:aws:lambda:us-west-2:081040173940:function:ACS-ImageMultiClass</code> </p> <p> <code>arn:aws:lambda:eu-west-1:568282634449:function:ACS-ImageMultiClass</code> </p> <p> <code>arn:aws:lambda:ap-northeast-1:477331159723:function:ACS-ImageMultiClass</code> </p> <p> <code>arn:aws:lambda:ap-southeast-2:454466003867:function:ACS-ImageMultiClass</code> </p> <p> <code>arn:aws:lambda:ap-south-1:565803892007:function:ACS-ImageMultiClass</code> </p> <p> <code>arn:aws:lambda:eu-central-1:203001061592:function:ACS-ImageMultiClass</code> </p> <p> <code>arn:aws:lambda:ap-northeast-2:845288260483:function:ACS-ImageMultiClass</code> </p> <p> <code>arn:aws:lambda:eu-west-2:487402164563:function:ACS-ImageMultiClass</code> </p> <p> <code>arn:aws:lambda:ap-southeast-1:377565633583:function:ACS-ImageMultiClass</code> </p> <p> <code>arn:aws:lambda:ca-central-1:918755190332:function:ACS-ImageMultiClass</code> </p> </li> </ul> <p> <b>Multi-label image classification</b> - Uses a variant of the Expectation Maximization approach to estimate the true classes of an image based on annotations from individual workers.</p> <ul> <li> <p> <code>arn:aws:lambda:us-east-1:432418664414:function:ACS-ImageMultiClassMultiLabel</code> </p> <p> <code>arn:aws:lambda:us-east-2:266458841044:function:ACS-ImageMultiClassMultiLabel</code> </p> <p> <code>arn:aws:lambda:us-west-2:081040173940:function:ACS-ImageMultiClassMultiLabel</code> </p> <p> <code>arn:aws:lambda:eu-west-1:568282634449:function:ACS-ImageMultiClassMultiLabel</code> </p> <p> <code>arn:aws:lambda:ap-northeast-1:477331159723:function:ACS-ImageMultiClassMultiLabel</code> </p> <p> <code>arn:aws:lambda:ap-southeast-2:454466003867:function:ACS-ImageMultiClassMultiLabel</code> </p> <p> <code>arn:aws:lambda:ap-south-1:565803892007:function:ACS-ImageMultiClassMultiLabel</code> </p> <p> <code>arn:aws:lambda:eu-central-1:203001061592:function:ACS-ImageMultiClassMultiLabel</code> </p> <p> <code>arn:aws:lambda:ap-northeast-2:845288260483:function:ACS-ImageMultiClassMultiLabel</code> </p> <p> <code>arn:aws:lambda:eu-west-2:487402164563:function:ACS-ImageMultiClassMultiLabel</code> </p> <p> <code>arn:aws:lambda:ap-southeast-1:377565633583:function:ACS-ImageMultiClassMultiLabel</code> </p> <p> <code>arn:aws:lambda:ca-central-1:918755190332:function:ACS-ImageMultiClassMultiLabel</code> </p> </li> </ul> <p> <b>Semantic segmentation</b> - Treats each pixel in an image as a multi-class classification and treats pixel annotations from workers as &quot;votes&quot; for the correct label.</p> <ul> <li> <p> <code>arn:aws:lambda:us-east-1:432418664414:function:ACS-SemanticSegmentation</code> </p> <p> <code>arn:aws:lambda:us-east-2:266458841044:function:ACS-SemanticSegmentation</code> </p> <p> <code>arn:aws:lambda:us-west-2:081040173940:function:ACS-SemanticSegmentation</code> </p> <p> <code>arn:aws:lambda:eu-west-1:568282634449:function:ACS-SemanticSegmentation</code> </p> <p> <code>arn:aws:lambda:ap-northeast-1:477331159723:function:ACS-SemanticSegmentation</code> </p> <p> <code>arn:aws:lambda:ap-southeast-2:454466003867:function:ACS-SemanticSegmentation</code> </p> <p> <code>arn:aws:lambda:ap-south-1:565803892007:function:ACS-SemanticSegmentation</code> </p> <p> <code>arn:aws:lambda:eu-central-1:203001061592:function:ACS-SemanticSegmentation</code> </p> <p> <code>arn:aws:lambda:ap-northeast-2:845288260483:function:ACS-SemanticSegmentation</code> </p> <p> <code>arn:aws:lambda:eu-west-2:487402164563:function:ACS-SemanticSegmentation</code> </p> <p> <code>arn:aws:lambda:ap-southeast-1:377565633583:function:ACS-SemanticSegmentation</code> </p> <p> <code>arn:aws:lambda:ca-central-1:918755190332:function:ACS-SemanticSegmentation</code> </p> </li> </ul> <p> <b>Text classification</b> - Uses a variant of the Expectation Maximization approach to estimate the true class of text based on annotations from individual workers.</p> <ul> <li> <p> <code>arn:aws:lambda:us-east-1:432418664414:function:ACS-TextMultiClass</code> </p> <p> <code>arn:aws:lambda:us-east-2:266458841044:function:ACS-TextMultiClass</code> </p> <p> <code>arn:aws:lambda:us-west-2:081040173940:function:ACS-TextMultiClass</code> </p> <p> <code>arn:aws:lambda:eu-west-1:568282634449:function:ACS-TextMultiClass</code> </p> <p> <code>arn:aws:lambda:ap-northeast-1:477331159723:function:ACS-TextMultiClass</code> </p> <p> <code>arn:aws:lambda:ap-southeast-2:454466003867:function:ACS-TextMultiClass</code> </p> <p> <code>arn:aws:lambda:ap-south-1:565803892007:function:ACS-TextMultiClass</code> </p> <p> <code>arn:aws:lambda:eu-central-1:203001061592:function:ACS-TextMultiClass</code> </p> <p> <code>arn:aws:lambda:ap-northeast-2:845288260483:function:ACS-TextMultiClass</code> </p> <p> <code>arn:aws:lambda:eu-west-2:487402164563:function:ACS-TextMultiClass</code> </p> <p> <code>arn:aws:lambda:ap-southeast-1:377565633583:function:ACS-TextMultiClass</code> </p> <p> <code>arn:aws:lambda:ca-central-1:918755190332:function:ACS-TextMultiClass</code> </p> </li> </ul> <p> <b>Multi-label text classification</b> - Uses a variant of the Expectation Maximization approach to estimate the true classes of text based on annotations from individual workers.</p> <ul> <li> <p> <code>arn:aws:lambda:us-east-1:432418664414:function:ACS-TextMultiClassMultiLabel</code> </p> <p> <code>arn:aws:lambda:us-east-2:266458841044:function:ACS-TextMultiClassMultiLabel</code> </p> <p> <code>arn:aws:lambda:us-west-2:081040173940:function:ACS-TextMultiClassMultiLabel</code> </p> <p> <code>arn:aws:lambda:eu-west-1:568282634449:function:ACS-TextMultiClassMultiLabel</code> </p> <p> <code>arn:aws:lambda:ap-northeast-1:477331159723:function:ACS-TextMultiClassMultiLabel</code> </p> <p> <code>arn:aws:lambda:ap-southeast-2:454466003867:function:ACS-TextMultiClassMultiLabel</code> </p> <p> <code>arn:aws:lambda:ap-south-1:565803892007:function:ACS-TextMultiClassMultiLabel</code> </p> <p> <code>arn:aws:lambda:eu-central-1:203001061592:function:ACS-TextMultiClassMultiLabel</code> </p> <p> <code>arn:aws:lambda:ap-northeast-2:845288260483:function:ACS-TextMultiClassMultiLabel</code> </p> <p> <code>arn:aws:lambda:eu-west-2:487402164563:function:ACS-TextMultiClassMultiLabel</code> </p> <p> <code>arn:aws:lambda:ap-southeast-1:377565633583:function:ACS-TextMultiClassMultiLabel</code> </p> <p> <code>arn:aws:lambda:ca-central-1:918755190332:function:ACS-TextMultiClassMultiLabel</code> </p> </li> </ul> <p> <b>Named entity recognition</b> - Groups similar selections and calculates aggregate boundaries, resolving to most-assigned label.</p> <ul> <li> <p> <code>arn:aws:lambda:us-east-1:432418664414:function:ACS-NamedEntityRecognition</code> </p> <p> <code>arn:aws:lambda:us-east-2:266458841044:function:ACS-NamedEntityRecognition</code> </p> <p> <code>arn:aws:lambda:us-west-2:081040173940:function:ACS-NamedEntityRecognition</code> </p> <p> <code>arn:aws:lambda:eu-west-1:568282634449:function:ACS-NamedEntityRecognition</code> </p> <p> <code>arn:aws:lambda:ap-northeast-1:477331159723:function:ACS-NamedEntityRecognition</code> </p> <p> <code>arn:aws:lambda:ap-southeast-2:454466003867:function:ACS-NamedEntityRecognition</code> </p> <p> <code>arn:aws:lambda:ap-south-1:565803892007:function:ACS-NamedEntityRecognition</code> </p> <p> <code>arn:aws:lambda:eu-central-1:203001061592:function:ACS-NamedEntityRecognition</code> </p> <p> <code>arn:aws:lambda:ap-northeast-2:845288260483:function:ACS-NamedEntityRecognition</code> </p> <p> <code>arn:aws:lambda:eu-west-2:487402164563:function:ACS-NamedEntityRecognition</code> </p> <p> <code>arn:aws:lambda:ap-southeast-1:377565633583:function:ACS-NamedEntityRecognition</code> </p> <p> <code>arn:aws:lambda:ca-central-1:918755190332:function:ACS-NamedEntityRecognition</code> </p> </li> </ul> <p> <b>Named entity recognition</b> - Groups similar selections and calculates aggregate boundaries, resolving to most-assigned label.</p> <ul> <li> <p> <code>arn:aws:lambda:us-east-1:432418664414:function:ACS-NamedEntityRecognition</code> </p> <p> <code>arn:aws:lambda:us-east-2:266458841044:function:ACS-NamedEntityRecognition</code> </p> <p> <code>arn:aws:lambda:us-west-2:081040173940:function:ACS-NamedEntityRecognition</code> </p> <p> <code>arn:aws:lambda:eu-west-1:568282634449:function:ACS-NamedEntityRecognition</code> </p> <p> <code>arn:aws:lambda:ap-northeast-1:477331159723:function:ACS-NamedEntityRecognition</code> </p> <p> <code>arn:aws:lambda:ap-southeast-2:454466003867:function:ACS-NamedEntityRecognition</code> </p> <p> <code>arn:aws:lambda:ap-south-1:565803892007:function:ACS-NamedEntityRecognition</code> </p> <p> <code>arn:aws:lambda:eu-central-1:203001061592:function:ACS-NamedEntityRecognition</code> </p> <p> <code>arn:aws:lambda:ap-northeast-2:845288260483:function:ACS-NamedEntityRecognition</code> </p> <p> <code>arn:aws:lambda:eu-west-2:487402164563:function:ACS-NamedEntityRecognition</code> </p> <p> <code>arn:aws:lambda:ap-southeast-1:377565633583:function:ACS-NamedEntityRecognition</code> </p> <p> <code>arn:aws:lambda:ca-central-1:918755190332:function:ACS-NamedEntityRecognition</code> </p> </li> </ul> <p> <b>Video Classification</b> - Use this task type when you need workers to classify videos using predefined labels that you specify. Workers are shown videos and are asked to choose one label for each video.</p> <ul> <li> <p> <code>arn:aws:lambda:us-east-1:432418664414:function:ACS-VideoMultiClass</code> </p> <p> <code>arn:aws:lambda:us-east-2:266458841044:function:ACS-VideoMultiClass</code> </p> <p> <code>arn:aws:lambda:us-west-2:081040173940:function:ACS-VideoMultiClass</code> </p> <p> <code>arn:aws:lambda:eu-west-1:568282634449:function:ACS-VideoMultiClass</code> </p> <p> <code>arn:aws:lambda:ap-northeast-1:477331159723:function:ACS-VideoMultiClass</code> </p> <p> <code>arn:aws:lambda:ap-southeast-2:454466003867:function:ACS-VideoMultiClass</code> </p> <p> <code>arn:aws:lambda:ap-south-1:565803892007:function:ACS-VideoMultiClass</code> </p> <p> <code>arn:aws:lambda:eu-central-1:203001061592:function:ACS-VideoMultiClass</code> </p> <p> <code>arn:aws:lambda:ap-northeast-2:845288260483:function:ACS-VideoMultiClass</code> </p> <p> <code>arn:aws:lambda:eu-west-2:487402164563:function:ACS-VideoMultiClass</code> </p> <p> <code>arn:aws:lambda:ap-southeast-1:377565633583:function:ACS-VideoMultiClass</code> </p> <p> <code>arn:aws:lambda:ca-central-1:918755190332:function:ACS-VideoMultiClass</code> </p> </li> </ul> <p> <b>Video Frame Object Detection</b> - Use this task type to have workers identify and locate objects in a sequence of video frames (images extracted from a video) using bounding boxes. For example, you can use this task to ask workers to identify and localize various objects in a series of video frames, such as cars, bikes, and pedestrians.</p> <ul> <li> <p> <code>arn:aws:lambda:us-east-1:432418664414:function:ACS-VideoObjectDetection</code> </p> <p> <code>arn:aws:lambda:us-east-2:266458841044:function:ACS-VideoObjectDetection</code> </p> <p> <code>arn:aws:lambda:us-west-2:081040173940:function:ACS-VideoObjectDetection</code> </p> <p> <code>arn:aws:lambda:eu-west-1:568282634449:function:ACS-VideoObjectDetection</code> </p> <p> <code>arn:aws:lambda:ap-northeast-1:477331159723:function:ACS-VideoObjectDetection</code> </p> <p> <code>arn:aws:lambda:ap-southeast-2:454466003867:function:ACS-VideoObjectDetection</code> </p> <p> <code>arn:aws:lambda:ap-south-1:565803892007:function:ACS-VideoObjectDetection</code> </p> <p> <code>arn:aws:lambda:eu-central-1:203001061592:function:ACS-VideoObjectDetection</code> </p> <p> <code>arn:aws:lambda:ap-northeast-2:845288260483:function:ACS-VideoObjectDetection</code> </p> <p> <code>arn:aws:lambda:eu-west-2:487402164563:function:ACS-VideoObjectDetection</code> </p> <p> <code>arn:aws:lambda:ap-southeast-1:377565633583:function:ACS-VideoObjectDetection</code> </p> <p> <code>arn:aws:lambda:ca-central-1:918755190332:function:ACS-VideoObjectDetection</code> </p> </li> </ul> <p> <b>Video Frame Object Tracking</b> - Use this task type to have workers track the movement of objects in a sequence of video frames (images extracted from a video) using bounding boxes. For example, you can use this task to ask workers to track the movement of objects, such as cars, bikes, and pedestrians. </p> <ul> <li> <p> <code>arn:aws:lambda:us-east-1:432418664414:function:ACS-VideoObjectTracking</code> </p> <p> <code>arn:aws:lambda:us-east-2:266458841044:function:ACS-VideoObjectTracking</code> </p> <p> <code>arn:aws:lambda:us-west-2:081040173940:function:ACS-VideoObjectTracking</code> </p> <p> <code>arn:aws:lambda:eu-west-1:568282634449:function:ACS-VideoObjectTracking</code> </p> <p> <code>arn:aws:lambda:ap-northeast-1:477331159723:function:ACS-VideoObjectTracking</code> </p> <p> <code>arn:aws:lambda:ap-southeast-2:454466003867:function:ACS-VideoObjectTracking</code> </p> <p> <code>arn:aws:lambda:ap-south-1:565803892007:function:ACS-VideoObjectTracking</code> </p> <p> <code>arn:aws:lambda:eu-central-1:203001061592:function:ACS-VideoObjectTracking</code> </p> <p> <code>arn:aws:lambda:ap-northeast-2:845288260483:function:ACS-VideoObjectTracking</code> </p> <p> <code>arn:aws:lambda:eu-west-2:487402164563:function:ACS-VideoObjectTracking</code> </p> <p> <code>arn:aws:lambda:ap-southeast-1:377565633583:function:ACS-VideoObjectTracking</code> </p> <p> <code>arn:aws:lambda:ca-central-1:918755190332:function:ACS-VideoObjectTracking</code> </p> </li> </ul> <p> <b>3D point cloud object detection</b> - Use this task type when you want workers to classify objects in a 3D point cloud by drawing 3D cuboids around objects. For example, you can use this task type to ask workers to identify different types of objects in a point cloud, such as cars, bikes, and pedestrians.</p> <ul> <li> <p> <code>arn:aws:lambda:us-east-1:432418664414:function:ACS-3DPointCloudObjectDetection</code> </p> <p> <code>arn:aws:lambda:us-east-2:266458841044:function:ACS-3DPointCloudObjectDetection</code> </p> <p> <code>arn:aws:lambda:us-west-2:081040173940:function:ACS-3DPointCloudObjectDetection</code> </p> <p> <code>arn:aws:lambda:eu-west-1:568282634449:function:ACS-3DPointCloudObjectDetection</code> </p> <p> <code>arn:aws:lambda:ap-northeast-1:477331159723:function:ACS-3DPointCloudObjectDetection</code> </p> <p> <code>arn:aws:lambda:ap-southeast-2:454466003867:function:ACS-3DPointCloudObjectDetection</code> </p> <p> <code>arn:aws:lambda:ap-south-1:565803892007:function:ACS-3DPointCloudObjectDetection</code> </p> <p> <code>arn:aws:lambda:eu-central-1:203001061592:function:ACS-3DPointCloudObjectDetection</code> </p> <p> <code>arn:aws:lambda:ap-northeast-2:845288260483:function:ACS-3DPointCloudObjectDetection</code> </p> <p> <code>arn:aws:lambda:eu-west-2:487402164563:function:ACS-3DPointCloudObjectDetection</code> </p> <p> <code>arn:aws:lambda:ap-southeast-1:377565633583:function:ACS-3DPointCloudObjectDetection</code> </p> <p> <code>arn:aws:lambda:ca-central-1:918755190332:function:ACS-3DPointCloudObjectDetection</code> </p> </li> </ul> <p> <b>3D point cloud object tracking</b> - Use this task type when you want workers to draw 3D cuboids around objects that appear in a sequence of 3D point cloud frames. For example, you can use this task type to ask workers to track the movement of vehicles across multiple point cloud frames. </p> <ul> <li> <p> <code>arn:aws:lambda:us-east-1:432418664414:function:ACS-3DPointCloudObjectTracking</code> </p> <p> <code>arn:aws:lambda:us-east-2:266458841044:function:ACS-3DPointCloudObjectTracking</code> </p> <p> <code>arn:aws:lambda:us-west-2:081040173940:function:ACS-3DPointCloudObjectTracking</code> </p> <p> <code>arn:aws:lambda:eu-west-1:568282634449:function:ACS-3DPointCloudObjectTracking</code> </p> <p> <code>arn:aws:lambda:ap-northeast-1:477331159723:function:ACS-3DPointCloudObjectTracking</code> </p> <p> <code>arn:aws:lambda:ap-southeast-2:454466003867:function:ACS-3DPointCloudObjectTracking</code> </p> <p> <code>arn:aws:lambda:ap-south-1:565803892007:function:ACS-3DPointCloudObjectTracking</code> </p> <p> <code>arn:aws:lambda:eu-central-1:203001061592:function:ACS-3DPointCloudObjectTracking</code> </p> <p> <code>arn:aws:lambda:ap-northeast-2:845288260483:function:ACS-3DPointCloudObjectTracking</code> </p> <p> <code>arn:aws:lambda:eu-west-2:487402164563:function:ACS-3DPointCloudObjectTracking</code> </p> <p> <code>arn:aws:lambda:ap-southeast-1:377565633583:function:ACS-3DPointCloudObjectTracking</code> </p> <p> <code>arn:aws:lambda:ca-central-1:918755190332:function:ACS-3DPointCloudObjectTracking</code> </p> </li> </ul> <p> <b>3D point cloud semantic segmentation</b> - Use this task type when you want workers to create a point-level semantic segmentation masks by painting objects in a 3D point cloud using different colors where each color is assigned to one of the classes you specify.</p> <ul> <li> <p> <code>arn:aws:lambda:us-east-1:432418664414:function:ACS-3DPointCloudSemanticSegmentation</code> </p> <p> <code>arn:aws:lambda:us-east-2:266458841044:function:ACS-3DPointCloudSemanticSegmentation</code> </p> <p> <code>arn:aws:lambda:us-west-2:081040173940:function:ACS-3DPointCloudSemanticSegmentation</code> </p> <p> <code>arn:aws:lambda:eu-west-1:568282634449:function:ACS-3DPointCloudSemanticSegmentation</code> </p> <p> <code>arn:aws:lambda:ap-northeast-1:477331159723:function:ACS-3DPointCloudSemanticSegmentation</code> </p> <p> <code>arn:aws:lambda:ap-southeast-2:454466003867:function:ACS-3DPointCloudSemanticSegmentation</code> </p> <p> <code>arn:aws:lambda:ap-south-1:565803892007:function:ACS-3DPointCloudSemanticSegmentation</code> </p> <p> <code>arn:aws:lambda:eu-central-1:203001061592:function:ACS-3DPointCloudSemanticSegmentation</code> </p> <p> <code>arn:aws:lambda:ap-northeast-2:845288260483:function:ACS-3DPointCloudSemanticSegmentation</code> </p> <p> <code>arn:aws:lambda:eu-west-2:487402164563:function:ACS-3DPointCloudSemanticSegmentation</code> </p> <p> <code>arn:aws:lambda:ap-southeast-1:377565633583:function:ACS-3DPointCloudSemanticSegmentation</code> </p> <p> <code>arn:aws:lambda:ca-central-1:918755190332:function:ACS-3DPointCloudSemanticSegmentation</code> </p> </li> </ul> <p> <b>Use the following ARNs for Label Verification and Adjustment Jobs</b> </p> <p>Use label verification and adjustment jobs to review and adjust labels. To learn more, see <a href="https://docs.aws.amazon.com/sagemaker/latest/dg/sms-verification-data.html">Verify and Adjust Labels </a>.</p> <p> <b>Semantic segmentation adjustment</b> - Treats each pixel in an image as a multi-class classification and treats pixel adjusted annotations from workers as &quot;votes&quot; for the correct label.</p> <ul> <li> <p> <code>arn:aws:lambda:us-east-1:432418664414:function:ACS-AdjustmentSemanticSegmentation</code> </p> <p> <code>arn:aws:lambda:us-east-2:266458841044:function:ACS-AdjustmentSemanticSegmentation</code> </p> <p> <code>arn:aws:lambda:us-west-2:081040173940:function:ACS-AdjustmentSemanticSegmentation</code> </p> <p> <code>arn:aws:lambda:eu-west-1:568282634449:function:ACS-AdjustmentSemanticSegmentation</code> </p> <p> <code>arn:aws:lambda:ap-northeast-1:477331159723:function:ACS-AdjustmentSemanticSegmentation</code> </p> <p> <code>arn:aws:lambda:ap-southeast-2:454466003867:function:ACS-AdjustmentSemanticSegmentation</code> </p> <p> <code>arn:aws:lambda:ap-south-1:565803892007:function:ACS-AdjustmentSemanticSegmentation</code> </p> <p> <code>arn:aws:lambda:eu-central-1:203001061592:function:ACS-AdjustmentSemanticSegmentation</code> </p> <p> <code>arn:aws:lambda:ap-northeast-2:845288260483:function:ACS-AdjustmentSemanticSegmentation</code> </p> <p> <code>arn:aws:lambda:eu-west-2:487402164563:function:ACS-AdjustmentSemanticSegmentation</code> </p> <p> <code>arn:aws:lambda:ap-southeast-1:377565633583:function:ACS-AdjustmentSemanticSegmentation</code> </p> <p> <code>arn:aws:lambda:ca-central-1:918755190332:function:ACS-AdjustmentSemanticSegmentation</code> </p> </li> </ul> <p> <b>Semantic segmentation verification</b> - Uses a variant of the Expectation Maximization approach to estimate the true class of verification judgment for semantic segmentation labels based on annotations from individual workers.</p> <ul> <li> <p> <code>arn:aws:lambda:us-east-1:432418664414:function:ACS-VerificationSemanticSegmentation</code> </p> <p> <code>arn:aws:lambda:us-east-2:266458841044:function:ACS-VerificationSemanticSegmentation</code> </p> <p> <code>arn:aws:lambda:us-west-2:081040173940:function:ACS-VerificationSemanticSegmentation</code> </p> <p> <code>arn:aws:lambda:eu-west-1:568282634449:function:ACS-VerificationSemanticSegmentation</code> </p> <p> <code>arn:aws:lambda:ap-northeast-1:477331159723:function:ACS-VerificationSemanticSegmentation</code> </p> <p> <code>arn:aws:lambda:ap-southeast-2:454466003867:function:ACS-VerificationSemanticSegmentation</code> </p> <p> <code>arn:aws:lambda:ap-south-1:565803892007:function:ACS-VerificationSemanticSegmentation</code> </p> <p> <code>arn:aws:lambda:eu-central-1:203001061592:function:ACS-VerificationSemanticSegmentation</code> </p> <p> <code>arn:aws:lambda:ap-northeast-2:845288260483:function:ACS-VerificationSemanticSegmentation</code> </p> <p> <code>arn:aws:lambda:eu-west-2:487402164563:function:ACS-VerificationSemanticSegmentation</code> </p> <p> <code>arn:aws:lambda:ap-southeast-1:377565633583:function:ACS-VerificationSemanticSegmentation</code> </p> <p> <code>arn:aws:lambda:ca-central-1:918755190332:function:ACS-VerificationSemanticSegmentation</code> </p> </li> </ul> <p> <b>Bounding box verification</b> - Uses a variant of the Expectation Maximization approach to estimate the true class of verification judgement for bounding box labels based on annotations from individual workers.</p> <ul> <li> <p> <code>arn:aws:lambda:us-east-1:432418664414:function:ACS-VerificationBoundingBox</code> </p> <p> <code>arn:aws:lambda:us-east-2:266458841044:function:ACS-VerificationBoundingBox</code> </p> <p> <code>arn:aws:lambda:us-west-2:081040173940:function:ACS-VerificationBoundingBox</code> </p> <p> <code>arn:aws:lambda:eu-west-1:568282634449:function:ACS-VerificationBoundingBox</code> </p> <p> <code>arn:aws:lambda:ap-northeast-1:477331159723:function:ACS-VerificationBoundingBox</code> </p> <p> <code>arn:aws:lambda:ap-southeast-2:454466003867:function:ACS-VerificationBoundingBox</code> </p> <p> <code>arn:aws:lambda:ap-south-1:565803892007:function:ACS-VerificationBoundingBox</code> </p> <p> <code>arn:aws:lambda:eu-central-1:203001061592:function:ACS-VerificationBoundingBox</code> </p> <p> <code>arn:aws:lambda:ap-northeast-2:845288260483:function:ACS-VerificationBoundingBox</code> </p> <p> <code>arn:aws:lambda:eu-west-2:487402164563:function:ACS-VerificationBoundingBox</code> </p> <p> <code>arn:aws:lambda:ap-southeast-1:377565633583:function:ACS-VerificationBoundingBox</code> </p> <p> <code>arn:aws:lambda:ca-central-1:918755190332:function:ACS-VerificationBoundingBox</code> </p> </li> </ul> <p> <b>Bounding box adjustment</b> - Finds the most similar boxes from different workers based on the Jaccard index of the adjusted annotations.</p> <ul> <li> <p> <code>arn:aws:lambda:us-east-1:432418664414:function:ACS-AdjustmentBoundingBox</code> </p> <p> <code>arn:aws:lambda:us-east-2:266458841044:function:ACS-AdjustmentBoundingBox</code> </p> <p> <code>arn:aws:lambda:us-west-2:081040173940:function:ACS-AdjustmentBoundingBox</code> </p> <p> <code>arn:aws:lambda:eu-west-1:568282634449:function:ACS-AdjustmentBoundingBox</code> </p> <p> <code>arn:aws:lambda:ap-northeast-1:477331159723:function:ACS-AdjustmentBoundingBox</code> </p> <p> <code>arn:aws:lambda:ap-southeast-2:454466003867:function:ACS-AdjustmentBoundingBox</code> </p> <p> <code>arn:aws:lambda:ap-south-1:565803892007:function:ACS-AdjustmentBoundingBox</code> </p> <p> <code>arn:aws:lambda:eu-central-1:203001061592:function:ACS-AdjustmentBoundingBox</code> </p> <p> <code>arn:aws:lambda:ap-northeast-2:845288260483:function:ACS-AdjustmentBoundingBox</code> </p> <p> <code>arn:aws:lambda:eu-west-2:487402164563:function:ACS-AdjustmentBoundingBox</code> </p> <p> <code>arn:aws:lambda:ap-southeast-1:377565633583:function:ACS-AdjustmentBoundingBox</code> </p> <p> <code>arn:aws:lambda:ca-central-1:918755190332:function:ACS-AdjustmentBoundingBox</code> </p> </li> </ul> <p> <b>Video Frame Object Detection Adjustment</b> - Use this task type when you want workers to adjust bounding boxes that workers have added to video frames to classify and localize objects in a sequence of video frames.</p> <ul> <li> <p> <code>arn:aws:lambda:us-east-1:432418664414:function:ACS-AdjustmentVideoObjectDetection</code> </p> <p> <code>arn:aws:lambda:us-east-2:266458841044:function:ACS-AdjustmentVideoObjectDetection</code> </p> <p> <code>arn:aws:lambda:us-west-2:081040173940:function:ACS-AdjustmentVideoObjectDetection</code> </p> <p> <code>arn:aws:lambda:eu-west-1:568282634449:function:ACS-AdjustmentVideoObjectDetection</code> </p> <p> <code>arn:aws:lambda:ap-northeast-1:477331159723:function:ACS-AdjustmentVideoObjectDetection</code> </p> <p> <code>arn:aws:lambda:ap-southeast-2:454466003867:function:ACS-AdjustmentVideoObjectDetection</code> </p> <p> <code>arn:aws:lambda:ap-south-1:565803892007:function:ACS-AdjustmentVideoObjectDetection</code> </p> <p> <code>arn:aws:lambda:eu-central-1:203001061592:function:ACS-AdjustmentVideoObjectDetection</code> </p> <p> <code>arn:aws:lambda:ap-northeast-2:845288260483:function:ACS-AdjustmentVideoObjectDetection</code> </p> <p> <code>arn:aws:lambda:eu-west-2:487402164563:function:ACS-AdjustmentVideoObjectDetection</code> </p> <p> <code>arn:aws:lambda:ap-southeast-1:377565633583:function:ACS-AdjustmentVideoObjectDetection</code> </p> <p> <code>arn:aws:lambda:ca-central-1:918755190332:function:ACS-AdjustmentVideoObjectDetection</code> </p> </li> </ul> <p> <b>Video Frame Object Tracking Adjustment</b> - Use this task type when you want workers to adjust bounding boxes that workers have added to video frames to track object movement across a sequence of video frames.</p> <ul> <li> <p> <code>arn:aws:lambda:us-east-1:432418664414:function:ACS-AdjustmentVideoObjectTracking</code> </p> <p> <code>arn:aws:lambda:us-east-2:266458841044:function:ACS-AdjustmentVideoObjectTracking</code> </p> <p> <code>arn:aws:lambda:us-west-2:081040173940:function:ACS-AdjustmentVideoObjectTracking</code> </p> <p> <code>arn:aws:lambda:eu-west-1:568282634449:function:ACS-AdjustmentVideoObjectTracking</code> </p> <p> <code>arn:aws:lambda:ap-northeast-1:477331159723:function:ACS-AdjustmentVideoObjectTracking</code> </p> <p> <code>arn:aws:lambda:ap-southeast-2:454466003867:function:ACS-AdjustmentVideoObjectTracking</code> </p> <p> <code>arn:aws:lambda:ap-south-1:565803892007:function:ACS-AdjustmentVideoObjectTracking</code> </p> <p> <code>arn:aws:lambda:eu-central-1:203001061592:function:ACS-AdjustmentVideoObjectTracking</code> </p> <p> <code>arn:aws:lambda:ap-northeast-2:845288260483:function:ACS-AdjustmentVideoObjectTracking</code> </p> <p> <code>arn:aws:lambda:eu-west-2:487402164563:function:ACS-AdjustmentVideoObjectTracking</code> </p> <p> <code>arn:aws:lambda:ap-southeast-1:377565633583:function:ACS-AdjustmentVideoObjectTracking</code> </p> <p> <code>arn:aws:lambda:ca-central-1:918755190332:function:ACS-AdjustmentVideoObjectTracking</code> </p> </li> </ul> <p> <b>3D point cloud object detection adjustment</b> - Use this task type when you want workers to adjust 3D cuboids around objects in a 3D point cloud. </p> <ul> <li> <p> <code>arn:aws:lambda:us-east-1:432418664414:function:ACS-Adjustment3DPointCloudObjectDetection</code> </p> <p> <code>arn:aws:lambda:us-east-2:266458841044:function:ACS-Adjustment3DPointCloudObjectDetection</code> </p> <p> <code>arn:aws:lambda:us-west-2:081040173940:function:ACS-Adjustment3DPointCloudObjectDetection</code> </p> <p> <code>arn:aws:lambda:eu-west-1:568282634449:function:ACS-Adjustment3DPointCloudObjectDetection</code> </p> <p> <code>arn:aws:lambda:ap-northeast-1:477331159723:function:ACS-Adjustment3DPointCloudObjectDetection</code> </p> <p> <code>arn:aws:lambda:ap-southeast-2:454466003867:function:ACS-Adjustment3DPointCloudObjectDetection</code> </p> <p> <code>arn:aws:lambda:ap-south-1:565803892007:function:ACS-Adjustment3DPointCloudObjectDetection</code> </p> <p> <code>arn:aws:lambda:eu-central-1:203001061592:function:ACS-Adjustment3DPointCloudObjectDetection</code> </p> <p> <code>arn:aws:lambda:ap-northeast-2:845288260483:function:ACS-Adjustment3DPointCloudObjectDetection</code> </p> <p> <code>arn:aws:lambda:eu-west-2:487402164563:function:ACS-Adjustment3DPointCloudObjectDetection</code> </p> <p> <code>arn:aws:lambda:ap-southeast-1:377565633583:function:ACS-Adjustment3DPointCloudObjectDetection</code> </p> <p> <code>arn:aws:lambda:ca-central-1:918755190332:function:ACS-Adjustment3DPointCloudObjectDetection</code> </p> </li> </ul> <p> <b>3D point cloud object tracking adjustment</b> - Use this task type when you want workers to adjust 3D cuboids around objects that appear in a sequence of 3D point cloud frames.</p> <ul> <li> <p> <code>arn:aws:lambda:us-east-1:432418664414:function:ACS-Adjustment3DPointCloudObjectTracking</code> </p> <p> <code>arn:aws:lambda:us-east-2:266458841044:function:ACS-Adjustment3DPointCloudObjectTracking</code> </p> <p> <code>arn:aws:lambda:us-west-2:081040173940:function:ACS-Adjustment3DPointCloudObjectTracking</code> </p> <p> <code>arn:aws:lambda:eu-west-1:568282634449:function:ACS-Adjustment3DPointCloudObjectTracking</code> </p> <p> <code>arn:aws:lambda:ap-northeast-1:477331159723:function:ACS-Adjustment3DPointCloudObjectTracking</code> </p> <p> <code>arn:aws:lambda:ap-southeast-2:454466003867:function:ACS-Adjustment3DPointCloudObjectTracking</code> </p> <p> <code>arn:aws:lambda:ap-south-1:565803892007:function:ACS-Adjustment3DPointCloudObjectTracking</code> </p> <p> <code>arn:aws:lambda:eu-central-1:203001061592:function:ACS-Adjustment3DPointCloudObjectTracking</code> </p> <p> <code>arn:aws:lambda:ap-northeast-2:845288260483:function:ACS-Adjustment3DPointCloudObjectTracking</code> </p> <p> <code>arn:aws:lambda:eu-west-2:487402164563:function:ACS-Adjustment3DPointCloudObjectTracking</code> </p> <p> <code>arn:aws:lambda:ap-southeast-1:377565633583:function:ACS-Adjustment3DPointCloudObjectTracking</code> </p> <p> <code>arn:aws:lambda:ca-central-1:918755190332:function:ACS-Adjustment3DPointCloudObjectTracking</code> </p> </li> </ul> <p> <b>3D point cloud semantic segmentation adjustment</b> - Use this task type when you want workers to adjust a point-level semantic segmentation masks using a paint tool.</p> <ul> <li> <p> <code>arn:aws:lambda:us-east-1:432418664414:function:ACS-Adjustment3DPointCloudSemanticSegmentation</code> </p> <p> <code>arn:aws:lambda:us-east-2:266458841044:function:ACS-Adjustment3DPointCloudSemanticSegmentation</code> </p> <p> <code>arn:aws:lambda:us-west-2:081040173940:function:ACS-Adjustment3DPointCloudSemanticSegmentation</code> </p> <p> <code>arn:aws:lambda:eu-west-1:568282634449:function:ACS-Adjustment3DPointCloudSemanticSegmentation</code> </p> <p> <code>arn:aws:lambda:ap-northeast-1:477331159723:function:ACS-Adjustment3DPointCloudSemanticSegmentation</code> </p> <p> <code>arn:aws:lambda:ap-southeast-2:454466003867:function:ACS-Adjustment3DPointCloudSemanticSegmentation</code> </p> <p> <code>arn:aws:lambda:ap-south-1:565803892007:function:ACS-Adjustment3DPointCloudSemanticSegmentation</code> </p> <p> <code>arn:aws:lambda:eu-central-1:203001061592:function:ACS-Adjustment3DPointCloudSemanticSegmentation</code> </p> <p> <code>arn:aws:lambda:ap-northeast-2:845288260483:function:ACS-Adjustment3DPointCloudSemanticSegmentation</code> </p> <p> <code>arn:aws:lambda:eu-west-2:487402164563:function:ACS-Adjustment3DPointCloudSemanticSegmentation</code> </p> <p> <code>arn:aws:lambda:ap-southeast-1:377565633583:function:ACS-Adjustment3DPointCloudSemanticSegmentation</code> </p> <p> <code>arn:aws:lambda:ca-central-1:918755190332:function:ACS-Adjustment3DPointCloudSemanticSegmentation</code> </p> </li> </ul></p>
     #[serde(rename = "AnnotationConsolidationLambdaArn")]
     pub annotation_consolidation_lambda_arn: String,
 }
 
-/// <p>The app's details.</p>
+/// <p>Details about an Amazon SageMaker app.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct AppDetails {
@@ -211,6 +310,32 @@ pub struct AppDetails {
     pub user_profile_name: Option<String>,
 }
 
+/// <p>The configuration for running a SageMaker image as a KernelGateway app.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct AppImageConfigDetails {
+    /// <p>The Amazon Resource Name (ARN) of the AppImageConfig.</p>
+    #[serde(rename = "AppImageConfigArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub app_image_config_arn: Option<String>,
+    /// <p>The name of the AppImageConfig. Must be unique to your account.</p>
+    #[serde(rename = "AppImageConfigName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub app_image_config_name: Option<String>,
+    /// <p>When the AppImageConfig was created.</p>
+    #[serde(rename = "CreationTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub creation_time: Option<f64>,
+    /// <p>The configuration for the file system and kernels in the SageMaker image.</p>
+    #[serde(rename = "KernelGatewayImageConfig")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub kernel_gateway_image_config: Option<KernelGatewayImageConfig>,
+    /// <p>When the AppImageConfig was last modified.</p>
+    #[serde(rename = "LastModifiedTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub last_modified_time: Option<f64>,
+}
+
 /// <p>Configuration to run a processing job in a specified container image.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct AppSpecification {
@@ -225,6 +350,59 @@ pub struct AppSpecification {
     /// <p>The container image to be run by the processing job.</p>
     #[serde(rename = "ImageUri")]
     pub image_uri: String,
+}
+
+/// <p>A structure describing the source of an artifact.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
+pub struct ArtifactSource {
+    /// <p>A list of source types.</p>
+    #[serde(rename = "SourceTypes")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub source_types: Option<Vec<ArtifactSourceType>>,
+    /// <p>The URI of the source.</p>
+    #[serde(rename = "SourceUri")]
+    pub source_uri: String,
+}
+
+/// <p>The ID and ID type of an artifact source.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
+pub struct ArtifactSourceType {
+    /// <p>The type of ID.</p>
+    #[serde(rename = "SourceIdType")]
+    pub source_id_type: String,
+    /// <p>The ID.</p>
+    #[serde(rename = "Value")]
+    pub value: String,
+}
+
+/// <p>Lists a summary of the properties of an artifact. An artifact represents a URI addressable object or data. Some examples are a dataset and a model.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct ArtifactSummary {
+    /// <p>The Amazon Resource Name (ARN) of the artifact.</p>
+    #[serde(rename = "ArtifactArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub artifact_arn: Option<String>,
+    /// <p>The name of the artifact.</p>
+    #[serde(rename = "ArtifactName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub artifact_name: Option<String>,
+    /// <p>The type of the artifact.</p>
+    #[serde(rename = "ArtifactType")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub artifact_type: Option<String>,
+    /// <p>When the artifact was created.</p>
+    #[serde(rename = "CreationTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub creation_time: Option<f64>,
+    /// <p>When the artifact was last modified.</p>
+    #[serde(rename = "LastModifiedTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub last_modified_time: Option<f64>,
+    /// <p>The source of the artifact.</p>
+    #[serde(rename = "Source")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub source: Option<ArtifactSource>,
 }
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
@@ -251,7 +429,74 @@ pub struct AssociateTrialComponentResponse {
     pub trial_component_arn: Option<String>,
 }
 
-/// <p>An AutoPilot job will return recommendations, or candidates. Each candidate has futher details about the steps involed, and the status.</p>
+/// <p>Lists a summary of the properties of an association. An association is an entity that links other lineage or experiment entities. An example would be an association between a training job and a model.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct AssociationSummary {
+    /// <p>The type of the association.</p>
+    #[serde(rename = "AssociationType")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub association_type: Option<String>,
+    #[serde(rename = "CreatedBy")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub created_by: Option<UserContext>,
+    /// <p>When the association was created.</p>
+    #[serde(rename = "CreationTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub creation_time: Option<f64>,
+    /// <p>The Amazon Resource Name (ARN) of the destination.</p>
+    #[serde(rename = "DestinationArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub destination_arn: Option<String>,
+    /// <p>The name of the destination.</p>
+    #[serde(rename = "DestinationName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub destination_name: Option<String>,
+    /// <p>The destination type.</p>
+    #[serde(rename = "DestinationType")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub destination_type: Option<String>,
+    /// <p>The ARN of the source.</p>
+    #[serde(rename = "SourceArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub source_arn: Option<String>,
+    /// <p>The name of the source.</p>
+    #[serde(rename = "SourceName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub source_name: Option<String>,
+    /// <p>The source type.</p>
+    #[serde(rename = "SourceType")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub source_type: Option<String>,
+}
+
+/// <p>Configuration for Athena Dataset Definition input.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
+pub struct AthenaDatasetDefinition {
+    #[serde(rename = "Catalog")]
+    pub catalog: String,
+    #[serde(rename = "Database")]
+    pub database: String,
+    /// <p>The AWS Key Management Service (AWS KMS) key that Amazon SageMaker uses to encrypt data generated from an Athena query execution.</p>
+    #[serde(rename = "KmsKeyId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub kms_key_id: Option<String>,
+    #[serde(rename = "OutputCompression")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub output_compression: Option<String>,
+    #[serde(rename = "OutputFormat")]
+    pub output_format: String,
+    /// <p>The location in Amazon S3 where Athena query results are stored.</p>
+    #[serde(rename = "OutputS3Uri")]
+    pub output_s3_uri: String,
+    #[serde(rename = "QueryString")]
+    pub query_string: String,
+    #[serde(rename = "WorkGroup")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub work_group: Option<String>,
+}
+
+/// <p>An Autopilot job returns recommendations, or candidates. Each candidate has futher details about the steps involed, and the status.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct AutoMLCandidate {
@@ -336,10 +581,10 @@ pub struct AutoMLContainerDefinition {
     pub model_data_url: String,
 }
 
-/// <p>The data source for the AutoPilot job.</p>
+/// <p>The data source for the Autopilot job.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct AutoMLDataSource {
-    /// <p><p>The Amazon S3 location of the input data.</p> <note> <p>The input data must be in CSV format and contain at least 1000 rows.</p> </note></p>
+    /// <p><p>The Amazon S3 location of the input data.</p> <note> <p>The input data must be in CSV format and contain at least 500 rows.</p> </note></p>
     #[serde(rename = "S3DataSource")]
     pub s3_data_source: AutoMLS3DataSource,
 }
@@ -388,10 +633,10 @@ pub struct AutoMLJobConfig {
     pub security_config: Option<AutoMLSecurityConfig>,
 }
 
-/// <p>Applies a metric to minimize or maximize for the job's objective.</p>
+/// <p>Specifies a metric to minimize or maximize as the objective of a job.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct AutoMLJobObjective {
-    /// <p>The name of the metric.</p>
+    /// <p><p>The name of the objective metric used to measure the predictive quality of a machine learning system. This metric is optimized during training to provide the best estimate for model parameter values from data.</p> <p>Here are the options:</p> <ul> <li> <p> <code>MSE</code>: The mean squared error (MSE) is the average of the squared differences between the predicted and actual values. It is used for regression. MSE values are always positive, the better a model is at predicting the actual values the smaller the MSE value. When the data contains outliers, they tend to dominate the MSE which might cause subpar prediction performance.</p> </li> <li> <p> <code>Accuracy</code>: The ratio of the number correctly classified items to the total number (correctly and incorrectly) classified. It is used for binary and multiclass classification. Measures how close the predicted class values are to the actual values. Accuracy values vary between zero and one, one being perfect accuracy and zero perfect inaccuracy.</p> </li> <li> <p> <code>F1</code>: The F1 score is the harmonic mean of the precision and recall. It is used for binary classification into classes traditionally referred to as positive and negative. Predictions are said to be true when they match their actual (correct) class; false when they do not. Precision is the ratio of the true positive predictions to all positive predictions (including the false positives) in a data set and measures the quality of the prediction when it predicts the positive class. Recall (or sensitivity) is the ratio of the true positive predictions to all actual positive instances and measures how completely a model predicts the actual class members in a data set. The standard F1 score weighs precision and recall equally. But which metric is paramount typically depends on specific aspects of a problem. F1 scores vary between zero and one, one being the best possible performance and zero the worst.</p> </li> <li> <p> <code>AUC</code>: The area under the curve (AUC) metric is used to compare and evaluate binary classification by algorithms such as logistic regression that return probabilities. A threshold is needed to map the probabilities into classifications. The relevant curve is the receiver operating characteristic curve that plots the true positive rate (TPR) of predictions (or recall) against the false positive rate (FPR) as a function of the threshold value, above which a prediction is considered positive. Increasing the threshold results in fewer false positives but more false negatives. AUC is the area under this receiver operating characteristic curve and so provides an aggregated measure of the model performance across all possible classification thresholds. The AUC score can also be interpreted as the probability that a randomly selected positive data point is more likely to be predicted positive than a randomly selected negative example. AUC scores vary between zero and one, one being perfect accuracy and one half not better than a random classifier. Values less that one half predict worse than a random predictor and such consistently bad predictors can be inverted to obtain better than random predictors.</p> </li> <li> <p> <code>F1macro</code>: The F1macro score applies F1 scoring to multiclass classification. In this context, you have multiple classes to predict. You just calculate the precision and recall for each class as you did for the positive class in binary classification. Then used these values to calculate the F1 score for each class and average them to obtain the F1macro score. F1macro scores vary between zero and one, one being the best possible performance and zero the worst.</p> </li> </ul> <p>If you do not specify a metric explicitly, the default behavior is to automatically use:</p> <ul> <li> <p> <code>MSE</code>: for regression.</p> </li> <li> <p> <code>F1</code>: for binary classification</p> </li> <li> <p> <code>Accuracy</code>: for multiclass classification.</p> </li> </ul></p>
     #[serde(rename = "MetricName")]
     pub metric_name: String,
 }
@@ -415,11 +660,11 @@ pub struct AutoMLJobSummary {
     /// <p>When the job was created.</p>
     #[serde(rename = "CreationTime")]
     pub creation_time: f64,
-    /// <p>The end time.</p>
+    /// <p>The end time of an AutoML job.</p>
     #[serde(rename = "EndTime")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub end_time: Option<f64>,
-    /// <p>The failure reason.</p>
+    /// <p>The failure reason of a job.</p>
     #[serde(rename = "FailureReason")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub failure_reason: Option<String>,
@@ -466,6 +711,61 @@ pub struct AutoMLSecurityConfig {
     #[serde(rename = "VpcConfig")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub vpc_config: Option<VpcConfig>,
+}
+
+/// <p>Currently, the <code>AutoRollbackConfig</code> API is not supported.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
+pub struct AutoRollbackConfig {
+    /// <p><p/></p>
+    #[serde(rename = "Alarms")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub alarms: Option<Vec<Alarm>>,
+}
+
+/// <p>Contains bias metrics for a model.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
+pub struct Bias {
+    /// <p>The bias report for a model</p>
+    #[serde(rename = "Report")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub report: Option<MetricsSource>,
+}
+
+/// <p>Currently, the <code>BlueGreenUpdatePolicy</code> API is not supported.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
+pub struct BlueGreenUpdatePolicy {
+    /// <p><p/></p>
+    #[serde(rename = "MaximumExecutionTimeoutInSeconds")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub maximum_execution_timeout_in_seconds: Option<i64>,
+    /// <p><p/></p>
+    #[serde(rename = "TerminationWaitInSeconds")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub termination_wait_in_seconds: Option<i64>,
+    /// <p><p/></p>
+    #[serde(rename = "TrafficRoutingConfiguration")]
+    pub traffic_routing_configuration: TrafficRoutingConfig,
+}
+
+/// <p>Details on the cache hit of a pipeline execution step.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct CacheHitResult {
+    /// <p>The Amazon Resource Name (ARN) of the pipeline execution.</p>
+    #[serde(rename = "SourcePipelineExecutionArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub source_pipeline_execution_arn: Option<String>,
+}
+
+/// <p>Currently, the <code>CapacitySize</code> API is not supported.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
+pub struct CapacitySize {
+    /// <p>This API is not supported.</p>
+    #[serde(rename = "Type")]
+    pub type_: String,
+    /// <p><p/></p>
+    #[serde(rename = "Value")]
+    pub value: i64,
 }
 
 /// <p><p/></p>
@@ -599,6 +899,17 @@ pub struct CodeRepositorySummary {
     pub last_modified_time: f64,
 }
 
+/// <p>Use this parameter to configure your Amazon Cognito workforce. A single Cognito workforce is created using and corresponds to a single <a href="https://docs.aws.amazon.com/cognito/latest/developerguide/cognito-user-identity-pools.html"> Amazon Cognito user pool</a>.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
+pub struct CognitoConfig {
+    /// <p>The client ID for your Amazon Cognito user pool.</p>
+    #[serde(rename = "ClientId")]
+    pub client_id: String,
+    /// <p>A <a href="https://docs.aws.amazon.com/cognito/latest/developerguide/cognito-user-identity-pools.html"> user pool</a> is a user directory in Amazon Cognito. With a user pool, your users can sign in to your web or mobile app through Amazon Cognito. Your users can also sign in through social identity providers like Google, Facebook, Amazon, or Apple, and through SAML identity providers.</p>
+    #[serde(rename = "UserPool")]
+    pub user_pool: String,
+}
+
 /// <p>Identifies a Amazon Cognito user group. A user group can be used in on or more work teams.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct CognitoMemberDefinition {
@@ -613,7 +924,7 @@ pub struct CognitoMemberDefinition {
     pub user_pool: String,
 }
 
-/// <p>Configuration information for tensor collections.</p>
+/// <p>Configuration information for the Debugger output tensor collections.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct CollectionConfiguration {
     /// <p>The name of the tensor collection. The name must be unique relative to other rule configuration names.</p>
@@ -647,9 +958,22 @@ pub struct CompilationJobSummary {
     #[serde(rename = "CompilationStartTime")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub compilation_start_time: Option<f64>,
-    /// <p>The type of device that the model will run on after compilation has completed.</p>
+    /// <p>The type of device that the model will run on after the compilation job has completed.</p>
     #[serde(rename = "CompilationTargetDevice")]
-    pub compilation_target_device: String,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub compilation_target_device: Option<String>,
+    /// <p>The type of accelerator that the model will run on after the compilation job has completed.</p>
+    #[serde(rename = "CompilationTargetPlatformAccelerator")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub compilation_target_platform_accelerator: Option<String>,
+    /// <p>The type of architecture that the model will run on after the compilation job has completed.</p>
+    #[serde(rename = "CompilationTargetPlatformArch")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub compilation_target_platform_arch: Option<String>,
+    /// <p>The type of OS that the model will run on after the compilation job has completed.</p>
+    #[serde(rename = "CompilationTargetPlatformOs")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub compilation_target_platform_os: Option<String>,
     /// <p>The time when the model compilation job was created.</p>
     #[serde(rename = "CreationTime")]
     pub creation_time: f64,
@@ -657,6 +981,16 @@ pub struct CompilationJobSummary {
     #[serde(rename = "LastModifiedTime")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub last_modified_time: Option<f64>,
+}
+
+/// <p>Metadata for a Condition step.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct ConditionStepMetadata {
+    /// <p>The outcome of the Condition step evaluation.</p>
+    #[serde(rename = "Outcome")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub outcome: Option<String>,
 }
 
 /// <p>Describes the container, as part of model definition.</p>
@@ -670,15 +1004,19 @@ pub struct ContainerDefinition {
     #[serde(rename = "Environment")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub environment: Option<::std::collections::HashMap<String, String>>,
-    /// <p>The Amazon EC2 Container Registry (Amazon ECR) path where inference code is stored. If you are using your own custom algorithm instead of an algorithm provided by Amazon SageMaker, the inference code must meet Amazon SageMaker requirements. Amazon SageMaker supports both <code>registry/repository[:tag]</code> and <code>registry/repository[@digest]</code> image path formats. For more information, see <a href="https://docs.aws.amazon.com/sagemaker/latest/dg/your-algorithms.html">Using Your Own Algorithms with Amazon SageMaker</a> </p>
+    /// <p>The path where inference code is stored. This can be either in Amazon EC2 Container Registry or in a Docker registry that is accessible from the same VPC that you configure for your endpoint. If you are using your own custom algorithm instead of an algorithm provided by Amazon SageMaker, the inference code must meet Amazon SageMaker requirements. Amazon SageMaker supports both <code>registry/repository[:tag]</code> and <code>registry/repository[@digest]</code> image path formats. For more information, see <a href="https://docs.aws.amazon.com/sagemaker/latest/dg/your-algorithms.html">Using Your Own Algorithms with Amazon SageMaker</a> </p>
     #[serde(rename = "Image")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub image: Option<String>,
+    /// <p>Specifies whether the model container is in Amazon ECR or a private Docker registry accessible from your Amazon Virtual Private Cloud (VPC). For information about storing containers in a private Docker registry, see <a href="https://docs.aws.amazon.com/sagemaker/latest/dg/your-algorithms-containers-inference-private.html">Use a Private Docker Registry for Real-Time Inference Containers</a> </p>
+    #[serde(rename = "ImageConfig")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub image_config: Option<ImageConfig>,
     /// <p>Whether the container hosts a single model or multiple models.</p>
     #[serde(rename = "Mode")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub mode: Option<String>,
-    /// <p><p>The S3 path where the model artifacts, which result from model training, are stored. This path must point to a single gzip compressed tar archive (.tar.gz suffix). The S3 path is required for Amazon SageMaker built-in algorithms, but not if you use your own algorithms. For more information on built-in algorithms, see <a href="https://docs.aws.amazon.com/sagemaker/latest/dg/sagemaker-algo-docker-registry-paths.html">Common Parameters</a>. </p> <p>If you provide a value for this parameter, Amazon SageMaker uses AWS Security Token Service to download model artifacts from the S3 path you provide. AWS STS is activated in your IAM user account by default. If you previously deactivated AWS STS for a region, you need to reactivate AWS STS for that region. For more information, see <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/id_credentials_temp_enable-regions.html">Activating and Deactivating AWS STS in an AWS Region</a> in the <i>AWS Identity and Access Management User Guide</i>.</p> <important> <p>If you use a built-in algorithm to create a model, Amazon SageMaker requires that you provide a S3 path to the model artifacts in <code>ModelDataUrl</code>.</p> </important></p>
+    /// <p><p>The S3 path where the model artifacts, which result from model training, are stored. This path must point to a single gzip compressed tar archive (.tar.gz suffix). The S3 path is required for Amazon SageMaker built-in algorithms, but not if you use your own algorithms. For more information on built-in algorithms, see <a href="https://docs.aws.amazon.com/sagemaker/latest/dg/sagemaker-algo-docker-registry-paths.html">Common Parameters</a>. </p> <note> <p>The model artifacts must be in an S3 bucket that is in the same region as the model or endpoint you are creating.</p> </note> <p>If you provide a value for this parameter, Amazon SageMaker uses AWS Security Token Service to download model artifacts from the S3 path you provide. AWS STS is activated in your IAM user account by default. If you previously deactivated AWS STS for a region, you need to reactivate AWS STS for that region. For more information, see <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/id_credentials_temp_enable-regions.html">Activating and Deactivating AWS STS in an AWS Region</a> in the <i>AWS Identity and Access Management User Guide</i>.</p> <important> <p>If you use a built-in algorithm to create a model, Amazon SageMaker requires that you provide a S3 path to the model artifacts in <code>ModelDataUrl</code>.</p> </important></p>
     #[serde(rename = "ModelDataUrl")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub model_data_url: Option<String>,
@@ -686,6 +1024,52 @@ pub struct ContainerDefinition {
     #[serde(rename = "ModelPackageName")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub model_package_name: Option<String>,
+}
+
+/// <p>A structure describing the source of a context.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
+pub struct ContextSource {
+    /// <p>The ID of the source.</p>
+    #[serde(rename = "SourceId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub source_id: Option<String>,
+    /// <p>The type of the source.</p>
+    #[serde(rename = "SourceType")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub source_type: Option<String>,
+    /// <p>The URI of the source.</p>
+    #[serde(rename = "SourceUri")]
+    pub source_uri: String,
+}
+
+/// <p>Lists a summary of the properties of a context. A context provides a logical grouping of other entities.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct ContextSummary {
+    /// <p>The Amazon Resource Name (ARN) of the context.</p>
+    #[serde(rename = "ContextArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub context_arn: Option<String>,
+    /// <p>The name of the context.</p>
+    #[serde(rename = "ContextName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub context_name: Option<String>,
+    /// <p>The type of the context.</p>
+    #[serde(rename = "ContextType")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub context_type: Option<String>,
+    /// <p>When the context was created.</p>
+    #[serde(rename = "CreationTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub creation_time: Option<f64>,
+    /// <p>When the context was last modified.</p>
+    #[serde(rename = "LastModifiedTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub last_modified_time: Option<f64>,
+    /// <p>The source of the context.</p>
+    #[serde(rename = "Source")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub source: Option<ContextSource>,
 }
 
 /// <p>A list of continuous hyperparameters to tune.</p>
@@ -719,6 +1103,48 @@ pub struct ContinuousParameterRangeSpecification {
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct CreateActionRequest {
+    /// <p>The name of the action. Must be unique to your account in an AWS Region.</p>
+    #[serde(rename = "ActionName")]
+    pub action_name: String,
+    /// <p>The action type.</p>
+    #[serde(rename = "ActionType")]
+    pub action_type: String,
+    /// <p>The description of the action.</p>
+    #[serde(rename = "Description")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub description: Option<String>,
+    #[serde(rename = "MetadataProperties")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub metadata_properties: Option<MetadataProperties>,
+    /// <p>A list of properties to add to the action.</p>
+    #[serde(rename = "Properties")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub properties: Option<::std::collections::HashMap<String, String>>,
+    /// <p>The source type, ID, and URI.</p>
+    #[serde(rename = "Source")]
+    pub source: ActionSource,
+    /// <p>The status of the action.</p>
+    #[serde(rename = "Status")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub status: Option<String>,
+    /// <p>A list of tags to apply to the action.</p>
+    #[serde(rename = "Tags")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub tags: Option<Vec<Tag>>,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct CreateActionResponse {
+    /// <p>The Amazon Resource Name (ARN) of the action.</p>
+    #[serde(rename = "ActionArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub action_arn: Option<String>,
+}
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateAlgorithmInput {
     /// <p>A description of the algorithm.</p>
     #[serde(rename = "AlgorithmDescription")]
@@ -735,6 +1161,10 @@ pub struct CreateAlgorithmInput {
     #[serde(rename = "InferenceSpecification")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub inference_specification: Option<InferenceSpecification>,
+    /// <p>An array of key-value pairs. You can use tags to categorize your AWS resources in different ways, for example, by purpose, owner, or environment. For more information, see <a href="https://docs.aws.amazon.com/general/latest/gr/aws_tagging.html">Tagging AWS Resources</a>.</p>
+    #[serde(rename = "Tags")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub tags: Option<Vec<Tag>>,
     /// <p><p>Specifies details about training jobs run by this algorithm, including the following:</p> <ul> <li> <p>The Amazon ECR path of the container and the version digest of the algorithm.</p> </li> <li> <p>The hyperparameters that the algorithm supports.</p> </li> <li> <p>The instance types that the algorithm supports for training.</p> </li> <li> <p>Whether the algorithm supports distributed training.</p> </li> <li> <p>The metrics that the algorithm emits to Amazon CloudWatch.</p> </li> <li> <p>Which metrics that the algorithm emits can be used as the objective metric for hyperparameter tuning jobs.</p> </li> <li> <p>The input channels that the algorithm supports for training data. For example, an algorithm might support <code>train</code>, <code>validation</code>, and <code>test</code> channels.</p> </li> </ul></p>
     #[serde(rename = "TrainingSpecification")]
     pub training_specification: TrainingSpecification,
@@ -750,6 +1180,31 @@ pub struct CreateAlgorithmOutput {
     /// <p>The Amazon Resource Name (ARN) of the new algorithm.</p>
     #[serde(rename = "AlgorithmArn")]
     pub algorithm_arn: String,
+}
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct CreateAppImageConfigRequest {
+    /// <p>The name of the AppImageConfig. Must be unique to your account.</p>
+    #[serde(rename = "AppImageConfigName")]
+    pub app_image_config_name: String,
+    /// <p>The KernelGatewayImageConfig.</p>
+    #[serde(rename = "KernelGatewayImageConfig")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub kernel_gateway_image_config: Option<KernelGatewayImageConfig>,
+    /// <p>A list of tags to apply to the AppImageConfig.</p>
+    #[serde(rename = "Tags")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub tags: Option<Vec<Tag>>,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct CreateAppImageConfigResponse {
+    /// <p>The Amazon Resource Name (ARN) of the AppImageConfig.</p>
+    #[serde(rename = "AppImageConfigArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub app_image_config_arn: Option<String>,
 }
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
@@ -780,10 +1235,45 @@ pub struct CreateAppRequest {
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateAppResponse {
-    /// <p>The App's Amazon Resource Name (ARN).</p>
+    /// <p>The Amazon Resource Name (ARN) of the app.</p>
     #[serde(rename = "AppArn")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub app_arn: Option<String>,
+}
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct CreateArtifactRequest {
+    /// <p>The name of the artifact. Must be unique to your account in an AWS Region.</p>
+    #[serde(rename = "ArtifactName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub artifact_name: Option<String>,
+    /// <p>The artifact type.</p>
+    #[serde(rename = "ArtifactType")]
+    pub artifact_type: String,
+    #[serde(rename = "MetadataProperties")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub metadata_properties: Option<MetadataProperties>,
+    /// <p>A list of properties to add to the artifact.</p>
+    #[serde(rename = "Properties")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub properties: Option<::std::collections::HashMap<String, String>>,
+    /// <p>The ID, ID type, and URI of the source.</p>
+    #[serde(rename = "Source")]
+    pub source: ArtifactSource,
+    /// <p>A list of tags to apply to the artifact.</p>
+    #[serde(rename = "Tags")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub tags: Option<Vec<Tag>>,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct CreateArtifactResponse {
+    /// <p>The Amazon Resource Name (ARN) of the artifact.</p>
+    #[serde(rename = "ArtifactArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub artifact_arn: Option<String>,
 }
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
@@ -793,18 +1283,18 @@ pub struct CreateAutoMLJobRequest {
     #[serde(rename = "AutoMLJobConfig")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub auto_ml_job_config: Option<AutoMLJobConfig>,
-    /// <p>Identifies an AutoPilot job. Must be unique to your account and is case-insensitive.</p>
+    /// <p>Identifies an Autopilot job. Must be unique to your account and is case-insensitive.</p>
     #[serde(rename = "AutoMLJobName")]
     pub auto_ml_job_name: String,
-    /// <p>Defines the job's objective. You provide a MetricName and AutoML will infer minimize or maximize. If this is not provided, the most commonly used ObjectiveMetric for problem type will be selected.</p>
+    /// <p>Defines the objective of a an AutoML job. You provide a <a>AutoMLJobObjective$MetricName</a> and Autopilot infers whether to minimize or maximize it. If a metric is not specified, the most commonly used ObjectiveMetric for problem type is automaically selected.</p>
     #[serde(rename = "AutoMLJobObjective")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub auto_ml_job_objective: Option<AutoMLJobObjective>,
-    /// <p>This will generate possible candidates without training a model. A candidate is a combination of data preprocessors, algorithms, and algorithm parameter settings.</p>
+    /// <p>Generates possible candidates without training a model. A candidate is a combination of data preprocessors, algorithms, and algorithm parameter settings.</p>
     #[serde(rename = "GenerateCandidateDefinitionsOnly")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub generate_candidate_definitions_only: Option<bool>,
-    /// <p>Similar to InputDataConfig supported by Tuning. Format(s) supported: CSV. Minimum of 1000 rows.</p>
+    /// <p>Similar to InputDataConfig supported by Tuning. Format(s) supported: CSV. Minimum of 500 rows.</p>
     #[serde(rename = "InputDataConfig")]
     pub input_data_config: Vec<AutoMLChannel>,
     /// <p>Similar to OutputDataConfig supported by Tuning. Format(s) supported: CSV.</p>
@@ -814,7 +1304,7 @@ pub struct CreateAutoMLJobRequest {
     #[serde(rename = "ProblemType")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub problem_type: Option<String>,
-    /// <p>The ARN of the role that will be used to access the data.</p>
+    /// <p>The ARN of the role that is used to access the data.</p>
     #[serde(rename = "RoleArn")]
     pub role_arn: String,
     /// <p>Each tag consists of a key and an optional value. Tag keys must be unique per resource.</p>
@@ -840,6 +1330,10 @@ pub struct CreateCodeRepositoryInput {
     /// <p>Specifies details about the repository, including the URL where the repository is located, the default branch, and credentials to use to access the repository.</p>
     #[serde(rename = "GitConfig")]
     pub git_config: GitConfig,
+    /// <p>An array of key-value pairs. You can use tags to categorize your AWS resources in different ways, for example, by purpose, owner, or environment. For more information, see <a href="https://docs.aws.amazon.com/general/latest/gr/aws_tagging.html">Tagging AWS Resources</a>.</p>
+    #[serde(rename = "Tags")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub tags: Option<Vec<Tag>>,
 }
 
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
@@ -868,6 +1362,10 @@ pub struct CreateCompilationJobRequest {
     /// <p>Specifies a limit to how long a model compilation job can run. When the job reaches the time limit, Amazon SageMaker ends the compilation job. Use this API to cap model training costs.</p>
     #[serde(rename = "StoppingCondition")]
     pub stopping_condition: StoppingCondition,
+    /// <p>An array of key-value pairs. You can use tags to categorize your AWS resources in different ways, for example, by purpose, owner, or environment. For more information, see <a href="https://docs.aws.amazon.com/general/latest/gr/aws_tagging.html">Tagging AWS Resources</a>.</p>
+    #[serde(rename = "Tags")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub tags: Option<Vec<Tag>>,
 }
 
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
@@ -880,7 +1378,113 @@ pub struct CreateCompilationJobResponse {
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct CreateContextRequest {
+    /// <p>The name of the context. Must be unique to your account in an AWS Region.</p>
+    #[serde(rename = "ContextName")]
+    pub context_name: String,
+    /// <p>The context type.</p>
+    #[serde(rename = "ContextType")]
+    pub context_type: String,
+    /// <p>The description of the context.</p>
+    #[serde(rename = "Description")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub description: Option<String>,
+    /// <p>A list of properties to add to the context.</p>
+    #[serde(rename = "Properties")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub properties: Option<::std::collections::HashMap<String, String>>,
+    /// <p>The source type, ID, and URI.</p>
+    #[serde(rename = "Source")]
+    pub source: ContextSource,
+    /// <p>A list of tags to apply to the context.</p>
+    #[serde(rename = "Tags")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub tags: Option<Vec<Tag>>,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct CreateContextResponse {
+    /// <p>The Amazon Resource Name (ARN) of the context.</p>
+    #[serde(rename = "ContextArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub context_arn: Option<String>,
+}
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct CreateDataQualityJobDefinitionRequest {
+    /// <p>Specifies the container that runs the monitoring job.</p>
+    #[serde(rename = "DataQualityAppSpecification")]
+    pub data_quality_app_specification: DataQualityAppSpecification,
+    /// <p>Configures the constraints and baselines for the monitoring job.</p>
+    #[serde(rename = "DataQualityBaselineConfig")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub data_quality_baseline_config: Option<DataQualityBaselineConfig>,
+    /// <p>A list of inputs for the monitoring job. Currently endpoints are supported as monitoring inputs.</p>
+    #[serde(rename = "DataQualityJobInput")]
+    pub data_quality_job_input: DataQualityJobInput,
+    #[serde(rename = "DataQualityJobOutputConfig")]
+    pub data_quality_job_output_config: MonitoringOutputConfig,
+    /// <p>The name for the monitoring job definition.</p>
+    #[serde(rename = "JobDefinitionName")]
+    pub job_definition_name: String,
+    #[serde(rename = "JobResources")]
+    pub job_resources: MonitoringResources,
+    /// <p>Specifies networking configuration for the monitoring job.</p>
+    #[serde(rename = "NetworkConfig")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub network_config: Option<MonitoringNetworkConfig>,
+    /// <p>The Amazon Resource Name (ARN) of an IAM role that Amazon SageMaker can assume to perform tasks on your behalf.</p>
+    #[serde(rename = "RoleArn")]
+    pub role_arn: String,
+    #[serde(rename = "StoppingCondition")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub stopping_condition: Option<MonitoringStoppingCondition>,
+    /// <p>(Optional) An array of key-value pairs. For more information, see <a href="https://docs.aws.amazon.com/awsaccountbilling/latest/aboutv2/cost-alloc-tags.html#allocation-whatURL">Using Cost Allocation Tags</a> in the <i>AWS Billing and Cost Management User Guide</i>.</p>
+    #[serde(rename = "Tags")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub tags: Option<Vec<Tag>>,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct CreateDataQualityJobDefinitionResponse {
+    /// <p>The Amazon Resource Name (ARN) of the job definition.</p>
+    #[serde(rename = "JobDefinitionArn")]
+    pub job_definition_arn: String,
+}
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct CreateDeviceFleetRequest {
+    /// <p>A description of the fleet.</p>
+    #[serde(rename = "Description")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub description: Option<String>,
+    /// <p>The name of the fleet that the device belongs to.</p>
+    #[serde(rename = "DeviceFleetName")]
+    pub device_fleet_name: String,
+    /// <p>The output configuration for storing sample data collected by the fleet.</p>
+    #[serde(rename = "OutputConfig")]
+    pub output_config: EdgeOutputConfig,
+    /// <p>The Amazon Resource Name (ARN) that has access to AWS Internet of Things (IoT).</p>
+    #[serde(rename = "RoleArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub role_arn: Option<String>,
+    /// <p>Creates tags for the specified fleet.</p>
+    #[serde(rename = "Tags")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub tags: Option<Vec<Tag>>,
+}
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateDomainRequest {
+    /// <p><p>Specifies the VPC used for non-EFS traffic. The default value is <code>PublicInternetOnly</code>.</p> <ul> <li> <p> <code>PublicInternetOnly</code> - Non-EFS traffic is through a VPC managed by Amazon SageMaker, which allows direct internet access</p> </li> <li> <p> <code>VpcOnly</code> - All Studio traffic is through the specified VPC and subnets</p> </li> </ul></p>
+    #[serde(rename = "AppNetworkAccessType")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub app_network_access_type: Option<String>,
     /// <p>The mode of authentication that members use to access the domain.</p>
     #[serde(rename = "AuthMode")]
     pub auth_mode: String,
@@ -890,18 +1494,18 @@ pub struct CreateDomainRequest {
     /// <p>A name for the domain.</p>
     #[serde(rename = "DomainName")]
     pub domain_name: String,
-    /// <p>The AWS Key Management Service (KMS) encryption key ID. Encryption with a customer master key (CMK) is not supported.</p>
-    #[serde(rename = "HomeEfsFileSystemKmsKeyId")]
+    /// <p>SageMaker uses AWS KMS to encrypt the EFS volume attached to the domain with an AWS managed customer master key (CMK) by default. For more control, specify a customer managed CMK.</p>
+    #[serde(rename = "KmsKeyId")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub home_efs_file_system_kms_key_id: Option<String>,
-    /// <p>The VPC subnets to use for communication with the EFS volume.</p>
+    pub kms_key_id: Option<String>,
+    /// <p>The VPC subnets that Studio uses for communication.</p>
     #[serde(rename = "SubnetIds")]
     pub subnet_ids: Vec<String>,
     /// <p>Tags to associated with the Domain. Each tag consists of a key and an optional value. Tag keys must be unique per resource. Tags are searchable using the <a>Search</a> API.</p>
     #[serde(rename = "Tags")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub tags: Option<Vec<Tag>>,
-    /// <p>The ID of the Amazon Virtual Private Cloud (VPC) to use for communication with the EFS volume.</p>
+    /// <p>The ID of the Amazon Virtual Private Cloud (VPC) that Studio uses for communication.</p>
     #[serde(rename = "VpcId")]
     pub vpc_id: String,
 }
@@ -921,6 +1525,37 @@ pub struct CreateDomainResponse {
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct CreateEdgePackagingJobRequest {
+    /// <p>The name of the SageMaker Neo compilation job that will be used to locate model artifacts for packaging.</p>
+    #[serde(rename = "CompilationJobName")]
+    pub compilation_job_name: String,
+    /// <p>The name of the edge packaging job.</p>
+    #[serde(rename = "EdgePackagingJobName")]
+    pub edge_packaging_job_name: String,
+    /// <p>The name of the model.</p>
+    #[serde(rename = "ModelName")]
+    pub model_name: String,
+    /// <p>The version of the model.</p>
+    #[serde(rename = "ModelVersion")]
+    pub model_version: String,
+    /// <p>Provides information about the output location for the packaged model.</p>
+    #[serde(rename = "OutputConfig")]
+    pub output_config: EdgeOutputConfig,
+    /// <p>The CMK to use when encrypting the EBS volume the edge packaging job runs on.</p>
+    #[serde(rename = "ResourceKey")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub resource_key: Option<String>,
+    /// <p>The Amazon Resource Name (ARN) of an IAM role that enables Amazon SageMaker to download and upload the model, and to contact SageMaker Neo.</p>
+    #[serde(rename = "RoleArn")]
+    pub role_arn: String,
+    /// <p>Creates tags for the packaging job.</p>
+    #[serde(rename = "Tags")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub tags: Option<Vec<Tag>>,
+}
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateEndpointConfigInput {
     #[serde(rename = "DataCaptureConfig")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -935,7 +1570,7 @@ pub struct CreateEndpointConfigInput {
     /// <p>An list of <code>ProductionVariant</code> objects, one for each model that you want to host at this endpoint.</p>
     #[serde(rename = "ProductionVariants")]
     pub production_variants: Vec<ProductionVariant>,
-    /// <p>A list of key-value pairs. For more information, see <a href="https://docs.aws.amazon.com/awsaccountbilling/latest/aboutv2/cost-alloc-tags.html#allocation-what">Using Cost Allocation Tags</a> in the <i> AWS Billing and Cost Management User Guide</i>. </p>
+    /// <p>An array of key-value pairs. You can use tags to categorize your AWS resources in different ways, for example, by purpose, owner, or environment. For more information, see <a href="https://docs.aws.amazon.com/general/latest/gr/aws_tagging.html">Tagging AWS Resources</a>.</p>
     #[serde(rename = "Tags")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub tags: Option<Vec<Tag>>,
@@ -955,10 +1590,10 @@ pub struct CreateEndpointInput {
     /// <p>The name of an endpoint configuration. For more information, see <a>CreateEndpointConfig</a>. </p>
     #[serde(rename = "EndpointConfigName")]
     pub endpoint_config_name: String,
-    /// <p>The name of the endpoint. The name must be unique within an AWS Region in your AWS account.</p>
+    /// <p>The name of the endpoint.The name must be unique within an AWS Region in your AWS account. The name is case-insensitive in <code>CreateEndpoint</code>, but the case is preserved and must be matched in .</p>
     #[serde(rename = "EndpointName")]
     pub endpoint_name: String,
-    /// <p>An array of key-value pairs. For more information, see <a href="https://docs.aws.amazon.com/awsaccountbilling/latest/aboutv2/cost-alloc-tags.html#allocation-what">Using Cost Allocation Tags</a>in the <i>AWS Billing and Cost Management User Guide</i>. </p>
+    /// <p>An array of key-value pairs. You can use tags to categorize your AWS resources in different ways, for example, by purpose, owner, or environment. For more information, see <a href="https://docs.aws.amazon.com/general/latest/gr/aws_tagging.html">Tagging AWS Resources</a>.</p>
     #[serde(rename = "Tags")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub tags: Option<Vec<Tag>>,
@@ -999,6 +1634,51 @@ pub struct CreateExperimentResponse {
     #[serde(rename = "ExperimentArn")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub experiment_arn: Option<String>,
+}
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct CreateFeatureGroupRequest {
+    /// <p>A free-form description of a <code>FeatureGroup</code>.</p>
+    #[serde(rename = "Description")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub description: Option<String>,
+    /// <p><p>The name of the feature that stores the <code>EventTime</code> of a <code>Record</code> in a <code>FeatureGroup</code>.</p> <p>An <code>EventTime</code> is a point in time when a new event occurs that corresponds to the creation or update of a <code>Record</code> in a <code>FeatureGroup</code>. All <code>Records</code> in the <code>FeatureGroup</code> must have a corresponding <code>EventTime</code>.</p> <p>An <code>EventTime</code> can be a <code>String</code> or <code>Fractional</code>. </p> <ul> <li> <p> <code>Fractional</code>: <code>EventTime</code> feature values must be a Unix timestamp in seconds.</p> </li> <li> <p> <code>String</code>: <code>EventTime</code> feature values must be an ISO-8601 string in the format. The following formats are supported <code>yyyy-MM-dd&#39;T&#39;HH:mm:ssZ</code> and <code>yyyy-MM-dd&#39;T&#39;HH:mm:ss.SSSZ</code> where <code>yyyy</code>, <code>MM</code>, and <code>dd</code> represent the year, month, and day respectively and <code>HH</code>, <code>mm</code>, <code>ss</code>, and if applicable, <code>SSS</code> represent the hour, month, second and milliseconds respsectively. <code>&#39;T&#39;</code> and <code>Z</code> are constants.</p> </li> </ul></p>
+    #[serde(rename = "EventTimeFeatureName")]
+    pub event_time_feature_name: String,
+    /// <p>A list of <code>Feature</code> names and types. <code>Name</code> and <code>Type</code> is compulsory per <code>Feature</code>. </p> <p>Valid feature <code>FeatureType</code>s are <code>Integral</code>, <code>Fractional</code> and <code>String</code>.</p> <p> <code>FeatureName</code>s cannot be any of the following: <code>is_deleted</code>, <code>write_time</code>, <code>api_invocation_time</code> </p> <p>You can create up to 2,500 <code>FeatureDefinition</code>s per <code>FeatureGroup</code>.</p>
+    #[serde(rename = "FeatureDefinitions")]
+    pub feature_definitions: Vec<FeatureDefinition>,
+    /// <p><p>The name of the <code>FeatureGroup</code>. The name must be unique within an AWS Region in an AWS account. The name:</p> <ul> <li> <p>Must start and end with an alphanumeric character.</p> </li> <li> <p>Can only contain alphanumeric character and hyphens. Spaces are not allowed. </p> </li> </ul></p>
+    #[serde(rename = "FeatureGroupName")]
+    pub feature_group_name: String,
+    /// <p>Use this to configure an <code>OfflineFeatureStore</code>. This parameter allows you to specify:</p> <ul> <li> <p>The Amazon Simple Storage Service (Amazon S3) location of an <code>OfflineStore</code>.</p> </li> <li> <p>A configuration for an AWS Glue or AWS Hive data cataolgue. </p> </li> <li> <p>An KMS encryption key to encrypt the Amazon S3 location used for <code>OfflineStore</code>.</p> </li> </ul> <p>To learn more about this parameter, see <a>OfflineStoreConfig</a>.</p>
+    #[serde(rename = "OfflineStoreConfig")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub offline_store_config: Option<OfflineStoreConfig>,
+    /// <p>You can turn the <code>OnlineStore</code> on or off by specifying <code>True</code> for the <code>EnableOnlineStore</code> flag in <code>OnlineStoreConfig</code>; the default value is <code>False</code>.</p> <p>You can also include an AWS KMS key ID (<code>KMSKeyId</code>) for at-rest encryption of the <code>OnlineStore</code>.</p>
+    #[serde(rename = "OnlineStoreConfig")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub online_store_config: Option<OnlineStoreConfig>,
+    /// <p><p>The name of the <code>Feature</code> whose value uniquely identifies a <code>Record</code> defined in the <code>FeatureStore</code>. Only the latest record per identifier value will be stored in the <code>OnlineStore</code>. <code>RecordIdentifierFeatureName</code> must be one of feature definitions&#39; names.</p> <p>You use the <code>RecordIdentifierFeatureName</code> to access data in a <code>FeatureStore</code>.</p> <p>This name:</p> <ul> <li> <p>Must start and end with an alphanumeric character.</p> </li> <li> <p>Can only contains alphanumeric characters, hyphens, underscores. Spaces are not allowed. </p> </li> </ul></p>
+    #[serde(rename = "RecordIdentifierFeatureName")]
+    pub record_identifier_feature_name: String,
+    /// <p>The Amazon Resource Name (ARN) of the IAM execution role used to persist data into the <code>OfflineStore</code> if an <code>OfflineStoreConfig</code> is provided.</p>
+    #[serde(rename = "RoleArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub role_arn: Option<String>,
+    /// <p>Tags used to identify <code>Features</code> in each <code>FeatureGroup</code>.</p>
+    #[serde(rename = "Tags")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub tags: Option<Vec<Tag>>,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct CreateFeatureGroupResponse {
+    /// <p>The Amazon Resource Name (ARN) of the <code>FeatureGroup</code>. This is a unique identifier for the feature group. </p>
+    #[serde(rename = "FeatureGroupArn")]
+    pub feature_group_arn: String,
 }
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
@@ -1066,10 +1746,10 @@ pub struct CreateHyperParameterTuningJobRequest {
     /// <p>The <a>HyperParameterTuningJobConfig</a> object that describes the tuning job, including the search strategy, the objective metric used to evaluate training jobs, ranges of parameters to search, and resource limits for the tuning job. For more information, see <a href="https://docs.aws.amazon.com/sagemaker/latest/dg/automatic-model-tuning-how-it-works.html">How Hyperparameter Tuning Works</a>.</p>
     #[serde(rename = "HyperParameterTuningJobConfig")]
     pub hyper_parameter_tuning_job_config: HyperParameterTuningJobConfig,
-    /// <p>The name of the tuning job. This name is the prefix for the names of all training jobs that this tuning job launches. The name must be unique within the same AWS account and AWS Region. The name must have { } to { } characters. Valid characters are a-z, A-Z, 0-9, and : + = @ _ % - (hyphen). The name is not case sensitive.</p>
+    /// <p>The name of the tuning job. This name is the prefix for the names of all training jobs that this tuning job launches. The name must be unique within the same AWS account and AWS Region. The name must have 1 to 32 characters. Valid characters are a-z, A-Z, 0-9, and : + = @ _ % - (hyphen). The name is not case sensitive.</p>
     #[serde(rename = "HyperParameterTuningJobName")]
     pub hyper_parameter_tuning_job_name: String,
-    /// <p>An array of key-value pairs. You can use tags to categorize your AWS resources in different ways, for example, by purpose, owner, or environment. For more information, see <a href="https://aws.amazon.com/answers/account-management/aws-tagging-strategies/">AWS Tagging Strategies</a>.</p> <p>Tags that you specify for the tuning job are also added to all training jobs that the tuning job launches.</p>
+    /// <p>An array of key-value pairs. You can use tags to categorize your AWS resources in different ways, for example, by purpose, owner, or environment. For more information, see <a href="https://docs.aws.amazon.com/general/latest/gr/aws_tagging.html">Tagging AWS Resources</a>.</p> <p>Tags that you specify for the tuning job are also added to all training jobs that the tuning job launches.</p>
     #[serde(rename = "Tags")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub tags: Option<Vec<Tag>>,
@@ -1097,6 +1777,61 @@ pub struct CreateHyperParameterTuningJobResponse {
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct CreateImageRequest {
+    /// <p>The description of the image.</p>
+    #[serde(rename = "Description")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub description: Option<String>,
+    /// <p>The display name of the image. If not provided, <code>ImageName</code> is displayed.</p>
+    #[serde(rename = "DisplayName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub display_name: Option<String>,
+    /// <p>The name of the image. Must be unique to your account.</p>
+    #[serde(rename = "ImageName")]
+    pub image_name: String,
+    /// <p>The Amazon Resource Name (ARN) of an IAM role that enables Amazon SageMaker to perform tasks on your behalf.</p>
+    #[serde(rename = "RoleArn")]
+    pub role_arn: String,
+    /// <p>A list of tags to apply to the image.</p>
+    #[serde(rename = "Tags")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub tags: Option<Vec<Tag>>,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct CreateImageResponse {
+    /// <p>The Amazon Resource Name (ARN) of the image.</p>
+    #[serde(rename = "ImageArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub image_arn: Option<String>,
+}
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct CreateImageVersionRequest {
+    /// <p>The registry path of the container image to use as the starting point for this version. The path is an Amazon Container Registry (ECR) URI in the following format:</p> <p> <code>&lt;acct-id&gt;.dkr.ecr.&lt;region&gt;.amazonaws.com/&lt;repo-name[:tag] or [@digest]&gt;</code> </p>
+    #[serde(rename = "BaseImage")]
+    pub base_image: String,
+    /// <p>A unique ID. If not specified, the AWS CLI and AWS SDKs, such as the SDK for Python (Boto3), add a unique value to the call.</p>
+    #[serde(rename = "ClientToken")]
+    pub client_token: String,
+    /// <p>The <code>ImageName</code> of the <code>Image</code> to create a version of.</p>
+    #[serde(rename = "ImageName")]
+    pub image_name: String,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct CreateImageVersionResponse {
+    /// <p>The Amazon Resource Name (ARN) of the image version.</p>
+    #[serde(rename = "ImageVersionArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub image_version_arn: Option<String>,
+}
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateLabelingJobRequest {
     /// <p>Configures the labeling task and how it is presented to workers; including, but not limited to price, keywords, and batch size (task count).</p>
     #[serde(rename = "HumanTaskConfig")]
@@ -1107,7 +1842,7 @@ pub struct CreateLabelingJobRequest {
     /// <p>The attribute name to use for the label in the output manifest file. This is the key for the key/value pair formed with the label that a worker assigns to the object. The name can't end with "-metadata". If you are running a semantic segmentation labeling job, the attribute name must end with "-ref". If you are running any other kind of labeling job, the attribute name must not end with "-ref".</p>
     #[serde(rename = "LabelAttributeName")]
     pub label_attribute_name: String,
-    /// <p>The S3 URL of the file that defines the categories used to label the data objects.</p> <p>For 3D point cloud task types, see <a href="https://docs.aws.amazon.com/sagemaker/latest/dg/sms-point-cloud-label-category-config.html">Create a Labeling Category Configuration File for 3D Point Cloud Labeling Jobs</a>. </p> <p>For all other <a href="https://docs.aws.amazon.com/sagemaker/latest/dg/sms-task-types.html">built-in task types</a> and <a href="https://docs.aws.amazon.com/sagemaker/latest/dg/sms-custom-templates.html">custom tasks</a>, your label category configuration file must be a JSON file in the following format. Identify the labels you want to use by replacing <code>label_1</code>, <code>label_2</code>,<code>...</code>,<code>label_n</code> with your label categories.</p> <p> <code>{</code> </p> <p> <code> "document-version": "2018-11-28"</code> </p> <p> <code> "labels": [</code> </p> <p> <code> {</code> </p> <p> <code> "label": "<i>label_1</i>"</code> </p> <p> <code> },</code> </p> <p> <code> {</code> </p> <p> <code> "label": "<i>label_2</i>"</code> </p> <p> <code> },</code> </p> <p> <code> ...</code> </p> <p> <code> {</code> </p> <p> <code> "label": "<i>label_n</i>"</code> </p> <p> <code> }</code> </p> <p> <code> ]</code> </p> <p> <code>}</code> </p>
+    /// <p>The S3 URI of the file that defines the categories used to label the data objects.</p> <p>For 3D point cloud task types, see <a href="https://docs.aws.amazon.com/sagemaker/latest/dg/sms-point-cloud-label-category-config.html">Create a Labeling Category Configuration File for 3D Point Cloud Labeling Jobs</a>. </p> <p>For all other <a href="https://docs.aws.amazon.com/sagemaker/latest/dg/sms-task-types.html">built-in task types</a> and <a href="https://docs.aws.amazon.com/sagemaker/latest/dg/sms-custom-templates.html">custom tasks</a>, your label category configuration file must be a JSON file in the following format. Identify the labels you want to use by replacing <code>label_1</code>, <code>label_2</code>,<code>...</code>,<code>label_n</code> with your label categories.</p> <p> <code>{</code> </p> <p> <code> "document-version": "2018-11-28"</code> </p> <p> <code> "labels": [</code> </p> <p> <code> {</code> </p> <p> <code> "label": "<i>label_1</i>"</code> </p> <p> <code> },</code> </p> <p> <code> {</code> </p> <p> <code> "label": "<i>label_2</i>"</code> </p> <p> <code> },</code> </p> <p> <code> ...</code> </p> <p> <code> {</code> </p> <p> <code> "label": "<i>label_n</i>"</code> </p> <p> <code> }</code> </p> <p> <code> ]</code> </p> <p> <code>}</code> </p>
     #[serde(rename = "LabelCategoryConfigS3Uri")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub label_category_config_s3_uri: Option<String>,
@@ -1144,6 +1879,94 @@ pub struct CreateLabelingJobResponse {
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct CreateModelBiasJobDefinitionRequest {
+    /// <p>The name of the bias job definition. The name must be unique within an AWS Region in the AWS account.</p>
+    #[serde(rename = "JobDefinitionName")]
+    pub job_definition_name: String,
+    #[serde(rename = "JobResources")]
+    pub job_resources: MonitoringResources,
+    /// <p>Configures the model bias job to run a specified Docker container image.</p>
+    #[serde(rename = "ModelBiasAppSpecification")]
+    pub model_bias_app_specification: ModelBiasAppSpecification,
+    /// <p>The baseline configuration for a model bias job.</p>
+    #[serde(rename = "ModelBiasBaselineConfig")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub model_bias_baseline_config: Option<ModelBiasBaselineConfig>,
+    /// <p>Inputs for the model bias job.</p>
+    #[serde(rename = "ModelBiasJobInput")]
+    pub model_bias_job_input: ModelBiasJobInput,
+    #[serde(rename = "ModelBiasJobOutputConfig")]
+    pub model_bias_job_output_config: MonitoringOutputConfig,
+    /// <p>Networking options for a model bias job.</p>
+    #[serde(rename = "NetworkConfig")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub network_config: Option<MonitoringNetworkConfig>,
+    /// <p>The Amazon Resource Name (ARN) of an IAM role that Amazon SageMaker can assume to perform tasks on your behalf.</p>
+    #[serde(rename = "RoleArn")]
+    pub role_arn: String,
+    #[serde(rename = "StoppingCondition")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub stopping_condition: Option<MonitoringStoppingCondition>,
+    /// <p>(Optional) An array of key-value pairs. For more information, see <a href="https://docs.aws.amazon.com/awsaccountbilling/latest/aboutv2/cost-alloc-tags.html#allocation-whatURL">Using Cost Allocation Tags</a> in the <i>AWS Billing and Cost Management User Guide</i>.</p>
+    #[serde(rename = "Tags")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub tags: Option<Vec<Tag>>,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct CreateModelBiasJobDefinitionResponse {
+    /// <p>The Amazon Resource Name (ARN) of the model bias job.</p>
+    #[serde(rename = "JobDefinitionArn")]
+    pub job_definition_arn: String,
+}
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct CreateModelExplainabilityJobDefinitionRequest {
+    /// <p> The name of the model explainability job definition. The name must be unique within an AWS Region in the AWS account.</p>
+    #[serde(rename = "JobDefinitionName")]
+    pub job_definition_name: String,
+    #[serde(rename = "JobResources")]
+    pub job_resources: MonitoringResources,
+    /// <p>Configures the model explainability job to run a specified Docker container image.</p>
+    #[serde(rename = "ModelExplainabilityAppSpecification")]
+    pub model_explainability_app_specification: ModelExplainabilityAppSpecification,
+    /// <p>The baseline configuration for a model explainability job.</p>
+    #[serde(rename = "ModelExplainabilityBaselineConfig")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub model_explainability_baseline_config: Option<ModelExplainabilityBaselineConfig>,
+    /// <p>Inputs for the model explainability job.</p>
+    #[serde(rename = "ModelExplainabilityJobInput")]
+    pub model_explainability_job_input: ModelExplainabilityJobInput,
+    #[serde(rename = "ModelExplainabilityJobOutputConfig")]
+    pub model_explainability_job_output_config: MonitoringOutputConfig,
+    /// <p>Networking options for a model explainability job.</p>
+    #[serde(rename = "NetworkConfig")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub network_config: Option<MonitoringNetworkConfig>,
+    /// <p>The Amazon Resource Name (ARN) of an IAM role that Amazon SageMaker can assume to perform tasks on your behalf.</p>
+    #[serde(rename = "RoleArn")]
+    pub role_arn: String,
+    #[serde(rename = "StoppingCondition")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub stopping_condition: Option<MonitoringStoppingCondition>,
+    /// <p>(Optional) An array of key-value pairs. For more information, see <a href="https://docs.aws.amazon.com/awsaccountbilling/latest/aboutv2/cost-alloc-tags.html#allocation-whatURL">Using Cost Allocation Tags</a> in the <i>AWS Billing and Cost Management User Guide</i>.</p>
+    #[serde(rename = "Tags")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub tags: Option<Vec<Tag>>,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct CreateModelExplainabilityJobDefinitionResponse {
+    /// <p>The Amazon Resource Name (ARN) of the model explainability job.</p>
+    #[serde(rename = "JobDefinitionArn")]
+    pub job_definition_arn: String,
+}
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateModelInput {
     /// <p>Specifies the containers in the inference pipeline.</p>
     #[serde(rename = "Containers")]
@@ -1163,7 +1986,7 @@ pub struct CreateModelInput {
     #[serde(rename = "PrimaryContainer")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub primary_container: Option<ContainerDefinition>,
-    /// <p>An array of key-value pairs. For more information, see <a href="https://docs.aws.amazon.com/awsaccountbilling/latest/aboutv2/cost-alloc-tags.html#allocation-what">Using Cost Allocation Tags</a> in the <i>AWS Billing and Cost Management User Guide</i>. </p>
+    /// <p>An array of key-value pairs. You can use tags to categorize your AWS resources in different ways, for example, by purpose, owner, or environment. For more information, see <a href="https://docs.aws.amazon.com/general/latest/gr/aws_tagging.html">Tagging AWS Resources</a>.</p>
     #[serde(rename = "Tags")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub tags: Option<Vec<Tag>>,
@@ -1183,26 +2006,74 @@ pub struct CreateModelOutput {
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct CreateModelPackageGroupInput {
+    /// <p>A description for the model group.</p>
+    #[serde(rename = "ModelPackageGroupDescription")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub model_package_group_description: Option<String>,
+    /// <p>The name of the model group.</p>
+    #[serde(rename = "ModelPackageGroupName")]
+    pub model_package_group_name: String,
+    /// <p>A list of key value pairs associated with the model group. For more information, see <a href="https://docs.aws.amazon.com/general/latest/gr/aws_tagging.html">Tagging AWS resources</a> in the <i>AWS General Reference Guide</i>.</p>
+    #[serde(rename = "Tags")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub tags: Option<Vec<Tag>>,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct CreateModelPackageGroupOutput {
+    /// <p>The Amazon Resource Name (ARN) of the model group.</p>
+    #[serde(rename = "ModelPackageGroupArn")]
+    pub model_package_group_arn: String,
+}
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateModelPackageInput {
-    /// <p>Whether to certify the model package for listing on AWS Marketplace.</p>
+    /// <p>Whether to certify the model package for listing on AWS Marketplace.</p> <p>This parameter is optional for unversioned models, and does not apply to versioned models.</p>
     #[serde(rename = "CertifyForMarketplace")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub certify_for_marketplace: Option<bool>,
+    /// <p>A unique token that guarantees that the call to this API is idempotent.</p>
+    #[serde(rename = "ClientToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub client_token: Option<String>,
     /// <p><p>Specifies details about inference jobs that can be run with models based on this model package, including the following:</p> <ul> <li> <p>The Amazon ECR paths of containers that contain the inference code and model artifacts.</p> </li> <li> <p>The instance types that the model package supports for transform jobs and real-time endpoints used for inference.</p> </li> <li> <p>The input and output content formats that the model package supports for inference.</p> </li> </ul></p>
     #[serde(rename = "InferenceSpecification")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub inference_specification: Option<InferenceSpecification>,
+    #[serde(rename = "MetadataProperties")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub metadata_properties: Option<MetadataProperties>,
+    /// <p>Whether the model is approved for deployment.</p> <p>This parameter is optional for versioned models, and does not apply to unversioned models.</p> <p>For versioned models, the value of this parameter must be set to <code>Approved</code> to deploy the model.</p>
+    #[serde(rename = "ModelApprovalStatus")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub model_approval_status: Option<String>,
+    /// <p>A structure that contains model metrics reports.</p>
+    #[serde(rename = "ModelMetrics")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub model_metrics: Option<ModelMetrics>,
     /// <p>A description of the model package.</p>
     #[serde(rename = "ModelPackageDescription")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub model_package_description: Option<String>,
-    /// <p>The name of the model package. The name must have 1 to 63 characters. Valid characters are a-z, A-Z, 0-9, and - (hyphen).</p>
+    /// <p>The name of the model group that this model version belongs to.</p> <p>This parameter is required for versioned models, and does not apply to unversioned models.</p>
+    #[serde(rename = "ModelPackageGroupName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub model_package_group_name: Option<String>,
+    /// <p>The name of the model package. The name must have 1 to 63 characters. Valid characters are a-z, A-Z, 0-9, and - (hyphen).</p> <p>This parameter is required for unversioned models. It is not applicable to versioned models.</p>
     #[serde(rename = "ModelPackageName")]
-    pub model_package_name: String,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub model_package_name: Option<String>,
     /// <p>Details about the algorithm that was used to create the model package.</p>
     #[serde(rename = "SourceAlgorithmSpecification")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub source_algorithm_specification: Option<SourceAlgorithmSpecification>,
+    /// <p>A list of key value pairs associated with the model. For more information, see <a href="https://docs.aws.amazon.com/general/latest/gr/aws_tagging.html">Tagging AWS resources</a> in the <i>AWS General Reference Guide</i>.</p>
+    #[serde(rename = "Tags")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub tags: Option<Vec<Tag>>,
     /// <p>Specifies configurations for one or more transform jobs that Amazon SageMaker runs to test the model package.</p>
     #[serde(rename = "ValidationSpecification")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1215,6 +2086,50 @@ pub struct CreateModelPackageOutput {
     /// <p>The Amazon Resource Name (ARN) of the new model package.</p>
     #[serde(rename = "ModelPackageArn")]
     pub model_package_arn: String,
+}
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct CreateModelQualityJobDefinitionRequest {
+    /// <p>The name of the monitoring job definition.</p>
+    #[serde(rename = "JobDefinitionName")]
+    pub job_definition_name: String,
+    #[serde(rename = "JobResources")]
+    pub job_resources: MonitoringResources,
+    /// <p>The container that runs the monitoring job.</p>
+    #[serde(rename = "ModelQualityAppSpecification")]
+    pub model_quality_app_specification: ModelQualityAppSpecification,
+    /// <p>Specifies the constraints and baselines for the monitoring job.</p>
+    #[serde(rename = "ModelQualityBaselineConfig")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub model_quality_baseline_config: Option<ModelQualityBaselineConfig>,
+    /// <p>A list of the inputs that are monitored. Currently endpoints are supported.</p>
+    #[serde(rename = "ModelQualityJobInput")]
+    pub model_quality_job_input: ModelQualityJobInput,
+    #[serde(rename = "ModelQualityJobOutputConfig")]
+    pub model_quality_job_output_config: MonitoringOutputConfig,
+    /// <p>Specifies the network configuration for the monitoring job.</p>
+    #[serde(rename = "NetworkConfig")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub network_config: Option<MonitoringNetworkConfig>,
+    /// <p>The Amazon Resource Name (ARN) of an IAM role that Amazon SageMaker can assume to perform tasks on your behalf.</p>
+    #[serde(rename = "RoleArn")]
+    pub role_arn: String,
+    #[serde(rename = "StoppingCondition")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub stopping_condition: Option<MonitoringStoppingCondition>,
+    /// <p>(Optional) An array of key-value pairs. For more information, see <a href="https://docs.aws.amazon.com/awsaccountbilling/latest/aboutv2/cost-alloc-tags.html#allocation-whatURL">Using Cost Allocation Tags</a> in the <i>AWS Billing and Cost Management User Guide</i>.</p>
+    #[serde(rename = "Tags")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub tags: Option<Vec<Tag>>,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct CreateModelQualityJobDefinitionResponse {
+    /// <p>The Amazon Resource Name (ARN) of the model quality monitoring job.</p>
+    #[serde(rename = "JobDefinitionArn")]
+    pub job_definition_arn: String,
 }
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
@@ -1288,7 +2203,7 @@ pub struct CreateNotebookInstanceInput {
     #[serde(rename = "SubnetId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub subnet_id: Option<String>,
-    /// <p>A list of tags to associate with the notebook instance. You can add tags later by using the <code>CreateTags</code> API.</p>
+    /// <p>An array of key-value pairs. You can use tags to categorize your AWS resources in different ways, for example, by purpose, owner, or environment. For more information, see <a href="https://docs.aws.amazon.com/general/latest/gr/aws_tagging.html">Tagging AWS Resources</a>.</p>
     #[serde(rename = "Tags")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub tags: Option<Vec<Tag>>,
@@ -1330,6 +2245,44 @@ pub struct CreateNotebookInstanceOutput {
     #[serde(rename = "NotebookInstanceArn")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub notebook_instance_arn: Option<String>,
+}
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct CreatePipelineRequest {
+    /// <p>A unique, case-sensitive identifier that you provide to ensure the idempotency of the operation. An idempotent operation completes no more than one time.</p>
+    #[serde(rename = "ClientRequestToken")]
+    pub client_request_token: String,
+    /// <p>The JSON pipeline definition of the pipeline.</p>
+    #[serde(rename = "PipelineDefinition")]
+    pub pipeline_definition: String,
+    /// <p>A description of the pipeline.</p>
+    #[serde(rename = "PipelineDescription")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub pipeline_description: Option<String>,
+    /// <p>The display name of the pipeline.</p>
+    #[serde(rename = "PipelineDisplayName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub pipeline_display_name: Option<String>,
+    /// <p>The name of the pipeline.</p>
+    #[serde(rename = "PipelineName")]
+    pub pipeline_name: String,
+    /// <p>The Amazon Resource Name (ARN) of the role used by the pipeline to access and create resources.</p>
+    #[serde(rename = "RoleArn")]
+    pub role_arn: String,
+    /// <p>A list of tags to apply to the created pipeline.</p>
+    #[serde(rename = "Tags")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub tags: Option<Vec<Tag>>,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct CreatePipelineResponse {
+    /// <p>The Amazon Resource Name (ARN) of the created pipeline.</p>
+    #[serde(rename = "PipelineArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub pipeline_arn: Option<String>,
 }
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
@@ -1394,7 +2347,7 @@ pub struct CreateProcessingJobRequest {
     #[serde(rename = "NetworkConfig")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub network_config: Option<NetworkConfig>,
-    /// <p>For each input, data is downloaded from S3 into the processing container before the processing job begins running if "S3InputMode" is set to <code>File</code>.</p>
+    /// <p>List of input configurations for the processing job.</p>
     #[serde(rename = "ProcessingInputs")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub processing_inputs: Option<Vec<ProcessingInput>>,
@@ -1431,6 +2384,36 @@ pub struct CreateProcessingJobResponse {
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct CreateProjectInput {
+    /// <p>A description for the project.</p>
+    #[serde(rename = "ProjectDescription")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub project_description: Option<String>,
+    /// <p>The name of the project.</p>
+    #[serde(rename = "ProjectName")]
+    pub project_name: String,
+    /// <p>The product ID and provisioning artifact ID to provision a service catalog. For information, see <a href="https://docs.aws.amazon.com/servicecatalog/latest/adminguide/introduction.html">What is AWS Service Catalog</a>.</p>
+    #[serde(rename = "ServiceCatalogProvisioningDetails")]
+    pub service_catalog_provisioning_details: ServiceCatalogProvisioningDetails,
+    /// <p>An array of key-value pairs that you want to use to organize and track your AWS resource costs. For more information, see <a href="https://docs.aws.amazon.com/general/latest/gr/aws_tagging.html">Tagging AWS resources</a> in the <i>AWS General Reference Guide</i>.</p>
+    #[serde(rename = "Tags")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub tags: Option<Vec<Tag>>,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct CreateProjectOutput {
+    /// <p>The Amazon Resource Name (ARN) of the project.</p>
+    #[serde(rename = "ProjectArn")]
+    pub project_arn: String,
+    /// <p>The ID of the new project.</p>
+    #[serde(rename = "ProjectId")]
+    pub project_id: String,
+}
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateTrainingJobRequest {
     /// <p>The registry path of the Docker image that contains the training algorithm and algorithm-specific metadata, including the input mode. For more information about algorithms provided by Amazon SageMaker, see <a href="https://docs.aws.amazon.com/sagemaker/latest/dg/algos.html">Algorithms</a>. For information about providing your own algorithms, see <a href="https://docs.aws.amazon.com/sagemaker/latest/dg/your-algorithms.html">Using Your Own Algorithms with Amazon SageMaker</a>. </p>
     #[serde(rename = "AlgorithmSpecification")]
@@ -1442,7 +2425,7 @@ pub struct CreateTrainingJobRequest {
     #[serde(rename = "DebugHookConfig")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub debug_hook_config: Option<DebugHookConfig>,
-    /// <p>Configuration information for debugging rules.</p>
+    /// <p>Configuration information for Debugger rules for debugging output tensors.</p>
     #[serde(rename = "DebugRuleConfigurations")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub debug_rule_configurations: Option<Vec<DebugRuleConfiguration>>,
@@ -1472,6 +2455,13 @@ pub struct CreateTrainingJobRequest {
     /// <p>Specifies the path to the S3 location where you want to store model artifacts. Amazon SageMaker creates subfolders for the artifacts. </p>
     #[serde(rename = "OutputDataConfig")]
     pub output_data_config: OutputDataConfig,
+    #[serde(rename = "ProfilerConfig")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub profiler_config: Option<ProfilerConfig>,
+    /// <p>Configuration information for Debugger rules for profiling system and framework metrics.</p>
+    #[serde(rename = "ProfilerRuleConfigurations")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub profiler_rule_configurations: Option<Vec<ProfilerRuleConfiguration>>,
     /// <p>The resources, including the ML compute instances and ML storage volumes, to use for model training. </p> <p>ML storage volumes store model artifacts and incremental states. Training algorithms might also use ML storage volumes for scratch space. If you want Amazon SageMaker to use the ML storage volume to store the training data, choose <code>File</code> as the <code>TrainingInputMode</code> in the algorithm specification. For distributed training algorithms, specify an instance count greater than 1.</p>
     #[serde(rename = "ResourceConfig")]
     pub resource_config: ResourceConfig,
@@ -1481,7 +2471,7 @@ pub struct CreateTrainingJobRequest {
     /// <p>Specifies a limit to how long a model training job can run. When the job reaches the time limit, Amazon SageMaker ends the training job. Use this API to cap model training costs.</p> <p>To stop a job, Amazon SageMaker sends the algorithm the <code>SIGTERM</code> signal, which delays job termination for 120 seconds. Algorithms can use this 120-second window to save the model artifacts, so the results of training are not lost. </p>
     #[serde(rename = "StoppingCondition")]
     pub stopping_condition: StoppingCondition,
-    /// <p>An array of key-value pairs. For more information, see <a href="https://docs.aws.amazon.com/awsaccountbilling/latest/aboutv2/cost-alloc-tags.html#allocation-what">Using Cost Allocation Tags</a> in the <i>AWS Billing and Cost Management User Guide</i>. </p>
+    /// <p>An array of key-value pairs. You can use tags to categorize your AWS resources in different ways, for example, by purpose, owner, or environment. For more information, see <a href="https://docs.aws.amazon.com/general/latest/gr/aws_tagging.html">Tagging AWS Resources</a>.</p>
     #[serde(rename = "Tags")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub tags: Option<Vec<Tag>>,
@@ -1579,6 +2569,9 @@ pub struct CreateTrialComponentRequest {
     #[serde(rename = "InputArtifacts")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub input_artifacts: Option<::std::collections::HashMap<String, TrialComponentArtifact>>,
+    #[serde(rename = "MetadataProperties")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub metadata_properties: Option<MetadataProperties>,
     /// <p>The output artifacts for the component. Examples of output artifacts are metrics, snapshots, logs, and images.</p>
     #[serde(rename = "OutputArtifacts")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1623,6 +2616,9 @@ pub struct CreateTrialRequest {
     /// <p>The name of the experiment to associate the trial with.</p>
     #[serde(rename = "ExperimentName")]
     pub experiment_name: String,
+    #[serde(rename = "MetadataProperties")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub metadata_properties: Option<MetadataProperties>,
     /// <p>A list of tags to associate with the trial. You can use <a>Search</a> API to search on the tags.</p>
     #[serde(rename = "Tags")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1679,11 +2675,42 @@ pub struct CreateUserProfileResponse {
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct CreateWorkforceRequest {
+    /// <p>Use this parameter to configure an Amazon Cognito private workforce. A single Cognito workforce is created using and corresponds to a single <a href="https://docs.aws.amazon.com/cognito/latest/developerguide/cognito-user-identity-pools.html"> Amazon Cognito user pool</a>.</p> <p>Do not use <code>OidcConfig</code> if you specify values for <code>CognitoConfig</code>.</p>
+    #[serde(rename = "CognitoConfig")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub cognito_config: Option<CognitoConfig>,
+    /// <p>Use this parameter to configure a private workforce using your own OIDC Identity Provider.</p> <p>Do not use <code>CognitoConfig</code> if you specify values for <code>OidcConfig</code>.</p>
+    #[serde(rename = "OidcConfig")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub oidc_config: Option<OidcConfig>,
+    #[serde(rename = "SourceIpConfig")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub source_ip_config: Option<SourceIpConfig>,
+    /// <p>An array of key-value pairs that contain metadata to help you categorize and organize our workforce. Each tag consists of a key and a value, both of which you define.</p>
+    #[serde(rename = "Tags")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub tags: Option<Vec<Tag>>,
+    /// <p>The name of the private workforce.</p>
+    #[serde(rename = "WorkforceName")]
+    pub workforce_name: String,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct CreateWorkforceResponse {
+    /// <p>The Amazon Resource Name (ARN) of the workforce.</p>
+    #[serde(rename = "WorkforceArn")]
+    pub workforce_arn: String,
+}
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateWorkteamRequest {
     /// <p>A description of the work team.</p>
     #[serde(rename = "Description")]
     pub description: String,
-    /// <p>A list of <code>MemberDefinition</code> objects that contains objects that identify the Amazon Cognito user pool that makes up the work team. For more information, see <a href="https://docs.aws.amazon.com/cognito/latest/developerguide/cognito-user-identity-pools.html">Amazon Cognito User Pools</a>.</p> <p>All of the <code>CognitoMemberDefinition</code> objects that make up the member definition must have the same <code>ClientId</code> and <code>UserPool</code> values.</p>
+    /// <p>A list of <code>MemberDefinition</code> objects that contains objects that identify the workers that make up the work team. </p> <p>Workforces can be created using Amazon Cognito or your own OIDC Identity Provider (IdP). For private workforces created using Amazon Cognito use <code>CognitoMemberDefinition</code>. For workforces created using your own OIDC identity provider (IdP) use <code>OidcMemberDefinition</code>. Do not provide input for both of these parameters in a single request.</p> <p>For workforces created using Amazon Cognito, private work teams correspond to Amazon Cognito <i>user groups</i> within the user pool used to create a workforce. All of the <code>CognitoMemberDefinition</code> objects that make up the member definition must have the same <code>ClientId</code> and <code>UserPool</code> values. To add a Amazon Cognito user group to an existing worker pool, see <a href="">Adding groups to a User Pool</a>. For more information about user pools, see <a href="https://docs.aws.amazon.com/cognito/latest/developerguide/cognito-user-identity-pools.html">Amazon Cognito User Pools</a>.</p> <p>For workforces created using your own OIDC IdP, specify the user groups that you want to include in your private work team in <code>OidcMemberDefinition</code> by listing those groups in <code>Groups</code>.</p>
     #[serde(rename = "MemberDefinitions")]
     pub member_definitions: Vec<MemberDefinition>,
     /// <p>Configures notification of workers regarding available or expiring work items.</p>
@@ -1694,6 +2721,10 @@ pub struct CreateWorkteamRequest {
     #[serde(rename = "Tags")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub tags: Option<Vec<Tag>>,
+    /// <p>The name of the workforce.</p>
+    #[serde(rename = "WorkforceName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub workforce_name: Option<String>,
     /// <p>The name of the work team. Use this name to identify the work team.</p>
     #[serde(rename = "WorkteamName")]
     pub workteam_name: String,
@@ -1706,6 +2737,21 @@ pub struct CreateWorkteamResponse {
     #[serde(rename = "WorkteamArn")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub workteam_arn: Option<String>,
+}
+
+/// <p>A custom SageMaker image. For more information, see <a href="https://docs.aws.amazon.com/sagemaker/latest/dg/studio-byoi.html">Bring your own SageMaker image</a>.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
+pub struct CustomImage {
+    /// <p>The name of the AppImageConfig.</p>
+    #[serde(rename = "AppImageConfigName")]
+    pub app_image_config_name: String,
+    /// <p>The name of the CustomImage. Must be unique to your account.</p>
+    #[serde(rename = "ImageName")]
+    pub image_name: String,
+    /// <p>The version number of the CustomImage.</p>
+    #[serde(rename = "ImageVersionNumber")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub image_version_number: Option<i64>,
 }
 
 /// <p><p/></p>
@@ -1755,6 +2801,20 @@ pub struct DataCaptureConfigSummary {
     pub kms_key_id: String,
 }
 
+/// <p>The meta data of the Glue table which serves as data catalog for the <code>OfflineStore</code>. </p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
+pub struct DataCatalogConfig {
+    /// <p>The name of the Glue table catalog.</p>
+    #[serde(rename = "Catalog")]
+    pub catalog: String,
+    /// <p>The name of the Glue table database.</p>
+    #[serde(rename = "Database")]
+    pub database: String,
+    /// <p>The name of the Glue table.</p>
+    #[serde(rename = "TableName")]
+    pub table_name: String,
+}
+
 /// <p>The data structure used to specify the data to be used for inference in a batch transform job and to associate the data that is relevant to the prediction results in the output. The input filter provided allows you to exclude input data that is not needed for inference in a batch transform job. The output filter provided allows you to include input data relevant to interpreting the predictions in the output from the job. For more information, see <a href="https://docs.aws.amazon.com/sagemaker/latest/dg/batch-transform-data-processing.html">Associate Prediction Results with their Corresponding Input Records</a>.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct DataProcessing {
@@ -1772,6 +2832,56 @@ pub struct DataProcessing {
     pub output_filter: Option<String>,
 }
 
+/// <p>Information about the container that a data quality monitoring job runs.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
+pub struct DataQualityAppSpecification {
+    /// <p>The arguments to send to the container that the monitoring job runs.</p>
+    #[serde(rename = "ContainerArguments")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub container_arguments: Option<Vec<String>>,
+    /// <p>The entrypoint for a container used to run a monitoring job.</p>
+    #[serde(rename = "ContainerEntrypoint")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub container_entrypoint: Option<Vec<String>>,
+    /// <p>Sets the environment variables in the container that the monitoring job runs.</p>
+    #[serde(rename = "Environment")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub environment: Option<::std::collections::HashMap<String, String>>,
+    /// <p>The container image that the data quality monitoring job runs.</p>
+    #[serde(rename = "ImageUri")]
+    pub image_uri: String,
+    /// <p>An Amazon S3 URI to a script that is called after analysis has been performed. Applicable only for the built-in (first party) containers.</p>
+    #[serde(rename = "PostAnalyticsProcessorSourceUri")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub post_analytics_processor_source_uri: Option<String>,
+    /// <p>An Amazon S3 URI to a script that is called per row prior to running analysis. It can base64 decode the payload and convert it into a flatted json so that the built-in container can use the converted data. Applicable only for the built-in (first party) containers.</p>
+    #[serde(rename = "RecordPreprocessorSourceUri")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub record_preprocessor_source_uri: Option<String>,
+}
+
+/// <p>Configuration for monitoring constraints and monitoring statistics. These baseline resources are compared against the results of the current job from the series of jobs scheduled to collect data periodically.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
+pub struct DataQualityBaselineConfig {
+    /// <p>The name of the job that performs baselining for the data quality monitoring job.</p>
+    #[serde(rename = "BaseliningJobName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub baselining_job_name: Option<String>,
+    #[serde(rename = "ConstraintsResource")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub constraints_resource: Option<MonitoringConstraintsResource>,
+    #[serde(rename = "StatisticsResource")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub statistics_resource: Option<MonitoringStatisticsResource>,
+}
+
+/// <p>The input for the data quality monitoring job. Currently endpoints are supported for input.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
+pub struct DataQualityJobInput {
+    #[serde(rename = "EndpointInput")]
+    pub endpoint_input: EndpointInput,
+}
+
 /// <p>Describes the location of the channel data.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct DataSource {
@@ -1785,30 +2895,53 @@ pub struct DataSource {
     pub s3_data_source: Option<S3DataSource>,
 }
 
-/// <p>Configuration information for the debug hook parameters, collection configuration, and storage paths.</p>
+/// <p>Configuration for Dataset Definition inputs. The Dataset Definition input must specify exactly one of either <code>AthenaDatasetDefinition</code> or <code>RedshiftDatasetDefinition</code> types.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
-pub struct DebugHookConfig {
-    /// <p>Configuration information for tensor collections.</p>
-    #[serde(rename = "CollectionConfigurations")]
+pub struct DatasetDefinition {
+    #[serde(rename = "AthenaDatasetDefinition")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub collection_configurations: Option<Vec<CollectionConfiguration>>,
-    /// <p>Configuration information for the debug hook parameters.</p>
-    #[serde(rename = "HookParameters")]
+    pub athena_dataset_definition: Option<AthenaDatasetDefinition>,
+    /// <p>Whether the generated dataset is <code>FullyReplicated</code> or <code>ShardedByS3Key</code> (default).</p>
+    #[serde(rename = "DataDistributionType")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub hook_parameters: Option<::std::collections::HashMap<String, String>>,
-    /// <p>Path to local storage location for tensors. Defaults to <code>/opt/ml/output/tensors/</code>.</p>
+    pub data_distribution_type: Option<String>,
+    /// <p>Whether to use <code>File</code> or <code>Pipe</code> input mode. In <code>File</code> (default) mode, Amazon SageMaker copies the data from the input source onto the local Amazon Elastic Block Store (Amazon EBS) volumes before starting your training algorithm. This is the most commonly used input mode. In <code>Pipe</code> mode, Amazon SageMaker streams input data from the source directly to your algorithm without using the EBS volume.</p>
+    #[serde(rename = "InputMode")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub input_mode: Option<String>,
+    /// <p>The local path where you want Amazon SageMaker to download the Dataset Definition inputs to run a processing job. <code>LocalPath</code> is an absolute path to the input data. This is a required parameter when <code>AppManaged</code> is <code>False</code> (default).</p>
     #[serde(rename = "LocalPath")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub local_path: Option<String>,
-    /// <p>Path to Amazon S3 storage location for tensors.</p>
+    #[serde(rename = "RedshiftDatasetDefinition")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub redshift_dataset_definition: Option<RedshiftDatasetDefinition>,
+}
+
+/// <p>Configuration information for the Debugger hook parameters, metric and tensor collections, and storage paths. To learn more about how to configure the <code>DebugHookConfig</code> parameter, see <a href="https://docs.aws.amazon.com/sagemaker/latest/dg/debugger-createtrainingjob-api.html">Use the SageMaker and Debugger Configuration API Operations to Create, Update, and Debug Your Training Job</a>.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
+pub struct DebugHookConfig {
+    /// <p>Configuration information for Debugger tensor collections. To learn more about how to configure the <code>CollectionConfiguration</code> parameter, see <a href="https://docs.aws.amazon.com/sagemaker/latest/dg/debugger-createtrainingjob-api.html">Use the SageMaker and Debugger Configuration API Operations to Create, Update, and Debug Your Training Job</a>. </p>
+    #[serde(rename = "CollectionConfigurations")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub collection_configurations: Option<Vec<CollectionConfiguration>>,
+    /// <p>Configuration information for the Debugger hook parameters.</p>
+    #[serde(rename = "HookParameters")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub hook_parameters: Option<::std::collections::HashMap<String, String>>,
+    /// <p>Path to local storage location for metrics and tensors. Defaults to <code>/opt/ml/output/tensors/</code>.</p>
+    #[serde(rename = "LocalPath")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub local_path: Option<String>,
+    /// <p>Path to Amazon S3 storage location for metrics and tensors.</p>
     #[serde(rename = "S3OutputPath")]
     pub s3_output_path: String,
 }
 
-/// <p>Configuration information for debugging rules.</p>
+/// <p>Configuration information for SageMaker Debugger rules for debugging. To learn more about how to configure the <code>DebugRuleConfiguration</code> parameter, see <a href="https://docs.aws.amazon.com/sagemaker/latest/dg/debugger-createtrainingjob-api.html">Use the SageMaker and Debugger Configuration API Operations to Create, Update, and Debug Your Training Job</a>.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct DebugRuleConfiguration {
-    /// <p>The instance type to deploy for a training job.</p>
+    /// <p>The instance type to deploy a Debugger custom rule for debugging a training job.</p>
     #[serde(rename = "InstanceType")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub instance_type: Option<String>,
@@ -1822,7 +2955,7 @@ pub struct DebugRuleConfiguration {
     /// <p>The Amazon Elastic Container (ECR) Image for the managed rule evaluation.</p>
     #[serde(rename = "RuleEvaluatorImage")]
     pub rule_evaluator_image: String,
-    /// <p> Runtime configuration for rule container.</p>
+    /// <p>Runtime configuration for rule container.</p>
     #[serde(rename = "RuleParameters")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub rule_parameters: Option<::std::collections::HashMap<String, String>>,
@@ -1844,7 +2977,7 @@ pub struct DebugRuleEvaluationStatus {
     #[serde(rename = "LastModifiedTime")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub last_modified_time: Option<f64>,
-    /// <p>The name of the rule configuration</p>
+    /// <p>The name of the rule configuration.</p>
     #[serde(rename = "RuleConfigurationName")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub rule_configuration_name: Option<String>,
@@ -1864,10 +2997,35 @@ pub struct DebugRuleEvaluationStatus {
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct DeleteActionRequest {
+    /// <p>The name of the action to delete.</p>
+    #[serde(rename = "ActionName")]
+    pub action_name: String,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct DeleteActionResponse {
+    /// <p>The Amazon Resource Name (ARN) of the action.</p>
+    #[serde(rename = "ActionArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub action_arn: Option<String>,
+}
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteAlgorithmInput {
     /// <p>The name of the algorithm to delete.</p>
     #[serde(rename = "AlgorithmName")]
     pub algorithm_name: String,
+}
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct DeleteAppImageConfigRequest {
+    /// <p>The name of the AppImageConfig to delete.</p>
+    #[serde(rename = "AppImageConfigName")]
+    pub app_image_config_name: String,
 }
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
@@ -1889,10 +3047,89 @@ pub struct DeleteAppRequest {
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct DeleteArtifactRequest {
+    /// <p>The Amazon Resource Name (ARN) of the artifact to delete.</p>
+    #[serde(rename = "ArtifactArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub artifact_arn: Option<String>,
+    /// <p>The URI of the source.</p>
+    #[serde(rename = "Source")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub source: Option<ArtifactSource>,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct DeleteArtifactResponse {
+    /// <p>The Amazon Resource Name (ARN) of the artifact.</p>
+    #[serde(rename = "ArtifactArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub artifact_arn: Option<String>,
+}
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct DeleteAssociationRequest {
+    /// <p>The Amazon Resource Name (ARN) of the destination.</p>
+    #[serde(rename = "DestinationArn")]
+    pub destination_arn: String,
+    /// <p>The ARN of the source.</p>
+    #[serde(rename = "SourceArn")]
+    pub source_arn: String,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct DeleteAssociationResponse {
+    /// <p>The Amazon Resource Name (ARN) of the destination.</p>
+    #[serde(rename = "DestinationArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub destination_arn: Option<String>,
+    /// <p>The ARN of the source.</p>
+    #[serde(rename = "SourceArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub source_arn: Option<String>,
+}
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteCodeRepositoryInput {
     /// <p>The name of the Git repository to delete.</p>
     #[serde(rename = "CodeRepositoryName")]
     pub code_repository_name: String,
+}
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct DeleteContextRequest {
+    /// <p>The name of the context to delete.</p>
+    #[serde(rename = "ContextName")]
+    pub context_name: String,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct DeleteContextResponse {
+    /// <p>The Amazon Resource Name (ARN) of the context.</p>
+    #[serde(rename = "ContextArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub context_arn: Option<String>,
+}
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct DeleteDataQualityJobDefinitionRequest {
+    /// <p>The name of the data quality monitoring job definition to delete.</p>
+    #[serde(rename = "JobDefinitionName")]
+    pub job_definition_name: String,
+}
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct DeleteDeviceFleetRequest {
+    /// <p>The name of the fleet to delete.</p>
+    #[serde(rename = "DeviceFleetName")]
+    pub device_fleet_name: String,
 }
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
@@ -1942,6 +3179,14 @@ pub struct DeleteExperimentResponse {
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct DeleteFeatureGroupRequest {
+    /// <p>The name of the <code>FeatureGroup</code> you want to delete. The name must be unique within an AWS Region in an AWS account. </p>
+    #[serde(rename = "FeatureGroupName")]
+    pub feature_group_name: String,
+}
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteFlowDefinitionRequest {
     /// <p>The name of the flow definition you are deleting.</p>
     #[serde(rename = "FlowDefinitionName")]
@@ -1966,6 +3211,49 @@ pub struct DeleteHumanTaskUiResponse {}
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct DeleteImageRequest {
+    /// <p>The name of the image to delete.</p>
+    #[serde(rename = "ImageName")]
+    pub image_name: String,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct DeleteImageResponse {}
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct DeleteImageVersionRequest {
+    /// <p>The name of the image.</p>
+    #[serde(rename = "ImageName")]
+    pub image_name: String,
+    /// <p>The version to delete.</p>
+    #[serde(rename = "Version")]
+    pub version: i64,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct DeleteImageVersionResponse {}
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct DeleteModelBiasJobDefinitionRequest {
+    /// <p>The name of the model bias job definition to delete.</p>
+    #[serde(rename = "JobDefinitionName")]
+    pub job_definition_name: String,
+}
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct DeleteModelExplainabilityJobDefinitionRequest {
+    /// <p>The name of the model explainability job definition to delete.</p>
+    #[serde(rename = "JobDefinitionName")]
+    pub job_definition_name: String,
+}
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteModelInput {
     /// <p>The name of the model to delete.</p>
     #[serde(rename = "ModelName")]
@@ -1974,10 +3262,34 @@ pub struct DeleteModelInput {
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct DeleteModelPackageGroupInput {
+    /// <p>The name of the model group to delete.</p>
+    #[serde(rename = "ModelPackageGroupName")]
+    pub model_package_group_name: String,
+}
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct DeleteModelPackageGroupPolicyInput {
+    /// <p>The name of the model group for which to delete the policy.</p>
+    #[serde(rename = "ModelPackageGroupName")]
+    pub model_package_group_name: String,
+}
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteModelPackageInput {
     /// <p>The name of the model package. The name must have 1 to 63 characters. Valid characters are a-z, A-Z, 0-9, and - (hyphen).</p>
     #[serde(rename = "ModelPackageName")]
     pub model_package_name: String,
+}
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct DeleteModelQualityJobDefinitionRequest {
+    /// <p>The name of the model quality monitoring job definition to delete.</p>
+    #[serde(rename = "JobDefinitionName")]
+    pub job_definition_name: String,
 }
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
@@ -2002,6 +3314,34 @@ pub struct DeleteNotebookInstanceLifecycleConfigInput {
     /// <p>The name of the lifecycle configuration to delete.</p>
     #[serde(rename = "NotebookInstanceLifecycleConfigName")]
     pub notebook_instance_lifecycle_config_name: String,
+}
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct DeletePipelineRequest {
+    /// <p>A unique, case-sensitive identifier that you provide to ensure the idempotency of the operation. An idempotent operation completes no more than one time.</p>
+    #[serde(rename = "ClientRequestToken")]
+    pub client_request_token: String,
+    /// <p>The name of the pipeline to delete.</p>
+    #[serde(rename = "PipelineName")]
+    pub pipeline_name: String,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct DeletePipelineResponse {
+    /// <p>The Amazon Resource Name (ARN) of the pipeline to delete.</p>
+    #[serde(rename = "PipelineArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub pipeline_arn: Option<String>,
+}
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct DeleteProjectInput {
+    /// <p>The name of the project to delete.</p>
+    #[serde(rename = "ProjectName")]
+    pub project_name: String,
 }
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
@@ -2066,6 +3406,18 @@ pub struct DeleteUserProfileRequest {
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct DeleteWorkforceRequest {
+    /// <p>The name of the workforce.</p>
+    #[serde(rename = "WorkforceName")]
+    pub workforce_name: String,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct DeleteWorkforceResponse {}
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteWorkteamRequest {
     /// <p>The name of the work team to delete.</p>
     #[serde(rename = "WorkteamName")]
@@ -2096,6 +3448,87 @@ pub struct DeployedImage {
     #[serde(rename = "SpecifiedImage")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub specified_image: Option<String>,
+}
+
+/// <p>Currently, the <code>DeploymentConfig</code> API is not supported.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
+pub struct DeploymentConfig {
+    /// <p><p/></p>
+    #[serde(rename = "AutoRollbackConfiguration")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub auto_rollback_configuration: Option<AutoRollbackConfig>,
+    /// <p><p/></p>
+    #[serde(rename = "BlueGreenUpdatePolicy")]
+    pub blue_green_update_policy: BlueGreenUpdatePolicy,
+}
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct DeregisterDevicesRequest {
+    /// <p>The name of the fleet the devices belong to.</p>
+    #[serde(rename = "DeviceFleetName")]
+    pub device_fleet_name: String,
+    /// <p>The unique IDs of the devices.</p>
+    #[serde(rename = "DeviceNames")]
+    pub device_names: Vec<String>,
+}
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct DescribeActionRequest {
+    /// <p>The name of the action to describe.</p>
+    #[serde(rename = "ActionName")]
+    pub action_name: String,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct DescribeActionResponse {
+    /// <p>The Amazon Resource Name (ARN) of the action.</p>
+    #[serde(rename = "ActionArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub action_arn: Option<String>,
+    /// <p>The name of the action.</p>
+    #[serde(rename = "ActionName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub action_name: Option<String>,
+    /// <p>The type of the action.</p>
+    #[serde(rename = "ActionType")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub action_type: Option<String>,
+    #[serde(rename = "CreatedBy")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub created_by: Option<UserContext>,
+    /// <p>When the action was created.</p>
+    #[serde(rename = "CreationTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub creation_time: Option<f64>,
+    /// <p>The description of the action.</p>
+    #[serde(rename = "Description")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub description: Option<String>,
+    #[serde(rename = "LastModifiedBy")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub last_modified_by: Option<UserContext>,
+    /// <p>When the action was last modified.</p>
+    #[serde(rename = "LastModifiedTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub last_modified_time: Option<f64>,
+    #[serde(rename = "MetadataProperties")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub metadata_properties: Option<MetadataProperties>,
+    /// <p>A list of the action's properties.</p>
+    #[serde(rename = "Properties")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub properties: Option<::std::collections::HashMap<String, String>>,
+    /// <p>The source of the action.</p>
+    #[serde(rename = "Source")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub source: Option<ActionSource>,
+    /// <p>The status of the action.</p>
+    #[serde(rename = "Status")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub status: Option<String>,
 }
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
@@ -2151,6 +3584,39 @@ pub struct DescribeAlgorithmOutput {
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct DescribeAppImageConfigRequest {
+    /// <p>The name of the AppImageConfig to describe.</p>
+    #[serde(rename = "AppImageConfigName")]
+    pub app_image_config_name: String,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct DescribeAppImageConfigResponse {
+    /// <p>The Amazon Resource Name (ARN) of the AppImageConfig.</p>
+    #[serde(rename = "AppImageConfigArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub app_image_config_arn: Option<String>,
+    /// <p>The name of the AppImageConfig.</p>
+    #[serde(rename = "AppImageConfigName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub app_image_config_name: Option<String>,
+    /// <p>When the AppImageConfig was created.</p>
+    #[serde(rename = "CreationTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub creation_time: Option<f64>,
+    /// <p>The configuration of a KernelGateway app.</p>
+    #[serde(rename = "KernelGatewayImageConfig")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub kernel_gateway_image_config: Option<KernelGatewayImageConfig>,
+    /// <p>When the AppImageConfig was last modified.</p>
+    #[serde(rename = "LastModifiedTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub last_modified_time: Option<f64>,
+}
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeAppRequest {
     /// <p>The name of the app.</p>
     #[serde(rename = "AppName")]
@@ -2169,7 +3635,7 @@ pub struct DescribeAppRequest {
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeAppResponse {
-    /// <p>The app's Amazon Resource Name (ARN).</p>
+    /// <p>The Amazon Resource Name (ARN) of the app.</p>
     #[serde(rename = "AppArn")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub app_arn: Option<String>,
@@ -2213,6 +3679,56 @@ pub struct DescribeAppResponse {
     #[serde(rename = "UserProfileName")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub user_profile_name: Option<String>,
+}
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct DescribeArtifactRequest {
+    /// <p>The Amazon Resource Name (ARN) of the artifact to describe.</p>
+    #[serde(rename = "ArtifactArn")]
+    pub artifact_arn: String,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct DescribeArtifactResponse {
+    /// <p>The Amazon Resource Name (ARN) of the artifact.</p>
+    #[serde(rename = "ArtifactArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub artifact_arn: Option<String>,
+    /// <p>The name of the artifact.</p>
+    #[serde(rename = "ArtifactName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub artifact_name: Option<String>,
+    /// <p>The type of the artifact.</p>
+    #[serde(rename = "ArtifactType")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub artifact_type: Option<String>,
+    #[serde(rename = "CreatedBy")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub created_by: Option<UserContext>,
+    /// <p>When the artifact was created.</p>
+    #[serde(rename = "CreationTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub creation_time: Option<f64>,
+    #[serde(rename = "LastModifiedBy")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub last_modified_by: Option<UserContext>,
+    /// <p>When the artifact was last modified.</p>
+    #[serde(rename = "LastModifiedTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub last_modified_time: Option<f64>,
+    #[serde(rename = "MetadataProperties")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub metadata_properties: Option<MetadataProperties>,
+    /// <p>A list of the artifact's properties.</p>
+    #[serde(rename = "Properties")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub properties: Option<::std::collections::HashMap<String, String>>,
+    /// <p>The source of the artifact.</p>
+    #[serde(rename = "Source")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub source: Option<ArtifactSource>,
 }
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
@@ -2363,6 +3879,10 @@ pub struct DescribeCompilationJobResponse {
     /// <p>Information about the location in Amazon S3 that has been configured for storing the model artifacts used in the compilation job.</p>
     #[serde(rename = "ModelArtifacts")]
     pub model_artifacts: ModelArtifacts,
+    /// <p>Provides a BLAKE2 hash value that identifies the compiled model artifacts in Amazon S3.</p>
+    #[serde(rename = "ModelDigests")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub model_digests: Option<ModelDigests>,
     /// <p>Information about the output location for the compiled model and the target device that the model runs on.</p>
     #[serde(rename = "OutputConfig")]
     pub output_config: OutputConfig,
@@ -2376,6 +3896,200 @@ pub struct DescribeCompilationJobResponse {
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct DescribeContextRequest {
+    /// <p>The name of the context to describe.</p>
+    #[serde(rename = "ContextName")]
+    pub context_name: String,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct DescribeContextResponse {
+    /// <p>The Amazon Resource Name (ARN) of the context.</p>
+    #[serde(rename = "ContextArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub context_arn: Option<String>,
+    /// <p>The name of the context.</p>
+    #[serde(rename = "ContextName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub context_name: Option<String>,
+    /// <p>The type of the context.</p>
+    #[serde(rename = "ContextType")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub context_type: Option<String>,
+    #[serde(rename = "CreatedBy")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub created_by: Option<UserContext>,
+    /// <p>When the context was created.</p>
+    #[serde(rename = "CreationTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub creation_time: Option<f64>,
+    /// <p>The description of the context.</p>
+    #[serde(rename = "Description")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub description: Option<String>,
+    #[serde(rename = "LastModifiedBy")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub last_modified_by: Option<UserContext>,
+    /// <p>When the context was last modified.</p>
+    #[serde(rename = "LastModifiedTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub last_modified_time: Option<f64>,
+    /// <p>A list of the context's properties.</p>
+    #[serde(rename = "Properties")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub properties: Option<::std::collections::HashMap<String, String>>,
+    /// <p>The source of the context.</p>
+    #[serde(rename = "Source")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub source: Option<ContextSource>,
+}
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct DescribeDataQualityJobDefinitionRequest {
+    /// <p>The name of the data quality monitoring job definition to describe.</p>
+    #[serde(rename = "JobDefinitionName")]
+    pub job_definition_name: String,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct DescribeDataQualityJobDefinitionResponse {
+    /// <p>The time that the data quality monitoring job definition was created.</p>
+    #[serde(rename = "CreationTime")]
+    pub creation_time: f64,
+    /// <p>Information about the container that runs the data quality monitoring job.</p>
+    #[serde(rename = "DataQualityAppSpecification")]
+    pub data_quality_app_specification: DataQualityAppSpecification,
+    /// <p>The constraints and baselines for the data quality monitoring job definition.</p>
+    #[serde(rename = "DataQualityBaselineConfig")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub data_quality_baseline_config: Option<DataQualityBaselineConfig>,
+    /// <p>The list of inputs for the data quality monitoring job. Currently endpoints are supported.</p>
+    #[serde(rename = "DataQualityJobInput")]
+    pub data_quality_job_input: DataQualityJobInput,
+    #[serde(rename = "DataQualityJobOutputConfig")]
+    pub data_quality_job_output_config: MonitoringOutputConfig,
+    /// <p>The Amazon Resource Name (ARN) of the data quality monitoring job definition.</p>
+    #[serde(rename = "JobDefinitionArn")]
+    pub job_definition_arn: String,
+    /// <p>The name of the data quality monitoring job definition.</p>
+    #[serde(rename = "JobDefinitionName")]
+    pub job_definition_name: String,
+    #[serde(rename = "JobResources")]
+    pub job_resources: MonitoringResources,
+    /// <p>The networking configuration for the data quality monitoring job.</p>
+    #[serde(rename = "NetworkConfig")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub network_config: Option<MonitoringNetworkConfig>,
+    /// <p>The Amazon Resource Name (ARN) of an IAM role that Amazon SageMaker can assume to perform tasks on your behalf.</p>
+    #[serde(rename = "RoleArn")]
+    pub role_arn: String,
+    #[serde(rename = "StoppingCondition")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub stopping_condition: Option<MonitoringStoppingCondition>,
+}
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct DescribeDeviceFleetRequest {
+    /// <p>The name of the fleet.</p>
+    #[serde(rename = "DeviceFleetName")]
+    pub device_fleet_name: String,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct DescribeDeviceFleetResponse {
+    /// <p>Timestamp of when the device fleet was created.</p>
+    #[serde(rename = "CreationTime")]
+    pub creation_time: f64,
+    /// <p>A description of the fleet.</p>
+    #[serde(rename = "Description")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub description: Option<String>,
+    /// <p>The The Amazon Resource Name (ARN) of the fleet.</p>
+    #[serde(rename = "DeviceFleetArn")]
+    pub device_fleet_arn: String,
+    /// <p>The name of the fleet.</p>
+    #[serde(rename = "DeviceFleetName")]
+    pub device_fleet_name: String,
+    /// <p>The Amazon Resource Name (ARN) alias created in AWS Internet of Things (IoT).</p>
+    #[serde(rename = "IotRoleAlias")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub iot_role_alias: Option<String>,
+    /// <p>Timestamp of when the device fleet was last updated.</p>
+    #[serde(rename = "LastModifiedTime")]
+    pub last_modified_time: f64,
+    /// <p>The output configuration for storing sampled data.</p>
+    #[serde(rename = "OutputConfig")]
+    pub output_config: EdgeOutputConfig,
+    /// <p>The Amazon Resource Name (ARN) that has access to AWS Internet of Things (IoT).</p>
+    #[serde(rename = "RoleArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub role_arn: Option<String>,
+}
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct DescribeDeviceRequest {
+    /// <p>The name of the fleet the devices belong to.</p>
+    #[serde(rename = "DeviceFleetName")]
+    pub device_fleet_name: String,
+    /// <p>The unique ID of the device.</p>
+    #[serde(rename = "DeviceName")]
+    pub device_name: String,
+    /// <p>Next token of device description.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct DescribeDeviceResponse {
+    /// <p>A description of the device.</p>
+    #[serde(rename = "Description")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub description: Option<String>,
+    /// <p>The Amazon Resource Name (ARN) of the device.</p>
+    #[serde(rename = "DeviceArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub device_arn: Option<String>,
+    /// <p>The name of the fleet the device belongs to.</p>
+    #[serde(rename = "DeviceFleetName")]
+    pub device_fleet_name: String,
+    /// <p>The unique identifier of the device.</p>
+    #[serde(rename = "DeviceName")]
+    pub device_name: String,
+    /// <p>The AWS Internet of Things (IoT) object thing name associated with the device.</p>
+    #[serde(rename = "IotThingName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub iot_thing_name: Option<String>,
+    /// <p>The last heartbeat received from the device.</p>
+    #[serde(rename = "LatestHeartbeat")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub latest_heartbeat: Option<f64>,
+    /// <p>The maximum number of models.</p>
+    #[serde(rename = "MaxModels")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub max_models: Option<i64>,
+    /// <p>Models on the device.</p>
+    #[serde(rename = "Models")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub models: Option<Vec<EdgeModel>>,
+    /// <p>The response from the last list when returning a list large enough to need tokening.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+    /// <p>The timestamp of the last registration or de-reregistration.</p>
+    #[serde(rename = "RegistrationTime")]
+    pub registration_time: f64,
+}
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeDomainRequest {
     /// <p>The domain ID.</p>
     #[serde(rename = "DomainId")]
@@ -2385,6 +4099,10 @@ pub struct DescribeDomainRequest {
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeDomainResponse {
+    /// <p><p>Specifies the VPC used for non-EFS traffic. The default value is <code>PublicInternetOnly</code>.</p> <ul> <li> <p> <code>PublicInternetOnly</code> - Non-EFS traffic is through a VPC managed by Amazon SageMaker, which allows direct internet access</p> </li> <li> <p> <code>VpcOnly</code> - All Studio traffic is through the specified VPC and subnets</p> </li> </ul></p>
+    #[serde(rename = "AppNetworkAccessType")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub app_network_access_type: Option<String>,
     /// <p>The domain's authentication mode.</p>
     #[serde(rename = "AuthMode")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -2393,7 +4111,7 @@ pub struct DescribeDomainResponse {
     #[serde(rename = "CreationTime")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub creation_time: Option<f64>,
-    /// <p>Settings which are applied to all UserProfile in this domain, if settings are not explicitly specified in a given UserProfile. </p>
+    /// <p>Settings which are applied to all UserProfiles in this domain, if settings are not explicitly specified in a given UserProfile. </p>
     #[serde(rename = "DefaultUserSettings")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub default_user_settings: Option<UserSettings>,
@@ -2417,10 +4135,10 @@ pub struct DescribeDomainResponse {
     #[serde(rename = "HomeEfsFileSystemId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub home_efs_file_system_id: Option<String>,
-    /// <p>The AWS Key Management Service encryption key ID.</p>
-    #[serde(rename = "HomeEfsFileSystemKmsKeyId")]
+    /// <p>The AWS KMS customer managed CMK used to encrypt the EFS volume attached to the domain.</p>
+    #[serde(rename = "KmsKeyId")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub home_efs_file_system_kms_key_id: Option<String>,
+    pub kms_key_id: Option<String>,
     /// <p>The last modified time.</p>
     #[serde(rename = "LastModifiedTime")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -2433,7 +4151,7 @@ pub struct DescribeDomainResponse {
     #[serde(rename = "Status")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub status: Option<String>,
-    /// <p>Security setting to limit to a set of subnets.</p>
+    /// <p>The VPC subnets that Studio uses for communication.</p>
     #[serde(rename = "SubnetIds")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub subnet_ids: Option<Vec<String>>,
@@ -2441,10 +4159,76 @@ pub struct DescribeDomainResponse {
     #[serde(rename = "Url")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub url: Option<String>,
-    /// <p>The ID of the Amazon Virtual Private Cloud.</p>
+    /// <p>The ID of the Amazon Virtual Private Cloud (VPC) that Studio uses for communication.</p>
     #[serde(rename = "VpcId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub vpc_id: Option<String>,
+}
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct DescribeEdgePackagingJobRequest {
+    /// <p>The name of the edge packaging job.</p>
+    #[serde(rename = "EdgePackagingJobName")]
+    pub edge_packaging_job_name: String,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct DescribeEdgePackagingJobResponse {
+    /// <p>The name of the SageMaker Neo compilation job that is used to locate model artifacts that are being packaged.</p>
+    #[serde(rename = "CompilationJobName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub compilation_job_name: Option<String>,
+    /// <p>The timestamp of when the packaging job was created.</p>
+    #[serde(rename = "CreationTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub creation_time: Option<f64>,
+    /// <p>The Amazon Resource Name (ARN) of the edge packaging job.</p>
+    #[serde(rename = "EdgePackagingJobArn")]
+    pub edge_packaging_job_arn: String,
+    /// <p>The name of the edge packaging job.</p>
+    #[serde(rename = "EdgePackagingJobName")]
+    pub edge_packaging_job_name: String,
+    /// <p>The current status of the packaging job.</p>
+    #[serde(rename = "EdgePackagingJobStatus")]
+    pub edge_packaging_job_status: String,
+    /// <p>Returns a message describing the job status and error messages.</p>
+    #[serde(rename = "EdgePackagingJobStatusMessage")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub edge_packaging_job_status_message: Option<String>,
+    /// <p>The timestamp of when the job was last updated.</p>
+    #[serde(rename = "LastModifiedTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub last_modified_time: Option<f64>,
+    /// <p>The Amazon Simple Storage (S3) URI where model artifacts ares stored.</p>
+    #[serde(rename = "ModelArtifact")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub model_artifact: Option<String>,
+    /// <p>The name of the model.</p>
+    #[serde(rename = "ModelName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub model_name: Option<String>,
+    /// <p>The signature document of files in the model artifact.</p>
+    #[serde(rename = "ModelSignature")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub model_signature: Option<String>,
+    /// <p>The version of the model.</p>
+    #[serde(rename = "ModelVersion")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub model_version: Option<String>,
+    /// <p>The output configuration for the edge packaging job.</p>
+    #[serde(rename = "OutputConfig")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub output_config: Option<EdgeOutputConfig>,
+    /// <p>The CMK to use when encrypting the EBS volume the job run on.</p>
+    #[serde(rename = "ResourceKey")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub resource_key: Option<String>,
+    /// <p>The Amazon Resource Name (ARN) of an IAM role that enables Amazon SageMaker to download and upload the model, and to contact Neo.</p>
+    #[serde(rename = "RoleArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub role_arn: Option<String>,
 }
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
@@ -2512,6 +4296,10 @@ pub struct DescribeEndpointOutput {
     #[serde(rename = "FailureReason")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub failure_reason: Option<String>,
+    /// <p>The most recent deployment configuration for the endpoint.</p>
+    #[serde(rename = "LastDeploymentConfig")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub last_deployment_config: Option<DeploymentConfig>,
     /// <p>A timestamp that shows when the endpoint was last modified.</p>
     #[serde(rename = "LastModifiedTime")]
     pub last_modified_time: f64,
@@ -2568,6 +4356,72 @@ pub struct DescribeExperimentResponse {
     #[serde(rename = "Source")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub source: Option<ExperimentSource>,
+}
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct DescribeFeatureGroupRequest {
+    /// <p>The name of the <code>FeatureGroup</code> you want described. </p>
+    #[serde(rename = "FeatureGroupName")]
+    pub feature_group_name: String,
+    /// <p>A token to resume pagination of the list of <code>Features</code> (<code>FeatureDefinitions</code>). 2,500 <code>Features</code> are returned by default.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct DescribeFeatureGroupResponse {
+    /// <p>A timestamp indicating when SageMaker created the <code>FeatureGroup</code>.</p>
+    #[serde(rename = "CreationTime")]
+    pub creation_time: f64,
+    /// <p>A free form description of the feature group.</p>
+    #[serde(rename = "Description")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub description: Option<String>,
+    /// <p>The name of the feature that stores the <code>EventTime</code> of a Record in a <code>FeatureGroup</code>.</p> <p> An <code>EventTime</code> is a point in time when a new event occurs that corresponds to the creation or update of a <code>Record</code> in a <code>FeatureGroup</code>. All <code>Records</code> in the <code>FeatureGroup</code> have a corresponding <code>EventTime</code>.</p>
+    #[serde(rename = "EventTimeFeatureName")]
+    pub event_time_feature_name: String,
+    /// <p><p>The reason that the <code>FeatureGroup</code> failed to be replicated in the <code>OfflineStore</code>. This is failure can occur because:</p> <ul> <li> <p>The <code>FeatureGroup</code> could not be created in the <code>OfflineStore</code>.</p> </li> <li> <p>The <code>FeatureGroup</code> could not be deleted from the <code>OfflineStore</code>.</p> </li> </ul></p>
+    #[serde(rename = "FailureReason")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub failure_reason: Option<String>,
+    /// <p>A list of the <code>Features</code> in the <code>FeatureGroup</code>. Each feature is defined by a <code>FeatureName</code> and <code>FeatureType</code>.</p>
+    #[serde(rename = "FeatureDefinitions")]
+    pub feature_definitions: Vec<FeatureDefinition>,
+    /// <p>The Amazon Resource Name (ARN) of the <code>FeatureGroup</code>. </p>
+    #[serde(rename = "FeatureGroupArn")]
+    pub feature_group_arn: String,
+    /// <p>he name of the <code>FeatureGroup</code>.</p>
+    #[serde(rename = "FeatureGroupName")]
+    pub feature_group_name: String,
+    /// <p>The status of the feature group.</p>
+    #[serde(rename = "FeatureGroupStatus")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub feature_group_status: Option<String>,
+    /// <p>A token to resume pagination of the list of <code>Features</code> (<code>FeatureDefinitions</code>).</p>
+    #[serde(rename = "NextToken")]
+    pub next_token: String,
+    /// <p>The configuration of the <code>OfflineStore</code>, inducing the S3 location of the <code>OfflineStore</code>, AWS Glue or AWS Hive data catalogue configurations, and the security configuration.</p>
+    #[serde(rename = "OfflineStoreConfig")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub offline_store_config: Option<OfflineStoreConfig>,
+    /// <p>The status of the <code>OfflineStore</code>. Notifies you if replicating data into the <code>OfflineStore</code> has failed. Returns either: <code>Active</code> or <code>Blocked</code> </p>
+    #[serde(rename = "OfflineStoreStatus")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub offline_store_status: Option<OfflineStoreStatus>,
+    /// <p>The configuration for the <code>OnlineStore</code>.</p>
+    #[serde(rename = "OnlineStoreConfig")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub online_store_config: Option<OnlineStoreConfig>,
+    /// <p>The name of the <code>Feature</code> used for <code>RecordIdentifier</code>, whose value uniquely identifies a record stored in the feature store.</p>
+    #[serde(rename = "RecordIdentifierFeatureName")]
+    pub record_identifier_feature_name: String,
+    /// <p>The Amazon Resource Name (ARN) of the IAM execution role used to persist data into the <code>OfflineStore</code> if an <code>OfflineStoreConfig</code> is provided.</p>
+    #[serde(rename = "RoleArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub role_arn: Option<String>,
 }
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
@@ -2712,6 +4566,108 @@ pub struct DescribeHyperParameterTuningJobResponse {
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct DescribeImageRequest {
+    /// <p>The name of the image to describe.</p>
+    #[serde(rename = "ImageName")]
+    pub image_name: String,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct DescribeImageResponse {
+    /// <p>When the image was created.</p>
+    #[serde(rename = "CreationTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub creation_time: Option<f64>,
+    /// <p>The description of the image.</p>
+    #[serde(rename = "Description")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub description: Option<String>,
+    /// <p>The name of the image as displayed.</p>
+    #[serde(rename = "DisplayName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub display_name: Option<String>,
+    /// <p>When a create, update, or delete operation fails, the reason for the failure.</p>
+    #[serde(rename = "FailureReason")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub failure_reason: Option<String>,
+    /// <p>The Amazon Resource Name (ARN) of the image.</p>
+    #[serde(rename = "ImageArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub image_arn: Option<String>,
+    /// <p>The name of the image.</p>
+    #[serde(rename = "ImageName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub image_name: Option<String>,
+    /// <p>The status of the image.</p>
+    #[serde(rename = "ImageStatus")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub image_status: Option<String>,
+    /// <p>When the image was last modified.</p>
+    #[serde(rename = "LastModifiedTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub last_modified_time: Option<f64>,
+    /// <p>The Amazon Resource Name (ARN) of the IAM role that enables Amazon SageMaker to perform tasks on your behalf.</p>
+    #[serde(rename = "RoleArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub role_arn: Option<String>,
+}
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct DescribeImageVersionRequest {
+    /// <p>The name of the image.</p>
+    #[serde(rename = "ImageName")]
+    pub image_name: String,
+    /// <p>The version of the image. If not specified, the latest version is described.</p>
+    #[serde(rename = "Version")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub version: Option<i64>,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct DescribeImageVersionResponse {
+    /// <p>The registry path of the container image on which this image version is based.</p>
+    #[serde(rename = "BaseImage")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub base_image: Option<String>,
+    /// <p>The registry path of the container image that contains this image version.</p>
+    #[serde(rename = "ContainerImage")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub container_image: Option<String>,
+    /// <p>When the version was created.</p>
+    #[serde(rename = "CreationTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub creation_time: Option<f64>,
+    /// <p>When a create or delete operation fails, the reason for the failure.</p>
+    #[serde(rename = "FailureReason")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub failure_reason: Option<String>,
+    /// <p>The Amazon Resource Name (ARN) of the image the version is based on.</p>
+    #[serde(rename = "ImageArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub image_arn: Option<String>,
+    /// <p>The ARN of the version.</p>
+    #[serde(rename = "ImageVersionArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub image_version_arn: Option<String>,
+    /// <p>The status of the version.</p>
+    #[serde(rename = "ImageVersionStatus")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub image_version_status: Option<String>,
+    /// <p>When the version was last modified.</p>
+    #[serde(rename = "LastModifiedTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub last_modified_time: Option<f64>,
+    /// <p>The version number.</p>
+    #[serde(rename = "Version")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub version: Option<i64>,
+}
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeLabelingJobRequest {
     /// <p>The name of the labeling job to return information for.</p>
     #[serde(rename = "LabelingJobName")]
@@ -2778,10 +4734,102 @@ pub struct DescribeLabelingJobResponse {
     #[serde(rename = "StoppingConditions")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub stopping_conditions: Option<LabelingJobStoppingConditions>,
-    /// <p>An array of key/value pairs. For more information, see <a href="https://docs.aws.amazon.com/awsaccountbilling/latest/aboutv2/cost-alloc-tags.html#allocation-what">Using Cost Allocation Tags</a> in the <i>AWS Billing and Cost Management User Guide</i>.</p>
+    /// <p>An array of key-value pairs. You can use tags to categorize your AWS resources in different ways, for example, by purpose, owner, or environment. For more information, see <a href="https://docs.aws.amazon.com/general/latest/gr/aws_tagging.html">Tagging AWS Resources</a>.</p>
     #[serde(rename = "Tags")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub tags: Option<Vec<Tag>>,
+}
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct DescribeModelBiasJobDefinitionRequest {
+    /// <p>The name of the model bias job definition. The name must be unique within an AWS Region in the AWS account.</p>
+    #[serde(rename = "JobDefinitionName")]
+    pub job_definition_name: String,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct DescribeModelBiasJobDefinitionResponse {
+    /// <p>The time at which the model bias job was created.</p>
+    #[serde(rename = "CreationTime")]
+    pub creation_time: f64,
+    /// <p>The Amazon Resource Name (ARN) of the model bias job.</p>
+    #[serde(rename = "JobDefinitionArn")]
+    pub job_definition_arn: String,
+    /// <p>The name of the bias job definition. The name must be unique within an AWS Region in the AWS account.</p>
+    #[serde(rename = "JobDefinitionName")]
+    pub job_definition_name: String,
+    #[serde(rename = "JobResources")]
+    pub job_resources: MonitoringResources,
+    /// <p>Configures the model bias job to run a specified Docker container image.</p>
+    #[serde(rename = "ModelBiasAppSpecification")]
+    pub model_bias_app_specification: ModelBiasAppSpecification,
+    /// <p>The baseline configuration for a model bias job.</p>
+    #[serde(rename = "ModelBiasBaselineConfig")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub model_bias_baseline_config: Option<ModelBiasBaselineConfig>,
+    /// <p>Inputs for the model bias job.</p>
+    #[serde(rename = "ModelBiasJobInput")]
+    pub model_bias_job_input: ModelBiasJobInput,
+    #[serde(rename = "ModelBiasJobOutputConfig")]
+    pub model_bias_job_output_config: MonitoringOutputConfig,
+    /// <p>Networking options for a model bias job.</p>
+    #[serde(rename = "NetworkConfig")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub network_config: Option<MonitoringNetworkConfig>,
+    /// <p>The Amazon Resource Name (ARN) of the AWS Identity and Access Management (IAM) role that has read permission to the input data location and write permission to the output data location in Amazon S3.</p>
+    #[serde(rename = "RoleArn")]
+    pub role_arn: String,
+    #[serde(rename = "StoppingCondition")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub stopping_condition: Option<MonitoringStoppingCondition>,
+}
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct DescribeModelExplainabilityJobDefinitionRequest {
+    /// <p>The name of the model explainability job definition. The name must be unique within an AWS Region in the AWS account.</p>
+    #[serde(rename = "JobDefinitionName")]
+    pub job_definition_name: String,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct DescribeModelExplainabilityJobDefinitionResponse {
+    /// <p>The time at which the model explainability job was created.</p>
+    #[serde(rename = "CreationTime")]
+    pub creation_time: f64,
+    /// <p>The Amazon Resource Name (ARN) of the model explainability job.</p>
+    #[serde(rename = "JobDefinitionArn")]
+    pub job_definition_arn: String,
+    /// <p>The name of the explainability job definition. The name must be unique within an AWS Region in the AWS account.</p>
+    #[serde(rename = "JobDefinitionName")]
+    pub job_definition_name: String,
+    #[serde(rename = "JobResources")]
+    pub job_resources: MonitoringResources,
+    /// <p>Configures the model explainability job to run a specified Docker container image.</p>
+    #[serde(rename = "ModelExplainabilityAppSpecification")]
+    pub model_explainability_app_specification: ModelExplainabilityAppSpecification,
+    /// <p>The baseline configuration for a model explainability job.</p>
+    #[serde(rename = "ModelExplainabilityBaselineConfig")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub model_explainability_baseline_config: Option<ModelExplainabilityBaselineConfig>,
+    /// <p>Inputs for the model explainability job.</p>
+    #[serde(rename = "ModelExplainabilityJobInput")]
+    pub model_explainability_job_input: ModelExplainabilityJobInput,
+    #[serde(rename = "ModelExplainabilityJobOutputConfig")]
+    pub model_explainability_job_output_config: MonitoringOutputConfig,
+    /// <p>Networking options for a model explainability job.</p>
+    #[serde(rename = "NetworkConfig")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub network_config: Option<MonitoringNetworkConfig>,
+    /// <p>The Amazon Resource Name (ARN) of the AWS Identity and Access Management (IAM) role that has read permission to the input data location and write permission to the output data location in Amazon S3.</p>
+    #[serde(rename = "RoleArn")]
+    pub role_arn: String,
+    #[serde(rename = "StoppingCondition")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub stopping_condition: Option<MonitoringStoppingCondition>,
 }
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
@@ -2827,6 +4875,37 @@ pub struct DescribeModelOutput {
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct DescribeModelPackageGroupInput {
+    /// <p>The name of the model group to describe.</p>
+    #[serde(rename = "ModelPackageGroupName")]
+    pub model_package_group_name: String,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct DescribeModelPackageGroupOutput {
+    #[serde(rename = "CreatedBy")]
+    pub created_by: UserContext,
+    /// <p>The time that the model group was created.</p>
+    #[serde(rename = "CreationTime")]
+    pub creation_time: f64,
+    /// <p>The Amazon Resource Name (ARN) of the model group.</p>
+    #[serde(rename = "ModelPackageGroupArn")]
+    pub model_package_group_arn: String,
+    /// <p>A description of the model group.</p>
+    #[serde(rename = "ModelPackageGroupDescription")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub model_package_group_description: Option<String>,
+    /// <p>The name of the model group.</p>
+    #[serde(rename = "ModelPackageGroupName")]
+    pub model_package_group_name: String,
+    /// <p>The status of the model group.</p>
+    #[serde(rename = "ModelPackageGroupStatus")]
+    pub model_package_group_status: String,
+}
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeModelPackageInput {
     /// <p>The name of the model package to describe.</p>
     #[serde(rename = "ModelPackageName")]
@@ -2836,10 +4915,17 @@ pub struct DescribeModelPackageInput {
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeModelPackageOutput {
+    /// <p>A description provided for the model approval.</p>
+    #[serde(rename = "ApprovalDescription")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub approval_description: Option<String>,
     /// <p>Whether the model package is certified for listing on AWS Marketplace.</p>
     #[serde(rename = "CertifyForMarketplace")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub certify_for_marketplace: Option<bool>,
+    #[serde(rename = "CreatedBy")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub created_by: Option<UserContext>,
     /// <p>A timestamp specifying when the model package was created.</p>
     #[serde(rename = "CreationTime")]
     pub creation_time: f64,
@@ -2847,6 +4933,24 @@ pub struct DescribeModelPackageOutput {
     #[serde(rename = "InferenceSpecification")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub inference_specification: Option<InferenceSpecification>,
+    #[serde(rename = "LastModifiedBy")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub last_modified_by: Option<UserContext>,
+    /// <p>The last time the model package was modified.</p>
+    #[serde(rename = "LastModifiedTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub last_modified_time: Option<f64>,
+    #[serde(rename = "MetadataProperties")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub metadata_properties: Option<MetadataProperties>,
+    /// <p>The approval status of the model package.</p>
+    #[serde(rename = "ModelApprovalStatus")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub model_approval_status: Option<String>,
+    /// <p>Metrics for the model.</p>
+    #[serde(rename = "ModelMetrics")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub model_metrics: Option<ModelMetrics>,
     /// <p>The Amazon Resource Name (ARN) of the model package.</p>
     #[serde(rename = "ModelPackageArn")]
     pub model_package_arn: String,
@@ -2854,6 +4958,10 @@ pub struct DescribeModelPackageOutput {
     #[serde(rename = "ModelPackageDescription")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub model_package_description: Option<String>,
+    /// <p>If the model is a versioned model, the name of the model group that the versioned model belongs to.</p>
+    #[serde(rename = "ModelPackageGroupName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub model_package_group_name: Option<String>,
     /// <p>The name of the model package being described.</p>
     #[serde(rename = "ModelPackageName")]
     pub model_package_name: String,
@@ -2863,6 +4971,10 @@ pub struct DescribeModelPackageOutput {
     /// <p>Details about the current status of the model package.</p>
     #[serde(rename = "ModelPackageStatusDetails")]
     pub model_package_status_details: ModelPackageStatusDetails,
+    /// <p>The version of the model package.</p>
+    #[serde(rename = "ModelPackageVersion")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub model_package_version: Option<i64>,
     /// <p>Details about the algorithm that was used to create the model package.</p>
     #[serde(rename = "SourceAlgorithmSpecification")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -2871,6 +4983,52 @@ pub struct DescribeModelPackageOutput {
     #[serde(rename = "ValidationSpecification")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub validation_specification: Option<ModelPackageValidationSpecification>,
+}
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct DescribeModelQualityJobDefinitionRequest {
+    /// <p>The name of the model quality job. The name must be unique within an AWS Region in the AWS account.</p>
+    #[serde(rename = "JobDefinitionName")]
+    pub job_definition_name: String,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct DescribeModelQualityJobDefinitionResponse {
+    /// <p>The time at which the model quality job was created.</p>
+    #[serde(rename = "CreationTime")]
+    pub creation_time: f64,
+    /// <p>The Amazon Resource Name (ARN) of the model quality job.</p>
+    #[serde(rename = "JobDefinitionArn")]
+    pub job_definition_arn: String,
+    /// <p>The name of the quality job definition. The name must be unique within an AWS Region in the AWS account.</p>
+    #[serde(rename = "JobDefinitionName")]
+    pub job_definition_name: String,
+    #[serde(rename = "JobResources")]
+    pub job_resources: MonitoringResources,
+    /// <p>Configures the model quality job to run a specified Docker container image.</p>
+    #[serde(rename = "ModelQualityAppSpecification")]
+    pub model_quality_app_specification: ModelQualityAppSpecification,
+    /// <p>The baseline configuration for a model quality job.</p>
+    #[serde(rename = "ModelQualityBaselineConfig")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub model_quality_baseline_config: Option<ModelQualityBaselineConfig>,
+    /// <p>Inputs for the model quality job.</p>
+    #[serde(rename = "ModelQualityJobInput")]
+    pub model_quality_job_input: ModelQualityJobInput,
+    #[serde(rename = "ModelQualityJobOutputConfig")]
+    pub model_quality_job_output_config: MonitoringOutputConfig,
+    /// <p>Networking options for a model quality job.</p>
+    #[serde(rename = "NetworkConfig")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub network_config: Option<MonitoringNetworkConfig>,
+    /// <p>The Amazon Resource Name (ARN) of an IAM role that Amazon SageMaker can assume to perform tasks on your behalf.</p>
+    #[serde(rename = "RoleArn")]
+    pub role_arn: String,
+    #[serde(rename = "StoppingCondition")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub stopping_condition: Option<MonitoringStoppingCondition>,
 }
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
@@ -2914,6 +5072,10 @@ pub struct DescribeMonitoringScheduleResponse {
     /// <p>The status of an monitoring job.</p>
     #[serde(rename = "MonitoringScheduleStatus")]
     pub monitoring_schedule_status: String,
+    /// <p><p>The type of the monitoring job that this schedule runs. This is one of the following values.</p> <ul> <li> <p> <code>DATA<em>QUALITY</code> - The schedule is for a data quality monitoring job.</p> </li> <li> <p> <code>MODEL</em>QUALITY</code> - The schedule is for a model quality monitoring job.</p> </li> <li> <p> <code>MODEL<em>BIAS</code> - The schedule is for a bias monitoring job.</p> </li> <li> <p> <code>MODEL</em>EXPLAINABILITY</code> - The schedule is for an explainability monitoring job.</p> </li> </ul></p>
+    #[serde(rename = "MonitoringType")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub monitoring_type: Option<String>,
 }
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
@@ -3048,6 +5210,133 @@ pub struct DescribeNotebookInstanceOutput {
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct DescribePipelineDefinitionForExecutionRequest {
+    /// <p>The Amazon Resource Name (ARN) of the pipeline execution.</p>
+    #[serde(rename = "PipelineExecutionArn")]
+    pub pipeline_execution_arn: String,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct DescribePipelineDefinitionForExecutionResponse {
+    /// <p>The time when the pipeline was created.</p>
+    #[serde(rename = "CreationTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub creation_time: Option<f64>,
+    /// <p>The JSON pipeline definition.</p>
+    #[serde(rename = "PipelineDefinition")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub pipeline_definition: Option<String>,
+}
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct DescribePipelineExecutionRequest {
+    /// <p>The Amazon Resource Name (ARN) of the pipeline execution.</p>
+    #[serde(rename = "PipelineExecutionArn")]
+    pub pipeline_execution_arn: String,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct DescribePipelineExecutionResponse {
+    #[serde(rename = "CreatedBy")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub created_by: Option<UserContext>,
+    /// <p>The time when the pipeline execution was created.</p>
+    #[serde(rename = "CreationTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub creation_time: Option<f64>,
+    #[serde(rename = "LastModifiedBy")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub last_modified_by: Option<UserContext>,
+    /// <p>The time when the pipeline execution was modified last.</p>
+    #[serde(rename = "LastModifiedTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub last_modified_time: Option<f64>,
+    /// <p>The Amazon Resource Name (ARN) of the pipeline.</p>
+    #[serde(rename = "PipelineArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub pipeline_arn: Option<String>,
+    /// <p>The Amazon Resource Name (ARN) of the pipeline execution.</p>
+    #[serde(rename = "PipelineExecutionArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub pipeline_execution_arn: Option<String>,
+    /// <p>The description of the pipeline execution.</p>
+    #[serde(rename = "PipelineExecutionDescription")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub pipeline_execution_description: Option<String>,
+    /// <p>The display name of the pipeline execution.</p>
+    #[serde(rename = "PipelineExecutionDisplayName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub pipeline_execution_display_name: Option<String>,
+    /// <p>The status of the pipeline execution.</p>
+    #[serde(rename = "PipelineExecutionStatus")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub pipeline_execution_status: Option<String>,
+}
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct DescribePipelineRequest {
+    /// <p>The name of the pipeline to describe.</p>
+    #[serde(rename = "PipelineName")]
+    pub pipeline_name: String,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct DescribePipelineResponse {
+    #[serde(rename = "CreatedBy")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub created_by: Option<UserContext>,
+    /// <p>The time when the pipeline was created.</p>
+    #[serde(rename = "CreationTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub creation_time: Option<f64>,
+    #[serde(rename = "LastModifiedBy")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub last_modified_by: Option<UserContext>,
+    /// <p>The time when the pipeline was last modified.</p>
+    #[serde(rename = "LastModifiedTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub last_modified_time: Option<f64>,
+    /// <p>The time when the pipeline was last run.</p>
+    #[serde(rename = "LastRunTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub last_run_time: Option<f64>,
+    /// <p>The Amazon Resource Name (ARN) of the pipeline.</p>
+    #[serde(rename = "PipelineArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub pipeline_arn: Option<String>,
+    /// <p>The JSON pipeline definition.</p>
+    #[serde(rename = "PipelineDefinition")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub pipeline_definition: Option<String>,
+    /// <p>The description of the pipeline.</p>
+    #[serde(rename = "PipelineDescription")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub pipeline_description: Option<String>,
+    /// <p>The display name of the pipeline.</p>
+    #[serde(rename = "PipelineDisplayName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub pipeline_display_name: Option<String>,
+    /// <p>The name of the pipeline.</p>
+    #[serde(rename = "PipelineName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub pipeline_name: Option<String>,
+    /// <p>The status of the pipeline execution.</p>
+    #[serde(rename = "PipelineStatus")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub pipeline_status: Option<String>,
+    /// <p>The Amazon Resource Name (ARN) that the pipeline uses to execute.</p>
+    #[serde(rename = "RoleArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub role_arn: Option<String>,
+}
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeProcessingJobRequest {
     /// <p>The name of the processing job. The name must be unique within an AWS Region in the AWS account.</p>
     #[serde(rename = "ProcessingJobName")]
@@ -3139,6 +5428,49 @@ pub struct DescribeProcessingJobResponse {
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct DescribeProjectInput {
+    /// <p>The name of the project to describe.</p>
+    #[serde(rename = "ProjectName")]
+    pub project_name: String,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct DescribeProjectOutput {
+    #[serde(rename = "CreatedBy")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub created_by: Option<UserContext>,
+    /// <p>The time when the project was created.</p>
+    #[serde(rename = "CreationTime")]
+    pub creation_time: f64,
+    /// <p>The Amazon Resource Name (ARN) of the project.</p>
+    #[serde(rename = "ProjectArn")]
+    pub project_arn: String,
+    /// <p>The description of the project.</p>
+    #[serde(rename = "ProjectDescription")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub project_description: Option<String>,
+    /// <p>The ID of the project.</p>
+    #[serde(rename = "ProjectId")]
+    pub project_id: String,
+    /// <p>The name of the project.</p>
+    #[serde(rename = "ProjectName")]
+    pub project_name: String,
+    /// <p>The status of the project.</p>
+    #[serde(rename = "ProjectStatus")]
+    pub project_status: String,
+    /// <p>Information about a provisioned service catalog product.</p>
+    #[serde(rename = "ServiceCatalogProvisionedProductDetails")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub service_catalog_provisioned_product_details:
+        Option<ServiceCatalogProvisionedProductDetails>,
+    /// <p>Information used to provision a service catalog product. For information, see <a href="https://docs.aws.amazon.com/servicecatalog/latest/adminguide/introduction.html">What is AWS Service Catalog</a>.</p>
+    #[serde(rename = "ServiceCatalogProvisioningDetails")]
+    pub service_catalog_provisioning_details: ServiceCatalogProvisioningDetails,
+}
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeSubscribedWorkteamRequest {
     /// <p>The Amazon Resource Name (ARN) of the subscribed work team to describe.</p>
     #[serde(rename = "WorkteamArn")]
@@ -3184,11 +5516,11 @@ pub struct DescribeTrainingJobResponse {
     #[serde(rename = "DebugHookConfig")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub debug_hook_config: Option<DebugHookConfig>,
-    /// <p>Configuration information for debugging rules.</p>
+    /// <p>Configuration information for Debugger rules for debugging output tensors.</p>
     #[serde(rename = "DebugRuleConfigurations")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub debug_rule_configurations: Option<Vec<DebugRuleConfiguration>>,
-    /// <p>Status about the debug rule evaluation.</p>
+    /// <p>Evaluation status of Debugger rules for debugging on a training job.</p>
     #[serde(rename = "DebugRuleEvaluationStatuses")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub debug_rule_evaluation_statuses: Option<Vec<DebugRuleEvaluationStatus>>,
@@ -3238,6 +5570,21 @@ pub struct DescribeTrainingJobResponse {
     #[serde(rename = "OutputDataConfig")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub output_data_config: Option<OutputDataConfig>,
+    #[serde(rename = "ProfilerConfig")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub profiler_config: Option<ProfilerConfig>,
+    /// <p>Configuration information for Debugger rules for profiling system and framework metrics.</p>
+    #[serde(rename = "ProfilerRuleConfigurations")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub profiler_rule_configurations: Option<Vec<ProfilerRuleConfiguration>>,
+    /// <p>Evaluation status of Debugger rules for profiling on a training job.</p>
+    #[serde(rename = "ProfilerRuleEvaluationStatuses")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub profiler_rule_evaluation_statuses: Option<Vec<ProfilerRuleEvaluationStatus>>,
+    /// <p>Profiling status of a training job.</p>
+    #[serde(rename = "ProfilingStatus")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub profiling_status: Option<String>,
     /// <p>Resources, including ML compute instances and ML storage volumes, that are configured for model training. </p>
     #[serde(rename = "ResourceConfig")]
     pub resource_config: ResourceConfig,
@@ -3245,7 +5592,7 @@ pub struct DescribeTrainingJobResponse {
     #[serde(rename = "RoleArn")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub role_arn: Option<String>,
-    /// <p><p> Provides detailed information about the state of the training job. For detailed information on the secondary status of the training job, see <code>StatusMessage</code> under <a>SecondaryStatusTransition</a>.</p> <p>Amazon SageMaker provides primary statuses and secondary statuses that apply to each of them:</p> <dl> <dt>InProgress</dt> <dd> <ul> <li> <p> <code>Starting</code> - Starting the training job.</p> </li> <li> <p> <code>Downloading</code> - An optional stage for algorithms that support <code>File</code> training input mode. It indicates that data is being downloaded to the ML storage volumes.</p> </li> <li> <p> <code>Training</code> - Training is in progress.</p> </li> <li> <p> <code>Interrupted</code> - The job stopped because the managed spot training instances were interrupted. </p> </li> <li> <p> <code>Uploading</code> - Training is complete and the model artifacts are being uploaded to the S3 location.</p> </li> </ul> </dd> <dt>Completed</dt> <dd> <ul> <li> <p> <code>Completed</code> - The training job has completed.</p> </li> </ul> </dd> <dt>Failed</dt> <dd> <ul> <li> <p> <code>Failed</code> - The training job has failed. The reason for the failure is returned in the <code>FailureReason</code> field of <code>DescribeTrainingJobResponse</code>.</p> </li> </ul> </dd> <dt>Stopped</dt> <dd> <ul> <li> <p> <code>MaxRuntimeExceeded</code> - The job stopped because it exceeded the maximum allowed runtime.</p> </li> <li> <p> <code>MaxWaitTmeExceeded</code> - The job stopped because it exceeded the maximum allowed wait time.</p> </li> <li> <p> <code>Stopped</code> - The training job has stopped.</p> </li> </ul> </dd> <dt>Stopping</dt> <dd> <ul> <li> <p> <code>Stopping</code> - Stopping the training job.</p> </li> </ul> </dd> </dl> <important> <p>Valid values for <code>SecondaryStatus</code> are subject to change. </p> </important> <p>We no longer support the following secondary statuses:</p> <ul> <li> <p> <code>LaunchingMLInstances</code> </p> </li> <li> <p> <code>PreparingTrainingStack</code> </p> </li> <li> <p> <code>DownloadingTrainingImage</code> </p> </li> </ul></p>
+    /// <p><p> Provides detailed information about the state of the training job. For detailed information on the secondary status of the training job, see <code>StatusMessage</code> under <a>SecondaryStatusTransition</a>.</p> <p>Amazon SageMaker provides primary statuses and secondary statuses that apply to each of them:</p> <dl> <dt>InProgress</dt> <dd> <ul> <li> <p> <code>Starting</code> - Starting the training job.</p> </li> <li> <p> <code>Downloading</code> - An optional stage for algorithms that support <code>File</code> training input mode. It indicates that data is being downloaded to the ML storage volumes.</p> </li> <li> <p> <code>Training</code> - Training is in progress.</p> </li> <li> <p> <code>Interrupted</code> - The job stopped because the managed spot training instances were interrupted. </p> </li> <li> <p> <code>Uploading</code> - Training is complete and the model artifacts are being uploaded to the S3 location.</p> </li> </ul> </dd> <dt>Completed</dt> <dd> <ul> <li> <p> <code>Completed</code> - The training job has completed.</p> </li> </ul> </dd> <dt>Failed</dt> <dd> <ul> <li> <p> <code>Failed</code> - The training job has failed. The reason for the failure is returned in the <code>FailureReason</code> field of <code>DescribeTrainingJobResponse</code>.</p> </li> </ul> </dd> <dt>Stopped</dt> <dd> <ul> <li> <p> <code>MaxRuntimeExceeded</code> - The job stopped because it exceeded the maximum allowed runtime.</p> </li> <li> <p> <code>MaxWaitTimeExceeded</code> - The job stopped because it exceeded the maximum allowed wait time.</p> </li> <li> <p> <code>Stopped</code> - The training job has stopped.</p> </li> </ul> </dd> <dt>Stopping</dt> <dd> <ul> <li> <p> <code>Stopping</code> - Stopping the training job.</p> </li> </ul> </dd> </dl> <important> <p>Valid values for <code>SecondaryStatus</code> are subject to change. </p> </important> <p>We no longer support the following secondary statuses:</p> <ul> <li> <p> <code>LaunchingMLInstances</code> </p> </li> <li> <p> <code>PreparingTrainingStack</code> </p> </li> <li> <p> <code>DownloadingTrainingImage</code> </p> </li> </ul></p>
     #[serde(rename = "SecondaryStatus")]
     pub secondary_status: String,
     /// <p>A history of all of the secondary statuses that the training job has transitioned through.</p>
@@ -3412,6 +5759,9 @@ pub struct DescribeTrialComponentResponse {
     #[serde(rename = "LastModifiedTime")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub last_modified_time: Option<f64>,
+    #[serde(rename = "MetadataProperties")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub metadata_properties: Option<MetadataProperties>,
     /// <p>The metrics for the component.</p>
     #[serde(rename = "Metrics")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -3481,6 +5831,9 @@ pub struct DescribeTrialResponse {
     #[serde(rename = "LastModifiedTime")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub last_modified_time: Option<f64>,
+    #[serde(rename = "MetadataProperties")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub metadata_properties: Option<MetadataProperties>,
     /// <p>The Amazon Resource Name (ARN) of the source and, optionally, the job type.</p>
     #[serde(rename = "Source")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -3604,6 +5957,99 @@ pub struct DesiredWeightAndCapacity {
     pub variant_name: String,
 }
 
+/// <p>Information of a particular device.</p>
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct Device {
+    /// <p>Description of the device.</p>
+    #[serde(rename = "Description")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub description: Option<String>,
+    /// <p>The name of the device.</p>
+    #[serde(rename = "DeviceName")]
+    pub device_name: String,
+    /// <p>AWS Internet of Things (IoT) object name.</p>
+    #[serde(rename = "IotThingName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub iot_thing_name: Option<String>,
+}
+
+/// <p>Summary of the device fleet.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct DeviceFleetSummary {
+    /// <p>Timestamp of when the device fleet was created.</p>
+    #[serde(rename = "CreationTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub creation_time: Option<f64>,
+    /// <p>Amazon Resource Name (ARN) of the device fleet.</p>
+    #[serde(rename = "DeviceFleetArn")]
+    pub device_fleet_arn: String,
+    /// <p>Name of the device fleet.</p>
+    #[serde(rename = "DeviceFleetName")]
+    pub device_fleet_name: String,
+    /// <p>Timestamp of when the device fleet was last updated.</p>
+    #[serde(rename = "LastModifiedTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub last_modified_time: Option<f64>,
+}
+
+/// <p>Status of devices.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct DeviceStats {
+    /// <p>The number of devices connected with a heartbeat.</p>
+    #[serde(rename = "ConnectedDeviceCount")]
+    pub connected_device_count: i64,
+    /// <p>The number of registered devices.</p>
+    #[serde(rename = "RegisteredDeviceCount")]
+    pub registered_device_count: i64,
+}
+
+/// <p>Summary of the device.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct DeviceSummary {
+    /// <p>A description of the device.</p>
+    #[serde(rename = "Description")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub description: Option<String>,
+    /// <p>Amazon Resource Name (ARN) of the device.</p>
+    #[serde(rename = "DeviceArn")]
+    pub device_arn: String,
+    /// <p>The name of the fleet the device belongs to.</p>
+    #[serde(rename = "DeviceFleetName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub device_fleet_name: Option<String>,
+    /// <p>The unique identifier of the device.</p>
+    #[serde(rename = "DeviceName")]
+    pub device_name: String,
+    /// <p>The AWS Internet of Things (IoT) object thing name associated with the device..</p>
+    #[serde(rename = "IotThingName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub iot_thing_name: Option<String>,
+    /// <p>The last heartbeat received from the device.</p>
+    #[serde(rename = "LatestHeartbeat")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub latest_heartbeat: Option<f64>,
+    /// <p>Models on the device.</p>
+    #[serde(rename = "Models")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub models: Option<Vec<EdgeModelSummary>>,
+    /// <p>The timestamp of the last registration or de-reregistration.</p>
+    #[serde(rename = "RegistrationTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub registration_time: Option<f64>,
+}
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct DisableSagemakerServicecatalogPortfolioInput {}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct DisableSagemakerServicecatalogPortfolioOutput {}
+
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DisassociateTrialComponentRequest {
@@ -3662,6 +6108,160 @@ pub struct DomainDetails {
     pub url: Option<String>,
 }
 
+/// <p>The model on the edge device.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct EdgeModel {
+    /// <p>The timestamp of the last inference that was made.</p>
+    #[serde(rename = "LatestInference")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub latest_inference: Option<f64>,
+    /// <p>The timestamp of the last data sample taken.</p>
+    #[serde(rename = "LatestSampleTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub latest_sample_time: Option<f64>,
+    /// <p>The name of the model.</p>
+    #[serde(rename = "ModelName")]
+    pub model_name: String,
+    /// <p>The model version.</p>
+    #[serde(rename = "ModelVersion")]
+    pub model_version: String,
+}
+
+/// <p>Status of edge devices with this model.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct EdgeModelStat {
+    /// <p>The number of devices that have this model version, a heart beat, and are currently running.</p>
+    #[serde(rename = "ActiveDeviceCount")]
+    pub active_device_count: i64,
+    /// <p>The number of devices that have this model version and have a heart beat. </p>
+    #[serde(rename = "ConnectedDeviceCount")]
+    pub connected_device_count: i64,
+    /// <p>The name of the model.</p>
+    #[serde(rename = "ModelName")]
+    pub model_name: String,
+    /// <p>The model version.</p>
+    #[serde(rename = "ModelVersion")]
+    pub model_version: String,
+    /// <p>The number of devices that have this model version and do not have a heart beat.</p>
+    #[serde(rename = "OfflineDeviceCount")]
+    pub offline_device_count: i64,
+    /// <p>The number of devices with this model version and are producing sample data.</p>
+    #[serde(rename = "SamplingDeviceCount")]
+    pub sampling_device_count: i64,
+}
+
+/// <p>Summary of model on edge device.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct EdgeModelSummary {
+    /// <p>The name of the model.</p>
+    #[serde(rename = "ModelName")]
+    pub model_name: String,
+    /// <p>The version model.</p>
+    #[serde(rename = "ModelVersion")]
+    pub model_version: String,
+}
+
+/// <p>The output configuration.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
+pub struct EdgeOutputConfig {
+    /// <p>The AWS Key Management Service (AWS KMS) key that Amazon SageMaker uses to encrypt data on the storage volume after compilation job. If you don't provide a KMS key ID, Amazon SageMaker uses the default KMS key for Amazon S3 for your role's account.</p>
+    #[serde(rename = "KmsKeyId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub kms_key_id: Option<String>,
+    /// <p>The Amazon Simple Storage (S3) bucker URI.</p>
+    #[serde(rename = "S3OutputLocation")]
+    pub s3_output_location: String,
+}
+
+/// <p>Summary of edge packaging job.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct EdgePackagingJobSummary {
+    /// <p>The name of the SageMaker Neo compilation job.</p>
+    #[serde(rename = "CompilationJobName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub compilation_job_name: Option<String>,
+    /// <p>The timestamp of when the job was created.</p>
+    #[serde(rename = "CreationTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub creation_time: Option<f64>,
+    /// <p>The Amazon Resource Name (ARN) of the edge packaging job.</p>
+    #[serde(rename = "EdgePackagingJobArn")]
+    pub edge_packaging_job_arn: String,
+    /// <p>The name of the edge packaging job.</p>
+    #[serde(rename = "EdgePackagingJobName")]
+    pub edge_packaging_job_name: String,
+    /// <p>The status of the edge packaging job.</p>
+    #[serde(rename = "EdgePackagingJobStatus")]
+    pub edge_packaging_job_status: String,
+    /// <p>The timestamp of when the edge packaging job was last updated.</p>
+    #[serde(rename = "LastModifiedTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub last_modified_time: Option<f64>,
+    /// <p>The name of the model.</p>
+    #[serde(rename = "ModelName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub model_name: Option<String>,
+    /// <p>The version of the model.</p>
+    #[serde(rename = "ModelVersion")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub model_version: Option<String>,
+}
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct EnableSagemakerServicecatalogPortfolioInput {}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct EnableSagemakerServicecatalogPortfolioOutput {}
+
+/// <p>A hosted endpoint for real-time inference.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct Endpoint {
+    /// <p>The time that the endpoint was created.</p>
+    #[serde(rename = "CreationTime")]
+    pub creation_time: f64,
+    #[serde(rename = "DataCaptureConfig")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub data_capture_config: Option<DataCaptureConfigSummary>,
+    /// <p>The Amazon Resource Name (ARN) of the endpoint.</p>
+    #[serde(rename = "EndpointArn")]
+    pub endpoint_arn: String,
+    /// <p>The endpoint configuration associated with the endpoint.</p>
+    #[serde(rename = "EndpointConfigName")]
+    pub endpoint_config_name: String,
+    /// <p>The name of the endpoint.</p>
+    #[serde(rename = "EndpointName")]
+    pub endpoint_name: String,
+    /// <p>The status of the endpoint.</p>
+    #[serde(rename = "EndpointStatus")]
+    pub endpoint_status: String,
+    /// <p>If the endpoint failed, the reason it failed.</p>
+    #[serde(rename = "FailureReason")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub failure_reason: Option<String>,
+    /// <p>The last time the endpoint was modified.</p>
+    #[serde(rename = "LastModifiedTime")]
+    pub last_modified_time: f64,
+    /// <p>A list of monitoring schedules for the endpoint. For information about model monitoring, see <a href="https://docs.aws.amazon.com/sagemaker/latest/dg/model-monitor.html">Amazon SageMaker Model Monitor</a>.</p>
+    #[serde(rename = "MonitoringSchedules")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub monitoring_schedules: Option<Vec<MonitoringSchedule>>,
+    /// <p>A list of the production variants hosted on the endpoint. Each production variant is a model.</p>
+    #[serde(rename = "ProductionVariants")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub production_variants: Option<Vec<ProductionVariantSummary>>,
+    /// <p>A list of the tags associated with the endpoint. For more information, see <a href="https://docs.aws.amazon.com/general/latest/gr/aws_tagging.html">Tagging AWS resources</a> in the <i>AWS General Reference Guide</i>.</p>
+    #[serde(rename = "Tags")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub tags: Option<Vec<Tag>>,
+}
+
 /// <p>Provides summary information for an endpoint configuration.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
@@ -3680,12 +6280,32 @@ pub struct EndpointConfigSummary {
 /// <p>Input object for the endpoint</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct EndpointInput {
+    /// <p>If specified, monitoring jobs substract this time from the end time. For information about using offsets for scheduling monitoring jobs, see <a href="https://docs.aws.amazon.com/sagemaker/latest/dg/model-monitor-model-quality-schedule.html">Schedule Model Quality Monitoring Jobs</a>.</p>
+    #[serde(rename = "EndTimeOffset")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub end_time_offset: Option<String>,
     /// <p>An endpoint in customer's account which has enabled <code>DataCaptureConfig</code> enabled.</p>
     #[serde(rename = "EndpointName")]
     pub endpoint_name: String,
+    /// <p>The attributes of the input data that are the input features.</p>
+    #[serde(rename = "FeaturesAttribute")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub features_attribute: Option<String>,
+    /// <p>The attribute of the input data that represents the ground truth label.</p>
+    #[serde(rename = "InferenceAttribute")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub inference_attribute: Option<String>,
     /// <p>Path to the filesystem where the endpoint data is available to the container.</p>
     #[serde(rename = "LocalPath")]
     pub local_path: String,
+    /// <p>In a classification problem, the attribute that represents the class probability.</p>
+    #[serde(rename = "ProbabilityAttribute")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub probability_attribute: Option<String>,
+    /// <p>The threshold for the class probability to be evaluated as a positive result.</p>
+    #[serde(rename = "ProbabilityThresholdAttribute")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub probability_threshold_attribute: Option<f64>,
     /// <p>Whether input data distributed in Amazon S3 is fully replicated or sharded by an S3 key. Defauts to <code>FullyReplicated</code> </p>
     #[serde(rename = "S3DataDistributionType")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -3694,6 +6314,10 @@ pub struct EndpointInput {
     #[serde(rename = "S3InputMode")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub s3_input_mode: Option<String>,
+    /// <p>If specified, monitoring jobs substract this time from the start time. For information about using offsets for scheduling monitoring jobs, see <a href="https://docs.aws.amazon.com/sagemaker/latest/dg/model-monitor-model-quality-schedule.html">Schedule Model Quality Monitoring Jobs</a>.</p>
+    #[serde(rename = "StartTimeOffset")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub start_time_offset: Option<String>,
 }
 
 /// <p>Provides summary information for an endpoint.</p>
@@ -3760,18 +6384,18 @@ pub struct Experiment {
     pub tags: Option<Vec<Tag>>,
 }
 
-/// <p>Configuration for the experiment.</p>
+/// <p><p>Associates a SageMaker job as a trial component with an experiment and trial. Specified when you call the following APIs:</p> <ul> <li> <p> <a>CreateProcessingJob</a> </p> </li> <li> <p> <a>CreateTrainingJob</a> </p> </li> <li> <p> <a>CreateTransformJob</a> </p> </li> </ul></p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct ExperimentConfig {
-    /// <p>The name of the experiment.</p>
+    /// <p>The name of an existing experiment to associate the trial component with.</p>
     #[serde(rename = "ExperimentName")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub experiment_name: Option<String>,
-    /// <p>Display name for the trial component.</p>
+    /// <p>The display name for the trial component. If this key isn't specified, the display name is the trial component name.</p>
     #[serde(rename = "TrialComponentDisplayName")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub trial_component_display_name: Option<String>,
-    /// <p>The name of the trial.</p>
+    /// <p>The name of an existing trial to associate the trial component with. If not specified, a new trial is created.</p>
     #[serde(rename = "TrialName")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub trial_name: Option<String>,
@@ -3819,6 +6443,127 @@ pub struct ExperimentSummary {
     pub last_modified_time: Option<f64>,
 }
 
+/// <p>Contains explainability metrics for a model.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
+pub struct Explainability {
+    /// <p>The explainability report for a model.</p>
+    #[serde(rename = "Report")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub report: Option<MetricsSource>,
+}
+
+/// <p>A list of features. You must include <code>FeatureName</code> and <code>FeatureType</code>. Valid feature <code>FeatureType</code>s are <code>Integral</code>, <code>Fractional</code> and <code>String</code>. </p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
+pub struct FeatureDefinition {
+    /// <p>The name of a feature. The type must be a string. <code>FeatureName</code> cannot be any of the following: <code>is_deleted</code>, <code>write_time</code>, <code>api_invocation_time</code>.</p>
+    #[serde(rename = "FeatureName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub feature_name: Option<String>,
+    /// <p>The value type of a feature. Valid values are Integral, Fractional, or String.</p>
+    #[serde(rename = "FeatureType")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub feature_type: Option<String>,
+}
+
+/// <p>Amazon SageMaker Feature Store stores features in a collection called Feature Group. A Feature Group can be visualized as a table which has rows, with a unique identifier for each row where each column in the table is a feature. In principle, a Feature Group is composed of features and values per features.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct FeatureGroup {
+    /// <p>The time a <code>FeatureGroup</code> was created.</p>
+    #[serde(rename = "CreationTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub creation_time: Option<f64>,
+    /// <p>A free form description of a <code>FeatureGroup</code>.</p>
+    #[serde(rename = "Description")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub description: Option<String>,
+    /// <p>The name of the feature that stores the <code>EventTime</code> of a Record in a <code>FeatureGroup</code>.</p> <p>A <code>EventTime</code> is point in time when a new event occurs that corresponds to the creation or update of a <code>Record</code> in <code>FeatureGroup</code>. All <code>Records</code> in the <code>FeatureGroup</code> must have a corresponding <code>EventTime</code>.</p>
+    #[serde(rename = "EventTimeFeatureName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub event_time_feature_name: Option<String>,
+    /// <p>The reason that the <code>FeatureGroup</code> failed to be replicated in the <code>OfflineStore</code>. This is failure may be due to a failure to create a <code>FeatureGroup</code> in or delete a <code>FeatureGroup</code> from the <code>OfflineStore</code>.</p>
+    #[serde(rename = "FailureReason")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub failure_reason: Option<String>,
+    /// <p>A list of <code>Feature</code>s. Each <code>Feature</code> must include a <code>FeatureName</code> and a <code>FeatureType</code>. </p> <p>Valid <code>FeatureType</code>s are <code>Integral</code>, <code>Fractional</code> and <code>String</code>. </p> <p> <code>FeatureName</code>s cannot be any of the following: <code>is_deleted</code>, <code>write_time</code>, <code>api_invocation_time</code>.</p> <p>You can create up to 2,500 <code>FeatureDefinition</code>s per <code>FeatureGroup</code>.</p>
+    #[serde(rename = "FeatureDefinitions")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub feature_definitions: Option<Vec<FeatureDefinition>>,
+    /// <p>The Amazon Resource Name (ARN) of a <code>FeatureGroup</code>.</p>
+    #[serde(rename = "FeatureGroupArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub feature_group_arn: Option<String>,
+    /// <p>The name of the <code>FeatureGroup</code>.</p>
+    #[serde(rename = "FeatureGroupName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub feature_group_name: Option<String>,
+    /// <p>A <code>FeatureGroup</code> status.</p>
+    #[serde(rename = "FeatureGroupStatus")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub feature_group_status: Option<String>,
+    #[serde(rename = "OfflineStoreConfig")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub offline_store_config: Option<OfflineStoreConfig>,
+    #[serde(rename = "OfflineStoreStatus")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub offline_store_status: Option<OfflineStoreStatus>,
+    #[serde(rename = "OnlineStoreConfig")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub online_store_config: Option<OnlineStoreConfig>,
+    /// <p>The name of the <code>Feature</code> whose value uniquely identifies a <code>Record</code> defined in the <code>FeatureGroup</code> <code>FeatureDefinitions</code>.</p>
+    #[serde(rename = "RecordIdentifierFeatureName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub record_identifier_feature_name: Option<String>,
+    /// <p>The Amazon Resource Name (ARN) of the IAM execution role used to create the feature group.</p>
+    #[serde(rename = "RoleArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub role_arn: Option<String>,
+    /// <p>Tags used to define a <code>FeatureGroup</code>.</p>
+    #[serde(rename = "Tags")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub tags: Option<Vec<Tag>>,
+}
+
+/// <p>The name, Arn, <code>CreationTime</code>, <code>FeatureGroup</code> values, <code>LastUpdatedTime</code> and <code>EnableOnlineStorage</code> status of a <code>FeatureGroup</code>.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct FeatureGroupSummary {
+    /// <p>A timestamp indicating the time of creation time of the <code>FeatureGroup</code>.</p>
+    #[serde(rename = "CreationTime")]
+    pub creation_time: f64,
+    /// <p>Unique identifier for the <code>FeatureGroup</code>.</p>
+    #[serde(rename = "FeatureGroupArn")]
+    pub feature_group_arn: String,
+    /// <p>The name of <code>FeatureGroup</code>.</p>
+    #[serde(rename = "FeatureGroupName")]
+    pub feature_group_name: String,
+    /// <p>The status of a FeatureGroup. The status can be any of the following: <code>Creating</code>, <code>Created</code>, <code>CreateFail</code>, <code>Deleting</code> or <code>DetailFail</code>. </p>
+    #[serde(rename = "FeatureGroupStatus")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub feature_group_status: Option<String>,
+    /// <p>Notifies you if replicating data into the <code>OfflineStore</code> has failed. Returns either: <code>Active</code> or <code>Blocked</code>.</p>
+    #[serde(rename = "OfflineStoreStatus")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub offline_store_status: Option<OfflineStoreStatus>,
+}
+
+/// <p>The Amazon Elastic File System (EFS) storage configuration for a SageMaker image.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
+pub struct FileSystemConfig {
+    /// <p>The default POSIX group ID (GID). If not specified, defaults to <code>100</code>.</p>
+    #[serde(rename = "DefaultGid")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub default_gid: Option<i64>,
+    /// <p>The default POSIX user ID (UID). If not specified, defaults to <code>1000</code>.</p>
+    #[serde(rename = "DefaultUid")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub default_uid: Option<i64>,
+    /// <p>The path within the image to mount the user's EFS home directory. The directory should be empty. If not specified, defaults to <i>/home/sagemaker-user</i>.</p>
+    #[serde(rename = "MountPath")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub mount_path: Option<String>,
+}
+
 /// <p>Specifies a file system data source for a channel.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct FileSystemDataSource {
@@ -3853,18 +6598,18 @@ pub struct Filter {
     pub value: Option<String>,
 }
 
-/// <p>The candidate result from a job.</p>
+/// <p>The best candidate result from an AutoML training job.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct FinalAutoMLJobObjectiveMetric {
-    /// <p>The name of the metric.</p>
+    /// <p>The name of the metric with the best result. For a description of the possible objective metrics, see <a>AutoMLJobObjective$MetricName</a>.</p>
     #[serde(rename = "MetricName")]
     pub metric_name: String,
-    /// <p>The metric type used.</p>
+    /// <p>The type of metric with the best result.</p>
     #[serde(rename = "Type")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub type_: Option<String>,
-    /// <p>The value of the metric.</p>
+    /// <p>The value of the metric with the best result.</p>
     #[serde(rename = "Value")]
     pub value: f32,
 }
@@ -3917,6 +6662,78 @@ pub struct FlowDefinitionSummary {
     /// <p>The status of the flow definition. Valid values:</p>
     #[serde(rename = "FlowDefinitionStatus")]
     pub flow_definition_status: String,
+}
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct GetDeviceFleetReportRequest {
+    /// <p>The name of the fleet.</p>
+    #[serde(rename = "DeviceFleetName")]
+    pub device_fleet_name: String,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct GetDeviceFleetReportResponse {
+    /// <p>The versions of Edge Manager agent deployed on the fleet.</p>
+    #[serde(rename = "AgentVersions")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub agent_versions: Option<Vec<AgentVersion>>,
+    /// <p>Description of the fleet.</p>
+    #[serde(rename = "Description")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub description: Option<String>,
+    /// <p>The Amazon Resource Name (ARN) of the device.</p>
+    #[serde(rename = "DeviceFleetArn")]
+    pub device_fleet_arn: String,
+    /// <p>The name of the fleet.</p>
+    #[serde(rename = "DeviceFleetName")]
+    pub device_fleet_name: String,
+    /// <p>Status of devices.</p>
+    #[serde(rename = "DeviceStats")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub device_stats: Option<DeviceStats>,
+    /// <p>Status of model on device.</p>
+    #[serde(rename = "ModelStats")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub model_stats: Option<Vec<EdgeModelStat>>,
+    /// <p>The output configuration for storing sample data collected by the fleet.</p>
+    #[serde(rename = "OutputConfig")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub output_config: Option<EdgeOutputConfig>,
+    /// <p>Timestamp of when the report was generated.</p>
+    #[serde(rename = "ReportGenerated")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub report_generated: Option<f64>,
+}
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct GetModelPackageGroupPolicyInput {
+    /// <p>The name of the model group for which to get the resource policy.</p>
+    #[serde(rename = "ModelPackageGroupName")]
+    pub model_package_group_name: String,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct GetModelPackageGroupPolicyOutput {
+    /// <p>The resource policy for the model group.</p>
+    #[serde(rename = "ResourcePolicy")]
+    pub resource_policy: String,
+}
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct GetSagemakerServicecatalogPortfolioStatusInput {}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct GetSagemakerServicecatalogPortfolioStatusOutput {
+    /// <p>Whether Service Catalog is enabled or disabled in SageMaker.</p>
+    #[serde(rename = "Status")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub status: Option<String>,
 }
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
@@ -3991,7 +6808,7 @@ pub struct HumanLoopConfig {
     #[serde(rename = "PublicWorkforceTaskPrice")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub public_workforce_task_price: Option<PublicWorkforceTaskPrice>,
-    /// <p>The length of time that a task remains available for labeling by human workers.</p>
+    /// <p>The length of time that a task remains available for review by human workers.</p>
     #[serde(rename = "TaskAvailabilityLifetimeInSeconds")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub task_availability_lifetime_in_seconds: Option<i64>,
@@ -4005,7 +6822,7 @@ pub struct HumanLoopConfig {
     #[serde(rename = "TaskKeywords")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub task_keywords: Option<Vec<String>>,
-    /// <p>The amount of time that a worker has to complete a task.</p>
+    /// <p>The amount of time that a worker has to complete a task. The default value is 3,600 seconds (1 hour)</p>
     #[serde(rename = "TaskTimeLimitInSeconds")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub task_time_limit_in_seconds: Option<i64>,
@@ -4038,7 +6855,7 @@ pub struct HumanTaskConfig {
     /// <p>The number of human workers that will label an object. </p>
     #[serde(rename = "NumberOfHumanWorkersPerDataObject")]
     pub number_of_human_workers_per_data_object: i64,
-    /// <p><p>The Amazon Resource Name (ARN) of a Lambda function that is run before a data object is sent to a human worker. Use this function to provide input to a custom labeling job.</p> <p>For <a href="https://docs.aws.amazon.com/sagemaker/latest/dg/sms-task-types.html">built-in task types</a>, use one of the following Amazon SageMaker Ground Truth Lambda function ARNs for <code>PreHumanTaskLambdaArn</code>. For custom labeling workflows, see <a href="https://docs.aws.amazon.com/sagemaker/latest/dg/sms-custom-templates-step3.html#sms-custom-templates-step3-prelambda">Pre-annotation Lambda</a>. </p> <p> <b>Bounding box</b> - Finds the most similar boxes from different workers based on the Jaccard index of the boxes.</p> <ul> <li> <p> <code>arn:aws:lambda:us-east-1:432418664414:function:PRE-BoundingBox</code> </p> </li> <li> <p> <code>arn:aws:lambda:us-east-2:266458841044:function:PRE-BoundingBox</code> </p> </li> <li> <p> <code>arn:aws:lambda:us-west-2:081040173940:function:PRE-BoundingBox</code> </p> </li> <li> <p> <code>arn:aws:lambda:ca-central-1:918755190332:function:PRE-BoundingBox</code> </p> </li> <li> <p> <code>arn:aws:lambda:eu-west-1:568282634449:function:PRE-BoundingBox</code> </p> </li> <li> <p> <code>arn:aws:lambda:eu-west-2:487402164563:function:PRE-BoundingBox</code> </p> </li> <li> <p> <code>arn:aws:lambda:eu-central-1:203001061592:function:PRE-BoundingBox</code> </p> </li> <li> <p> <code>arn:aws:lambda:ap-northeast-1:477331159723:function:PRE-BoundingBox</code> </p> </li> <li> <p> <code>arn:aws:lambda:ap-northeast-2:845288260483:function:PRE-BoundingBox</code> </p> </li> <li> <p> <code>arn:aws:lambda:ap-south-1:565803892007:function:PRE-BoundingBox</code> </p> </li> <li> <p> <code>arn:aws:lambda:ap-southeast-1:377565633583:function:PRE-BoundingBox</code> </p> </li> <li> <p> <code>arn:aws:lambda:ap-southeast-2:454466003867:function:PRE-BoundingBox</code> </p> </li> </ul> <p> <b>Image classification</b> - Uses a variant of the Expectation Maximization approach to estimate the true class of an image based on annotations from individual workers.</p> <ul> <li> <p> <code>arn:aws:lambda:us-east-1:432418664414:function:PRE-ImageMultiClass</code> </p> </li> <li> <p> <code>arn:aws:lambda:us-east-2:266458841044:function:PRE-ImageMultiClass</code> </p> </li> <li> <p> <code>arn:aws:lambda:us-west-2:081040173940:function:PRE-ImageMultiClass</code> </p> </li> <li> <p> <code>arn:aws:lambda:ca-central-1:918755190332:function:PRE-ImageMultiClass</code> </p> </li> <li> <p> <code>arn:aws:lambda:eu-west-1:568282634449:function:PRE-ImageMultiClass</code> </p> </li> <li> <p> <code>arn:aws:lambda:eu-west-2:487402164563:function:PRE-ImageMultiClass</code> </p> </li> <li> <p> <code>arn:aws:lambda:eu-central-1:203001061592:function:PRE-ImageMultiClass</code> </p> </li> <li> <p> <code>arn:aws:lambda:ap-northeast-1:477331159723:function:PRE-ImageMultiClass</code> </p> </li> <li> <p> <code>arn:aws:lambda:ap-northeast-2:845288260483:function:PRE-ImageMultiClass</code> </p> </li> <li> <p> <code>arn:aws:lambda:ap-south-1:565803892007:function:PRE-ImageMultiClass</code> </p> </li> <li> <p> <code>arn:aws:lambda:ap-southeast-1:377565633583:function:PRE-ImageMultiClass</code> </p> </li> <li> <p> <code>arn:aws:lambda:ap-southeast-2:454466003867:function:PRE-ImageMultiClass</code> </p> </li> </ul> <p> <b>Multi-label image classification</b> - Uses a variant of the Expectation Maximization approach to estimate the true classes of an image based on annotations from individual workers.</p> <ul> <li> <p> <code>arn:aws:lambda:us-east-1:432418664414:function:PRE-ImageMultiClassMultiLabel</code> </p> </li> <li> <p> <code>arn:aws:lambda:us-east-2:266458841044:function:PRE-ImageMultiClassMultiLabel</code> </p> </li> <li> <p> <code>arn:aws:lambda:us-west-2:081040173940:function:PRE-ImageMultiClassMultiLabel</code> </p> </li> <li> <p> <code>arn:aws:lambda:ca-central-1:918755190332:function:PRE-ImageMultiClassMultiLabel</code> </p> </li> <li> <p> <code>arn:aws:lambda:eu-west-1:568282634449:function:PRE-ImageMultiClassMultiLabel</code> </p> </li> <li> <p> <code>arn:aws:lambda:eu-west-2:487402164563:function:PRE-ImageMultiClassMultiLabel</code> </p> </li> <li> <p> <code>arn:aws:lambda:eu-central-1:203001061592:function:PRE-ImageMultiClassMultiLabel</code> </p> </li> <li> <p> <code>arn:aws:lambda:ap-northeast-1:477331159723:function:PRE-ImageMultiClassMultiLabel</code> </p> </li> <li> <p> <code>arn:aws:lambda:ap-northeast-2:845288260483:function:PRE-ImageMultiClassMultiLabel</code> </p> </li> <li> <p> <code>arn:aws:lambda:ap-south-1:565803892007:function:PRE-ImageMultiClassMultiLabel</code> </p> </li> <li> <p> <code>arn:aws:lambda:ap-southeast-1:377565633583:function:PRE-ImageMultiClassMultiLabel</code> </p> </li> <li> <p> <code>arn:aws:lambda:ap-southeast-2:454466003867:function:PRE-ImageMultiClassMultiLabel</code> </p> </li> </ul> <p> <b>Semantic segmentation</b> - Treats each pixel in an image as a multi-class classification and treats pixel annotations from workers as &quot;votes&quot; for the correct label.</p> <ul> <li> <p> <code>arn:aws:lambda:us-east-1:432418664414:function:PRE-SemanticSegmentation</code> </p> </li> <li> <p> <code>arn:aws:lambda:us-east-2:266458841044:function:PRE-SemanticSegmentation</code> </p> </li> <li> <p> <code>arn:aws:lambda:us-west-2:081040173940:function:PRE-SemanticSegmentation</code> </p> </li> <li> <p> <code>arn:aws:lambda:ca-central-1:918755190332:function:PRE-SemanticSegmentation</code> </p> </li> <li> <p> <code>arn:aws:lambda:eu-west-1:568282634449:function:PRE-SemanticSegmentation</code> </p> </li> <li> <p> <code>arn:aws:lambda:eu-west-2:487402164563:function:PRE-SemanticSegmentation</code> </p> </li> <li> <p> <code>arn:aws:lambda:eu-central-1:203001061592:function:PRE-SemanticSegmentation</code> </p> </li> <li> <p> <code>arn:aws:lambda:ap-northeast-1:477331159723:function:PRE-SemanticSegmentation</code> </p> </li> <li> <p> <code>arn:aws:lambda:ap-northeast-2:845288260483:function:PRE-SemanticSegmentation</code> </p> </li> <li> <p> <code>arn:aws:lambda:ap-south-1:565803892007:function:PRE-SemanticSegmentation</code> </p> </li> <li> <p> <code>arn:aws:lambda:ap-southeast-1:377565633583:function:PRE-SemanticSegmentation</code> </p> </li> <li> <p> <code>arn:aws:lambda:ap-southeast-2:454466003867:function:PRE-SemanticSegmentation</code> </p> </li> </ul> <p> <b>Text classification</b> - Uses a variant of the Expectation Maximization approach to estimate the true class of text based on annotations from individual workers.</p> <ul> <li> <p> <code>arn:aws:lambda:us-east-1:432418664414:function:PRE-TextMultiClass</code> </p> </li> <li> <p> <code>arn:aws:lambda:us-east-2:266458841044:function:PRE-TextMultiClass</code> </p> </li> <li> <p> <code>arn:aws:lambda:us-west-2:081040173940:function:PRE-TextMultiClass</code> </p> </li> <li> <p> <code>arn:aws:lambda:ca-central-1:918755190332:function:PRE-TextMultiClass</code> </p> </li> <li> <p> <code>arn:aws:lambda:eu-west-1:568282634449:function:PRE-TextMultiClass</code> </p> </li> <li> <p> <code>arn:aws:lambda:eu-west-2:487402164563:function:PRE-TextMultiClass</code> </p> </li> <li> <p> <code>arn:aws:lambda:eu-central-1:203001061592:function:PRE-TextMultiClass</code> </p> </li> <li> <p> <code>arn:aws:lambda:ap-northeast-1:477331159723:function:PRE-TextMultiClass</code> </p> </li> <li> <p> <code>arn:aws:lambda:ap-northeast-2:845288260483:function:PRE-TextMultiClass</code> </p> </li> <li> <p> <code>arn:aws:lambda:ap-south-1:565803892007:function:PRE-TextMultiClass</code> </p> </li> <li> <p> <code>arn:aws:lambda:ap-southeast-1:377565633583:function:PRE-TextMultiClass</code> </p> </li> <li> <p> <code>arn:aws:lambda:ap-southeast-2:454466003867:function:PRE-TextMultiClass</code> </p> </li> </ul> <p> <b>Multi-label text classification</b> - Uses a variant of the Expectation Maximization approach to estimate the true classes of text based on annotations from individual workers.</p> <ul> <li> <p> <code>arn:aws:lambda:us-east-1:432418664414:function:PRE-TextMultiClassMultiLabel</code> </p> </li> <li> <p> <code>arn:aws:lambda:us-east-2:266458841044:function:PRE-TextMultiClassMultiLabel</code> </p> </li> <li> <p> <code>arn:aws:lambda:us-west-2:081040173940:function:PRE-TextMultiClassMultiLabel</code> </p> </li> <li> <p> <code>arn:aws:lambda:ca-central-1:918755190332:function:PRE-TextMultiClassMultiLabel</code> </p> </li> <li> <p> <code>arn:aws:lambda:eu-west-1:568282634449:function:PRE-TextMultiClassMultiLabel</code> </p> </li> <li> <p> <code>arn:aws:lambda:eu-west-2:487402164563:function:PRE-TextMultiClassMultiLabel</code> </p> </li> <li> <p> <code>arn:aws:lambda:eu-central-1:203001061592:function:PRE-TextMultiClassMultiLabel</code> </p> </li> <li> <p> <code>arn:aws:lambda:ap-northeast-1:477331159723:function:PRE-TextMultiClassMultiLabel</code> </p> </li> <li> <p> <code>arn:aws:lambda:ap-northeast-2:845288260483:function:PRE-TextMultiClassMultiLabel</code> </p> </li> <li> <p> <code>arn:aws:lambda:ap-south-1:565803892007:function:PRE-TextMultiClassMultiLabel</code> </p> </li> <li> <p> <code>arn:aws:lambda:ap-southeast-1:377565633583:function:PRE-TextMultiClassMultiLabel</code> </p> </li> <li> <p> <code>arn:aws:lambda:ap-southeast-2:454466003867:function:PRE-TextMultiClassMultiLabel</code> </p> </li> </ul> <p> <b>Named entity recognition</b> - Groups similar selections and calculates aggregate boundaries, resolving to most-assigned label.</p> <ul> <li> <p> <code>arn:aws:lambda:us-east-1:432418664414:function:PRE-NamedEntityRecognition</code> </p> </li> <li> <p> <code>arn:aws:lambda:us-east-2:266458841044:function:PRE-NamedEntityRecognition</code> </p> </li> <li> <p> <code>arn:aws:lambda:us-west-2:081040173940:function:PRE-NamedEntityRecognition</code> </p> </li> <li> <p> <code>arn:aws:lambda:ca-central-1:918755190332:function:PRE-NamedEntityRecognition</code> </p> </li> <li> <p> <code>arn:aws:lambda:eu-west-1:568282634449:function:PRE-NamedEntityRecognition</code> </p> </li> <li> <p> <code>arn:aws:lambda:eu-west-2:487402164563:function:PRE-NamedEntityRecognition</code> </p> </li> <li> <p> <code>arn:aws:lambda:eu-central-1:203001061592:function:PRE-NamedEntityRecognition</code> </p> </li> <li> <p> <code>arn:aws:lambda:ap-northeast-1:477331159723:function:PRE-NamedEntityRecognition</code> </p> </li> <li> <p> <code>arn:aws:lambda:ap-northeast-2:845288260483:function:PRE-NamedEntityRecognition</code> </p> </li> <li> <p> <code>arn:aws:lambda:ap-south-1:565803892007:function:PRE-NamedEntityRecognition</code> </p> </li> <li> <p> <code>arn:aws:lambda:ap-southeast-1:377565633583:function:PRE-NamedEntityRecognition</code> </p> </li> <li> <p> <code>arn:aws:lambda:ap-southeast-2:454466003867:function:PRE-NamedEntityRecognition</code> </p> </li> </ul> <p> <b>3D Point Cloud Modalities</b> </p> <p>Use the following pre-annotation lambdas for 3D point cloud labeling modality tasks. See <a href="https://docs.aws.amazon.com/sagemaker/latest/dg/sms-point-cloud-task-types.html">3D Point Cloud Task types </a> to learn more. </p> <p> <b>3D Point Cloud Object Detection</b> - Use this task type when you want workers to classify objects in a 3D point cloud by drawing 3D cuboids around objects. For example, you can use this task type to ask workers to identify different types of objects in a point cloud, such as cars, bikes, and pedestrians.</p> <ul> <li> <p> <code>arn:aws:lambda:us-east-1:432418664414:function:PRE-3DPointCloudObjectDetection</code> </p> </li> <li> <p> <code>arn:aws:lambda:us-east-2:266458841044:function:PRE-3DPointCloudObjectDetection</code> </p> </li> <li> <p> <code>arn:aws:lambda:us-west-2:081040173940:function:PRE-3DPointCloudObjectDetection</code> </p> </li> <li> <p> <code>arn:aws:lambda:eu-west-1:568282634449:function:PRE-3DPointCloudObjectDetection</code> </p> </li> <li> <p> <code>arn:aws:lambda:ap-northeast-1:477331159723:function:PRE-3DPointCloudObjectDetection</code> </p> </li> <li> <p> <code>arn:aws:lambda:ap-southeast-2:454466003867:function:PRE-3DPointCloudObjectDetection</code> </p> </li> <li> <p> <code>arn:aws:lambda:ap-south-1:565803892007:function:PRE-3DPointCloudObjectDetection</code> </p> </li> <li> <p> <code>arn:aws:lambda:eu-central-1:203001061592:function:PRE-3DPointCloudObjectDetection</code> </p> </li> <li> <p> <code>arn:aws:lambda:ap-northeast-2:845288260483:function:PRE-3DPointCloudObjectDetection</code> </p> </li> <li> <p> <code>arn:aws:lambda:eu-west-2:487402164563:function:PRE-3DPointCloudObjectDetection</code> </p> </li> <li> <p> <code>arn:aws:lambda:ap-southeast-1:377565633583:function:PRE-3DPointCloudObjectDetection</code> </p> </li> <li> <p> <code>arn:aws:lambda:ca-central-1:918755190332:function:PRE-3DPointCloudObjectDetection</code> </p> </li> </ul> <p> <b>3D Point Cloud Object Tracking</b> - Use this task type when you want workers to draw 3D cuboids around objects that appear in a sequence of 3D point cloud frames. For example, you can use this task type to ask workers to track the movement of vehicles across multiple point cloud frames. </p> <ul> <li> <p> <code>arn:aws:lambda:us-east-1:432418664414:function:PRE-3DPointCloudObjectTracking</code> </p> </li> <li> <p> <code>arn:aws:lambda:us-east-2:266458841044:function:PRE-3DPointCloudObjectTracking</code> </p> </li> <li> <p> <code>arn:aws:lambda:us-west-2:081040173940:function:PRE-3DPointCloudObjectTracking</code> </p> </li> <li> <p> <code>arn:aws:lambda:eu-west-1:568282634449:function:PRE-3DPointCloudObjectTracking</code> </p> </li> <li> <p> <code>arn:aws:lambda:ap-northeast-1:477331159723:function:PRE-3DPointCloudObjectTracking</code> </p> </li> <li> <p> <code>arn:aws:lambda:ap-southeast-2:454466003867:function:PRE-3DPointCloudObjectTracking</code> </p> </li> <li> <p> <code>arn:aws:lambda:ap-south-1:565803892007:function:PRE-3DPointCloudObjectTracking</code> </p> </li> <li> <p> <code>arn:aws:lambda:eu-central-1:203001061592:function:PRE-3DPointCloudObjectTracking</code> </p> </li> <li> <p> <code>arn:aws:lambda:ap-northeast-2:845288260483:function:PRE-3DPointCloudObjectTracking</code> </p> </li> <li> <p> <code>arn:aws:lambda:eu-west-2:487402164563:function:PRE-3DPointCloudObjectTracking</code> </p> </li> <li> <p> <code>arn:aws:lambda:ap-southeast-1:377565633583:function:PRE-3DPointCloudObjectTracking</code> </p> </li> <li> <p> <code>arn:aws:lambda:ca-central-1:918755190332:function:PRE-3DPointCloudObjectTracking</code> </p> </li> </ul> <p> <b>3D Point Cloud Semantic Segmentation</b> - Use this task type when you want workers to create a point-level semantic segmentation masks by painting objects in a 3D point cloud using different colors where each color is assigned to one of the classes you specify.</p> <ul> <li> <p> <code>arn:aws:lambda:us-east-1:432418664414:function:PRE-3DPointCloudSemanticSegmentation</code> </p> </li> <li> <p> <code>arn:aws:lambda:us-east-2:266458841044:function:PRE-3DPointCloudSemanticSegmentation</code> </p> </li> <li> <p> <code>arn:aws:lambda:us-west-2:081040173940:function:PRE-3DPointCloudSemanticSegmentation</code> </p> </li> <li> <p> <code>arn:aws:lambda:eu-west-1:568282634449:function:PRE-3DPointCloudSemanticSegmentation</code> </p> </li> <li> <p> <code>arn:aws:lambda:ap-northeast-1:477331159723:function:PRE-3DPointCloudSemanticSegmentation</code> </p> </li> <li> <p> <code>arn:aws:lambda:ap-southeast-2:454466003867:function:PRE-3DPointCloudSemanticSegmentation</code> </p> </li> <li> <p> <code>arn:aws:lambda:ap-south-1:565803892007:function:PRE-3DPointCloudSemanticSegmentation</code> </p> </li> <li> <p> <code>arn:aws:lambda:eu-central-1:203001061592:function:PRE-3DPointCloudSemanticSegmentation</code> </p> </li> <li> <p> <code>arn:aws:lambda:ap-northeast-2:845288260483:function:PRE-3DPointCloudSemanticSegmentation</code> </p> </li> <li> <p> <code>arn:aws:lambda:eu-west-2:487402164563:function:PRE-3DPointCloudSemanticSegmentation</code> </p> </li> <li> <p> <code>arn:aws:lambda:ap-southeast-1:377565633583:function:PRE-3DPointCloudSemanticSegmentation</code> </p> </li> <li> <p> <code>arn:aws:lambda:ca-central-1:918755190332:function:PRE-3DPointCloudSemanticSegmentation</code> </p> </li> </ul> <p> <b>Use the following ARNs for Label Verification and Adjustment Jobs</b> </p> <p>Use label verification and adjustment jobs to review and adjust labels. To learn more, see <a href="https://docs.aws.amazon.com/sagemaker/latest/dg/sms-verification-data.html">Verify and Adjust Labels </a>.</p> <p> <b>Bounding box verification</b> - Uses a variant of the Expectation Maximization approach to estimate the true class of verification judgement for bounding box labels based on annotations from individual workers.</p> <ul> <li> <p> <code>arn:aws:lambda:us-east-1:432418664414:function:PRE-Adjustment3DPointCloudObjectTracking</code> </p> </li> <li> <p> <code>arn:aws:lambda:us-east-2:266458841044:function:PRE-Adjustment3DPointCloudObjectTracking</code> </p> </li> <li> <p> <code>arn:aws:lambda:us-west-2:081040173940:function:PRE-Adjustment3DPointCloudObjectTracking</code> </p> </li> <li> <p> <code>arn:aws:lambda:eu-west-1:568282634449:function:PRE-Adjustment3DPointCloudObjectTracking</code> </p> </li> <li> <p> <code>arn:aws:lambda:ap-northeast-1:477331159723:function:PRE-Adjustment3DPointCloudObjectTracking</code> </p> </li> <li> <p> <code>arn:aws:lambda:ap-southeast-2:454466003867:function:PRE-Adjustment3DPointCloudObjectTracking</code> </p> </li> <li> <p> <code>arn:aws:lambda:ap-south-1:565803892007:function:PRE-Adjustment3DPointCloudObjectTracking</code> </p> </li> <li> <p> <code>arn:aws:lambda:eu-central-1:203001061592:function:PRE-Adjustment3DPointCloudObjectTracking</code> </p> </li> <li> <p> <code>arn:aws:lambda:ap-northeast-2:845288260483:function:PRE-Adjustment3DPointCloudObjectTracking</code> </p> </li> <li> <p> <code>arn:aws:lambda:eu-west-2:487402164563:function:PRE-Adjustment3DPointCloudObjectTracking</code> </p> </li> <li> <p> <code>arn:aws:lambda:ap-southeast-1:377565633583:function:PRE-Adjustment3DPointCloudObjectTracking</code> </p> </li> <li> <p> <code>arn:aws:lambda:ca-central-1:918755190332:function:PRE-Adjustment3DPointCloudObjectTracking</code> </p> </li> </ul> <p> <b>Bounding box adjustment</b> - Finds the most similar boxes from different workers based on the Jaccard index of the adjusted annotations.</p> <ul> <li> <p> <code>arn:aws:lambda:us-east-1:432418664414:function:PRE-AdjustmentBoundingBox</code> </p> </li> <li> <p> <code>arn:aws:lambda:us-east-2:266458841044:function:PRE-AdjustmentBoundingBox</code> </p> </li> <li> <p> <code>arn:aws:lambda:us-west-2:081040173940:function:PRE-AdjustmentBoundingBox</code> </p> </li> <li> <p> <code>arn:aws:lambda:ca-central-1:918755190332:function:PRE-AdjustmentBoundingBox</code> </p> </li> <li> <p> <code>arn:aws:lambda:eu-west-1:568282634449:function:PRE-AdjustmentBoundingBox</code> </p> </li> <li> <p> <code>arn:aws:lambda:eu-west-2:487402164563:function:PRE-AdjustmentBoundingBox</code> </p> </li> <li> <p> <code>arn:aws:lambda:eu-central-1:203001061592:function:PRE-AdjustmentBoundingBox</code> </p> </li> <li> <p> <code>arn:aws:lambda:ap-northeast-1:477331159723:function:PRE-AdjustmentBoundingBox</code> </p> </li> <li> <p> <code>arn:aws:lambda:ap-northeast-2:845288260483:function:PRE-AdjustmentBoundingBox</code> </p> </li> <li> <p> <code>arn:aws:lambda:ap-south-1:565803892007:function:PRE-AdjustmentBoundingBox</code> </p> </li> <li> <p> <code>arn:aws:lambda:ap-southeast-1:377565633583:function:PRE-AdjustmentBoundingBox</code> </p> </li> <li> <p> <code>arn:aws:lambda:ap-southeast-2:454466003867:function:PRE-AdjustmentBoundingBox</code> </p> </li> </ul> <p> <b>Semantic segmentation verification</b> - Uses a variant of the Expectation Maximization approach to estimate the true class of verification judgment for semantic segmentation labels based on annotations from individual workers.</p> <ul> <li> <p> <code>arn:aws:lambda:us-east-1:432418664414:function:PRE-VerificationSemanticSegmentation</code> </p> </li> <li> <p> <code>arn:aws:lambda:us-east-2:266458841044:function:PRE-VerificationSemanticSegmentation</code> </p> </li> <li> <p> <code>arn:aws:lambda:us-west-2:081040173940:function:PRE-VerificationSemanticSegmentation</code> </p> </li> <li> <p> <code>arn:aws:lambda:ca-central-1:918755190332:function:PRE-VerificationSemanticSegmentation</code> </p> </li> <li> <p> <code>arn:aws:lambda:eu-west-1:568282634449:function:PRE-VerificationSemanticSegmentation</code> </p> </li> <li> <p> <code>arn:aws:lambda:eu-west-2:487402164563:function:PRE-VerificationSemanticSegmentation</code> </p> </li> <li> <p> <code>arn:aws:lambda:eu-central-1:203001061592:function:PRE-VerificationSemanticSegmentation</code> </p> </li> <li> <p> <code>arn:aws:lambda:ap-northeast-1:477331159723:function:PRE-VerificationSemanticSegmentation</code> </p> </li> <li> <p> <code>arn:aws:lambda:ap-northeast-2:845288260483:function:PRE-VerificationSemanticSegmentation</code> </p> </li> <li> <p> <code>arn:aws:lambda:ap-south-1:565803892007:function:PRE-VerificationSemanticSegmentation</code> </p> </li> <li> <p> <code>arn:aws:lambda:ap-southeast-1:377565633583:function:PRE-VerificationSemanticSegmentation</code> </p> </li> <li> <p> <code>arn:aws:lambda:ap-southeast-2:454466003867:function:PRE-VerificationSemanticSegmentation</code> </p> </li> </ul> <p> <b>Semantic segmentation adjustment</b> - Treats each pixel in an image as a multi-class classification and treats pixel adjusted annotations from workers as &quot;votes&quot; for the correct label.</p> <ul> <li> <p> <code>arn:aws:lambda:us-east-1:432418664414:function:PRE-AdjustmentSemanticSegmentation</code> </p> </li> <li> <p> <code>arn:aws:lambda:us-east-2:266458841044:function:PRE-AdjustmentSemanticSegmentation</code> </p> </li> <li> <p> <code>arn:aws:lambda:us-west-2:081040173940:function:PRE-AdjustmentSemanticSegmentation</code> </p> </li> <li> <p> <code>arn:aws:lambda:ca-central-1:918755190332:function:PRE-AdjustmentSemanticSegmentation</code> </p> </li> <li> <p> <code>arn:aws:lambda:eu-west-1:568282634449:function:PRE-AdjustmentSemanticSegmentation</code> </p> </li> <li> <p> <code>arn:aws:lambda:eu-west-2:487402164563:function:PRE-AdjustmentSemanticSegmentation</code> </p> </li> <li> <p> <code>arn:aws:lambda:eu-central-1:203001061592:function:PRE-AdjustmentSemanticSegmentation</code> </p> </li> <li> <p> <code>arn:aws:lambda:ap-northeast-1:477331159723:function:PRE-AdjustmentSemanticSegmentation</code> </p> </li> <li> <p> <code>arn:aws:lambda:ap-northeast-2:845288260483:function:PRE-AdjustmentSemanticSegmentation</code> </p> </li> <li> <p> <code>arn:aws:lambda:ap-south-1:565803892007:function:PRE-AdjustmentSemanticSegmentation</code> </p> </li> <li> <p> <code>arn:aws:lambda:ap-southeast-1:377565633583:function:PRE-AdjustmentSemanticSegmentation</code> </p> </li> <li> <p> <code>arn:aws:lambda:ap-southeast-2:454466003867:function:PRE-AdjustmentSemanticSegmentation</code> </p> </li> </ul> <p> <b>3D point cloud object detection adjustment</b> - Adjust 3D cuboids in a point cloud frame. </p> <ul> <li> <p> <code>arn:aws:lambda:us-east-1:432418664414:function:PRE-Adjustment3DPointCloudObjectDetection</code> </p> </li> <li> <p> <code>arn:aws:lambda:us-east-2:266458841044:function:PRE-Adjustment3DPointCloudObjectDetection</code> </p> </li> <li> <p> <code>arn:aws:lambda:us-west-2:081040173940:function:PRE-Adjustment3DPointCloudObjectDetection</code> </p> </li> <li> <p> <code>arn:aws:lambda:eu-west-1:568282634449:function:PRE-Adjustment3DPointCloudObjectDetection</code> </p> </li> <li> <p> <code>arn:aws:lambda:ap-northeast-1:477331159723:function:PRE-Adjustment3DPointCloudObjectDetection</code> </p> </li> <li> <p> <code>arn:aws:lambda:ap-southeast-2:454466003867:function:PRE-Adjustment3DPointCloudObjectDetection</code> </p> </li> <li> <p> <code>arn:aws:lambda:ap-south-1:565803892007:function:PRE-Adjustment3DPointCloudObjectDetection</code> </p> </li> <li> <p> <code>arn:aws:lambda:eu-central-1:203001061592:function:PRE-Adjustment3DPointCloudObjectDetection</code> </p> </li> <li> <p> <code>arn:aws:lambda:ap-northeast-2:845288260483:function:PRE-Adjustment3DPointCloudObjectDetection</code> </p> </li> <li> <p> <code>arn:aws:lambda:eu-west-2:487402164563:function:PRE-Adjustment3DPointCloudObjectDetection</code> </p> </li> <li> <p> <code>arn:aws:lambda:ap-southeast-1:377565633583:function:PRE-Adjustment3DPointCloudObjectDetection</code> </p> </li> <li> <p> <code>arn:aws:lambda:ca-central-1:918755190332:function:PRE-Adjustment3DPointCloudObjectDetection</code> </p> </li> </ul> <p> <b>3D point cloud object tracking adjustment</b> - Adjust 3D cuboids across a sequence of point cloud frames. </p> <ul> <li> <p> <code>arn:aws:lambda:us-east-1:432418664414:function:PRE-Adjustment3DPointCloudObjectTracking</code> </p> </li> <li> <p> <code>arn:aws:lambda:us-east-2:266458841044:function:PRE-Adjustment3DPointCloudObjectTracking</code> </p> </li> <li> <p> <code>arn:aws:lambda:us-west-2:081040173940:function:PRE-Adjustment3DPointCloudObjectTracking</code> </p> </li> <li> <p> <code>arn:aws:lambda:eu-west-1:568282634449:function:PRE-Adjustment3DPointCloudObjectTracking</code> </p> </li> <li> <p> <code>arn:aws:lambda:ap-northeast-1:477331159723:function:PRE-Adjustment3DPointCloudObjectTracking</code> </p> </li> <li> <p> <code>arn:aws:lambda:ap-southeast-2:454466003867:function:PRE-Adjustment3DPointCloudObjectTracking</code> </p> </li> <li> <p> <code>arn:aws:lambda:ap-south-1:565803892007:function:PRE-Adjustment3DPointCloudObjectTracking</code> </p> </li> <li> <p> <code>arn:aws:lambda:eu-central-1:203001061592:function:PRE-Adjustment3DPointCloudObjectTracking</code> </p> </li> <li> <p> <code>arn:aws:lambda:ap-northeast-2:845288260483:function:PRE-Adjustment3DPointCloudObjectTracking</code> </p> </li> <li> <p> <code>arn:aws:lambda:eu-west-2:487402164563:function:PRE-Adjustment3DPointCloudObjectTracking</code> </p> </li> <li> <p> <code>arn:aws:lambda:ap-southeast-1:377565633583:function:PRE-Adjustment3DPointCloudObjectTracking</code> </p> </li> <li> <p> <code>arn:aws:lambda:ca-central-1:918755190332:function:PRE-Adjustment3DPointCloudObjectTracking</code> </p> </li> </ul> <p> <b>3D point cloud semantic segmentation adjustment</b> - Adjust semantic segmentation masks in a 3D point cloud. </p> <ul> <li> <p> <code>arn:aws:lambda:us-east-1:432418664414:function:PRE-Adjustment3DPointCloudSemanticSegmentation</code> </p> </li> <li> <p> <code>arn:aws:lambda:us-east-2:266458841044:function:PRE-Adjustment3DPointCloudSemanticSegmentation</code> </p> </li> <li> <p> <code>arn:aws:lambda:us-west-2:081040173940:function:PRE-Adjustment3DPointCloudSemanticSegmentation</code> </p> </li> <li> <p> <code>arn:aws:lambda:eu-west-1:568282634449:function:PRE-Adjustment3DPointCloudSemanticSegmentation</code> </p> </li> <li> <p> <code>arn:aws:lambda:ap-northeast-1:477331159723:function:PRE-Adjustment3DPointCloudSemanticSegmentation</code> </p> </li> <li> <p> <code>arn:aws:lambda:ap-southeast-2:454466003867:function:PRE-Adjustment3DPointCloudSemanticSegmentation</code> </p> </li> <li> <p> <code>arn:aws:lambda:ap-south-1:565803892007:function:PRE-Adjustment3DPointCloudSemanticSegmentation</code> </p> </li> <li> <p> <code>arn:aws:lambda:eu-central-1:203001061592:function:PRE-Adjustment3DPointCloudSemanticSegmentation</code> </p> </li> <li> <p> <code>arn:aws:lambda:ap-northeast-2:845288260483:function:PRE-Adjustment3DPointCloudSemanticSegmentation</code> </p> </li> <li> <p> <code>arn:aws:lambda:eu-west-2:487402164563:function:PRE-Adjustment3DPointCloudSemanticSegmentation</code> </p> </li> <li> <p> <code>arn:aws:lambda:ap-southeast-1:377565633583:function:PRE-Adjustment3DPointCloudSemanticSegmentation</code> </p> </li> <li> <p> <code>arn:aws:lambda:ca-central-1:918755190332:function:PRE-Adjustment3DPointCloudSemanticSegmentation</code> </p> </li> </ul></p>
+    /// <p><p>The Amazon Resource Name (ARN) of a Lambda function that is run before a data object is sent to a human worker. Use this function to provide input to a custom labeling job.</p> <p>For <a href="https://docs.aws.amazon.com/sagemaker/latest/dg/sms-task-types.html">built-in task types</a>, use one of the following Amazon SageMaker Ground Truth Lambda function ARNs for <code>PreHumanTaskLambdaArn</code>. For custom labeling workflows, see <a href="https://docs.aws.amazon.com/sagemaker/latest/dg/sms-custom-templates-step3.html#sms-custom-templates-step3-prelambda">Pre-annotation Lambda</a>. </p> <p> <b>Bounding box</b> - Finds the most similar boxes from different workers based on the Jaccard index of the boxes.</p> <ul> <li> <p> <code>arn:aws:lambda:us-east-1:432418664414:function:PRE-BoundingBox</code> </p> </li> <li> <p> <code>arn:aws:lambda:us-east-2:266458841044:function:PRE-BoundingBox</code> </p> </li> <li> <p> <code>arn:aws:lambda:us-west-2:081040173940:function:PRE-BoundingBox</code> </p> </li> <li> <p> <code>arn:aws:lambda:ca-central-1:918755190332:function:PRE-BoundingBox</code> </p> </li> <li> <p> <code>arn:aws:lambda:eu-west-1:568282634449:function:PRE-BoundingBox</code> </p> </li> <li> <p> <code>arn:aws:lambda:eu-west-2:487402164563:function:PRE-BoundingBox</code> </p> </li> <li> <p> <code>arn:aws:lambda:eu-central-1:203001061592:function:PRE-BoundingBox</code> </p> </li> <li> <p> <code>arn:aws:lambda:ap-northeast-1:477331159723:function:PRE-BoundingBox</code> </p> </li> <li> <p> <code>arn:aws:lambda:ap-northeast-2:845288260483:function:PRE-BoundingBox</code> </p> </li> <li> <p> <code>arn:aws:lambda:ap-south-1:565803892007:function:PRE-BoundingBox</code> </p> </li> <li> <p> <code>arn:aws:lambda:ap-southeast-1:377565633583:function:PRE-BoundingBox</code> </p> </li> <li> <p> <code>arn:aws:lambda:ap-southeast-2:454466003867:function:PRE-BoundingBox</code> </p> </li> </ul> <p> <b>Image classification</b> - Uses a variant of the Expectation Maximization approach to estimate the true class of an image based on annotations from individual workers.</p> <ul> <li> <p> <code>arn:aws:lambda:us-east-1:432418664414:function:PRE-ImageMultiClass</code> </p> </li> <li> <p> <code>arn:aws:lambda:us-east-2:266458841044:function:PRE-ImageMultiClass</code> </p> </li> <li> <p> <code>arn:aws:lambda:us-west-2:081040173940:function:PRE-ImageMultiClass</code> </p> </li> <li> <p> <code>arn:aws:lambda:ca-central-1:918755190332:function:PRE-ImageMultiClass</code> </p> </li> <li> <p> <code>arn:aws:lambda:eu-west-1:568282634449:function:PRE-ImageMultiClass</code> </p> </li> <li> <p> <code>arn:aws:lambda:eu-west-2:487402164563:function:PRE-ImageMultiClass</code> </p> </li> <li> <p> <code>arn:aws:lambda:eu-central-1:203001061592:function:PRE-ImageMultiClass</code> </p> </li> <li> <p> <code>arn:aws:lambda:ap-northeast-1:477331159723:function:PRE-ImageMultiClass</code> </p> </li> <li> <p> <code>arn:aws:lambda:ap-northeast-2:845288260483:function:PRE-ImageMultiClass</code> </p> </li> <li> <p> <code>arn:aws:lambda:ap-south-1:565803892007:function:PRE-ImageMultiClass</code> </p> </li> <li> <p> <code>arn:aws:lambda:ap-southeast-1:377565633583:function:PRE-ImageMultiClass</code> </p> </li> <li> <p> <code>arn:aws:lambda:ap-southeast-2:454466003867:function:PRE-ImageMultiClass</code> </p> </li> </ul> <p> <b>Multi-label image classification</b> - Uses a variant of the Expectation Maximization approach to estimate the true classes of an image based on annotations from individual workers.</p> <ul> <li> <p> <code>arn:aws:lambda:us-east-1:432418664414:function:PRE-ImageMultiClassMultiLabel</code> </p> </li> <li> <p> <code>arn:aws:lambda:us-east-2:266458841044:function:PRE-ImageMultiClassMultiLabel</code> </p> </li> <li> <p> <code>arn:aws:lambda:us-west-2:081040173940:function:PRE-ImageMultiClassMultiLabel</code> </p> </li> <li> <p> <code>arn:aws:lambda:ca-central-1:918755190332:function:PRE-ImageMultiClassMultiLabel</code> </p> </li> <li> <p> <code>arn:aws:lambda:eu-west-1:568282634449:function:PRE-ImageMultiClassMultiLabel</code> </p> </li> <li> <p> <code>arn:aws:lambda:eu-west-2:487402164563:function:PRE-ImageMultiClassMultiLabel</code> </p> </li> <li> <p> <code>arn:aws:lambda:eu-central-1:203001061592:function:PRE-ImageMultiClassMultiLabel</code> </p> </li> <li> <p> <code>arn:aws:lambda:ap-northeast-1:477331159723:function:PRE-ImageMultiClassMultiLabel</code> </p> </li> <li> <p> <code>arn:aws:lambda:ap-northeast-2:845288260483:function:PRE-ImageMultiClassMultiLabel</code> </p> </li> <li> <p> <code>arn:aws:lambda:ap-south-1:565803892007:function:PRE-ImageMultiClassMultiLabel</code> </p> </li> <li> <p> <code>arn:aws:lambda:ap-southeast-1:377565633583:function:PRE-ImageMultiClassMultiLabel</code> </p> </li> <li> <p> <code>arn:aws:lambda:ap-southeast-2:454466003867:function:PRE-ImageMultiClassMultiLabel</code> </p> </li> </ul> <p> <b>Semantic segmentation</b> - Treats each pixel in an image as a multi-class classification and treats pixel annotations from workers as &quot;votes&quot; for the correct label.</p> <ul> <li> <p> <code>arn:aws:lambda:us-east-1:432418664414:function:PRE-SemanticSegmentation</code> </p> </li> <li> <p> <code>arn:aws:lambda:us-east-2:266458841044:function:PRE-SemanticSegmentation</code> </p> </li> <li> <p> <code>arn:aws:lambda:us-west-2:081040173940:function:PRE-SemanticSegmentation</code> </p> </li> <li> <p> <code>arn:aws:lambda:ca-central-1:918755190332:function:PRE-SemanticSegmentation</code> </p> </li> <li> <p> <code>arn:aws:lambda:eu-west-1:568282634449:function:PRE-SemanticSegmentation</code> </p> </li> <li> <p> <code>arn:aws:lambda:eu-west-2:487402164563:function:PRE-SemanticSegmentation</code> </p> </li> <li> <p> <code>arn:aws:lambda:eu-central-1:203001061592:function:PRE-SemanticSegmentation</code> </p> </li> <li> <p> <code>arn:aws:lambda:ap-northeast-1:477331159723:function:PRE-SemanticSegmentation</code> </p> </li> <li> <p> <code>arn:aws:lambda:ap-northeast-2:845288260483:function:PRE-SemanticSegmentation</code> </p> </li> <li> <p> <code>arn:aws:lambda:ap-south-1:565803892007:function:PRE-SemanticSegmentation</code> </p> </li> <li> <p> <code>arn:aws:lambda:ap-southeast-1:377565633583:function:PRE-SemanticSegmentation</code> </p> </li> <li> <p> <code>arn:aws:lambda:ap-southeast-2:454466003867:function:PRE-SemanticSegmentation</code> </p> </li> </ul> <p> <b>Text classification</b> - Uses a variant of the Expectation Maximization approach to estimate the true class of text based on annotations from individual workers.</p> <ul> <li> <p> <code>arn:aws:lambda:us-east-1:432418664414:function:PRE-TextMultiClass</code> </p> </li> <li> <p> <code>arn:aws:lambda:us-east-2:266458841044:function:PRE-TextMultiClass</code> </p> </li> <li> <p> <code>arn:aws:lambda:us-west-2:081040173940:function:PRE-TextMultiClass</code> </p> </li> <li> <p> <code>arn:aws:lambda:ca-central-1:918755190332:function:PRE-TextMultiClass</code> </p> </li> <li> <p> <code>arn:aws:lambda:eu-west-1:568282634449:function:PRE-TextMultiClass</code> </p> </li> <li> <p> <code>arn:aws:lambda:eu-west-2:487402164563:function:PRE-TextMultiClass</code> </p> </li> <li> <p> <code>arn:aws:lambda:eu-central-1:203001061592:function:PRE-TextMultiClass</code> </p> </li> <li> <p> <code>arn:aws:lambda:ap-northeast-1:477331159723:function:PRE-TextMultiClass</code> </p> </li> <li> <p> <code>arn:aws:lambda:ap-northeast-2:845288260483:function:PRE-TextMultiClass</code> </p> </li> <li> <p> <code>arn:aws:lambda:ap-south-1:565803892007:function:PRE-TextMultiClass</code> </p> </li> <li> <p> <code>arn:aws:lambda:ap-southeast-1:377565633583:function:PRE-TextMultiClass</code> </p> </li> <li> <p> <code>arn:aws:lambda:ap-southeast-2:454466003867:function:PRE-TextMultiClass</code> </p> </li> </ul> <p> <b>Multi-label text classification</b> - Uses a variant of the Expectation Maximization approach to estimate the true classes of text based on annotations from individual workers.</p> <ul> <li> <p> <code>arn:aws:lambda:us-east-1:432418664414:function:PRE-TextMultiClassMultiLabel</code> </p> </li> <li> <p> <code>arn:aws:lambda:us-east-2:266458841044:function:PRE-TextMultiClassMultiLabel</code> </p> </li> <li> <p> <code>arn:aws:lambda:us-west-2:081040173940:function:PRE-TextMultiClassMultiLabel</code> </p> </li> <li> <p> <code>arn:aws:lambda:ca-central-1:918755190332:function:PRE-TextMultiClassMultiLabel</code> </p> </li> <li> <p> <code>arn:aws:lambda:eu-west-1:568282634449:function:PRE-TextMultiClassMultiLabel</code> </p> </li> <li> <p> <code>arn:aws:lambda:eu-west-2:487402164563:function:PRE-TextMultiClassMultiLabel</code> </p> </li> <li> <p> <code>arn:aws:lambda:eu-central-1:203001061592:function:PRE-TextMultiClassMultiLabel</code> </p> </li> <li> <p> <code>arn:aws:lambda:ap-northeast-1:477331159723:function:PRE-TextMultiClassMultiLabel</code> </p> </li> <li> <p> <code>arn:aws:lambda:ap-northeast-2:845288260483:function:PRE-TextMultiClassMultiLabel</code> </p> </li> <li> <p> <code>arn:aws:lambda:ap-south-1:565803892007:function:PRE-TextMultiClassMultiLabel</code> </p> </li> <li> <p> <code>arn:aws:lambda:ap-southeast-1:377565633583:function:PRE-TextMultiClassMultiLabel</code> </p> </li> <li> <p> <code>arn:aws:lambda:ap-southeast-2:454466003867:function:PRE-TextMultiClassMultiLabel</code> </p> </li> </ul> <p> <b>Named entity recognition</b> - Groups similar selections and calculates aggregate boundaries, resolving to most-assigned label.</p> <ul> <li> <p> <code>arn:aws:lambda:us-east-1:432418664414:function:PRE-NamedEntityRecognition</code> </p> </li> <li> <p> <code>arn:aws:lambda:us-east-2:266458841044:function:PRE-NamedEntityRecognition</code> </p> </li> <li> <p> <code>arn:aws:lambda:us-west-2:081040173940:function:PRE-NamedEntityRecognition</code> </p> </li> <li> <p> <code>arn:aws:lambda:ca-central-1:918755190332:function:PRE-NamedEntityRecognition</code> </p> </li> <li> <p> <code>arn:aws:lambda:eu-west-1:568282634449:function:PRE-NamedEntityRecognition</code> </p> </li> <li> <p> <code>arn:aws:lambda:eu-west-2:487402164563:function:PRE-NamedEntityRecognition</code> </p> </li> <li> <p> <code>arn:aws:lambda:eu-central-1:203001061592:function:PRE-NamedEntityRecognition</code> </p> </li> <li> <p> <code>arn:aws:lambda:ap-northeast-1:477331159723:function:PRE-NamedEntityRecognition</code> </p> </li> <li> <p> <code>arn:aws:lambda:ap-northeast-2:845288260483:function:PRE-NamedEntityRecognition</code> </p> </li> <li> <p> <code>arn:aws:lambda:ap-south-1:565803892007:function:PRE-NamedEntityRecognition</code> </p> </li> <li> <p> <code>arn:aws:lambda:ap-southeast-1:377565633583:function:PRE-NamedEntityRecognition</code> </p> </li> <li> <p> <code>arn:aws:lambda:ap-southeast-2:454466003867:function:PRE-NamedEntityRecognition</code> </p> </li> </ul> <p> <b>Video Classification</b> - Use this task type when you need workers to classify videos using predefined labels that you specify. Workers are shown videos and are asked to choose one label for each video.</p> <ul> <li> <p> <code>arn:aws:lambda:us-east-1:432418664414:function:PRE-VideoMultiClass</code> </p> </li> <li> <p> <code>arn:aws:lambda:us-east-2:266458841044:function:PRE-VideoMultiClass</code> </p> </li> <li> <p> <code>arn:aws:lambda:us-west-2:081040173940:function:PRE-VideoMultiClass</code> </p> </li> <li> <p> <code>arn:aws:lambda:eu-west-1:568282634449:function:PRE-VideoMultiClass</code> </p> </li> <li> <p> <code>arn:aws:lambda:ap-northeast-1:477331159723:function:PRE-VideoMultiClass</code> </p> </li> <li> <p> <code>arn:aws:lambda:ap-southeast-2:454466003867:function:PRE-VideoMultiClass</code> </p> </li> <li> <p> <code>arn:aws:lambda:ap-south-1:565803892007:function:PRE-VideoMultiClass</code> </p> </li> <li> <p> <code>arn:aws:lambda:eu-central-1:203001061592:function:PRE-VideoMultiClass</code> </p> </li> <li> <p> <code>arn:aws:lambda:ap-northeast-2:845288260483:function:PRE-VideoMultiClass</code> </p> </li> <li> <p> <code>arn:aws:lambda:eu-west-2:487402164563:function:PRE-VideoMultiClass</code> </p> </li> <li> <p> <code>arn:aws:lambda:ap-southeast-1:377565633583:function:PRE-VideoMultiClass</code> </p> </li> <li> <p> <code>arn:aws:lambda:ca-central-1:918755190332:function:PRE-VideoMultiClass</code> </p> </li> </ul> <p> <b>Video Frame Object Detection</b> - Use this task type to have workers identify and locate objects in a sequence of video frames (images extracted from a video) using bounding boxes. For example, you can use this task to ask workers to identify and localize various objects in a series of video frames, such as cars, bikes, and pedestrians.</p> <ul> <li> <p> <code>arn:aws:lambda:us-east-1:432418664414:function:PRE-VideoObjectDetection</code> </p> </li> <li> <p> <code>arn:aws:lambda:us-east-2:266458841044:function:PRE-VideoObjectDetection</code> </p> </li> <li> <p> <code>arn:aws:lambda:us-west-2:081040173940:function:PRE-VideoObjectDetection</code> </p> </li> <li> <p> <code>arn:aws:lambda:eu-west-1:568282634449:function:PRE-VideoObjectDetection</code> </p> </li> <li> <p> <code>arn:aws:lambda:ap-northeast-1:477331159723:function:PRE-VideoObjectDetection</code> </p> </li> <li> <p> <code>arn:aws:lambda:ap-southeast-2:454466003867:function:PRE-VideoObjectDetection</code> </p> </li> <li> <p> <code>arn:aws:lambda:ap-south-1:565803892007:function:PRE-VideoObjectDetection</code> </p> </li> <li> <p> <code>arn:aws:lambda:eu-central-1:203001061592:function:PRE-VideoObjectDetection</code> </p> </li> <li> <p> <code>arn:aws:lambda:ap-northeast-2:845288260483:function:PRE-VideoObjectDetection</code> </p> </li> <li> <p> <code>arn:aws:lambda:eu-west-2:487402164563:function:PRE-VideoObjectDetection</code> </p> </li> <li> <p> <code>arn:aws:lambda:ap-southeast-1:377565633583:function:PRE-VideoObjectDetection</code> </p> </li> <li> <p> <code>arn:aws:lambda:ca-central-1:918755190332:function:PRE-VideoObjectDetection</code> </p> </li> </ul> <p> <b>Video Frame Object Tracking</b> - Use this task type to have workers track the movement of objects in a sequence of video frames (images extracted from a video) using bounding boxes. For example, you can use this task to ask workers to track the movement of objects, such as cars, bikes, and pedestrians. </p> <ul> <li> <p> <code>arn:aws:lambda:us-east-1:432418664414:function:PRE-VideoObjectTracking</code> </p> </li> <li> <p> <code>arn:aws:lambda:us-east-2:266458841044:function:PRE-VideoObjectTracking</code> </p> </li> <li> <p> <code>arn:aws:lambda:us-west-2:081040173940:function:PRE-VideoObjectTracking</code> </p> </li> <li> <p> <code>arn:aws:lambda:eu-west-1:568282634449:function:PRE-VideoObjectTracking</code> </p> </li> <li> <p> <code>arn:aws:lambda:ap-northeast-1:477331159723:function:PRE-VideoObjectTracking</code> </p> </li> <li> <p> <code>arn:aws:lambda:ap-southeast-2:454466003867:function:PRE-VideoObjectTracking</code> </p> </li> <li> <p> <code>arn:aws:lambda:ap-south-1:565803892007:function:PRE-VideoObjectTracking</code> </p> </li> <li> <p> <code>arn:aws:lambda:eu-central-1:203001061592:function:PRE-VideoObjectTracking</code> </p> </li> <li> <p> <code>arn:aws:lambda:ap-northeast-2:845288260483:function:PRE-VideoObjectTracking</code> </p> </li> <li> <p> <code>arn:aws:lambda:eu-west-2:487402164563:function:PRE-VideoObjectTracking</code> </p> </li> <li> <p> <code>arn:aws:lambda:ap-southeast-1:377565633583:function:PRE-VideoObjectTracking</code> </p> </li> <li> <p> <code>arn:aws:lambda:ca-central-1:918755190332:function:PRE-VideoObjectTracking</code> </p> </li> </ul> <p> <b>3D Point Cloud Modalities</b> </p> <p>Use the following pre-annotation lambdas for 3D point cloud labeling modality tasks. See <a href="https://docs.aws.amazon.com/sagemaker/latest/dg/sms-point-cloud-task-types.html">3D Point Cloud Task types </a> to learn more. </p> <p> <b>3D Point Cloud Object Detection</b> - Use this task type when you want workers to classify objects in a 3D point cloud by drawing 3D cuboids around objects. For example, you can use this task type to ask workers to identify different types of objects in a point cloud, such as cars, bikes, and pedestrians.</p> <ul> <li> <p> <code>arn:aws:lambda:us-east-1:432418664414:function:PRE-3DPointCloudObjectDetection</code> </p> </li> <li> <p> <code>arn:aws:lambda:us-east-2:266458841044:function:PRE-3DPointCloudObjectDetection</code> </p> </li> <li> <p> <code>arn:aws:lambda:us-west-2:081040173940:function:PRE-3DPointCloudObjectDetection</code> </p> </li> <li> <p> <code>arn:aws:lambda:eu-west-1:568282634449:function:PRE-3DPointCloudObjectDetection</code> </p> </li> <li> <p> <code>arn:aws:lambda:ap-northeast-1:477331159723:function:PRE-3DPointCloudObjectDetection</code> </p> </li> <li> <p> <code>arn:aws:lambda:ap-southeast-2:454466003867:function:PRE-3DPointCloudObjectDetection</code> </p> </li> <li> <p> <code>arn:aws:lambda:ap-south-1:565803892007:function:PRE-3DPointCloudObjectDetection</code> </p> </li> <li> <p> <code>arn:aws:lambda:eu-central-1:203001061592:function:PRE-3DPointCloudObjectDetection</code> </p> </li> <li> <p> <code>arn:aws:lambda:ap-northeast-2:845288260483:function:PRE-3DPointCloudObjectDetection</code> </p> </li> <li> <p> <code>arn:aws:lambda:eu-west-2:487402164563:function:PRE-3DPointCloudObjectDetection</code> </p> </li> <li> <p> <code>arn:aws:lambda:ap-southeast-1:377565633583:function:PRE-3DPointCloudObjectDetection</code> </p> </li> <li> <p> <code>arn:aws:lambda:ca-central-1:918755190332:function:PRE-3DPointCloudObjectDetection</code> </p> </li> </ul> <p> <b>3D Point Cloud Object Tracking</b> - Use this task type when you want workers to draw 3D cuboids around objects that appear in a sequence of 3D point cloud frames. For example, you can use this task type to ask workers to track the movement of vehicles across multiple point cloud frames. </p> <ul> <li> <p> <code>arn:aws:lambda:us-east-1:432418664414:function:PRE-3DPointCloudObjectTracking</code> </p> </li> <li> <p> <code>arn:aws:lambda:us-east-2:266458841044:function:PRE-3DPointCloudObjectTracking</code> </p> </li> <li> <p> <code>arn:aws:lambda:us-west-2:081040173940:function:PRE-3DPointCloudObjectTracking</code> </p> </li> <li> <p> <code>arn:aws:lambda:eu-west-1:568282634449:function:PRE-3DPointCloudObjectTracking</code> </p> </li> <li> <p> <code>arn:aws:lambda:ap-northeast-1:477331159723:function:PRE-3DPointCloudObjectTracking</code> </p> </li> <li> <p> <code>arn:aws:lambda:ap-southeast-2:454466003867:function:PRE-3DPointCloudObjectTracking</code> </p> </li> <li> <p> <code>arn:aws:lambda:ap-south-1:565803892007:function:PRE-3DPointCloudObjectTracking</code> </p> </li> <li> <p> <code>arn:aws:lambda:eu-central-1:203001061592:function:PRE-3DPointCloudObjectTracking</code> </p> </li> <li> <p> <code>arn:aws:lambda:ap-northeast-2:845288260483:function:PRE-3DPointCloudObjectTracking</code> </p> </li> <li> <p> <code>arn:aws:lambda:eu-west-2:487402164563:function:PRE-3DPointCloudObjectTracking</code> </p> </li> <li> <p> <code>arn:aws:lambda:ap-southeast-1:377565633583:function:PRE-3DPointCloudObjectTracking</code> </p> </li> <li> <p> <code>arn:aws:lambda:ca-central-1:918755190332:function:PRE-3DPointCloudObjectTracking</code> </p> </li> </ul> <p> <b>3D Point Cloud Semantic Segmentation</b> - Use this task type when you want workers to create a point-level semantic segmentation masks by painting objects in a 3D point cloud using different colors where each color is assigned to one of the classes you specify.</p> <ul> <li> <p> <code>arn:aws:lambda:us-east-1:432418664414:function:PRE-3DPointCloudSemanticSegmentation</code> </p> </li> <li> <p> <code>arn:aws:lambda:us-east-2:266458841044:function:PRE-3DPointCloudSemanticSegmentation</code> </p> </li> <li> <p> <code>arn:aws:lambda:us-west-2:081040173940:function:PRE-3DPointCloudSemanticSegmentation</code> </p> </li> <li> <p> <code>arn:aws:lambda:eu-west-1:568282634449:function:PRE-3DPointCloudSemanticSegmentation</code> </p> </li> <li> <p> <code>arn:aws:lambda:ap-northeast-1:477331159723:function:PRE-3DPointCloudSemanticSegmentation</code> </p> </li> <li> <p> <code>arn:aws:lambda:ap-southeast-2:454466003867:function:PRE-3DPointCloudSemanticSegmentation</code> </p> </li> <li> <p> <code>arn:aws:lambda:ap-south-1:565803892007:function:PRE-3DPointCloudSemanticSegmentation</code> </p> </li> <li> <p> <code>arn:aws:lambda:eu-central-1:203001061592:function:PRE-3DPointCloudSemanticSegmentation</code> </p> </li> <li> <p> <code>arn:aws:lambda:ap-northeast-2:845288260483:function:PRE-3DPointCloudSemanticSegmentation</code> </p> </li> <li> <p> <code>arn:aws:lambda:eu-west-2:487402164563:function:PRE-3DPointCloudSemanticSegmentation</code> </p> </li> <li> <p> <code>arn:aws:lambda:ap-southeast-1:377565633583:function:PRE-3DPointCloudSemanticSegmentation</code> </p> </li> <li> <p> <code>arn:aws:lambda:ca-central-1:918755190332:function:PRE-3DPointCloudSemanticSegmentation</code> </p> </li> </ul> <p> <b>Use the following ARNs for Label Verification and Adjustment Jobs</b> </p> <p>Use label verification and adjustment jobs to review and adjust labels. To learn more, see <a href="https://docs.aws.amazon.com/sagemaker/latest/dg/sms-verification-data.html">Verify and Adjust Labels </a>.</p> <p> <b>Bounding box verification</b> - Uses a variant of the Expectation Maximization approach to estimate the true class of verification judgement for bounding box labels based on annotations from individual workers.</p> <ul> <li> <p> <code>arn:aws:lambda:us-east-1:432418664414:function:PRE-Adjustment3DPointCloudObjectTracking</code> </p> </li> <li> <p> <code>arn:aws:lambda:us-east-2:266458841044:function:PRE-Adjustment3DPointCloudObjectTracking</code> </p> </li> <li> <p> <code>arn:aws:lambda:us-west-2:081040173940:function:PRE-Adjustment3DPointCloudObjectTracking</code> </p> </li> <li> <p> <code>arn:aws:lambda:eu-west-1:568282634449:function:PRE-Adjustment3DPointCloudObjectTracking</code> </p> </li> <li> <p> <code>arn:aws:lambda:ap-northeast-1:477331159723:function:PRE-Adjustment3DPointCloudObjectTracking</code> </p> </li> <li> <p> <code>arn:aws:lambda:ap-southeast-2:454466003867:function:PRE-Adjustment3DPointCloudObjectTracking</code> </p> </li> <li> <p> <code>arn:aws:lambda:ap-south-1:565803892007:function:PRE-Adjustment3DPointCloudObjectTracking</code> </p> </li> <li> <p> <code>arn:aws:lambda:eu-central-1:203001061592:function:PRE-Adjustment3DPointCloudObjectTracking</code> </p> </li> <li> <p> <code>arn:aws:lambda:ap-northeast-2:845288260483:function:PRE-Adjustment3DPointCloudObjectTracking</code> </p> </li> <li> <p> <code>arn:aws:lambda:eu-west-2:487402164563:function:PRE-Adjustment3DPointCloudObjectTracking</code> </p> </li> <li> <p> <code>arn:aws:lambda:ap-southeast-1:377565633583:function:PRE-Adjustment3DPointCloudObjectTracking</code> </p> </li> <li> <p> <code>arn:aws:lambda:ca-central-1:918755190332:function:PRE-Adjustment3DPointCloudObjectTracking</code> </p> </li> </ul> <p> <b>Bounding box adjustment</b> - Finds the most similar boxes from different workers based on the Jaccard index of the adjusted annotations.</p> <ul> <li> <p> <code>arn:aws:lambda:us-east-1:432418664414:function:PRE-AdjustmentBoundingBox</code> </p> </li> <li> <p> <code>arn:aws:lambda:us-east-2:266458841044:function:PRE-AdjustmentBoundingBox</code> </p> </li> <li> <p> <code>arn:aws:lambda:us-west-2:081040173940:function:PRE-AdjustmentBoundingBox</code> </p> </li> <li> <p> <code>arn:aws:lambda:ca-central-1:918755190332:function:PRE-AdjustmentBoundingBox</code> </p> </li> <li> <p> <code>arn:aws:lambda:eu-west-1:568282634449:function:PRE-AdjustmentBoundingBox</code> </p> </li> <li> <p> <code>arn:aws:lambda:eu-west-2:487402164563:function:PRE-AdjustmentBoundingBox</code> </p> </li> <li> <p> <code>arn:aws:lambda:eu-central-1:203001061592:function:PRE-AdjustmentBoundingBox</code> </p> </li> <li> <p> <code>arn:aws:lambda:ap-northeast-1:477331159723:function:PRE-AdjustmentBoundingBox</code> </p> </li> <li> <p> <code>arn:aws:lambda:ap-northeast-2:845288260483:function:PRE-AdjustmentBoundingBox</code> </p> </li> <li> <p> <code>arn:aws:lambda:ap-south-1:565803892007:function:PRE-AdjustmentBoundingBox</code> </p> </li> <li> <p> <code>arn:aws:lambda:ap-southeast-1:377565633583:function:PRE-AdjustmentBoundingBox</code> </p> </li> <li> <p> <code>arn:aws:lambda:ap-southeast-2:454466003867:function:PRE-AdjustmentBoundingBox</code> </p> </li> </ul> <p> <b>Semantic segmentation verification</b> - Uses a variant of the Expectation Maximization approach to estimate the true class of verification judgment for semantic segmentation labels based on annotations from individual workers.</p> <ul> <li> <p> <code>arn:aws:lambda:us-east-1:432418664414:function:PRE-VerificationSemanticSegmentation</code> </p> </li> <li> <p> <code>arn:aws:lambda:us-east-2:266458841044:function:PRE-VerificationSemanticSegmentation</code> </p> </li> <li> <p> <code>arn:aws:lambda:us-west-2:081040173940:function:PRE-VerificationSemanticSegmentation</code> </p> </li> <li> <p> <code>arn:aws:lambda:ca-central-1:918755190332:function:PRE-VerificationSemanticSegmentation</code> </p> </li> <li> <p> <code>arn:aws:lambda:eu-west-1:568282634449:function:PRE-VerificationSemanticSegmentation</code> </p> </li> <li> <p> <code>arn:aws:lambda:eu-west-2:487402164563:function:PRE-VerificationSemanticSegmentation</code> </p> </li> <li> <p> <code>arn:aws:lambda:eu-central-1:203001061592:function:PRE-VerificationSemanticSegmentation</code> </p> </li> <li> <p> <code>arn:aws:lambda:ap-northeast-1:477331159723:function:PRE-VerificationSemanticSegmentation</code> </p> </li> <li> <p> <code>arn:aws:lambda:ap-northeast-2:845288260483:function:PRE-VerificationSemanticSegmentation</code> </p> </li> <li> <p> <code>arn:aws:lambda:ap-south-1:565803892007:function:PRE-VerificationSemanticSegmentation</code> </p> </li> <li> <p> <code>arn:aws:lambda:ap-southeast-1:377565633583:function:PRE-VerificationSemanticSegmentation</code> </p> </li> <li> <p> <code>arn:aws:lambda:ap-southeast-2:454466003867:function:PRE-VerificationSemanticSegmentation</code> </p> </li> </ul> <p> <b>Semantic segmentation adjustment</b> - Treats each pixel in an image as a multi-class classification and treats pixel adjusted annotations from workers as &quot;votes&quot; for the correct label.</p> <ul> <li> <p> <code>arn:aws:lambda:us-east-1:432418664414:function:PRE-AdjustmentSemanticSegmentation</code> </p> </li> <li> <p> <code>arn:aws:lambda:us-east-2:266458841044:function:PRE-AdjustmentSemanticSegmentation</code> </p> </li> <li> <p> <code>arn:aws:lambda:us-west-2:081040173940:function:PRE-AdjustmentSemanticSegmentation</code> </p> </li> <li> <p> <code>arn:aws:lambda:ca-central-1:918755190332:function:PRE-AdjustmentSemanticSegmentation</code> </p> </li> <li> <p> <code>arn:aws:lambda:eu-west-1:568282634449:function:PRE-AdjustmentSemanticSegmentation</code> </p> </li> <li> <p> <code>arn:aws:lambda:eu-west-2:487402164563:function:PRE-AdjustmentSemanticSegmentation</code> </p> </li> <li> <p> <code>arn:aws:lambda:eu-central-1:203001061592:function:PRE-AdjustmentSemanticSegmentation</code> </p> </li> <li> <p> <code>arn:aws:lambda:ap-northeast-1:477331159723:function:PRE-AdjustmentSemanticSegmentation</code> </p> </li> <li> <p> <code>arn:aws:lambda:ap-northeast-2:845288260483:function:PRE-AdjustmentSemanticSegmentation</code> </p> </li> <li> <p> <code>arn:aws:lambda:ap-south-1:565803892007:function:PRE-AdjustmentSemanticSegmentation</code> </p> </li> <li> <p> <code>arn:aws:lambda:ap-southeast-1:377565633583:function:PRE-AdjustmentSemanticSegmentation</code> </p> </li> <li> <p> <code>arn:aws:lambda:ap-southeast-2:454466003867:function:PRE-AdjustmentSemanticSegmentation</code> </p> </li> </ul> <p> <b>Video Frame Object Detection Adjustment</b> - Use this task type when you want workers to adjust bounding boxes that workers have added to video frames to classify and localize objects in a sequence of video frames.</p> <ul> <li> <p> <code>arn:aws:lambda:us-east-1:432418664414:function:PRE-AdjustmentVideoObjectDetection</code> </p> </li> <li> <p> <code>arn:aws:lambda:us-east-2:266458841044:function:PRE-AdjustmentVideoObjectDetection</code> </p> </li> <li> <p> <code>arn:aws:lambda:us-west-2:081040173940:function:PRE-AdjustmentVideoObjectDetection</code> </p> </li> <li> <p> <code>arn:aws:lambda:eu-west-1:568282634449:function:PRE-AdjustmentVideoObjectDetection</code> </p> </li> <li> <p> <code>arn:aws:lambda:ap-northeast-1:477331159723:function:PRE-AdjustmentVideoObjectDetection</code> </p> </li> <li> <p> <code>arn:aws:lambda:ap-southeast-2:454466003867:function:PRE-AdjustmentVideoObjectDetection</code> </p> </li> <li> <p> <code>arn:aws:lambda:ap-south-1:565803892007:function:PRE-AdjustmentVideoObjectDetection</code> </p> </li> <li> <p> <code>arn:aws:lambda:eu-central-1:203001061592:function:PRE-AdjustmentVideoObjectDetection</code> </p> </li> <li> <p> <code>arn:aws:lambda:ap-northeast-2:845288260483:function:PRE-AdjustmentVideoObjectDetection</code> </p> </li> <li> <p> <code>arn:aws:lambda:eu-west-2:487402164563:function:PRE-AdjustmentVideoObjectDetection</code> </p> </li> <li> <p> <code>arn:aws:lambda:ap-southeast-1:377565633583:function:PRE-AdjustmentVideoObjectDetection</code> </p> </li> <li> <p> <code>arn:aws:lambda:ca-central-1:918755190332:function:PRE-AdjustmentVideoObjectDetection</code> </p> </li> </ul> <p> <b>Video Frame Object Tracking Adjustment</b> - Use this task type when you want workers to adjust bounding boxes that workers have added to video frames to track object movement across a sequence of video frames.</p> <ul> <li> <p> <code>arn:aws:lambda:us-east-1:432418664414:function:PRE-AdjustmentVideoObjectTracking</code> </p> </li> <li> <p> <code>arn:aws:lambda:us-east-2:266458841044:function:PRE-AdjustmentVideoObjectTracking</code> </p> </li> <li> <p> <code>arn:aws:lambda:us-west-2:081040173940:function:PRE-AdjustmentVideoObjectTracking</code> </p> </li> <li> <p> <code>arn:aws:lambda:eu-west-1:568282634449:function:PRE-AdjustmentVideoObjectTracking</code> </p> </li> <li> <p> <code>arn:aws:lambda:ap-northeast-1:477331159723:function:PRE-AdjustmentVideoObjectTracking</code> </p> </li> <li> <p> <code>arn:aws:lambda:ap-southeast-2:454466003867:function:PRE-AdjustmentVideoObjectTracking</code> </p> </li> <li> <p> <code>arn:aws:lambda:ap-south-1:565803892007:function:PRE-AdjustmentVideoObjectTracking</code> </p> </li> <li> <p> <code>arn:aws:lambda:eu-central-1:203001061592:function:PRE-AdjustmentVideoObjectTracking</code> </p> </li> <li> <p> <code>arn:aws:lambda:ap-northeast-2:845288260483:function:PRE-AdjustmentVideoObjectTracking</code> </p> </li> <li> <p> <code>arn:aws:lambda:eu-west-2:487402164563:function:PRE-AdjustmentVideoObjectTracking</code> </p> </li> <li> <p> <code>arn:aws:lambda:ap-southeast-1:377565633583:function:PRE-AdjustmentVideoObjectTracking</code> </p> </li> <li> <p> <code>arn:aws:lambda:ca-central-1:918755190332:function:PRE-AdjustmentVideoObjectTracking</code> </p> </li> </ul> <p> <b>3D point cloud object detection adjustment</b> - Adjust 3D cuboids in a point cloud frame. </p> <ul> <li> <p> <code>arn:aws:lambda:us-east-1:432418664414:function:PRE-Adjustment3DPointCloudObjectDetection</code> </p> </li> <li> <p> <code>arn:aws:lambda:us-east-2:266458841044:function:PRE-Adjustment3DPointCloudObjectDetection</code> </p> </li> <li> <p> <code>arn:aws:lambda:us-west-2:081040173940:function:PRE-Adjustment3DPointCloudObjectDetection</code> </p> </li> <li> <p> <code>arn:aws:lambda:eu-west-1:568282634449:function:PRE-Adjustment3DPointCloudObjectDetection</code> </p> </li> <li> <p> <code>arn:aws:lambda:ap-northeast-1:477331159723:function:PRE-Adjustment3DPointCloudObjectDetection</code> </p> </li> <li> <p> <code>arn:aws:lambda:ap-southeast-2:454466003867:function:PRE-Adjustment3DPointCloudObjectDetection</code> </p> </li> <li> <p> <code>arn:aws:lambda:ap-south-1:565803892007:function:PRE-Adjustment3DPointCloudObjectDetection</code> </p> </li> <li> <p> <code>arn:aws:lambda:eu-central-1:203001061592:function:PRE-Adjustment3DPointCloudObjectDetection</code> </p> </li> <li> <p> <code>arn:aws:lambda:ap-northeast-2:845288260483:function:PRE-Adjustment3DPointCloudObjectDetection</code> </p> </li> <li> <p> <code>arn:aws:lambda:eu-west-2:487402164563:function:PRE-Adjustment3DPointCloudObjectDetection</code> </p> </li> <li> <p> <code>arn:aws:lambda:ap-southeast-1:377565633583:function:PRE-Adjustment3DPointCloudObjectDetection</code> </p> </li> <li> <p> <code>arn:aws:lambda:ca-central-1:918755190332:function:PRE-Adjustment3DPointCloudObjectDetection</code> </p> </li> </ul> <p> <b>3D point cloud object tracking adjustment</b> - Adjust 3D cuboids across a sequence of point cloud frames. </p> <ul> <li> <p> <code>arn:aws:lambda:us-east-1:432418664414:function:PRE-Adjustment3DPointCloudObjectTracking</code> </p> </li> <li> <p> <code>arn:aws:lambda:us-east-2:266458841044:function:PRE-Adjustment3DPointCloudObjectTracking</code> </p> </li> <li> <p> <code>arn:aws:lambda:us-west-2:081040173940:function:PRE-Adjustment3DPointCloudObjectTracking</code> </p> </li> <li> <p> <code>arn:aws:lambda:eu-west-1:568282634449:function:PRE-Adjustment3DPointCloudObjectTracking</code> </p> </li> <li> <p> <code>arn:aws:lambda:ap-northeast-1:477331159723:function:PRE-Adjustment3DPointCloudObjectTracking</code> </p> </li> <li> <p> <code>arn:aws:lambda:ap-southeast-2:454466003867:function:PRE-Adjustment3DPointCloudObjectTracking</code> </p> </li> <li> <p> <code>arn:aws:lambda:ap-south-1:565803892007:function:PRE-Adjustment3DPointCloudObjectTracking</code> </p> </li> <li> <p> <code>arn:aws:lambda:eu-central-1:203001061592:function:PRE-Adjustment3DPointCloudObjectTracking</code> </p> </li> <li> <p> <code>arn:aws:lambda:ap-northeast-2:845288260483:function:PRE-Adjustment3DPointCloudObjectTracking</code> </p> </li> <li> <p> <code>arn:aws:lambda:eu-west-2:487402164563:function:PRE-Adjustment3DPointCloudObjectTracking</code> </p> </li> <li> <p> <code>arn:aws:lambda:ap-southeast-1:377565633583:function:PRE-Adjustment3DPointCloudObjectTracking</code> </p> </li> <li> <p> <code>arn:aws:lambda:ca-central-1:918755190332:function:PRE-Adjustment3DPointCloudObjectTracking</code> </p> </li> </ul> <p> <b>3D point cloud semantic segmentation adjustment</b> - Adjust semantic segmentation masks in a 3D point cloud. </p> <ul> <li> <p> <code>arn:aws:lambda:us-east-1:432418664414:function:PRE-Adjustment3DPointCloudSemanticSegmentation</code> </p> </li> <li> <p> <code>arn:aws:lambda:us-east-2:266458841044:function:PRE-Adjustment3DPointCloudSemanticSegmentation</code> </p> </li> <li> <p> <code>arn:aws:lambda:us-west-2:081040173940:function:PRE-Adjustment3DPointCloudSemanticSegmentation</code> </p> </li> <li> <p> <code>arn:aws:lambda:eu-west-1:568282634449:function:PRE-Adjustment3DPointCloudSemanticSegmentation</code> </p> </li> <li> <p> <code>arn:aws:lambda:ap-northeast-1:477331159723:function:PRE-Adjustment3DPointCloudSemanticSegmentation</code> </p> </li> <li> <p> <code>arn:aws:lambda:ap-southeast-2:454466003867:function:PRE-Adjustment3DPointCloudSemanticSegmentation</code> </p> </li> <li> <p> <code>arn:aws:lambda:ap-south-1:565803892007:function:PRE-Adjustment3DPointCloudSemanticSegmentation</code> </p> </li> <li> <p> <code>arn:aws:lambda:eu-central-1:203001061592:function:PRE-Adjustment3DPointCloudSemanticSegmentation</code> </p> </li> <li> <p> <code>arn:aws:lambda:ap-northeast-2:845288260483:function:PRE-Adjustment3DPointCloudSemanticSegmentation</code> </p> </li> <li> <p> <code>arn:aws:lambda:eu-west-2:487402164563:function:PRE-Adjustment3DPointCloudSemanticSegmentation</code> </p> </li> <li> <p> <code>arn:aws:lambda:ap-southeast-1:377565633583:function:PRE-Adjustment3DPointCloudSemanticSegmentation</code> </p> </li> <li> <p> <code>arn:aws:lambda:ca-central-1:918755190332:function:PRE-Adjustment3DPointCloudSemanticSegmentation</code> </p> </li> </ul></p>
     #[serde(rename = "PreHumanTaskLambdaArn")]
     pub pre_human_task_lambda_arn: String,
     /// <p>The price that you pay for each task performed by an Amazon Mechanical Turk worker.</p>
@@ -4331,6 +7148,75 @@ pub struct HyperParameterTuningJobWarmStartConfig {
     pub warm_start_type: String,
 }
 
+/// <p>A SageMaker image. A SageMaker image represents a set of container images that are derived from a common base container image. Each of these container images is represented by a SageMaker <code>ImageVersion</code>.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct Image {
+    /// <p>When the image was created.</p>
+    #[serde(rename = "CreationTime")]
+    pub creation_time: f64,
+    /// <p>The description of the image.</p>
+    #[serde(rename = "Description")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub description: Option<String>,
+    /// <p>The name of the image as displayed.</p>
+    #[serde(rename = "DisplayName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub display_name: Option<String>,
+    /// <p>When a create, update, or delete operation fails, the reason for the failure.</p>
+    #[serde(rename = "FailureReason")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub failure_reason: Option<String>,
+    /// <p>The Amazon Resource Name (ARN) of the image.</p>
+    #[serde(rename = "ImageArn")]
+    pub image_arn: String,
+    /// <p>The name of the image.</p>
+    #[serde(rename = "ImageName")]
+    pub image_name: String,
+    /// <p>The status of the image.</p>
+    #[serde(rename = "ImageStatus")]
+    pub image_status: String,
+    /// <p>When the image was last modified.</p>
+    #[serde(rename = "LastModifiedTime")]
+    pub last_modified_time: f64,
+}
+
+/// <p>Specifies whether the model container is in Amazon ECR or a private Docker registry accessible from your Amazon Virtual Private Cloud (VPC).</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
+pub struct ImageConfig {
+    /// <p><p>Set this to one of the following values:</p> <ul> <li> <p> <code>Platform</code> - The model image is hosted in Amazon ECR.</p> </li> <li> <p> <code>Vpc</code> - The model image is hosted in a private Docker registry in your VPC.</p> </li> </ul></p>
+    #[serde(rename = "RepositoryAccessMode")]
+    pub repository_access_mode: String,
+}
+
+/// <p>A version of a SageMaker <code>Image</code>. A version represents an existing container image.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct ImageVersion {
+    /// <p>When the version was created.</p>
+    #[serde(rename = "CreationTime")]
+    pub creation_time: f64,
+    /// <p>When a create or delete operation fails, the reason for the failure.</p>
+    #[serde(rename = "FailureReason")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub failure_reason: Option<String>,
+    /// <p>The Amazon Resource Name (ARN) of the image the version is based on.</p>
+    #[serde(rename = "ImageArn")]
+    pub image_arn: String,
+    /// <p>The ARN of the version.</p>
+    #[serde(rename = "ImageVersionArn")]
+    pub image_version_arn: String,
+    /// <p>The status of the version.</p>
+    #[serde(rename = "ImageVersionStatus")]
+    pub image_version_status: String,
+    /// <p>When the version was last modified.</p>
+    #[serde(rename = "LastModifiedTime")]
+    pub last_modified_time: f64,
+    /// <p>The version number.</p>
+    #[serde(rename = "Version")]
+    pub version: i64,
+}
+
 /// <p>Defines how to perform inference generation after a training job is run.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct InferenceSpecification {
@@ -4340,21 +7226,23 @@ pub struct InferenceSpecification {
     /// <p>The supported MIME types for the input data.</p>
     #[serde(rename = "SupportedContentTypes")]
     pub supported_content_types: Vec<String>,
-    /// <p>A list of the instance types that are used to generate inferences in real-time.</p>
+    /// <p>A list of the instance types that are used to generate inferences in real-time.</p> <p>This parameter is required for unversioned models, and optional for versioned models.</p>
     #[serde(rename = "SupportedRealtimeInferenceInstanceTypes")]
-    pub supported_realtime_inference_instance_types: Vec<String>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub supported_realtime_inference_instance_types: Option<Vec<String>>,
     /// <p>The supported MIME types for the output data.</p>
     #[serde(rename = "SupportedResponseMIMETypes")]
     pub supported_response_mime_types: Vec<String>,
-    /// <p>A list of the instance types on which a transformation job can be run or on which an endpoint can be deployed.</p>
+    /// <p>A list of the instance types on which a transformation job can be run or on which an endpoint can be deployed.</p> <p>This parameter is required for unversioned models, and optional for versioned models.</p>
     #[serde(rename = "SupportedTransformInstanceTypes")]
-    pub supported_transform_instance_types: Vec<String>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub supported_transform_instance_types: Option<Vec<String>>,
 }
 
 /// <p>Contains information about the location of input model artifacts, the name and shape of the expected data inputs, and the framework in which the model was trained.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct InputConfig {
-    /// <p><p>Specifies the name and shape of the expected data inputs for your trained model with a JSON dictionary form. The data inputs are <a>InputConfig$Framework</a> specific. </p> <ul> <li> <p> <code>TensorFlow</code>: You must specify the name and shape (NHWC format) of the expected data inputs using a dictionary format for your trained model. The dictionary formats required for the console and CLI are different.</p> <ul> <li> <p>Examples for one input:</p> <ul> <li> <p>If using the console, <code>{&quot;input&quot;:[1,1024,1024,3]}</code> </p> </li> <li> <p>If using the CLI, <code>{&quot;input&quot;:[1,1024,1024,3]}</code> </p> </li> </ul> </li> <li> <p>Examples for two inputs:</p> <ul> <li> <p>If using the console, <code>{&quot;data1&quot;: [1,28,28,1], &quot;data2&quot;:[1,28,28,1]}</code> </p> </li> <li> <p>If using the CLI, <code>{&quot;data1&quot;: [1,28,28,1], &quot;data2&quot;:[1,28,28,1]}</code> </p> </li> </ul> </li> </ul> </li> <li> <p> <code>KERAS</code>: You must specify the name and shape (NCHW format) of expected data inputs using a dictionary format for your trained model. Note that while Keras model artifacts should be uploaded in NHWC (channel-last) format, <code>DataInputConfig</code> should be specified in NCHW (channel-first) format. The dictionary formats required for the console and CLI are different.</p> <ul> <li> <p>Examples for one input:</p> <ul> <li> <p>If using the console, <code>{&quot;input<em>1&quot;:[1,3,224,224]}</code> </p> </li> <li> <p>If using the CLI, <code>{&quot;input</em>1&quot;:[1,3,224,224]}</code> </p> </li> </ul> </li> <li> <p>Examples for two inputs:</p> <ul> <li> <p>If using the console, <code>{&quot;input<em>1&quot;: [1,3,224,224], &quot;input</em>2&quot;:[1,3,224,224]} </code> </p> </li> <li> <p>If using the CLI, <code>{&quot;input<em>1&quot;: [1,3,224,224], &quot;input</em>2&quot;:[1,3,224,224]}</code> </p> </li> </ul> </li> </ul> </li> <li> <p> <code>MXNET/ONNX</code>: You must specify the name and shape (NCHW format) of the expected data inputs in order using a dictionary format for your trained model. The dictionary formats required for the console and CLI are different.</p> <ul> <li> <p>Examples for one input:</p> <ul> <li> <p>If using the console, <code>{&quot;data&quot;:[1,3,1024,1024]}</code> </p> </li> <li> <p>If using the CLI, <code>{&quot;data&quot;:[1,3,1024,1024]}</code> </p> </li> </ul> </li> <li> <p>Examples for two inputs:</p> <ul> <li> <p>If using the console, <code>{&quot;var1&quot;: [1,1,28,28], &quot;var2&quot;:[1,1,28,28]} </code> </p> </li> <li> <p>If using the CLI, <code>{&quot;var1&quot;: [1,1,28,28], &quot;var2&quot;:[1,1,28,28]}</code> </p> </li> </ul> </li> </ul> </li> <li> <p> <code>PyTorch</code>: You can either specify the name and shape (NCHW format) of expected data inputs in order using a dictionary format for your trained model or you can specify the shape only using a list format. The dictionary formats required for the console and CLI are different. The list formats for the console and CLI are the same.</p> <ul> <li> <p>Examples for one input in dictionary format:</p> <ul> <li> <p>If using the console, <code>{&quot;input0&quot;:[1,3,224,224]}</code> </p> </li> <li> <p>If using the CLI, <code>{&quot;input0&quot;:[1,3,224,224]}</code> </p> </li> </ul> </li> <li> <p>Example for one input in list format: <code>[[1,3,224,224]]</code> </p> </li> <li> <p>Examples for two inputs in dictionary format:</p> <ul> <li> <p>If using the console, <code>{&quot;input0&quot;:[1,3,224,224], &quot;input1&quot;:[1,3,224,224]}</code> </p> </li> <li> <p>If using the CLI, <code>{&quot;input0&quot;:[1,3,224,224], &quot;input1&quot;:[1,3,224,224]} </code> </p> </li> </ul> </li> <li> <p>Example for two inputs in list format: <code>[[1,3,224,224], [1,3,224,224]]</code> </p> </li> </ul> </li> <li> <p> <code>XGBOOST</code>: input data name and shape are not needed.</p> </li> </ul></p>
+    /// <p><p>Specifies the name and shape of the expected data inputs for your trained model with a JSON dictionary form. The data inputs are <a>InputConfig$Framework</a> specific. </p> <ul> <li> <p> <code>TensorFlow</code>: You must specify the name and shape (NHWC format) of the expected data inputs using a dictionary format for your trained model. The dictionary formats required for the console and CLI are different.</p> <ul> <li> <p>Examples for one input:</p> <ul> <li> <p>If using the console, <code>{&quot;input&quot;:[1,1024,1024,3]}</code> </p> </li> <li> <p>If using the CLI, <code>{&quot;input&quot;:[1,1024,1024,3]}</code> </p> </li> </ul> </li> <li> <p>Examples for two inputs:</p> <ul> <li> <p>If using the console, <code>{&quot;data1&quot;: [1,28,28,1], &quot;data2&quot;:[1,28,28,1]}</code> </p> </li> <li> <p>If using the CLI, <code>{&quot;data1&quot;: [1,28,28,1], &quot;data2&quot;:[1,28,28,1]}</code> </p> </li> </ul> </li> </ul> </li> <li> <p> <code>KERAS</code>: You must specify the name and shape (NCHW format) of expected data inputs using a dictionary format for your trained model. Note that while Keras model artifacts should be uploaded in NHWC (channel-last) format, <code>DataInputConfig</code> should be specified in NCHW (channel-first) format. The dictionary formats required for the console and CLI are different.</p> <ul> <li> <p>Examples for one input:</p> <ul> <li> <p>If using the console, <code>{&quot;input<em>1&quot;:[1,3,224,224]}</code> </p> </li> <li> <p>If using the CLI, <code>{&quot;input</em>1&quot;:[1,3,224,224]}</code> </p> </li> </ul> </li> <li> <p>Examples for two inputs:</p> <ul> <li> <p>If using the console, <code>{&quot;input<em>1&quot;: [1,3,224,224], &quot;input</em>2&quot;:[1,3,224,224]} </code> </p> </li> <li> <p>If using the CLI, <code>{&quot;input<em>1&quot;: [1,3,224,224], &quot;input</em>2&quot;:[1,3,224,224]}</code> </p> </li> </ul> </li> </ul> </li> <li> <p> <code>MXNET/ONNX/DARKNET</code>: You must specify the name and shape (NCHW format) of the expected data inputs in order using a dictionary format for your trained model. The dictionary formats required for the console and CLI are different.</p> <ul> <li> <p>Examples for one input:</p> <ul> <li> <p>If using the console, <code>{&quot;data&quot;:[1,3,1024,1024]}</code> </p> </li> <li> <p>If using the CLI, <code>{&quot;data&quot;:[1,3,1024,1024]}</code> </p> </li> </ul> </li> <li> <p>Examples for two inputs:</p> <ul> <li> <p>If using the console, <code>{&quot;var1&quot;: [1,1,28,28], &quot;var2&quot;:[1,1,28,28]} </code> </p> </li> <li> <p>If using the CLI, <code>{&quot;var1&quot;: [1,1,28,28], &quot;var2&quot;:[1,1,28,28]}</code> </p> </li> </ul> </li> </ul> </li> <li> <p> <code>PyTorch</code>: You can either specify the name and shape (NCHW format) of expected data inputs in order using a dictionary format for your trained model or you can specify the shape only using a list format. The dictionary formats required for the console and CLI are different. The list formats for the console and CLI are the same.</p> <ul> <li> <p>Examples for one input in dictionary format:</p> <ul> <li> <p>If using the console, <code>{&quot;input0&quot;:[1,3,224,224]}</code> </p> </li> <li> <p>If using the CLI, <code>{&quot;input0&quot;:[1,3,224,224]}</code> </p> </li> </ul> </li> <li> <p>Example for one input in list format: <code>[[1,3,224,224]]</code> </p> </li> <li> <p>Examples for two inputs in dictionary format:</p> <ul> <li> <p>If using the console, <code>{&quot;input0&quot;:[1,3,224,224], &quot;input1&quot;:[1,3,224,224]}</code> </p> </li> <li> <p>If using the CLI, <code>{&quot;input0&quot;:[1,3,224,224], &quot;input1&quot;:[1,3,224,224]} </code> </p> </li> </ul> </li> <li> <p>Example for two inputs in list format: <code>[[1,3,224,224], [1,3,224,224]]</code> </p> </li> </ul> </li> <li> <p> <code>XGBOOST</code>: input data name and shape are not needed.</p> </li> </ul> <p> <code>DataInputConfig</code> supports the following parameters for <code>CoreML</code> <a>OutputConfig$TargetDevice</a> (ML Model format):</p> <ul> <li> <p> <code>shape</code>: Input shape, for example <code>{&quot;input<em>1&quot;: {&quot;shape&quot;: [1,224,224,3]}}</code>. In addition to static input shapes, CoreML converter supports Flexible input shapes:</p> <ul> <li> <p>Range Dimension. You can use the Range Dimension feature if you know the input shape will be within some specific interval in that dimension, for example: <code>{&quot;input</em>1&quot;: {&quot;shape&quot;: [&quot;1..10&quot;, 224, 224, 3]}}</code> </p> </li> <li> <p>Enumerated shapes. Sometimes, the models are trained to work only on a select set of inputs. You can enumerate all supported input shapes, for example: <code>{&quot;input<em>1&quot;: {&quot;shape&quot;: [[1, 224, 224, 3], [1, 160, 160, 3]]}}</code> </p> </li> </ul> </li> <li> <p> <code>default</em>shape</code>: Default input shape. You can set a default shape during conversion for both Range Dimension and Enumerated Shapes. For example <code>{&quot;input<em>1&quot;: {&quot;shape&quot;: [&quot;1..10&quot;, 224, 224, 3], &quot;default</em>shape&quot;: [1, 224, 224, 3]}}</code> </p> </li> <li> <p> <code>type</code>: Input type. Allowed values: <code>Image</code> and <code>Tensor</code>. By default, the converter generates an ML Model with inputs of type Tensor (MultiArray). User can set input type to be Image. Image input type requires additional input parameters such as <code>bias</code> and <code>scale</code>.</p> </li> <li> <p> <code>bias</code>: If the input type is an Image, you need to provide the bias vector.</p> </li> <li> <p> <code>scale</code>: If the input type is an Image, you need to provide a scale factor.</p> </li> </ul> <p>CoreML <code>ClassifierConfig</code> parameters can be specified using <a>OutputConfig$CompilerOptions</a>. CoreML converter supports Tensorflow and PyTorch models. CoreML conversion examples:</p> <ul> <li> <p>Tensor type input:</p> <ul> <li> <p> <code>&quot;DataInputConfig&quot;: {&quot;input<em>1&quot;: {&quot;shape&quot;: [[1,224,224,3], [1,160,160,3]], &quot;default</em>shape&quot;: [1,224,224,3]}}</code> </p> </li> </ul> </li> <li> <p>Tensor type input without input name (PyTorch):</p> <ul> <li> <p> <code>&quot;DataInputConfig&quot;: [{&quot;shape&quot;: [[1,3,224,224], [1,3,160,160]], &quot;default<em>shape&quot;: [1,3,224,224]}]</code> </p> </li> </ul> </li> <li> <p>Image type input:</p> <ul> <li> <p> <code>&quot;DataInputConfig&quot;: {&quot;input</em>1&quot;: {&quot;shape&quot;: [[1,224,224,3], [1,160,160,3]], &quot;default<em>shape&quot;: [1,224,224,3], &quot;type&quot;: &quot;Image&quot;, &quot;bias&quot;: [-1,-1,-1], &quot;scale&quot;: 0.007843137255}}</code> </p> </li> <li> <p> <code>&quot;CompilerOptions&quot;: {&quot;class</em>labels&quot;: &quot;imagenet<em>labels</em>1000.txt&quot;}</code> </p> </li> </ul> </li> <li> <p>Image type input without input name (PyTorch):</p> <ul> <li> <p> <code>&quot;DataInputConfig&quot;: [{&quot;shape&quot;: [[1,3,224,224], [1,3,160,160]], &quot;default<em>shape&quot;: [1,3,224,224], &quot;type&quot;: &quot;Image&quot;, &quot;bias&quot;: [-1,-1,-1], &quot;scale&quot;: 0.007843137255}]</code> </p> </li> <li> <p> <code>&quot;CompilerOptions&quot;: {&quot;class</em>labels&quot;: &quot;imagenet<em>labels</em>1000.txt&quot;}</code> </p> </li> </ul> </li> </ul></p>
     #[serde(rename = "DataInputConfig")]
     pub data_input_config: String,
     /// <p>Identifies the framework in which the model was trained. For example: TENSORFLOW.</p>
@@ -4394,22 +7282,50 @@ pub struct IntegerParameterRangeSpecification {
     pub min_value: String,
 }
 
-/// <p>Jupyter server's app settings.</p>
+/// <p>The JupyterServer app settings.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct JupyterServerAppSettings {
-    /// <p>The default instance type and the Amazon Resource Name (ARN) of the SageMaker image created on the instance.</p>
+    /// <p>The default instance type and the Amazon Resource Name (ARN) of the default SageMaker image used by the JupyterServer app.</p>
     #[serde(rename = "DefaultResourceSpec")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub default_resource_spec: Option<ResourceSpec>,
 }
 
-/// <p>The kernel gateway app settings.</p>
+/// <p>The KernelGateway app settings.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct KernelGatewayAppSettings {
-    /// <p>The default instance type and the Amazon Resource Name (ARN) of the SageMaker image created on the instance.</p>
+    /// <p>A list of custom SageMaker images that are configured to run as a KernelGateway app.</p>
+    #[serde(rename = "CustomImages")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub custom_images: Option<Vec<CustomImage>>,
+    /// <p>The default instance type and the Amazon Resource Name (ARN) of the default SageMaker image used by the KernelGateway app.</p>
     #[serde(rename = "DefaultResourceSpec")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub default_resource_spec: Option<ResourceSpec>,
+}
+
+/// <p>The configuration for the file system and kernels in a SageMaker image running as a KernelGateway app.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
+pub struct KernelGatewayImageConfig {
+    /// <p>The Amazon Elastic File System (EFS) storage configuration for a SageMaker image.</p>
+    #[serde(rename = "FileSystemConfig")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub file_system_config: Option<FileSystemConfig>,
+    /// <p>The specification of the Jupyter kernels in the image.</p>
+    #[serde(rename = "KernelSpecs")]
+    pub kernel_specs: Vec<KernelSpec>,
+}
+
+/// <p>The specification of a Jupyter kernel.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
+pub struct KernelSpec {
+    /// <p>The display name of the kernel.</p>
+    #[serde(rename = "DisplayName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub display_name: Option<String>,
+    /// <p>The name of the kernel.</p>
+    #[serde(rename = "Name")]
+    pub name: String,
 }
 
 /// <p>Provides a breakdown of the number of objects labeled.</p>
@@ -4459,7 +7375,7 @@ pub struct LabelCountersForWorkteam {
 /// <p>Provides configuration information for auto-labeling of your data objects. A <code>LabelingJobAlgorithmsConfig</code> object must be supplied in order to use auto-labeling.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct LabelingJobAlgorithmsConfig {
-    /// <p>At the end of an auto-label job Amazon SageMaker Ground Truth sends the Amazon Resource Nam (ARN) of the final model used for auto-labeling. You can use this model as the starting point for subsequent similar jobs by providing the ARN of the model here. </p>
+    /// <p>At the end of an auto-label job Ground Truth sends the Amazon Resource Name (ARN) of the final model used for auto-labeling. You can use this model as the starting point for subsequent similar jobs by providing the ARN of the model here. </p>
     #[serde(rename = "InitialActiveLearningModelArn")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub initial_active_learning_model_arn: Option<String>,
@@ -4481,12 +7397,17 @@ pub struct LabelingJobDataAttributes {
     pub content_classifiers: Option<Vec<String>>,
 }
 
-/// <p>Provides information about the location of input data.</p>
+/// <p>Provides information about the location of input data.</p> <p>You must specify at least one of the following: <code>S3DataSource</code> or <code>SnsDataSource</code>.</p> <p>Use <code>SnsDataSource</code> to specify an SNS input topic for a streaming labeling job. If you do not specify and SNS input topic ARN, Ground Truth will create a one-time labeling job.</p> <p>Use <code>S3DataSource</code> to specify an input manifest file for both streaming and one-time labeling jobs. Adding an <code>S3DataSource</code> is optional if you use <code>SnsDataSource</code> to create a streaming labeling job.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct LabelingJobDataSource {
     /// <p>The Amazon S3 location of the input data objects.</p>
     #[serde(rename = "S3DataSource")]
-    pub s3_data_source: LabelingJobS3DataSource,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub s3_data_source: Option<LabelingJobS3DataSource>,
+    /// <p>An Amazon SNS data source used for streaming labeling jobs.</p>
+    #[serde(rename = "SnsDataSource")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub sns_data_source: Option<LabelingJobSnsDataSource>,
 }
 
 /// <p>Provides summary information for a work team.</p>
@@ -4551,6 +7472,10 @@ pub struct LabelingJobOutputConfig {
     /// <p>The Amazon S3 location to write output data.</p>
     #[serde(rename = "S3OutputPath")]
     pub s3_output_path: String,
+    /// <p>An Amazon Simple Notification Service (Amazon SNS) output topic ARN.</p> <p>When workers complete labeling tasks, Ground Truth will send labeling task output data to the SNS output topic you specify here.</p> <p>You must provide a value for this parameter if you provide an Amazon SNS input topic in <code>SnsDataSource</code> in <code>InputConfig</code>.</p>
+    #[serde(rename = "SnsTopicArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub sns_topic_arn: Option<String>,
 }
 
 /// <p>Provides configuration information for labeling jobs.</p>
@@ -4568,6 +7493,14 @@ pub struct LabelingJobS3DataSource {
     /// <p>The Amazon S3 location of the manifest file that describes the input data objects.</p>
     #[serde(rename = "ManifestS3Uri")]
     pub manifest_s3_uri: String,
+}
+
+/// <p>An Amazon SNS data source used for streaming labeling jobs.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
+pub struct LabelingJobSnsDataSource {
+    /// <p>The Amazon SNS input topic Amazon Resource Name (ARN). Specify the ARN of the input topic you will use to send new data objects to a streaming labeling job.</p> <p>If you specify an input topic for <code>SnsTopicArn</code> in <code>InputConfig</code>, you must specify a value for <code>SnsTopicArn</code> in <code>OutputConfig</code>.</p>
+    #[serde(rename = "SnsTopicArn")]
+    pub sns_topic_arn: String,
 }
 
 /// <p><p>A set of conditions for stopping a labeling job. If any of the conditions are met, the job is automatically stopped. You can use these conditions to control the cost of data labeling.</p> <note> <p>Labeling jobs fail after 30 days with an appropriate client error message.</p> </note></p>
@@ -4631,6 +7564,56 @@ pub struct LabelingJobSummary {
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct ListActionsRequest {
+    /// <p>A filter that returns only actions of the specified type.</p>
+    #[serde(rename = "ActionType")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub action_type: Option<String>,
+    /// <p>A filter that returns only actions created on or after the specified time.</p>
+    #[serde(rename = "CreatedAfter")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub created_after: Option<f64>,
+    /// <p>A filter that returns only actions created on or before the specified time.</p>
+    #[serde(rename = "CreatedBefore")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub created_before: Option<f64>,
+    /// <p>The maximum number of actions to return in the response. The default value is 10.</p>
+    #[serde(rename = "MaxResults")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub max_results: Option<i64>,
+    /// <p>If the previous call to <code>ListActions</code> didn't return the full set of actions, the call returns a token for getting the next set of actions.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+    /// <p>The property used to sort results. The default value is <code>CreationTime</code>.</p>
+    #[serde(rename = "SortBy")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub sort_by: Option<String>,
+    /// <p>The sort order. The default value is <code>Descending</code>.</p>
+    #[serde(rename = "SortOrder")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub sort_order: Option<String>,
+    /// <p>A filter that returns only actions with the specified source URI.</p>
+    #[serde(rename = "SourceUri")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub source_uri: Option<String>,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct ListActionsResponse {
+    /// <p>A list of actions and their properties.</p>
+    #[serde(rename = "ActionSummaries")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub action_summaries: Option<Vec<ActionSummary>>,
+    /// <p>A token for getting the next set of actions, if there are any.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+}
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListAlgorithmsInput {
     /// <p>A filter that returns only algorithms created after the specified time (timestamp).</p>
     #[serde(rename = "CreationTimeAfter")]
@@ -4669,6 +7652,60 @@ pub struct ListAlgorithmsOutput {
     #[serde(rename = "AlgorithmSummaryList")]
     pub algorithm_summary_list: Vec<AlgorithmSummary>,
     /// <p>If the response is truncated, Amazon SageMaker returns this token. To retrieve the next set of algorithms, use it in the subsequent request.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+}
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct ListAppImageConfigsRequest {
+    /// <p>A filter that returns only AppImageConfigs created on or after the specified time.</p>
+    #[serde(rename = "CreationTimeAfter")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub creation_time_after: Option<f64>,
+    /// <p>A filter that returns only AppImageConfigs created on or before the specified time.</p>
+    #[serde(rename = "CreationTimeBefore")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub creation_time_before: Option<f64>,
+    /// <p>The maximum number of AppImageConfigs to return in the response. The default value is 10. </p>
+    #[serde(rename = "MaxResults")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub max_results: Option<i64>,
+    /// <p>A filter that returns only AppImageConfigs modified on or after the specified time.</p>
+    #[serde(rename = "ModifiedTimeAfter")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub modified_time_after: Option<f64>,
+    /// <p>A filter that returns only AppImageConfigs modified on or before the specified time.</p>
+    #[serde(rename = "ModifiedTimeBefore")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub modified_time_before: Option<f64>,
+    /// <p>A filter that returns only AppImageConfigs whose name contains the specified string.</p>
+    #[serde(rename = "NameContains")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub name_contains: Option<String>,
+    /// <p>If the previous call to <code>ListImages</code> didn't return the full set of AppImageConfigs, the call returns a token for getting the next set of AppImageConfigs.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+    /// <p>The property used to sort results. The default value is <code>CreationTime</code>.</p>
+    #[serde(rename = "SortBy")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub sort_by: Option<String>,
+    /// <p>The sort order. The default value is <code>Descending</code>.</p>
+    #[serde(rename = "SortOrder")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub sort_order: Option<String>,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct ListAppImageConfigsResponse {
+    /// <p>A list of AppImageConfigs and their properties.</p>
+    #[serde(rename = "AppImageConfigs")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub app_image_configs: Option<Vec<AppImageConfigDetails>>,
+    /// <p>A token for getting the next set of AppImageConfigs, if there are any.</p>
     #[serde(rename = "NextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
@@ -4718,6 +7755,118 @@ pub struct ListAppsResponse {
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct ListArtifactsRequest {
+    /// <p>A filter that returns only artifacts of the specified type.</p>
+    #[serde(rename = "ArtifactType")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub artifact_type: Option<String>,
+    /// <p>A filter that returns only artifacts created on or after the specified time.</p>
+    #[serde(rename = "CreatedAfter")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub created_after: Option<f64>,
+    /// <p>A filter that returns only artifacts created on or before the specified time.</p>
+    #[serde(rename = "CreatedBefore")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub created_before: Option<f64>,
+    /// <p>The maximum number of artifacts to return in the response. The default value is 10.</p>
+    #[serde(rename = "MaxResults")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub max_results: Option<i64>,
+    /// <p>If the previous call to <code>ListArtifacts</code> didn't return the full set of artifacts, the call returns a token for getting the next set of artifacts.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+    /// <p>The property used to sort results. The default value is <code>CreationTime</code>.</p>
+    #[serde(rename = "SortBy")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub sort_by: Option<String>,
+    /// <p>The sort order. The default value is <code>Descending</code>.</p>
+    #[serde(rename = "SortOrder")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub sort_order: Option<String>,
+    /// <p>A filter that returns only artifacts with the specified source URI.</p>
+    #[serde(rename = "SourceUri")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub source_uri: Option<String>,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct ListArtifactsResponse {
+    /// <p>A list of artifacts and their properties.</p>
+    #[serde(rename = "ArtifactSummaries")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub artifact_summaries: Option<Vec<ArtifactSummary>>,
+    /// <p>A token for getting the next set of artifacts, if there are any.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+}
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct ListAssociationsRequest {
+    /// <p>A filter that returns only associations of the specified type.</p>
+    #[serde(rename = "AssociationType")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub association_type: Option<String>,
+    /// <p>A filter that returns only associations created on or after the specified time.</p>
+    #[serde(rename = "CreatedAfter")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub created_after: Option<f64>,
+    /// <p>A filter that returns only associations created on or before the specified time.</p>
+    #[serde(rename = "CreatedBefore")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub created_before: Option<f64>,
+    /// <p>A filter that returns only associations with the specified destination Amazon Resource Name (ARN).</p>
+    #[serde(rename = "DestinationArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub destination_arn: Option<String>,
+    /// <p>A filter that returns only associations with the specified destination type.</p>
+    #[serde(rename = "DestinationType")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub destination_type: Option<String>,
+    /// <p>The maximum number of associations to return in the response. The default value is 10.</p>
+    #[serde(rename = "MaxResults")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub max_results: Option<i64>,
+    /// <p>If the previous call to <code>ListAssociations</code> didn't return the full set of associations, the call returns a token for getting the next set of associations.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+    /// <p>The property used to sort results. The default value is <code>CreationTime</code>.</p>
+    #[serde(rename = "SortBy")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub sort_by: Option<String>,
+    /// <p>The sort order. The default value is <code>Descending</code>.</p>
+    #[serde(rename = "SortOrder")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub sort_order: Option<String>,
+    /// <p>A filter that returns only associations with the specified source ARN.</p>
+    #[serde(rename = "SourceArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub source_arn: Option<String>,
+    /// <p>A filter that returns only associations with the specified source type.</p>
+    #[serde(rename = "SourceType")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub source_type: Option<String>,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct ListAssociationsResponse {
+    /// <p>A list of associations and their properties.</p>
+    #[serde(rename = "AssociationSummaries")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub association_summaries: Option<Vec<AssociationSummary>>,
+    /// <p>A token for getting the next set of associations, if there are any.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+}
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListAutoMLJobsRequest {
     /// <p>Request a list of jobs, using a filter for time.</p>
     #[serde(rename = "CreationTimeAfter")]
@@ -4743,7 +7892,7 @@ pub struct ListAutoMLJobsRequest {
     #[serde(rename = "NameContains")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub name_contains: Option<String>,
-    /// <p>If the previous response was truncated, you will receive this token. Use it in your next request to receive the next set of results.</p>
+    /// <p>If the previous response was truncated, you receive this token. Use it in your next request to receive the next set of results.</p>
     #[serde(rename = "NextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
@@ -4767,7 +7916,7 @@ pub struct ListAutoMLJobsResponse {
     /// <p>Returns a summary list of jobs.</p>
     #[serde(rename = "AutoMLJobSummaries")]
     pub auto_ml_job_summaries: Vec<AutoMLJobSummary>,
-    /// <p>If the previous response was truncated, you will receive this token. Use it in your next request to receive the next set of results.</p>
+    /// <p>If the previous response was truncated, you receive this token. Use it in your next request to receive the next set of results.</p>
     #[serde(rename = "NextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
@@ -4787,7 +7936,7 @@ pub struct ListCandidatesForAutoMLJobRequest {
     #[serde(rename = "MaxResults")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub max_results: Option<i64>,
-    /// <p>If the previous response was truncated, you will receive this token. Use it in your next request to receive the next set of results.</p>
+    /// <p>If the previous response was truncated, you receive this token. Use it in your next request to receive the next set of results.</p>
     #[serde(rename = "NextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
@@ -4811,7 +7960,7 @@ pub struct ListCandidatesForAutoMLJobResponse {
     /// <p>Summaries about the Candidates.</p>
     #[serde(rename = "Candidates")]
     pub candidates: Vec<AutoMLCandidate>,
-    /// <p>If the previous response was truncated, you will receive this token. Use it in your next request to receive the next set of results.</p>
+    /// <p>If the previous response was truncated, you receive this token. Use it in your next request to receive the next set of results.</p>
     #[serde(rename = "NextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
@@ -4929,6 +8078,195 @@ pub struct ListCompilationJobsResponse {
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct ListContextsRequest {
+    /// <p>A filter that returns only contexts of the specified type.</p>
+    #[serde(rename = "ContextType")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub context_type: Option<String>,
+    /// <p>A filter that returns only contexts created on or after the specified time.</p>
+    #[serde(rename = "CreatedAfter")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub created_after: Option<f64>,
+    /// <p>A filter that returns only contexts created on or before the specified time.</p>
+    #[serde(rename = "CreatedBefore")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub created_before: Option<f64>,
+    /// <p>The maximum number of contexts to return in the response. The default value is 10.</p>
+    #[serde(rename = "MaxResults")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub max_results: Option<i64>,
+    /// <p>If the previous call to <code>ListContexts</code> didn't return the full set of contexts, the call returns a token for getting the next set of contexts.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+    /// <p>The property used to sort results. The default value is <code>CreationTime</code>.</p>
+    #[serde(rename = "SortBy")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub sort_by: Option<String>,
+    /// <p>The sort order. The default value is <code>Descending</code>.</p>
+    #[serde(rename = "SortOrder")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub sort_order: Option<String>,
+    /// <p>A filter that returns only contexts with the specified source URI.</p>
+    #[serde(rename = "SourceUri")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub source_uri: Option<String>,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct ListContextsResponse {
+    /// <p>A list of contexts and their properties.</p>
+    #[serde(rename = "ContextSummaries")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub context_summaries: Option<Vec<ContextSummary>>,
+    /// <p>A token for getting the next set of contexts, if there are any.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+}
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct ListDataQualityJobDefinitionsRequest {
+    /// <p>A filter that returns only data quality monitoring job definitions created after the specified time.</p>
+    #[serde(rename = "CreationTimeAfter")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub creation_time_after: Option<f64>,
+    /// <p>A filter that returns only data quality monitoring job definitions created before the specified time.</p>
+    #[serde(rename = "CreationTimeBefore")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub creation_time_before: Option<f64>,
+    /// <p>A filter that lists the data quality job definitions associated with the specified endpoint.</p>
+    #[serde(rename = "EndpointName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub endpoint_name: Option<String>,
+    /// <p>The maximum number of data quality monitoring job definitions to return in the response.</p>
+    #[serde(rename = "MaxResults")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub max_results: Option<i64>,
+    /// <p>A string in the data quality monitoring job definition name. This filter returns only data quality monitoring job definitions whose name contains the specified string.</p>
+    #[serde(rename = "NameContains")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub name_contains: Option<String>,
+    /// <p>If the result of the previous <code>ListDataQualityJobDefinitions</code> request was truncated, the response includes a <code>NextToken</code>. To retrieve the next set of transform jobs, use the token in the next request.&gt;</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+    /// <p>The field to sort results by. The default is <code>CreationTime</code>.</p>
+    #[serde(rename = "SortBy")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub sort_by: Option<String>,
+    /// <p>The sort order for results. The default is <code>Descending</code>.</p>
+    #[serde(rename = "SortOrder")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub sort_order: Option<String>,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct ListDataQualityJobDefinitionsResponse {
+    /// <p>A list of data quality monitoring job definitions.</p>
+    #[serde(rename = "JobDefinitionSummaries")]
+    pub job_definition_summaries: Vec<MonitoringJobDefinitionSummary>,
+    /// <p>If the result of the previous <code>ListDataQualityJobDefinitions</code> request was truncated, the response includes a <code>NextToken</code>. To retrieve the next set of data quality monitoring job definitions, use the token in the next request.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+}
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct ListDeviceFleetsRequest {
+    /// <p>Filter fleets where packaging job was created after specified time.</p>
+    #[serde(rename = "CreationTimeAfter")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub creation_time_after: Option<f64>,
+    /// <p>Filter fleets where the edge packaging job was created before specified time.</p>
+    #[serde(rename = "CreationTimeBefore")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub creation_time_before: Option<f64>,
+    /// <p>Select fleets where the job was updated after X</p>
+    #[serde(rename = "LastModifiedTimeAfter")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub last_modified_time_after: Option<f64>,
+    /// <p>Select fleets where the job was updated before X</p>
+    #[serde(rename = "LastModifiedTimeBefore")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub last_modified_time_before: Option<f64>,
+    /// <p>The maximum number of results to select.</p>
+    #[serde(rename = "MaxResults")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub max_results: Option<i64>,
+    /// <p>Filter for fleets containing this name in their fleet device name.</p>
+    #[serde(rename = "NameContains")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub name_contains: Option<String>,
+    /// <p>The response from the last list when returning a list large enough to need tokening.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+    /// <p>The column to sort by.</p>
+    #[serde(rename = "SortBy")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub sort_by: Option<String>,
+    /// <p>What direction to sort in.</p>
+    #[serde(rename = "SortOrder")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub sort_order: Option<String>,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct ListDeviceFleetsResponse {
+    /// <p>Summary of the device fleet.</p>
+    #[serde(rename = "DeviceFleetSummaries")]
+    pub device_fleet_summaries: Vec<DeviceFleetSummary>,
+    /// <p>The response from the last list when returning a list large enough to need tokening.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+}
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct ListDevicesRequest {
+    /// <p>Filter for fleets containing this name in their device fleet name.</p>
+    #[serde(rename = "DeviceFleetName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub device_fleet_name: Option<String>,
+    /// <p>Select fleets where the job was updated after X</p>
+    #[serde(rename = "LatestHeartbeatAfter")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub latest_heartbeat_after: Option<f64>,
+    /// <p>Maximum number of results to select.</p>
+    #[serde(rename = "MaxResults")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub max_results: Option<i64>,
+    /// <p>A filter that searches devices that contains this name in any of their models.</p>
+    #[serde(rename = "ModelName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub model_name: Option<String>,
+    /// <p>The response from the last list when returning a list large enough to need tokening.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct ListDevicesResponse {
+    /// <p>Summary of devices.</p>
+    #[serde(rename = "DeviceSummaries")]
+    pub device_summaries: Vec<DeviceSummary>,
+    /// <p>The response from the last list when returning a list large enough to need tokening.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+}
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListDomainsRequest {
     /// <p>Returns a list up to a specified limit.</p>
     #[serde(rename = "MaxResults")]
@@ -4948,6 +8286,67 @@ pub struct ListDomainsResponse {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub domains: Option<Vec<DomainDetails>>,
     /// <p>If the previous response was truncated, you will receive this token. Use it in your next request to receive the next set of results.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+}
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct ListEdgePackagingJobsRequest {
+    /// <p>Select jobs where the job was created after specified time.</p>
+    #[serde(rename = "CreationTimeAfter")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub creation_time_after: Option<f64>,
+    /// <p>Select jobs where the job was created before specified time.</p>
+    #[serde(rename = "CreationTimeBefore")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub creation_time_before: Option<f64>,
+    /// <p>Select jobs where the job was updated after specified time.</p>
+    #[serde(rename = "LastModifiedTimeAfter")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub last_modified_time_after: Option<f64>,
+    /// <p>Select jobs where the job was updated before specified time.</p>
+    #[serde(rename = "LastModifiedTimeBefore")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub last_modified_time_before: Option<f64>,
+    /// <p>Maximum number of results to select.</p>
+    #[serde(rename = "MaxResults")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub max_results: Option<i64>,
+    /// <p>Filter for jobs where the model name contains this string.</p>
+    #[serde(rename = "ModelNameContains")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub model_name_contains: Option<String>,
+    /// <p>Filter for jobs containing this name in their packaging job name.</p>
+    #[serde(rename = "NameContains")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub name_contains: Option<String>,
+    /// <p>The response from the last list when returning a list large enough to need tokening.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+    /// <p>Use to specify what column to sort by.</p>
+    #[serde(rename = "SortBy")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub sort_by: Option<String>,
+    /// <p>What direction to sort by.</p>
+    #[serde(rename = "SortOrder")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub sort_order: Option<String>,
+    /// <p>The job status to filter for.</p>
+    #[serde(rename = "StatusEquals")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub status_equals: Option<String>,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct ListEdgePackagingJobsResponse {
+    /// <p>Summaries of edge packaging jobs.</p>
+    #[serde(rename = "EdgePackagingJobSummaries")]
+    pub edge_packaging_job_summaries: Vec<EdgePackagingJobSummary>,
+    /// <p>Token to use when calling the next page of results.</p>
     #[serde(rename = "NextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
@@ -5099,6 +8498,58 @@ pub struct ListExperimentsResponse {
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct ListFeatureGroupsRequest {
+    /// <p>Use this parameter to search for <code>FeatureGroups</code>s created after a specific date and time.</p>
+    #[serde(rename = "CreationTimeAfter")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub creation_time_after: Option<f64>,
+    /// <p>Use this parameter to search for <code>FeatureGroups</code>s created before a specific date and time.</p>
+    #[serde(rename = "CreationTimeBefore")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub creation_time_before: Option<f64>,
+    /// <p>A <code>FeatureGroup</code> status. Filters by <code>FeatureGroup</code> status. </p>
+    #[serde(rename = "FeatureGroupStatusEquals")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub feature_group_status_equals: Option<String>,
+    /// <p>The maximum number of results returned by <code>ListFeatureGroups</code>.</p>
+    #[serde(rename = "MaxResults")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub max_results: Option<i64>,
+    /// <p>A string that partially matches one or more <code>FeatureGroup</code>s names. Filters <code>FeatureGroup</code>s by name. </p>
+    #[serde(rename = "NameContains")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub name_contains: Option<String>,
+    /// <p>A token to resume pagination of <code>ListFeatureGroups</code> results.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+    /// <p>An <code>OfflineStore</code> status. Filters by <code>OfflineStore</code> status. </p>
+    #[serde(rename = "OfflineStoreStatusEquals")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub offline_store_status_equals: Option<String>,
+    /// <p>The value on which the feature group list is sorted.</p>
+    #[serde(rename = "SortBy")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub sort_by: Option<String>,
+    /// <p>The order in which feature groups are listed.</p>
+    #[serde(rename = "SortOrder")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub sort_order: Option<String>,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct ListFeatureGroupsResponse {
+    /// <p>A summary of feature groups.</p>
+    #[serde(rename = "FeatureGroupSummaries")]
+    pub feature_group_summaries: Vec<FeatureGroupSummary>,
+    /// <p>A token to resume pagination of <code>ListFeatureGroups</code> results.</p>
+    #[serde(rename = "NextToken")]
+    pub next_token: String,
+}
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListFlowDefinitionsRequest {
     /// <p>A filter that returns only flow definitions with a creation time greater than or equal to the specified timestamp.</p>
     #[serde(rename = "CreationTimeAfter")]
@@ -5230,6 +8681,113 @@ pub struct ListHyperParameterTuningJobsResponse {
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct ListImageVersionsRequest {
+    /// <p>A filter that returns only versions created on or after the specified time.</p>
+    #[serde(rename = "CreationTimeAfter")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub creation_time_after: Option<f64>,
+    /// <p>A filter that returns only versions created on or before the specified time.</p>
+    #[serde(rename = "CreationTimeBefore")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub creation_time_before: Option<f64>,
+    /// <p>The name of the image to list the versions of.</p>
+    #[serde(rename = "ImageName")]
+    pub image_name: String,
+    /// <p>A filter that returns only versions modified on or after the specified time.</p>
+    #[serde(rename = "LastModifiedTimeAfter")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub last_modified_time_after: Option<f64>,
+    /// <p>A filter that returns only versions modified on or before the specified time.</p>
+    #[serde(rename = "LastModifiedTimeBefore")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub last_modified_time_before: Option<f64>,
+    /// <p>The maximum number of versions to return in the response. The default value is 10. </p>
+    #[serde(rename = "MaxResults")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub max_results: Option<i64>,
+    /// <p>If the previous call to <code>ListImageVersions</code> didn't return the full set of versions, the call returns a token for getting the next set of versions.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+    /// <p>The property used to sort results. The default value is <code>CREATION_TIME</code>.</p>
+    #[serde(rename = "SortBy")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub sort_by: Option<String>,
+    /// <p>The sort order. The default value is <code>DESCENDING</code>.</p>
+    #[serde(rename = "SortOrder")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub sort_order: Option<String>,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct ListImageVersionsResponse {
+    /// <p>A list of versions and their properties.</p>
+    #[serde(rename = "ImageVersions")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub image_versions: Option<Vec<ImageVersion>>,
+    /// <p>A token for getting the next set of versions, if there are any.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+}
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct ListImagesRequest {
+    /// <p>A filter that returns only images created on or after the specified time.</p>
+    #[serde(rename = "CreationTimeAfter")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub creation_time_after: Option<f64>,
+    /// <p>A filter that returns only images created on or before the specified time.</p>
+    #[serde(rename = "CreationTimeBefore")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub creation_time_before: Option<f64>,
+    /// <p>A filter that returns only images modified on or after the specified time.</p>
+    #[serde(rename = "LastModifiedTimeAfter")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub last_modified_time_after: Option<f64>,
+    /// <p>A filter that returns only images modified on or before the specified time.</p>
+    #[serde(rename = "LastModifiedTimeBefore")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub last_modified_time_before: Option<f64>,
+    /// <p>The maximum number of images to return in the response. The default value is 10. </p>
+    #[serde(rename = "MaxResults")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub max_results: Option<i64>,
+    /// <p>A filter that returns only images whose name contains the specified string.</p>
+    #[serde(rename = "NameContains")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub name_contains: Option<String>,
+    /// <p>If the previous call to <code>ListImages</code> didn't return the full set of images, the call returns a token for getting the next set of images.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+    /// <p>The property used to sort results. The default value is <code>CREATION_TIME</code>.</p>
+    #[serde(rename = "SortBy")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub sort_by: Option<String>,
+    /// <p>The sort order. The default value is <code>DESCENDING</code>.</p>
+    #[serde(rename = "SortOrder")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub sort_order: Option<String>,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct ListImagesResponse {
+    /// <p>A list of images and their properties.</p>
+    #[serde(rename = "Images")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub images: Option<Vec<Image>>,
+    /// <p>A token for getting the next set of images, if there are any.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+}
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListLabelingJobsForWorkteamRequest {
     /// <p>A filter that returns only labeling jobs created after the specified time (timestamp).</p>
     #[serde(rename = "CreationTimeAfter")]
@@ -5336,6 +8894,149 @@ pub struct ListLabelingJobsResponse {
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct ListModelBiasJobDefinitionsRequest {
+    /// <p>A filter that returns only model bias jobs created after a specified time.</p>
+    #[serde(rename = "CreationTimeAfter")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub creation_time_after: Option<f64>,
+    /// <p>A filter that returns only model bias jobs created before a specified time.</p>
+    #[serde(rename = "CreationTimeBefore")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub creation_time_before: Option<f64>,
+    /// <p>Name of the endpoint to monitor for model bias.</p>
+    #[serde(rename = "EndpointName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub endpoint_name: Option<String>,
+    /// <p>The maximum number of model bias jobs to return in the response. The default value is 10.</p>
+    #[serde(rename = "MaxResults")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub max_results: Option<i64>,
+    /// <p>Filter for model bias jobs whose name contains a specified string.</p>
+    #[serde(rename = "NameContains")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub name_contains: Option<String>,
+    /// <p>The token returned if the response is truncated. To retrieve the next set of job executions, use it in the next request.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+    /// <p>Whether to sort results by the <code>Name</code> or <code>CreationTime</code> field. The default is <code>CreationTime</code>.</p>
+    #[serde(rename = "SortBy")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub sort_by: Option<String>,
+    /// <p>Whether to sort the results in <code>Ascending</code> or <code>Descending</code> order. The default is <code>Descending</code>.</p>
+    #[serde(rename = "SortOrder")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub sort_order: Option<String>,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct ListModelBiasJobDefinitionsResponse {
+    /// <p>A JSON array in which each element is a summary for a model bias jobs.</p>
+    #[serde(rename = "JobDefinitionSummaries")]
+    pub job_definition_summaries: Vec<MonitoringJobDefinitionSummary>,
+    /// <p>If the response is truncated, Amazon SageMaker returns this token. To retrieve the next set of jobs, use it in the subsequent request.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+}
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct ListModelExplainabilityJobDefinitionsRequest {
+    /// <p>A filter that returns only model explainability jobs created after a specified time.</p>
+    #[serde(rename = "CreationTimeAfter")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub creation_time_after: Option<f64>,
+    /// <p>A filter that returns only model explainability jobs created before a specified time.</p>
+    #[serde(rename = "CreationTimeBefore")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub creation_time_before: Option<f64>,
+    /// <p>Name of the endpoint to monitor for model explainability.</p>
+    #[serde(rename = "EndpointName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub endpoint_name: Option<String>,
+    /// <p>The maximum number of jobs to return in the response. The default value is 10.</p>
+    #[serde(rename = "MaxResults")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub max_results: Option<i64>,
+    /// <p>Filter for model explainability jobs whose name contains a specified string.</p>
+    #[serde(rename = "NameContains")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub name_contains: Option<String>,
+    /// <p>The token returned if the response is truncated. To retrieve the next set of job executions, use it in the next request.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+    /// <p>Whether to sort results by the <code>Name</code> or <code>CreationTime</code> field. The default is <code>CreationTime</code>.</p>
+    #[serde(rename = "SortBy")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub sort_by: Option<String>,
+    /// <p>Whether to sort the results in <code>Ascending</code> or <code>Descending</code> order. The default is <code>Descending</code>.</p>
+    #[serde(rename = "SortOrder")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub sort_order: Option<String>,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct ListModelExplainabilityJobDefinitionsResponse {
+    /// <p>A JSON array in which each element is a summary for a explainability bias jobs.</p>
+    #[serde(rename = "JobDefinitionSummaries")]
+    pub job_definition_summaries: Vec<MonitoringJobDefinitionSummary>,
+    /// <p>If the response is truncated, Amazon SageMaker returns this token. To retrieve the next set of jobs, use it in the subsequent request.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+}
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct ListModelPackageGroupsInput {
+    /// <p>A filter that returns only model groups created after the specified time.</p>
+    #[serde(rename = "CreationTimeAfter")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub creation_time_after: Option<f64>,
+    /// <p>A filter that returns only model groups created before the specified time.</p>
+    #[serde(rename = "CreationTimeBefore")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub creation_time_before: Option<f64>,
+    /// <p>The maximum number of results to return in the response.</p>
+    #[serde(rename = "MaxResults")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub max_results: Option<i64>,
+    /// <p>A string in the model group name. This filter returns only model groups whose name contains the specified string.</p>
+    #[serde(rename = "NameContains")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub name_contains: Option<String>,
+    /// <p>If the result of the previous <code>ListModelPackageGroups</code> request was truncated, the response includes a <code>NextToken</code>. To retrieve the next set of model groups, use the token in the next request.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+    /// <p>The field to sort results by. The default is <code>CreationTime</code>.</p>
+    #[serde(rename = "SortBy")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub sort_by: Option<String>,
+    /// <p>The sort order for results. The default is <code>Ascending</code>.</p>
+    #[serde(rename = "SortOrder")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub sort_order: Option<String>,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct ListModelPackageGroupsOutput {
+    /// <p>A list of summaries of the model groups in your AWS account.</p>
+    #[serde(rename = "ModelPackageGroupSummaryList")]
+    pub model_package_group_summary_list: Vec<ModelPackageGroupSummary>,
+    /// <p>If the response is truncated, SageMaker returns this token. To retrieve the next set of model groups, use it in the subsequent request.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+}
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListModelPackagesInput {
     /// <p>A filter that returns only model packages created after the specified time (timestamp).</p>
     #[serde(rename = "CreationTimeAfter")]
@@ -5349,6 +9050,18 @@ pub struct ListModelPackagesInput {
     #[serde(rename = "MaxResults")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub max_results: Option<i64>,
+    /// <p>A filter that returns only the model packages with the specified approval status.</p>
+    #[serde(rename = "ModelApprovalStatus")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub model_approval_status: Option<String>,
+    /// <p>A filter that returns only model versions that belong to the specified model group.</p>
+    #[serde(rename = "ModelPackageGroupName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub model_package_group_name: Option<String>,
+    /// <p><p>A filter that returns onlyl the model packages of the specified type. This can be one of the following values.</p> <ul> <li> <p> <code>VERSIONED</code> - List only versioned models.</p> </li> <li> <p> <code>UNVERSIONED</code> - List only unversioined models.</p> </li> <li> <p> <code>BOTH</code> - List both versioned and unversioned models.</p> </li> </ul></p>
+    #[serde(rename = "ModelPackageType")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub model_package_type: Option<String>,
     /// <p>A string in the model package name. This filter returns only model packages whose name contains the specified string.</p>
     #[serde(rename = "NameContains")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -5374,6 +9087,55 @@ pub struct ListModelPackagesOutput {
     #[serde(rename = "ModelPackageSummaryList")]
     pub model_package_summary_list: Vec<ModelPackageSummary>,
     /// <p>If the response is truncated, Amazon SageMaker returns this token. To retrieve the next set of model packages, use it in the subsequent request.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+}
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct ListModelQualityJobDefinitionsRequest {
+    /// <p>A filter that returns only model quality monitoring job definitions created after the specified time.</p>
+    #[serde(rename = "CreationTimeAfter")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub creation_time_after: Option<f64>,
+    /// <p>A filter that returns only model quality monitoring job definitions created before the specified time.</p>
+    #[serde(rename = "CreationTimeBefore")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub creation_time_before: Option<f64>,
+    /// <p>A filter that returns only model quality monitoring job definitions that are associated with the specified endpoint.</p>
+    #[serde(rename = "EndpointName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub endpoint_name: Option<String>,
+    /// <p>The maximum number of results to return in a call to <code>ListModelQualityJobDefinitions</code>.</p>
+    #[serde(rename = "MaxResults")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub max_results: Option<i64>,
+    /// <p>A string in the transform job name. This filter returns only model quality monitoring job definitions whose name contains the specified string.</p>
+    #[serde(rename = "NameContains")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub name_contains: Option<String>,
+    /// <p>If the result of the previous <code>ListModelQualityJobDefinitions</code> request was truncated, the response includes a <code>NextToken</code>. To retrieve the next set of model quality monitoring job definitions, use the token in the next request.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+    /// <p>The field to sort results by. The default is <code>CreationTime</code>.</p>
+    #[serde(rename = "SortBy")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub sort_by: Option<String>,
+    /// <p>The sort order for results. The default is <code>Descending</code>.</p>
+    #[serde(rename = "SortOrder")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub sort_order: Option<String>,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct ListModelQualityJobDefinitionsResponse {
+    /// <p>A list of summaries of model quality monitoring job definitions.</p>
+    #[serde(rename = "JobDefinitionSummaries")]
+    pub job_definition_summaries: Vec<MonitoringJobDefinitionSummary>,
+    /// <p>If the response is truncated, Amazon SageMaker returns this token. To retrieve the next set of model quality monitoring job definitions, use it in the next request.</p>
     #[serde(rename = "NextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
@@ -5451,10 +9213,18 @@ pub struct ListMonitoringExecutionsRequest {
     #[serde(rename = "MaxResults")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub max_results: Option<i64>,
+    /// <p>Gets a list of the monitoring job runs of the specified monitoring job definitions.</p>
+    #[serde(rename = "MonitoringJobDefinitionName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub monitoring_job_definition_name: Option<String>,
     /// <p>Name of a specific schedule to fetch jobs for.</p>
     #[serde(rename = "MonitoringScheduleName")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub monitoring_schedule_name: Option<String>,
+    /// <p>A filter that returns only the monitoring job runs of the specified monitoring type.</p>
+    #[serde(rename = "MonitoringTypeEquals")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub monitoring_type_equals: Option<String>,
     /// <p>The token returned if the response is truncated. To retrieve the next set of job executions, use it in the next request.</p>
     #[serde(rename = "NextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -5520,6 +9290,14 @@ pub struct ListMonitoringSchedulesRequest {
     #[serde(rename = "MaxResults")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub max_results: Option<i64>,
+    /// <p>Gets a list of the monitoring schedules for the specified monitoring job definition.</p>
+    #[serde(rename = "MonitoringJobDefinitionName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub monitoring_job_definition_name: Option<String>,
+    /// <p>A filter that returns only the monitoring schedules for the specified monitoring type.</p>
+    #[serde(rename = "MonitoringTypeEquals")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub monitoring_type_equals: Option<String>,
     /// <p>Filter for monitoring schedules whose name contains a specified string.</p>
     #[serde(rename = "NameContains")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -5548,7 +9326,7 @@ pub struct ListMonitoringSchedulesResponse {
     /// <p>A JSON array in which each element is a summary for a monitoring schedule.</p>
     #[serde(rename = "MonitoringScheduleSummaries")]
     pub monitoring_schedule_summaries: Vec<MonitoringScheduleSummary>,
-    /// <p>If the response is truncated, Amazon SageMaker returns this token. To retrieve the next set of jobs, use it in the subsequent reques</p>
+    /// <p>If the response is truncated, Amazon SageMaker returns this token. To retrieve the next set of jobs, use it in the subsequent request.</p>
     #[serde(rename = "NextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
@@ -5680,6 +9458,160 @@ pub struct ListNotebookInstancesOutput {
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct ListPipelineExecutionStepsRequest {
+    /// <p>The maximum number of pipeline execution steps to return in the response.</p>
+    #[serde(rename = "MaxResults")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub max_results: Option<i64>,
+    /// <p>If the result of the previous <code>ListPipelineExecutionSteps</code> request was truncated, the response includes a <code>NextToken</code>. To retrieve the next set of pipeline execution steps, use the token in the next request.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+    /// <p>The Amazon Resource Name (ARN) of the pipeline execution.</p>
+    #[serde(rename = "PipelineExecutionArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub pipeline_execution_arn: Option<String>,
+    /// <p>The field by which to sort results. The default is <code>CreatedTime</code>.</p>
+    #[serde(rename = "SortOrder")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub sort_order: Option<String>,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct ListPipelineExecutionStepsResponse {
+    /// <p>If the result of the previous <code>ListPipelineExecutionSteps</code> request was truncated, the response includes a <code>NextToken</code>. To retrieve the next set of pipeline execution steps, use the token in the next request.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+    /// <p>A list of <code>PipeLineExecutionStep</code> objects. Each <code>PipeLineExecutionStep</code> consists of StepName, StartTime, EndTime, StepStatus, and Metadata. Metadata is an object with properties for each job that contains relevant information about the job created by the step.</p>
+    #[serde(rename = "PipelineExecutionSteps")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub pipeline_execution_steps: Option<Vec<PipelineExecutionStep>>,
+}
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct ListPipelineExecutionsRequest {
+    /// <p>A filter that returns the pipeline executions that were created after a specified time.</p>
+    #[serde(rename = "CreatedAfter")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub created_after: Option<f64>,
+    /// <p>A filter that returns the pipeline executions that were created before a specified time.</p>
+    #[serde(rename = "CreatedBefore")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub created_before: Option<f64>,
+    /// <p>The maximum number of pipeline executions to return in the response.</p>
+    #[serde(rename = "MaxResults")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub max_results: Option<i64>,
+    /// <p>If the result of the previous <code>ListPipelineExecutions</code> request was truncated, the response includes a <code>NextToken</code>. To retrieve the next set of pipeline executions, use the token in the next request.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+    /// <p>The name of the pipeline.</p>
+    #[serde(rename = "PipelineName")]
+    pub pipeline_name: String,
+    /// <p>The field by which to sort results. The default is <code>CreatedTime</code>.</p>
+    #[serde(rename = "SortBy")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub sort_by: Option<String>,
+    /// <p>The sort order for results.</p>
+    #[serde(rename = "SortOrder")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub sort_order: Option<String>,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct ListPipelineExecutionsResponse {
+    /// <p>If the result of the previous <code>ListPipelineExecutions</code> request was truncated, the response includes a <code>NextToken</code>. To retrieve the next set of pipeline executions, use the token in the next request.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+    /// <p>Contains a sorted list of pipeline execution summary objects matching the specified filters. Each run summary includes the Amazon Resource Name (ARN) of the pipeline execution, the run date, and the status. This list can be empty. </p>
+    #[serde(rename = "PipelineExecutionSummaries")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub pipeline_execution_summaries: Option<Vec<PipelineExecutionSummary>>,
+}
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct ListPipelineParametersForExecutionRequest {
+    /// <p>The maximum number of parameters to return in the response.</p>
+    #[serde(rename = "MaxResults")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub max_results: Option<i64>,
+    /// <p>If the result of the previous <code>ListPipelineParametersForExecution</code> request was truncated, the response includes a <code>NextToken</code>. To retrieve the next set of parameters, use the token in the next request.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+    /// <p>The Amazon Resource Name (ARN) of the pipeline execution.</p>
+    #[serde(rename = "PipelineExecutionArn")]
+    pub pipeline_execution_arn: String,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct ListPipelineParametersForExecutionResponse {
+    /// <p>If the result of the previous <code>ListPipelineParametersForExecution</code> request was truncated, the response includes a <code>NextToken</code>. To retrieve the next set of parameters, use the token in the next request.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+    /// <p>Contains a list of pipeline parameters. This list can be empty. </p>
+    #[serde(rename = "PipelineParameters")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub pipeline_parameters: Option<Vec<Parameter>>,
+}
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct ListPipelinesRequest {
+    /// <p>A filter that returns the pipelines that were created after a specified time.</p>
+    #[serde(rename = "CreatedAfter")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub created_after: Option<f64>,
+    /// <p>A filter that returns the pipelines that were created before a specified time.</p>
+    #[serde(rename = "CreatedBefore")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub created_before: Option<f64>,
+    /// <p>The maximum number of pipelines to return in the response.</p>
+    #[serde(rename = "MaxResults")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub max_results: Option<i64>,
+    /// <p>If the result of the previous <code>ListPipelines</code> request was truncated, the response includes a <code>NextToken</code>. To retrieve the next set of pipelines, use the token in the next request.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+    /// <p>The prefix of the pipeline name.</p>
+    #[serde(rename = "PipelineNamePrefix")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub pipeline_name_prefix: Option<String>,
+    /// <p>The field by which to sort results. The default is <code>CreatedTime</code>.</p>
+    #[serde(rename = "SortBy")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub sort_by: Option<String>,
+    /// <p>The sort order for results.</p>
+    #[serde(rename = "SortOrder")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub sort_order: Option<String>,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct ListPipelinesResponse {
+    /// <p>If the result of the previous <code>ListPipelines</code> request was truncated, the response includes a <code>NextToken</code>. To retrieve the next set of pipelines, use the token in the next request.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+    /// <p>Contains a sorted list of <code>PipelineSummary</code> objects matching the specified filters. Each <code>PipelineSummary</code> consists of PipelineArn, PipelineName, ExperimentName, PipelineDescription, CreationTime, LastModifiedTime, LastRunTime, and RoleArn. This list can be empty. </p>
+    #[serde(rename = "PipelineSummaries")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub pipeline_summaries: Option<Vec<PipelineSummary>>,
+}
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListProcessingJobsRequest {
     /// <p>A filter that returns only processing jobs created after the specified time.</p>
     #[serde(rename = "CreationTimeAfter")]
@@ -5733,6 +9665,51 @@ pub struct ListProcessingJobsResponse {
     /// <p>An array of <code>ProcessingJobSummary</code> objects, each listing a processing job.</p>
     #[serde(rename = "ProcessingJobSummaries")]
     pub processing_job_summaries: Vec<ProcessingJobSummary>,
+}
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct ListProjectsInput {
+    /// <p>A filter that returns the projects that were created after a specified time.</p>
+    #[serde(rename = "CreationTimeAfter")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub creation_time_after: Option<f64>,
+    /// <p>A filter that returns the projects that were created before a specified time.</p>
+    #[serde(rename = "CreationTimeBefore")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub creation_time_before: Option<f64>,
+    /// <p>The maximum number of projects to return in the response.</p>
+    #[serde(rename = "MaxResults")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub max_results: Option<i64>,
+    /// <p>A filter that returns the projects whose name contains a specified string.</p>
+    #[serde(rename = "NameContains")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub name_contains: Option<String>,
+    /// <p>If the result of the previous <code>ListProjects</code> request was truncated, the response includes a <code>NextToken</code>. To retrieve the next set of projects, use the token in the next request.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+    /// <p>The field by which to sort results. The default is <code>CreationTime</code>.</p>
+    #[serde(rename = "SortBy")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub sort_by: Option<String>,
+    /// <p>The sort order for results. The default is <code>Ascending</code>.</p>
+    #[serde(rename = "SortOrder")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub sort_order: Option<String>,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct ListProjectsOutput {
+    /// <p>If the result of the previous <code>ListCompilationJobs</code> request was truncated, the response includes a <code>NextToken</code>. To retrieve the next set of model compilation jobs, use the token in the next request.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+    /// <p>A list of summaries of projects.</p>
+    #[serde(rename = "ProjectSummaryList")]
+    pub project_summary_list: Vec<ProjectSummary>,
 }
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
@@ -6095,6 +10072,43 @@ pub struct ListUserProfilesResponse {
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct ListWorkforcesRequest {
+    /// <p>The maximum number of workforces returned in the response.</p>
+    #[serde(rename = "MaxResults")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub max_results: Option<i64>,
+    /// <p>A filter you can use to search for workforces using part of the workforce name.</p>
+    #[serde(rename = "NameContains")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub name_contains: Option<String>,
+    /// <p>A token to resume pagination.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+    /// <p>Sort workforces using the workforce name or creation date.</p>
+    #[serde(rename = "SortBy")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub sort_by: Option<String>,
+    /// <p>Sort workforces in ascending or descending order.</p>
+    #[serde(rename = "SortOrder")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub sort_order: Option<String>,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct ListWorkforcesResponse {
+    /// <p>A token to resume pagination.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+    /// <p>A list containing information about your workforce.</p>
+    #[serde(rename = "Workforces")]
+    pub workforces: Vec<Workforce>,
+}
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListWorkteamsRequest {
     /// <p>The maximum number of work teams to return in each page of the response.</p>
     #[serde(rename = "MaxResults")]
@@ -6130,13 +10144,38 @@ pub struct ListWorkteamsResponse {
     pub workteams: Vec<Workteam>,
 }
 
-/// <p>Defines the Amazon Cognito user group that is part of a work team.</p>
+/// <p>Defines an Amazon Cognito or your own OIDC IdP user group that is part of a work team.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct MemberDefinition {
     /// <p>The Amazon Cognito user group that is part of the work team.</p>
     #[serde(rename = "CognitoMemberDefinition")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub cognito_member_definition: Option<CognitoMemberDefinition>,
+    /// <p>A list user groups that exist in your OIDC Identity Provider (IdP). One to ten groups can be used to create a single private work team. When you add a user group to the list of <code>Groups</code>, you can add that user group to one or more private work teams. If you add a user group to a private work team, all workers in that user group are added to the work team.</p>
+    #[serde(rename = "OidcMemberDefinition")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub oidc_member_definition: Option<OidcMemberDefinition>,
+}
+
+/// <p>Metadata properties of the tracking entity, trial, or trial component.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
+pub struct MetadataProperties {
+    /// <p>The commit ID.</p>
+    #[serde(rename = "CommitId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub commit_id: Option<String>,
+    /// <p>The entity this entity was generated by.</p>
+    #[serde(rename = "GeneratedBy")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub generated_by: Option<String>,
+    /// <p>The project ID.</p>
+    #[serde(rename = "ProjectId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub project_id: Option<String>,
+    /// <p>The repository.</p>
+    #[serde(rename = "Repository")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub repository: Option<String>,
 }
 
 /// <p>The name, value, and date and time of a metric that was emitted to Amazon CloudWatch.</p>
@@ -6168,6 +10207,21 @@ pub struct MetricDefinition {
     pub regex: String,
 }
 
+/// <p><p/></p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
+pub struct MetricsSource {
+    /// <p><p/></p>
+    #[serde(rename = "ContentDigest")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub content_digest: Option<String>,
+    /// <p><p/></p>
+    #[serde(rename = "ContentType")]
+    pub content_type: String,
+    /// <p><p/></p>
+    #[serde(rename = "S3Uri")]
+    pub s3_uri: String,
+}
+
 /// <p>Provides information about the location that is configured for storing model artifacts. </p> <p>Model artifacts are the output that results from training a model, and typically consist of trained parameters, a model defintion that desribes how to compute inferences, and other metadata.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
@@ -6175,6 +10229,43 @@ pub struct ModelArtifacts {
     /// <p>The path of the S3 object that contains the model artifacts. For example, <code>s3://bucket-name/keynameprefix/model.tar.gz</code>.</p>
     #[serde(rename = "S3ModelArtifacts")]
     pub s3_model_artifacts: String,
+}
+
+/// <p>Docker container image configuration object for the model bias job.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
+pub struct ModelBiasAppSpecification {
+    /// <p>JSON formatted S3 file that defines bias parameters. For more information on this JSON configuration file, see <a href="https://docs.aws.amazon.com/sagemaker/latest/json-bias-parameter-config.html">Configure bias parameters</a>.</p>
+    #[serde(rename = "ConfigUri")]
+    pub config_uri: String,
+    /// <p>Sets the environment variables in the Docker container.</p>
+    #[serde(rename = "Environment")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub environment: Option<::std::collections::HashMap<String, String>>,
+    /// <p>The container image to be run by the model bias job.</p>
+    #[serde(rename = "ImageUri")]
+    pub image_uri: String,
+}
+
+/// <p>The configuration for a baseline model bias job.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
+pub struct ModelBiasBaselineConfig {
+    /// <p>The name of the baseline model bias job.</p>
+    #[serde(rename = "BaseliningJobName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub baselining_job_name: Option<String>,
+    #[serde(rename = "ConstraintsResource")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub constraints_resource: Option<MonitoringConstraintsResource>,
+}
+
+/// <p>Inputs for the model bias job.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
+pub struct ModelBiasJobInput {
+    #[serde(rename = "EndpointInput")]
+    pub endpoint_input: EndpointInput,
+    /// <p>Location of ground truth labels to use in model bias job.</p>
+    #[serde(rename = "GroundTruthS3Input")]
+    pub ground_truth_s3_input: MonitoringGroundTruthS3Input,
 }
 
 /// <p>Configures the timeout and maximum number of retries for processing a transform job invocation.</p>
@@ -6188,6 +10279,163 @@ pub struct ModelClientConfig {
     #[serde(rename = "InvocationsTimeoutInSeconds")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub invocations_timeout_in_seconds: Option<i64>,
+}
+
+/// <p>Data quality constraints and statistics for a model.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
+pub struct ModelDataQuality {
+    /// <p>Data quality constraints for a model.</p>
+    #[serde(rename = "Constraints")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub constraints: Option<MetricsSource>,
+    /// <p>Data quality statistics for a model.</p>
+    #[serde(rename = "Statistics")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub statistics: Option<MetricsSource>,
+}
+
+/// <p>Provides information to verify the integrity of stored model artifacts. </p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct ModelDigests {
+    /// <p>Provides a hash value that uniquely identifies the stored model artifacts.</p>
+    #[serde(rename = "ArtifactDigest")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub artifact_digest: Option<String>,
+}
+
+/// <p>Docker container image configuration object for the model explainability job.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
+pub struct ModelExplainabilityAppSpecification {
+    /// <p>JSON formatted S3 file that defines explainability parameters. For more information on this JSON configuration file, see <a href="https://docs.aws.amazon.com/sagemaker/latest/json-model-explainability-parameter-config.html">Configure model explainability parameters</a>.</p>
+    #[serde(rename = "ConfigUri")]
+    pub config_uri: String,
+    /// <p>Sets the environment variables in the Docker container.</p>
+    #[serde(rename = "Environment")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub environment: Option<::std::collections::HashMap<String, String>>,
+    /// <p>The container image to be run by the model explainability job.</p>
+    #[serde(rename = "ImageUri")]
+    pub image_uri: String,
+}
+
+/// <p>The configuration for a baseline model explainability job.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
+pub struct ModelExplainabilityBaselineConfig {
+    /// <p>The name of the baseline model explainability job.</p>
+    #[serde(rename = "BaseliningJobName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub baselining_job_name: Option<String>,
+    #[serde(rename = "ConstraintsResource")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub constraints_resource: Option<MonitoringConstraintsResource>,
+}
+
+/// <p>Inputs for the model explainability job.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
+pub struct ModelExplainabilityJobInput {
+    #[serde(rename = "EndpointInput")]
+    pub endpoint_input: EndpointInput,
+}
+
+/// <p>Contains metrics captured from a model.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
+pub struct ModelMetrics {
+    /// <p>Metrics that measure bais in a model.</p>
+    #[serde(rename = "Bias")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub bias: Option<Bias>,
+    /// <p>Metrics that help explain a model.</p>
+    #[serde(rename = "Explainability")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub explainability: Option<Explainability>,
+    /// <p>Metrics that measure the quality of the input data for a model.</p>
+    #[serde(rename = "ModelDataQuality")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub model_data_quality: Option<ModelDataQuality>,
+    /// <p>Metrics that measure the quality of a model.</p>
+    #[serde(rename = "ModelQuality")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub model_quality: Option<ModelQuality>,
+}
+
+/// <p>A versioned model that can be deployed for SageMaker inference.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct ModelPackage {
+    /// <p>A description provided when the model approval is set.</p>
+    #[serde(rename = "ApprovalDescription")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub approval_description: Option<String>,
+    /// <p>Whether the model package is to be certified to be listed on AWS Marketplace. For information about listing model packages on AWS Marketplace, see <a href="https://docs.aws.amazon.com/sagemaker/latest/dg/sagemaker-mkt-list.html">List Your Algorithm or Model Package on AWS Marketplace</a>.</p>
+    #[serde(rename = "CertifyForMarketplace")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub certify_for_marketplace: Option<bool>,
+    #[serde(rename = "CreatedBy")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub created_by: Option<UserContext>,
+    /// <p>The time that the model package was created.</p>
+    #[serde(rename = "CreationTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub creation_time: Option<f64>,
+    #[serde(rename = "InferenceSpecification")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub inference_specification: Option<InferenceSpecification>,
+    #[serde(rename = "LastModifiedBy")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub last_modified_by: Option<UserContext>,
+    /// <p>The last time the model package was modified.</p>
+    #[serde(rename = "LastModifiedTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub last_modified_time: Option<f64>,
+    #[serde(rename = "MetadataProperties")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub metadata_properties: Option<MetadataProperties>,
+    /// <p><p>The approval status of the model. This can be one of the following values.</p> <ul> <li> <p> <code>APPROVED</code> - The model is approved</p> </li> <li> <p> <code>REJECTED</code> - The model is rejected.</p> </li> <li> <p> <code>PENDING<em>MANUAL</em>APPROVAL</code> - The model is waiting for manual approval.</p> </li> </ul></p>
+    #[serde(rename = "ModelApprovalStatus")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub model_approval_status: Option<String>,
+    /// <p>Metrics for the model.</p>
+    #[serde(rename = "ModelMetrics")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub model_metrics: Option<ModelMetrics>,
+    /// <p>The Amazon Resource Name (ARN) of the model package.</p>
+    #[serde(rename = "ModelPackageArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub model_package_arn: Option<String>,
+    /// <p>The description of the model package.</p>
+    #[serde(rename = "ModelPackageDescription")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub model_package_description: Option<String>,
+    /// <p>The model group to which the model belongs.</p>
+    #[serde(rename = "ModelPackageGroupName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub model_package_group_name: Option<String>,
+    /// <p>The name of the model.</p>
+    #[serde(rename = "ModelPackageName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub model_package_name: Option<String>,
+    /// <p><p>The status of the model package. This can be one of the following values.</p> <ul> <li> <p> <code>PENDING</code> - The model package is pending being created.</p> </li> <li> <p> <code>IN_PROGRESS</code> - The model package is in the process of being created.</p> </li> <li> <p> <code>COMPLETED</code> - The model package was successfully created.</p> </li> <li> <p> <code>FAILED</code> - The model package failed.</p> </li> <li> <p> <code>DELETING</code> - The model package is in the process of being deleted.</p> </li> </ul></p>
+    #[serde(rename = "ModelPackageStatus")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub model_package_status: Option<String>,
+    #[serde(rename = "ModelPackageStatusDetails")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub model_package_status_details: Option<ModelPackageStatusDetails>,
+    /// <p>The version number of a versioned model.</p>
+    #[serde(rename = "ModelPackageVersion")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub model_package_version: Option<i64>,
+    #[serde(rename = "SourceAlgorithmSpecification")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub source_algorithm_specification: Option<SourceAlgorithmSpecification>,
+    /// <p>A list of the tags associated with the model package. For more information, see <a href="https://docs.aws.amazon.com/general/latest/gr/aws_tagging.html">Tagging AWS resources</a> in the <i>AWS General Reference Guide</i>.</p>
+    #[serde(rename = "Tags")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub tags: Option<Vec<Tag>>,
+    #[serde(rename = "ValidationSpecification")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub validation_specification: Option<ModelPackageValidationSpecification>,
 }
 
 /// <p>Describes the Docker container for the model package.</p>
@@ -6204,7 +10452,7 @@ pub struct ModelPackageContainerDefinition {
     #[serde(rename = "ImageDigest")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub image_digest: Option<String>,
-    /// <p>The Amazon S3 path where the model artifacts, which result from model training, are stored. This path must point to a single <code>gzip</code> compressed tar archive (<code>.tar.gz</code> suffix).</p>
+    /// <p><p>The Amazon S3 path where the model artifacts, which result from model training, are stored. This path must point to a single <code>gzip</code> compressed tar archive (<code>.tar.gz</code> suffix).</p> <note> <p>The model artifacts must be in an S3 bucket that is in the same region as the model package.</p> </note></p>
     #[serde(rename = "ModelDataUrl")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub model_data_url: Option<String>,
@@ -6212,6 +10460,61 @@ pub struct ModelPackageContainerDefinition {
     #[serde(rename = "ProductId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub product_id: Option<String>,
+}
+
+/// <p>A group of versioned models in the model registry.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct ModelPackageGroup {
+    #[serde(rename = "CreatedBy")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub created_by: Option<UserContext>,
+    /// <p>The time that the model group was created.</p>
+    #[serde(rename = "CreationTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub creation_time: Option<f64>,
+    /// <p>The Amazon Resource Name (ARN) of the model group.</p>
+    #[serde(rename = "ModelPackageGroupArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub model_package_group_arn: Option<String>,
+    /// <p>The description for the model group.</p>
+    #[serde(rename = "ModelPackageGroupDescription")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub model_package_group_description: Option<String>,
+    /// <p>The name of the model group.</p>
+    #[serde(rename = "ModelPackageGroupName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub model_package_group_name: Option<String>,
+    /// <p><p>The status of the model group. This can be one of the following values.</p> <ul> <li> <p> <code>PENDING</code> - The model group is pending being created.</p> </li> <li> <p> <code>IN<em>PROGRESS</code> - The model group is in the process of being created.</p> </li> <li> <p> <code>COMPLETED</code> - The model group was successfully created.</p> </li> <li> <p> <code>FAILED</code> - The model group failed.</p> </li> <li> <p> <code>DELETING</code> - The model group is in the process of being deleted.</p> </li> <li> <p> <code>DELETE</em>FAILED</code> - SageMaker failed to delete the model group.</p> </li> </ul></p>
+    #[serde(rename = "ModelPackageGroupStatus")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub model_package_group_status: Option<String>,
+    /// <p>A list of the tags associated with the model group. For more information, see <a href="https://docs.aws.amazon.com/general/latest/gr/aws_tagging.html">Tagging AWS resources</a> in the <i>AWS General Reference Guide</i>.</p>
+    #[serde(rename = "Tags")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub tags: Option<Vec<Tag>>,
+}
+
+/// <p>Summary information about a model group.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct ModelPackageGroupSummary {
+    /// <p>The time that the model group was created.</p>
+    #[serde(rename = "CreationTime")]
+    pub creation_time: f64,
+    /// <p>The Amazon Resource Name (ARN) of the model group.</p>
+    #[serde(rename = "ModelPackageGroupArn")]
+    pub model_package_group_arn: String,
+    /// <p>A description of the model group.</p>
+    #[serde(rename = "ModelPackageGroupDescription")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub model_package_group_description: Option<String>,
+    /// <p>The name of the model group.</p>
+    #[serde(rename = "ModelPackageGroupName")]
+    pub model_package_group_name: String,
+    /// <p>The status of the model group.</p>
+    #[serde(rename = "ModelPackageGroupStatus")]
+    pub model_package_group_status: String,
 }
 
 /// <p>Specifies the validation and image scan statuses of the model package.</p>
@@ -6250,6 +10553,10 @@ pub struct ModelPackageSummary {
     /// <p>A timestamp that shows when the model package was created.</p>
     #[serde(rename = "CreationTime")]
     pub creation_time: f64,
+    /// <p><p>The approval status of the model. This can be one of the following values.</p> <ul> <li> <p> <code>APPROVED</code> - The model is approved</p> </li> <li> <p> <code>REJECTED</code> - The model is rejected.</p> </li> <li> <p> <code>PENDING<em>MANUAL</em>APPROVAL</code> - The model is waiting for manual approval.</p> </li> </ul></p>
+    #[serde(rename = "ModelApprovalStatus")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub model_approval_status: Option<String>,
     /// <p>The Amazon Resource Name (ARN) of the model package.</p>
     #[serde(rename = "ModelPackageArn")]
     pub model_package_arn: String,
@@ -6257,12 +10564,20 @@ pub struct ModelPackageSummary {
     #[serde(rename = "ModelPackageDescription")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub model_package_description: Option<String>,
+    /// <p>If the model package is a versioned model, the model group that the versioned model belongs to.</p>
+    #[serde(rename = "ModelPackageGroupName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub model_package_group_name: Option<String>,
     /// <p>The name of the model package.</p>
     #[serde(rename = "ModelPackageName")]
     pub model_package_name: String,
     /// <p>The overall status of the model package.</p>
     #[serde(rename = "ModelPackageStatus")]
     pub model_package_status: String,
+    /// <p>If the model package is a versioned model, the version of the model.</p>
+    #[serde(rename = "ModelPackageVersion")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub model_package_version: Option<i64>,
 }
 
 /// <p>Contains data, such as the inputs and targeted instance types that are used in the process of validating the model package.</p> <p>The data provided in the validation profile is made available to your buyers on AWS Marketplace.</p>
@@ -6285,6 +10600,83 @@ pub struct ModelPackageValidationSpecification {
     /// <p>The IAM roles to be used for the validation of the model package.</p>
     #[serde(rename = "ValidationRole")]
     pub validation_role: String,
+}
+
+/// <p>Model quality statistics and constraints.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
+pub struct ModelQuality {
+    /// <p>Model quality constraints.</p>
+    #[serde(rename = "Constraints")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub constraints: Option<MetricsSource>,
+    /// <p>Model quality statistics.</p>
+    #[serde(rename = "Statistics")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub statistics: Option<MetricsSource>,
+}
+
+/// <p>Container image configuration object for the monitoring job.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
+pub struct ModelQualityAppSpecification {
+    /// <p>An array of arguments for the container used to run the monitoring job.</p>
+    #[serde(rename = "ContainerArguments")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub container_arguments: Option<Vec<String>>,
+    /// <p>Specifies the entrypoint for a container that the monitoring job runs.</p>
+    #[serde(rename = "ContainerEntrypoint")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub container_entrypoint: Option<Vec<String>>,
+    /// <p>Sets the environment variables in the container that the monitoring job runs.</p>
+    #[serde(rename = "Environment")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub environment: Option<::std::collections::HashMap<String, String>>,
+    /// <p>The address of the container image that the monitoring job runs.</p>
+    #[serde(rename = "ImageUri")]
+    pub image_uri: String,
+    /// <p>An Amazon S3 URI to a script that is called after analysis has been performed. Applicable only for the built-in (first party) containers.</p>
+    #[serde(rename = "PostAnalyticsProcessorSourceUri")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub post_analytics_processor_source_uri: Option<String>,
+    /// <p>The machine learning problem type of the model that the monitoring job monitors.</p>
+    #[serde(rename = "ProblemType")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub problem_type: Option<String>,
+    /// <p>An Amazon S3 URI to a script that is called per row prior to running analysis. It can base64 decode the payload and convert it into a flatted json so that the built-in container can use the converted data. Applicable only for the built-in (first party) containers.</p>
+    #[serde(rename = "RecordPreprocessorSourceUri")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub record_preprocessor_source_uri: Option<String>,
+}
+
+/// <p>Configuration for monitoring constraints and monitoring statistics. These baseline resources are compared against the results of the current job from the series of jobs scheduled to collect data periodically.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
+pub struct ModelQualityBaselineConfig {
+    /// <p>The name of the job that performs baselining for the monitoring job.</p>
+    #[serde(rename = "BaseliningJobName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub baselining_job_name: Option<String>,
+    #[serde(rename = "ConstraintsResource")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub constraints_resource: Option<MonitoringConstraintsResource>,
+}
+
+/// <p>The input for the model quality monitoring job. Currently endponts are supported for input for model quality monitoring jobs.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
+pub struct ModelQualityJobInput {
+    #[serde(rename = "EndpointInput")]
+    pub endpoint_input: EndpointInput,
+    /// <p>The ground truth label provided for the model.</p>
+    #[serde(rename = "GroundTruthS3Input")]
+    pub ground_truth_s3_input: MonitoringGroundTruthS3Input,
+}
+
+/// <p>Metadata for Model steps.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct ModelStepMetadata {
+    /// <p>The Amazon Resource Name (ARN) of the created model.</p>
+    #[serde(rename = "Arn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub arn: Option<String>,
 }
 
 /// <p>Provides summary information about a model.</p>
@@ -6329,6 +10721,10 @@ pub struct MonitoringAppSpecification {
 /// <p>Configuration for monitoring constraints and monitoring statistics. These baseline resources are compared against the results of the current job from the series of jobs scheduled to collect data periodically.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct MonitoringBaselineConfig {
+    /// <p>The name of the job that performs baselining for the monitoring job.</p>
+    #[serde(rename = "BaseliningJobName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub baselining_job_name: Option<String>,
     /// <p>The baseline constraint file in Amazon S3 that the current monitoring job should validated against.</p>
     #[serde(rename = "ConstraintsResource")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -6373,7 +10769,7 @@ pub struct MonitoringExecutionSummary {
     /// <p>The time at which the monitoring job was created.</p>
     #[serde(rename = "CreationTime")]
     pub creation_time: f64,
-    /// <p>The name of teh endpoint used to run the monitoring job.</p>
+    /// <p>The name of the endpoint used to run the monitoring job.</p>
     #[serde(rename = "EndpointName")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub endpoint_name: Option<String>,
@@ -6387,9 +10783,17 @@ pub struct MonitoringExecutionSummary {
     /// <p>The status of the monitoring job.</p>
     #[serde(rename = "MonitoringExecutionStatus")]
     pub monitoring_execution_status: String,
+    /// <p>The name of the monitoring job.</p>
+    #[serde(rename = "MonitoringJobDefinitionName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub monitoring_job_definition_name: Option<String>,
     /// <p>The name of the monitoring schedule.</p>
     #[serde(rename = "MonitoringScheduleName")]
     pub monitoring_schedule_name: String,
+    /// <p>The type of the monitoring job.</p>
+    #[serde(rename = "MonitoringType")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub monitoring_type: Option<String>,
     /// <p>The Amazon Resource Name (ARN) of the monitoring job.</p>
     #[serde(rename = "ProcessingJobArn")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -6397,6 +10801,15 @@ pub struct MonitoringExecutionSummary {
     /// <p>The time the monitoring job was scheduled.</p>
     #[serde(rename = "ScheduledTime")]
     pub scheduled_time: f64,
+}
+
+/// <p>The ground truth labels for the dataset used for the monitoring job.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
+pub struct MonitoringGroundTruthS3Input {
+    /// <p>The address of the Amazon S3 location of the ground truth labels.</p>
+    #[serde(rename = "S3Uri")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub s3_uri: Option<String>,
 }
 
 /// <p>The inputs for a monitoring job.</p>
@@ -6443,6 +10856,40 @@ pub struct MonitoringJobDefinition {
     pub stopping_condition: Option<MonitoringStoppingCondition>,
 }
 
+/// <p>Summary information about a monitoring job.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct MonitoringJobDefinitionSummary {
+    /// <p>The time that the monitoring job was created.</p>
+    #[serde(rename = "CreationTime")]
+    pub creation_time: f64,
+    /// <p>The name of the endpoint that the job monitors.</p>
+    #[serde(rename = "EndpointName")]
+    pub endpoint_name: String,
+    /// <p>The Amazon Resource Name (ARN) of the monitoring job.</p>
+    #[serde(rename = "MonitoringJobDefinitionArn")]
+    pub monitoring_job_definition_arn: String,
+    /// <p>The name of the monitoring job.</p>
+    #[serde(rename = "MonitoringJobDefinitionName")]
+    pub monitoring_job_definition_name: String,
+}
+
+/// <p>The networking configuration for the monitoring job.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
+pub struct MonitoringNetworkConfig {
+    /// <p>Whether to encrypt all communications between the instances used for the monitoring jobs. Choose <code>True</code> to encrypt communications. Encryption provides greater security for distributed jobs, but the processing might take longer.</p>
+    #[serde(rename = "EnableInterContainerTrafficEncryption")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub enable_inter_container_traffic_encryption: Option<bool>,
+    /// <p>Whether to allow inbound and outbound network calls to and from the containers used for the monitoring job.</p>
+    #[serde(rename = "EnableNetworkIsolation")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub enable_network_isolation: Option<bool>,
+    #[serde(rename = "VpcConfig")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub vpc_config: Option<VpcConfig>,
+}
+
 /// <p>The output object for a monitoring job.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct MonitoringOutput {
@@ -6486,12 +10933,69 @@ pub struct MonitoringS3Output {
     pub s3_uri: String,
 }
 
+/// <p>A schedule for a model monitoring job. For information about model monitor, see <a href="https://docs.aws.amazon.com/sagemaker/latest/dg/model-monitor.html">Amazon SageMaker Model Monitor</a>.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct MonitoringSchedule {
+    /// <p>The time that the monitoring schedule was created.</p>
+    #[serde(rename = "CreationTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub creation_time: Option<f64>,
+    /// <p>The endpoint that hosts the model being monitored.</p>
+    #[serde(rename = "EndpointName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub endpoint_name: Option<String>,
+    /// <p>If the monitoring schedule failed, the reason it failed.</p>
+    #[serde(rename = "FailureReason")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub failure_reason: Option<String>,
+    /// <p>The last time the monitoring schedule was changed.</p>
+    #[serde(rename = "LastModifiedTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub last_modified_time: Option<f64>,
+    #[serde(rename = "LastMonitoringExecutionSummary")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub last_monitoring_execution_summary: Option<MonitoringExecutionSummary>,
+    /// <p>The Amazon Resource Name (ARN) of the monitoring schedule.</p>
+    #[serde(rename = "MonitoringScheduleArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub monitoring_schedule_arn: Option<String>,
+    #[serde(rename = "MonitoringScheduleConfig")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub monitoring_schedule_config: Option<MonitoringScheduleConfig>,
+    /// <p>The name of the monitoring schedule.</p>
+    #[serde(rename = "MonitoringScheduleName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub monitoring_schedule_name: Option<String>,
+    /// <p><p>The status of the monitoring schedule. This can be one of the following values.</p> <ul> <li> <p> <code>PENDING</code> - The schedule is pending being created.</p> </li> <li> <p> <code>FAILED</code> - The schedule failed.</p> </li> <li> <p> <code>SCHEDULED</code> - The schedule was successfully created.</p> </li> <li> <p> <code>STOPPED</code> - The schedule was stopped.</p> </li> </ul></p>
+    #[serde(rename = "MonitoringScheduleStatus")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub monitoring_schedule_status: Option<String>,
+    /// <p>The type of the monitoring job definition to schedule.</p>
+    #[serde(rename = "MonitoringType")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub monitoring_type: Option<String>,
+    /// <p>A list of the tags associated with the monitoring schedlue. For more information, see <a href="https://docs.aws.amazon.com/general/latest/gr/aws_tagging.html">Tagging AWS resources</a> in the <i>AWS General Reference Guide</i>.</p>
+    #[serde(rename = "Tags")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub tags: Option<Vec<Tag>>,
+}
+
 /// <p>Configures the monitoring schedule and defines the monitoring job.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct MonitoringScheduleConfig {
     /// <p>Defines the monitoring job.</p>
     #[serde(rename = "MonitoringJobDefinition")]
-    pub monitoring_job_definition: MonitoringJobDefinition,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub monitoring_job_definition: Option<MonitoringJobDefinition>,
+    /// <p>The name of the monitoring job definition to schedule.</p>
+    #[serde(rename = "MonitoringJobDefinitionName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub monitoring_job_definition_name: Option<String>,
+    /// <p>The type of the monitoring job definition to schedule.</p>
+    #[serde(rename = "MonitoringType")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub monitoring_type: Option<String>,
     /// <p>Configures the monitoring schedule.</p>
     #[serde(rename = "ScheduleConfig")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -6512,6 +11016,10 @@ pub struct MonitoringScheduleSummary {
     /// <p>The last time the monitoring schedule was modified.</p>
     #[serde(rename = "LastModifiedTime")]
     pub last_modified_time: f64,
+    /// <p>The name of the monitoring job definition that the schedule is for.</p>
+    #[serde(rename = "MonitoringJobDefinitionName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub monitoring_job_definition_name: Option<String>,
     /// <p>The Amazon Resource Name (ARN) of the monitoring schedule.</p>
     #[serde(rename = "MonitoringScheduleArn")]
     pub monitoring_schedule_arn: String,
@@ -6521,6 +11029,10 @@ pub struct MonitoringScheduleSummary {
     /// <p>The status of the monitoring schedule.</p>
     #[serde(rename = "MonitoringScheduleStatus")]
     pub monitoring_schedule_status: String,
+    /// <p>The type of the monitoring job definition that the schedule is for.</p>
+    #[serde(rename = "MonitoringType")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub monitoring_type: Option<String>,
 }
 
 /// <p>The statistics resource for a monitoring job.</p>
@@ -6668,15 +11180,151 @@ pub struct ObjectiveStatusCounters {
     pub succeeded: Option<i64>,
 }
 
-/// <p>Contains information about the output location for the compiled model and the device (target) that the model runs on.</p>
+/// <p>The configuration of an <code>OfflineStore</code>.</p> <p>Provide an <code>OfflineStoreConfig</code> in a request to <code>CreateFeatureGroup</code> to create an <code>OfflineStore</code>.</p> <p>To encrypt an <code>OfflineStore</code> using at rest data encryption, specify AWS Key Management Service (KMS) key ID, or <code>KMSKeyId</code>, in <code>S3StorageConfig</code>.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
+pub struct OfflineStoreConfig {
+    /// <p>The meta data of the Glue table that is autogenerated when an <code>OfflineStore</code> is created. </p>
+    #[serde(rename = "DataCatalogConfig")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub data_catalog_config: Option<DataCatalogConfig>,
+    /// <p>Set to <code>True</code> to disable the automatic creation of an AWS Glue table when configuring an <code>OfflineStore</code>.</p>
+    #[serde(rename = "DisableGlueTableCreation")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub disable_glue_table_creation: Option<bool>,
+    /// <p>The Amazon Simple Storage (Amazon S3) location of <code>OfflineStore</code>.</p>
+    #[serde(rename = "S3StorageConfig")]
+    pub s3_storage_config: S3StorageConfig,
+}
+
+/// <p>The status of <code>OfflineStore</code>.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct OfflineStoreStatus {
+    /// <p>The justification for why the OfflineStoreStatus is Blocked (if applicable).</p>
+    #[serde(rename = "BlockedReason")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub blocked_reason: Option<String>,
+    /// <p>An <code>OfflineStore</code> status.</p>
+    #[serde(rename = "Status")]
+    pub status: String,
+}
+
+/// <p>Use this parameter to configure your OIDC Identity Provider (IdP).</p>
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct OidcConfig {
+    /// <p>The OIDC IdP authorization endpoint used to configure your private workforce.</p>
+    #[serde(rename = "AuthorizationEndpoint")]
+    pub authorization_endpoint: String,
+    /// <p>The OIDC IdP client ID used to configure your private workforce.</p>
+    #[serde(rename = "ClientId")]
+    pub client_id: String,
+    /// <p>The OIDC IdP client secret used to configure your private workforce.</p>
+    #[serde(rename = "ClientSecret")]
+    pub client_secret: String,
+    /// <p>The OIDC IdP issuer used to configure your private workforce.</p>
+    #[serde(rename = "Issuer")]
+    pub issuer: String,
+    /// <p>The OIDC IdP JSON Web Key Set (Jwks) URI used to configure your private workforce.</p>
+    #[serde(rename = "JwksUri")]
+    pub jwks_uri: String,
+    /// <p>The OIDC IdP logout endpoint used to configure your private workforce.</p>
+    #[serde(rename = "LogoutEndpoint")]
+    pub logout_endpoint: String,
+    /// <p>The OIDC IdP token endpoint used to configure your private workforce.</p>
+    #[serde(rename = "TokenEndpoint")]
+    pub token_endpoint: String,
+    /// <p>The OIDC IdP user information endpoint used to configure your private workforce.</p>
+    #[serde(rename = "UserInfoEndpoint")]
+    pub user_info_endpoint: String,
+}
+
+/// <p>Your OIDC IdP workforce configuration.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct OidcConfigForResponse {
+    /// <p>The OIDC IdP authorization endpoint used to configure your private workforce.</p>
+    #[serde(rename = "AuthorizationEndpoint")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub authorization_endpoint: Option<String>,
+    /// <p>The OIDC IdP client ID used to configure your private workforce.</p>
+    #[serde(rename = "ClientId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub client_id: Option<String>,
+    /// <p>The OIDC IdP issuer used to configure your private workforce.</p>
+    #[serde(rename = "Issuer")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub issuer: Option<String>,
+    /// <p>The OIDC IdP JSON Web Key Set (Jwks) URI used to configure your private workforce.</p>
+    #[serde(rename = "JwksUri")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub jwks_uri: Option<String>,
+    /// <p>The OIDC IdP logout endpoint used to configure your private workforce.</p>
+    #[serde(rename = "LogoutEndpoint")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub logout_endpoint: Option<String>,
+    /// <p>The OIDC IdP token endpoint used to configure your private workforce.</p>
+    #[serde(rename = "TokenEndpoint")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub token_endpoint: Option<String>,
+    /// <p>The OIDC IdP user information endpoint used to configure your private workforce.</p>
+    #[serde(rename = "UserInfoEndpoint")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub user_info_endpoint: Option<String>,
+}
+
+/// <p>A list of user groups that exist in your OIDC Identity Provider (IdP). One to ten groups can be used to create a single private work team. When you add a user group to the list of <code>Groups</code>, you can add that user group to one or more private work teams. If you add a user group to a private work team, all workers in that user group are added to the work team.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
+pub struct OidcMemberDefinition {
+    /// <p>A list of comma seperated strings that identifies user groups in your OIDC IdP. Each user group is made up of a group of private workers.</p>
+    #[serde(rename = "Groups")]
+    pub groups: Vec<String>,
+}
+
+/// <p>Use this to specify the AWS Key Management Service (KMS) Key ID, or <code>KMSKeyId</code>, for at rest data encryption. You can turn <code>OnlineStore</code> on or off by specifying the <code>EnableOnlineStore</code> flag at General Assembly; the default value is <code>False</code>.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
+pub struct OnlineStoreConfig {
+    /// <p>Turn <code>OnlineStore</code> off by specifying <code>False</code> for the <code>EnableOnlineStore</code> flag. Turn <code>OnlineStore</code> on by specifying <code>True</code> for the <code>EnableOnlineStore</code> flag. </p> <p>The default value is <code>False</code>.</p>
+    #[serde(rename = "EnableOnlineStore")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub enable_online_store: Option<bool>,
+    /// <p>Use to specify KMS Key ID (<code>KMSKeyId</code>) for at-rest encryption of your <code>OnlineStore</code>.</p>
+    #[serde(rename = "SecurityConfig")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub security_config: Option<OnlineStoreSecurityConfig>,
+}
+
+/// <p>The security configuration for <code>OnlineStore</code>.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
+pub struct OnlineStoreSecurityConfig {
+    /// <p><p>The ID of the AWS Key Management Service (AWS KMS) key that SageMaker Feature Store uses to encrypt the Amazon S3 objects at rest using Amazon S3 server-side encryption.</p> <p>The caller (either IAM user or IAM role) of <code>CreateFeatureGroup</code> must have below permissions to the <code>OnlineStore</code> <code>KmsKeyId</code>:</p> <ul> <li> <p> <code>&quot;kms:Encrypt&quot;</code> </p> </li> <li> <p> <code>&quot;kms:Decrypt&quot;</code> </p> </li> <li> <p> <code>&quot;kms:DescribeKey&quot;</code> </p> </li> <li> <p> <code>&quot;kms:CreateGrant&quot;</code> </p> </li> <li> <p> <code>&quot;kms:RetireGrant&quot;</code> </p> </li> <li> <p> <code>&quot;kms:ReEncryptFrom&quot;</code> </p> </li> <li> <p> <code>&quot;kms:ReEncryptTo&quot;</code> </p> </li> <li> <p> <code>&quot;kms:GenerateDataKey&quot;</code> </p> </li> <li> <p> <code>&quot;kms:ListAliases&quot;</code> </p> </li> <li> <p> <code>&quot;kms:ListGrants&quot;</code> </p> </li> <li> <p> <code>&quot;kms:RevokeGrant&quot;</code> </p> </li> </ul> <p>The caller (either IAM user or IAM role) to all DataPlane operations (<code>PutRecord</code>, <code>GetRecord</code>, <code>DeleteRecord</code>) must have the following permissions to the <code>KmsKeyId</code>:</p> <ul> <li> <p> <code>&quot;kms:Decrypt&quot;</code> </p> </li> </ul></p>
+    #[serde(rename = "KmsKeyId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub kms_key_id: Option<String>,
+}
+
+/// <p>Contains information about the output location for the compiled model and the target device that the model runs on. <code>TargetDevice</code> and <code>TargetPlatform</code> are mutually exclusive, so you need to choose one between the two to specify your target device or platform. If you cannot find your device you want to use from the <code>TargetDevice</code> list, use <code>TargetPlatform</code> to describe the platform of your edge device and <code>CompilerOptions</code> if there are specific settings that are required or recommended to use for particular TargetPlatform.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct OutputConfig {
-    /// <p>Identifies the S3 path where you want Amazon SageMaker to store the model artifacts. For example, s3://bucket-name/key-name-prefix.</p>
+    /// <p><p>Specifies additional parameters for compiler options in JSON format. The compiler options are <code>TargetPlatform</code> specific. It is required for NVIDIA accelerators and highly recommended for CPU compilations. For any other cases, it is optional to specify <code>CompilerOptions.</code> </p> <ul> <li> <p> <code>CPU</code>: Compilation for CPU supports the following compiler options.</p> <ul> <li> <p> <code>mcpu</code>: CPU micro-architecture. For example, <code>{&#39;mcpu&#39;: &#39;skylake-avx512&#39;}</code> </p> </li> <li> <p> <code>mattr</code>: CPU flags. For example, <code>{&#39;mattr&#39;: [&#39;+neon&#39;, &#39;+vfpv4&#39;]}</code> </p> </li> </ul> </li> <li> <p> <code>ARM</code>: Details of ARM CPU compilations.</p> <ul> <li> <p> <code>NEON</code>: NEON is an implementation of the Advanced SIMD extension used in ARMv7 processors.</p> <p>For example, add <code>{&#39;mattr&#39;: [&#39;+neon&#39;]}</code> to the compiler options if compiling for ARM 32-bit platform with the NEON support.</p> </li> </ul> </li> <li> <p> <code>NVIDIA</code>: Compilation for NVIDIA GPU supports the following compiler options.</p> <ul> <li> <p> <code>gpu<em>code</code>: Specifies the targeted architecture.</p> </li> <li> <p> <code>trt-ver</code>: Specifies the TensorRT versions in x.y.z. format.</p> </li> <li> <p> <code>cuda-ver</code>: Specifies the CUDA version in x.y format.</p> </li> </ul> <p>For example, <code>{&#39;gpu-code&#39;: &#39;sm</em>72&#39;, &#39;trt-ver&#39;: &#39;6.0.1&#39;, &#39;cuda-ver&#39;: &#39;10.1&#39;}</code> </p> </li> <li> <p> <code>ANDROID</code>: Compilation for the Android OS supports the following compiler options:</p> <ul> <li> <p> <code>ANDROID<em>PLATFORM</code>: Specifies the Android API levels. Available levels range from 21 to 29. For example, <code>{&#39;ANDROID</em>PLATFORM&#39;: 28}</code>.</p> </li> <li> <p> <code>mattr</code>: Add <code>{&#39;mattr&#39;: [&#39;+neon&#39;]}</code> to compiler options if compiling for ARM 32-bit platform with NEON support.</p> </li> </ul> </li> <li> <p> <code>INFERENTIA</code>: Compilation for target ml<em>inf1 uses compiler options passed in as a JSON string. For example, <code>&quot;CompilerOptions&quot;: &quot;&quot;--verbose 1 --num-neuroncores 2 -O2&quot;&quot;</code>. </p> <p>For information about supported compiler options, see <a href="https://github.com/aws/aws-neuron-sdk/blob/master/docs/neuron-cc/command-line-reference.md"> Neuron Compiler CLI</a>. </p> </li> <li> <p> <code>CoreML</code>: Compilation for the CoreML <a>OutputConfig$TargetDevice</a> supports the following compiler options:</p> <ul> <li> <p> <code>class</em>labels</code>: Specifies the classification labels file name inside input tar.gz file. For example, <code>{&quot;class<em>labels&quot;: &quot;imagenet</em>labels_1000.txt&quot;}</code>. Labels inside the txt file should be separated by newlines.</p> </li> </ul> </li> </ul></p>
+    #[serde(rename = "CompilerOptions")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub compiler_options: Option<String>,
+    /// <p><p>The AWS Key Management Service (AWS KMS) key that Amazon SageMaker uses to encrypt data on the storage volume after compilation job. If you don&#39;t provide a KMS key ID, Amazon SageMaker uses the default KMS key for Amazon S3 for your role&#39;s account</p> <p>The KmsKeyId can be any of the following formats: </p> <ul> <li> <p>Key ID: <code>1234abcd-12ab-34cd-56ef-1234567890ab</code> </p> </li> <li> <p>Key ARN: <code>arn:aws:kms:us-west-2:111122223333:key/1234abcd-12ab-34cd-56ef-1234567890ab</code> </p> </li> <li> <p>Alias name: <code>alias/ExampleAlias</code> </p> </li> <li> <p>Alias name ARN: <code>arn:aws:kms:us-west-2:111122223333:alias/ExampleAlias</code> </p> </li> </ul></p>
+    #[serde(rename = "KmsKeyId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub kms_key_id: Option<String>,
+    /// <p>Identifies the S3 bucket where you want Amazon SageMaker to store the model artifacts. For example, <code>s3://bucket-name/key-name-prefix</code>.</p>
     #[serde(rename = "S3OutputLocation")]
     pub s3_output_location: String,
-    /// <p>Identifies the device that you want to run your model on after it has been compiled. For example: ml_c5.</p>
+    /// <p>Identifies the target device or the machine learning instance that you want to run your model on after the compilation has completed. Alternatively, you can specify OS, architecture, and accelerator using <a>TargetPlatform</a> fields. It can be used instead of <code>TargetPlatform</code>.</p>
     #[serde(rename = "TargetDevice")]
-    pub target_device: String,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub target_device: Option<String>,
+    /// <p><p>Contains information about a target platform that you want your model to run on, such as OS, architecture, and accelerators. It is an alternative of <code>TargetDevice</code>.</p> <p>The following examples show how to configure the <code>TargetPlatform</code> and <code>CompilerOptions</code> JSON strings for popular target platforms: </p> <ul> <li> <p>Raspberry Pi 3 Model B+</p> <p> <code>&quot;TargetPlatform&quot;: {&quot;Os&quot;: &quot;LINUX&quot;, &quot;Arch&quot;: &quot;ARM<em>EABIHF&quot;},</code> </p> <p> <code> &quot;CompilerOptions&quot;: {&#39;mattr&#39;: [&#39;+neon&#39;]}</code> </p> </li> <li> <p>Jetson TX2</p> <p> <code>&quot;TargetPlatform&quot;: {&quot;Os&quot;: &quot;LINUX&quot;, &quot;Arch&quot;: &quot;ARM64&quot;, &quot;Accelerator&quot;: &quot;NVIDIA&quot;},</code> </p> <p> <code> &quot;CompilerOptions&quot;: {&#39;gpu-code&#39;: &#39;sm</em>62&#39;, &#39;trt-ver&#39;: &#39;6.0.1&#39;, &#39;cuda-ver&#39;: &#39;10.0&#39;}</code> </p> </li> <li> <p>EC2 m5.2xlarge instance OS</p> <p> <code>&quot;TargetPlatform&quot;: {&quot;Os&quot;: &quot;LINUX&quot;, &quot;Arch&quot;: &quot;X86<em>64&quot;, &quot;Accelerator&quot;: &quot;NVIDIA&quot;},</code> </p> <p> <code> &quot;CompilerOptions&quot;: {&#39;mcpu&#39;: &#39;skylake-avx512&#39;}</code> </p> </li> <li> <p>RK3399</p> <p> <code>&quot;TargetPlatform&quot;: {&quot;Os&quot;: &quot;LINUX&quot;, &quot;Arch&quot;: &quot;ARM64&quot;, &quot;Accelerator&quot;: &quot;MALI&quot;}</code> </p> </li> <li> <p>ARMv7 phone (CPU)</p> <p> <code>&quot;TargetPlatform&quot;: {&quot;Os&quot;: &quot;ANDROID&quot;, &quot;Arch&quot;: &quot;ARM</em>EABI&quot;},</code> </p> <p> <code> &quot;CompilerOptions&quot;: {&#39;ANDROID<em>PLATFORM&#39;: 25, &#39;mattr&#39;: [&#39;+neon&#39;]}</code> </p> </li> <li> <p>ARMv8 phone (CPU)</p> <p> <code>&quot;TargetPlatform&quot;: {&quot;Os&quot;: &quot;ANDROID&quot;, &quot;Arch&quot;: &quot;ARM64&quot;},</code> </p> <p> <code> &quot;CompilerOptions&quot;: {&#39;ANDROID</em>PLATFORM&#39;: 29}</code> </p> </li> </ul></p>
+    #[serde(rename = "TargetPlatform")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub target_platform: Option<TargetPlatform>,
 }
 
 /// <p>Provides information about how to store model training results (model artifacts).</p>
@@ -6689,6 +11337,17 @@ pub struct OutputDataConfig {
     /// <p>Identifies the S3 path where you want Amazon SageMaker to store the model artifacts. For example, <code>s3://bucket-name/key-name-prefix</code>. </p>
     #[serde(rename = "S3OutputPath")]
     pub s3_output_path: String,
+}
+
+/// <p>Assigns a value to a named Pipeline parameter.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
+pub struct Parameter {
+    /// <p>The name of the parameter to assign a value to. This parameter name must match a named parameter in the pipeline definition.</p>
+    #[serde(rename = "Name")]
+    pub name: String,
+    /// <p>The literal value for the parameter.</p>
+    #[serde(rename = "Value")]
+    pub value: String,
 }
 
 /// <p>Defines the possible values for categorical, continuous, and integer hyperparameters to be used by an algorithm.</p>
@@ -6748,6 +11407,230 @@ pub struct ParentHyperParameterTuningJob {
     pub hyper_parameter_tuning_job_name: Option<String>,
 }
 
+/// <p>A SageMaker Model Building Pipeline instance.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct Pipeline {
+    #[serde(rename = "CreatedBy")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub created_by: Option<UserContext>,
+    /// <p>The creation time of the pipeline.</p>
+    #[serde(rename = "CreationTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub creation_time: Option<f64>,
+    #[serde(rename = "LastModifiedBy")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub last_modified_by: Option<UserContext>,
+    /// <p>The time that the pipeline was last modified.</p>
+    #[serde(rename = "LastModifiedTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub last_modified_time: Option<f64>,
+    /// <p>The time when the pipeline was last run.</p>
+    #[serde(rename = "LastRunTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub last_run_time: Option<f64>,
+    /// <p>The Amazon Resource Name (ARN) of the pipeline.</p>
+    #[serde(rename = "PipelineArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub pipeline_arn: Option<String>,
+    /// <p>The description of the pipeline.</p>
+    #[serde(rename = "PipelineDescription")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub pipeline_description: Option<String>,
+    /// <p>The display name of the pipeline.</p>
+    #[serde(rename = "PipelineDisplayName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub pipeline_display_name: Option<String>,
+    /// <p>The name of the pipeline.</p>
+    #[serde(rename = "PipelineName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub pipeline_name: Option<String>,
+    /// <p>The status of the pipeline.</p>
+    #[serde(rename = "PipelineStatus")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub pipeline_status: Option<String>,
+    /// <p>The Amazon Resource Name (ARN) of the role that created the pipeline.</p>
+    #[serde(rename = "RoleArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub role_arn: Option<String>,
+    /// <p>A list of tags that apply to the pipeline.</p>
+    #[serde(rename = "Tags")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub tags: Option<Vec<Tag>>,
+}
+
+/// <p>An execution of a pipeline.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct PipelineExecution {
+    #[serde(rename = "CreatedBy")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub created_by: Option<UserContext>,
+    /// <p>The creation time of the pipeline execution.</p>
+    #[serde(rename = "CreationTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub creation_time: Option<f64>,
+    #[serde(rename = "LastModifiedBy")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub last_modified_by: Option<UserContext>,
+    /// <p>The time that the pipeline execution was last modified.</p>
+    #[serde(rename = "LastModifiedTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub last_modified_time: Option<f64>,
+    /// <p>The Amazon Resource Name (ARN) of the pipeline that was executed.</p>
+    #[serde(rename = "PipelineArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub pipeline_arn: Option<String>,
+    /// <p>The Amazon Resource Name (ARN) of the pipeline execution.</p>
+    #[serde(rename = "PipelineExecutionArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub pipeline_execution_arn: Option<String>,
+    /// <p>The description of the pipeline execution.</p>
+    #[serde(rename = "PipelineExecutionDescription")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub pipeline_execution_description: Option<String>,
+    /// <p>The display name of the pipeline execution.</p>
+    #[serde(rename = "PipelineExecutionDisplayName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub pipeline_execution_display_name: Option<String>,
+    /// <p>The status of the pipeline status.</p>
+    #[serde(rename = "PipelineExecutionStatus")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub pipeline_execution_status: Option<String>,
+    /// <p>Contains a list of pipeline parameters. This list can be empty. </p>
+    #[serde(rename = "PipelineParameters")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub pipeline_parameters: Option<Vec<Parameter>>,
+}
+
+/// <p>An execution of a step in a pipeline.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct PipelineExecutionStep {
+    /// <p>If this pipeline execution step was cached, details on the cache hit.</p>
+    #[serde(rename = "CacheHitResult")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub cache_hit_result: Option<CacheHitResult>,
+    /// <p>The time that the step stopped executing.</p>
+    #[serde(rename = "EndTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub end_time: Option<f64>,
+    /// <p>The reason why the step failed execution. This is only returned if the step failed its execution.</p>
+    #[serde(rename = "FailureReason")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub failure_reason: Option<String>,
+    /// <p>The metadata for the step execution.</p>
+    #[serde(rename = "Metadata")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub metadata: Option<PipelineExecutionStepMetadata>,
+    /// <p>The time that the step started executing.</p>
+    #[serde(rename = "StartTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub start_time: Option<f64>,
+    /// <p>The name of the step that is executed.</p>
+    #[serde(rename = "StepName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub step_name: Option<String>,
+    /// <p>The status of the step execution.</p>
+    #[serde(rename = "StepStatus")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub step_status: Option<String>,
+}
+
+/// <p>Metadata for a step execution.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct PipelineExecutionStepMetadata {
+    /// <p>If this is a Condition step metadata object, details on the condition.</p>
+    #[serde(rename = "Condition")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub condition: Option<ConditionStepMetadata>,
+    /// <p>Metadata for the Model step.</p>
+    #[serde(rename = "Model")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub model: Option<ModelStepMetadata>,
+    /// <p>The Amazon Resource Name (ARN) of the processing job that was run by this step execution.</p>
+    #[serde(rename = "ProcessingJob")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub processing_job: Option<ProcessingJobStepMetadata>,
+    /// <p>Metadata for the RegisterModel step.</p>
+    #[serde(rename = "RegisterModel")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub register_model: Option<RegisterModelStepMetadata>,
+    /// <p>The Amazon Resource Name (ARN) of the training job that was run by this step execution.</p>
+    #[serde(rename = "TrainingJob")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub training_job: Option<TrainingJobStepMetadata>,
+    /// <p>The Amazon Resource Name (ARN) of the transform job that was run by this step execution.</p>
+    #[serde(rename = "TransformJob")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub transform_job: Option<TransformJobStepMetadata>,
+}
+
+/// <p>A pipeline execution summary.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct PipelineExecutionSummary {
+    /// <p>The Amazon Resource Name (ARN) of the pipeline execution.</p>
+    #[serde(rename = "PipelineExecutionArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub pipeline_execution_arn: Option<String>,
+    /// <p>The description of the pipeline execution.</p>
+    #[serde(rename = "PipelineExecutionDescription")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub pipeline_execution_description: Option<String>,
+    /// <p>The display name of the pipeline execution.</p>
+    #[serde(rename = "PipelineExecutionDisplayName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub pipeline_execution_display_name: Option<String>,
+    /// <p>The status of the pipeline execution.</p>
+    #[serde(rename = "PipelineExecutionStatus")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub pipeline_execution_status: Option<String>,
+    /// <p>The start time of the pipeline execution.</p>
+    #[serde(rename = "StartTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub start_time: Option<f64>,
+}
+
+/// <p>A summary of a pipeline.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct PipelineSummary {
+    /// <p>The creation time of the pipeline.</p>
+    #[serde(rename = "CreationTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub creation_time: Option<f64>,
+    /// <p>The last time that a pipeline execution began.</p>
+    #[serde(rename = "LastExecutionTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub last_execution_time: Option<f64>,
+    /// <p>The time that the pipeline was last modified.</p>
+    #[serde(rename = "LastModifiedTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub last_modified_time: Option<f64>,
+    /// <p> The Amazon Resource Name (ARN) of the pipeline.</p>
+    #[serde(rename = "PipelineArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub pipeline_arn: Option<String>,
+    /// <p>The description of the pipeline.</p>
+    #[serde(rename = "PipelineDescription")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub pipeline_description: Option<String>,
+    /// <p>The display name of the pipeline.</p>
+    #[serde(rename = "PipelineDisplayName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub pipeline_display_name: Option<String>,
+    /// <p>The name of the pipeline.</p>
+    #[serde(rename = "PipelineName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub pipeline_name: Option<String>,
+    /// <p>The Amazon Resource Name (ARN) that the pipeline used to execute.</p>
+    #[serde(rename = "RoleArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub role_arn: Option<String>,
+}
+
 /// <p>Configuration for the cluster used to run a processing job.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct ProcessingClusterConfig {
@@ -6766,15 +11649,32 @@ pub struct ProcessingClusterConfig {
     pub volume_size_in_gb: i64,
 }
 
-/// <p>The inputs for a processing job.</p>
+/// <p>Configuration for processing job outputs in Amazon SageMaker Feature Store.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
+pub struct ProcessingFeatureStoreOutput {
+    /// <p>The name of the Amazon SageMaker FeatureGroup to use as the destination for processing job output.</p>
+    #[serde(rename = "FeatureGroupName")]
+    pub feature_group_name: String,
+}
+
+/// <p>The inputs for a processing job. The processing input must specify exactly one of either <code>S3Input</code> or <code>DatasetDefinition</code> types.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct ProcessingInput {
+    /// <p>When <code>True</code>, input operations such as data download are managed natively by the processing job application. When <code>False</code> (default), input operations are managed by Amazon SageMaker.</p>
+    #[serde(rename = "AppManaged")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub app_managed: Option<bool>,
+    /// <p>Configuration for a Dataset Definition input. </p>
+    #[serde(rename = "DatasetDefinition")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub dataset_definition: Option<DatasetDefinition>,
     /// <p>The name of the inputs for the processing job.</p>
     #[serde(rename = "InputName")]
     pub input_name: String,
-    /// <p>The S3 inputs for the processing job. </p>
+    /// <p>Configuration for processing job inputs in Amazon S3.</p>
     #[serde(rename = "S3Input")]
-    pub s3_input: ProcessingS3Input,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub s3_input: Option<ProcessingS3Input>,
 }
 
 /// <p>An Amazon SageMaker processing job that is used to analyze data and evaluate models. For more information, see <a href="https://docs.aws.amazon.com/sagemaker/latest/dg/processing-job.html">Process Data and Evaluate Models</a>.</p>
@@ -6822,7 +11722,7 @@ pub struct ProcessingJob {
     #[serde(rename = "ProcessingEndTime")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub processing_end_time: Option<f64>,
-    /// <p>For each input, data is downloaded from S3 into the processing container before the processing job begins running if "S3InputMode" is set to <code>File</code>.</p>
+    /// <p>List of input configurations for the processing job.</p>
     #[serde(rename = "ProcessingInputs")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub processing_inputs: Option<Vec<ProcessingInput>>,
@@ -6865,6 +11765,16 @@ pub struct ProcessingJob {
     pub training_job_arn: Option<String>,
 }
 
+/// <p>Metadata for a processing job step.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct ProcessingJobStepMetadata {
+    /// <p>The Amazon Resource Name (ARN) of the processing job.</p>
+    #[serde(rename = "Arn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub arn: Option<String>,
+}
+
 /// <p>Summary of information about a processing job.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
@@ -6899,15 +11809,24 @@ pub struct ProcessingJobSummary {
     pub processing_job_status: String,
 }
 
-/// <p>Describes the results of a processing job.</p>
+/// <p>Describes the results of a processing job. The processing output must specify exactly one of either <code>S3Output</code> or <code>FeatureStoreOutput</code> types.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct ProcessingOutput {
+    /// <p>When <code>True</code>, output operations such as data upload are managed natively by the processing job application. When <code>False</code> (default), output operations are managed by Amazon SageMaker.</p>
+    #[serde(rename = "AppManaged")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub app_managed: Option<bool>,
+    /// <p>Configuration for processing job outputs in Amazon SageMaker Feature Store. This processing output type is only supported when <code>AppManaged</code> is specified. </p>
+    #[serde(rename = "FeatureStoreOutput")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub feature_store_output: Option<ProcessingFeatureStoreOutput>,
     /// <p>The name for the processing job output.</p>
     #[serde(rename = "OutputName")]
     pub output_name: String,
     /// <p>Configuration for processing job outputs in Amazon S3.</p>
     #[serde(rename = "S3Output")]
-    pub s3_output: ProcessingS3Output,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub s3_output: Option<ProcessingS3Output>,
 }
 
 /// <p>The output configuration for the processing job.</p>
@@ -6917,7 +11836,7 @@ pub struct ProcessingOutputConfig {
     #[serde(rename = "KmsKeyId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub kms_key_id: Option<String>,
-    /// <p>Output configuration information for a processing job.</p>
+    /// <p>List of output configurations for the processing job.</p>
     #[serde(rename = "Outputs")]
     pub outputs: Vec<ProcessingOutput>,
 }
@@ -6930,12 +11849,13 @@ pub struct ProcessingResources {
     pub cluster_config: ProcessingClusterConfig,
 }
 
-/// <p>Information about where and how you want to obtain the inputs for an processing job.</p>
+/// <p>Configuration for processing job inputs in Amazon S3.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct ProcessingS3Input {
-    /// <p>The local path to the Amazon S3 bucket where you want Amazon SageMaker to download the inputs to run a processing job. <code>LocalPath</code> is an absolute path to the input data.</p>
+    /// <p>The local path to the Amazon S3 bucket where you want Amazon SageMaker to download the inputs to run a processing job. <code>LocalPath</code> is an absolute path to the input data. This is a required parameter when <code>AppManaged</code> is <code>False</code> (default).</p>
     #[serde(rename = "LocalPath")]
-    pub local_path: String,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub local_path: Option<String>,
     /// <p>Whether to use <code>Gzip</code> compression for Amazon S3 storage.</p>
     #[serde(rename = "S3CompressionType")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -6947,15 +11867,16 @@ pub struct ProcessingS3Input {
     /// <p>Whether you use an <code>S3Prefix</code> or a <code>ManifestFile</code> for the data type. If you choose <code>S3Prefix</code>, <code>S3Uri</code> identifies a key name prefix. Amazon SageMaker uses all objects with the specified key name prefix for the processing job. If you choose <code>ManifestFile</code>, <code>S3Uri</code> identifies an object that is a manifest file containing a list of object keys that you want Amazon SageMaker to use for the processing job.</p>
     #[serde(rename = "S3DataType")]
     pub s3_data_type: String,
-    /// <p>Whether to use <code>File</code> or <code>Pipe</code> input mode. In <code>File</code> mode, Amazon SageMaker copies the data from the input source onto the local Amazon Elastic Block Store (Amazon EBS) volumes before starting your training algorithm. This is the most commonly used input mode. In <code>Pipe</code> mode, Amazon SageMaker streams input data from the source directly to your algorithm without using the EBS volume.</p>
+    /// <p>Whether to use <code>File</code> or <code>Pipe</code> input mode. In <code>File</code> mode, Amazon SageMaker copies the data from the input source onto the local Amazon Elastic Block Store (Amazon EBS) volumes before starting your training algorithm. This is the most commonly used input mode. In <code>Pipe</code> mode, Amazon SageMaker streams input data from the source directly to your algorithm without using the EBS volume.This is a required parameter when <code>AppManaged</code> is <code>False</code> (default).</p>
     #[serde(rename = "S3InputMode")]
-    pub s3_input_mode: String,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub s3_input_mode: Option<String>,
     /// <p>The URI for the Amazon S3 storage where you want Amazon SageMaker to download the artifacts needed to run a processing job.</p>
     #[serde(rename = "S3Uri")]
     pub s3_uri: String,
 }
 
-/// <p>Information about where and how you want to store the results of an processing job.</p>
+/// <p>Configuration for processing job outputs in Amazon S3.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct ProcessingS3Output {
     /// <p>The local path to the Amazon S3 bucket where you want Amazon SageMaker to save the results of an processing job. <code>LocalPath</code> is an absolute path to the input data.</p>
@@ -7031,6 +11952,126 @@ pub struct ProductionVariantSummary {
     pub variant_name: String,
 }
 
+/// <p>Configuration information for Debugger system monitoring, framework profiling, and storage paths.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
+pub struct ProfilerConfig {
+    /// <p>A time interval for capturing system metrics in milliseconds. Available values are 100, 200, 500, 1000 (1 second), 5000 (5 seconds), and 60000 (1 minute) milliseconds. The default value is 500 milliseconds.</p>
+    #[serde(rename = "ProfilingIntervalInMilliseconds")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub profiling_interval_in_milliseconds: Option<i64>,
+    /// <p>Configuration information for capturing framework metrics. Available key strings for different profiling options are <code>DetailedProfilingConfig</code>, <code>PythonProfilingConfig</code>, and <code>DataLoaderProfilingConfig</code>. The following codes are configuration structures for the <code>ProfilingParameters</code> parameter. To learn more about how to configure the <code>ProfilingParameters</code> parameter, see <a href="https://docs.aws.amazon.com/sagemaker/latest/dg/debugger-createtrainingjob-api.html">Use the SageMaker and Debugger Configuration API Operations to Create, Update, and Debug Your Training Job</a>. </p>
+    #[serde(rename = "ProfilingParameters")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub profiling_parameters: Option<::std::collections::HashMap<String, String>>,
+    /// <p>Path to Amazon S3 storage location for system and framework metrics.</p>
+    #[serde(rename = "S3OutputPath")]
+    pub s3_output_path: String,
+}
+
+/// <p>Configuration information for updating the Debugger profile parameters, system and framework metrics configurations, and storage paths.</p>
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct ProfilerConfigForUpdate {
+    /// <p>To disable Debugger monitoring and profiling, set to <code>True</code>.</p>
+    #[serde(rename = "DisableProfiler")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub disable_profiler: Option<bool>,
+    /// <p>A time interval for capturing system metrics in milliseconds. Available values are 100, 200, 500, 1000 (1 second), 5000 (5 seconds), and 60000 (1 minute) milliseconds. The default value is 500 milliseconds.</p>
+    #[serde(rename = "ProfilingIntervalInMilliseconds")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub profiling_interval_in_milliseconds: Option<i64>,
+    /// <p>Configuration information for capturing framework metrics. Available key strings for different profiling options are <code>DetailedProfilingConfig</code>, <code>PythonProfilingConfig</code>, and <code>DataLoaderProfilingConfig</code>. The following codes are configuration structures for the <code>ProfilingParameters</code> parameter. To learn more about how to configure the <code>ProfilingParameters</code> parameter, see <a href="https://docs.aws.amazon.com/sagemaker/latest/dg/debugger-createtrainingjob-api.html">Use the SageMaker and Debugger Configuration API Operations to Create, Update, and Debug Your Training Job</a>. </p>
+    #[serde(rename = "ProfilingParameters")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub profiling_parameters: Option<::std::collections::HashMap<String, String>>,
+    /// <p>Path to Amazon S3 storage location for system and framework metrics.</p>
+    #[serde(rename = "S3OutputPath")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub s3_output_path: Option<String>,
+}
+
+/// <p>Configuration information for profiling rules.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
+pub struct ProfilerRuleConfiguration {
+    /// <p>The instance type to deploy a Debugger custom rule for profiling a training job.</p>
+    #[serde(rename = "InstanceType")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub instance_type: Option<String>,
+    /// <p>Path to local storage location for output of rules. Defaults to <code>/opt/ml/processing/output/rule/</code>. </p>
+    #[serde(rename = "LocalPath")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub local_path: Option<String>,
+    /// <p>The name of the rule configuration. It must be unique relative to other rule configuration names.</p>
+    #[serde(rename = "RuleConfigurationName")]
+    pub rule_configuration_name: String,
+    /// <p>The Amazon Elastic Container (ECR) Image for the managed rule evaluation.</p>
+    #[serde(rename = "RuleEvaluatorImage")]
+    pub rule_evaluator_image: String,
+    /// <p>Runtime configuration for rule container.</p>
+    #[serde(rename = "RuleParameters")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub rule_parameters: Option<::std::collections::HashMap<String, String>>,
+    /// <p>Path to Amazon S3 storage location for rules.</p>
+    #[serde(rename = "S3OutputPath")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub s3_output_path: Option<String>,
+    /// <p>The size, in GB, of the ML storage volume attached to the processing instance.</p>
+    #[serde(rename = "VolumeSizeInGB")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub volume_size_in_gb: Option<i64>,
+}
+
+/// <p>Information about the status of the rule evaluation.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct ProfilerRuleEvaluationStatus {
+    /// <p>Timestamp when the rule evaluation status was last modified.</p>
+    #[serde(rename = "LastModifiedTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub last_modified_time: Option<f64>,
+    /// <p>The name of the rule configuration.</p>
+    #[serde(rename = "RuleConfigurationName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub rule_configuration_name: Option<String>,
+    /// <p>The Amazon Resource Name (ARN) of the rule evaluation job.</p>
+    #[serde(rename = "RuleEvaluationJobArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub rule_evaluation_job_arn: Option<String>,
+    /// <p>Status of the rule evaluation.</p>
+    #[serde(rename = "RuleEvaluationStatus")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub rule_evaluation_status: Option<String>,
+    /// <p>Details from the rule evaluation.</p>
+    #[serde(rename = "StatusDetails")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub status_details: Option<String>,
+}
+
+/// <p>Information about a project.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct ProjectSummary {
+    /// <p>The time that the project was created.</p>
+    #[serde(rename = "CreationTime")]
+    pub creation_time: f64,
+    /// <p>The Amazon Resource Name (ARN) of the project.</p>
+    #[serde(rename = "ProjectArn")]
+    pub project_arn: String,
+    /// <p>The description of the project.</p>
+    #[serde(rename = "ProjectDescription")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub project_description: Option<String>,
+    /// <p>The ID of the project.</p>
+    #[serde(rename = "ProjectId")]
+    pub project_id: String,
+    /// <p>The name of the project.</p>
+    #[serde(rename = "ProjectName")]
+    pub project_name: String,
+    /// <p>The status of the project.</p>
+    #[serde(rename = "ProjectStatus")]
+    pub project_status: String,
+}
+
 /// <p>Part of the <code>SuggestionQuery</code> type. Specifies a hint for retrieving property names that begin with the specified text.</p>
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
@@ -7050,6 +12091,19 @@ pub struct PropertyNameSuggestion {
     pub property_name: Option<String>,
 }
 
+/// <p>A key value pair used when you provision a project as a service catalog product. For information, see <a href="https://docs.aws.amazon.com/servicecatalog/latest/adminguide/introduction.html">What is AWS Service Catalog</a>.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
+pub struct ProvisioningParameter {
+    /// <p>The key that identifies a provisioning parameter.</p>
+    #[serde(rename = "Key")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub key: Option<String>,
+    /// <p>The value of the provisioning parameter.</p>
+    #[serde(rename = "Value")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub value: Option<String>,
+}
+
 /// <p><p>Defines the amount of money paid to an Amazon Mechanical Turk worker for each task performed. </p> <p>Use one of the following prices for bounding box tasks. Prices are in US dollars and should be based on the complexity of the task; the longer it takes in your initial testing, the more you should offer.</p> <ul> <li> <p>0.036</p> </li> <li> <p>0.048</p> </li> <li> <p>0.060</p> </li> <li> <p>0.072</p> </li> <li> <p>0.120</p> </li> <li> <p>0.240</p> </li> <li> <p>0.360</p> </li> <li> <p>0.480</p> </li> <li> <p>0.600</p> </li> <li> <p>0.720</p> </li> <li> <p>0.840</p> </li> <li> <p>0.960</p> </li> <li> <p>1.080</p> </li> <li> <p>1.200</p> </li> </ul> <p>Use one of the following prices for image classification, text classification, and custom tasks. Prices are in US dollars.</p> <ul> <li> <p>0.012</p> </li> <li> <p>0.024</p> </li> <li> <p>0.036</p> </li> <li> <p>0.048</p> </li> <li> <p>0.060</p> </li> <li> <p>0.072</p> </li> <li> <p>0.120</p> </li> <li> <p>0.240</p> </li> <li> <p>0.360</p> </li> <li> <p>0.480</p> </li> <li> <p>0.600</p> </li> <li> <p>0.720</p> </li> <li> <p>0.840</p> </li> <li> <p>0.960</p> </li> <li> <p>1.080</p> </li> <li> <p>1.200</p> </li> </ul> <p>Use one of the following prices for semantic segmentation tasks. Prices are in US dollars.</p> <ul> <li> <p>0.840</p> </li> <li> <p>0.960</p> </li> <li> <p>1.080</p> </li> <li> <p>1.200</p> </li> </ul> <p>Use one of the following prices for Textract AnalyzeDocument Important Form Key Amazon Augmented AI review tasks. Prices are in US dollars.</p> <ul> <li> <p>2.400 </p> </li> <li> <p>2.280 </p> </li> <li> <p>2.160 </p> </li> <li> <p>2.040 </p> </li> <li> <p>1.920 </p> </li> <li> <p>1.800 </p> </li> <li> <p>1.680 </p> </li> <li> <p>1.560 </p> </li> <li> <p>1.440 </p> </li> <li> <p>1.320 </p> </li> <li> <p>1.200 </p> </li> <li> <p>1.080 </p> </li> <li> <p>0.960 </p> </li> <li> <p>0.840 </p> </li> <li> <p>0.720 </p> </li> <li> <p>0.600 </p> </li> <li> <p>0.480 </p> </li> <li> <p>0.360 </p> </li> <li> <p>0.240 </p> </li> <li> <p>0.120 </p> </li> <li> <p>0.072 </p> </li> <li> <p>0.060 </p> </li> <li> <p>0.048 </p> </li> <li> <p>0.036 </p> </li> <li> <p>0.024 </p> </li> <li> <p>0.012 </p> </li> </ul> <p>Use one of the following prices for Rekognition DetectModerationLabels Amazon Augmented AI review tasks. Prices are in US dollars.</p> <ul> <li> <p>1.200 </p> </li> <li> <p>1.080 </p> </li> <li> <p>0.960 </p> </li> <li> <p>0.840 </p> </li> <li> <p>0.720 </p> </li> <li> <p>0.600 </p> </li> <li> <p>0.480 </p> </li> <li> <p>0.360 </p> </li> <li> <p>0.240 </p> </li> <li> <p>0.120 </p> </li> <li> <p>0.072 </p> </li> <li> <p>0.060 </p> </li> <li> <p>0.048 </p> </li> <li> <p>0.036 </p> </li> <li> <p>0.024 </p> </li> <li> <p>0.012 </p> </li> </ul> <p>Use one of the following prices for Amazon Augmented AI custom human review tasks. Prices are in US dollars.</p> <ul> <li> <p>1.200 </p> </li> <li> <p>1.080 </p> </li> <li> <p>0.960 </p> </li> <li> <p>0.840 </p> </li> <li> <p>0.720 </p> </li> <li> <p>0.600 </p> </li> <li> <p>0.480 </p> </li> <li> <p>0.360 </p> </li> <li> <p>0.240 </p> </li> <li> <p>0.120 </p> </li> <li> <p>0.072 </p> </li> <li> <p>0.060 </p> </li> <li> <p>0.048 </p> </li> <li> <p>0.036 </p> </li> <li> <p>0.024 </p> </li> <li> <p>0.012 </p> </li> </ul></p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct PublicWorkforceTaskPrice {
@@ -7057,6 +12111,78 @@ pub struct PublicWorkforceTaskPrice {
     #[serde(rename = "AmountInUsd")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub amount_in_usd: Option<USD>,
+}
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct PutModelPackageGroupPolicyInput {
+    /// <p>The name of the model group to add a resource policy to.</p>
+    #[serde(rename = "ModelPackageGroupName")]
+    pub model_package_group_name: String,
+    /// <p>The resource policy for the model group.</p>
+    #[serde(rename = "ResourcePolicy")]
+    pub resource_policy: String,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct PutModelPackageGroupPolicyOutput {
+    /// <p>The Amazon Resource Name (ARN) of the model package group.</p>
+    #[serde(rename = "ModelPackageGroupArn")]
+    pub model_package_group_arn: String,
+}
+
+/// <p>Configuration for Redshift Dataset Definition input.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
+pub struct RedshiftDatasetDefinition {
+    #[serde(rename = "ClusterId")]
+    pub cluster_id: String,
+    /// <p>The IAM role attached to your Redshift cluster that Amazon SageMaker uses to generate datasets.</p>
+    #[serde(rename = "ClusterRoleArn")]
+    pub cluster_role_arn: String,
+    #[serde(rename = "Database")]
+    pub database: String,
+    #[serde(rename = "DbUser")]
+    pub db_user: String,
+    /// <p>The AWS Key Management Service (AWS KMS) key that Amazon SageMaker uses to encrypt data from a Redshift execution.</p>
+    #[serde(rename = "KmsKeyId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub kms_key_id: Option<String>,
+    #[serde(rename = "OutputCompression")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub output_compression: Option<String>,
+    #[serde(rename = "OutputFormat")]
+    pub output_format: String,
+    /// <p>The location in Amazon S3 where the Redshift query results are stored.</p>
+    #[serde(rename = "OutputS3Uri")]
+    pub output_s3_uri: String,
+    #[serde(rename = "QueryString")]
+    pub query_string: String,
+}
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct RegisterDevicesRequest {
+    /// <p>The name of the fleet.</p>
+    #[serde(rename = "DeviceFleetName")]
+    pub device_fleet_name: String,
+    /// <p>A list of devices to register with SageMaker Edge Manager.</p>
+    #[serde(rename = "Devices")]
+    pub devices: Vec<Device>,
+    /// <p>The tags associated with devices.</p>
+    #[serde(rename = "Tags")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub tags: Option<Vec<Tag>>,
+}
+
+/// <p>Metadata for a register model job step.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct RegisterModelStepMetadata {
+    /// <p>The Amazon Resource Name (ARN) of the model package.</p>
+    #[serde(rename = "Arn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub arn: Option<String>,
 }
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
@@ -7155,17 +12281,21 @@ pub struct ResourceLimits {
     pub max_parallel_training_jobs: i64,
 }
 
-/// <p>The instance type and the Amazon Resource Name (ARN) of the SageMaker image created on the instance. The ARN is stored as metadata in SageMaker Studio notebooks.</p>
+/// <p>Specifies the ARN's of a SageMaker image and SageMaker image version, and the instance type that the version runs on.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct ResourceSpec {
-    /// <p>The instance type.</p>
+    /// <p>The instance type that the image version runs on.</p>
     #[serde(rename = "InstanceType")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub instance_type: Option<String>,
-    /// <p>The Amazon Resource Name (ARN) of the SageMaker image created on the instance.</p>
+    /// <p>The ARN of the SageMaker image that the image version belongs to.</p>
     #[serde(rename = "SageMakerImageArn")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub sage_maker_image_arn: Option<String>,
+    /// <p>The ARN of the image version created on the instance.</p>
+    #[serde(rename = "SageMakerImageVersionArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub sage_maker_image_version_arn: Option<String>,
 }
 
 /// <p>The retention policy for data stored on an Amazon Elastic File System (EFS) volume.</p>
@@ -7193,6 +12323,18 @@ pub struct S3DataSource {
     #[serde(rename = "S3DataType")]
     pub s3_data_type: String,
     /// <p><p>Depending on the value specified for the <code>S3DataType</code>, identifies either a key name prefix or a manifest. For example: </p> <ul> <li> <p> A key name prefix might look like this: <code>s3://bucketname/exampleprefix</code> </p> </li> <li> <p> A manifest might look like this: <code>s3://bucketname/example.manifest</code> </p> <p> A manifest is an S3 object which is a JSON file consisting of an array of elements. The first element is a prefix which is followed by one or more suffixes. SageMaker appends the suffix elements to the prefix to get a full set of <code>S3Uri</code>. Note that the prefix must be a valid non-empty <code>S3Uri</code> that precludes users from specifying a manifest whose individual <code>S3Uri</code> is sourced from different S3 buckets.</p> <p> The following code example shows a valid manifest format: </p> <p> <code>[ {&quot;prefix&quot;: &quot;s3://customer<em>bucket/some/prefix/&quot;},</code> </p> <p> <code> &quot;relative/path/to/custdata-1&quot;,</code> </p> <p> <code> &quot;relative/path/custdata-2&quot;,</code> </p> <p> <code> ...</code> </p> <p> <code> &quot;relative/path/custdata-N&quot;</code> </p> <p> <code>]</code> </p> <p> This JSON is equivalent to the following <code>S3Uri</code> list:</p> <p> <code>s3://customer</em>bucket/some/prefix/relative/path/to/custdata-1</code> </p> <p> <code>s3://customer<em>bucket/some/prefix/relative/path/custdata-2</code> </p> <p> <code>...</code> </p> <p> <code>s3://customer</em>bucket/some/prefix/relative/path/custdata-N</code> </p> <p>The complete set of <code>S3Uri</code> in this manifest is the input data for the channel for this data source. The object that each <code>S3Uri</code> points to must be readable by the IAM role that Amazon SageMaker uses to perform tasks on your behalf. </p> </li> </ul></p>
+    #[serde(rename = "S3Uri")]
+    pub s3_uri: String,
+}
+
+/// <p>The Amazon Simple Storage (Amazon S3) location and and security configuration for <code>OfflineStore</code>.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
+pub struct S3StorageConfig {
+    /// <p><p>The AWS Key Management Service (KMS) key ID of the key used to encrypt any objects written into the <code>OfflineStore</code> S3 location.</p> <p>The IAM <code>roleARN</code> that is passed as a parameter to <code>CreateFeatureGroup</code> must have below permissions to the <code>KmsKeyId</code>:</p> <ul> <li> <p> <code>&quot;kms:GenerateDataKey&quot;</code> </p> </li> </ul></p>
+    #[serde(rename = "KmsKeyId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub kms_key_id: Option<String>,
+    /// <p>The S3 URI, or location in Amazon S3, of <code>OfflineStore</code>.</p> <p>S3 URIs have a format similar to the following: <code>s3://example-bucket/prefix/</code>.</p>
     #[serde(rename = "S3Uri")]
     pub s3_uri: String,
 }
@@ -7231,10 +12373,28 @@ pub struct SearchExpression {
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct SearchRecord {
+    #[serde(rename = "Endpoint")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub endpoint: Option<Endpoint>,
     /// <p>The properties of an experiment.</p>
     #[serde(rename = "Experiment")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub experiment: Option<Experiment>,
+    #[serde(rename = "FeatureGroup")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub feature_group: Option<FeatureGroup>,
+    #[serde(rename = "ModelPackage")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub model_package: Option<ModelPackage>,
+    #[serde(rename = "ModelPackageGroup")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub model_package_group: Option<ModelPackageGroup>,
+    #[serde(rename = "Pipeline")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub pipeline: Option<Pipeline>,
+    #[serde(rename = "PipelineExecution")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub pipeline_execution: Option<PipelineExecution>,
     /// <p>The properties of a training job.</p>
     #[serde(rename = "TrainingJob")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -7310,6 +12470,39 @@ pub struct SecondaryStatusTransition {
     pub status_message: Option<String>,
 }
 
+/// <p>Details of a provisioned service catalog product. For information about service catalog, see <a href="https://docs.aws.amazon.com/servicecatalog/latest/adminguide/introduction.html">What is AWS Service Catalog</a>.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct ServiceCatalogProvisionedProductDetails {
+    /// <p>The ID of the provisioned product.</p>
+    #[serde(rename = "ProvisionedProductId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub provisioned_product_id: Option<String>,
+    /// <p><p>The current status of the product.</p> <ul> <li> <p> <code>AVAILABLE</code> - Stable state, ready to perform any operation. The most recent operation succeeded and completed.</p> </li> <li> <p> <code>UNDER<em>CHANGE</code> - Transitive state. Operations performed might not have valid results. Wait for an AVAILABLE status before performing operations.</p> </li> <li> <p> <code>TAINTED</code> - Stable state, ready to perform any operation. The stack has completed the requested operation but is not exactly what was requested. For example, a request to update to a new version failed and the stack rolled back to the current version.</p> </li> <li> <p> <code>ERROR</code> - An unexpected error occurred. The provisioned product exists but the stack is not running. For example, CloudFormation received a parameter value that was not valid and could not launch the stack.</p> </li> <li> <p> <code>PLAN</em>IN_PROGRESS</code> - Transitive state. The plan operations were performed to provision a new product, but resources have not yet been created. After reviewing the list of resources to be created, execute the plan. Wait for an AVAILABLE status before performing operations.</p> </li> </ul></p>
+    #[serde(rename = "ProvisionedProductStatusMessage")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub provisioned_product_status_message: Option<String>,
+}
+
+/// <p>Details that you specify to provision a service catalog product. For information about service catalog, see .<a href="https://docs.aws.amazon.com/servicecatalog/latest/adminguide/introduction.html">What is AWS Service Catalog</a>.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
+pub struct ServiceCatalogProvisioningDetails {
+    /// <p>The path identifier of the product. This value is optional if the product has a default path, and required if the product has more than one path. </p>
+    #[serde(rename = "PathId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub path_id: Option<String>,
+    /// <p>The ID of the product to provision.</p>
+    #[serde(rename = "ProductId")]
+    pub product_id: String,
+    /// <p>The ID of the provisioning artifact.</p>
+    #[serde(rename = "ProvisioningArtifactId")]
+    pub provisioning_artifact_id: String,
+    /// <p>A list of key value pairs that you specify when you provision a product.</p>
+    #[serde(rename = "ProvisioningParameters")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub provisioning_parameters: Option<Vec<ProvisioningParameter>>,
+}
+
 /// <p>Specifies options when sharing an Amazon SageMaker Studio notebook. These settings are specified as part of <code>DefaultUserSettings</code> when the <a>CreateDomain</a> API is called, and as part of <code>UserSettings</code> when the <a>CreateUserProfile</a> API is called.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct SharingSettings {
@@ -7321,7 +12514,7 @@ pub struct SharingSettings {
     #[serde(rename = "S3KmsKeyId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub s3_kms_key_id: Option<String>,
-    /// <p>When <code>NotebookOutputOption</code> is <code>Allowed</code>, the Amazon S3 bucket used to save the notebook cell output. If <code>S3OutputPath</code> isn't specified, a default bucket is used.</p>
+    /// <p>When <code>NotebookOutputOption</code> is <code>Allowed</code>, the Amazon S3 bucket used to save the notebook cell output.</p>
     #[serde(rename = "S3OutputPath")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub s3_output_path: Option<String>,
@@ -7341,7 +12534,7 @@ pub struct SourceAlgorithm {
     /// <p>The name of an algorithm that was used to create the model package. The algorithm must be either an algorithm resource in your Amazon SageMaker account or an algorithm in AWS Marketplace that you are subscribed to.</p>
     #[serde(rename = "AlgorithmName")]
     pub algorithm_name: String,
-    /// <p>The Amazon S3 path where the model artifacts, which result from model training, are stored. This path must point to a single <code>gzip</code> compressed tar archive (<code>.tar.gz</code> suffix).</p>
+    /// <p><p>The Amazon S3 path where the model artifacts, which result from model training, are stored. This path must point to a single <code>gzip</code> compressed tar archive (<code>.tar.gz</code> suffix).</p> <note> <p>The model artifacts must be in an S3 bucket that is in the same region as the algorithm.</p> </note></p>
     #[serde(rename = "ModelDataUrl")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub model_data_url: Option<String>,
@@ -7355,7 +12548,7 @@ pub struct SourceAlgorithmSpecification {
     pub source_algorithms: Vec<SourceAlgorithm>,
 }
 
-/// <p>A list of IP address ranges (<a href="https://docs.aws.amazon.com/vpc/latest/userguide/VPC_Subnets.html">CIDRs</a>). Used to create an allow list of IP addresses for a private workforce. For more information, see .</p>
+/// <p>A list of IP address ranges (<a href="https://docs.aws.amazon.com/vpc/latest/userguide/VPC_Subnets.html">CIDRs</a>). Used to create an allow list of IP addresses for a private workforce. Workers will only be able to login to their worker portal from an IP address within this range. By default, a workforce isn't restricted to specific IP addresses.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct SourceIpConfig {
     /// <p><p>A list of one to ten <a href="https://docs.aws.amazon.com/vpc/latest/userguide/VPC_Subnets.html">Classless Inter-Domain Routing</a> (CIDR) values.</p> <p>Maximum: Ten CIDR values</p> <note> <p>The following Length Constraints apply to individual CIDR values in the CIDR value list.</p> </note></p>
@@ -7381,6 +12574,38 @@ pub struct StartNotebookInstanceInput {
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct StartPipelineExecutionRequest {
+    /// <p>A unique, case-sensitive identifier that you provide to ensure the idempotency of the operation. An idempotent operation completes no more than one time.</p>
+    #[serde(rename = "ClientRequestToken")]
+    pub client_request_token: String,
+    /// <p>The description of the pipeline execution.</p>
+    #[serde(rename = "PipelineExecutionDescription")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub pipeline_execution_description: Option<String>,
+    /// <p>The display name of the pipeline execution.</p>
+    #[serde(rename = "PipelineExecutionDisplayName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub pipeline_execution_display_name: Option<String>,
+    /// <p>The name of the pipeline.</p>
+    #[serde(rename = "PipelineName")]
+    pub pipeline_name: String,
+    /// <p>Contains a list of pipeline parameters. This list can be empty. </p>
+    #[serde(rename = "PipelineParameters")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub pipeline_parameters: Option<Vec<Parameter>>,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct StartPipelineExecutionResponse {
+    /// <p>The Amazon Resource Name (ARN) of the pipeline execution.</p>
+    #[serde(rename = "PipelineExecutionArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub pipeline_execution_arn: Option<String>,
+}
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct StopAutoMLJobRequest {
     /// <p>The name of the object you are requesting.</p>
     #[serde(rename = "AutoMLJobName")]
@@ -7393,6 +12618,14 @@ pub struct StopCompilationJobRequest {
     /// <p>The name of the model compilation job to stop.</p>
     #[serde(rename = "CompilationJobName")]
     pub compilation_job_name: String,
+}
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct StopEdgePackagingJobRequest {
+    /// <p>The name of the edge packaging job.</p>
+    #[serde(rename = "EdgePackagingJobName")]
+    pub edge_packaging_job_name: String,
 }
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
@@ -7425,6 +12658,26 @@ pub struct StopNotebookInstanceInput {
     /// <p>The name of the notebook instance to terminate.</p>
     #[serde(rename = "NotebookInstanceName")]
     pub notebook_instance_name: String,
+}
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct StopPipelineExecutionRequest {
+    /// <p>A unique, case-sensitive identifier that you provide to ensure the idempotency of the operation. An idempotent operation completes no more than one time.</p>
+    #[serde(rename = "ClientRequestToken")]
+    pub client_request_token: String,
+    /// <p>The Amazon Resource Name (ARN) of the pipeline execution.</p>
+    #[serde(rename = "PipelineExecutionArn")]
+    pub pipeline_execution_arn: String,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct StopPipelineExecutionResponse {
+    /// <p>The Amazon Resource Name (ARN) of the pipeline execution.</p>
+    #[serde(rename = "PipelineExecutionArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub pipeline_execution_arn: Option<String>,
 }
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
@@ -7510,6 +12763,21 @@ pub struct Tag {
     pub value: String,
 }
 
+/// <p>Contains information about a target platform that you want your model to run on, such as OS, architecture, and accelerators. It is an alternative of <code>TargetDevice</code>.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
+pub struct TargetPlatform {
+    /// <p><p>Specifies a target platform accelerator (optional).</p> <ul> <li> <p> <code>NVIDIA</code>: Nvidia graphics processing unit. It also requires <code>gpu-code</code>, <code>trt-ver</code>, <code>cuda-ver</code> compiler options</p> </li> <li> <p> <code>MALI</code>: ARM Mali graphics processor</p> </li> <li> <p> <code>INTEL_GRAPHICS</code>: Integrated Intel graphics</p> </li> </ul></p>
+    #[serde(rename = "Accelerator")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub accelerator: Option<String>,
+    /// <p><p>Specifies a target platform architecture.</p> <ul> <li> <p> <code>X86<em>64</code>: 64-bit version of the x86 instruction set.</p> </li> <li> <p> <code>X86</code>: 32-bit version of the x86 instruction set.</p> </li> <li> <p> <code>ARM64</code>: ARMv8 64-bit CPU.</p> </li> <li> <p> <code>ARM</em>EABIHF</code>: ARMv7 32-bit, Hard Float.</p> </li> <li> <p> <code>ARM_EABI</code>: ARMv7 32-bit, Soft Float. Used by Android 32-bit ARM platform.</p> </li> </ul></p>
+    #[serde(rename = "Arch")]
+    pub arch: String,
+    /// <p><p>Specifies a target platform OS.</p> <ul> <li> <p> <code>LINUX</code>: Linux-based operating systems.</p> </li> <li> <p> <code>ANDROID</code>: Android operating systems. Android API level can be specified using the <code>ANDROID<em>PLATFORM</code> compiler option. For example, <code>&quot;CompilerOptions&quot;: {&#39;ANDROID</em>PLATFORM&#39;: 28}</code> </p> </li> </ul></p>
+    #[serde(rename = "Os")]
+    pub os: String,
+}
+
 /// <p>The TensorBoard app settings.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct TensorBoardAppSettings {
@@ -7519,7 +12787,7 @@ pub struct TensorBoardAppSettings {
     pub default_resource_spec: Option<ResourceSpec>,
 }
 
-/// <p>Configuration of storage locations for TensorBoard output.</p>
+/// <p>Configuration of storage locations for the Debugger TensorBoard output data.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct TensorBoardOutputConfig {
     /// <p>Path to local storage location for tensorBoard output. Defaults to <code>/opt/ml/output/tensorboard</code>.</p>
@@ -7529,6 +12797,21 @@ pub struct TensorBoardOutputConfig {
     /// <p>Path to Amazon S3 storage location for TensorBoard output.</p>
     #[serde(rename = "S3OutputPath")]
     pub s3_output_path: String,
+}
+
+/// <p>Currently, the <code>TrafficRoutingConfig</code> API is not supported.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
+pub struct TrafficRoutingConfig {
+    /// <p><p/></p>
+    #[serde(rename = "CanarySize")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub canary_size: Option<CapacitySize>,
+    /// <p><p/></p>
+    #[serde(rename = "Type")]
+    pub type_: String,
+    /// <p><p/></p>
+    #[serde(rename = "WaitIntervalInSeconds")]
+    pub wait_interval_in_seconds: i64,
 }
 
 /// <p>Contains information about a training job.</p>
@@ -7632,7 +12915,7 @@ pub struct TrainingJob {
     #[serde(rename = "StoppingCondition")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub stopping_condition: Option<StoppingCondition>,
-    /// <p>An array of key-value pairs. For more information, see <a href="https://docs.aws.amazon.com/awsaccountbilling/latest/aboutv2/cost-alloc-tags.html#allocation-what">Using Cost Allocation Tags</a> in the <i>AWS Billing and Cost Management User Guide</i>.</p>
+    /// <p>An array of key-value pairs. You can use tags to categorize your AWS resources in different ways, for example, by purpose, owner, or environment. For more information, see <a href="https://docs.aws.amazon.com/general/latest/gr/aws_tagging.html">Tagging AWS Resources</a>.</p>
     #[serde(rename = "Tags")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub tags: Option<Vec<Tag>>,
@@ -7723,6 +13006,16 @@ pub struct TrainingJobStatusCounters {
     pub stopped: Option<i64>,
 }
 
+/// <p>Metadata for a training job step.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct TrainingJobStepMetadata {
+    /// <p>The Amazon Resource Name (ARN) of the training job that was run by this step execution.</p>
+    #[serde(rename = "Arn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub arn: Option<String>,
+}
+
 /// <p>Provides summary information about a training job.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
@@ -7805,10 +13098,94 @@ pub struct TransformInput {
     /// <p>Describes the location of the channel data, which is, the S3 location of the input data that the model can consume.</p>
     #[serde(rename = "DataSource")]
     pub data_source: TransformDataSource,
-    /// <p><p>The method to use to split the transform job&#39;s data files into smaller batches. Splitting is necessary when the total size of each object is too large to fit in a single request. You can also use data splitting to improve performance by processing multiple concurrent mini-batches. The default value for <code>SplitType</code> is <code>None</code>, which indicates that input data files are not split, and request payloads contain the entire contents of an input object. Set the value of this parameter to <code>Line</code> to split records on a newline character boundary. <code>SplitType</code> also supports a number of record-oriented binary data formats.</p> <p>When splitting is enabled, the size of a mini-batch depends on the values of the <code>BatchStrategy</code> and <code>MaxPayloadInMB</code> parameters. When the value of <code>BatchStrategy</code> is <code>MultiRecord</code>, Amazon SageMaker sends the maximum number of records in each request, up to the <code>MaxPayloadInMB</code> limit. If the value of <code>BatchStrategy</code> is <code>SingleRecord</code>, Amazon SageMaker sends individual records in each request.</p> <note> <p>Some data formats represent a record as a binary payload wrapped with extra padding bytes. When splitting is applied to a binary data format, padding is removed if the value of <code>BatchStrategy</code> is set to <code>SingleRecord</code>. Padding is not removed if the value of <code>BatchStrategy</code> is set to <code>MultiRecord</code>.</p> <p>For more information about <code>RecordIO</code>, see <a href="https://mxnet.apache.org/api/faq/recordio">Create a Dataset Using RecordIO</a> in the MXNet documentation. For more information about <code>TFRecord</code>, see <a href="https://www.tensorflow.org/guide/datasets#consuming_tfrecord_data">Consuming TFRecord data</a> in the TensorFlow documentation.</p> </note></p>
+    /// <p><p>The method to use to split the transform job&#39;s data files into smaller batches. Splitting is necessary when the total size of each object is too large to fit in a single request. You can also use data splitting to improve performance by processing multiple concurrent mini-batches. The default value for <code>SplitType</code> is <code>None</code>, which indicates that input data files are not split, and request payloads contain the entire contents of an input object. Set the value of this parameter to <code>Line</code> to split records on a newline character boundary. <code>SplitType</code> also supports a number of record-oriented binary data formats. Currently, the supported record formats are:</p> <ul> <li> <p>RecordIO</p> </li> <li> <p>TFRecord</p> </li> </ul> <p>When splitting is enabled, the size of a mini-batch depends on the values of the <code>BatchStrategy</code> and <code>MaxPayloadInMB</code> parameters. When the value of <code>BatchStrategy</code> is <code>MultiRecord</code>, Amazon SageMaker sends the maximum number of records in each request, up to the <code>MaxPayloadInMB</code> limit. If the value of <code>BatchStrategy</code> is <code>SingleRecord</code>, Amazon SageMaker sends individual records in each request.</p> <note> <p>Some data formats represent a record as a binary payload wrapped with extra padding bytes. When splitting is applied to a binary data format, padding is removed if the value of <code>BatchStrategy</code> is set to <code>SingleRecord</code>. Padding is not removed if the value of <code>BatchStrategy</code> is set to <code>MultiRecord</code>.</p> <p>For more information about <code>RecordIO</code>, see <a href="https://mxnet.apache.org/api/faq/recordio">Create a Dataset Using RecordIO</a> in the MXNet documentation. For more information about <code>TFRecord</code>, see <a href="https://www.tensorflow.org/guide/datasets#consuming_tfrecord_data">Consuming TFRecord data</a> in the TensorFlow documentation.</p> </note></p>
     #[serde(rename = "SplitType")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub split_type: Option<String>,
+}
+
+/// <p>A batch transform job. For information about SageMaker batch transform, see <a href="https://docs.aws.amazon.com/sagemaker/latest/dg/batch-transform.html">Use Batch Transform</a>.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct TransformJob {
+    /// <p>The Amazon Resource Name (ARN) of the AutoML job that created the transform job.</p>
+    #[serde(rename = "AutoMLJobArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub auto_ml_job_arn: Option<String>,
+    /// <p>Specifies the number of records to include in a mini-batch for an HTTP inference request. A record is a single unit of input data that inference can be made on. For example, a single line in a CSV file is a record.</p>
+    #[serde(rename = "BatchStrategy")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub batch_strategy: Option<String>,
+    /// <p>A timestamp that shows when the transform Job was created.</p>
+    #[serde(rename = "CreationTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub creation_time: Option<f64>,
+    #[serde(rename = "DataProcessing")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub data_processing: Option<DataProcessing>,
+    /// <p>The environment variables to set in the Docker container. We support up to 16 key and values entries in the map.</p>
+    #[serde(rename = "Environment")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub environment: Option<::std::collections::HashMap<String, String>>,
+    #[serde(rename = "ExperimentConfig")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub experiment_config: Option<ExperimentConfig>,
+    /// <p>If the transform job failed, the reason it failed.</p>
+    #[serde(rename = "FailureReason")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub failure_reason: Option<String>,
+    /// <p>The Amazon Resource Name (ARN) of the labeling job that created the transform job.</p>
+    #[serde(rename = "LabelingJobArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub labeling_job_arn: Option<String>,
+    /// <p>The maximum number of parallel requests that can be sent to each instance in a transform job. If <code>MaxConcurrentTransforms</code> is set to 0 or left unset, SageMaker checks the optional execution-parameters to determine the settings for your chosen algorithm. If the execution-parameters endpoint is not enabled, the default value is 1. For built-in algorithms, you don't need to set a value for <code>MaxConcurrentTransforms</code>.</p>
+    #[serde(rename = "MaxConcurrentTransforms")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub max_concurrent_transforms: Option<i64>,
+    /// <p>The maximum allowed size of the payload, in MB. A payload is the data portion of a record (without metadata). The value in <code>MaxPayloadInMB</code> must be greater than, or equal to, the size of a single record. To estimate the size of a record in MB, divide the size of your dataset by the number of records. To ensure that the records fit within the maximum payload size, we recommend using a slightly larger value. The default value is 6 MB. For cases where the payload might be arbitrarily large and is transmitted using HTTP chunked encoding, set the value to 0. This feature works only in supported algorithms. Currently, SageMaker built-in algorithms do not support HTTP chunked encoding.</p>
+    #[serde(rename = "MaxPayloadInMB")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub max_payload_in_mb: Option<i64>,
+    #[serde(rename = "ModelClientConfig")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub model_client_config: Option<ModelClientConfig>,
+    /// <p>The name of the model associated with the transform job.</p>
+    #[serde(rename = "ModelName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub model_name: Option<String>,
+    /// <p>A list of tags associated with the transform job.</p>
+    #[serde(rename = "Tags")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub tags: Option<Vec<Tag>>,
+    /// <p>Indicates when the transform job has been completed, or has stopped or failed. You are billed for the time interval between this time and the value of <code>TransformStartTime</code>.</p>
+    #[serde(rename = "TransformEndTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub transform_end_time: Option<f64>,
+    #[serde(rename = "TransformInput")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub transform_input: Option<TransformInput>,
+    /// <p>The Amazon Resource Name (ARN) of the transform job.</p>
+    #[serde(rename = "TransformJobArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub transform_job_arn: Option<String>,
+    /// <p>The name of the transform job.</p>
+    #[serde(rename = "TransformJobName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub transform_job_name: Option<String>,
+    /// <p><p>The status of the transform job.</p> <p>Transform job statuses are:</p> <ul> <li> <p> <code>InProgress</code> - The job is in progress.</p> </li> <li> <p> <code>Completed</code> - The job has completed.</p> </li> <li> <p> <code>Failed</code> - The transform job has failed. To see the reason for the failure, see the <code>FailureReason</code> field in the response to a <code>DescribeTransformJob</code> call.</p> </li> <li> <p> <code>Stopping</code> - The transform job is stopping.</p> </li> <li> <p> <code>Stopped</code> - The transform job has stopped.</p> </li> </ul></p>
+    #[serde(rename = "TransformJobStatus")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub transform_job_status: Option<String>,
+    #[serde(rename = "TransformOutput")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub transform_output: Option<TransformOutput>,
+    #[serde(rename = "TransformResources")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub transform_resources: Option<TransformResources>,
+    /// <p>Indicates when the transform job starts on ML instances. You are billed for the time interval between this time and the value of <code>TransformEndTime</code>.</p>
+    #[serde(rename = "TransformStartTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub transform_start_time: Option<f64>,
 }
 
 /// <p>Defines the input needed to run a transform job using the inference specification specified in the algorithm.</p>
@@ -7839,6 +13216,16 @@ pub struct TransformJobDefinition {
     /// <p>Identifies the ML compute instances for the transform job.</p>
     #[serde(rename = "TransformResources")]
     pub transform_resources: TransformResources,
+}
+
+/// <p>Metadata for a transform job step.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct TransformJobStepMetadata {
+    /// <p>The Amazon Resource Name (ARN) of the transform job that was run by this step execution.</p>
+    #[serde(rename = "Arn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub arn: Option<String>,
 }
 
 /// <p>Provides a summary of a transform job. Multiple <code>TransformJobSummary</code> objects are returned as a list after in response to a <a>ListTransformJobs</a> call.</p>
@@ -7912,7 +13299,7 @@ pub struct TransformS3DataSource {
     /// <p>If you choose <code>S3Prefix</code>, <code>S3Uri</code> identifies a key name prefix. Amazon SageMaker uses all objects with the specified key name prefix for batch transform. </p> <p>If you choose <code>ManifestFile</code>, <code>S3Uri</code> identifies an object that is a manifest file containing a list of object keys that you want Amazon SageMaker to use for batch transform. </p> <p>The following values are compatible: <code>ManifestFile</code>, <code>S3Prefix</code> </p> <p>The following value is not compatible: <code>AugmentedManifestFile</code> </p>
     #[serde(rename = "S3DataType")]
     pub s3_data_type: String,
-    /// <p><p>Depending on the value specified for the <code>S3DataType</code>, identifies either a key name prefix or a manifest. For example:</p> <ul> <li> <p> A key name prefix might look like this: <code>s3://bucketname/exampleprefix</code>. </p> </li> <li> <p> A manifest might look like this: <code>s3://bucketname/example.manifest</code> </p> <p> The manifest is an S3 object which is a JSON file with the following format: </p> <p> <code>[ {&quot;prefix&quot;: &quot;s3://customer<em>bucket/some/prefix/&quot;},</code> </p> <p> <code>&quot;relative/path/to/custdata-1&quot;,</code> </p> <p> <code>&quot;relative/path/custdata-2&quot;,</code> </p> <p> <code>...</code> </p> <p> <code>&quot;relative/path/custdata-N&quot;</code> </p> <p> <code>]</code> </p> <p> The preceding JSON matches the following <code>s3Uris</code>: </p> <p> <code>s3://customer</em>bucket/some/prefix/relative/path/to/custdata-1</code> </p> <p> <code>s3://customer<em>bucket/some/prefix/relative/path/custdata-2</code> </p> <p> <code>...</code> </p> <p> <code>s3://customer</em>bucket/some/prefix/relative/path/custdata-N</code> </p> <p> The complete set of <code>S3Uris</code> in this manifest constitutes the input data for the channel for this datasource. The object that each <code>S3Uris</code> points to must be readable by the IAM role that Amazon SageMaker uses to perform tasks on your behalf.</p> </li> </ul></p>
+    /// <p><p>Depending on the value specified for the <code>S3DataType</code>, identifies either a key name prefix or a manifest. For example:</p> <ul> <li> <p> A key name prefix might look like this: <code>s3://bucketname/exampleprefix</code>. </p> </li> <li> <p> A manifest might look like this: <code>s3://bucketname/example.manifest</code> </p> <p> The manifest is an S3 object which is a JSON file with the following format: </p> <p> <code>[ {&quot;prefix&quot;: &quot;s3://customer<em>bucket/some/prefix/&quot;},</code> </p> <p> <code>&quot;relative/path/to/custdata-1&quot;,</code> </p> <p> <code>&quot;relative/path/custdata-2&quot;,</code> </p> <p> <code>...</code> </p> <p> <code>&quot;relative/path/custdata-N&quot;</code> </p> <p> <code>]</code> </p> <p> The preceding JSON matches the following <code>S3Uris</code>: </p> <p> <code>s3://customer</em>bucket/some/prefix/relative/path/to/custdata-1</code> </p> <p> <code>s3://customer<em>bucket/some/prefix/relative/path/custdata-2</code> </p> <p> <code>...</code> </p> <p> <code>s3://customer</em>bucket/some/prefix/relative/path/custdata-N</code> </p> <p> The complete set of <code>S3Uris</code> in this manifest constitutes the input data for the channel for this datasource. The object that each <code>S3Uris</code> points to must be readable by the IAM role that Amazon SageMaker uses to perform tasks on your behalf.</p> </li> </ul></p>
     #[serde(rename = "S3Uri")]
     pub s3_uri: String,
 }
@@ -7943,6 +13330,9 @@ pub struct Trial {
     #[serde(rename = "LastModifiedTime")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub last_modified_time: Option<f64>,
+    #[serde(rename = "MetadataProperties")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub metadata_properties: Option<MetadataProperties>,
     #[serde(rename = "Source")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub source: Option<TrialSource>,
@@ -7994,6 +13384,9 @@ pub struct TrialComponent {
     #[serde(rename = "LastModifiedTime")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub last_modified_time: Option<f64>,
+    #[serde(rename = "MetadataProperties")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub metadata_properties: Option<MetadataProperties>,
     /// <p>The metrics for the component.</p>
     #[serde(rename = "Metrics")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -8159,6 +13552,10 @@ pub struct TrialComponentSourceDetail {
     #[serde(rename = "TrainingJob")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub training_job: Option<TrainingJob>,
+    /// <p>Information about a transform job that's the source of a trial component.</p>
+    #[serde(rename = "TransformJob")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub transform_job: Option<TransformJob>,
 }
 
 /// <p>The status of the trial component.</p>
@@ -8268,7 +13665,7 @@ pub struct TrialSummary {
 /// <p>The job completion criteria.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct TuningJobCompletionCriteria {
-    /// <p>The objective metric's value.</p>
+    /// <p>The value of the objective metric.</p>
     #[serde(rename = "TargetObjectiveMetricValue")]
     pub target_objective_metric_value: f32,
 }
@@ -8293,7 +13690,7 @@ pub struct USD {
 /// <p>Provided configuration information for the worker UI for a labeling job. </p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct UiConfig {
-    /// <p><p>The ARN of the worker task template used to render the worker UI and tools for labeling job tasks.</p> <p>Use this parameter when you are creating a labeling job for 3D point cloud labeling modalities. Use your labeling job task type to select one of the following ARN&#39;s and use it with this parameter when you create a labeling job. Replace <code>aws-region</code> with the AWS region you are creating your labeling job in.</p> <p>Use this <code>HumanTaskUiArn</code> for 3D point cloud object detection and 3D point cloud object detection adjustment labeling jobs. </p> <ul> <li> <p> <code>arn:aws:sagemaker:aws-region:394669845002:human-task-ui/PointCloudObjectDetection</code> </p> </li> </ul> <p> Use this <code>HumanTaskUiArn</code> for 3D point cloud object tracking and 3D point cloud object tracking adjustment labeling jobs. </p> <ul> <li> <p> <code>arn:aws:sagemaker:aws-region:394669845002:human-task-ui/PointCloudObjectTracking</code> </p> </li> </ul> <p> Use this <code>HumanTaskUiArn</code> for 3D point cloud semantic segmentation and 3D point cloud semantic segmentation adjustment labeling jobs.</p> <ul> <li> <p> <code>arn:aws:sagemaker:aws-region:394669845002:human-task-ui/PointCloudSemanticSegmentation</code> </p> </li> </ul></p>
+    /// <p><p>The ARN of the worker task template used to render the worker UI and tools for labeling job tasks.</p> <p>Use this parameter when you are creating a labeling job for 3D point cloud and video fram labeling jobs. Use your labeling job task type to select one of the following ARN&#39;s and use it with this parameter when you create a labeling job. Replace <code>aws-region</code> with the AWS region you are creating your labeling job in.</p> <p> <b>3D Point Cloud HumanTaskUiArns</b> </p> <p>Use this <code>HumanTaskUiArn</code> for 3D point cloud object detection and 3D point cloud object detection adjustment labeling jobs. </p> <ul> <li> <p> <code>arn:aws:sagemaker:aws-region:394669845002:human-task-ui/PointCloudObjectDetection</code> </p> </li> </ul> <p> Use this <code>HumanTaskUiArn</code> for 3D point cloud object tracking and 3D point cloud object tracking adjustment labeling jobs. </p> <ul> <li> <p> <code>arn:aws:sagemaker:aws-region:394669845002:human-task-ui/PointCloudObjectTracking</code> </p> </li> </ul> <p> Use this <code>HumanTaskUiArn</code> for 3D point cloud semantic segmentation and 3D point cloud semantic segmentation adjustment labeling jobs.</p> <ul> <li> <p> <code>arn:aws:sagemaker:aws-region:394669845002:human-task-ui/PointCloudSemanticSegmentation</code> </p> </li> </ul> <p> <b>Video Frame HumanTaskUiArns</b> </p> <p>Use this <code>HumanTaskUiArn</code> for video frame object detection and video frame object detection adjustment labeling jobs. </p> <ul> <li> <p> <code>arn:aws:sagemaker:region:394669845002:human-task-ui/VideoObjectDetection</code> </p> </li> </ul> <p> Use this <code>HumanTaskUiArn</code> for video frame object tracking and video frame object tracking adjustment labeling jobs. </p> <ul> <li> <p> <code>arn:aws:sagemaker:aws-region:394669845002:human-task-ui/VideoObjectTracking</code> </p> </li> </ul></p>
     #[serde(rename = "HumanTaskUiArn")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub human_task_ui_arn: Option<String>,
@@ -8328,6 +13725,89 @@ pub struct UiTemplateInfo {
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct UpdateActionRequest {
+    /// <p>The name of the action to update.</p>
+    #[serde(rename = "ActionName")]
+    pub action_name: String,
+    /// <p>The new description for the action.</p>
+    #[serde(rename = "Description")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub description: Option<String>,
+    /// <p>The new list of properties. Overwrites the current property list.</p>
+    #[serde(rename = "Properties")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub properties: Option<::std::collections::HashMap<String, String>>,
+    /// <p>A list of properties to remove.</p>
+    #[serde(rename = "PropertiesToRemove")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub properties_to_remove: Option<Vec<String>>,
+    /// <p>The new status for the action.</p>
+    #[serde(rename = "Status")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub status: Option<String>,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct UpdateActionResponse {
+    /// <p>The Amazon Resource Name (ARN) of the action.</p>
+    #[serde(rename = "ActionArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub action_arn: Option<String>,
+}
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct UpdateAppImageConfigRequest {
+    /// <p>The name of the AppImageConfig to update.</p>
+    #[serde(rename = "AppImageConfigName")]
+    pub app_image_config_name: String,
+    /// <p>The new KernelGateway app to run on the image.</p>
+    #[serde(rename = "KernelGatewayImageConfig")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub kernel_gateway_image_config: Option<KernelGatewayImageConfig>,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct UpdateAppImageConfigResponse {
+    /// <p>The Amazon Resource Name (ARN) for the AppImageConfig.</p>
+    #[serde(rename = "AppImageConfigArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub app_image_config_arn: Option<String>,
+}
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct UpdateArtifactRequest {
+    /// <p>The Amazon Resource Name (ARN) of the artifact to update.</p>
+    #[serde(rename = "ArtifactArn")]
+    pub artifact_arn: String,
+    /// <p>The new name for the artifact.</p>
+    #[serde(rename = "ArtifactName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub artifact_name: Option<String>,
+    /// <p>The new list of properties. Overwrites the current property list.</p>
+    #[serde(rename = "Properties")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub properties: Option<::std::collections::HashMap<String, String>>,
+    /// <p>A list of properties to remove.</p>
+    #[serde(rename = "PropertiesToRemove")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub properties_to_remove: Option<Vec<String>>,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct UpdateArtifactResponse {
+    /// <p>The Amazon Resource Name (ARN) of the artifact.</p>
+    #[serde(rename = "ArtifactArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub artifact_arn: Option<String>,
+}
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateCodeRepositoryInput {
     /// <p>The name of the Git repository to update.</p>
     #[serde(rename = "CodeRepositoryName")]
@@ -8344,6 +13824,65 @@ pub struct UpdateCodeRepositoryOutput {
     /// <p>The ARN of the Git repository.</p>
     #[serde(rename = "CodeRepositoryArn")]
     pub code_repository_arn: String,
+}
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct UpdateContextRequest {
+    /// <p>The name of the context to update.</p>
+    #[serde(rename = "ContextName")]
+    pub context_name: String,
+    /// <p>The new description for the context.</p>
+    #[serde(rename = "Description")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub description: Option<String>,
+    /// <p>The new list of properties. Overwrites the current property list.</p>
+    #[serde(rename = "Properties")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub properties: Option<::std::collections::HashMap<String, String>>,
+    /// <p>A list of properties to remove.</p>
+    #[serde(rename = "PropertiesToRemove")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub properties_to_remove: Option<Vec<String>>,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct UpdateContextResponse {
+    /// <p>The Amazon Resource Name (ARN) of the context.</p>
+    #[serde(rename = "ContextArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub context_arn: Option<String>,
+}
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct UpdateDeviceFleetRequest {
+    /// <p>Description of the fleet.</p>
+    #[serde(rename = "Description")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub description: Option<String>,
+    /// <p>The name of the fleet.</p>
+    #[serde(rename = "DeviceFleetName")]
+    pub device_fleet_name: String,
+    /// <p>Output configuration for storing sample data collected by the fleet.</p>
+    #[serde(rename = "OutputConfig")]
+    pub output_config: EdgeOutputConfig,
+    /// <p>The Amazon Resource Name (ARN) of the device.</p>
+    #[serde(rename = "RoleArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub role_arn: Option<String>,
+}
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct UpdateDevicesRequest {
+    /// <p>The name of the fleet the devices belong to.</p>
+    #[serde(rename = "DeviceFleetName")]
+    pub device_fleet_name: String,
+    /// <p>List of devices to register with Edge Manager agent.</p>
+    #[serde(rename = "Devices")]
+    pub devices: Vec<Device>,
 }
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
@@ -8370,6 +13909,10 @@ pub struct UpdateDomainResponse {
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateEndpointInput {
+    /// <p>The deployment configuration for the endpoint to be updated.</p>
+    #[serde(rename = "DeploymentConfig")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub deployment_config: Option<DeploymentConfig>,
     /// <p>The name of the new endpoint configuration.</p>
     #[serde(rename = "EndpointConfigName")]
     pub endpoint_config_name: String,
@@ -8380,7 +13923,7 @@ pub struct UpdateEndpointInput {
     #[serde(rename = "ExcludeRetainedVariantProperties")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub exclude_retained_variant_properties: Option<Vec<VariantProperty>>,
-    /// <p>When updating endpoint resources, enables or disables the retention of variant properties, such as the instance count or the variant weight. To retain the variant properties of an endpoint when updating it, set <code>RetainAllVariantProperties</code> to <code>true</code>. To use the variant properties specified in a new <code>EndpointConfig</code> call when updating an endpoint, set <code>RetainAllVariantProperties</code> to <code>false</code>.</p>
+    /// <p>When updating endpoint resources, enables or disables the retention of <a href="https://docs.aws.amazon.com/sagemaker/latest/APIReference/API_VariantProperty.html">variant properties</a>, such as the instance count or the variant weight. To retain the variant properties of an endpoint when updating it, set <code>RetainAllVariantProperties</code> to <code>true</code>. To use the variant properties specified in a new <code>EndpointConfig</code> call when updating an endpoint, set <code>RetainAllVariantProperties</code> to <code>false</code>. The default is <code>false</code>.</p>
     #[serde(rename = "RetainAllVariantProperties")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub retain_all_variant_properties: Option<bool>,
@@ -8436,6 +13979,62 @@ pub struct UpdateExperimentResponse {
     #[serde(rename = "ExperimentArn")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub experiment_arn: Option<String>,
+}
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct UpdateImageRequest {
+    /// <p>A list of properties to delete. Only the <code>Description</code> and <code>DisplayName</code> properties can be deleted.</p>
+    #[serde(rename = "DeleteProperties")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub delete_properties: Option<Vec<String>>,
+    /// <p>The new description for the image.</p>
+    #[serde(rename = "Description")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub description: Option<String>,
+    /// <p>The new display name for the image.</p>
+    #[serde(rename = "DisplayName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub display_name: Option<String>,
+    /// <p>The name of the image to update.</p>
+    #[serde(rename = "ImageName")]
+    pub image_name: String,
+    /// <p>The new Amazon Resource Name (ARN) for the IAM role that enables Amazon SageMaker to perform tasks on your behalf.</p>
+    #[serde(rename = "RoleArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub role_arn: Option<String>,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct UpdateImageResponse {
+    /// <p>The Amazon Resource Name (ARN) of the image.</p>
+    #[serde(rename = "ImageArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub image_arn: Option<String>,
+}
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct UpdateModelPackageInput {
+    /// <p>A description for the approval status of the model.</p>
+    #[serde(rename = "ApprovalDescription")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub approval_description: Option<String>,
+    /// <p>The approval status of the model.</p>
+    #[serde(rename = "ModelApprovalStatus")]
+    pub model_approval_status: String,
+    /// <p>The Amazon Resource Name (ARN) of the model.</p>
+    #[serde(rename = "ModelPackageArn")]
+    pub model_package_arn: String,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct UpdateModelPackageOutput {
+    /// <p>The Amazon Resource Name (ARN) of the model.</p>
+    #[serde(rename = "ModelPackageArn")]
+    pub model_package_arn: String,
 }
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
@@ -8536,6 +14135,88 @@ pub struct UpdateNotebookInstanceLifecycleConfigOutput {}
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateNotebookInstanceOutput {}
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct UpdatePipelineExecutionRequest {
+    /// <p>The Amazon Resource Name (ARN) of the pipeline execution.</p>
+    #[serde(rename = "PipelineExecutionArn")]
+    pub pipeline_execution_arn: String,
+    /// <p>The description of the pipeline execution.</p>
+    #[serde(rename = "PipelineExecutionDescription")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub pipeline_execution_description: Option<String>,
+    /// <p>The display name of the pipeline execution.</p>
+    #[serde(rename = "PipelineExecutionDisplayName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub pipeline_execution_display_name: Option<String>,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct UpdatePipelineExecutionResponse {
+    /// <p>The Amazon Resource Name (ARN) of the updated pipeline execution.</p>
+    #[serde(rename = "PipelineExecutionArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub pipeline_execution_arn: Option<String>,
+}
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct UpdatePipelineRequest {
+    /// <p>The JSON pipeline definition.</p>
+    #[serde(rename = "PipelineDefinition")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub pipeline_definition: Option<String>,
+    /// <p>The description of the pipeline.</p>
+    #[serde(rename = "PipelineDescription")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub pipeline_description: Option<String>,
+    /// <p>The display name of the pipeline.</p>
+    #[serde(rename = "PipelineDisplayName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub pipeline_display_name: Option<String>,
+    /// <p>The name of the pipeline to update.</p>
+    #[serde(rename = "PipelineName")]
+    pub pipeline_name: String,
+    /// <p>The Amazon Resource Name (ARN) that the pipeline uses to execute.</p>
+    #[serde(rename = "RoleArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub role_arn: Option<String>,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct UpdatePipelineResponse {
+    /// <p>The Amazon Resource Name (ARN) of the updated pipeline.</p>
+    #[serde(rename = "PipelineArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub pipeline_arn: Option<String>,
+}
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct UpdateTrainingJobRequest {
+    /// <p>Configuration information for Debugger system monitoring, framework profiling, and storage paths.</p>
+    #[serde(rename = "ProfilerConfig")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub profiler_config: Option<ProfilerConfigForUpdate>,
+    /// <p>Configuration information for Debugger rules for profiling system and framework metrics.</p>
+    #[serde(rename = "ProfilerRuleConfigurations")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub profiler_rule_configurations: Option<Vec<ProfilerRuleConfiguration>>,
+    /// <p>The name of a training job to update the Debugger profiling configuration.</p>
+    #[serde(rename = "TrainingJobName")]
+    pub training_job_name: String,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct UpdateTrainingJobResponse {
+    /// <p>The Amazon Resource Name (ARN) of the training job.</p>
+    #[serde(rename = "TrainingJobArn")]
+    pub training_job_arn: String,
+}
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
@@ -8642,11 +14323,15 @@ pub struct UpdateUserProfileResponse {
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateWorkforceRequest {
+    /// <p>Use this parameter to update your OIDC Identity Provider (IdP) configuration for a workforce made using your own IdP.</p>
+    #[serde(rename = "OidcConfig")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub oidc_config: Option<OidcConfig>,
     /// <p>A list of one to ten worker IP address ranges (<a href="https://docs.aws.amazon.com/vpc/latest/userguide/VPC_Subnets.html">CIDRs</a>) that can be used to access tasks assigned to this workforce.</p> <p>Maximum: Ten CIDR values</p>
     #[serde(rename = "SourceIpConfig")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub source_ip_config: Option<SourceIpConfig>,
-    /// <p>The name of the private workforce whose access you want to restrict. <code>WorkforceName</code> is automatically set to <code>default</code> when a workforce is created and cannot be modified. </p>
+    /// <p>The name of the private workforce that you want to update. You can find your workforce name by using the operation.</p>
     #[serde(rename = "WorkforceName")]
     pub workforce_name: String,
 }
@@ -8654,7 +14339,7 @@ pub struct UpdateWorkforceRequest {
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateWorkforceResponse {
-    /// <p>A single private workforce, which is automatically created when you create your first private work team. You can create one private work force in each AWS Region. By default, any workforce-related API operation used in a specific region will apply to the workforce created in that region. To learn how to create a private workforce, see <a href="https://docs.aws.amazon.com/sagemaker/latest/dg/sms-workforce-create-private.html">Create a Private Workforce</a>.</p>
+    /// <p>A single private workforce. You can create one private work force in each AWS Region. By default, any workforce-related API operation used in a specific region will apply to the workforce created in that region. To learn how to create a private workforce, see <a href="https://docs.aws.amazon.com/sagemaker/latest/dg/sms-workforce-create-private.html">Create a Private Workforce</a>.</p>
     #[serde(rename = "Workforce")]
     pub workforce: Workforce,
 }
@@ -8666,7 +14351,7 @@ pub struct UpdateWorkteamRequest {
     #[serde(rename = "Description")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub description: Option<String>,
-    /// <p>A list of <code>MemberDefinition</code> objects that contain the updated work team members.</p>
+    /// <p>A list of <code>MemberDefinition</code> objects that contains objects that identify the workers that make up the work team. </p> <p>Workforces can be created using Amazon Cognito or your own OIDC Identity Provider (IdP). For private workforces created using Amazon Cognito use <code>CognitoMemberDefinition</code>. For workforces created using your own OIDC identity provider (IdP) use <code>OidcMemberDefinition</code>. You should not provide input for both of these parameters in a single request.</p> <p>For workforces created using Amazon Cognito, private work teams correspond to Amazon Cognito <i>user groups</i> within the user pool used to create a workforce. All of the <code>CognitoMemberDefinition</code> objects that make up the member definition must have the same <code>ClientId</code> and <code>UserPool</code> values. To add a Amazon Cognito user group to an existing worker pool, see <a href="">Adding groups to a User Pool</a>. For more information about user pools, see <a href="https://docs.aws.amazon.com/cognito/latest/developerguide/cognito-user-identity-pools.html">Amazon Cognito User Pools</a>.</p> <p>For workforces created using your own OIDC IdP, specify the user groups that you want to include in your private work team in <code>OidcMemberDefinition</code> by listing those groups in <code>Groups</code>. Be aware that user groups that are already in the work team must also be listed in <code>Groups</code> when you make this request to remain on the work team. If you do not include these user groups, they will no longer be associated with the work team you update. </p>
     #[serde(rename = "MemberDefinitions")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub member_definitions: Option<Vec<MemberDefinition>>,
@@ -8746,7 +14431,7 @@ pub struct UserSettings {
     #[serde(rename = "KernelGatewayAppSettings")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub kernel_gateway_app_settings: Option<KernelGatewayAppSettings>,
-    /// <p>The security groups.</p>
+    /// <p>The security groups for the Amazon Virtual Private Cloud (VPC) that Studio uses for communication.</p> <p>Optional when the <code>CreateDomain.AppNetworkAccessType</code> parameter is set to <code>PublicInternetOnly</code>.</p> <p>Required when the <code>CreateDomain.AppNetworkAccessType</code> parameter is set to <code>VpcOnly</code>.</p>
     #[serde(rename = "SecurityGroups")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub security_groups: Option<Vec<String>>,
@@ -8784,18 +14469,34 @@ pub struct VpcConfig {
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct Workforce {
+    /// <p>The configuration of an Amazon Cognito workforce. A single Cognito workforce is created using and corresponds to a single <a href="https://docs.aws.amazon.com/cognito/latest/developerguide/cognito-user-identity-pools.html"> Amazon Cognito user pool</a>.</p>
+    #[serde(rename = "CognitoConfig")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub cognito_config: Option<CognitoConfig>,
+    /// <p>The date that the workforce is created.</p>
+    #[serde(rename = "CreateDate")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub create_date: Option<f64>,
     /// <p>The most recent date that was used to successfully add one or more IP address ranges (<a href="https://docs.aws.amazon.com/vpc/latest/userguide/VPC_Subnets.html">CIDRs</a>) to a private workforce's allow list.</p>
     #[serde(rename = "LastUpdatedDate")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub last_updated_date: Option<f64>,
-    /// <p>A list of one to ten IP address ranges (<a href="https://docs.aws.amazon.com/vpc/latest/userguide/VPC_Subnets.html">CIDRs</a>) to be added to the workforce allow list.</p>
+    /// <p>The configuration of an OIDC Identity Provider (IdP) private workforce.</p>
+    #[serde(rename = "OidcConfig")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub oidc_config: Option<OidcConfigForResponse>,
+    /// <p>A list of one to ten IP address ranges (<a href="https://docs.aws.amazon.com/vpc/latest/userguide/VPC_Subnets.html">CIDRs</a>) to be added to the workforce allow list. By default, a workforce isn't restricted to specific IP addresses.</p>
     #[serde(rename = "SourceIpConfig")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub source_ip_config: Option<SourceIpConfig>,
+    /// <p>The subdomain for your OIDC Identity Provider.</p>
+    #[serde(rename = "SubDomain")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub sub_domain: Option<String>,
     /// <p>The Amazon Resource Name (ARN) of the private workforce.</p>
     #[serde(rename = "WorkforceArn")]
     pub workforce_arn: String,
-    /// <p>The name of the private workforce whose access you want to restrict. <code>WorkforceName</code> is automatically set to <code>default</code> when a workforce is created and cannot be modified. </p>
+    /// <p>The name of the private workforce.</p>
     #[serde(rename = "WorkforceName")]
     pub workforce_name: String,
 }
@@ -8815,7 +14516,7 @@ pub struct Workteam {
     #[serde(rename = "LastUpdatedDate")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub last_updated_date: Option<f64>,
-    /// <p>The Amazon Cognito user groups that make up the work team.</p>
+    /// <p>A list of <code>MemberDefinition</code> objects that contains objects that identify the workers that make up the work team. </p> <p>Workforces can be created using Amazon Cognito or your own OIDC Identity Provider (IdP). For private workforces created using Amazon Cognito use <code>CognitoMemberDefinition</code>. For workforces created using your own OIDC identity provider (IdP) use <code>OidcMemberDefinition</code>.</p>
     #[serde(rename = "MemberDefinitions")]
     pub member_definitions: Vec<MemberDefinition>,
     /// <p>Configures SNS notifications of available or expiring work items for work teams.</p>
@@ -8830,6 +14531,10 @@ pub struct Workteam {
     #[serde(rename = "SubDomain")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub sub_domain: Option<String>,
+    /// <p>The Amazon Resource Name (ARN) of the workforce.</p>
+    #[serde(rename = "WorkforceArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub workforce_arn: Option<String>,
     /// <p>The Amazon Resource Name (ARN) that identifies the work team.</p>
     #[serde(rename = "WorkteamArn")]
     pub workteam_arn: String,
@@ -8838,6 +14543,44 @@ pub struct Workteam {
     pub workteam_name: String,
 }
 
+/// Errors returned by AddAssociation
+#[derive(Debug, PartialEq)]
+pub enum AddAssociationError {
+    /// <p> You have exceeded an Amazon SageMaker resource limit. For example, you might have too many training jobs created. </p>
+    ResourceLimitExceeded(String),
+    /// <p>Resource being access is not found.</p>
+    ResourceNotFound(String),
+}
+
+impl AddAssociationError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<AddAssociationError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "ResourceLimitExceeded" => {
+                    return RusotoError::Service(AddAssociationError::ResourceLimitExceeded(
+                        err.msg,
+                    ))
+                }
+                "ResourceNotFound" => {
+                    return RusotoError::Service(AddAssociationError::ResourceNotFound(err.msg))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for AddAssociationError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            AddAssociationError::ResourceLimitExceeded(ref cause) => write!(f, "{}", cause),
+            AddAssociationError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for AddAssociationError {}
 /// Errors returned by AddTags
 #[derive(Debug, PartialEq)]
 pub enum AddTagsError {}
@@ -8902,6 +14645,36 @@ impl fmt::Display for AssociateTrialComponentError {
     }
 }
 impl Error for AssociateTrialComponentError {}
+/// Errors returned by CreateAction
+#[derive(Debug, PartialEq)]
+pub enum CreateActionError {
+    /// <p> You have exceeded an Amazon SageMaker resource limit. For example, you might have too many training jobs created. </p>
+    ResourceLimitExceeded(String),
+}
+
+impl CreateActionError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateActionError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "ResourceLimitExceeded" => {
+                    return RusotoError::Service(CreateActionError::ResourceLimitExceeded(err.msg))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for CreateActionError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            CreateActionError::ResourceLimitExceeded(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for CreateActionError {}
 /// Errors returned by CreateAlgorithm
 #[derive(Debug, PartialEq)]
 pub enum CreateAlgorithmError {}
@@ -8960,6 +14733,68 @@ impl fmt::Display for CreateAppError {
     }
 }
 impl Error for CreateAppError {}
+/// Errors returned by CreateAppImageConfig
+#[derive(Debug, PartialEq)]
+pub enum CreateAppImageConfigError {
+    /// <p>Resource being accessed is in use.</p>
+    ResourceInUse(String),
+}
+
+impl CreateAppImageConfigError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateAppImageConfigError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "ResourceInUse" => {
+                    return RusotoError::Service(CreateAppImageConfigError::ResourceInUse(err.msg))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for CreateAppImageConfigError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            CreateAppImageConfigError::ResourceInUse(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for CreateAppImageConfigError {}
+/// Errors returned by CreateArtifact
+#[derive(Debug, PartialEq)]
+pub enum CreateArtifactError {
+    /// <p> You have exceeded an Amazon SageMaker resource limit. For example, you might have too many training jobs created. </p>
+    ResourceLimitExceeded(String),
+}
+
+impl CreateArtifactError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateArtifactError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "ResourceLimitExceeded" => {
+                    return RusotoError::Service(CreateArtifactError::ResourceLimitExceeded(
+                        err.msg,
+                    ))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for CreateArtifactError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            CreateArtifactError::ResourceLimitExceeded(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for CreateArtifactError {}
 /// Errors returned by CreateAutoMLJob
 #[derive(Debug, PartialEq)]
 pub enum CreateAutoMLJobError {
@@ -9058,6 +14893,118 @@ impl fmt::Display for CreateCompilationJobError {
     }
 }
 impl Error for CreateCompilationJobError {}
+/// Errors returned by CreateContext
+#[derive(Debug, PartialEq)]
+pub enum CreateContextError {
+    /// <p> You have exceeded an Amazon SageMaker resource limit. For example, you might have too many training jobs created. </p>
+    ResourceLimitExceeded(String),
+}
+
+impl CreateContextError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateContextError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "ResourceLimitExceeded" => {
+                    return RusotoError::Service(CreateContextError::ResourceLimitExceeded(err.msg))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for CreateContextError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            CreateContextError::ResourceLimitExceeded(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for CreateContextError {}
+/// Errors returned by CreateDataQualityJobDefinition
+#[derive(Debug, PartialEq)]
+pub enum CreateDataQualityJobDefinitionError {
+    /// <p>Resource being accessed is in use.</p>
+    ResourceInUse(String),
+    /// <p> You have exceeded an Amazon SageMaker resource limit. For example, you might have too many training jobs created. </p>
+    ResourceLimitExceeded(String),
+}
+
+impl CreateDataQualityJobDefinitionError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<CreateDataQualityJobDefinitionError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "ResourceInUse" => {
+                    return RusotoError::Service(
+                        CreateDataQualityJobDefinitionError::ResourceInUse(err.msg),
+                    )
+                }
+                "ResourceLimitExceeded" => {
+                    return RusotoError::Service(
+                        CreateDataQualityJobDefinitionError::ResourceLimitExceeded(err.msg),
+                    )
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for CreateDataQualityJobDefinitionError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            CreateDataQualityJobDefinitionError::ResourceInUse(ref cause) => write!(f, "{}", cause),
+            CreateDataQualityJobDefinitionError::ResourceLimitExceeded(ref cause) => {
+                write!(f, "{}", cause)
+            }
+        }
+    }
+}
+impl Error for CreateDataQualityJobDefinitionError {}
+/// Errors returned by CreateDeviceFleet
+#[derive(Debug, PartialEq)]
+pub enum CreateDeviceFleetError {
+    /// <p>Resource being accessed is in use.</p>
+    ResourceInUse(String),
+    /// <p> You have exceeded an Amazon SageMaker resource limit. For example, you might have too many training jobs created. </p>
+    ResourceLimitExceeded(String),
+}
+
+impl CreateDeviceFleetError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateDeviceFleetError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "ResourceInUse" => {
+                    return RusotoError::Service(CreateDeviceFleetError::ResourceInUse(err.msg))
+                }
+                "ResourceLimitExceeded" => {
+                    return RusotoError::Service(CreateDeviceFleetError::ResourceLimitExceeded(
+                        err.msg,
+                    ))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for CreateDeviceFleetError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            CreateDeviceFleetError::ResourceInUse(ref cause) => write!(f, "{}", cause),
+            CreateDeviceFleetError::ResourceLimitExceeded(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for CreateDeviceFleetError {}
 /// Errors returned by CreateDomain
 #[derive(Debug, PartialEq)]
 pub enum CreateDomainError {
@@ -9094,6 +15041,38 @@ impl fmt::Display for CreateDomainError {
     }
 }
 impl Error for CreateDomainError {}
+/// Errors returned by CreateEdgePackagingJob
+#[derive(Debug, PartialEq)]
+pub enum CreateEdgePackagingJobError {
+    /// <p> You have exceeded an Amazon SageMaker resource limit. For example, you might have too many training jobs created. </p>
+    ResourceLimitExceeded(String),
+}
+
+impl CreateEdgePackagingJobError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateEdgePackagingJobError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "ResourceLimitExceeded" => {
+                    return RusotoError::Service(
+                        CreateEdgePackagingJobError::ResourceLimitExceeded(err.msg),
+                    )
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for CreateEdgePackagingJobError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            CreateEdgePackagingJobError::ResourceLimitExceeded(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for CreateEdgePackagingJobError {}
 /// Errors returned by CreateEndpoint
 #[derive(Debug, PartialEq)]
 pub enum CreateEndpointError {
@@ -9190,6 +15169,44 @@ impl fmt::Display for CreateExperimentError {
     }
 }
 impl Error for CreateExperimentError {}
+/// Errors returned by CreateFeatureGroup
+#[derive(Debug, PartialEq)]
+pub enum CreateFeatureGroupError {
+    /// <p>Resource being accessed is in use.</p>
+    ResourceInUse(String),
+    /// <p> You have exceeded an Amazon SageMaker resource limit. For example, you might have too many training jobs created. </p>
+    ResourceLimitExceeded(String),
+}
+
+impl CreateFeatureGroupError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateFeatureGroupError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "ResourceInUse" => {
+                    return RusotoError::Service(CreateFeatureGroupError::ResourceInUse(err.msg))
+                }
+                "ResourceLimitExceeded" => {
+                    return RusotoError::Service(CreateFeatureGroupError::ResourceLimitExceeded(
+                        err.msg,
+                    ))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for CreateFeatureGroupError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            CreateFeatureGroupError::ResourceInUse(ref cause) => write!(f, "{}", cause),
+            CreateFeatureGroupError::ResourceLimitExceeded(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for CreateFeatureGroupError {}
 /// Errors returned by CreateFlowDefinition
 #[derive(Debug, PartialEq)]
 pub enum CreateFlowDefinitionError {
@@ -9310,6 +15327,86 @@ impl fmt::Display for CreateHyperParameterTuningJobError {
     }
 }
 impl Error for CreateHyperParameterTuningJobError {}
+/// Errors returned by CreateImage
+#[derive(Debug, PartialEq)]
+pub enum CreateImageError {
+    /// <p>Resource being accessed is in use.</p>
+    ResourceInUse(String),
+    /// <p> You have exceeded an Amazon SageMaker resource limit. For example, you might have too many training jobs created. </p>
+    ResourceLimitExceeded(String),
+}
+
+impl CreateImageError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateImageError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "ResourceInUse" => {
+                    return RusotoError::Service(CreateImageError::ResourceInUse(err.msg))
+                }
+                "ResourceLimitExceeded" => {
+                    return RusotoError::Service(CreateImageError::ResourceLimitExceeded(err.msg))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for CreateImageError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            CreateImageError::ResourceInUse(ref cause) => write!(f, "{}", cause),
+            CreateImageError::ResourceLimitExceeded(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for CreateImageError {}
+/// Errors returned by CreateImageVersion
+#[derive(Debug, PartialEq)]
+pub enum CreateImageVersionError {
+    /// <p>Resource being accessed is in use.</p>
+    ResourceInUse(String),
+    /// <p> You have exceeded an Amazon SageMaker resource limit. For example, you might have too many training jobs created. </p>
+    ResourceLimitExceeded(String),
+    /// <p>Resource being access is not found.</p>
+    ResourceNotFound(String),
+}
+
+impl CreateImageVersionError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateImageVersionError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "ResourceInUse" => {
+                    return RusotoError::Service(CreateImageVersionError::ResourceInUse(err.msg))
+                }
+                "ResourceLimitExceeded" => {
+                    return RusotoError::Service(CreateImageVersionError::ResourceLimitExceeded(
+                        err.msg,
+                    ))
+                }
+                "ResourceNotFound" => {
+                    return RusotoError::Service(CreateImageVersionError::ResourceNotFound(err.msg))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for CreateImageVersionError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            CreateImageVersionError::ResourceInUse(ref cause) => write!(f, "{}", cause),
+            CreateImageVersionError::ResourceLimitExceeded(ref cause) => write!(f, "{}", cause),
+            CreateImageVersionError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for CreateImageVersionError {}
 /// Errors returned by CreateLabelingJob
 #[derive(Debug, PartialEq)]
 pub enum CreateLabelingJobError {
@@ -9378,14 +15475,117 @@ impl fmt::Display for CreateModelError {
     }
 }
 impl Error for CreateModelError {}
+/// Errors returned by CreateModelBiasJobDefinition
+#[derive(Debug, PartialEq)]
+pub enum CreateModelBiasJobDefinitionError {
+    /// <p>Resource being accessed is in use.</p>
+    ResourceInUse(String),
+    /// <p> You have exceeded an Amazon SageMaker resource limit. For example, you might have too many training jobs created. </p>
+    ResourceLimitExceeded(String),
+}
+
+impl CreateModelBiasJobDefinitionError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<CreateModelBiasJobDefinitionError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "ResourceInUse" => {
+                    return RusotoError::Service(CreateModelBiasJobDefinitionError::ResourceInUse(
+                        err.msg,
+                    ))
+                }
+                "ResourceLimitExceeded" => {
+                    return RusotoError::Service(
+                        CreateModelBiasJobDefinitionError::ResourceLimitExceeded(err.msg),
+                    )
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for CreateModelBiasJobDefinitionError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            CreateModelBiasJobDefinitionError::ResourceInUse(ref cause) => write!(f, "{}", cause),
+            CreateModelBiasJobDefinitionError::ResourceLimitExceeded(ref cause) => {
+                write!(f, "{}", cause)
+            }
+        }
+    }
+}
+impl Error for CreateModelBiasJobDefinitionError {}
+/// Errors returned by CreateModelExplainabilityJobDefinition
+#[derive(Debug, PartialEq)]
+pub enum CreateModelExplainabilityJobDefinitionError {
+    /// <p>Resource being accessed is in use.</p>
+    ResourceInUse(String),
+    /// <p> You have exceeded an Amazon SageMaker resource limit. For example, you might have too many training jobs created. </p>
+    ResourceLimitExceeded(String),
+}
+
+impl CreateModelExplainabilityJobDefinitionError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<CreateModelExplainabilityJobDefinitionError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "ResourceInUse" => {
+                    return RusotoError::Service(
+                        CreateModelExplainabilityJobDefinitionError::ResourceInUse(err.msg),
+                    )
+                }
+                "ResourceLimitExceeded" => {
+                    return RusotoError::Service(
+                        CreateModelExplainabilityJobDefinitionError::ResourceLimitExceeded(err.msg),
+                    )
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for CreateModelExplainabilityJobDefinitionError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            CreateModelExplainabilityJobDefinitionError::ResourceInUse(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            CreateModelExplainabilityJobDefinitionError::ResourceLimitExceeded(ref cause) => {
+                write!(f, "{}", cause)
+            }
+        }
+    }
+}
+impl Error for CreateModelExplainabilityJobDefinitionError {}
 /// Errors returned by CreateModelPackage
 #[derive(Debug, PartialEq)]
-pub enum CreateModelPackageError {}
+pub enum CreateModelPackageError {
+    /// <p>There was a conflict when you attempted to modify an experiment, trial, or trial component.</p>
+    Conflict(String),
+    /// <p> You have exceeded an Amazon SageMaker resource limit. For example, you might have too many training jobs created. </p>
+    ResourceLimitExceeded(String),
+}
 
 impl CreateModelPackageError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateModelPackageError> {
         if let Some(err) = proto::json::Error::parse(&res) {
             match err.typ.as_str() {
+                "ConflictException" => {
+                    return RusotoError::Service(CreateModelPackageError::Conflict(err.msg))
+                }
+                "ResourceLimitExceeded" => {
+                    return RusotoError::Service(CreateModelPackageError::ResourceLimitExceeded(
+                        err.msg,
+                    ))
+                }
                 "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
@@ -9396,10 +15596,93 @@ impl CreateModelPackageError {
 impl fmt::Display for CreateModelPackageError {
     #[allow(unused_variables)]
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        match *self {}
+        match *self {
+            CreateModelPackageError::Conflict(ref cause) => write!(f, "{}", cause),
+            CreateModelPackageError::ResourceLimitExceeded(ref cause) => write!(f, "{}", cause),
+        }
     }
 }
 impl Error for CreateModelPackageError {}
+/// Errors returned by CreateModelPackageGroup
+#[derive(Debug, PartialEq)]
+pub enum CreateModelPackageGroupError {
+    /// <p> You have exceeded an Amazon SageMaker resource limit. For example, you might have too many training jobs created. </p>
+    ResourceLimitExceeded(String),
+}
+
+impl CreateModelPackageGroupError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateModelPackageGroupError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "ResourceLimitExceeded" => {
+                    return RusotoError::Service(
+                        CreateModelPackageGroupError::ResourceLimitExceeded(err.msg),
+                    )
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for CreateModelPackageGroupError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            CreateModelPackageGroupError::ResourceLimitExceeded(ref cause) => {
+                write!(f, "{}", cause)
+            }
+        }
+    }
+}
+impl Error for CreateModelPackageGroupError {}
+/// Errors returned by CreateModelQualityJobDefinition
+#[derive(Debug, PartialEq)]
+pub enum CreateModelQualityJobDefinitionError {
+    /// <p>Resource being accessed is in use.</p>
+    ResourceInUse(String),
+    /// <p> You have exceeded an Amazon SageMaker resource limit. For example, you might have too many training jobs created. </p>
+    ResourceLimitExceeded(String),
+}
+
+impl CreateModelQualityJobDefinitionError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<CreateModelQualityJobDefinitionError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "ResourceInUse" => {
+                    return RusotoError::Service(
+                        CreateModelQualityJobDefinitionError::ResourceInUse(err.msg),
+                    )
+                }
+                "ResourceLimitExceeded" => {
+                    return RusotoError::Service(
+                        CreateModelQualityJobDefinitionError::ResourceLimitExceeded(err.msg),
+                    )
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for CreateModelQualityJobDefinitionError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            CreateModelQualityJobDefinitionError::ResourceInUse(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            CreateModelQualityJobDefinitionError::ResourceLimitExceeded(ref cause) => {
+                write!(f, "{}", cause)
+            }
+        }
+    }
+}
+impl Error for CreateModelQualityJobDefinitionError {}
 /// Errors returned by CreateMonitoringSchedule
 #[derive(Debug, PartialEq)]
 pub enum CreateMonitoringScheduleError {
@@ -9510,6 +15793,44 @@ impl fmt::Display for CreateNotebookInstanceLifecycleConfigError {
     }
 }
 impl Error for CreateNotebookInstanceLifecycleConfigError {}
+/// Errors returned by CreatePipeline
+#[derive(Debug, PartialEq)]
+pub enum CreatePipelineError {
+    /// <p> You have exceeded an Amazon SageMaker resource limit. For example, you might have too many training jobs created. </p>
+    ResourceLimitExceeded(String),
+    /// <p>Resource being access is not found.</p>
+    ResourceNotFound(String),
+}
+
+impl CreatePipelineError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreatePipelineError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "ResourceLimitExceeded" => {
+                    return RusotoError::Service(CreatePipelineError::ResourceLimitExceeded(
+                        err.msg,
+                    ))
+                }
+                "ResourceNotFound" => {
+                    return RusotoError::Service(CreatePipelineError::ResourceNotFound(err.msg))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for CreatePipelineError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            CreatePipelineError::ResourceLimitExceeded(ref cause) => write!(f, "{}", cause),
+            CreatePipelineError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for CreatePipelineError {}
 /// Errors returned by CreatePresignedDomainUrl
 #[derive(Debug, PartialEq)]
 pub enum CreatePresignedDomainUrlError {
@@ -9612,6 +15933,36 @@ impl fmt::Display for CreateProcessingJobError {
     }
 }
 impl Error for CreateProcessingJobError {}
+/// Errors returned by CreateProject
+#[derive(Debug, PartialEq)]
+pub enum CreateProjectError {
+    /// <p> You have exceeded an Amazon SageMaker resource limit. For example, you might have too many training jobs created. </p>
+    ResourceLimitExceeded(String),
+}
+
+impl CreateProjectError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateProjectError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "ResourceLimitExceeded" => {
+                    return RusotoError::Service(CreateProjectError::ResourceLimitExceeded(err.msg))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for CreateProjectError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            CreateProjectError::ResourceLimitExceeded(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for CreateProjectError {}
 /// Errors returned by CreateTrainingJob
 #[derive(Debug, PartialEq)]
 pub enum CreateTrainingJobError {
@@ -9806,6 +16157,28 @@ impl fmt::Display for CreateUserProfileError {
     }
 }
 impl Error for CreateUserProfileError {}
+/// Errors returned by CreateWorkforce
+#[derive(Debug, PartialEq)]
+pub enum CreateWorkforceError {}
+
+impl CreateWorkforceError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateWorkforceError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for CreateWorkforceError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {}
+    }
+}
+impl Error for CreateWorkforceError {}
 /// Errors returned by CreateWorkteam
 #[derive(Debug, PartialEq)]
 pub enum CreateWorkteamError {
@@ -9844,6 +16217,36 @@ impl fmt::Display for CreateWorkteamError {
     }
 }
 impl Error for CreateWorkteamError {}
+/// Errors returned by DeleteAction
+#[derive(Debug, PartialEq)]
+pub enum DeleteActionError {
+    /// <p>Resource being access is not found.</p>
+    ResourceNotFound(String),
+}
+
+impl DeleteActionError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteActionError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "ResourceNotFound" => {
+                    return RusotoError::Service(DeleteActionError::ResourceNotFound(err.msg))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for DeleteActionError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            DeleteActionError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for DeleteActionError {}
 /// Errors returned by DeleteAlgorithm
 #[derive(Debug, PartialEq)]
 pub enum DeleteAlgorithmError {}
@@ -9902,6 +16305,98 @@ impl fmt::Display for DeleteAppError {
     }
 }
 impl Error for DeleteAppError {}
+/// Errors returned by DeleteAppImageConfig
+#[derive(Debug, PartialEq)]
+pub enum DeleteAppImageConfigError {
+    /// <p>Resource being access is not found.</p>
+    ResourceNotFound(String),
+}
+
+impl DeleteAppImageConfigError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteAppImageConfigError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "ResourceNotFound" => {
+                    return RusotoError::Service(DeleteAppImageConfigError::ResourceNotFound(
+                        err.msg,
+                    ))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for DeleteAppImageConfigError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            DeleteAppImageConfigError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for DeleteAppImageConfigError {}
+/// Errors returned by DeleteArtifact
+#[derive(Debug, PartialEq)]
+pub enum DeleteArtifactError {
+    /// <p>Resource being access is not found.</p>
+    ResourceNotFound(String),
+}
+
+impl DeleteArtifactError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteArtifactError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "ResourceNotFound" => {
+                    return RusotoError::Service(DeleteArtifactError::ResourceNotFound(err.msg))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for DeleteArtifactError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            DeleteArtifactError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for DeleteArtifactError {}
+/// Errors returned by DeleteAssociation
+#[derive(Debug, PartialEq)]
+pub enum DeleteAssociationError {
+    /// <p>Resource being access is not found.</p>
+    ResourceNotFound(String),
+}
+
+impl DeleteAssociationError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteAssociationError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "ResourceNotFound" => {
+                    return RusotoError::Service(DeleteAssociationError::ResourceNotFound(err.msg))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for DeleteAssociationError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            DeleteAssociationError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for DeleteAssociationError {}
 /// Errors returned by DeleteCodeRepository
 #[derive(Debug, PartialEq)]
 pub enum DeleteCodeRepositoryError {}
@@ -9924,6 +16419,102 @@ impl fmt::Display for DeleteCodeRepositoryError {
     }
 }
 impl Error for DeleteCodeRepositoryError {}
+/// Errors returned by DeleteContext
+#[derive(Debug, PartialEq)]
+pub enum DeleteContextError {
+    /// <p>Resource being access is not found.</p>
+    ResourceNotFound(String),
+}
+
+impl DeleteContextError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteContextError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "ResourceNotFound" => {
+                    return RusotoError::Service(DeleteContextError::ResourceNotFound(err.msg))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for DeleteContextError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            DeleteContextError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for DeleteContextError {}
+/// Errors returned by DeleteDataQualityJobDefinition
+#[derive(Debug, PartialEq)]
+pub enum DeleteDataQualityJobDefinitionError {
+    /// <p>Resource being access is not found.</p>
+    ResourceNotFound(String),
+}
+
+impl DeleteDataQualityJobDefinitionError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<DeleteDataQualityJobDefinitionError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "ResourceNotFound" => {
+                    return RusotoError::Service(
+                        DeleteDataQualityJobDefinitionError::ResourceNotFound(err.msg),
+                    )
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for DeleteDataQualityJobDefinitionError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            DeleteDataQualityJobDefinitionError::ResourceNotFound(ref cause) => {
+                write!(f, "{}", cause)
+            }
+        }
+    }
+}
+impl Error for DeleteDataQualityJobDefinitionError {}
+/// Errors returned by DeleteDeviceFleet
+#[derive(Debug, PartialEq)]
+pub enum DeleteDeviceFleetError {
+    /// <p>Resource being accessed is in use.</p>
+    ResourceInUse(String),
+}
+
+impl DeleteDeviceFleetError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteDeviceFleetError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "ResourceInUse" => {
+                    return RusotoError::Service(DeleteDeviceFleetError::ResourceInUse(err.msg))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for DeleteDeviceFleetError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            DeleteDeviceFleetError::ResourceInUse(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for DeleteDeviceFleetError {}
 /// Errors returned by DeleteDomain
 #[derive(Debug, PartialEq)]
 pub enum DeleteDomainError {
@@ -10034,9 +16625,41 @@ impl fmt::Display for DeleteExperimentError {
     }
 }
 impl Error for DeleteExperimentError {}
+/// Errors returned by DeleteFeatureGroup
+#[derive(Debug, PartialEq)]
+pub enum DeleteFeatureGroupError {
+    /// <p>Resource being access is not found.</p>
+    ResourceNotFound(String),
+}
+
+impl DeleteFeatureGroupError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteFeatureGroupError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "ResourceNotFound" => {
+                    return RusotoError::Service(DeleteFeatureGroupError::ResourceNotFound(err.msg))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for DeleteFeatureGroupError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            DeleteFeatureGroupError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for DeleteFeatureGroupError {}
 /// Errors returned by DeleteFlowDefinition
 #[derive(Debug, PartialEq)]
 pub enum DeleteFlowDefinitionError {
+    /// <p>Resource being accessed is in use.</p>
+    ResourceInUse(String),
     /// <p>Resource being access is not found.</p>
     ResourceNotFound(String),
 }
@@ -10045,6 +16668,9 @@ impl DeleteFlowDefinitionError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteFlowDefinitionError> {
         if let Some(err) = proto::json::Error::parse(&res) {
             match err.typ.as_str() {
+                "ResourceInUse" => {
+                    return RusotoError::Service(DeleteFlowDefinitionError::ResourceInUse(err.msg))
+                }
                 "ResourceNotFound" => {
                     return RusotoError::Service(DeleteFlowDefinitionError::ResourceNotFound(
                         err.msg,
@@ -10061,6 +16687,7 @@ impl fmt::Display for DeleteFlowDefinitionError {
     #[allow(unused_variables)]
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match *self {
+            DeleteFlowDefinitionError::ResourceInUse(ref cause) => write!(f, "{}", cause),
             DeleteFlowDefinitionError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
@@ -10096,6 +16723,78 @@ impl fmt::Display for DeleteHumanTaskUiError {
     }
 }
 impl Error for DeleteHumanTaskUiError {}
+/// Errors returned by DeleteImage
+#[derive(Debug, PartialEq)]
+pub enum DeleteImageError {
+    /// <p>Resource being accessed is in use.</p>
+    ResourceInUse(String),
+    /// <p>Resource being access is not found.</p>
+    ResourceNotFound(String),
+}
+
+impl DeleteImageError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteImageError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "ResourceInUse" => {
+                    return RusotoError::Service(DeleteImageError::ResourceInUse(err.msg))
+                }
+                "ResourceNotFound" => {
+                    return RusotoError::Service(DeleteImageError::ResourceNotFound(err.msg))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for DeleteImageError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            DeleteImageError::ResourceInUse(ref cause) => write!(f, "{}", cause),
+            DeleteImageError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for DeleteImageError {}
+/// Errors returned by DeleteImageVersion
+#[derive(Debug, PartialEq)]
+pub enum DeleteImageVersionError {
+    /// <p>Resource being accessed is in use.</p>
+    ResourceInUse(String),
+    /// <p>Resource being access is not found.</p>
+    ResourceNotFound(String),
+}
+
+impl DeleteImageVersionError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteImageVersionError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "ResourceInUse" => {
+                    return RusotoError::Service(DeleteImageVersionError::ResourceInUse(err.msg))
+                }
+                "ResourceNotFound" => {
+                    return RusotoError::Service(DeleteImageVersionError::ResourceNotFound(err.msg))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for DeleteImageVersionError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            DeleteImageVersionError::ResourceInUse(ref cause) => write!(f, "{}", cause),
+            DeleteImageVersionError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for DeleteImageVersionError {}
 /// Errors returned by DeleteModel
 #[derive(Debug, PartialEq)]
 pub enum DeleteModelError {}
@@ -10118,14 +16817,92 @@ impl fmt::Display for DeleteModelError {
     }
 }
 impl Error for DeleteModelError {}
+/// Errors returned by DeleteModelBiasJobDefinition
+#[derive(Debug, PartialEq)]
+pub enum DeleteModelBiasJobDefinitionError {
+    /// <p>Resource being access is not found.</p>
+    ResourceNotFound(String),
+}
+
+impl DeleteModelBiasJobDefinitionError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<DeleteModelBiasJobDefinitionError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "ResourceNotFound" => {
+                    return RusotoError::Service(
+                        DeleteModelBiasJobDefinitionError::ResourceNotFound(err.msg),
+                    )
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for DeleteModelBiasJobDefinitionError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            DeleteModelBiasJobDefinitionError::ResourceNotFound(ref cause) => {
+                write!(f, "{}", cause)
+            }
+        }
+    }
+}
+impl Error for DeleteModelBiasJobDefinitionError {}
+/// Errors returned by DeleteModelExplainabilityJobDefinition
+#[derive(Debug, PartialEq)]
+pub enum DeleteModelExplainabilityJobDefinitionError {
+    /// <p>Resource being access is not found.</p>
+    ResourceNotFound(String),
+}
+
+impl DeleteModelExplainabilityJobDefinitionError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<DeleteModelExplainabilityJobDefinitionError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "ResourceNotFound" => {
+                    return RusotoError::Service(
+                        DeleteModelExplainabilityJobDefinitionError::ResourceNotFound(err.msg),
+                    )
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for DeleteModelExplainabilityJobDefinitionError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            DeleteModelExplainabilityJobDefinitionError::ResourceNotFound(ref cause) => {
+                write!(f, "{}", cause)
+            }
+        }
+    }
+}
+impl Error for DeleteModelExplainabilityJobDefinitionError {}
 /// Errors returned by DeleteModelPackage
 #[derive(Debug, PartialEq)]
-pub enum DeleteModelPackageError {}
+pub enum DeleteModelPackageError {
+    /// <p>There was a conflict when you attempted to modify an experiment, trial, or trial component.</p>
+    Conflict(String),
+}
 
 impl DeleteModelPackageError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteModelPackageError> {
         if let Some(err) = proto::json::Error::parse(&res) {
             match err.typ.as_str() {
+                "ConflictException" => {
+                    return RusotoError::Service(DeleteModelPackageError::Conflict(err.msg))
+                }
                 "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
@@ -10136,10 +16913,94 @@ impl DeleteModelPackageError {
 impl fmt::Display for DeleteModelPackageError {
     #[allow(unused_variables)]
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        match *self {}
+        match *self {
+            DeleteModelPackageError::Conflict(ref cause) => write!(f, "{}", cause),
+        }
     }
 }
 impl Error for DeleteModelPackageError {}
+/// Errors returned by DeleteModelPackageGroup
+#[derive(Debug, PartialEq)]
+pub enum DeleteModelPackageGroupError {}
+
+impl DeleteModelPackageGroupError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteModelPackageGroupError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for DeleteModelPackageGroupError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {}
+    }
+}
+impl Error for DeleteModelPackageGroupError {}
+/// Errors returned by DeleteModelPackageGroupPolicy
+#[derive(Debug, PartialEq)]
+pub enum DeleteModelPackageGroupPolicyError {}
+
+impl DeleteModelPackageGroupPolicyError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<DeleteModelPackageGroupPolicyError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for DeleteModelPackageGroupPolicyError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {}
+    }
+}
+impl Error for DeleteModelPackageGroupPolicyError {}
+/// Errors returned by DeleteModelQualityJobDefinition
+#[derive(Debug, PartialEq)]
+pub enum DeleteModelQualityJobDefinitionError {
+    /// <p>Resource being access is not found.</p>
+    ResourceNotFound(String),
+}
+
+impl DeleteModelQualityJobDefinitionError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<DeleteModelQualityJobDefinitionError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "ResourceNotFound" => {
+                    return RusotoError::Service(
+                        DeleteModelQualityJobDefinitionError::ResourceNotFound(err.msg),
+                    )
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for DeleteModelQualityJobDefinitionError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            DeleteModelQualityJobDefinitionError::ResourceNotFound(ref cause) => {
+                write!(f, "{}", cause)
+            }
+        }
+    }
+}
+impl Error for DeleteModelQualityJobDefinitionError {}
 /// Errors returned by DeleteMonitoringSchedule
 #[derive(Debug, PartialEq)]
 pub enum DeleteMonitoringScheduleError {
@@ -10218,6 +17079,58 @@ impl fmt::Display for DeleteNotebookInstanceLifecycleConfigError {
     }
 }
 impl Error for DeleteNotebookInstanceLifecycleConfigError {}
+/// Errors returned by DeletePipeline
+#[derive(Debug, PartialEq)]
+pub enum DeletePipelineError {
+    /// <p>Resource being access is not found.</p>
+    ResourceNotFound(String),
+}
+
+impl DeletePipelineError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeletePipelineError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "ResourceNotFound" => {
+                    return RusotoError::Service(DeletePipelineError::ResourceNotFound(err.msg))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for DeletePipelineError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            DeletePipelineError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for DeletePipelineError {}
+/// Errors returned by DeleteProject
+#[derive(Debug, PartialEq)]
+pub enum DeleteProjectError {}
+
+impl DeleteProjectError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteProjectError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for DeleteProjectError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {}
+    }
+}
+impl Error for DeleteProjectError {}
 /// Errors returned by DeleteTags
 #[derive(Debug, PartialEq)]
 pub enum DeleteTagsError {}
@@ -10338,6 +17251,28 @@ impl fmt::Display for DeleteUserProfileError {
     }
 }
 impl Error for DeleteUserProfileError {}
+/// Errors returned by DeleteWorkforce
+#[derive(Debug, PartialEq)]
+pub enum DeleteWorkforceError {}
+
+impl DeleteWorkforceError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteWorkforceError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for DeleteWorkforceError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {}
+    }
+}
+impl Error for DeleteWorkforceError {}
 /// Errors returned by DeleteWorkteam
 #[derive(Debug, PartialEq)]
 pub enum DeleteWorkteamError {
@@ -10370,6 +17305,58 @@ impl fmt::Display for DeleteWorkteamError {
     }
 }
 impl Error for DeleteWorkteamError {}
+/// Errors returned by DeregisterDevices
+#[derive(Debug, PartialEq)]
+pub enum DeregisterDevicesError {}
+
+impl DeregisterDevicesError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeregisterDevicesError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for DeregisterDevicesError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {}
+    }
+}
+impl Error for DeregisterDevicesError {}
+/// Errors returned by DescribeAction
+#[derive(Debug, PartialEq)]
+pub enum DescribeActionError {
+    /// <p>Resource being access is not found.</p>
+    ResourceNotFound(String),
+}
+
+impl DescribeActionError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeActionError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "ResourceNotFound" => {
+                    return RusotoError::Service(DescribeActionError::ResourceNotFound(err.msg))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for DescribeActionError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            DescribeActionError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for DescribeActionError {}
 /// Errors returned by DescribeAlgorithm
 #[derive(Debug, PartialEq)]
 pub enum DescribeAlgorithmError {}
@@ -10422,6 +17409,68 @@ impl fmt::Display for DescribeAppError {
     }
 }
 impl Error for DescribeAppError {}
+/// Errors returned by DescribeAppImageConfig
+#[derive(Debug, PartialEq)]
+pub enum DescribeAppImageConfigError {
+    /// <p>Resource being access is not found.</p>
+    ResourceNotFound(String),
+}
+
+impl DescribeAppImageConfigError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeAppImageConfigError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "ResourceNotFound" => {
+                    return RusotoError::Service(DescribeAppImageConfigError::ResourceNotFound(
+                        err.msg,
+                    ))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for DescribeAppImageConfigError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            DescribeAppImageConfigError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for DescribeAppImageConfigError {}
+/// Errors returned by DescribeArtifact
+#[derive(Debug, PartialEq)]
+pub enum DescribeArtifactError {
+    /// <p>Resource being access is not found.</p>
+    ResourceNotFound(String),
+}
+
+impl DescribeArtifactError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeArtifactError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "ResourceNotFound" => {
+                    return RusotoError::Service(DescribeArtifactError::ResourceNotFound(err.msg))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for DescribeArtifactError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            DescribeArtifactError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for DescribeArtifactError {}
 /// Errors returned by DescribeAutoMLJob
 #[derive(Debug, PartialEq)]
 pub enum DescribeAutoMLJobError {
@@ -10506,6 +17555,134 @@ impl fmt::Display for DescribeCompilationJobError {
     }
 }
 impl Error for DescribeCompilationJobError {}
+/// Errors returned by DescribeContext
+#[derive(Debug, PartialEq)]
+pub enum DescribeContextError {
+    /// <p>Resource being access is not found.</p>
+    ResourceNotFound(String),
+}
+
+impl DescribeContextError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeContextError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "ResourceNotFound" => {
+                    return RusotoError::Service(DescribeContextError::ResourceNotFound(err.msg))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for DescribeContextError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            DescribeContextError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for DescribeContextError {}
+/// Errors returned by DescribeDataQualityJobDefinition
+#[derive(Debug, PartialEq)]
+pub enum DescribeDataQualityJobDefinitionError {
+    /// <p>Resource being access is not found.</p>
+    ResourceNotFound(String),
+}
+
+impl DescribeDataQualityJobDefinitionError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<DescribeDataQualityJobDefinitionError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "ResourceNotFound" => {
+                    return RusotoError::Service(
+                        DescribeDataQualityJobDefinitionError::ResourceNotFound(err.msg),
+                    )
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for DescribeDataQualityJobDefinitionError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            DescribeDataQualityJobDefinitionError::ResourceNotFound(ref cause) => {
+                write!(f, "{}", cause)
+            }
+        }
+    }
+}
+impl Error for DescribeDataQualityJobDefinitionError {}
+/// Errors returned by DescribeDevice
+#[derive(Debug, PartialEq)]
+pub enum DescribeDeviceError {
+    /// <p>Resource being access is not found.</p>
+    ResourceNotFound(String),
+}
+
+impl DescribeDeviceError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeDeviceError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "ResourceNotFound" => {
+                    return RusotoError::Service(DescribeDeviceError::ResourceNotFound(err.msg))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for DescribeDeviceError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            DescribeDeviceError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for DescribeDeviceError {}
+/// Errors returned by DescribeDeviceFleet
+#[derive(Debug, PartialEq)]
+pub enum DescribeDeviceFleetError {
+    /// <p>Resource being access is not found.</p>
+    ResourceNotFound(String),
+}
+
+impl DescribeDeviceFleetError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeDeviceFleetError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "ResourceNotFound" => {
+                    return RusotoError::Service(DescribeDeviceFleetError::ResourceNotFound(
+                        err.msg,
+                    ))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for DescribeDeviceFleetError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            DescribeDeviceFleetError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for DescribeDeviceFleetError {}
 /// Errors returned by DescribeDomain
 #[derive(Debug, PartialEq)]
 pub enum DescribeDomainError {
@@ -10536,6 +17713,38 @@ impl fmt::Display for DescribeDomainError {
     }
 }
 impl Error for DescribeDomainError {}
+/// Errors returned by DescribeEdgePackagingJob
+#[derive(Debug, PartialEq)]
+pub enum DescribeEdgePackagingJobError {
+    /// <p>Resource being access is not found.</p>
+    ResourceNotFound(String),
+}
+
+impl DescribeEdgePackagingJobError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeEdgePackagingJobError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "ResourceNotFound" => {
+                    return RusotoError::Service(DescribeEdgePackagingJobError::ResourceNotFound(
+                        err.msg,
+                    ))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for DescribeEdgePackagingJobError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            DescribeEdgePackagingJobError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for DescribeEdgePackagingJobError {}
 /// Errors returned by DescribeEndpoint
 #[derive(Debug, PartialEq)]
 pub enum DescribeEndpointError {}
@@ -10610,6 +17819,38 @@ impl fmt::Display for DescribeExperimentError {
     }
 }
 impl Error for DescribeExperimentError {}
+/// Errors returned by DescribeFeatureGroup
+#[derive(Debug, PartialEq)]
+pub enum DescribeFeatureGroupError {
+    /// <p>Resource being access is not found.</p>
+    ResourceNotFound(String),
+}
+
+impl DescribeFeatureGroupError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeFeatureGroupError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "ResourceNotFound" => {
+                    return RusotoError::Service(DescribeFeatureGroupError::ResourceNotFound(
+                        err.msg,
+                    ))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for DescribeFeatureGroupError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            DescribeFeatureGroupError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for DescribeFeatureGroupError {}
 /// Errors returned by DescribeFlowDefinition
 #[derive(Debug, PartialEq)]
 pub enum DescribeFlowDefinitionError {
@@ -10710,6 +17951,68 @@ impl fmt::Display for DescribeHyperParameterTuningJobError {
     }
 }
 impl Error for DescribeHyperParameterTuningJobError {}
+/// Errors returned by DescribeImage
+#[derive(Debug, PartialEq)]
+pub enum DescribeImageError {
+    /// <p>Resource being access is not found.</p>
+    ResourceNotFound(String),
+}
+
+impl DescribeImageError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeImageError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "ResourceNotFound" => {
+                    return RusotoError::Service(DescribeImageError::ResourceNotFound(err.msg))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for DescribeImageError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            DescribeImageError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for DescribeImageError {}
+/// Errors returned by DescribeImageVersion
+#[derive(Debug, PartialEq)]
+pub enum DescribeImageVersionError {
+    /// <p>Resource being access is not found.</p>
+    ResourceNotFound(String),
+}
+
+impl DescribeImageVersionError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeImageVersionError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "ResourceNotFound" => {
+                    return RusotoError::Service(DescribeImageVersionError::ResourceNotFound(
+                        err.msg,
+                    ))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for DescribeImageVersionError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            DescribeImageVersionError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for DescribeImageVersionError {}
 /// Errors returned by DescribeLabelingJob
 #[derive(Debug, PartialEq)]
 pub enum DescribeLabelingJobError {
@@ -10764,6 +18067,78 @@ impl fmt::Display for DescribeModelError {
     }
 }
 impl Error for DescribeModelError {}
+/// Errors returned by DescribeModelBiasJobDefinition
+#[derive(Debug, PartialEq)]
+pub enum DescribeModelBiasJobDefinitionError {
+    /// <p>Resource being access is not found.</p>
+    ResourceNotFound(String),
+}
+
+impl DescribeModelBiasJobDefinitionError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<DescribeModelBiasJobDefinitionError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "ResourceNotFound" => {
+                    return RusotoError::Service(
+                        DescribeModelBiasJobDefinitionError::ResourceNotFound(err.msg),
+                    )
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for DescribeModelBiasJobDefinitionError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            DescribeModelBiasJobDefinitionError::ResourceNotFound(ref cause) => {
+                write!(f, "{}", cause)
+            }
+        }
+    }
+}
+impl Error for DescribeModelBiasJobDefinitionError {}
+/// Errors returned by DescribeModelExplainabilityJobDefinition
+#[derive(Debug, PartialEq)]
+pub enum DescribeModelExplainabilityJobDefinitionError {
+    /// <p>Resource being access is not found.</p>
+    ResourceNotFound(String),
+}
+
+impl DescribeModelExplainabilityJobDefinitionError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<DescribeModelExplainabilityJobDefinitionError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "ResourceNotFound" => {
+                    return RusotoError::Service(
+                        DescribeModelExplainabilityJobDefinitionError::ResourceNotFound(err.msg),
+                    )
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for DescribeModelExplainabilityJobDefinitionError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            DescribeModelExplainabilityJobDefinitionError::ResourceNotFound(ref cause) => {
+                write!(f, "{}", cause)
+            }
+        }
+    }
+}
+impl Error for DescribeModelExplainabilityJobDefinitionError {}
 /// Errors returned by DescribeModelPackage
 #[derive(Debug, PartialEq)]
 pub enum DescribeModelPackageError {}
@@ -10786,6 +18161,64 @@ impl fmt::Display for DescribeModelPackageError {
     }
 }
 impl Error for DescribeModelPackageError {}
+/// Errors returned by DescribeModelPackageGroup
+#[derive(Debug, PartialEq)]
+pub enum DescribeModelPackageGroupError {}
+
+impl DescribeModelPackageGroupError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeModelPackageGroupError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for DescribeModelPackageGroupError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {}
+    }
+}
+impl Error for DescribeModelPackageGroupError {}
+/// Errors returned by DescribeModelQualityJobDefinition
+#[derive(Debug, PartialEq)]
+pub enum DescribeModelQualityJobDefinitionError {
+    /// <p>Resource being access is not found.</p>
+    ResourceNotFound(String),
+}
+
+impl DescribeModelQualityJobDefinitionError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<DescribeModelQualityJobDefinitionError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "ResourceNotFound" => {
+                    return RusotoError::Service(
+                        DescribeModelQualityJobDefinitionError::ResourceNotFound(err.msg),
+                    )
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for DescribeModelQualityJobDefinitionError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            DescribeModelQualityJobDefinitionError::ResourceNotFound(ref cause) => {
+                write!(f, "{}", cause)
+            }
+        }
+    }
+}
+impl Error for DescribeModelQualityJobDefinitionError {}
 /// Errors returned by DescribeMonitoringSchedule
 #[derive(Debug, PartialEq)]
 pub enum DescribeMonitoringScheduleError {
@@ -10866,6 +18299,104 @@ impl fmt::Display for DescribeNotebookInstanceLifecycleConfigError {
     }
 }
 impl Error for DescribeNotebookInstanceLifecycleConfigError {}
+/// Errors returned by DescribePipeline
+#[derive(Debug, PartialEq)]
+pub enum DescribePipelineError {
+    /// <p>Resource being access is not found.</p>
+    ResourceNotFound(String),
+}
+
+impl DescribePipelineError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribePipelineError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "ResourceNotFound" => {
+                    return RusotoError::Service(DescribePipelineError::ResourceNotFound(err.msg))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for DescribePipelineError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            DescribePipelineError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for DescribePipelineError {}
+/// Errors returned by DescribePipelineDefinitionForExecution
+#[derive(Debug, PartialEq)]
+pub enum DescribePipelineDefinitionForExecutionError {
+    /// <p>Resource being access is not found.</p>
+    ResourceNotFound(String),
+}
+
+impl DescribePipelineDefinitionForExecutionError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<DescribePipelineDefinitionForExecutionError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "ResourceNotFound" => {
+                    return RusotoError::Service(
+                        DescribePipelineDefinitionForExecutionError::ResourceNotFound(err.msg),
+                    )
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for DescribePipelineDefinitionForExecutionError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            DescribePipelineDefinitionForExecutionError::ResourceNotFound(ref cause) => {
+                write!(f, "{}", cause)
+            }
+        }
+    }
+}
+impl Error for DescribePipelineDefinitionForExecutionError {}
+/// Errors returned by DescribePipelineExecution
+#[derive(Debug, PartialEq)]
+pub enum DescribePipelineExecutionError {
+    /// <p>Resource being access is not found.</p>
+    ResourceNotFound(String),
+}
+
+impl DescribePipelineExecutionError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribePipelineExecutionError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "ResourceNotFound" => {
+                    return RusotoError::Service(DescribePipelineExecutionError::ResourceNotFound(
+                        err.msg,
+                    ))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for DescribePipelineExecutionError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            DescribePipelineExecutionError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for DescribePipelineExecutionError {}
 /// Errors returned by DescribeProcessingJob
 #[derive(Debug, PartialEq)]
 pub enum DescribeProcessingJobError {
@@ -10898,6 +18429,28 @@ impl fmt::Display for DescribeProcessingJobError {
     }
 }
 impl Error for DescribeProcessingJobError {}
+/// Errors returned by DescribeProject
+#[derive(Debug, PartialEq)]
+pub enum DescribeProjectError {}
+
+impl DescribeProjectError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeProjectError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for DescribeProjectError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {}
+    }
+}
+impl Error for DescribeProjectError {}
 /// Errors returned by DescribeSubscribedWorkteam
 #[derive(Debug, PartialEq)]
 pub enum DescribeSubscribedWorkteamError {}
@@ -11124,6 +18677,30 @@ impl fmt::Display for DescribeWorkteamError {
     }
 }
 impl Error for DescribeWorkteamError {}
+/// Errors returned by DisableSagemakerServicecatalogPortfolio
+#[derive(Debug, PartialEq)]
+pub enum DisableSagemakerServicecatalogPortfolioError {}
+
+impl DisableSagemakerServicecatalogPortfolioError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<DisableSagemakerServicecatalogPortfolioError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for DisableSagemakerServicecatalogPortfolioError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {}
+    }
+}
+impl Error for DisableSagemakerServicecatalogPortfolioError {}
 /// Errors returned by DisassociateTrialComponent
 #[derive(Debug, PartialEq)]
 pub enum DisassociateTrialComponentError {
@@ -11158,6 +18735,100 @@ impl fmt::Display for DisassociateTrialComponentError {
     }
 }
 impl Error for DisassociateTrialComponentError {}
+/// Errors returned by EnableSagemakerServicecatalogPortfolio
+#[derive(Debug, PartialEq)]
+pub enum EnableSagemakerServicecatalogPortfolioError {}
+
+impl EnableSagemakerServicecatalogPortfolioError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<EnableSagemakerServicecatalogPortfolioError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for EnableSagemakerServicecatalogPortfolioError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {}
+    }
+}
+impl Error for EnableSagemakerServicecatalogPortfolioError {}
+/// Errors returned by GetDeviceFleetReport
+#[derive(Debug, PartialEq)]
+pub enum GetDeviceFleetReportError {}
+
+impl GetDeviceFleetReportError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetDeviceFleetReportError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for GetDeviceFleetReportError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {}
+    }
+}
+impl Error for GetDeviceFleetReportError {}
+/// Errors returned by GetModelPackageGroupPolicy
+#[derive(Debug, PartialEq)]
+pub enum GetModelPackageGroupPolicyError {}
+
+impl GetModelPackageGroupPolicyError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<GetModelPackageGroupPolicyError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for GetModelPackageGroupPolicyError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {}
+    }
+}
+impl Error for GetModelPackageGroupPolicyError {}
+/// Errors returned by GetSagemakerServicecatalogPortfolioStatus
+#[derive(Debug, PartialEq)]
+pub enum GetSagemakerServicecatalogPortfolioStatusError {}
+
+impl GetSagemakerServicecatalogPortfolioStatusError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<GetSagemakerServicecatalogPortfolioStatusError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for GetSagemakerServicecatalogPortfolioStatusError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {}
+    }
+}
+impl Error for GetSagemakerServicecatalogPortfolioStatusError {}
 /// Errors returned by GetSearchSuggestions
 #[derive(Debug, PartialEq)]
 pub enum GetSearchSuggestionsError {}
@@ -11180,6 +18851,36 @@ impl fmt::Display for GetSearchSuggestionsError {
     }
 }
 impl Error for GetSearchSuggestionsError {}
+/// Errors returned by ListActions
+#[derive(Debug, PartialEq)]
+pub enum ListActionsError {
+    /// <p>Resource being access is not found.</p>
+    ResourceNotFound(String),
+}
+
+impl ListActionsError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListActionsError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "ResourceNotFound" => {
+                    return RusotoError::Service(ListActionsError::ResourceNotFound(err.msg))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for ListActionsError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            ListActionsError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for ListActionsError {}
 /// Errors returned by ListAlgorithms
 #[derive(Debug, PartialEq)]
 pub enum ListAlgorithmsError {}
@@ -11202,6 +18903,28 @@ impl fmt::Display for ListAlgorithmsError {
     }
 }
 impl Error for ListAlgorithmsError {}
+/// Errors returned by ListAppImageConfigs
+#[derive(Debug, PartialEq)]
+pub enum ListAppImageConfigsError {}
+
+impl ListAppImageConfigsError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListAppImageConfigsError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for ListAppImageConfigsError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {}
+    }
+}
+impl Error for ListAppImageConfigsError {}
 /// Errors returned by ListApps
 #[derive(Debug, PartialEq)]
 pub enum ListAppsError {}
@@ -11224,6 +18947,66 @@ impl fmt::Display for ListAppsError {
     }
 }
 impl Error for ListAppsError {}
+/// Errors returned by ListArtifacts
+#[derive(Debug, PartialEq)]
+pub enum ListArtifactsError {
+    /// <p>Resource being access is not found.</p>
+    ResourceNotFound(String),
+}
+
+impl ListArtifactsError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListArtifactsError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "ResourceNotFound" => {
+                    return RusotoError::Service(ListArtifactsError::ResourceNotFound(err.msg))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for ListArtifactsError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            ListArtifactsError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for ListArtifactsError {}
+/// Errors returned by ListAssociations
+#[derive(Debug, PartialEq)]
+pub enum ListAssociationsError {
+    /// <p>Resource being access is not found.</p>
+    ResourceNotFound(String),
+}
+
+impl ListAssociationsError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListAssociationsError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "ResourceNotFound" => {
+                    return RusotoError::Service(ListAssociationsError::ResourceNotFound(err.msg))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for ListAssociationsError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            ListAssociationsError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for ListAssociationsError {}
 /// Errors returned by ListAutoMLJobs
 #[derive(Debug, PartialEq)]
 pub enum ListAutoMLJobsError {}
@@ -11324,6 +19107,104 @@ impl fmt::Display for ListCompilationJobsError {
     }
 }
 impl Error for ListCompilationJobsError {}
+/// Errors returned by ListContexts
+#[derive(Debug, PartialEq)]
+pub enum ListContextsError {
+    /// <p>Resource being access is not found.</p>
+    ResourceNotFound(String),
+}
+
+impl ListContextsError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListContextsError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "ResourceNotFound" => {
+                    return RusotoError::Service(ListContextsError::ResourceNotFound(err.msg))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for ListContextsError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            ListContextsError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for ListContextsError {}
+/// Errors returned by ListDataQualityJobDefinitions
+#[derive(Debug, PartialEq)]
+pub enum ListDataQualityJobDefinitionsError {}
+
+impl ListDataQualityJobDefinitionsError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<ListDataQualityJobDefinitionsError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for ListDataQualityJobDefinitionsError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {}
+    }
+}
+impl Error for ListDataQualityJobDefinitionsError {}
+/// Errors returned by ListDeviceFleets
+#[derive(Debug, PartialEq)]
+pub enum ListDeviceFleetsError {}
+
+impl ListDeviceFleetsError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListDeviceFleetsError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for ListDeviceFleetsError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {}
+    }
+}
+impl Error for ListDeviceFleetsError {}
+/// Errors returned by ListDevices
+#[derive(Debug, PartialEq)]
+pub enum ListDevicesError {}
+
+impl ListDevicesError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListDevicesError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for ListDevicesError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {}
+    }
+}
+impl Error for ListDevicesError {}
 /// Errors returned by ListDomains
 #[derive(Debug, PartialEq)]
 pub enum ListDomainsError {}
@@ -11346,6 +19227,28 @@ impl fmt::Display for ListDomainsError {
     }
 }
 impl Error for ListDomainsError {}
+/// Errors returned by ListEdgePackagingJobs
+#[derive(Debug, PartialEq)]
+pub enum ListEdgePackagingJobsError {}
+
+impl ListEdgePackagingJobsError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListEdgePackagingJobsError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for ListEdgePackagingJobsError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {}
+    }
+}
+impl Error for ListEdgePackagingJobsError {}
 /// Errors returned by ListEndpointConfigs
 #[derive(Debug, PartialEq)]
 pub enum ListEndpointConfigsError {}
@@ -11412,6 +19315,28 @@ impl fmt::Display for ListExperimentsError {
     }
 }
 impl Error for ListExperimentsError {}
+/// Errors returned by ListFeatureGroups
+#[derive(Debug, PartialEq)]
+pub enum ListFeatureGroupsError {}
+
+impl ListFeatureGroupsError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListFeatureGroupsError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for ListFeatureGroupsError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {}
+    }
+}
+impl Error for ListFeatureGroupsError {}
 /// Errors returned by ListFlowDefinitions
 #[derive(Debug, PartialEq)]
 pub enum ListFlowDefinitionsError {}
@@ -11480,6 +19405,58 @@ impl fmt::Display for ListHyperParameterTuningJobsError {
     }
 }
 impl Error for ListHyperParameterTuningJobsError {}
+/// Errors returned by ListImageVersions
+#[derive(Debug, PartialEq)]
+pub enum ListImageVersionsError {
+    /// <p>Resource being access is not found.</p>
+    ResourceNotFound(String),
+}
+
+impl ListImageVersionsError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListImageVersionsError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "ResourceNotFound" => {
+                    return RusotoError::Service(ListImageVersionsError::ResourceNotFound(err.msg))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for ListImageVersionsError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            ListImageVersionsError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for ListImageVersionsError {}
+/// Errors returned by ListImages
+#[derive(Debug, PartialEq)]
+pub enum ListImagesError {}
+
+impl ListImagesError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListImagesError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for ListImagesError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {}
+    }
+}
+impl Error for ListImagesError {}
 /// Errors returned by ListLabelingJobs
 #[derive(Debug, PartialEq)]
 pub enum ListLabelingJobsError {}
@@ -11536,6 +19513,76 @@ impl fmt::Display for ListLabelingJobsForWorkteamError {
     }
 }
 impl Error for ListLabelingJobsForWorkteamError {}
+/// Errors returned by ListModelBiasJobDefinitions
+#[derive(Debug, PartialEq)]
+pub enum ListModelBiasJobDefinitionsError {}
+
+impl ListModelBiasJobDefinitionsError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<ListModelBiasJobDefinitionsError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for ListModelBiasJobDefinitionsError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {}
+    }
+}
+impl Error for ListModelBiasJobDefinitionsError {}
+/// Errors returned by ListModelExplainabilityJobDefinitions
+#[derive(Debug, PartialEq)]
+pub enum ListModelExplainabilityJobDefinitionsError {}
+
+impl ListModelExplainabilityJobDefinitionsError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<ListModelExplainabilityJobDefinitionsError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for ListModelExplainabilityJobDefinitionsError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {}
+    }
+}
+impl Error for ListModelExplainabilityJobDefinitionsError {}
+/// Errors returned by ListModelPackageGroups
+#[derive(Debug, PartialEq)]
+pub enum ListModelPackageGroupsError {}
+
+impl ListModelPackageGroupsError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListModelPackageGroupsError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for ListModelPackageGroupsError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {}
+    }
+}
+impl Error for ListModelPackageGroupsError {}
 /// Errors returned by ListModelPackages
 #[derive(Debug, PartialEq)]
 pub enum ListModelPackagesError {}
@@ -11558,6 +19605,30 @@ impl fmt::Display for ListModelPackagesError {
     }
 }
 impl Error for ListModelPackagesError {}
+/// Errors returned by ListModelQualityJobDefinitions
+#[derive(Debug, PartialEq)]
+pub enum ListModelQualityJobDefinitionsError {}
+
+impl ListModelQualityJobDefinitionsError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<ListModelQualityJobDefinitionsError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for ListModelQualityJobDefinitionsError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {}
+    }
+}
+impl Error for ListModelQualityJobDefinitionsError {}
 /// Errors returned by ListModels
 #[derive(Debug, PartialEq)]
 pub enum ListModelsError {}
@@ -11670,6 +19741,130 @@ impl fmt::Display for ListNotebookInstancesError {
     }
 }
 impl Error for ListNotebookInstancesError {}
+/// Errors returned by ListPipelineExecutionSteps
+#[derive(Debug, PartialEq)]
+pub enum ListPipelineExecutionStepsError {
+    /// <p>Resource being access is not found.</p>
+    ResourceNotFound(String),
+}
+
+impl ListPipelineExecutionStepsError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<ListPipelineExecutionStepsError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "ResourceNotFound" => {
+                    return RusotoError::Service(ListPipelineExecutionStepsError::ResourceNotFound(
+                        err.msg,
+                    ))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for ListPipelineExecutionStepsError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            ListPipelineExecutionStepsError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for ListPipelineExecutionStepsError {}
+/// Errors returned by ListPipelineExecutions
+#[derive(Debug, PartialEq)]
+pub enum ListPipelineExecutionsError {
+    /// <p>Resource being access is not found.</p>
+    ResourceNotFound(String),
+}
+
+impl ListPipelineExecutionsError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListPipelineExecutionsError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "ResourceNotFound" => {
+                    return RusotoError::Service(ListPipelineExecutionsError::ResourceNotFound(
+                        err.msg,
+                    ))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for ListPipelineExecutionsError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            ListPipelineExecutionsError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for ListPipelineExecutionsError {}
+/// Errors returned by ListPipelineParametersForExecution
+#[derive(Debug, PartialEq)]
+pub enum ListPipelineParametersForExecutionError {
+    /// <p>Resource being access is not found.</p>
+    ResourceNotFound(String),
+}
+
+impl ListPipelineParametersForExecutionError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<ListPipelineParametersForExecutionError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "ResourceNotFound" => {
+                    return RusotoError::Service(
+                        ListPipelineParametersForExecutionError::ResourceNotFound(err.msg),
+                    )
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for ListPipelineParametersForExecutionError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            ListPipelineParametersForExecutionError::ResourceNotFound(ref cause) => {
+                write!(f, "{}", cause)
+            }
+        }
+    }
+}
+impl Error for ListPipelineParametersForExecutionError {}
+/// Errors returned by ListPipelines
+#[derive(Debug, PartialEq)]
+pub enum ListPipelinesError {}
+
+impl ListPipelinesError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListPipelinesError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for ListPipelinesError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {}
+    }
+}
+impl Error for ListPipelinesError {}
 /// Errors returned by ListProcessingJobs
 #[derive(Debug, PartialEq)]
 pub enum ListProcessingJobsError {}
@@ -11692,6 +19887,28 @@ impl fmt::Display for ListProcessingJobsError {
     }
 }
 impl Error for ListProcessingJobsError {}
+/// Errors returned by ListProjects
+#[derive(Debug, PartialEq)]
+pub enum ListProjectsError {}
+
+impl ListProjectsError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListProjectsError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for ListProjectsError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {}
+    }
+}
+impl Error for ListProjectsError {}
 /// Errors returned by ListSubscribedWorkteams
 #[derive(Debug, PartialEq)]
 pub enum ListSubscribedWorkteamsError {}
@@ -11900,6 +20117,28 @@ impl fmt::Display for ListUserProfilesError {
     }
 }
 impl Error for ListUserProfilesError {}
+/// Errors returned by ListWorkforces
+#[derive(Debug, PartialEq)]
+pub enum ListWorkforcesError {}
+
+impl ListWorkforcesError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListWorkforcesError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for ListWorkforcesError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {}
+    }
+}
+impl Error for ListWorkforcesError {}
 /// Errors returned by ListWorkteams
 #[derive(Debug, PartialEq)]
 pub enum ListWorkteamsError {}
@@ -11922,14 +20161,76 @@ impl fmt::Display for ListWorkteamsError {
     }
 }
 impl Error for ListWorkteamsError {}
+/// Errors returned by PutModelPackageGroupPolicy
+#[derive(Debug, PartialEq)]
+pub enum PutModelPackageGroupPolicyError {}
+
+impl PutModelPackageGroupPolicyError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<PutModelPackageGroupPolicyError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for PutModelPackageGroupPolicyError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {}
+    }
+}
+impl Error for PutModelPackageGroupPolicyError {}
+/// Errors returned by RegisterDevices
+#[derive(Debug, PartialEq)]
+pub enum RegisterDevicesError {
+    /// <p> You have exceeded an Amazon SageMaker resource limit. For example, you might have too many training jobs created. </p>
+    ResourceLimitExceeded(String),
+}
+
+impl RegisterDevicesError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<RegisterDevicesError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "ResourceLimitExceeded" => {
+                    return RusotoError::Service(RegisterDevicesError::ResourceLimitExceeded(
+                        err.msg,
+                    ))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for RegisterDevicesError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            RegisterDevicesError::ResourceLimitExceeded(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for RegisterDevicesError {}
 /// Errors returned by RenderUiTemplate
 #[derive(Debug, PartialEq)]
-pub enum RenderUiTemplateError {}
+pub enum RenderUiTemplateError {
+    /// <p>Resource being access is not found.</p>
+    ResourceNotFound(String),
+}
 
 impl RenderUiTemplateError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<RenderUiTemplateError> {
         if let Some(err) = proto::json::Error::parse(&res) {
             match err.typ.as_str() {
+                "ResourceNotFound" => {
+                    return RusotoError::Service(RenderUiTemplateError::ResourceNotFound(err.msg))
+                }
                 "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
@@ -11940,7 +20241,9 @@ impl RenderUiTemplateError {
 impl fmt::Display for RenderUiTemplateError {
     #[allow(unused_variables)]
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        match *self {}
+        match *self {
+            RenderUiTemplateError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+        }
     }
 }
 impl Error for RenderUiTemplateError {}
@@ -12030,6 +20333,46 @@ impl fmt::Display for StartNotebookInstanceError {
     }
 }
 impl Error for StartNotebookInstanceError {}
+/// Errors returned by StartPipelineExecution
+#[derive(Debug, PartialEq)]
+pub enum StartPipelineExecutionError {
+    /// <p> You have exceeded an Amazon SageMaker resource limit. For example, you might have too many training jobs created. </p>
+    ResourceLimitExceeded(String),
+    /// <p>Resource being access is not found.</p>
+    ResourceNotFound(String),
+}
+
+impl StartPipelineExecutionError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<StartPipelineExecutionError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "ResourceLimitExceeded" => {
+                    return RusotoError::Service(
+                        StartPipelineExecutionError::ResourceLimitExceeded(err.msg),
+                    )
+                }
+                "ResourceNotFound" => {
+                    return RusotoError::Service(StartPipelineExecutionError::ResourceNotFound(
+                        err.msg,
+                    ))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for StartPipelineExecutionError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            StartPipelineExecutionError::ResourceLimitExceeded(ref cause) => write!(f, "{}", cause),
+            StartPipelineExecutionError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for StartPipelineExecutionError {}
 /// Errors returned by StopAutoMLJob
 #[derive(Debug, PartialEq)]
 pub enum StopAutoMLJobError {
@@ -12090,6 +20433,28 @@ impl fmt::Display for StopCompilationJobError {
     }
 }
 impl Error for StopCompilationJobError {}
+/// Errors returned by StopEdgePackagingJob
+#[derive(Debug, PartialEq)]
+pub enum StopEdgePackagingJobError {}
+
+impl StopEdgePackagingJobError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<StopEdgePackagingJobError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for StopEdgePackagingJobError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {}
+    }
+}
+impl Error for StopEdgePackagingJobError {}
 /// Errors returned by StopHyperParameterTuningJob
 #[derive(Debug, PartialEq)]
 pub enum StopHyperParameterTuningJobError {
@@ -12208,6 +20573,38 @@ impl fmt::Display for StopNotebookInstanceError {
     }
 }
 impl Error for StopNotebookInstanceError {}
+/// Errors returned by StopPipelineExecution
+#[derive(Debug, PartialEq)]
+pub enum StopPipelineExecutionError {
+    /// <p>Resource being access is not found.</p>
+    ResourceNotFound(String),
+}
+
+impl StopPipelineExecutionError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<StopPipelineExecutionError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "ResourceNotFound" => {
+                    return RusotoError::Service(StopPipelineExecutionError::ResourceNotFound(
+                        err.msg,
+                    ))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for StopPipelineExecutionError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            StopPipelineExecutionError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for StopPipelineExecutionError {}
 /// Errors returned by StopProcessingJob
 #[derive(Debug, PartialEq)]
 pub enum StopProcessingJobError {
@@ -12298,6 +20695,110 @@ impl fmt::Display for StopTransformJobError {
     }
 }
 impl Error for StopTransformJobError {}
+/// Errors returned by UpdateAction
+#[derive(Debug, PartialEq)]
+pub enum UpdateActionError {
+    /// <p>There was a conflict when you attempted to modify an experiment, trial, or trial component.</p>
+    Conflict(String),
+    /// <p>Resource being access is not found.</p>
+    ResourceNotFound(String),
+}
+
+impl UpdateActionError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateActionError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "ConflictException" => {
+                    return RusotoError::Service(UpdateActionError::Conflict(err.msg))
+                }
+                "ResourceNotFound" => {
+                    return RusotoError::Service(UpdateActionError::ResourceNotFound(err.msg))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for UpdateActionError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            UpdateActionError::Conflict(ref cause) => write!(f, "{}", cause),
+            UpdateActionError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for UpdateActionError {}
+/// Errors returned by UpdateAppImageConfig
+#[derive(Debug, PartialEq)]
+pub enum UpdateAppImageConfigError {
+    /// <p>Resource being access is not found.</p>
+    ResourceNotFound(String),
+}
+
+impl UpdateAppImageConfigError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateAppImageConfigError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "ResourceNotFound" => {
+                    return RusotoError::Service(UpdateAppImageConfigError::ResourceNotFound(
+                        err.msg,
+                    ))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for UpdateAppImageConfigError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            UpdateAppImageConfigError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for UpdateAppImageConfigError {}
+/// Errors returned by UpdateArtifact
+#[derive(Debug, PartialEq)]
+pub enum UpdateArtifactError {
+    /// <p>There was a conflict when you attempted to modify an experiment, trial, or trial component.</p>
+    Conflict(String),
+    /// <p>Resource being access is not found.</p>
+    ResourceNotFound(String),
+}
+
+impl UpdateArtifactError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateArtifactError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "ConflictException" => {
+                    return RusotoError::Service(UpdateArtifactError::Conflict(err.msg))
+                }
+                "ResourceNotFound" => {
+                    return RusotoError::Service(UpdateArtifactError::ResourceNotFound(err.msg))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for UpdateArtifactError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            UpdateArtifactError::Conflict(ref cause) => write!(f, "{}", cause),
+            UpdateArtifactError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for UpdateArtifactError {}
 /// Errors returned by UpdateCodeRepository
 #[derive(Debug, PartialEq)]
 pub enum UpdateCodeRepositoryError {}
@@ -12320,6 +20821,94 @@ impl fmt::Display for UpdateCodeRepositoryError {
     }
 }
 impl Error for UpdateCodeRepositoryError {}
+/// Errors returned by UpdateContext
+#[derive(Debug, PartialEq)]
+pub enum UpdateContextError {
+    /// <p>There was a conflict when you attempted to modify an experiment, trial, or trial component.</p>
+    Conflict(String),
+    /// <p>Resource being access is not found.</p>
+    ResourceNotFound(String),
+}
+
+impl UpdateContextError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateContextError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "ConflictException" => {
+                    return RusotoError::Service(UpdateContextError::Conflict(err.msg))
+                }
+                "ResourceNotFound" => {
+                    return RusotoError::Service(UpdateContextError::ResourceNotFound(err.msg))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for UpdateContextError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            UpdateContextError::Conflict(ref cause) => write!(f, "{}", cause),
+            UpdateContextError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for UpdateContextError {}
+/// Errors returned by UpdateDeviceFleet
+#[derive(Debug, PartialEq)]
+pub enum UpdateDeviceFleetError {
+    /// <p>Resource being accessed is in use.</p>
+    ResourceInUse(String),
+}
+
+impl UpdateDeviceFleetError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateDeviceFleetError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "ResourceInUse" => {
+                    return RusotoError::Service(UpdateDeviceFleetError::ResourceInUse(err.msg))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for UpdateDeviceFleetError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            UpdateDeviceFleetError::ResourceInUse(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for UpdateDeviceFleetError {}
+/// Errors returned by UpdateDevices
+#[derive(Debug, PartialEq)]
+pub enum UpdateDevicesError {}
+
+impl UpdateDevicesError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateDevicesError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for UpdateDevicesError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {}
+    }
+}
+impl Error for UpdateDevicesError {}
 /// Errors returned by UpdateDomain
 #[derive(Debug, PartialEq)]
 pub enum UpdateDomainError {
@@ -12466,6 +21055,64 @@ impl fmt::Display for UpdateExperimentError {
     }
 }
 impl Error for UpdateExperimentError {}
+/// Errors returned by UpdateImage
+#[derive(Debug, PartialEq)]
+pub enum UpdateImageError {
+    /// <p>Resource being accessed is in use.</p>
+    ResourceInUse(String),
+    /// <p>Resource being access is not found.</p>
+    ResourceNotFound(String),
+}
+
+impl UpdateImageError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateImageError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "ResourceInUse" => {
+                    return RusotoError::Service(UpdateImageError::ResourceInUse(err.msg))
+                }
+                "ResourceNotFound" => {
+                    return RusotoError::Service(UpdateImageError::ResourceNotFound(err.msg))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for UpdateImageError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            UpdateImageError::ResourceInUse(ref cause) => write!(f, "{}", cause),
+            UpdateImageError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for UpdateImageError {}
+/// Errors returned by UpdateModelPackage
+#[derive(Debug, PartialEq)]
+pub enum UpdateModelPackageError {}
+
+impl UpdateModelPackageError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateModelPackageError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for UpdateModelPackageError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {}
+    }
+}
+impl Error for UpdateModelPackageError {}
 /// Errors returned by UpdateMonitoringSchedule
 #[derive(Debug, PartialEq)]
 pub enum UpdateMonitoringScheduleError {
@@ -12576,6 +21223,98 @@ impl fmt::Display for UpdateNotebookInstanceLifecycleConfigError {
     }
 }
 impl Error for UpdateNotebookInstanceLifecycleConfigError {}
+/// Errors returned by UpdatePipeline
+#[derive(Debug, PartialEq)]
+pub enum UpdatePipelineError {
+    /// <p>Resource being access is not found.</p>
+    ResourceNotFound(String),
+}
+
+impl UpdatePipelineError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdatePipelineError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "ResourceNotFound" => {
+                    return RusotoError::Service(UpdatePipelineError::ResourceNotFound(err.msg))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for UpdatePipelineError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            UpdatePipelineError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for UpdatePipelineError {}
+/// Errors returned by UpdatePipelineExecution
+#[derive(Debug, PartialEq)]
+pub enum UpdatePipelineExecutionError {
+    /// <p>Resource being access is not found.</p>
+    ResourceNotFound(String),
+}
+
+impl UpdatePipelineExecutionError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdatePipelineExecutionError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "ResourceNotFound" => {
+                    return RusotoError::Service(UpdatePipelineExecutionError::ResourceNotFound(
+                        err.msg,
+                    ))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for UpdatePipelineExecutionError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            UpdatePipelineExecutionError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for UpdatePipelineExecutionError {}
+/// Errors returned by UpdateTrainingJob
+#[derive(Debug, PartialEq)]
+pub enum UpdateTrainingJobError {
+    /// <p>Resource being access is not found.</p>
+    ResourceNotFound(String),
+}
+
+impl UpdateTrainingJobError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateTrainingJobError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "ResourceNotFound" => {
+                    return RusotoError::Service(UpdateTrainingJobError::ResourceNotFound(err.msg))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for UpdateTrainingJobError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            UpdateTrainingJobError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for UpdateTrainingJobError {}
 /// Errors returned by UpdateTrial
 #[derive(Debug, PartialEq)]
 pub enum UpdateTrialError {
@@ -12751,6 +21490,12 @@ impl Error for UpdateWorkteamError {}
 /// Trait representing the capabilities of the SageMaker API. SageMaker clients implement this trait.
 #[async_trait]
 pub trait SageMaker {
+    /// <p>Creates an <i>association</i> between the source and the destination. A source can be associated with multiple destinations, and a destination can be associated with multiple sources. An association is a lineage tracking entity. For more information, see <a href="https://docs.aws.amazon.com/sagemaker/latest/dg/lineage-tracking.html">Amazon SageMaker ML Lineage Tracking</a>.</p>
+    async fn add_association(
+        &self,
+        input: AddAssociationRequest,
+    ) -> Result<AddAssociationResponse, RusotoError<AddAssociationError>>;
+
     /// <p><p>Adds or overwrites one or more tags for the specified Amazon SageMaker resource. You can add tags to notebook instances, training jobs, hyperparameter tuning jobs, batch transform jobs, models, labeling jobs, work teams, endpoint configurations, and endpoints.</p> <p>Each tag consists of a key and an optional value. Tag keys must be unique per resource. For more information about tags, see For more information, see <a href="https://aws.amazon.com/answers/account-management/aws-tagging-strategies/">AWS Tagging Strategies</a>.</p> <note> <p>Tags that you add to a hyperparameter tuning job by calling this API are also added to any training jobs that the hyperparameter tuning job launches after you call this API, but not to training jobs that the hyperparameter tuning job launched before you called this API. To make sure that the tags associated with a hyperparameter tuning job are also added to all training jobs that the hyperparameter tuning job launches, add the tags when you first create the tuning job by specifying them in the <code>Tags</code> parameter of <a>CreateHyperParameterTuningJob</a> </p> </note></p>
     async fn add_tags(
         &self,
@@ -12762,6 +21507,12 @@ pub trait SageMaker {
         &self,
         input: AssociateTrialComponentRequest,
     ) -> Result<AssociateTrialComponentResponse, RusotoError<AssociateTrialComponentError>>;
+
+    /// <p>Creates an <i>action</i>. An action is a lineage tracking entity that represents an action or activity. For example, a model deployment or an HPO job. Generally, an action involves at least one input or output artifact. For more information, see <a href="https://docs.aws.amazon.com/sagemaker/latest/dg/lineage-tracking.html">Amazon SageMaker ML Lineage Tracking</a>.</p>
+    async fn create_action(
+        &self,
+        input: CreateActionRequest,
+    ) -> Result<CreateActionResponse, RusotoError<CreateActionError>>;
 
     /// <p>Create a machine learning algorithm that you can use in Amazon SageMaker and list in the AWS Marketplace.</p>
     async fn create_algorithm(
@@ -12775,7 +21526,19 @@ pub trait SageMaker {
         input: CreateAppRequest,
     ) -> Result<CreateAppResponse, RusotoError<CreateAppError>>;
 
-    /// <p>Creates an AutoPilot job.</p> <p>After you run an AutoPilot job, you can find the best performing model by calling , and then deploy that model by following the steps described in <a href="https://docs.aws.amazon.com/sagemaker/latest/dg/ex1-deploy-model.html">Step 6.1: Deploy the Model to Amazon SageMaker Hosting Services</a>.</p> <p>For information about how to use AutoPilot, see <a href="https://docs.aws.amazon.com/sagemaker/latest/dg/autopilot-automate-model-development.html">Use AutoPilot to Automate Model Development</a>.</p>
+    /// <p>Creates a configuration for running a SageMaker image as a KernelGateway app. The configuration specifies the Amazon Elastic File System (EFS) storage volume on the image, and a list of the kernels in the image.</p>
+    async fn create_app_image_config(
+        &self,
+        input: CreateAppImageConfigRequest,
+    ) -> Result<CreateAppImageConfigResponse, RusotoError<CreateAppImageConfigError>>;
+
+    /// <p>Creates an <i>artifact</i>. An artifact is a lineage tracking entity that represents a URI addressable object or data. Some examples are the S3 URI of a dataset and the ECR registry path of an image. For more information, see <a href="https://docs.aws.amazon.com/sagemaker/latest/dg/lineage-tracking.html">Amazon SageMaker ML Lineage Tracking</a>.</p>
+    async fn create_artifact(
+        &self,
+        input: CreateArtifactRequest,
+    ) -> Result<CreateArtifactResponse, RusotoError<CreateArtifactError>>;
+
+    /// <p>Creates an Autopilot job.</p> <p>Find the best performing model after you run an Autopilot job by calling . Deploy that model by following the steps described in <a href="https://docs.aws.amazon.com/sagemaker/latest/dg/ex1-deploy-model.html">Step 6.1: Deploy the Model to Amazon SageMaker Hosting Services</a>.</p> <p>For information about how to use Autopilot, see <a href="https://docs.aws.amazon.com/sagemaker/latest/dg/autopilot-automate-model-development.html"> Automate Model Development with Amazon SageMaker Autopilot</a>.</p>
     async fn create_auto_ml_job(
         &self,
         input: CreateAutoMLJobRequest,
@@ -12787,19 +21550,46 @@ pub trait SageMaker {
         input: CreateCodeRepositoryInput,
     ) -> Result<CreateCodeRepositoryOutput, RusotoError<CreateCodeRepositoryError>>;
 
-    /// <p>Starts a model compilation job. After the model has been compiled, Amazon SageMaker saves the resulting model artifacts to an Amazon Simple Storage Service (Amazon S3) bucket that you specify. </p> <p>If you choose to host your model using Amazon SageMaker hosting services, you can use the resulting model artifacts as part of the model. You can also use the artifacts with AWS IoT Greengrass. In that case, deploy them as an ML resource.</p> <p>In the request body, you provide the following:</p> <ul> <li> <p>A name for the compilation job</p> </li> <li> <p> Information about the input model artifacts </p> </li> <li> <p>The output location for the compiled model and the device (target) that the model runs on </p> </li> <li> <p> <code>The Amazon Resource Name (ARN) of the IAM role that Amazon SageMaker assumes to perform the model compilation job</code> </p> </li> </ul> <p>You can also provide a <code>Tag</code> to track the model compilation job's resource use and costs. The response body contains the <code>CompilationJobArn</code> for the compiled job.</p> <p>To stop a model compilation job, use <a>StopCompilationJob</a>. To get information about a particular model compilation job, use <a>DescribeCompilationJob</a>. To get information about multiple model compilation jobs, use <a>ListCompilationJobs</a>.</p>
+    /// <p>Starts a model compilation job. After the model has been compiled, Amazon SageMaker saves the resulting model artifacts to an Amazon Simple Storage Service (Amazon S3) bucket that you specify. </p> <p>If you choose to host your model using Amazon SageMaker hosting services, you can use the resulting model artifacts as part of the model. You can also use the artifacts with AWS IoT Greengrass. In that case, deploy them as an ML resource.</p> <p>In the request body, you provide the following:</p> <ul> <li> <p>A name for the compilation job</p> </li> <li> <p> Information about the input model artifacts </p> </li> <li> <p>The output location for the compiled model and the device (target) that the model runs on </p> </li> <li> <p>The Amazon Resource Name (ARN) of the IAM role that Amazon SageMaker assumes to perform the model compilation job. </p> </li> </ul> <p>You can also provide a <code>Tag</code> to track the model compilation job's resource use and costs. The response body contains the <code>CompilationJobArn</code> for the compiled job.</p> <p>To stop a model compilation job, use <a>StopCompilationJob</a>. To get information about a particular model compilation job, use <a>DescribeCompilationJob</a>. To get information about multiple model compilation jobs, use <a>ListCompilationJobs</a>.</p>
     async fn create_compilation_job(
         &self,
         input: CreateCompilationJobRequest,
     ) -> Result<CreateCompilationJobResponse, RusotoError<CreateCompilationJobError>>;
 
-    /// <p><p>Creates a <code>Domain</code> used by SageMaker Studio. A domain consists of an associated directory, a list of authorized users, and a variety of security, application, policy, and Amazon Virtual Private Cloud (VPC) configurations. An AWS account is limited to one domain per region. Users within a domain can share notebook files and other artifacts with each other.</p> <p>When a domain is created, an Amazon Elastic File System (EFS) volume is also created for use by all of the users within the domain. Each user receives a private home directory within the EFS for notebooks, Git repositories, and data files.</p> <p>All traffic between the domain and the EFS volume is communicated through the specified subnet IDs. All other traffic goes over the Internet through an Amazon SageMaker system VPC. The EFS traffic uses the NFS/TCP protocol over port 2049.</p> <important> <p>NFS traffic over TCP on port 2049 needs to be allowed in both inbound and outbound rules in order to launch a SageMaker Studio app successfully.</p> </important></p>
+    /// <p>Creates a <i>context</i>. A context is a lineage tracking entity that represents a logical grouping of other tracking or experiment entities. Some examples are an endpoint and a model package. For more information, see <a href="https://docs.aws.amazon.com/sagemaker/latest/dg/lineage-tracking.html">Amazon SageMaker ML Lineage Tracking</a>.</p>
+    async fn create_context(
+        &self,
+        input: CreateContextRequest,
+    ) -> Result<CreateContextResponse, RusotoError<CreateContextError>>;
+
+    /// <p>Creates a definition for a job that monitors data quality and drift. For information about model monitor, see <a href="https://docs.aws.amazon.com/sagemaker/latest/dg/model-monitor.html">Amazon SageMaker Model Monitor</a>.</p>
+    async fn create_data_quality_job_definition(
+        &self,
+        input: CreateDataQualityJobDefinitionRequest,
+    ) -> Result<
+        CreateDataQualityJobDefinitionResponse,
+        RusotoError<CreateDataQualityJobDefinitionError>,
+    >;
+
+    /// <p>Creates a device fleet.</p>
+    async fn create_device_fleet(
+        &self,
+        input: CreateDeviceFleetRequest,
+    ) -> Result<(), RusotoError<CreateDeviceFleetError>>;
+
+    /// <p>Creates a <code>Domain</code> used by Amazon SageMaker Studio. A domain consists of an associated Amazon Elastic File System (EFS) volume, a list of authorized users, and a variety of security, application, policy, and Amazon Virtual Private Cloud (VPC) configurations. An AWS account is limited to one domain per region. Users within a domain can share notebook files and other artifacts with each other.</p> <p> <b>EFS storage</b> </p> <p>When a domain is created, an EFS volume is created for use by all of the users within the domain. Each user receives a private home directory within the EFS volume for notebooks, Git repositories, and data files.</p> <p>SageMaker uses the AWS Key Management Service (AWS KMS) to encrypt the EFS volume attached to the domain with an AWS managed customer master key (CMK) by default. For more control, you can specify a customer managed CMK. For more information, see <a href="https://docs.aws.amazon.com/sagemaker/latest/dg/encryption-at-rest.html">Protect Data at Rest Using Encryption</a>.</p> <p> <b>VPC configuration</b> </p> <p>All SageMaker Studio traffic between the domain and the EFS volume is through the specified VPC and subnets. For other Studio traffic, you can specify the <code>AppNetworkAccessType</code> parameter. <code>AppNetworkAccessType</code> corresponds to the network access type that you choose when you onboard to Studio. The following options are available:</p> <ul> <li> <p> <code>PublicInternetOnly</code> - Non-EFS traffic goes through a VPC managed by Amazon SageMaker, which allows internet access. This is the default value.</p> </li> <li> <p> <code>VpcOnly</code> - All Studio traffic is through the specified VPC and subnets. Internet access is disabled by default. To allow internet access, you must specify a NAT gateway.</p> <p>When internet access is disabled, you won't be able to run a Studio notebook or to train or host models unless your VPC has an interface endpoint to the SageMaker API and runtime or a NAT gateway and your security groups allow outbound connections.</p> </li> </ul> <p>For more information, see <a href="https://docs.aws.amazon.com/sagemaker/latest/dg/studio-notebooks-and-internet-access.html">Connect SageMaker Studio Notebooks to Resources in a VPC</a>.</p>
     async fn create_domain(
         &self,
         input: CreateDomainRequest,
     ) -> Result<CreateDomainResponse, RusotoError<CreateDomainError>>;
 
-    /// <p>Creates an endpoint using the endpoint configuration specified in the request. Amazon SageMaker uses the endpoint to provision resources and deploy models. You create the endpoint configuration with the <a>CreateEndpointConfig</a> API. </p> <p> Use this API to deploy models using Amazon SageMaker hosting services. </p> <p>For an example that calls this method when deploying a model to Amazon SageMaker hosting services, see <a href="https://docs.aws.amazon.com/sagemaker/latest/dg/ex1-deploy-model.html#ex1-deploy-model-boto">Deploy the Model to Amazon SageMaker Hosting Services (AWS SDK for Python (Boto 3)).</a> </p> <note> <p> You must not delete an <code>EndpointConfig</code> that is in use by an endpoint that is live or while the <code>UpdateEndpoint</code> or <code>CreateEndpoint</code> operations are being performed on the endpoint. To update an endpoint, you must create a new <code>EndpointConfig</code>.</p> </note> <p>The endpoint name must be unique within an AWS Region in your AWS account. </p> <p>When it receives the request, Amazon SageMaker creates the endpoint, launches the resources (ML compute instances), and deploys the model(s) on them. </p> <note> <p>When you call <a>CreateEndpoint</a>, a load call is made to DynamoDB to verify that your endpoint configuration exists. When you read data from a DynamoDB table supporting <a href="https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/HowItWorks.ReadConsistency.html"> <code>Eventually Consistent Reads</code> </a>, the response might not reflect the results of a recently completed write operation. The response might include some stale data. If the dependent entities are not yet in DynamoDB, this causes a validation error. If you repeat your read request after a short time, the response should return the latest data. So retry logic is recommended to handle these possible issues. We also recommend that customers call <a>DescribeEndpointConfig</a> before calling <a>CreateEndpoint</a> to minimize the potential impact of a DynamoDB eventually consistent read.</p> </note> <p>When Amazon SageMaker receives the request, it sets the endpoint status to <code>Creating</code>. After it creates the endpoint, it sets the status to <code>InService</code>. Amazon SageMaker can then process incoming requests for inferences. To check the status of an endpoint, use the <a>DescribeEndpoint</a> API.</p> <p>If any of the models hosted at this endpoint get model data from an Amazon S3 location, Amazon SageMaker uses AWS Security Token Service to download model artifacts from the S3 path you provided. AWS STS is activated in your IAM user account by default. If you previously deactivated AWS STS for a region, you need to reactivate AWS STS for that region. For more information, see <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/id_credentials_temp_enable-regions.html">Activating and Deactivating AWS STS in an AWS Region</a> in the <i>AWS Identity and Access Management User Guide</i>.</p>
+    /// <p>Starts a SageMaker Edge Manager model packaging job. Edge Manager will use the model artifacts from the Amazon Simple Storage Service bucket that you specify. After the model has been packaged, Amazon SageMaker saves the resulting artifacts to an S3 bucket that you specify.</p>
+    async fn create_edge_packaging_job(
+        &self,
+        input: CreateEdgePackagingJobRequest,
+    ) -> Result<(), RusotoError<CreateEdgePackagingJobError>>;
+
+    /// <p><p>Creates an endpoint using the endpoint configuration specified in the request. Amazon SageMaker uses the endpoint to provision resources and deploy models. You create the endpoint configuration with the <a>CreateEndpointConfig</a> API. </p> <p> Use this API to deploy models using Amazon SageMaker hosting services. </p> <p>For an example that calls this method when deploying a model to Amazon SageMaker hosting services, see <a href="https://docs.aws.amazon.com/sagemaker/latest/dg/ex1-deploy-model.html#ex1-deploy-model-boto">Deploy the Model to Amazon SageMaker Hosting Services (AWS SDK for Python (Boto 3)).</a> </p> <note> <p> You must not delete an <code>EndpointConfig</code> that is in use by an endpoint that is live or while the <code>UpdateEndpoint</code> or <code>CreateEndpoint</code> operations are being performed on the endpoint. To update an endpoint, you must create a new <code>EndpointConfig</code>.</p> </note> <p>The endpoint name must be unique within an AWS Region in your AWS account. </p> <p>When it receives the request, Amazon SageMaker creates the endpoint, launches the resources (ML compute instances), and deploys the model(s) on them. </p> <note> <p>When you call <a>CreateEndpoint</a>, a load call is made to DynamoDB to verify that your endpoint configuration exists. When you read data from a DynamoDB table supporting <a href="https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/HowItWorks.ReadConsistency.html"> <code>Eventually Consistent Reads</code> </a>, the response might not reflect the results of a recently completed write operation. The response might include some stale data. If the dependent entities are not yet in DynamoDB, this causes a validation error. If you repeat your read request after a short time, the response should return the latest data. So retry logic is recommended to handle these possible issues. We also recommend that customers call <a>DescribeEndpointConfig</a> before calling <a>CreateEndpoint</a> to minimize the potential impact of a DynamoDB eventually consistent read.</p> </note> <p>When Amazon SageMaker receives the request, it sets the endpoint status to <code>Creating</code>. After it creates the endpoint, it sets the status to <code>InService</code>. Amazon SageMaker can then process incoming requests for inferences. To check the status of an endpoint, use the <a>DescribeEndpoint</a> API.</p> <p>If any of the models hosted at this endpoint get model data from an Amazon S3 location, Amazon SageMaker uses AWS Security Token Service to download model artifacts from the S3 path you provided. AWS STS is activated in your IAM user account by default. If you previously deactivated AWS STS for a region, you need to reactivate AWS STS for that region. For more information, see <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/id_credentials_temp_enable-regions.html">Activating and Deactivating AWS STS in an AWS Region</a> in the <i>AWS Identity and Access Management User Guide</i>.</p> <note> <p> To add the IAM role policies for using this API operation, go to the <a href="https://console.aws.amazon.com/iam/">IAM console</a>, and choose Roles in the left navigation pane. Search the IAM role that you want to grant access to use the <a>CreateEndpoint</a> and <a>CreateEndpointConfig</a> API operations, add the following policies to the role. </p> <ul> <li> <p>Option 1: For a full Amazon SageMaker access, search and attach the <code>AmazonSageMakerFullAccess</code> policy.</p> </li> <li> <p>Option 2: For granting a limited access to an IAM role, paste the following Action elements manually into the JSON file of the IAM role: </p> <p> <code>&quot;Action&quot;: [&quot;sagemaker:CreateEndpoint&quot;, &quot;sagemaker:CreateEndpointConfig&quot;]</code> </p> <p> <code>&quot;Resource&quot;: [</code> </p> <p> <code>&quot;arn:aws:sagemaker:region:account-id:endpoint/endpointName&quot;</code> </p> <p> <code>&quot;arn:aws:sagemaker:region:account-id:endpoint-config/endpointConfigName&quot;</code> </p> <p> <code>]</code> </p> <p>For more information, see <a href="https://docs.aws.amazon.com/sagemaker/latest/dg/api-permissions-reference.html">Amazon SageMaker API Permissions: Actions, Permissions, and Resources Reference</a>.</p> </li> </ul> </note></p>
     async fn create_endpoint(
         &self,
         input: CreateEndpointInput,
@@ -12811,11 +21601,17 @@ pub trait SageMaker {
         input: CreateEndpointConfigInput,
     ) -> Result<CreateEndpointConfigOutput, RusotoError<CreateEndpointConfigError>>;
 
-    /// <p>Creates an Amazon SageMaker <i>experiment</i>. An experiment is a collection of <i>trials</i> that are observed, compared and evaluated as a group. A trial is a set of steps, called <i>trial components</i>, that produce a machine learning model.</p> <p>The goal of an experiment is to determine the components that produce the best model. Multiple trials are performed, each one isolating and measuring the impact of a change to one or more inputs, while keeping the remaining inputs constant.</p> <p>When you use Amazon SageMaker Studio or the Amazon SageMaker Python SDK, all experiments, trials, and trial components are automatically tracked, logged, and indexed. When you use the AWS SDK for Python (Boto), you must use the logging APIs provided by the SDK.</p> <p>You can add tags to experiments, trials, trial components and then use the <a>Search</a> API to search for the tags.</p> <p>To add a description to an experiment, specify the optional <code>Description</code> parameter. To add a description later, or to change the description, call the <a>UpdateExperiment</a> API.</p> <p>To get a list of all your experiments, call the <a>ListExperiments</a> API. To view an experiment's properties, call the <a>DescribeExperiment</a> API. To get a list of all the trials associated with an experiment, call the <a>ListTrials</a> API. To create a trial call the <a>CreateTrial</a> API.</p>
+    /// <p>Creates an SageMaker <i>experiment</i>. An experiment is a collection of <i>trials</i> that are observed, compared and evaluated as a group. A trial is a set of steps, called <i>trial components</i>, that produce a machine learning model.</p> <p>The goal of an experiment is to determine the components that produce the best model. Multiple trials are performed, each one isolating and measuring the impact of a change to one or more inputs, while keeping the remaining inputs constant.</p> <p>When you use Amazon SageMaker Studio or the Amazon SageMaker Python SDK, all experiments, trials, and trial components are automatically tracked, logged, and indexed. When you use the AWS SDK for Python (Boto), you must use the logging APIs provided by the SDK.</p> <p>You can add tags to experiments, trials, trial components and then use the <a>Search</a> API to search for the tags.</p> <p>To add a description to an experiment, specify the optional <code>Description</code> parameter. To add a description later, or to change the description, call the <a>UpdateExperiment</a> API.</p> <p>To get a list of all your experiments, call the <a>ListExperiments</a> API. To view an experiment's properties, call the <a>DescribeExperiment</a> API. To get a list of all the trials associated with an experiment, call the <a>ListTrials</a> API. To create a trial call the <a>CreateTrial</a> API.</p>
     async fn create_experiment(
         &self,
         input: CreateExperimentRequest,
     ) -> Result<CreateExperimentResponse, RusotoError<CreateExperimentError>>;
+
+    /// <p><p>Create a new <code>FeatureGroup</code>. A <code>FeatureGroup</code> is a group of <code>Features</code> defined in the <code>FeatureStore</code> to describe a <code>Record</code>. </p> <p>The <code>FeatureGroup</code> defines the schema and features contained in the FeatureGroup. A <code>FeatureGroup</code> definition is composed of a list of <code>Features</code>, a <code>RecordIdentifierFeatureName</code>, an <code>EventTimeFeatureName</code> and configurations for its <code>OnlineStore</code> and <code>OfflineStore</code>. Check <a href="https://docs.aws.amazon.com/general/latest/gr/aws_service_limits.html">AWS service quotas</a> to see the <code>FeatureGroup</code>s quota for your AWS account.</p> <important> <p>You must include at least one of <code>OnlineStoreConfig</code> and <code>OfflineStoreConfig</code> to create a <code>FeatureGroup</code>.</p> </important></p>
+    async fn create_feature_group(
+        &self,
+        input: CreateFeatureGroupRequest,
+    ) -> Result<CreateFeatureGroupResponse, RusotoError<CreateFeatureGroupError>>;
 
     /// <p>Creates a flow definition.</p>
     async fn create_flow_definition(
@@ -12838,6 +21634,18 @@ pub trait SageMaker {
         RusotoError<CreateHyperParameterTuningJobError>,
     >;
 
+    /// <p>Creates a custom SageMaker image. A SageMaker image is a set of image versions. Each image version represents a container image stored in Amazon Container Registry (ECR). For more information, see <a href="https://docs.aws.amazon.com/sagemaker/latest/dg/studio-byoi.html">Bring your own SageMaker image</a>.</p>
+    async fn create_image(
+        &self,
+        input: CreateImageRequest,
+    ) -> Result<CreateImageResponse, RusotoError<CreateImageError>>;
+
+    /// <p>Creates a version of the SageMaker image specified by <code>ImageName</code>. The version represents the Amazon Container Registry (ECR) container image specified by <code>BaseImage</code>.</p>
+    async fn create_image_version(
+        &self,
+        input: CreateImageVersionRequest,
+    ) -> Result<CreateImageVersionResponse, RusotoError<CreateImageVersionError>>;
+
     /// <p>Creates a job that uses workers to label the data objects in your input dataset. You can use the labeled data to train machine learning models.</p> <p>You can select your workforce from one of three providers:</p> <ul> <li> <p>A private workforce that you create. It can include employees, contractors, and outside experts. Use a private workforce when want the data to stay within your organization or when a specific set of skills is required.</p> </li> <li> <p>One or more vendors that you select from the AWS Marketplace. Vendors provide expertise in specific areas. </p> </li> <li> <p>The Amazon Mechanical Turk workforce. This is the largest workforce, but it should only be used for public data or data that has been stripped of any personally identifiable information.</p> </li> </ul> <p>You can also use <i>automated data labeling</i> to reduce the number of data objects that need to be labeled by a human. Automated data labeling uses <i>active learning</i> to determine if a data object can be labeled by machine or if it needs to be sent to a human worker. For more information, see <a href="https://docs.aws.amazon.com/sagemaker/latest/dg/sms-automated-labeling.html">Using Automated Data Labeling</a>.</p> <p>The data objects to be labeled are contained in an Amazon S3 bucket. You create a <i>manifest file</i> that describes the location of each object. For more information, see <a href="https://docs.aws.amazon.com/sagemaker/latest/dg/sms-data.html">Using Input and Output Data</a>.</p> <p>The output can be used as the manifest file for another labeling job or as training data for your machine learning models.</p>
     async fn create_labeling_job(
         &self,
@@ -12850,11 +21658,41 @@ pub trait SageMaker {
         input: CreateModelInput,
     ) -> Result<CreateModelOutput, RusotoError<CreateModelError>>;
 
-    /// <p>Creates a model package that you can use to create Amazon SageMaker models or list on AWS Marketplace. Buyers can subscribe to model packages listed on AWS Marketplace to create models in Amazon SageMaker.</p> <p>To create a model package by specifying a Docker container that contains your inference code and the Amazon S3 location of your model artifacts, provide values for <code>InferenceSpecification</code>. To create a model from an algorithm resource that you created or subscribed to in AWS Marketplace, provide a value for <code>SourceAlgorithmSpecification</code>.</p>
+    /// <p>Creates the definition for a model bias job.</p>
+    async fn create_model_bias_job_definition(
+        &self,
+        input: CreateModelBiasJobDefinitionRequest,
+    ) -> Result<CreateModelBiasJobDefinitionResponse, RusotoError<CreateModelBiasJobDefinitionError>>;
+
+    /// <p>Creates the definition for a model explainability job.</p>
+    async fn create_model_explainability_job_definition(
+        &self,
+        input: CreateModelExplainabilityJobDefinitionRequest,
+    ) -> Result<
+        CreateModelExplainabilityJobDefinitionResponse,
+        RusotoError<CreateModelExplainabilityJobDefinitionError>,
+    >;
+
+    /// <p><p>Creates a model package that you can use to create Amazon SageMaker models or list on AWS Marketplace, or a versioned model that is part of a model group. Buyers can subscribe to model packages listed on AWS Marketplace to create models in Amazon SageMaker.</p> <p>To create a model package by specifying a Docker container that contains your inference code and the Amazon S3 location of your model artifacts, provide values for <code>InferenceSpecification</code>. To create a model from an algorithm resource that you created or subscribed to in AWS Marketplace, provide a value for <code>SourceAlgorithmSpecification</code>.</p> <note> <p>There are two types of model packages:</p> <ul> <li> <p>Versioned - a model that is part of a model group in the model registry.</p> </li> <li> <p>Unversioned - a model package that is not part of a model group.</p> </li> </ul> </note></p>
     async fn create_model_package(
         &self,
         input: CreateModelPackageInput,
     ) -> Result<CreateModelPackageOutput, RusotoError<CreateModelPackageError>>;
+
+    /// <p>Creates a model group. A model group contains a group of model versions.</p>
+    async fn create_model_package_group(
+        &self,
+        input: CreateModelPackageGroupInput,
+    ) -> Result<CreateModelPackageGroupOutput, RusotoError<CreateModelPackageGroupError>>;
+
+    /// <p>Creates a definition for a job that monitors model quality and drift. For information about model monitor, see <a href="https://docs.aws.amazon.com/sagemaker/latest/dg/model-monitor.html">Amazon SageMaker Model Monitor</a>.</p>
+    async fn create_model_quality_job_definition(
+        &self,
+        input: CreateModelQualityJobDefinitionRequest,
+    ) -> Result<
+        CreateModelQualityJobDefinitionResponse,
+        RusotoError<CreateModelQualityJobDefinitionError>,
+    >;
 
     /// <p>Creates a schedule that regularly starts Amazon SageMaker Processing Jobs to monitor the data captured for an Amazon SageMaker Endoint.</p>
     async fn create_monitoring_schedule(
@@ -12877,7 +21715,13 @@ pub trait SageMaker {
         RusotoError<CreateNotebookInstanceLifecycleConfigError>,
     >;
 
-    /// <p>Creates a URL for a specified UserProfile in a Domain. When accessed in a web browser, the user will be automatically signed in to Amazon SageMaker Studio, and granted access to all of the Apps and files associated with the Domain's Amazon Elastic File System (EFS) volume. This operation can only be called when the authentication mode equals IAM. </p>
+    /// <p>Creates a pipeline using a JSON pipeline definition.</p>
+    async fn create_pipeline(
+        &self,
+        input: CreatePipelineRequest,
+    ) -> Result<CreatePipelineResponse, RusotoError<CreatePipelineError>>;
+
+    /// <p><p>Creates a URL for a specified UserProfile in a Domain. When accessed in a web browser, the user will be automatically signed in to Amazon SageMaker Studio, and granted access to all of the Apps and files associated with the Domain&#39;s Amazon Elastic File System (EFS) volume. This operation can only be called when the authentication mode equals IAM. </p> <note> <p>The URL that you get from a call to <code>CreatePresignedDomainUrl</code> is valid only for 5 minutes. If you try to use the URL after the 5-minute limit expires, you are directed to the AWS console sign-in page.</p> </note></p>
     async fn create_presigned_domain_url(
         &self,
         input: CreatePresignedDomainUrlRequest,
@@ -12898,7 +21742,13 @@ pub trait SageMaker {
         input: CreateProcessingJobRequest,
     ) -> Result<CreateProcessingJobResponse, RusotoError<CreateProcessingJobError>>;
 
-    /// <p>Starts a model training job. After training completes, Amazon SageMaker saves the resulting model artifacts to an Amazon S3 location that you specify. </p> <p>If you choose to host your model using Amazon SageMaker hosting services, you can use the resulting model artifacts as part of the model. You can also use the artifacts in a machine learning service other than Amazon SageMaker, provided that you know how to use them for inferences. </p> <p>In the request body, you provide the following: </p> <ul> <li> <p> <code>AlgorithmSpecification</code> - Identifies the training algorithm to use. </p> </li> <li> <p> <code>HyperParameters</code> - Specify these algorithm-specific parameters to enable the estimation of model parameters during training. Hyperparameters can be tuned to optimize this learning process. For a list of hyperparameters for each training algorithm provided by Amazon SageMaker, see <a href="https://docs.aws.amazon.com/sagemaker/latest/dg/algos.html">Algorithms</a>. </p> </li> <li> <p> <code>InputDataConfig</code> - Describes the training dataset and the Amazon S3, EFS, or FSx location where it is stored.</p> </li> <li> <p> <code>OutputDataConfig</code> - Identifies the Amazon S3 bucket where you want Amazon SageMaker to save the results of model training. </p> <p/> </li> <li> <p> <code>ResourceConfig</code> - Identifies the resources, ML compute instances, and ML storage volumes to deploy for model training. In distributed training, you specify more than one instance. </p> </li> <li> <p> <code>EnableManagedSpotTraining</code> - Optimize the cost of training machine learning models by up to 80% by using Amazon EC2 Spot instances. For more information, see <a href="https://docs.aws.amazon.com/sagemaker/latest/dg/model-managed-spot-training.html">Managed Spot Training</a>. </p> </li> <li> <p> <code>RoleARN</code> - The Amazon Resource Number (ARN) that Amazon SageMaker assumes to perform tasks on your behalf during model training. You must grant this role the necessary permissions so that Amazon SageMaker can successfully complete model training. </p> </li> <li> <p> <code>StoppingCondition</code> - To help cap training costs, use <code>MaxRuntimeInSeconds</code> to set a time limit for training. Use <code>MaxWaitTimeInSeconds</code> to specify how long you are willing to wait for a managed spot training job to complete. </p> </li> </ul> <p> For more information about Amazon SageMaker, see <a href="https://docs.aws.amazon.com/sagemaker/latest/dg/how-it-works.html">How It Works</a>. </p>
+    /// <p>Creates a machine learning (ML) project that can contain one or more templates that set up an ML pipeline from training to deploying an approved model.</p>
+    async fn create_project(
+        &self,
+        input: CreateProjectInput,
+    ) -> Result<CreateProjectOutput, RusotoError<CreateProjectError>>;
+
+    /// <p>Starts a model training job. After training completes, Amazon SageMaker saves the resulting model artifacts to an Amazon S3 location that you specify. </p> <p>If you choose to host your model using Amazon SageMaker hosting services, you can use the resulting model artifacts as part of the model. You can also use the artifacts in a machine learning service other than Amazon SageMaker, provided that you know how to use them for inference. </p> <p>In the request body, you provide the following: </p> <ul> <li> <p> <code>AlgorithmSpecification</code> - Identifies the training algorithm to use. </p> </li> <li> <p> <code>HyperParameters</code> - Specify these algorithm-specific parameters to enable the estimation of model parameters during training. Hyperparameters can be tuned to optimize this learning process. For a list of hyperparameters for each training algorithm provided by Amazon SageMaker, see <a href="https://docs.aws.amazon.com/sagemaker/latest/dg/algos.html">Algorithms</a>. </p> </li> <li> <p> <code>InputDataConfig</code> - Describes the training dataset and the Amazon S3, EFS, or FSx location where it is stored.</p> </li> <li> <p> <code>OutputDataConfig</code> - Identifies the Amazon S3 bucket where you want Amazon SageMaker to save the results of model training. </p> <p/> </li> <li> <p> <code>ResourceConfig</code> - Identifies the resources, ML compute instances, and ML storage volumes to deploy for model training. In distributed training, you specify more than one instance. </p> </li> <li> <p> <code>EnableManagedSpotTraining</code> - Optimize the cost of training machine learning models by up to 80% by using Amazon EC2 Spot instances. For more information, see <a href="https://docs.aws.amazon.com/sagemaker/latest/dg/model-managed-spot-training.html">Managed Spot Training</a>. </p> </li> <li> <p> <code>RoleArn</code> - The Amazon Resource Number (ARN) that Amazon SageMaker assumes to perform tasks on your behalf during model training. You must grant this role the necessary permissions so that Amazon SageMaker can successfully complete model training. </p> </li> <li> <p> <code>StoppingCondition</code> - To help cap training costs, use <code>MaxRuntimeInSeconds</code> to set a time limit for training. Use <code>MaxWaitTimeInSeconds</code> to specify how long you are willing to wait for a managed spot training job to complete. </p> </li> </ul> <p> For more information about Amazon SageMaker, see <a href="https://docs.aws.amazon.com/sagemaker/latest/dg/how-it-works.html">How It Works</a>. </p>
     async fn create_training_job(
         &self,
         input: CreateTrainingJobRequest,
@@ -12928,11 +21778,23 @@ pub trait SageMaker {
         input: CreateUserProfileRequest,
     ) -> Result<CreateUserProfileResponse, RusotoError<CreateUserProfileError>>;
 
+    /// <p>Use this operation to create a workforce. This operation will return an error if a workforce already exists in the AWS Region that you specify. You can only create one workforce in each AWS Region per AWS account.</p> <p>If you want to create a new workforce in an AWS Region where a workforce already exists, use the API operation to delete the existing workforce and then use <code>CreateWorkforce</code> to create a new workforce.</p> <p>To create a private workforce using Amazon Cognito, you must specify a Cognito user pool in <code>CognitoConfig</code>. You can also create an Amazon Cognito workforce using the Amazon SageMaker console. For more information, see <a href="https://docs.aws.amazon.com/sagemaker/latest/dg/sms-workforce-create-private.html"> Create a Private Workforce (Amazon Cognito)</a>.</p> <p>To create a private workforce using your own OIDC Identity Provider (IdP), specify your IdP configuration in <code>OidcConfig</code>. Your OIDC IdP must support <i>groups</i> because groups are used by Ground Truth and Amazon A2I to create work teams. For more information, see <a href="https://docs.aws.amazon.com/sagemaker/latest/dg/sms-workforce-create-private-oidc.html"> Create a Private Workforce (OIDC IdP)</a>.</p>
+    async fn create_workforce(
+        &self,
+        input: CreateWorkforceRequest,
+    ) -> Result<CreateWorkforceResponse, RusotoError<CreateWorkforceError>>;
+
     /// <p>Creates a new work team for labeling your data. A work team is defined by one or more Amazon Cognito user pools. You must first create the user pools before you can create a work team.</p> <p>You cannot create more than 25 work teams in an account and region.</p>
     async fn create_workteam(
         &self,
         input: CreateWorkteamRequest,
     ) -> Result<CreateWorkteamResponse, RusotoError<CreateWorkteamError>>;
+
+    /// <p>Deletes an action.</p>
+    async fn delete_action(
+        &self,
+        input: DeleteActionRequest,
+    ) -> Result<DeleteActionResponse, RusotoError<DeleteActionError>>;
 
     /// <p>Removes the specified algorithm from your account.</p>
     async fn delete_algorithm(
@@ -12943,11 +21805,47 @@ pub trait SageMaker {
     /// <p>Used to stop and delete an app.</p>
     async fn delete_app(&self, input: DeleteAppRequest) -> Result<(), RusotoError<DeleteAppError>>;
 
+    /// <p>Deletes an AppImageConfig.</p>
+    async fn delete_app_image_config(
+        &self,
+        input: DeleteAppImageConfigRequest,
+    ) -> Result<(), RusotoError<DeleteAppImageConfigError>>;
+
+    /// <p>Deletes an artifact. Either <code>ArtifactArn</code> or <code>Source</code> must be specified.</p>
+    async fn delete_artifact(
+        &self,
+        input: DeleteArtifactRequest,
+    ) -> Result<DeleteArtifactResponse, RusotoError<DeleteArtifactError>>;
+
+    /// <p>Deletes an association.</p>
+    async fn delete_association(
+        &self,
+        input: DeleteAssociationRequest,
+    ) -> Result<DeleteAssociationResponse, RusotoError<DeleteAssociationError>>;
+
     /// <p>Deletes the specified Git repository from your account.</p>
     async fn delete_code_repository(
         &self,
         input: DeleteCodeRepositoryInput,
     ) -> Result<(), RusotoError<DeleteCodeRepositoryError>>;
+
+    /// <p>Deletes an context.</p>
+    async fn delete_context(
+        &self,
+        input: DeleteContextRequest,
+    ) -> Result<DeleteContextResponse, RusotoError<DeleteContextError>>;
+
+    /// <p>Deletes a data quality monitoring job definition.</p>
+    async fn delete_data_quality_job_definition(
+        &self,
+        input: DeleteDataQualityJobDefinitionRequest,
+    ) -> Result<(), RusotoError<DeleteDataQualityJobDefinitionError>>;
+
+    /// <p>Deletes a fleet.</p>
+    async fn delete_device_fleet(
+        &self,
+        input: DeleteDeviceFleetRequest,
+    ) -> Result<(), RusotoError<DeleteDeviceFleetError>>;
 
     /// <p>Used to delete a domain. If you onboarded with IAM mode, you will need to delete your domain to onboard again using SSO. Use with caution. All of the members of the domain will lose access to their EFS volume, including data, notebooks, and other artifacts. </p>
     async fn delete_domain(
@@ -12973,17 +21871,35 @@ pub trait SageMaker {
         input: DeleteExperimentRequest,
     ) -> Result<DeleteExperimentResponse, RusotoError<DeleteExperimentError>>;
 
+    /// <p>Delete the <code>FeatureGroup</code> and any data that was written to the <code>OnlineStore</code> of the <code>FeatureGroup</code>. Data cannot be accessed from the <code>OnlineStore</code> immediately after <code>DeleteFeatureGroup</code> is called. </p> <p>Data written into the <code>OfflineStore</code> will not be deleted. The AWS Glue database and tables that are automatically created for your <code>OfflineStore</code> are not deleted. </p>
+    async fn delete_feature_group(
+        &self,
+        input: DeleteFeatureGroupRequest,
+    ) -> Result<(), RusotoError<DeleteFeatureGroupError>>;
+
     /// <p>Deletes the specified flow definition.</p>
     async fn delete_flow_definition(
         &self,
         input: DeleteFlowDefinitionRequest,
     ) -> Result<DeleteFlowDefinitionResponse, RusotoError<DeleteFlowDefinitionError>>;
 
-    /// <p>Use this operation to delete a worker task template (<code>HumanTaskUi</code>).</p> <p> To see a list of human task user interfaces (work task templates) in your account, use . When you delete a worker task template, it no longer appears when you call <code>ListHumanTaskUis</code>.</p>
+    /// <p>Use this operation to delete a human task user interface (worker task template).</p> <p> To see a list of human task user interfaces (work task templates) in your account, use . When you delete a worker task template, it no longer appears when you call <code>ListHumanTaskUis</code>.</p>
     async fn delete_human_task_ui(
         &self,
         input: DeleteHumanTaskUiRequest,
     ) -> Result<DeleteHumanTaskUiResponse, RusotoError<DeleteHumanTaskUiError>>;
+
+    /// <p>Deletes a SageMaker image and all versions of the image. The container images aren't deleted.</p>
+    async fn delete_image(
+        &self,
+        input: DeleteImageRequest,
+    ) -> Result<DeleteImageResponse, RusotoError<DeleteImageError>>;
+
+    /// <p>Deletes a version of a SageMaker image. The container image the version represents isn't deleted.</p>
+    async fn delete_image_version(
+        &self,
+        input: DeleteImageVersionRequest,
+    ) -> Result<DeleteImageVersionResponse, RusotoError<DeleteImageVersionError>>;
 
     /// <p>Deletes a model. The <code>DeleteModel</code> API deletes only the model entry that was created in Amazon SageMaker when you called the <a>CreateModel</a> API. It does not delete model artifacts, inference code, or the IAM role that you specified when creating the model. </p>
     async fn delete_model(
@@ -12991,11 +21907,41 @@ pub trait SageMaker {
         input: DeleteModelInput,
     ) -> Result<(), RusotoError<DeleteModelError>>;
 
+    /// <p>Deletes an Amazon SageMaker model bias job definition.</p>
+    async fn delete_model_bias_job_definition(
+        &self,
+        input: DeleteModelBiasJobDefinitionRequest,
+    ) -> Result<(), RusotoError<DeleteModelBiasJobDefinitionError>>;
+
+    /// <p>Deletes an Amazon SageMaker model explainability job definition.</p>
+    async fn delete_model_explainability_job_definition(
+        &self,
+        input: DeleteModelExplainabilityJobDefinitionRequest,
+    ) -> Result<(), RusotoError<DeleteModelExplainabilityJobDefinitionError>>;
+
     /// <p>Deletes a model package.</p> <p>A model package is used to create Amazon SageMaker models or list on AWS Marketplace. Buyers can subscribe to model packages listed on AWS Marketplace to create models in Amazon SageMaker.</p>
     async fn delete_model_package(
         &self,
         input: DeleteModelPackageInput,
     ) -> Result<(), RusotoError<DeleteModelPackageError>>;
+
+    /// <p>Deletes the specified model group.</p>
+    async fn delete_model_package_group(
+        &self,
+        input: DeleteModelPackageGroupInput,
+    ) -> Result<(), RusotoError<DeleteModelPackageGroupError>>;
+
+    /// <p>Deletes a model group resource policy.</p>
+    async fn delete_model_package_group_policy(
+        &self,
+        input: DeleteModelPackageGroupPolicyInput,
+    ) -> Result<(), RusotoError<DeleteModelPackageGroupPolicyError>>;
+
+    /// <p>Deletes the secified model quality monitoring job definition.</p>
+    async fn delete_model_quality_job_definition(
+        &self,
+        input: DeleteModelQualityJobDefinitionRequest,
+    ) -> Result<(), RusotoError<DeleteModelQualityJobDefinitionError>>;
 
     /// <p>Deletes a monitoring schedule. Also stops the schedule had not already been stopped. This does not delete the job execution history of the monitoring schedule. </p>
     async fn delete_monitoring_schedule(
@@ -13014,6 +21960,18 @@ pub trait SageMaker {
         &self,
         input: DeleteNotebookInstanceLifecycleConfigInput,
     ) -> Result<(), RusotoError<DeleteNotebookInstanceLifecycleConfigError>>;
+
+    /// <p>Deletes a pipeline if there are no in-progress executions.</p>
+    async fn delete_pipeline(
+        &self,
+        input: DeletePipelineRequest,
+    ) -> Result<DeletePipelineResponse, RusotoError<DeletePipelineError>>;
+
+    /// <p>Delete the specified project.</p>
+    async fn delete_project(
+        &self,
+        input: DeleteProjectInput,
+    ) -> Result<(), RusotoError<DeleteProjectError>>;
 
     /// <p><p>Deletes the specified tags from an Amazon SageMaker resource.</p> <p>To list a resource&#39;s tags, use the <code>ListTags</code> API. </p> <note> <p>When you call this API to delete tags from a hyperparameter tuning job, the deleted tags are not removed from training jobs that the hyperparameter tuning job launched before you called this API.</p> </note></p>
     async fn delete_tags(
@@ -13039,11 +21997,29 @@ pub trait SageMaker {
         input: DeleteUserProfileRequest,
     ) -> Result<(), RusotoError<DeleteUserProfileError>>;
 
+    /// <p><p>Use this operation to delete a workforce.</p> <p>If you want to create a new workforce in an AWS Region where a workforce already exists, use this operation to delete the existing workforce and then use to create a new workforce.</p> <important> <p>If a private workforce contains one or more work teams, you must use the operation to delete all work teams before you delete the workforce. If you try to delete a workforce that contains one or more work teams, you will recieve a <code>ResourceInUse</code> error.</p> </important></p>
+    async fn delete_workforce(
+        &self,
+        input: DeleteWorkforceRequest,
+    ) -> Result<DeleteWorkforceResponse, RusotoError<DeleteWorkforceError>>;
+
     /// <p>Deletes an existing work team. This operation can't be undone.</p>
     async fn delete_workteam(
         &self,
         input: DeleteWorkteamRequest,
     ) -> Result<DeleteWorkteamResponse, RusotoError<DeleteWorkteamError>>;
+
+    /// <p>Deregisters the specified devices. After you deregister a device, you will need to re-register the devices.</p>
+    async fn deregister_devices(
+        &self,
+        input: DeregisterDevicesRequest,
+    ) -> Result<(), RusotoError<DeregisterDevicesError>>;
+
+    /// <p>Describes an action.</p>
+    async fn describe_action(
+        &self,
+        input: DescribeActionRequest,
+    ) -> Result<DescribeActionResponse, RusotoError<DescribeActionError>>;
 
     /// <p>Returns a description of the specified algorithm that is in your account.</p>
     async fn describe_algorithm(
@@ -13056,6 +22032,18 @@ pub trait SageMaker {
         &self,
         input: DescribeAppRequest,
     ) -> Result<DescribeAppResponse, RusotoError<DescribeAppError>>;
+
+    /// <p>Describes an AppImageConfig.</p>
+    async fn describe_app_image_config(
+        &self,
+        input: DescribeAppImageConfigRequest,
+    ) -> Result<DescribeAppImageConfigResponse, RusotoError<DescribeAppImageConfigError>>;
+
+    /// <p>Describes an artifact.</p>
+    async fn describe_artifact(
+        &self,
+        input: DescribeArtifactRequest,
+    ) -> Result<DescribeArtifactResponse, RusotoError<DescribeArtifactError>>;
 
     /// <p>Returns information about an Amazon SageMaker job.</p>
     async fn describe_auto_ml_job(
@@ -13075,11 +22063,44 @@ pub trait SageMaker {
         input: DescribeCompilationJobRequest,
     ) -> Result<DescribeCompilationJobResponse, RusotoError<DescribeCompilationJobError>>;
 
+    /// <p>Describes a context.</p>
+    async fn describe_context(
+        &self,
+        input: DescribeContextRequest,
+    ) -> Result<DescribeContextResponse, RusotoError<DescribeContextError>>;
+
+    /// <p>Gets the details of a data quality monitoring job definition.</p>
+    async fn describe_data_quality_job_definition(
+        &self,
+        input: DescribeDataQualityJobDefinitionRequest,
+    ) -> Result<
+        DescribeDataQualityJobDefinitionResponse,
+        RusotoError<DescribeDataQualityJobDefinitionError>,
+    >;
+
+    /// <p>Describes the device.</p>
+    async fn describe_device(
+        &self,
+        input: DescribeDeviceRequest,
+    ) -> Result<DescribeDeviceResponse, RusotoError<DescribeDeviceError>>;
+
+    /// <p>A description of the fleet the device belongs to.</p>
+    async fn describe_device_fleet(
+        &self,
+        input: DescribeDeviceFleetRequest,
+    ) -> Result<DescribeDeviceFleetResponse, RusotoError<DescribeDeviceFleetError>>;
+
     /// <p>The description of the domain.</p>
     async fn describe_domain(
         &self,
         input: DescribeDomainRequest,
     ) -> Result<DescribeDomainResponse, RusotoError<DescribeDomainError>>;
+
+    /// <p>A description of edge packaging jobs.</p>
+    async fn describe_edge_packaging_job(
+        &self,
+        input: DescribeEdgePackagingJobRequest,
+    ) -> Result<DescribeEdgePackagingJobResponse, RusotoError<DescribeEdgePackagingJobError>>;
 
     /// <p>Returns the description of an endpoint.</p>
     async fn describe_endpoint(
@@ -13098,6 +22119,12 @@ pub trait SageMaker {
         &self,
         input: DescribeExperimentRequest,
     ) -> Result<DescribeExperimentResponse, RusotoError<DescribeExperimentError>>;
+
+    /// <p>Use this operation to describe a <code>FeatureGroup</code>. The response includes information on the creation time, <code>FeatureGroup</code> name, the unique identifier for each <code>FeatureGroup</code>, and more.</p>
+    async fn describe_feature_group(
+        &self,
+        input: DescribeFeatureGroupRequest,
+    ) -> Result<DescribeFeatureGroupResponse, RusotoError<DescribeFeatureGroupError>>;
 
     /// <p>Returns information about the specified flow definition.</p>
     async fn describe_flow_definition(
@@ -13120,6 +22147,18 @@ pub trait SageMaker {
         RusotoError<DescribeHyperParameterTuningJobError>,
     >;
 
+    /// <p>Describes a SageMaker image.</p>
+    async fn describe_image(
+        &self,
+        input: DescribeImageRequest,
+    ) -> Result<DescribeImageResponse, RusotoError<DescribeImageError>>;
+
+    /// <p>Describes a version of a SageMaker image.</p>
+    async fn describe_image_version(
+        &self,
+        input: DescribeImageVersionRequest,
+    ) -> Result<DescribeImageVersionResponse, RusotoError<DescribeImageVersionError>>;
+
     /// <p>Gets information about a labeling job.</p>
     async fn describe_labeling_job(
         &self,
@@ -13132,11 +22171,44 @@ pub trait SageMaker {
         input: DescribeModelInput,
     ) -> Result<DescribeModelOutput, RusotoError<DescribeModelError>>;
 
+    /// <p>Returns a description of a model bias job definition.</p>
+    async fn describe_model_bias_job_definition(
+        &self,
+        input: DescribeModelBiasJobDefinitionRequest,
+    ) -> Result<
+        DescribeModelBiasJobDefinitionResponse,
+        RusotoError<DescribeModelBiasJobDefinitionError>,
+    >;
+
+    /// <p>Returns a description of a model explainability job definition.</p>
+    async fn describe_model_explainability_job_definition(
+        &self,
+        input: DescribeModelExplainabilityJobDefinitionRequest,
+    ) -> Result<
+        DescribeModelExplainabilityJobDefinitionResponse,
+        RusotoError<DescribeModelExplainabilityJobDefinitionError>,
+    >;
+
     /// <p>Returns a description of the specified model package, which is used to create Amazon SageMaker models or list them on AWS Marketplace.</p> <p>To create models in Amazon SageMaker, buyers can subscribe to model packages listed on AWS Marketplace.</p>
     async fn describe_model_package(
         &self,
         input: DescribeModelPackageInput,
     ) -> Result<DescribeModelPackageOutput, RusotoError<DescribeModelPackageError>>;
+
+    /// <p>Gets a description for the specified model group.</p>
+    async fn describe_model_package_group(
+        &self,
+        input: DescribeModelPackageGroupInput,
+    ) -> Result<DescribeModelPackageGroupOutput, RusotoError<DescribeModelPackageGroupError>>;
+
+    /// <p>Returns a description of a model quality job definition.</p>
+    async fn describe_model_quality_job_definition(
+        &self,
+        input: DescribeModelQualityJobDefinitionRequest,
+    ) -> Result<
+        DescribeModelQualityJobDefinitionResponse,
+        RusotoError<DescribeModelQualityJobDefinitionError>,
+    >;
 
     /// <p>Describes the schedule for a monitoring job.</p>
     async fn describe_monitoring_schedule(
@@ -13159,11 +22231,38 @@ pub trait SageMaker {
         RusotoError<DescribeNotebookInstanceLifecycleConfigError>,
     >;
 
+    /// <p>Describes the details of a pipeline.</p>
+    async fn describe_pipeline(
+        &self,
+        input: DescribePipelineRequest,
+    ) -> Result<DescribePipelineResponse, RusotoError<DescribePipelineError>>;
+
+    /// <p>Describes the details of an execution's pipeline definition.</p>
+    async fn describe_pipeline_definition_for_execution(
+        &self,
+        input: DescribePipelineDefinitionForExecutionRequest,
+    ) -> Result<
+        DescribePipelineDefinitionForExecutionResponse,
+        RusotoError<DescribePipelineDefinitionForExecutionError>,
+    >;
+
+    /// <p>Describes the details of a pipeline execution.</p>
+    async fn describe_pipeline_execution(
+        &self,
+        input: DescribePipelineExecutionRequest,
+    ) -> Result<DescribePipelineExecutionResponse, RusotoError<DescribePipelineExecutionError>>;
+
     /// <p>Returns a description of a processing job.</p>
     async fn describe_processing_job(
         &self,
         input: DescribeProcessingJobRequest,
     ) -> Result<DescribeProcessingJobResponse, RusotoError<DescribeProcessingJobError>>;
+
+    /// <p>Describes the details of a project.</p>
+    async fn describe_project(
+        &self,
+        input: DescribeProjectInput,
+    ) -> Result<DescribeProjectOutput, RusotoError<DescribeProjectError>>;
 
     /// <p>Gets information about a work team provided by a vendor. It returns details about the subscription with a vendor in the AWS Marketplace.</p>
     async fn describe_subscribed_workteam(
@@ -13213,11 +22312,47 @@ pub trait SageMaker {
         input: DescribeWorkteamRequest,
     ) -> Result<DescribeWorkteamResponse, RusotoError<DescribeWorkteamError>>;
 
+    /// <p>Disables using Service Catalog in SageMaker. Service Catalog is used to create SageMaker projects.</p>
+    async fn disable_sagemaker_servicecatalog_portfolio(
+        &self,
+    ) -> Result<
+        DisableSagemakerServicecatalogPortfolioOutput,
+        RusotoError<DisableSagemakerServicecatalogPortfolioError>,
+    >;
+
     /// <p>Disassociates a trial component from a trial. This doesn't effect other trials the component is associated with. Before you can delete a component, you must disassociate the component from all trials it is associated with. To associate a trial component with a trial, call the <a>AssociateTrialComponent</a> API.</p> <p>To get a list of the trials a component is associated with, use the <a>Search</a> API. Specify <code>ExperimentTrialComponent</code> for the <code>Resource</code> parameter. The list appears in the response under <code>Results.TrialComponent.Parents</code>.</p>
     async fn disassociate_trial_component(
         &self,
         input: DisassociateTrialComponentRequest,
     ) -> Result<DisassociateTrialComponentResponse, RusotoError<DisassociateTrialComponentError>>;
+
+    /// <p>Enables using Service Catalog in SageMaker. Service Catalog is used to create SageMaker projects.</p>
+    async fn enable_sagemaker_servicecatalog_portfolio(
+        &self,
+    ) -> Result<
+        EnableSagemakerServicecatalogPortfolioOutput,
+        RusotoError<EnableSagemakerServicecatalogPortfolioError>,
+    >;
+
+    /// <p>Describes a fleet.</p>
+    async fn get_device_fleet_report(
+        &self,
+        input: GetDeviceFleetReportRequest,
+    ) -> Result<GetDeviceFleetReportResponse, RusotoError<GetDeviceFleetReportError>>;
+
+    /// <p>Gets a resource policy that manages access for a model group. For information about resource policies, see <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/access_policies_identity-vs-resource.html">Identity-based policies and resource-based policies</a> in the <i>AWS Identity and Access Management User Guide.</i>.</p>
+    async fn get_model_package_group_policy(
+        &self,
+        input: GetModelPackageGroupPolicyInput,
+    ) -> Result<GetModelPackageGroupPolicyOutput, RusotoError<GetModelPackageGroupPolicyError>>;
+
+    /// <p>Gets the status of Service Catalog in SageMaker. Service Catalog is used to create SageMaker projects.</p>
+    async fn get_sagemaker_servicecatalog_portfolio_status(
+        &self,
+    ) -> Result<
+        GetSagemakerServicecatalogPortfolioStatusOutput,
+        RusotoError<GetSagemakerServicecatalogPortfolioStatusError>,
+    >;
 
     /// <p>An auto-complete API for the search functionality in the Amazon SageMaker console. It returns suggestions of possible matches for the property name to use in <code>Search</code> queries. Provides suggestions for <code>HyperParameters</code>, <code>Tags</code>, and <code>Metrics</code>.</p>
     async fn get_search_suggestions(
@@ -13225,17 +22360,41 @@ pub trait SageMaker {
         input: GetSearchSuggestionsRequest,
     ) -> Result<GetSearchSuggestionsResponse, RusotoError<GetSearchSuggestionsError>>;
 
+    /// <p>Lists the actions in your account and their properties.</p>
+    async fn list_actions(
+        &self,
+        input: ListActionsRequest,
+    ) -> Result<ListActionsResponse, RusotoError<ListActionsError>>;
+
     /// <p>Lists the machine learning algorithms that have been created.</p>
     async fn list_algorithms(
         &self,
         input: ListAlgorithmsInput,
     ) -> Result<ListAlgorithmsOutput, RusotoError<ListAlgorithmsError>>;
 
+    /// <p>Lists the AppImageConfigs in your account and their properties. The list can be filtered by creation time or modified time, and whether the AppImageConfig name contains a specified string.</p>
+    async fn list_app_image_configs(
+        &self,
+        input: ListAppImageConfigsRequest,
+    ) -> Result<ListAppImageConfigsResponse, RusotoError<ListAppImageConfigsError>>;
+
     /// <p>Lists apps.</p>
     async fn list_apps(
         &self,
         input: ListAppsRequest,
     ) -> Result<ListAppsResponse, RusotoError<ListAppsError>>;
+
+    /// <p>Lists the artifacts in your account and their properties.</p>
+    async fn list_artifacts(
+        &self,
+        input: ListArtifactsRequest,
+    ) -> Result<ListArtifactsResponse, RusotoError<ListArtifactsError>>;
+
+    /// <p>Lists the associations in your account and their properties.</p>
+    async fn list_associations(
+        &self,
+        input: ListAssociationsRequest,
+    ) -> Result<ListAssociationsResponse, RusotoError<ListAssociationsError>>;
 
     /// <p>Request a list of jobs.</p>
     async fn list_auto_ml_jobs(
@@ -13261,11 +22420,44 @@ pub trait SageMaker {
         input: ListCompilationJobsRequest,
     ) -> Result<ListCompilationJobsResponse, RusotoError<ListCompilationJobsError>>;
 
+    /// <p>Lists the contexts in your account and their properties.</p>
+    async fn list_contexts(
+        &self,
+        input: ListContextsRequest,
+    ) -> Result<ListContextsResponse, RusotoError<ListContextsError>>;
+
+    /// <p>Lists the data quality job definitions in your account.</p>
+    async fn list_data_quality_job_definitions(
+        &self,
+        input: ListDataQualityJobDefinitionsRequest,
+    ) -> Result<
+        ListDataQualityJobDefinitionsResponse,
+        RusotoError<ListDataQualityJobDefinitionsError>,
+    >;
+
+    /// <p>Returns a list of devices in the fleet.</p>
+    async fn list_device_fleets(
+        &self,
+        input: ListDeviceFleetsRequest,
+    ) -> Result<ListDeviceFleetsResponse, RusotoError<ListDeviceFleetsError>>;
+
+    /// <p>A list of devices.</p>
+    async fn list_devices(
+        &self,
+        input: ListDevicesRequest,
+    ) -> Result<ListDevicesResponse, RusotoError<ListDevicesError>>;
+
     /// <p>Lists the domains.</p>
     async fn list_domains(
         &self,
         input: ListDomainsRequest,
     ) -> Result<ListDomainsResponse, RusotoError<ListDomainsError>>;
+
+    /// <p>Returns a list of edge packaging jobs.</p>
+    async fn list_edge_packaging_jobs(
+        &self,
+        input: ListEdgePackagingJobsRequest,
+    ) -> Result<ListEdgePackagingJobsResponse, RusotoError<ListEdgePackagingJobsError>>;
 
     /// <p>Lists endpoint configurations.</p>
     async fn list_endpoint_configs(
@@ -13285,6 +22477,12 @@ pub trait SageMaker {
         input: ListExperimentsRequest,
     ) -> Result<ListExperimentsResponse, RusotoError<ListExperimentsError>>;
 
+    /// <p>List <code>FeatureGroup</code>s based on given filter and order.</p>
+    async fn list_feature_groups(
+        &self,
+        input: ListFeatureGroupsRequest,
+    ) -> Result<ListFeatureGroupsResponse, RusotoError<ListFeatureGroupsError>>;
+
     /// <p>Returns information about the flow definitions in your account.</p>
     async fn list_flow_definitions(
         &self,
@@ -13303,6 +22501,18 @@ pub trait SageMaker {
         input: ListHyperParameterTuningJobsRequest,
     ) -> Result<ListHyperParameterTuningJobsResponse, RusotoError<ListHyperParameterTuningJobsError>>;
 
+    /// <p>Lists the versions of a specified image and their properties. The list can be filtered by creation time or modified time.</p>
+    async fn list_image_versions(
+        &self,
+        input: ListImageVersionsRequest,
+    ) -> Result<ListImageVersionsResponse, RusotoError<ListImageVersionsError>>;
+
+    /// <p>Lists the images in your account and their properties. The list can be filtered by creation time or modified time, and whether the image name contains a specified string.</p>
+    async fn list_images(
+        &self,
+        input: ListImagesRequest,
+    ) -> Result<ListImagesResponse, RusotoError<ListImagesError>>;
+
     /// <p>Gets a list of labeling jobs.</p>
     async fn list_labeling_jobs(
         &self,
@@ -13315,11 +22525,41 @@ pub trait SageMaker {
         input: ListLabelingJobsForWorkteamRequest,
     ) -> Result<ListLabelingJobsForWorkteamResponse, RusotoError<ListLabelingJobsForWorkteamError>>;
 
+    /// <p>Lists model bias jobs definitions that satisfy various filters.</p>
+    async fn list_model_bias_job_definitions(
+        &self,
+        input: ListModelBiasJobDefinitionsRequest,
+    ) -> Result<ListModelBiasJobDefinitionsResponse, RusotoError<ListModelBiasJobDefinitionsError>>;
+
+    /// <p>Lists model explainability job definitions that satisfy various filters.</p>
+    async fn list_model_explainability_job_definitions(
+        &self,
+        input: ListModelExplainabilityJobDefinitionsRequest,
+    ) -> Result<
+        ListModelExplainabilityJobDefinitionsResponse,
+        RusotoError<ListModelExplainabilityJobDefinitionsError>,
+    >;
+
+    /// <p>Gets a list of the model groups in your AWS account.</p>
+    async fn list_model_package_groups(
+        &self,
+        input: ListModelPackageGroupsInput,
+    ) -> Result<ListModelPackageGroupsOutput, RusotoError<ListModelPackageGroupsError>>;
+
     /// <p>Lists the model packages that have been created.</p>
     async fn list_model_packages(
         &self,
         input: ListModelPackagesInput,
     ) -> Result<ListModelPackagesOutput, RusotoError<ListModelPackagesError>>;
+
+    /// <p>Gets a list of model quality monitoring job definitions in your account.</p>
+    async fn list_model_quality_job_definitions(
+        &self,
+        input: ListModelQualityJobDefinitionsRequest,
+    ) -> Result<
+        ListModelQualityJobDefinitionsResponse,
+        RusotoError<ListModelQualityJobDefinitionsError>,
+    >;
 
     /// <p>Lists models created with the <a>CreateModel</a> API.</p>
     async fn list_models(
@@ -13354,11 +22594,44 @@ pub trait SageMaker {
         input: ListNotebookInstancesInput,
     ) -> Result<ListNotebookInstancesOutput, RusotoError<ListNotebookInstancesError>>;
 
+    /// <p>Gets a list of <code>PipeLineExecutionStep</code> objects.</p>
+    async fn list_pipeline_execution_steps(
+        &self,
+        input: ListPipelineExecutionStepsRequest,
+    ) -> Result<ListPipelineExecutionStepsResponse, RusotoError<ListPipelineExecutionStepsError>>;
+
+    /// <p>Gets a list of the pipeline executions.</p>
+    async fn list_pipeline_executions(
+        &self,
+        input: ListPipelineExecutionsRequest,
+    ) -> Result<ListPipelineExecutionsResponse, RusotoError<ListPipelineExecutionsError>>;
+
+    /// <p>Gets a list of parameters for a pipeline execution.</p>
+    async fn list_pipeline_parameters_for_execution(
+        &self,
+        input: ListPipelineParametersForExecutionRequest,
+    ) -> Result<
+        ListPipelineParametersForExecutionResponse,
+        RusotoError<ListPipelineParametersForExecutionError>,
+    >;
+
+    /// <p>Gets a list of pipelines.</p>
+    async fn list_pipelines(
+        &self,
+        input: ListPipelinesRequest,
+    ) -> Result<ListPipelinesResponse, RusotoError<ListPipelinesError>>;
+
     /// <p>Lists processing jobs that satisfy various filters.</p>
     async fn list_processing_jobs(
         &self,
         input: ListProcessingJobsRequest,
     ) -> Result<ListProcessingJobsResponse, RusotoError<ListProcessingJobsError>>;
+
+    /// <p>Gets a list of the projects in an AWS account.</p>
+    async fn list_projects(
+        &self,
+        input: ListProjectsInput,
+    ) -> Result<ListProjectsOutput, RusotoError<ListProjectsError>>;
 
     /// <p>Gets a list of the work teams that you are subscribed to in the AWS Marketplace. The list may be empty if no work team satisfies the filter specified in the <code>NameContains</code> parameter.</p>
     async fn list_subscribed_workteams(
@@ -13411,11 +22684,29 @@ pub trait SageMaker {
         input: ListUserProfilesRequest,
     ) -> Result<ListUserProfilesResponse, RusotoError<ListUserProfilesError>>;
 
-    /// <p>Gets a list of work teams that you have defined in a region. The list may be empty if no work team satisfies the filter specified in the <code>NameContains</code> parameter.</p>
+    /// <p>Use this operation to list all private and vendor workforces in an AWS Region. Note that you can only have one private workforce per AWS Region.</p>
+    async fn list_workforces(
+        &self,
+        input: ListWorkforcesRequest,
+    ) -> Result<ListWorkforcesResponse, RusotoError<ListWorkforcesError>>;
+
+    /// <p>Gets a list of private work teams that you have defined in a region. The list may be empty if no work team satisfies the filter specified in the <code>NameContains</code> parameter.</p>
     async fn list_workteams(
         &self,
         input: ListWorkteamsRequest,
     ) -> Result<ListWorkteamsResponse, RusotoError<ListWorkteamsError>>;
+
+    /// <p>Adds a resouce policy to control access to a model group. For information about resoure policies, see <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/access_policies_identity-vs-resource.html">Identity-based policies and resource-based policies</a> in the <i>AWS Identity and Access Management User Guide.</i>.</p>
+    async fn put_model_package_group_policy(
+        &self,
+        input: PutModelPackageGroupPolicyInput,
+    ) -> Result<PutModelPackageGroupPolicyOutput, RusotoError<PutModelPackageGroupPolicyError>>;
+
+    /// <p>Register devices.</p>
+    async fn register_devices(
+        &self,
+        input: RegisterDevicesRequest,
+    ) -> Result<(), RusotoError<RegisterDevicesError>>;
 
     /// <p>Renders the UI template so that you can preview the worker's experience. </p>
     async fn render_ui_template(
@@ -13429,7 +22720,7 @@ pub trait SageMaker {
         input: SearchRequest,
     ) -> Result<SearchResponse, RusotoError<SearchError>>;
 
-    /// <p><p>Starts a previously stopped monitoring schedule.</p> <note> <p>New monitoring schedules are immediately started after creation.</p> </note></p>
+    /// <p><p>Starts a previously stopped monitoring schedule.</p> <note> <p>By default, when you successfully create a new schedule, the status of a monitoring schedule is <code>scheduled</code>.</p> </note></p>
     async fn start_monitoring_schedule(
         &self,
         input: StartMonitoringScheduleRequest,
@@ -13440,6 +22731,12 @@ pub trait SageMaker {
         &self,
         input: StartNotebookInstanceInput,
     ) -> Result<(), RusotoError<StartNotebookInstanceError>>;
+
+    /// <p>Starts a pipeline execution.</p>
+    async fn start_pipeline_execution(
+        &self,
+        input: StartPipelineExecutionRequest,
+    ) -> Result<StartPipelineExecutionResponse, RusotoError<StartPipelineExecutionError>>;
 
     /// <p>A method for forcing the termination of a running job.</p>
     async fn stop_auto_ml_job(
@@ -13452,6 +22749,12 @@ pub trait SageMaker {
         &self,
         input: StopCompilationJobRequest,
     ) -> Result<(), RusotoError<StopCompilationJobError>>;
+
+    /// <p>Request to stop an edge packaging job.</p>
+    async fn stop_edge_packaging_job(
+        &self,
+        input: StopEdgePackagingJobRequest,
+    ) -> Result<(), RusotoError<StopEdgePackagingJobError>>;
 
     /// <p>Stops a running hyperparameter tuning job and all running training jobs that the tuning job launched.</p> <p>All model artifacts output from the training jobs are stored in Amazon Simple Storage Service (Amazon S3). All data that the training jobs write to Amazon CloudWatch Logs are still available in CloudWatch. After the tuning job moves to the <code>Stopped</code> state, it releases all reserved resources for the tuning job.</p>
     async fn stop_hyper_parameter_tuning_job(
@@ -13477,6 +22780,12 @@ pub trait SageMaker {
         input: StopNotebookInstanceInput,
     ) -> Result<(), RusotoError<StopNotebookInstanceError>>;
 
+    /// <p>Stops a pipeline execution.</p>
+    async fn stop_pipeline_execution(
+        &self,
+        input: StopPipelineExecutionRequest,
+    ) -> Result<StopPipelineExecutionResponse, RusotoError<StopPipelineExecutionError>>;
+
     /// <p>Stops a processing job.</p>
     async fn stop_processing_job(
         &self,
@@ -13495,11 +22804,47 @@ pub trait SageMaker {
         input: StopTransformJobRequest,
     ) -> Result<(), RusotoError<StopTransformJobError>>;
 
+    /// <p>Updates an action.</p>
+    async fn update_action(
+        &self,
+        input: UpdateActionRequest,
+    ) -> Result<UpdateActionResponse, RusotoError<UpdateActionError>>;
+
+    /// <p>Updates the properties of an AppImageConfig.</p>
+    async fn update_app_image_config(
+        &self,
+        input: UpdateAppImageConfigRequest,
+    ) -> Result<UpdateAppImageConfigResponse, RusotoError<UpdateAppImageConfigError>>;
+
+    /// <p>Updates an artifact.</p>
+    async fn update_artifact(
+        &self,
+        input: UpdateArtifactRequest,
+    ) -> Result<UpdateArtifactResponse, RusotoError<UpdateArtifactError>>;
+
     /// <p>Updates the specified Git repository with the specified values.</p>
     async fn update_code_repository(
         &self,
         input: UpdateCodeRepositoryInput,
     ) -> Result<UpdateCodeRepositoryOutput, RusotoError<UpdateCodeRepositoryError>>;
+
+    /// <p>Updates a context.</p>
+    async fn update_context(
+        &self,
+        input: UpdateContextRequest,
+    ) -> Result<UpdateContextResponse, RusotoError<UpdateContextError>>;
+
+    /// <p>Updates a fleet of devices.</p>
+    async fn update_device_fleet(
+        &self,
+        input: UpdateDeviceFleetRequest,
+    ) -> Result<(), RusotoError<UpdateDeviceFleetError>>;
+
+    /// <p>Updates one or more devices in a fleet.</p>
+    async fn update_devices(
+        &self,
+        input: UpdateDevicesRequest,
+    ) -> Result<(), RusotoError<UpdateDevicesError>>;
 
     /// <p>Updates the default settings for new user profiles in the domain.</p>
     async fn update_domain(
@@ -13528,6 +22873,18 @@ pub trait SageMaker {
         input: UpdateExperimentRequest,
     ) -> Result<UpdateExperimentResponse, RusotoError<UpdateExperimentError>>;
 
+    /// <p>Updates the properties of a SageMaker image. To change the image's tags, use the <a>AddTags</a> and <a>DeleteTags</a> APIs.</p>
+    async fn update_image(
+        &self,
+        input: UpdateImageRequest,
+    ) -> Result<UpdateImageResponse, RusotoError<UpdateImageError>>;
+
+    /// <p>Updates a versioned model.</p>
+    async fn update_model_package(
+        &self,
+        input: UpdateModelPackageInput,
+    ) -> Result<UpdateModelPackageOutput, RusotoError<UpdateModelPackageError>>;
+
     /// <p>Updates a previously created schedule.</p>
     async fn update_monitoring_schedule(
         &self,
@@ -13549,6 +22906,24 @@ pub trait SageMaker {
         RusotoError<UpdateNotebookInstanceLifecycleConfigError>,
     >;
 
+    /// <p>Updates a pipeline.</p>
+    async fn update_pipeline(
+        &self,
+        input: UpdatePipelineRequest,
+    ) -> Result<UpdatePipelineResponse, RusotoError<UpdatePipelineError>>;
+
+    /// <p>Updates a pipeline execution.</p>
+    async fn update_pipeline_execution(
+        &self,
+        input: UpdatePipelineExecutionRequest,
+    ) -> Result<UpdatePipelineExecutionResponse, RusotoError<UpdatePipelineExecutionError>>;
+
+    /// <p>Update a model training job to request a new Debugger profiling configuration.</p>
+    async fn update_training_job(
+        &self,
+        input: UpdateTrainingJobRequest,
+    ) -> Result<UpdateTrainingJobResponse, RusotoError<UpdateTrainingJobError>>;
+
     /// <p>Updates the display name of a trial.</p>
     async fn update_trial(
         &self,
@@ -13567,7 +22942,7 @@ pub trait SageMaker {
         input: UpdateUserProfileRequest,
     ) -> Result<UpdateUserProfileResponse, RusotoError<UpdateUserProfileError>>;
 
-    /// <p><p>Restricts access to tasks assigned to workers in the specified workforce to those within specific ranges of IP addresses. You specify allowed IP addresses by creating a list of up to ten <a href="https://docs.aws.amazon.com/vpc/latest/userguide/VPC_Subnets.html">CIDRs</a>.</p> <p>By default, a workforce isn&#39;t restricted to specific IP addresses. If you specify a range of IP addresses, workers who attempt to access tasks using any IP address outside the specified range are denied access and get a <code>Not Found</code> error message on the worker portal. After restricting access with this operation, you can see the allowed IP values for a private workforce with the operation.</p> <important> <p>This operation applies only to private workforces.</p> </important></p>
+    /// <p><p>Use this operation to update your workforce. You can use this operation to require that workers use specific IP addresses to work on tasks and to update your OpenID Connect (OIDC) Identity Provider (IdP) workforce configuration.</p> <p> Use <code>SourceIpConfig</code> to restrict worker access to tasks to a specific range of IP addresses. You specify allowed IP addresses by creating a list of up to ten <a href="https://docs.aws.amazon.com/vpc/latest/userguide/VPC_Subnets.html">CIDRs</a>. By default, a workforce isn&#39;t restricted to specific IP addresses. If you specify a range of IP addresses, workers who attempt to access tasks using any IP address outside the specified range are denied and get a <code>Not Found</code> error message on the worker portal.</p> <p>Use <code>OidcConfig</code> to update the configuration of a workforce created using your own OIDC IdP. </p> <important> <p>You can only update your OIDC IdP configuration when there are no work teams associated with your workforce. You can delete work teams using the operation.</p> </important> <p>After restricting access to a range of IP addresses or updating your OIDC IdP configuration with this operation, you can view details about your update workforce using the operation.</p> <important> <p>This operation only applies to private workforces.</p> </important></p>
     async fn update_workforce(
         &self,
         input: UpdateWorkforceRequest,
@@ -13619,6 +22994,24 @@ impl SageMakerClient {
 
 #[async_trait]
 impl SageMaker for SageMakerClient {
+    /// <p>Creates an <i>association</i> between the source and the destination. A source can be associated with multiple destinations, and a destination can be associated with multiple sources. An association is a lineage tracking entity. For more information, see <a href="https://docs.aws.amazon.com/sagemaker/latest/dg/lineage-tracking.html">Amazon SageMaker ML Lineage Tracking</a>.</p>
+    async fn add_association(
+        &self,
+        input: AddAssociationRequest,
+    ) -> Result<AddAssociationResponse, RusotoError<AddAssociationError>> {
+        let mut request = self.new_signed_request("POST", "/");
+        request.add_header("x-amz-target", "SageMaker.AddAssociation");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        let response = self
+            .sign_and_dispatch(request, AddAssociationError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<AddAssociationResponse, _>()
+    }
+
     /// <p><p>Adds or overwrites one or more tags for the specified Amazon SageMaker resource. You can add tags to notebook instances, training jobs, hyperparameter tuning jobs, batch transform jobs, models, labeling jobs, work teams, endpoint configurations, and endpoints.</p> <p>Each tag consists of a key and an optional value. Tag keys must be unique per resource. For more information about tags, see For more information, see <a href="https://aws.amazon.com/answers/account-management/aws-tagging-strategies/">AWS Tagging Strategies</a>.</p> <note> <p>Tags that you add to a hyperparameter tuning job by calling this API are also added to any training jobs that the hyperparameter tuning job launches after you call this API, but not to training jobs that the hyperparameter tuning job launched before you called this API. To make sure that the tags associated with a hyperparameter tuning job are also added to all training jobs that the hyperparameter tuning job launches, add the tags when you first create the tuning job by specifying them in the <code>Tags</code> parameter of <a>CreateHyperParameterTuningJob</a> </p> </note></p>
     async fn add_tags(
         &self,
@@ -13654,6 +23047,24 @@ impl SageMaker for SageMakerClient {
         let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         proto::json::ResponsePayload::new(&response)
             .deserialize::<AssociateTrialComponentResponse, _>()
+    }
+
+    /// <p>Creates an <i>action</i>. An action is a lineage tracking entity that represents an action or activity. For example, a model deployment or an HPO job. Generally, an action involves at least one input or output artifact. For more information, see <a href="https://docs.aws.amazon.com/sagemaker/latest/dg/lineage-tracking.html">Amazon SageMaker ML Lineage Tracking</a>.</p>
+    async fn create_action(
+        &self,
+        input: CreateActionRequest,
+    ) -> Result<CreateActionResponse, RusotoError<CreateActionError>> {
+        let mut request = self.new_signed_request("POST", "/");
+        request.add_header("x-amz-target", "SageMaker.CreateAction");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        let response = self
+            .sign_and_dispatch(request, CreateActionError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<CreateActionResponse, _>()
     }
 
     /// <p>Create a machine learning algorithm that you can use in Amazon SageMaker and list in the AWS Marketplace.</p>
@@ -13692,7 +23103,44 @@ impl SageMaker for SageMakerClient {
         proto::json::ResponsePayload::new(&response).deserialize::<CreateAppResponse, _>()
     }
 
-    /// <p>Creates an AutoPilot job.</p> <p>After you run an AutoPilot job, you can find the best performing model by calling , and then deploy that model by following the steps described in <a href="https://docs.aws.amazon.com/sagemaker/latest/dg/ex1-deploy-model.html">Step 6.1: Deploy the Model to Amazon SageMaker Hosting Services</a>.</p> <p>For information about how to use AutoPilot, see <a href="https://docs.aws.amazon.com/sagemaker/latest/dg/autopilot-automate-model-development.html">Use AutoPilot to Automate Model Development</a>.</p>
+    /// <p>Creates a configuration for running a SageMaker image as a KernelGateway app. The configuration specifies the Amazon Elastic File System (EFS) storage volume on the image, and a list of the kernels in the image.</p>
+    async fn create_app_image_config(
+        &self,
+        input: CreateAppImageConfigRequest,
+    ) -> Result<CreateAppImageConfigResponse, RusotoError<CreateAppImageConfigError>> {
+        let mut request = self.new_signed_request("POST", "/");
+        request.add_header("x-amz-target", "SageMaker.CreateAppImageConfig");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        let response = self
+            .sign_and_dispatch(request, CreateAppImageConfigError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<CreateAppImageConfigResponse, _>()
+    }
+
+    /// <p>Creates an <i>artifact</i>. An artifact is a lineage tracking entity that represents a URI addressable object or data. Some examples are the S3 URI of a dataset and the ECR registry path of an image. For more information, see <a href="https://docs.aws.amazon.com/sagemaker/latest/dg/lineage-tracking.html">Amazon SageMaker ML Lineage Tracking</a>.</p>
+    async fn create_artifact(
+        &self,
+        input: CreateArtifactRequest,
+    ) -> Result<CreateArtifactResponse, RusotoError<CreateArtifactError>> {
+        let mut request = self.new_signed_request("POST", "/");
+        request.add_header("x-amz-target", "SageMaker.CreateArtifact");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        let response = self
+            .sign_and_dispatch(request, CreateArtifactError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<CreateArtifactResponse, _>()
+    }
+
+    /// <p>Creates an Autopilot job.</p> <p>Find the best performing model after you run an Autopilot job by calling . Deploy that model by following the steps described in <a href="https://docs.aws.amazon.com/sagemaker/latest/dg/ex1-deploy-model.html">Step 6.1: Deploy the Model to Amazon SageMaker Hosting Services</a>.</p> <p>For information about how to use Autopilot, see <a href="https://docs.aws.amazon.com/sagemaker/latest/dg/autopilot-automate-model-development.html"> Automate Model Development with Amazon SageMaker Autopilot</a>.</p>
     async fn create_auto_ml_job(
         &self,
         input: CreateAutoMLJobRequest,
@@ -13728,7 +23176,7 @@ impl SageMaker for SageMakerClient {
         proto::json::ResponsePayload::new(&response).deserialize::<CreateCodeRepositoryOutput, _>()
     }
 
-    /// <p>Starts a model compilation job. After the model has been compiled, Amazon SageMaker saves the resulting model artifacts to an Amazon Simple Storage Service (Amazon S3) bucket that you specify. </p> <p>If you choose to host your model using Amazon SageMaker hosting services, you can use the resulting model artifacts as part of the model. You can also use the artifacts with AWS IoT Greengrass. In that case, deploy them as an ML resource.</p> <p>In the request body, you provide the following:</p> <ul> <li> <p>A name for the compilation job</p> </li> <li> <p> Information about the input model artifacts </p> </li> <li> <p>The output location for the compiled model and the device (target) that the model runs on </p> </li> <li> <p> <code>The Amazon Resource Name (ARN) of the IAM role that Amazon SageMaker assumes to perform the model compilation job</code> </p> </li> </ul> <p>You can also provide a <code>Tag</code> to track the model compilation job's resource use and costs. The response body contains the <code>CompilationJobArn</code> for the compiled job.</p> <p>To stop a model compilation job, use <a>StopCompilationJob</a>. To get information about a particular model compilation job, use <a>DescribeCompilationJob</a>. To get information about multiple model compilation jobs, use <a>ListCompilationJobs</a>.</p>
+    /// <p>Starts a model compilation job. After the model has been compiled, Amazon SageMaker saves the resulting model artifacts to an Amazon Simple Storage Service (Amazon S3) bucket that you specify. </p> <p>If you choose to host your model using Amazon SageMaker hosting services, you can use the resulting model artifacts as part of the model. You can also use the artifacts with AWS IoT Greengrass. In that case, deploy them as an ML resource.</p> <p>In the request body, you provide the following:</p> <ul> <li> <p>A name for the compilation job</p> </li> <li> <p> Information about the input model artifacts </p> </li> <li> <p>The output location for the compiled model and the device (target) that the model runs on </p> </li> <li> <p>The Amazon Resource Name (ARN) of the IAM role that Amazon SageMaker assumes to perform the model compilation job. </p> </li> </ul> <p>You can also provide a <code>Tag</code> to track the model compilation job's resource use and costs. The response body contains the <code>CompilationJobArn</code> for the compiled job.</p> <p>To stop a model compilation job, use <a>StopCompilationJob</a>. To get information about a particular model compilation job, use <a>DescribeCompilationJob</a>. To get information about multiple model compilation jobs, use <a>ListCompilationJobs</a>.</p>
     async fn create_compilation_job(
         &self,
         input: CreateCompilationJobRequest,
@@ -13747,7 +23195,64 @@ impl SageMaker for SageMakerClient {
             .deserialize::<CreateCompilationJobResponse, _>()
     }
 
-    /// <p><p>Creates a <code>Domain</code> used by SageMaker Studio. A domain consists of an associated directory, a list of authorized users, and a variety of security, application, policy, and Amazon Virtual Private Cloud (VPC) configurations. An AWS account is limited to one domain per region. Users within a domain can share notebook files and other artifacts with each other.</p> <p>When a domain is created, an Amazon Elastic File System (EFS) volume is also created for use by all of the users within the domain. Each user receives a private home directory within the EFS for notebooks, Git repositories, and data files.</p> <p>All traffic between the domain and the EFS volume is communicated through the specified subnet IDs. All other traffic goes over the Internet through an Amazon SageMaker system VPC. The EFS traffic uses the NFS/TCP protocol over port 2049.</p> <important> <p>NFS traffic over TCP on port 2049 needs to be allowed in both inbound and outbound rules in order to launch a SageMaker Studio app successfully.</p> </important></p>
+    /// <p>Creates a <i>context</i>. A context is a lineage tracking entity that represents a logical grouping of other tracking or experiment entities. Some examples are an endpoint and a model package. For more information, see <a href="https://docs.aws.amazon.com/sagemaker/latest/dg/lineage-tracking.html">Amazon SageMaker ML Lineage Tracking</a>.</p>
+    async fn create_context(
+        &self,
+        input: CreateContextRequest,
+    ) -> Result<CreateContextResponse, RusotoError<CreateContextError>> {
+        let mut request = self.new_signed_request("POST", "/");
+        request.add_header("x-amz-target", "SageMaker.CreateContext");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        let response = self
+            .sign_and_dispatch(request, CreateContextError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<CreateContextResponse, _>()
+    }
+
+    /// <p>Creates a definition for a job that monitors data quality and drift. For information about model monitor, see <a href="https://docs.aws.amazon.com/sagemaker/latest/dg/model-monitor.html">Amazon SageMaker Model Monitor</a>.</p>
+    async fn create_data_quality_job_definition(
+        &self,
+        input: CreateDataQualityJobDefinitionRequest,
+    ) -> Result<
+        CreateDataQualityJobDefinitionResponse,
+        RusotoError<CreateDataQualityJobDefinitionError>,
+    > {
+        let mut request = self.new_signed_request("POST", "/");
+        request.add_header("x-amz-target", "SageMaker.CreateDataQualityJobDefinition");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        let response = self
+            .sign_and_dispatch(request, CreateDataQualityJobDefinitionError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<CreateDataQualityJobDefinitionResponse, _>()
+    }
+
+    /// <p>Creates a device fleet.</p>
+    async fn create_device_fleet(
+        &self,
+        input: CreateDeviceFleetRequest,
+    ) -> Result<(), RusotoError<CreateDeviceFleetError>> {
+        let mut request = self.new_signed_request("POST", "/");
+        request.add_header("x-amz-target", "SageMaker.CreateDeviceFleet");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        let response = self
+            .sign_and_dispatch(request, CreateDeviceFleetError::from_response)
+            .await?;
+        std::mem::drop(response);
+        Ok(())
+    }
+
+    /// <p>Creates a <code>Domain</code> used by Amazon SageMaker Studio. A domain consists of an associated Amazon Elastic File System (EFS) volume, a list of authorized users, and a variety of security, application, policy, and Amazon Virtual Private Cloud (VPC) configurations. An AWS account is limited to one domain per region. Users within a domain can share notebook files and other artifacts with each other.</p> <p> <b>EFS storage</b> </p> <p>When a domain is created, an EFS volume is created for use by all of the users within the domain. Each user receives a private home directory within the EFS volume for notebooks, Git repositories, and data files.</p> <p>SageMaker uses the AWS Key Management Service (AWS KMS) to encrypt the EFS volume attached to the domain with an AWS managed customer master key (CMK) by default. For more control, you can specify a customer managed CMK. For more information, see <a href="https://docs.aws.amazon.com/sagemaker/latest/dg/encryption-at-rest.html">Protect Data at Rest Using Encryption</a>.</p> <p> <b>VPC configuration</b> </p> <p>All SageMaker Studio traffic between the domain and the EFS volume is through the specified VPC and subnets. For other Studio traffic, you can specify the <code>AppNetworkAccessType</code> parameter. <code>AppNetworkAccessType</code> corresponds to the network access type that you choose when you onboard to Studio. The following options are available:</p> <ul> <li> <p> <code>PublicInternetOnly</code> - Non-EFS traffic goes through a VPC managed by Amazon SageMaker, which allows internet access. This is the default value.</p> </li> <li> <p> <code>VpcOnly</code> - All Studio traffic is through the specified VPC and subnets. Internet access is disabled by default. To allow internet access, you must specify a NAT gateway.</p> <p>When internet access is disabled, you won't be able to run a Studio notebook or to train or host models unless your VPC has an interface endpoint to the SageMaker API and runtime or a NAT gateway and your security groups allow outbound connections.</p> </li> </ul> <p>For more information, see <a href="https://docs.aws.amazon.com/sagemaker/latest/dg/studio-notebooks-and-internet-access.html">Connect SageMaker Studio Notebooks to Resources in a VPC</a>.</p>
     async fn create_domain(
         &self,
         input: CreateDomainRequest,
@@ -13765,7 +23270,24 @@ impl SageMaker for SageMakerClient {
         proto::json::ResponsePayload::new(&response).deserialize::<CreateDomainResponse, _>()
     }
 
-    /// <p>Creates an endpoint using the endpoint configuration specified in the request. Amazon SageMaker uses the endpoint to provision resources and deploy models. You create the endpoint configuration with the <a>CreateEndpointConfig</a> API. </p> <p> Use this API to deploy models using Amazon SageMaker hosting services. </p> <p>For an example that calls this method when deploying a model to Amazon SageMaker hosting services, see <a href="https://docs.aws.amazon.com/sagemaker/latest/dg/ex1-deploy-model.html#ex1-deploy-model-boto">Deploy the Model to Amazon SageMaker Hosting Services (AWS SDK for Python (Boto 3)).</a> </p> <note> <p> You must not delete an <code>EndpointConfig</code> that is in use by an endpoint that is live or while the <code>UpdateEndpoint</code> or <code>CreateEndpoint</code> operations are being performed on the endpoint. To update an endpoint, you must create a new <code>EndpointConfig</code>.</p> </note> <p>The endpoint name must be unique within an AWS Region in your AWS account. </p> <p>When it receives the request, Amazon SageMaker creates the endpoint, launches the resources (ML compute instances), and deploys the model(s) on them. </p> <note> <p>When you call <a>CreateEndpoint</a>, a load call is made to DynamoDB to verify that your endpoint configuration exists. When you read data from a DynamoDB table supporting <a href="https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/HowItWorks.ReadConsistency.html"> <code>Eventually Consistent Reads</code> </a>, the response might not reflect the results of a recently completed write operation. The response might include some stale data. If the dependent entities are not yet in DynamoDB, this causes a validation error. If you repeat your read request after a short time, the response should return the latest data. So retry logic is recommended to handle these possible issues. We also recommend that customers call <a>DescribeEndpointConfig</a> before calling <a>CreateEndpoint</a> to minimize the potential impact of a DynamoDB eventually consistent read.</p> </note> <p>When Amazon SageMaker receives the request, it sets the endpoint status to <code>Creating</code>. After it creates the endpoint, it sets the status to <code>InService</code>. Amazon SageMaker can then process incoming requests for inferences. To check the status of an endpoint, use the <a>DescribeEndpoint</a> API.</p> <p>If any of the models hosted at this endpoint get model data from an Amazon S3 location, Amazon SageMaker uses AWS Security Token Service to download model artifacts from the S3 path you provided. AWS STS is activated in your IAM user account by default. If you previously deactivated AWS STS for a region, you need to reactivate AWS STS for that region. For more information, see <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/id_credentials_temp_enable-regions.html">Activating and Deactivating AWS STS in an AWS Region</a> in the <i>AWS Identity and Access Management User Guide</i>.</p>
+    /// <p>Starts a SageMaker Edge Manager model packaging job. Edge Manager will use the model artifacts from the Amazon Simple Storage Service bucket that you specify. After the model has been packaged, Amazon SageMaker saves the resulting artifacts to an S3 bucket that you specify.</p>
+    async fn create_edge_packaging_job(
+        &self,
+        input: CreateEdgePackagingJobRequest,
+    ) -> Result<(), RusotoError<CreateEdgePackagingJobError>> {
+        let mut request = self.new_signed_request("POST", "/");
+        request.add_header("x-amz-target", "SageMaker.CreateEdgePackagingJob");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        let response = self
+            .sign_and_dispatch(request, CreateEdgePackagingJobError::from_response)
+            .await?;
+        std::mem::drop(response);
+        Ok(())
+    }
+
+    /// <p><p>Creates an endpoint using the endpoint configuration specified in the request. Amazon SageMaker uses the endpoint to provision resources and deploy models. You create the endpoint configuration with the <a>CreateEndpointConfig</a> API. </p> <p> Use this API to deploy models using Amazon SageMaker hosting services. </p> <p>For an example that calls this method when deploying a model to Amazon SageMaker hosting services, see <a href="https://docs.aws.amazon.com/sagemaker/latest/dg/ex1-deploy-model.html#ex1-deploy-model-boto">Deploy the Model to Amazon SageMaker Hosting Services (AWS SDK for Python (Boto 3)).</a> </p> <note> <p> You must not delete an <code>EndpointConfig</code> that is in use by an endpoint that is live or while the <code>UpdateEndpoint</code> or <code>CreateEndpoint</code> operations are being performed on the endpoint. To update an endpoint, you must create a new <code>EndpointConfig</code>.</p> </note> <p>The endpoint name must be unique within an AWS Region in your AWS account. </p> <p>When it receives the request, Amazon SageMaker creates the endpoint, launches the resources (ML compute instances), and deploys the model(s) on them. </p> <note> <p>When you call <a>CreateEndpoint</a>, a load call is made to DynamoDB to verify that your endpoint configuration exists. When you read data from a DynamoDB table supporting <a href="https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/HowItWorks.ReadConsistency.html"> <code>Eventually Consistent Reads</code> </a>, the response might not reflect the results of a recently completed write operation. The response might include some stale data. If the dependent entities are not yet in DynamoDB, this causes a validation error. If you repeat your read request after a short time, the response should return the latest data. So retry logic is recommended to handle these possible issues. We also recommend that customers call <a>DescribeEndpointConfig</a> before calling <a>CreateEndpoint</a> to minimize the potential impact of a DynamoDB eventually consistent read.</p> </note> <p>When Amazon SageMaker receives the request, it sets the endpoint status to <code>Creating</code>. After it creates the endpoint, it sets the status to <code>InService</code>. Amazon SageMaker can then process incoming requests for inferences. To check the status of an endpoint, use the <a>DescribeEndpoint</a> API.</p> <p>If any of the models hosted at this endpoint get model data from an Amazon S3 location, Amazon SageMaker uses AWS Security Token Service to download model artifacts from the S3 path you provided. AWS STS is activated in your IAM user account by default. If you previously deactivated AWS STS for a region, you need to reactivate AWS STS for that region. For more information, see <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/id_credentials_temp_enable-regions.html">Activating and Deactivating AWS STS in an AWS Region</a> in the <i>AWS Identity and Access Management User Guide</i>.</p> <note> <p> To add the IAM role policies for using this API operation, go to the <a href="https://console.aws.amazon.com/iam/">IAM console</a>, and choose Roles in the left navigation pane. Search the IAM role that you want to grant access to use the <a>CreateEndpoint</a> and <a>CreateEndpointConfig</a> API operations, add the following policies to the role. </p> <ul> <li> <p>Option 1: For a full Amazon SageMaker access, search and attach the <code>AmazonSageMakerFullAccess</code> policy.</p> </li> <li> <p>Option 2: For granting a limited access to an IAM role, paste the following Action elements manually into the JSON file of the IAM role: </p> <p> <code>&quot;Action&quot;: [&quot;sagemaker:CreateEndpoint&quot;, &quot;sagemaker:CreateEndpointConfig&quot;]</code> </p> <p> <code>&quot;Resource&quot;: [</code> </p> <p> <code>&quot;arn:aws:sagemaker:region:account-id:endpoint/endpointName&quot;</code> </p> <p> <code>&quot;arn:aws:sagemaker:region:account-id:endpoint-config/endpointConfigName&quot;</code> </p> <p> <code>]</code> </p> <p>For more information, see <a href="https://docs.aws.amazon.com/sagemaker/latest/dg/api-permissions-reference.html">Amazon SageMaker API Permissions: Actions, Permissions, and Resources Reference</a>.</p> </li> </ul> </note></p>
     async fn create_endpoint(
         &self,
         input: CreateEndpointInput,
@@ -13801,7 +23323,7 @@ impl SageMaker for SageMakerClient {
         proto::json::ResponsePayload::new(&response).deserialize::<CreateEndpointConfigOutput, _>()
     }
 
-    /// <p>Creates an Amazon SageMaker <i>experiment</i>. An experiment is a collection of <i>trials</i> that are observed, compared and evaluated as a group. A trial is a set of steps, called <i>trial components</i>, that produce a machine learning model.</p> <p>The goal of an experiment is to determine the components that produce the best model. Multiple trials are performed, each one isolating and measuring the impact of a change to one or more inputs, while keeping the remaining inputs constant.</p> <p>When you use Amazon SageMaker Studio or the Amazon SageMaker Python SDK, all experiments, trials, and trial components are automatically tracked, logged, and indexed. When you use the AWS SDK for Python (Boto), you must use the logging APIs provided by the SDK.</p> <p>You can add tags to experiments, trials, trial components and then use the <a>Search</a> API to search for the tags.</p> <p>To add a description to an experiment, specify the optional <code>Description</code> parameter. To add a description later, or to change the description, call the <a>UpdateExperiment</a> API.</p> <p>To get a list of all your experiments, call the <a>ListExperiments</a> API. To view an experiment's properties, call the <a>DescribeExperiment</a> API. To get a list of all the trials associated with an experiment, call the <a>ListTrials</a> API. To create a trial call the <a>CreateTrial</a> API.</p>
+    /// <p>Creates an SageMaker <i>experiment</i>. An experiment is a collection of <i>trials</i> that are observed, compared and evaluated as a group. A trial is a set of steps, called <i>trial components</i>, that produce a machine learning model.</p> <p>The goal of an experiment is to determine the components that produce the best model. Multiple trials are performed, each one isolating and measuring the impact of a change to one or more inputs, while keeping the remaining inputs constant.</p> <p>When you use Amazon SageMaker Studio or the Amazon SageMaker Python SDK, all experiments, trials, and trial components are automatically tracked, logged, and indexed. When you use the AWS SDK for Python (Boto), you must use the logging APIs provided by the SDK.</p> <p>You can add tags to experiments, trials, trial components and then use the <a>Search</a> API to search for the tags.</p> <p>To add a description to an experiment, specify the optional <code>Description</code> parameter. To add a description later, or to change the description, call the <a>UpdateExperiment</a> API.</p> <p>To get a list of all your experiments, call the <a>ListExperiments</a> API. To view an experiment's properties, call the <a>DescribeExperiment</a> API. To get a list of all the trials associated with an experiment, call the <a>ListTrials</a> API. To create a trial call the <a>CreateTrial</a> API.</p>
     async fn create_experiment(
         &self,
         input: CreateExperimentRequest,
@@ -13817,6 +23339,24 @@ impl SageMaker for SageMakerClient {
         let mut response = response;
         let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         proto::json::ResponsePayload::new(&response).deserialize::<CreateExperimentResponse, _>()
+    }
+
+    /// <p><p>Create a new <code>FeatureGroup</code>. A <code>FeatureGroup</code> is a group of <code>Features</code> defined in the <code>FeatureStore</code> to describe a <code>Record</code>. </p> <p>The <code>FeatureGroup</code> defines the schema and features contained in the FeatureGroup. A <code>FeatureGroup</code> definition is composed of a list of <code>Features</code>, a <code>RecordIdentifierFeatureName</code>, an <code>EventTimeFeatureName</code> and configurations for its <code>OnlineStore</code> and <code>OfflineStore</code>. Check <a href="https://docs.aws.amazon.com/general/latest/gr/aws_service_limits.html">AWS service quotas</a> to see the <code>FeatureGroup</code>s quota for your AWS account.</p> <important> <p>You must include at least one of <code>OnlineStoreConfig</code> and <code>OfflineStoreConfig</code> to create a <code>FeatureGroup</code>.</p> </important></p>
+    async fn create_feature_group(
+        &self,
+        input: CreateFeatureGroupRequest,
+    ) -> Result<CreateFeatureGroupResponse, RusotoError<CreateFeatureGroupError>> {
+        let mut request = self.new_signed_request("POST", "/");
+        request.add_header("x-amz-target", "SageMaker.CreateFeatureGroup");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        let response = self
+            .sign_and_dispatch(request, CreateFeatureGroupError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<CreateFeatureGroupResponse, _>()
     }
 
     /// <p>Creates a flow definition.</p>
@@ -13878,6 +23418,42 @@ impl SageMaker for SageMakerClient {
             .deserialize::<CreateHyperParameterTuningJobResponse, _>()
     }
 
+    /// <p>Creates a custom SageMaker image. A SageMaker image is a set of image versions. Each image version represents a container image stored in Amazon Container Registry (ECR). For more information, see <a href="https://docs.aws.amazon.com/sagemaker/latest/dg/studio-byoi.html">Bring your own SageMaker image</a>.</p>
+    async fn create_image(
+        &self,
+        input: CreateImageRequest,
+    ) -> Result<CreateImageResponse, RusotoError<CreateImageError>> {
+        let mut request = self.new_signed_request("POST", "/");
+        request.add_header("x-amz-target", "SageMaker.CreateImage");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        let response = self
+            .sign_and_dispatch(request, CreateImageError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<CreateImageResponse, _>()
+    }
+
+    /// <p>Creates a version of the SageMaker image specified by <code>ImageName</code>. The version represents the Amazon Container Registry (ECR) container image specified by <code>BaseImage</code>.</p>
+    async fn create_image_version(
+        &self,
+        input: CreateImageVersionRequest,
+    ) -> Result<CreateImageVersionResponse, RusotoError<CreateImageVersionError>> {
+        let mut request = self.new_signed_request("POST", "/");
+        request.add_header("x-amz-target", "SageMaker.CreateImageVersion");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        let response = self
+            .sign_and_dispatch(request, CreateImageVersionError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<CreateImageVersionResponse, _>()
+    }
+
     /// <p>Creates a job that uses workers to label the data objects in your input dataset. You can use the labeled data to train machine learning models.</p> <p>You can select your workforce from one of three providers:</p> <ul> <li> <p>A private workforce that you create. It can include employees, contractors, and outside experts. Use a private workforce when want the data to stay within your organization or when a specific set of skills is required.</p> </li> <li> <p>One or more vendors that you select from the AWS Marketplace. Vendors provide expertise in specific areas. </p> </li> <li> <p>The Amazon Mechanical Turk workforce. This is the largest workforce, but it should only be used for public data or data that has been stripped of any personally identifiable information.</p> </li> </ul> <p>You can also use <i>automated data labeling</i> to reduce the number of data objects that need to be labeled by a human. Automated data labeling uses <i>active learning</i> to determine if a data object can be labeled by machine or if it needs to be sent to a human worker. For more information, see <a href="https://docs.aws.amazon.com/sagemaker/latest/dg/sms-automated-labeling.html">Using Automated Data Labeling</a>.</p> <p>The data objects to be labeled are contained in an Amazon S3 bucket. You create a <i>manifest file</i> that describes the location of each object. For more information, see <a href="https://docs.aws.amazon.com/sagemaker/latest/dg/sms-data.html">Using Input and Output Data</a>.</p> <p>The output can be used as the manifest file for another labeling job or as training data for your machine learning models.</p>
     async fn create_labeling_job(
         &self,
@@ -13914,7 +23490,55 @@ impl SageMaker for SageMakerClient {
         proto::json::ResponsePayload::new(&response).deserialize::<CreateModelOutput, _>()
     }
 
-    /// <p>Creates a model package that you can use to create Amazon SageMaker models or list on AWS Marketplace. Buyers can subscribe to model packages listed on AWS Marketplace to create models in Amazon SageMaker.</p> <p>To create a model package by specifying a Docker container that contains your inference code and the Amazon S3 location of your model artifacts, provide values for <code>InferenceSpecification</code>. To create a model from an algorithm resource that you created or subscribed to in AWS Marketplace, provide a value for <code>SourceAlgorithmSpecification</code>.</p>
+    /// <p>Creates the definition for a model bias job.</p>
+    async fn create_model_bias_job_definition(
+        &self,
+        input: CreateModelBiasJobDefinitionRequest,
+    ) -> Result<CreateModelBiasJobDefinitionResponse, RusotoError<CreateModelBiasJobDefinitionError>>
+    {
+        let mut request = self.new_signed_request("POST", "/");
+        request.add_header("x-amz-target", "SageMaker.CreateModelBiasJobDefinition");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        let response = self
+            .sign_and_dispatch(request, CreateModelBiasJobDefinitionError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<CreateModelBiasJobDefinitionResponse, _>()
+    }
+
+    /// <p>Creates the definition for a model explainability job.</p>
+    async fn create_model_explainability_job_definition(
+        &self,
+        input: CreateModelExplainabilityJobDefinitionRequest,
+    ) -> Result<
+        CreateModelExplainabilityJobDefinitionResponse,
+        RusotoError<CreateModelExplainabilityJobDefinitionError>,
+    > {
+        let mut request = self.new_signed_request("POST", "/");
+        request.add_header(
+            "x-amz-target",
+            "SageMaker.CreateModelExplainabilityJobDefinition",
+        );
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        let response = self
+            .sign_and_dispatch(
+                request,
+                CreateModelExplainabilityJobDefinitionError::from_response,
+            )
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<CreateModelExplainabilityJobDefinitionResponse, _>()
+    }
+
+    /// <p><p>Creates a model package that you can use to create Amazon SageMaker models or list on AWS Marketplace, or a versioned model that is part of a model group. Buyers can subscribe to model packages listed on AWS Marketplace to create models in Amazon SageMaker.</p> <p>To create a model package by specifying a Docker container that contains your inference code and the Amazon S3 location of your model artifacts, provide values for <code>InferenceSpecification</code>. To create a model from an algorithm resource that you created or subscribed to in AWS Marketplace, provide a value for <code>SourceAlgorithmSpecification</code>.</p> <note> <p>There are two types of model packages:</p> <ul> <li> <p>Versioned - a model that is part of a model group in the model registry.</p> </li> <li> <p>Unversioned - a model package that is not part of a model group.</p> </li> </ul> </note></p>
     async fn create_model_package(
         &self,
         input: CreateModelPackageInput,
@@ -13930,6 +23554,47 @@ impl SageMaker for SageMakerClient {
         let mut response = response;
         let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         proto::json::ResponsePayload::new(&response).deserialize::<CreateModelPackageOutput, _>()
+    }
+
+    /// <p>Creates a model group. A model group contains a group of model versions.</p>
+    async fn create_model_package_group(
+        &self,
+        input: CreateModelPackageGroupInput,
+    ) -> Result<CreateModelPackageGroupOutput, RusotoError<CreateModelPackageGroupError>> {
+        let mut request = self.new_signed_request("POST", "/");
+        request.add_header("x-amz-target", "SageMaker.CreateModelPackageGroup");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        let response = self
+            .sign_and_dispatch(request, CreateModelPackageGroupError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<CreateModelPackageGroupOutput, _>()
+    }
+
+    /// <p>Creates a definition for a job that monitors model quality and drift. For information about model monitor, see <a href="https://docs.aws.amazon.com/sagemaker/latest/dg/model-monitor.html">Amazon SageMaker Model Monitor</a>.</p>
+    async fn create_model_quality_job_definition(
+        &self,
+        input: CreateModelQualityJobDefinitionRequest,
+    ) -> Result<
+        CreateModelQualityJobDefinitionResponse,
+        RusotoError<CreateModelQualityJobDefinitionError>,
+    > {
+        let mut request = self.new_signed_request("POST", "/");
+        request.add_header("x-amz-target", "SageMaker.CreateModelQualityJobDefinition");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        let response = self
+            .sign_and_dispatch(request, CreateModelQualityJobDefinitionError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<CreateModelQualityJobDefinitionResponse, _>()
     }
 
     /// <p>Creates a schedule that regularly starts Amazon SageMaker Processing Jobs to monitor the data captured for an Amazon SageMaker Endoint.</p>
@@ -13998,7 +23663,25 @@ impl SageMaker for SageMakerClient {
             .deserialize::<CreateNotebookInstanceLifecycleConfigOutput, _>()
     }
 
-    /// <p>Creates a URL for a specified UserProfile in a Domain. When accessed in a web browser, the user will be automatically signed in to Amazon SageMaker Studio, and granted access to all of the Apps and files associated with the Domain's Amazon Elastic File System (EFS) volume. This operation can only be called when the authentication mode equals IAM. </p>
+    /// <p>Creates a pipeline using a JSON pipeline definition.</p>
+    async fn create_pipeline(
+        &self,
+        input: CreatePipelineRequest,
+    ) -> Result<CreatePipelineResponse, RusotoError<CreatePipelineError>> {
+        let mut request = self.new_signed_request("POST", "/");
+        request.add_header("x-amz-target", "SageMaker.CreatePipeline");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        let response = self
+            .sign_and_dispatch(request, CreatePipelineError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<CreatePipelineResponse, _>()
+    }
+
+    /// <p><p>Creates a URL for a specified UserProfile in a Domain. When accessed in a web browser, the user will be automatically signed in to Amazon SageMaker Studio, and granted access to all of the Apps and files associated with the Domain&#39;s Amazon Elastic File System (EFS) volume. This operation can only be called when the authentication mode equals IAM. </p> <note> <p>The URL that you get from a call to <code>CreatePresignedDomainUrl</code> is valid only for 5 minutes. If you try to use the URL after the 5-minute limit expires, you are directed to the AWS console sign-in page.</p> </note></p>
     async fn create_presigned_domain_url(
         &self,
         input: CreatePresignedDomainUrlRequest,
@@ -14063,7 +23746,25 @@ impl SageMaker for SageMakerClient {
         proto::json::ResponsePayload::new(&response).deserialize::<CreateProcessingJobResponse, _>()
     }
 
-    /// <p>Starts a model training job. After training completes, Amazon SageMaker saves the resulting model artifacts to an Amazon S3 location that you specify. </p> <p>If you choose to host your model using Amazon SageMaker hosting services, you can use the resulting model artifacts as part of the model. You can also use the artifacts in a machine learning service other than Amazon SageMaker, provided that you know how to use them for inferences. </p> <p>In the request body, you provide the following: </p> <ul> <li> <p> <code>AlgorithmSpecification</code> - Identifies the training algorithm to use. </p> </li> <li> <p> <code>HyperParameters</code> - Specify these algorithm-specific parameters to enable the estimation of model parameters during training. Hyperparameters can be tuned to optimize this learning process. For a list of hyperparameters for each training algorithm provided by Amazon SageMaker, see <a href="https://docs.aws.amazon.com/sagemaker/latest/dg/algos.html">Algorithms</a>. </p> </li> <li> <p> <code>InputDataConfig</code> - Describes the training dataset and the Amazon S3, EFS, or FSx location where it is stored.</p> </li> <li> <p> <code>OutputDataConfig</code> - Identifies the Amazon S3 bucket where you want Amazon SageMaker to save the results of model training. </p> <p/> </li> <li> <p> <code>ResourceConfig</code> - Identifies the resources, ML compute instances, and ML storage volumes to deploy for model training. In distributed training, you specify more than one instance. </p> </li> <li> <p> <code>EnableManagedSpotTraining</code> - Optimize the cost of training machine learning models by up to 80% by using Amazon EC2 Spot instances. For more information, see <a href="https://docs.aws.amazon.com/sagemaker/latest/dg/model-managed-spot-training.html">Managed Spot Training</a>. </p> </li> <li> <p> <code>RoleARN</code> - The Amazon Resource Number (ARN) that Amazon SageMaker assumes to perform tasks on your behalf during model training. You must grant this role the necessary permissions so that Amazon SageMaker can successfully complete model training. </p> </li> <li> <p> <code>StoppingCondition</code> - To help cap training costs, use <code>MaxRuntimeInSeconds</code> to set a time limit for training. Use <code>MaxWaitTimeInSeconds</code> to specify how long you are willing to wait for a managed spot training job to complete. </p> </li> </ul> <p> For more information about Amazon SageMaker, see <a href="https://docs.aws.amazon.com/sagemaker/latest/dg/how-it-works.html">How It Works</a>. </p>
+    /// <p>Creates a machine learning (ML) project that can contain one or more templates that set up an ML pipeline from training to deploying an approved model.</p>
+    async fn create_project(
+        &self,
+        input: CreateProjectInput,
+    ) -> Result<CreateProjectOutput, RusotoError<CreateProjectError>> {
+        let mut request = self.new_signed_request("POST", "/");
+        request.add_header("x-amz-target", "SageMaker.CreateProject");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        let response = self
+            .sign_and_dispatch(request, CreateProjectError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<CreateProjectOutput, _>()
+    }
+
+    /// <p>Starts a model training job. After training completes, Amazon SageMaker saves the resulting model artifacts to an Amazon S3 location that you specify. </p> <p>If you choose to host your model using Amazon SageMaker hosting services, you can use the resulting model artifacts as part of the model. You can also use the artifacts in a machine learning service other than Amazon SageMaker, provided that you know how to use them for inference. </p> <p>In the request body, you provide the following: </p> <ul> <li> <p> <code>AlgorithmSpecification</code> - Identifies the training algorithm to use. </p> </li> <li> <p> <code>HyperParameters</code> - Specify these algorithm-specific parameters to enable the estimation of model parameters during training. Hyperparameters can be tuned to optimize this learning process. For a list of hyperparameters for each training algorithm provided by Amazon SageMaker, see <a href="https://docs.aws.amazon.com/sagemaker/latest/dg/algos.html">Algorithms</a>. </p> </li> <li> <p> <code>InputDataConfig</code> - Describes the training dataset and the Amazon S3, EFS, or FSx location where it is stored.</p> </li> <li> <p> <code>OutputDataConfig</code> - Identifies the Amazon S3 bucket where you want Amazon SageMaker to save the results of model training. </p> <p/> </li> <li> <p> <code>ResourceConfig</code> - Identifies the resources, ML compute instances, and ML storage volumes to deploy for model training. In distributed training, you specify more than one instance. </p> </li> <li> <p> <code>EnableManagedSpotTraining</code> - Optimize the cost of training machine learning models by up to 80% by using Amazon EC2 Spot instances. For more information, see <a href="https://docs.aws.amazon.com/sagemaker/latest/dg/model-managed-spot-training.html">Managed Spot Training</a>. </p> </li> <li> <p> <code>RoleArn</code> - The Amazon Resource Number (ARN) that Amazon SageMaker assumes to perform tasks on your behalf during model training. You must grant this role the necessary permissions so that Amazon SageMaker can successfully complete model training. </p> </li> <li> <p> <code>StoppingCondition</code> - To help cap training costs, use <code>MaxRuntimeInSeconds</code> to set a time limit for training. Use <code>MaxWaitTimeInSeconds</code> to specify how long you are willing to wait for a managed spot training job to complete. </p> </li> </ul> <p> For more information about Amazon SageMaker, see <a href="https://docs.aws.amazon.com/sagemaker/latest/dg/how-it-works.html">How It Works</a>. </p>
     async fn create_training_job(
         &self,
         input: CreateTrainingJobRequest,
@@ -14154,6 +23855,24 @@ impl SageMaker for SageMakerClient {
         proto::json::ResponsePayload::new(&response).deserialize::<CreateUserProfileResponse, _>()
     }
 
+    /// <p>Use this operation to create a workforce. This operation will return an error if a workforce already exists in the AWS Region that you specify. You can only create one workforce in each AWS Region per AWS account.</p> <p>If you want to create a new workforce in an AWS Region where a workforce already exists, use the API operation to delete the existing workforce and then use <code>CreateWorkforce</code> to create a new workforce.</p> <p>To create a private workforce using Amazon Cognito, you must specify a Cognito user pool in <code>CognitoConfig</code>. You can also create an Amazon Cognito workforce using the Amazon SageMaker console. For more information, see <a href="https://docs.aws.amazon.com/sagemaker/latest/dg/sms-workforce-create-private.html"> Create a Private Workforce (Amazon Cognito)</a>.</p> <p>To create a private workforce using your own OIDC Identity Provider (IdP), specify your IdP configuration in <code>OidcConfig</code>. Your OIDC IdP must support <i>groups</i> because groups are used by Ground Truth and Amazon A2I to create work teams. For more information, see <a href="https://docs.aws.amazon.com/sagemaker/latest/dg/sms-workforce-create-private-oidc.html"> Create a Private Workforce (OIDC IdP)</a>.</p>
+    async fn create_workforce(
+        &self,
+        input: CreateWorkforceRequest,
+    ) -> Result<CreateWorkforceResponse, RusotoError<CreateWorkforceError>> {
+        let mut request = self.new_signed_request("POST", "/");
+        request.add_header("x-amz-target", "SageMaker.CreateWorkforce");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        let response = self
+            .sign_and_dispatch(request, CreateWorkforceError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<CreateWorkforceResponse, _>()
+    }
+
     /// <p>Creates a new work team for labeling your data. A work team is defined by one or more Amazon Cognito user pools. You must first create the user pools before you can create a work team.</p> <p>You cannot create more than 25 work teams in an account and region.</p>
     async fn create_workteam(
         &self,
@@ -14170,6 +23889,24 @@ impl SageMaker for SageMakerClient {
         let mut response = response;
         let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         proto::json::ResponsePayload::new(&response).deserialize::<CreateWorkteamResponse, _>()
+    }
+
+    /// <p>Deletes an action.</p>
+    async fn delete_action(
+        &self,
+        input: DeleteActionRequest,
+    ) -> Result<DeleteActionResponse, RusotoError<DeleteActionError>> {
+        let mut request = self.new_signed_request("POST", "/");
+        request.add_header("x-amz-target", "SageMaker.DeleteAction");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        let response = self
+            .sign_and_dispatch(request, DeleteActionError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<DeleteActionResponse, _>()
     }
 
     /// <p>Removes the specified algorithm from your account.</p>
@@ -14203,6 +23940,59 @@ impl SageMaker for SageMakerClient {
         Ok(())
     }
 
+    /// <p>Deletes an AppImageConfig.</p>
+    async fn delete_app_image_config(
+        &self,
+        input: DeleteAppImageConfigRequest,
+    ) -> Result<(), RusotoError<DeleteAppImageConfigError>> {
+        let mut request = self.new_signed_request("POST", "/");
+        request.add_header("x-amz-target", "SageMaker.DeleteAppImageConfig");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        let response = self
+            .sign_and_dispatch(request, DeleteAppImageConfigError::from_response)
+            .await?;
+        std::mem::drop(response);
+        Ok(())
+    }
+
+    /// <p>Deletes an artifact. Either <code>ArtifactArn</code> or <code>Source</code> must be specified.</p>
+    async fn delete_artifact(
+        &self,
+        input: DeleteArtifactRequest,
+    ) -> Result<DeleteArtifactResponse, RusotoError<DeleteArtifactError>> {
+        let mut request = self.new_signed_request("POST", "/");
+        request.add_header("x-amz-target", "SageMaker.DeleteArtifact");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        let response = self
+            .sign_and_dispatch(request, DeleteArtifactError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<DeleteArtifactResponse, _>()
+    }
+
+    /// <p>Deletes an association.</p>
+    async fn delete_association(
+        &self,
+        input: DeleteAssociationRequest,
+    ) -> Result<DeleteAssociationResponse, RusotoError<DeleteAssociationError>> {
+        let mut request = self.new_signed_request("POST", "/");
+        request.add_header("x-amz-target", "SageMaker.DeleteAssociation");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        let response = self
+            .sign_and_dispatch(request, DeleteAssociationError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<DeleteAssociationResponse, _>()
+    }
+
     /// <p>Deletes the specified Git repository from your account.</p>
     async fn delete_code_repository(
         &self,
@@ -14215,6 +24005,58 @@ impl SageMaker for SageMakerClient {
 
         let response = self
             .sign_and_dispatch(request, DeleteCodeRepositoryError::from_response)
+            .await?;
+        std::mem::drop(response);
+        Ok(())
+    }
+
+    /// <p>Deletes an context.</p>
+    async fn delete_context(
+        &self,
+        input: DeleteContextRequest,
+    ) -> Result<DeleteContextResponse, RusotoError<DeleteContextError>> {
+        let mut request = self.new_signed_request("POST", "/");
+        request.add_header("x-amz-target", "SageMaker.DeleteContext");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        let response = self
+            .sign_and_dispatch(request, DeleteContextError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<DeleteContextResponse, _>()
+    }
+
+    /// <p>Deletes a data quality monitoring job definition.</p>
+    async fn delete_data_quality_job_definition(
+        &self,
+        input: DeleteDataQualityJobDefinitionRequest,
+    ) -> Result<(), RusotoError<DeleteDataQualityJobDefinitionError>> {
+        let mut request = self.new_signed_request("POST", "/");
+        request.add_header("x-amz-target", "SageMaker.DeleteDataQualityJobDefinition");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        let response = self
+            .sign_and_dispatch(request, DeleteDataQualityJobDefinitionError::from_response)
+            .await?;
+        std::mem::drop(response);
+        Ok(())
+    }
+
+    /// <p>Deletes a fleet.</p>
+    async fn delete_device_fleet(
+        &self,
+        input: DeleteDeviceFleetRequest,
+    ) -> Result<(), RusotoError<DeleteDeviceFleetError>> {
+        let mut request = self.new_signed_request("POST", "/");
+        request.add_header("x-amz-target", "SageMaker.DeleteDeviceFleet");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        let response = self
+            .sign_and_dispatch(request, DeleteDeviceFleetError::from_response)
             .await?;
         std::mem::drop(response);
         Ok(())
@@ -14289,6 +24131,23 @@ impl SageMaker for SageMakerClient {
         proto::json::ResponsePayload::new(&response).deserialize::<DeleteExperimentResponse, _>()
     }
 
+    /// <p>Delete the <code>FeatureGroup</code> and any data that was written to the <code>OnlineStore</code> of the <code>FeatureGroup</code>. Data cannot be accessed from the <code>OnlineStore</code> immediately after <code>DeleteFeatureGroup</code> is called. </p> <p>Data written into the <code>OfflineStore</code> will not be deleted. The AWS Glue database and tables that are automatically created for your <code>OfflineStore</code> are not deleted. </p>
+    async fn delete_feature_group(
+        &self,
+        input: DeleteFeatureGroupRequest,
+    ) -> Result<(), RusotoError<DeleteFeatureGroupError>> {
+        let mut request = self.new_signed_request("POST", "/");
+        request.add_header("x-amz-target", "SageMaker.DeleteFeatureGroup");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        let response = self
+            .sign_and_dispatch(request, DeleteFeatureGroupError::from_response)
+            .await?;
+        std::mem::drop(response);
+        Ok(())
+    }
+
     /// <p>Deletes the specified flow definition.</p>
     async fn delete_flow_definition(
         &self,
@@ -14308,7 +24167,7 @@ impl SageMaker for SageMakerClient {
             .deserialize::<DeleteFlowDefinitionResponse, _>()
     }
 
-    /// <p>Use this operation to delete a worker task template (<code>HumanTaskUi</code>).</p> <p> To see a list of human task user interfaces (work task templates) in your account, use . When you delete a worker task template, it no longer appears when you call <code>ListHumanTaskUis</code>.</p>
+    /// <p>Use this operation to delete a human task user interface (worker task template).</p> <p> To see a list of human task user interfaces (work task templates) in your account, use . When you delete a worker task template, it no longer appears when you call <code>ListHumanTaskUis</code>.</p>
     async fn delete_human_task_ui(
         &self,
         input: DeleteHumanTaskUiRequest,
@@ -14324,6 +24183,42 @@ impl SageMaker for SageMakerClient {
         let mut response = response;
         let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         proto::json::ResponsePayload::new(&response).deserialize::<DeleteHumanTaskUiResponse, _>()
+    }
+
+    /// <p>Deletes a SageMaker image and all versions of the image. The container images aren't deleted.</p>
+    async fn delete_image(
+        &self,
+        input: DeleteImageRequest,
+    ) -> Result<DeleteImageResponse, RusotoError<DeleteImageError>> {
+        let mut request = self.new_signed_request("POST", "/");
+        request.add_header("x-amz-target", "SageMaker.DeleteImage");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        let response = self
+            .sign_and_dispatch(request, DeleteImageError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<DeleteImageResponse, _>()
+    }
+
+    /// <p>Deletes a version of a SageMaker image. The container image the version represents isn't deleted.</p>
+    async fn delete_image_version(
+        &self,
+        input: DeleteImageVersionRequest,
+    ) -> Result<DeleteImageVersionResponse, RusotoError<DeleteImageVersionError>> {
+        let mut request = self.new_signed_request("POST", "/");
+        request.add_header("x-amz-target", "SageMaker.DeleteImageVersion");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        let response = self
+            .sign_and_dispatch(request, DeleteImageVersionError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<DeleteImageVersionResponse, _>()
     }
 
     /// <p>Deletes a model. The <code>DeleteModel</code> API deletes only the model entry that was created in Amazon SageMaker when you called the <a>CreateModel</a> API. It does not delete model artifacts, inference code, or the IAM role that you specified when creating the model. </p>
@@ -14343,6 +24238,46 @@ impl SageMaker for SageMakerClient {
         Ok(())
     }
 
+    /// <p>Deletes an Amazon SageMaker model bias job definition.</p>
+    async fn delete_model_bias_job_definition(
+        &self,
+        input: DeleteModelBiasJobDefinitionRequest,
+    ) -> Result<(), RusotoError<DeleteModelBiasJobDefinitionError>> {
+        let mut request = self.new_signed_request("POST", "/");
+        request.add_header("x-amz-target", "SageMaker.DeleteModelBiasJobDefinition");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        let response = self
+            .sign_and_dispatch(request, DeleteModelBiasJobDefinitionError::from_response)
+            .await?;
+        std::mem::drop(response);
+        Ok(())
+    }
+
+    /// <p>Deletes an Amazon SageMaker model explainability job definition.</p>
+    async fn delete_model_explainability_job_definition(
+        &self,
+        input: DeleteModelExplainabilityJobDefinitionRequest,
+    ) -> Result<(), RusotoError<DeleteModelExplainabilityJobDefinitionError>> {
+        let mut request = self.new_signed_request("POST", "/");
+        request.add_header(
+            "x-amz-target",
+            "SageMaker.DeleteModelExplainabilityJobDefinition",
+        );
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        let response = self
+            .sign_and_dispatch(
+                request,
+                DeleteModelExplainabilityJobDefinitionError::from_response,
+            )
+            .await?;
+        std::mem::drop(response);
+        Ok(())
+    }
+
     /// <p>Deletes a model package.</p> <p>A model package is used to create Amazon SageMaker models or list on AWS Marketplace. Buyers can subscribe to model packages listed on AWS Marketplace to create models in Amazon SageMaker.</p>
     async fn delete_model_package(
         &self,
@@ -14355,6 +24290,57 @@ impl SageMaker for SageMakerClient {
 
         let response = self
             .sign_and_dispatch(request, DeleteModelPackageError::from_response)
+            .await?;
+        std::mem::drop(response);
+        Ok(())
+    }
+
+    /// <p>Deletes the specified model group.</p>
+    async fn delete_model_package_group(
+        &self,
+        input: DeleteModelPackageGroupInput,
+    ) -> Result<(), RusotoError<DeleteModelPackageGroupError>> {
+        let mut request = self.new_signed_request("POST", "/");
+        request.add_header("x-amz-target", "SageMaker.DeleteModelPackageGroup");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        let response = self
+            .sign_and_dispatch(request, DeleteModelPackageGroupError::from_response)
+            .await?;
+        std::mem::drop(response);
+        Ok(())
+    }
+
+    /// <p>Deletes a model group resource policy.</p>
+    async fn delete_model_package_group_policy(
+        &self,
+        input: DeleteModelPackageGroupPolicyInput,
+    ) -> Result<(), RusotoError<DeleteModelPackageGroupPolicyError>> {
+        let mut request = self.new_signed_request("POST", "/");
+        request.add_header("x-amz-target", "SageMaker.DeleteModelPackageGroupPolicy");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        let response = self
+            .sign_and_dispatch(request, DeleteModelPackageGroupPolicyError::from_response)
+            .await?;
+        std::mem::drop(response);
+        Ok(())
+    }
+
+    /// <p>Deletes the secified model quality monitoring job definition.</p>
+    async fn delete_model_quality_job_definition(
+        &self,
+        input: DeleteModelQualityJobDefinitionRequest,
+    ) -> Result<(), RusotoError<DeleteModelQualityJobDefinitionError>> {
+        let mut request = self.new_signed_request("POST", "/");
+        request.add_header("x-amz-target", "SageMaker.DeleteModelQualityJobDefinition");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        let response = self
+            .sign_and_dispatch(request, DeleteModelQualityJobDefinitionError::from_response)
             .await?;
         std::mem::drop(response);
         Ok(())
@@ -14412,6 +24398,41 @@ impl SageMaker for SageMakerClient {
                 request,
                 DeleteNotebookInstanceLifecycleConfigError::from_response,
             )
+            .await?;
+        std::mem::drop(response);
+        Ok(())
+    }
+
+    /// <p>Deletes a pipeline if there are no in-progress executions.</p>
+    async fn delete_pipeline(
+        &self,
+        input: DeletePipelineRequest,
+    ) -> Result<DeletePipelineResponse, RusotoError<DeletePipelineError>> {
+        let mut request = self.new_signed_request("POST", "/");
+        request.add_header("x-amz-target", "SageMaker.DeletePipeline");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        let response = self
+            .sign_and_dispatch(request, DeletePipelineError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<DeletePipelineResponse, _>()
+    }
+
+    /// <p>Delete the specified project.</p>
+    async fn delete_project(
+        &self,
+        input: DeleteProjectInput,
+    ) -> Result<(), RusotoError<DeleteProjectError>> {
+        let mut request = self.new_signed_request("POST", "/");
+        request.add_header("x-amz-target", "SageMaker.DeleteProject");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        let response = self
+            .sign_and_dispatch(request, DeleteProjectError::from_response)
             .await?;
         std::mem::drop(response);
         Ok(())
@@ -14489,6 +24510,24 @@ impl SageMaker for SageMakerClient {
         Ok(())
     }
 
+    /// <p><p>Use this operation to delete a workforce.</p> <p>If you want to create a new workforce in an AWS Region where a workforce already exists, use this operation to delete the existing workforce and then use to create a new workforce.</p> <important> <p>If a private workforce contains one or more work teams, you must use the operation to delete all work teams before you delete the workforce. If you try to delete a workforce that contains one or more work teams, you will recieve a <code>ResourceInUse</code> error.</p> </important></p>
+    async fn delete_workforce(
+        &self,
+        input: DeleteWorkforceRequest,
+    ) -> Result<DeleteWorkforceResponse, RusotoError<DeleteWorkforceError>> {
+        let mut request = self.new_signed_request("POST", "/");
+        request.add_header("x-amz-target", "SageMaker.DeleteWorkforce");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        let response = self
+            .sign_and_dispatch(request, DeleteWorkforceError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<DeleteWorkforceResponse, _>()
+    }
+
     /// <p>Deletes an existing work team. This operation can't be undone.</p>
     async fn delete_workteam(
         &self,
@@ -14505,6 +24544,41 @@ impl SageMaker for SageMakerClient {
         let mut response = response;
         let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         proto::json::ResponsePayload::new(&response).deserialize::<DeleteWorkteamResponse, _>()
+    }
+
+    /// <p>Deregisters the specified devices. After you deregister a device, you will need to re-register the devices.</p>
+    async fn deregister_devices(
+        &self,
+        input: DeregisterDevicesRequest,
+    ) -> Result<(), RusotoError<DeregisterDevicesError>> {
+        let mut request = self.new_signed_request("POST", "/");
+        request.add_header("x-amz-target", "SageMaker.DeregisterDevices");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        let response = self
+            .sign_and_dispatch(request, DeregisterDevicesError::from_response)
+            .await?;
+        std::mem::drop(response);
+        Ok(())
+    }
+
+    /// <p>Describes an action.</p>
+    async fn describe_action(
+        &self,
+        input: DescribeActionRequest,
+    ) -> Result<DescribeActionResponse, RusotoError<DescribeActionError>> {
+        let mut request = self.new_signed_request("POST", "/");
+        request.add_header("x-amz-target", "SageMaker.DescribeAction");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        let response = self
+            .sign_and_dispatch(request, DescribeActionError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<DescribeActionResponse, _>()
     }
 
     /// <p>Returns a description of the specified algorithm that is in your account.</p>
@@ -14541,6 +24615,43 @@ impl SageMaker for SageMakerClient {
         let mut response = response;
         let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         proto::json::ResponsePayload::new(&response).deserialize::<DescribeAppResponse, _>()
+    }
+
+    /// <p>Describes an AppImageConfig.</p>
+    async fn describe_app_image_config(
+        &self,
+        input: DescribeAppImageConfigRequest,
+    ) -> Result<DescribeAppImageConfigResponse, RusotoError<DescribeAppImageConfigError>> {
+        let mut request = self.new_signed_request("POST", "/");
+        request.add_header("x-amz-target", "SageMaker.DescribeAppImageConfig");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        let response = self
+            .sign_and_dispatch(request, DescribeAppImageConfigError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<DescribeAppImageConfigResponse, _>()
+    }
+
+    /// <p>Describes an artifact.</p>
+    async fn describe_artifact(
+        &self,
+        input: DescribeArtifactRequest,
+    ) -> Result<DescribeArtifactResponse, RusotoError<DescribeArtifactError>> {
+        let mut request = self.new_signed_request("POST", "/");
+        request.add_header("x-amz-target", "SageMaker.DescribeArtifact");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        let response = self
+            .sign_and_dispatch(request, DescribeArtifactError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<DescribeArtifactResponse, _>()
     }
 
     /// <p>Returns information about an Amazon SageMaker job.</p>
@@ -14599,6 +24710,85 @@ impl SageMaker for SageMakerClient {
             .deserialize::<DescribeCompilationJobResponse, _>()
     }
 
+    /// <p>Describes a context.</p>
+    async fn describe_context(
+        &self,
+        input: DescribeContextRequest,
+    ) -> Result<DescribeContextResponse, RusotoError<DescribeContextError>> {
+        let mut request = self.new_signed_request("POST", "/");
+        request.add_header("x-amz-target", "SageMaker.DescribeContext");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        let response = self
+            .sign_and_dispatch(request, DescribeContextError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<DescribeContextResponse, _>()
+    }
+
+    /// <p>Gets the details of a data quality monitoring job definition.</p>
+    async fn describe_data_quality_job_definition(
+        &self,
+        input: DescribeDataQualityJobDefinitionRequest,
+    ) -> Result<
+        DescribeDataQualityJobDefinitionResponse,
+        RusotoError<DescribeDataQualityJobDefinitionError>,
+    > {
+        let mut request = self.new_signed_request("POST", "/");
+        request.add_header("x-amz-target", "SageMaker.DescribeDataQualityJobDefinition");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        let response = self
+            .sign_and_dispatch(
+                request,
+                DescribeDataQualityJobDefinitionError::from_response,
+            )
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<DescribeDataQualityJobDefinitionResponse, _>()
+    }
+
+    /// <p>Describes the device.</p>
+    async fn describe_device(
+        &self,
+        input: DescribeDeviceRequest,
+    ) -> Result<DescribeDeviceResponse, RusotoError<DescribeDeviceError>> {
+        let mut request = self.new_signed_request("POST", "/");
+        request.add_header("x-amz-target", "SageMaker.DescribeDevice");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        let response = self
+            .sign_and_dispatch(request, DescribeDeviceError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<DescribeDeviceResponse, _>()
+    }
+
+    /// <p>A description of the fleet the device belongs to.</p>
+    async fn describe_device_fleet(
+        &self,
+        input: DescribeDeviceFleetRequest,
+    ) -> Result<DescribeDeviceFleetResponse, RusotoError<DescribeDeviceFleetError>> {
+        let mut request = self.new_signed_request("POST", "/");
+        request.add_header("x-amz-target", "SageMaker.DescribeDeviceFleet");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        let response = self
+            .sign_and_dispatch(request, DescribeDeviceFleetError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<DescribeDeviceFleetResponse, _>()
+    }
+
     /// <p>The description of the domain.</p>
     async fn describe_domain(
         &self,
@@ -14615,6 +24805,25 @@ impl SageMaker for SageMakerClient {
         let mut response = response;
         let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         proto::json::ResponsePayload::new(&response).deserialize::<DescribeDomainResponse, _>()
+    }
+
+    /// <p>A description of edge packaging jobs.</p>
+    async fn describe_edge_packaging_job(
+        &self,
+        input: DescribeEdgePackagingJobRequest,
+    ) -> Result<DescribeEdgePackagingJobResponse, RusotoError<DescribeEdgePackagingJobError>> {
+        let mut request = self.new_signed_request("POST", "/");
+        request.add_header("x-amz-target", "SageMaker.DescribeEdgePackagingJob");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        let response = self
+            .sign_and_dispatch(request, DescribeEdgePackagingJobError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<DescribeEdgePackagingJobResponse, _>()
     }
 
     /// <p>Returns the description of an endpoint.</p>
@@ -14670,6 +24879,25 @@ impl SageMaker for SageMakerClient {
         let mut response = response;
         let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         proto::json::ResponsePayload::new(&response).deserialize::<DescribeExperimentResponse, _>()
+    }
+
+    /// <p>Use this operation to describe a <code>FeatureGroup</code>. The response includes information on the creation time, <code>FeatureGroup</code> name, the unique identifier for each <code>FeatureGroup</code>, and more.</p>
+    async fn describe_feature_group(
+        &self,
+        input: DescribeFeatureGroupRequest,
+    ) -> Result<DescribeFeatureGroupResponse, RusotoError<DescribeFeatureGroupError>> {
+        let mut request = self.new_signed_request("POST", "/");
+        request.add_header("x-amz-target", "SageMaker.DescribeFeatureGroup");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        let response = self
+            .sign_and_dispatch(request, DescribeFeatureGroupError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<DescribeFeatureGroupResponse, _>()
     }
 
     /// <p>Returns information about the specified flow definition.</p>
@@ -14731,6 +24959,43 @@ impl SageMaker for SageMakerClient {
             .deserialize::<DescribeHyperParameterTuningJobResponse, _>()
     }
 
+    /// <p>Describes a SageMaker image.</p>
+    async fn describe_image(
+        &self,
+        input: DescribeImageRequest,
+    ) -> Result<DescribeImageResponse, RusotoError<DescribeImageError>> {
+        let mut request = self.new_signed_request("POST", "/");
+        request.add_header("x-amz-target", "SageMaker.DescribeImage");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        let response = self
+            .sign_and_dispatch(request, DescribeImageError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<DescribeImageResponse, _>()
+    }
+
+    /// <p>Describes a version of a SageMaker image.</p>
+    async fn describe_image_version(
+        &self,
+        input: DescribeImageVersionRequest,
+    ) -> Result<DescribeImageVersionResponse, RusotoError<DescribeImageVersionError>> {
+        let mut request = self.new_signed_request("POST", "/");
+        request.add_header("x-amz-target", "SageMaker.DescribeImageVersion");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        let response = self
+            .sign_and_dispatch(request, DescribeImageVersionError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<DescribeImageVersionResponse, _>()
+    }
+
     /// <p>Gets information about a labeling job.</p>
     async fn describe_labeling_job(
         &self,
@@ -14767,6 +25032,56 @@ impl SageMaker for SageMakerClient {
         proto::json::ResponsePayload::new(&response).deserialize::<DescribeModelOutput, _>()
     }
 
+    /// <p>Returns a description of a model bias job definition.</p>
+    async fn describe_model_bias_job_definition(
+        &self,
+        input: DescribeModelBiasJobDefinitionRequest,
+    ) -> Result<
+        DescribeModelBiasJobDefinitionResponse,
+        RusotoError<DescribeModelBiasJobDefinitionError>,
+    > {
+        let mut request = self.new_signed_request("POST", "/");
+        request.add_header("x-amz-target", "SageMaker.DescribeModelBiasJobDefinition");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        let response = self
+            .sign_and_dispatch(request, DescribeModelBiasJobDefinitionError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<DescribeModelBiasJobDefinitionResponse, _>()
+    }
+
+    /// <p>Returns a description of a model explainability job definition.</p>
+    async fn describe_model_explainability_job_definition(
+        &self,
+        input: DescribeModelExplainabilityJobDefinitionRequest,
+    ) -> Result<
+        DescribeModelExplainabilityJobDefinitionResponse,
+        RusotoError<DescribeModelExplainabilityJobDefinitionError>,
+    > {
+        let mut request = self.new_signed_request("POST", "/");
+        request.add_header(
+            "x-amz-target",
+            "SageMaker.DescribeModelExplainabilityJobDefinition",
+        );
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        let response = self
+            .sign_and_dispatch(
+                request,
+                DescribeModelExplainabilityJobDefinitionError::from_response,
+            )
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<DescribeModelExplainabilityJobDefinitionResponse, _>()
+    }
+
     /// <p>Returns a description of the specified model package, which is used to create Amazon SageMaker models or list them on AWS Marketplace.</p> <p>To create models in Amazon SageMaker, buyers can subscribe to model packages listed on AWS Marketplace.</p>
     async fn describe_model_package(
         &self,
@@ -14783,6 +25098,53 @@ impl SageMaker for SageMakerClient {
         let mut response = response;
         let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         proto::json::ResponsePayload::new(&response).deserialize::<DescribeModelPackageOutput, _>()
+    }
+
+    /// <p>Gets a description for the specified model group.</p>
+    async fn describe_model_package_group(
+        &self,
+        input: DescribeModelPackageGroupInput,
+    ) -> Result<DescribeModelPackageGroupOutput, RusotoError<DescribeModelPackageGroupError>> {
+        let mut request = self.new_signed_request("POST", "/");
+        request.add_header("x-amz-target", "SageMaker.DescribeModelPackageGroup");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        let response = self
+            .sign_and_dispatch(request, DescribeModelPackageGroupError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<DescribeModelPackageGroupOutput, _>()
+    }
+
+    /// <p>Returns a description of a model quality job definition.</p>
+    async fn describe_model_quality_job_definition(
+        &self,
+        input: DescribeModelQualityJobDefinitionRequest,
+    ) -> Result<
+        DescribeModelQualityJobDefinitionResponse,
+        RusotoError<DescribeModelQualityJobDefinitionError>,
+    > {
+        let mut request = self.new_signed_request("POST", "/");
+        request.add_header(
+            "x-amz-target",
+            "SageMaker.DescribeModelQualityJobDefinition",
+        );
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        let response = self
+            .sign_and_dispatch(
+                request,
+                DescribeModelQualityJobDefinitionError::from_response,
+            )
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<DescribeModelQualityJobDefinitionResponse, _>()
     }
 
     /// <p>Describes the schedule for a monitoring job.</p>
@@ -14852,6 +25214,72 @@ impl SageMaker for SageMakerClient {
             .deserialize::<DescribeNotebookInstanceLifecycleConfigOutput, _>()
     }
 
+    /// <p>Describes the details of a pipeline.</p>
+    async fn describe_pipeline(
+        &self,
+        input: DescribePipelineRequest,
+    ) -> Result<DescribePipelineResponse, RusotoError<DescribePipelineError>> {
+        let mut request = self.new_signed_request("POST", "/");
+        request.add_header("x-amz-target", "SageMaker.DescribePipeline");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        let response = self
+            .sign_and_dispatch(request, DescribePipelineError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<DescribePipelineResponse, _>()
+    }
+
+    /// <p>Describes the details of an execution's pipeline definition.</p>
+    async fn describe_pipeline_definition_for_execution(
+        &self,
+        input: DescribePipelineDefinitionForExecutionRequest,
+    ) -> Result<
+        DescribePipelineDefinitionForExecutionResponse,
+        RusotoError<DescribePipelineDefinitionForExecutionError>,
+    > {
+        let mut request = self.new_signed_request("POST", "/");
+        request.add_header(
+            "x-amz-target",
+            "SageMaker.DescribePipelineDefinitionForExecution",
+        );
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        let response = self
+            .sign_and_dispatch(
+                request,
+                DescribePipelineDefinitionForExecutionError::from_response,
+            )
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<DescribePipelineDefinitionForExecutionResponse, _>()
+    }
+
+    /// <p>Describes the details of a pipeline execution.</p>
+    async fn describe_pipeline_execution(
+        &self,
+        input: DescribePipelineExecutionRequest,
+    ) -> Result<DescribePipelineExecutionResponse, RusotoError<DescribePipelineExecutionError>>
+    {
+        let mut request = self.new_signed_request("POST", "/");
+        request.add_header("x-amz-target", "SageMaker.DescribePipelineExecution");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        let response = self
+            .sign_and_dispatch(request, DescribePipelineExecutionError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<DescribePipelineExecutionResponse, _>()
+    }
+
     /// <p>Returns a description of a processing job.</p>
     async fn describe_processing_job(
         &self,
@@ -14869,6 +25297,24 @@ impl SageMaker for SageMakerClient {
         let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         proto::json::ResponsePayload::new(&response)
             .deserialize::<DescribeProcessingJobResponse, _>()
+    }
+
+    /// <p>Describes the details of a project.</p>
+    async fn describe_project(
+        &self,
+        input: DescribeProjectInput,
+    ) -> Result<DescribeProjectOutput, RusotoError<DescribeProjectError>> {
+        let mut request = self.new_signed_request("POST", "/");
+        request.add_header("x-amz-target", "SageMaker.DescribeProject");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        let response = self
+            .sign_and_dispatch(request, DescribeProjectError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<DescribeProjectOutput, _>()
     }
 
     /// <p>Gets information about a work team provided by a vendor. It returns details about the subscription with a vendor in the AWS Marketplace.</p>
@@ -15019,6 +25465,32 @@ impl SageMaker for SageMakerClient {
         proto::json::ResponsePayload::new(&response).deserialize::<DescribeWorkteamResponse, _>()
     }
 
+    /// <p>Disables using Service Catalog in SageMaker. Service Catalog is used to create SageMaker projects.</p>
+    async fn disable_sagemaker_servicecatalog_portfolio(
+        &self,
+    ) -> Result<
+        DisableSagemakerServicecatalogPortfolioOutput,
+        RusotoError<DisableSagemakerServicecatalogPortfolioError>,
+    > {
+        let mut request = self.new_signed_request("POST", "/");
+        request.add_header(
+            "x-amz-target",
+            "SageMaker.DisableSagemakerServicecatalogPortfolio",
+        );
+        request.set_payload(Some(bytes::Bytes::from_static(b"{}")));
+
+        let response = self
+            .sign_and_dispatch(
+                request,
+                DisableSagemakerServicecatalogPortfolioError::from_response,
+            )
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<DisableSagemakerServicecatalogPortfolioOutput, _>()
+    }
+
     /// <p>Disassociates a trial component from a trial. This doesn't effect other trials the component is associated with. Before you can delete a component, you must disassociate the component from all trials it is associated with. To associate a trial component with a trial, call the <a>AssociateTrialComponent</a> API.</p> <p>To get a list of the trials a component is associated with, use the <a>Search</a> API. Specify <code>ExperimentTrialComponent</code> for the <code>Resource</code> parameter. The list appears in the response under <code>Results.TrialComponent.Parents</code>.</p>
     async fn disassociate_trial_component(
         &self,
@@ -15037,6 +25509,97 @@ impl SageMaker for SageMakerClient {
         let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         proto::json::ResponsePayload::new(&response)
             .deserialize::<DisassociateTrialComponentResponse, _>()
+    }
+
+    /// <p>Enables using Service Catalog in SageMaker. Service Catalog is used to create SageMaker projects.</p>
+    async fn enable_sagemaker_servicecatalog_portfolio(
+        &self,
+    ) -> Result<
+        EnableSagemakerServicecatalogPortfolioOutput,
+        RusotoError<EnableSagemakerServicecatalogPortfolioError>,
+    > {
+        let mut request = self.new_signed_request("POST", "/");
+        request.add_header(
+            "x-amz-target",
+            "SageMaker.EnableSagemakerServicecatalogPortfolio",
+        );
+        request.set_payload(Some(bytes::Bytes::from_static(b"{}")));
+
+        let response = self
+            .sign_and_dispatch(
+                request,
+                EnableSagemakerServicecatalogPortfolioError::from_response,
+            )
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<EnableSagemakerServicecatalogPortfolioOutput, _>()
+    }
+
+    /// <p>Describes a fleet.</p>
+    async fn get_device_fleet_report(
+        &self,
+        input: GetDeviceFleetReportRequest,
+    ) -> Result<GetDeviceFleetReportResponse, RusotoError<GetDeviceFleetReportError>> {
+        let mut request = self.new_signed_request("POST", "/");
+        request.add_header("x-amz-target", "SageMaker.GetDeviceFleetReport");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        let response = self
+            .sign_and_dispatch(request, GetDeviceFleetReportError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<GetDeviceFleetReportResponse, _>()
+    }
+
+    /// <p>Gets a resource policy that manages access for a model group. For information about resource policies, see <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/access_policies_identity-vs-resource.html">Identity-based policies and resource-based policies</a> in the <i>AWS Identity and Access Management User Guide.</i>.</p>
+    async fn get_model_package_group_policy(
+        &self,
+        input: GetModelPackageGroupPolicyInput,
+    ) -> Result<GetModelPackageGroupPolicyOutput, RusotoError<GetModelPackageGroupPolicyError>>
+    {
+        let mut request = self.new_signed_request("POST", "/");
+        request.add_header("x-amz-target", "SageMaker.GetModelPackageGroupPolicy");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        let response = self
+            .sign_and_dispatch(request, GetModelPackageGroupPolicyError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<GetModelPackageGroupPolicyOutput, _>()
+    }
+
+    /// <p>Gets the status of Service Catalog in SageMaker. Service Catalog is used to create SageMaker projects.</p>
+    async fn get_sagemaker_servicecatalog_portfolio_status(
+        &self,
+    ) -> Result<
+        GetSagemakerServicecatalogPortfolioStatusOutput,
+        RusotoError<GetSagemakerServicecatalogPortfolioStatusError>,
+    > {
+        let mut request = self.new_signed_request("POST", "/");
+        request.add_header(
+            "x-amz-target",
+            "SageMaker.GetSagemakerServicecatalogPortfolioStatus",
+        );
+        request.set_payload(Some(bytes::Bytes::from_static(b"{}")));
+
+        let response = self
+            .sign_and_dispatch(
+                request,
+                GetSagemakerServicecatalogPortfolioStatusError::from_response,
+            )
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<GetSagemakerServicecatalogPortfolioStatusOutput, _>()
     }
 
     /// <p>An auto-complete API for the search functionality in the Amazon SageMaker console. It returns suggestions of possible matches for the property name to use in <code>Search</code> queries. Provides suggestions for <code>HyperParameters</code>, <code>Tags</code>, and <code>Metrics</code>.</p>
@@ -15058,6 +25621,24 @@ impl SageMaker for SageMakerClient {
             .deserialize::<GetSearchSuggestionsResponse, _>()
     }
 
+    /// <p>Lists the actions in your account and their properties.</p>
+    async fn list_actions(
+        &self,
+        input: ListActionsRequest,
+    ) -> Result<ListActionsResponse, RusotoError<ListActionsError>> {
+        let mut request = self.new_signed_request("POST", "/");
+        request.add_header("x-amz-target", "SageMaker.ListActions");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        let response = self
+            .sign_and_dispatch(request, ListActionsError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<ListActionsResponse, _>()
+    }
+
     /// <p>Lists the machine learning algorithms that have been created.</p>
     async fn list_algorithms(
         &self,
@@ -15076,6 +25657,24 @@ impl SageMaker for SageMakerClient {
         proto::json::ResponsePayload::new(&response).deserialize::<ListAlgorithmsOutput, _>()
     }
 
+    /// <p>Lists the AppImageConfigs in your account and their properties. The list can be filtered by creation time or modified time, and whether the AppImageConfig name contains a specified string.</p>
+    async fn list_app_image_configs(
+        &self,
+        input: ListAppImageConfigsRequest,
+    ) -> Result<ListAppImageConfigsResponse, RusotoError<ListAppImageConfigsError>> {
+        let mut request = self.new_signed_request("POST", "/");
+        request.add_header("x-amz-target", "SageMaker.ListAppImageConfigs");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        let response = self
+            .sign_and_dispatch(request, ListAppImageConfigsError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<ListAppImageConfigsResponse, _>()
+    }
+
     /// <p>Lists apps.</p>
     async fn list_apps(
         &self,
@@ -15092,6 +25691,42 @@ impl SageMaker for SageMakerClient {
         let mut response = response;
         let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         proto::json::ResponsePayload::new(&response).deserialize::<ListAppsResponse, _>()
+    }
+
+    /// <p>Lists the artifacts in your account and their properties.</p>
+    async fn list_artifacts(
+        &self,
+        input: ListArtifactsRequest,
+    ) -> Result<ListArtifactsResponse, RusotoError<ListArtifactsError>> {
+        let mut request = self.new_signed_request("POST", "/");
+        request.add_header("x-amz-target", "SageMaker.ListArtifacts");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        let response = self
+            .sign_and_dispatch(request, ListArtifactsError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<ListArtifactsResponse, _>()
+    }
+
+    /// <p>Lists the associations in your account and their properties.</p>
+    async fn list_associations(
+        &self,
+        input: ListAssociationsRequest,
+    ) -> Result<ListAssociationsResponse, RusotoError<ListAssociationsError>> {
+        let mut request = self.new_signed_request("POST", "/");
+        request.add_header("x-amz-target", "SageMaker.ListAssociations");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        let response = self
+            .sign_and_dispatch(request, ListAssociationsError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<ListAssociationsResponse, _>()
     }
 
     /// <p>Request a list of jobs.</p>
@@ -15168,6 +25803,82 @@ impl SageMaker for SageMakerClient {
         proto::json::ResponsePayload::new(&response).deserialize::<ListCompilationJobsResponse, _>()
     }
 
+    /// <p>Lists the contexts in your account and their properties.</p>
+    async fn list_contexts(
+        &self,
+        input: ListContextsRequest,
+    ) -> Result<ListContextsResponse, RusotoError<ListContextsError>> {
+        let mut request = self.new_signed_request("POST", "/");
+        request.add_header("x-amz-target", "SageMaker.ListContexts");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        let response = self
+            .sign_and_dispatch(request, ListContextsError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<ListContextsResponse, _>()
+    }
+
+    /// <p>Lists the data quality job definitions in your account.</p>
+    async fn list_data_quality_job_definitions(
+        &self,
+        input: ListDataQualityJobDefinitionsRequest,
+    ) -> Result<
+        ListDataQualityJobDefinitionsResponse,
+        RusotoError<ListDataQualityJobDefinitionsError>,
+    > {
+        let mut request = self.new_signed_request("POST", "/");
+        request.add_header("x-amz-target", "SageMaker.ListDataQualityJobDefinitions");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        let response = self
+            .sign_and_dispatch(request, ListDataQualityJobDefinitionsError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<ListDataQualityJobDefinitionsResponse, _>()
+    }
+
+    /// <p>Returns a list of devices in the fleet.</p>
+    async fn list_device_fleets(
+        &self,
+        input: ListDeviceFleetsRequest,
+    ) -> Result<ListDeviceFleetsResponse, RusotoError<ListDeviceFleetsError>> {
+        let mut request = self.new_signed_request("POST", "/");
+        request.add_header("x-amz-target", "SageMaker.ListDeviceFleets");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        let response = self
+            .sign_and_dispatch(request, ListDeviceFleetsError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<ListDeviceFleetsResponse, _>()
+    }
+
+    /// <p>A list of devices.</p>
+    async fn list_devices(
+        &self,
+        input: ListDevicesRequest,
+    ) -> Result<ListDevicesResponse, RusotoError<ListDevicesError>> {
+        let mut request = self.new_signed_request("POST", "/");
+        request.add_header("x-amz-target", "SageMaker.ListDevices");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        let response = self
+            .sign_and_dispatch(request, ListDevicesError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<ListDevicesResponse, _>()
+    }
+
     /// <p>Lists the domains.</p>
     async fn list_domains(
         &self,
@@ -15184,6 +25895,25 @@ impl SageMaker for SageMakerClient {
         let mut response = response;
         let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         proto::json::ResponsePayload::new(&response).deserialize::<ListDomainsResponse, _>()
+    }
+
+    /// <p>Returns a list of edge packaging jobs.</p>
+    async fn list_edge_packaging_jobs(
+        &self,
+        input: ListEdgePackagingJobsRequest,
+    ) -> Result<ListEdgePackagingJobsResponse, RusotoError<ListEdgePackagingJobsError>> {
+        let mut request = self.new_signed_request("POST", "/");
+        request.add_header("x-amz-target", "SageMaker.ListEdgePackagingJobs");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        let response = self
+            .sign_and_dispatch(request, ListEdgePackagingJobsError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<ListEdgePackagingJobsResponse, _>()
     }
 
     /// <p>Lists endpoint configurations.</p>
@@ -15238,6 +25968,24 @@ impl SageMaker for SageMakerClient {
         let mut response = response;
         let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         proto::json::ResponsePayload::new(&response).deserialize::<ListExperimentsResponse, _>()
+    }
+
+    /// <p>List <code>FeatureGroup</code>s based on given filter and order.</p>
+    async fn list_feature_groups(
+        &self,
+        input: ListFeatureGroupsRequest,
+    ) -> Result<ListFeatureGroupsResponse, RusotoError<ListFeatureGroupsError>> {
+        let mut request = self.new_signed_request("POST", "/");
+        request.add_header("x-amz-target", "SageMaker.ListFeatureGroups");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        let response = self
+            .sign_and_dispatch(request, ListFeatureGroupsError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<ListFeatureGroupsResponse, _>()
     }
 
     /// <p>Returns information about the flow definitions in your account.</p>
@@ -15296,6 +26044,42 @@ impl SageMaker for SageMakerClient {
             .deserialize::<ListHyperParameterTuningJobsResponse, _>()
     }
 
+    /// <p>Lists the versions of a specified image and their properties. The list can be filtered by creation time or modified time.</p>
+    async fn list_image_versions(
+        &self,
+        input: ListImageVersionsRequest,
+    ) -> Result<ListImageVersionsResponse, RusotoError<ListImageVersionsError>> {
+        let mut request = self.new_signed_request("POST", "/");
+        request.add_header("x-amz-target", "SageMaker.ListImageVersions");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        let response = self
+            .sign_and_dispatch(request, ListImageVersionsError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<ListImageVersionsResponse, _>()
+    }
+
+    /// <p>Lists the images in your account and their properties. The list can be filtered by creation time or modified time, and whether the image name contains a specified string.</p>
+    async fn list_images(
+        &self,
+        input: ListImagesRequest,
+    ) -> Result<ListImagesResponse, RusotoError<ListImagesError>> {
+        let mut request = self.new_signed_request("POST", "/");
+        request.add_header("x-amz-target", "SageMaker.ListImages");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        let response = self
+            .sign_and_dispatch(request, ListImagesError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<ListImagesResponse, _>()
+    }
+
     /// <p>Gets a list of labeling jobs.</p>
     async fn list_labeling_jobs(
         &self,
@@ -15334,6 +26118,73 @@ impl SageMaker for SageMakerClient {
             .deserialize::<ListLabelingJobsForWorkteamResponse, _>()
     }
 
+    /// <p>Lists model bias jobs definitions that satisfy various filters.</p>
+    async fn list_model_bias_job_definitions(
+        &self,
+        input: ListModelBiasJobDefinitionsRequest,
+    ) -> Result<ListModelBiasJobDefinitionsResponse, RusotoError<ListModelBiasJobDefinitionsError>>
+    {
+        let mut request = self.new_signed_request("POST", "/");
+        request.add_header("x-amz-target", "SageMaker.ListModelBiasJobDefinitions");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        let response = self
+            .sign_and_dispatch(request, ListModelBiasJobDefinitionsError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<ListModelBiasJobDefinitionsResponse, _>()
+    }
+
+    /// <p>Lists model explainability job definitions that satisfy various filters.</p>
+    async fn list_model_explainability_job_definitions(
+        &self,
+        input: ListModelExplainabilityJobDefinitionsRequest,
+    ) -> Result<
+        ListModelExplainabilityJobDefinitionsResponse,
+        RusotoError<ListModelExplainabilityJobDefinitionsError>,
+    > {
+        let mut request = self.new_signed_request("POST", "/");
+        request.add_header(
+            "x-amz-target",
+            "SageMaker.ListModelExplainabilityJobDefinitions",
+        );
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        let response = self
+            .sign_and_dispatch(
+                request,
+                ListModelExplainabilityJobDefinitionsError::from_response,
+            )
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<ListModelExplainabilityJobDefinitionsResponse, _>()
+    }
+
+    /// <p>Gets a list of the model groups in your AWS account.</p>
+    async fn list_model_package_groups(
+        &self,
+        input: ListModelPackageGroupsInput,
+    ) -> Result<ListModelPackageGroupsOutput, RusotoError<ListModelPackageGroupsError>> {
+        let mut request = self.new_signed_request("POST", "/");
+        request.add_header("x-amz-target", "SageMaker.ListModelPackageGroups");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        let response = self
+            .sign_and_dispatch(request, ListModelPackageGroupsError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<ListModelPackageGroupsOutput, _>()
+    }
+
     /// <p>Lists the model packages that have been created.</p>
     async fn list_model_packages(
         &self,
@@ -15350,6 +26201,28 @@ impl SageMaker for SageMakerClient {
         let mut response = response;
         let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         proto::json::ResponsePayload::new(&response).deserialize::<ListModelPackagesOutput, _>()
+    }
+
+    /// <p>Gets a list of model quality monitoring job definitions in your account.</p>
+    async fn list_model_quality_job_definitions(
+        &self,
+        input: ListModelQualityJobDefinitionsRequest,
+    ) -> Result<
+        ListModelQualityJobDefinitionsResponse,
+        RusotoError<ListModelQualityJobDefinitionsError>,
+    > {
+        let mut request = self.new_signed_request("POST", "/");
+        request.add_header("x-amz-target", "SageMaker.ListModelQualityJobDefinitions");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        let response = self
+            .sign_and_dispatch(request, ListModelQualityJobDefinitionsError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<ListModelQualityJobDefinitionsResponse, _>()
     }
 
     /// <p>Lists models created with the <a>CreateModel</a> API.</p>
@@ -15454,6 +26327,91 @@ impl SageMaker for SageMakerClient {
         proto::json::ResponsePayload::new(&response).deserialize::<ListNotebookInstancesOutput, _>()
     }
 
+    /// <p>Gets a list of <code>PipeLineExecutionStep</code> objects.</p>
+    async fn list_pipeline_execution_steps(
+        &self,
+        input: ListPipelineExecutionStepsRequest,
+    ) -> Result<ListPipelineExecutionStepsResponse, RusotoError<ListPipelineExecutionStepsError>>
+    {
+        let mut request = self.new_signed_request("POST", "/");
+        request.add_header("x-amz-target", "SageMaker.ListPipelineExecutionSteps");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        let response = self
+            .sign_and_dispatch(request, ListPipelineExecutionStepsError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<ListPipelineExecutionStepsResponse, _>()
+    }
+
+    /// <p>Gets a list of the pipeline executions.</p>
+    async fn list_pipeline_executions(
+        &self,
+        input: ListPipelineExecutionsRequest,
+    ) -> Result<ListPipelineExecutionsResponse, RusotoError<ListPipelineExecutionsError>> {
+        let mut request = self.new_signed_request("POST", "/");
+        request.add_header("x-amz-target", "SageMaker.ListPipelineExecutions");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        let response = self
+            .sign_and_dispatch(request, ListPipelineExecutionsError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<ListPipelineExecutionsResponse, _>()
+    }
+
+    /// <p>Gets a list of parameters for a pipeline execution.</p>
+    async fn list_pipeline_parameters_for_execution(
+        &self,
+        input: ListPipelineParametersForExecutionRequest,
+    ) -> Result<
+        ListPipelineParametersForExecutionResponse,
+        RusotoError<ListPipelineParametersForExecutionError>,
+    > {
+        let mut request = self.new_signed_request("POST", "/");
+        request.add_header(
+            "x-amz-target",
+            "SageMaker.ListPipelineParametersForExecution",
+        );
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        let response = self
+            .sign_and_dispatch(
+                request,
+                ListPipelineParametersForExecutionError::from_response,
+            )
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<ListPipelineParametersForExecutionResponse, _>()
+    }
+
+    /// <p>Gets a list of pipelines.</p>
+    async fn list_pipelines(
+        &self,
+        input: ListPipelinesRequest,
+    ) -> Result<ListPipelinesResponse, RusotoError<ListPipelinesError>> {
+        let mut request = self.new_signed_request("POST", "/");
+        request.add_header("x-amz-target", "SageMaker.ListPipelines");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        let response = self
+            .sign_and_dispatch(request, ListPipelinesError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<ListPipelinesResponse, _>()
+    }
+
     /// <p>Lists processing jobs that satisfy various filters.</p>
     async fn list_processing_jobs(
         &self,
@@ -15470,6 +26428,24 @@ impl SageMaker for SageMakerClient {
         let mut response = response;
         let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         proto::json::ResponsePayload::new(&response).deserialize::<ListProcessingJobsResponse, _>()
+    }
+
+    /// <p>Gets a list of the projects in an AWS account.</p>
+    async fn list_projects(
+        &self,
+        input: ListProjectsInput,
+    ) -> Result<ListProjectsOutput, RusotoError<ListProjectsError>> {
+        let mut request = self.new_signed_request("POST", "/");
+        request.add_header("x-amz-target", "SageMaker.ListProjects");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        let response = self
+            .sign_and_dispatch(request, ListProjectsError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<ListProjectsOutput, _>()
     }
 
     /// <p>Gets a list of the work teams that you are subscribed to in the AWS Marketplace. The list may be empty if no work team satisfies the filter specified in the <code>NameContains</code> parameter.</p>
@@ -15627,7 +26603,25 @@ impl SageMaker for SageMakerClient {
         proto::json::ResponsePayload::new(&response).deserialize::<ListUserProfilesResponse, _>()
     }
 
-    /// <p>Gets a list of work teams that you have defined in a region. The list may be empty if no work team satisfies the filter specified in the <code>NameContains</code> parameter.</p>
+    /// <p>Use this operation to list all private and vendor workforces in an AWS Region. Note that you can only have one private workforce per AWS Region.</p>
+    async fn list_workforces(
+        &self,
+        input: ListWorkforcesRequest,
+    ) -> Result<ListWorkforcesResponse, RusotoError<ListWorkforcesError>> {
+        let mut request = self.new_signed_request("POST", "/");
+        request.add_header("x-amz-target", "SageMaker.ListWorkforces");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        let response = self
+            .sign_and_dispatch(request, ListWorkforcesError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<ListWorkforcesResponse, _>()
+    }
+
+    /// <p>Gets a list of private work teams that you have defined in a region. The list may be empty if no work team satisfies the filter specified in the <code>NameContains</code> parameter.</p>
     async fn list_workteams(
         &self,
         input: ListWorkteamsRequest,
@@ -15643,6 +26637,43 @@ impl SageMaker for SageMakerClient {
         let mut response = response;
         let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         proto::json::ResponsePayload::new(&response).deserialize::<ListWorkteamsResponse, _>()
+    }
+
+    /// <p>Adds a resouce policy to control access to a model group. For information about resoure policies, see <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/access_policies_identity-vs-resource.html">Identity-based policies and resource-based policies</a> in the <i>AWS Identity and Access Management User Guide.</i>.</p>
+    async fn put_model_package_group_policy(
+        &self,
+        input: PutModelPackageGroupPolicyInput,
+    ) -> Result<PutModelPackageGroupPolicyOutput, RusotoError<PutModelPackageGroupPolicyError>>
+    {
+        let mut request = self.new_signed_request("POST", "/");
+        request.add_header("x-amz-target", "SageMaker.PutModelPackageGroupPolicy");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        let response = self
+            .sign_and_dispatch(request, PutModelPackageGroupPolicyError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<PutModelPackageGroupPolicyOutput, _>()
+    }
+
+    /// <p>Register devices.</p>
+    async fn register_devices(
+        &self,
+        input: RegisterDevicesRequest,
+    ) -> Result<(), RusotoError<RegisterDevicesError>> {
+        let mut request = self.new_signed_request("POST", "/");
+        request.add_header("x-amz-target", "SageMaker.RegisterDevices");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        let response = self
+            .sign_and_dispatch(request, RegisterDevicesError::from_response)
+            .await?;
+        std::mem::drop(response);
+        Ok(())
     }
 
     /// <p>Renders the UI template so that you can preview the worker's experience. </p>
@@ -15681,7 +26712,7 @@ impl SageMaker for SageMakerClient {
         proto::json::ResponsePayload::new(&response).deserialize::<SearchResponse, _>()
     }
 
-    /// <p><p>Starts a previously stopped monitoring schedule.</p> <note> <p>New monitoring schedules are immediately started after creation.</p> </note></p>
+    /// <p><p>Starts a previously stopped monitoring schedule.</p> <note> <p>By default, when you successfully create a new schedule, the status of a monitoring schedule is <code>scheduled</code>.</p> </note></p>
     async fn start_monitoring_schedule(
         &self,
         input: StartMonitoringScheduleRequest,
@@ -15715,6 +26746,25 @@ impl SageMaker for SageMakerClient {
         Ok(())
     }
 
+    /// <p>Starts a pipeline execution.</p>
+    async fn start_pipeline_execution(
+        &self,
+        input: StartPipelineExecutionRequest,
+    ) -> Result<StartPipelineExecutionResponse, RusotoError<StartPipelineExecutionError>> {
+        let mut request = self.new_signed_request("POST", "/");
+        request.add_header("x-amz-target", "SageMaker.StartPipelineExecution");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        let response = self
+            .sign_and_dispatch(request, StartPipelineExecutionError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<StartPipelineExecutionResponse, _>()
+    }
+
     /// <p>A method for forcing the termination of a running job.</p>
     async fn stop_auto_ml_job(
         &self,
@@ -15744,6 +26794,23 @@ impl SageMaker for SageMakerClient {
 
         let response = self
             .sign_and_dispatch(request, StopCompilationJobError::from_response)
+            .await?;
+        std::mem::drop(response);
+        Ok(())
+    }
+
+    /// <p>Request to stop an edge packaging job.</p>
+    async fn stop_edge_packaging_job(
+        &self,
+        input: StopEdgePackagingJobRequest,
+    ) -> Result<(), RusotoError<StopEdgePackagingJobError>> {
+        let mut request = self.new_signed_request("POST", "/");
+        request.add_header("x-amz-target", "SageMaker.StopEdgePackagingJob");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        let response = self
+            .sign_and_dispatch(request, StopEdgePackagingJobError::from_response)
             .await?;
         std::mem::drop(response);
         Ok(())
@@ -15817,6 +26884,25 @@ impl SageMaker for SageMakerClient {
         Ok(())
     }
 
+    /// <p>Stops a pipeline execution.</p>
+    async fn stop_pipeline_execution(
+        &self,
+        input: StopPipelineExecutionRequest,
+    ) -> Result<StopPipelineExecutionResponse, RusotoError<StopPipelineExecutionError>> {
+        let mut request = self.new_signed_request("POST", "/");
+        request.add_header("x-amz-target", "SageMaker.StopPipelineExecution");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        let response = self
+            .sign_and_dispatch(request, StopPipelineExecutionError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<StopPipelineExecutionResponse, _>()
+    }
+
     /// <p>Stops a processing job.</p>
     async fn stop_processing_job(
         &self,
@@ -15868,6 +26954,61 @@ impl SageMaker for SageMakerClient {
         Ok(())
     }
 
+    /// <p>Updates an action.</p>
+    async fn update_action(
+        &self,
+        input: UpdateActionRequest,
+    ) -> Result<UpdateActionResponse, RusotoError<UpdateActionError>> {
+        let mut request = self.new_signed_request("POST", "/");
+        request.add_header("x-amz-target", "SageMaker.UpdateAction");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        let response = self
+            .sign_and_dispatch(request, UpdateActionError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<UpdateActionResponse, _>()
+    }
+
+    /// <p>Updates the properties of an AppImageConfig.</p>
+    async fn update_app_image_config(
+        &self,
+        input: UpdateAppImageConfigRequest,
+    ) -> Result<UpdateAppImageConfigResponse, RusotoError<UpdateAppImageConfigError>> {
+        let mut request = self.new_signed_request("POST", "/");
+        request.add_header("x-amz-target", "SageMaker.UpdateAppImageConfig");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        let response = self
+            .sign_and_dispatch(request, UpdateAppImageConfigError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<UpdateAppImageConfigResponse, _>()
+    }
+
+    /// <p>Updates an artifact.</p>
+    async fn update_artifact(
+        &self,
+        input: UpdateArtifactRequest,
+    ) -> Result<UpdateArtifactResponse, RusotoError<UpdateArtifactError>> {
+        let mut request = self.new_signed_request("POST", "/");
+        request.add_header("x-amz-target", "SageMaker.UpdateArtifact");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        let response = self
+            .sign_and_dispatch(request, UpdateArtifactError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<UpdateArtifactResponse, _>()
+    }
+
     /// <p>Updates the specified Git repository with the specified values.</p>
     async fn update_code_repository(
         &self,
@@ -15884,6 +27025,58 @@ impl SageMaker for SageMakerClient {
         let mut response = response;
         let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         proto::json::ResponsePayload::new(&response).deserialize::<UpdateCodeRepositoryOutput, _>()
+    }
+
+    /// <p>Updates a context.</p>
+    async fn update_context(
+        &self,
+        input: UpdateContextRequest,
+    ) -> Result<UpdateContextResponse, RusotoError<UpdateContextError>> {
+        let mut request = self.new_signed_request("POST", "/");
+        request.add_header("x-amz-target", "SageMaker.UpdateContext");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        let response = self
+            .sign_and_dispatch(request, UpdateContextError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<UpdateContextResponse, _>()
+    }
+
+    /// <p>Updates a fleet of devices.</p>
+    async fn update_device_fleet(
+        &self,
+        input: UpdateDeviceFleetRequest,
+    ) -> Result<(), RusotoError<UpdateDeviceFleetError>> {
+        let mut request = self.new_signed_request("POST", "/");
+        request.add_header("x-amz-target", "SageMaker.UpdateDeviceFleet");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        let response = self
+            .sign_and_dispatch(request, UpdateDeviceFleetError::from_response)
+            .await?;
+        std::mem::drop(response);
+        Ok(())
+    }
+
+    /// <p>Updates one or more devices in a fleet.</p>
+    async fn update_devices(
+        &self,
+        input: UpdateDevicesRequest,
+    ) -> Result<(), RusotoError<UpdateDevicesError>> {
+        let mut request = self.new_signed_request("POST", "/");
+        request.add_header("x-amz-target", "SageMaker.UpdateDevices");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        let response = self
+            .sign_and_dispatch(request, UpdateDevicesError::from_response)
+            .await?;
+        std::mem::drop(response);
+        Ok(())
     }
 
     /// <p>Updates the default settings for new user profiles in the domain.</p>
@@ -15968,6 +27161,42 @@ impl SageMaker for SageMakerClient {
         proto::json::ResponsePayload::new(&response).deserialize::<UpdateExperimentResponse, _>()
     }
 
+    /// <p>Updates the properties of a SageMaker image. To change the image's tags, use the <a>AddTags</a> and <a>DeleteTags</a> APIs.</p>
+    async fn update_image(
+        &self,
+        input: UpdateImageRequest,
+    ) -> Result<UpdateImageResponse, RusotoError<UpdateImageError>> {
+        let mut request = self.new_signed_request("POST", "/");
+        request.add_header("x-amz-target", "SageMaker.UpdateImage");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        let response = self
+            .sign_and_dispatch(request, UpdateImageError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<UpdateImageResponse, _>()
+    }
+
+    /// <p>Updates a versioned model.</p>
+    async fn update_model_package(
+        &self,
+        input: UpdateModelPackageInput,
+    ) -> Result<UpdateModelPackageOutput, RusotoError<UpdateModelPackageError>> {
+        let mut request = self.new_signed_request("POST", "/");
+        request.add_header("x-amz-target", "SageMaker.UpdateModelPackage");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        let response = self
+            .sign_and_dispatch(request, UpdateModelPackageError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<UpdateModelPackageOutput, _>()
+    }
+
     /// <p>Updates a previously created schedule.</p>
     async fn update_monitoring_schedule(
         &self,
@@ -16034,6 +27263,61 @@ impl SageMaker for SageMakerClient {
             .deserialize::<UpdateNotebookInstanceLifecycleConfigOutput, _>()
     }
 
+    /// <p>Updates a pipeline.</p>
+    async fn update_pipeline(
+        &self,
+        input: UpdatePipelineRequest,
+    ) -> Result<UpdatePipelineResponse, RusotoError<UpdatePipelineError>> {
+        let mut request = self.new_signed_request("POST", "/");
+        request.add_header("x-amz-target", "SageMaker.UpdatePipeline");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        let response = self
+            .sign_and_dispatch(request, UpdatePipelineError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<UpdatePipelineResponse, _>()
+    }
+
+    /// <p>Updates a pipeline execution.</p>
+    async fn update_pipeline_execution(
+        &self,
+        input: UpdatePipelineExecutionRequest,
+    ) -> Result<UpdatePipelineExecutionResponse, RusotoError<UpdatePipelineExecutionError>> {
+        let mut request = self.new_signed_request("POST", "/");
+        request.add_header("x-amz-target", "SageMaker.UpdatePipelineExecution");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        let response = self
+            .sign_and_dispatch(request, UpdatePipelineExecutionError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<UpdatePipelineExecutionResponse, _>()
+    }
+
+    /// <p>Update a model training job to request a new Debugger profiling configuration.</p>
+    async fn update_training_job(
+        &self,
+        input: UpdateTrainingJobRequest,
+    ) -> Result<UpdateTrainingJobResponse, RusotoError<UpdateTrainingJobError>> {
+        let mut request = self.new_signed_request("POST", "/");
+        request.add_header("x-amz-target", "SageMaker.UpdateTrainingJob");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        let response = self
+            .sign_and_dispatch(request, UpdateTrainingJobError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<UpdateTrainingJobResponse, _>()
+    }
+
     /// <p>Updates the display name of a trial.</p>
     async fn update_trial(
         &self,
@@ -16089,7 +27373,7 @@ impl SageMaker for SageMakerClient {
         proto::json::ResponsePayload::new(&response).deserialize::<UpdateUserProfileResponse, _>()
     }
 
-    /// <p><p>Restricts access to tasks assigned to workers in the specified workforce to those within specific ranges of IP addresses. You specify allowed IP addresses by creating a list of up to ten <a href="https://docs.aws.amazon.com/vpc/latest/userguide/VPC_Subnets.html">CIDRs</a>.</p> <p>By default, a workforce isn&#39;t restricted to specific IP addresses. If you specify a range of IP addresses, workers who attempt to access tasks using any IP address outside the specified range are denied access and get a <code>Not Found</code> error message on the worker portal. After restricting access with this operation, you can see the allowed IP values for a private workforce with the operation.</p> <important> <p>This operation applies only to private workforces.</p> </important></p>
+    /// <p><p>Use this operation to update your workforce. You can use this operation to require that workers use specific IP addresses to work on tasks and to update your OpenID Connect (OIDC) Identity Provider (IdP) workforce configuration.</p> <p> Use <code>SourceIpConfig</code> to restrict worker access to tasks to a specific range of IP addresses. You specify allowed IP addresses by creating a list of up to ten <a href="https://docs.aws.amazon.com/vpc/latest/userguide/VPC_Subnets.html">CIDRs</a>. By default, a workforce isn&#39;t restricted to specific IP addresses. If you specify a range of IP addresses, workers who attempt to access tasks using any IP address outside the specified range are denied and get a <code>Not Found</code> error message on the worker portal.</p> <p>Use <code>OidcConfig</code> to update the configuration of a workforce created using your own OIDC IdP. </p> <important> <p>You can only update your OIDC IdP configuration when there are no work teams associated with your workforce. You can delete work teams using the operation.</p> </important> <p>After restricting access to a range of IP addresses or updating your OIDC IdP configuration with this operation, you can view details about your update workforce using the operation.</p> <important> <p>This operation only applies to private workforces.</p> </important></p>
     async fn update_workforce(
         &self,
         input: UpdateWorkforceRequest,

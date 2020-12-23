@@ -119,6 +119,10 @@ pub struct CreateDeliveryStreamInput {
     #[serde(rename = "ExtendedS3DestinationConfiguration")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub extended_s3_destination_configuration: Option<ExtendedS3DestinationConfiguration>,
+    /// <p>Enables configuring Kinesis Firehose to deliver data to any HTTP endpoint destination. You can specify only one destination.</p>
+    #[serde(rename = "HttpEndpointDestinationConfiguration")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub http_endpoint_destination_configuration: Option<HttpEndpointDestinationConfiguration>,
     /// <p>When a Kinesis data stream is used as the source for the delivery stream, a <a>KinesisStreamSourceConfiguration</a> containing the Kinesis data stream Amazon Resource Name (ARN) and the role ARN for the source stream.</p>
     #[serde(rename = "KinesisStreamSourceConfiguration")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -317,6 +321,10 @@ pub struct DestinationDescription {
     #[serde(rename = "ExtendedS3DestinationDescription")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub extended_s3_destination_description: Option<ExtendedS3DestinationDescription>,
+    /// <p>Describes the specified HTTP endpoint destination.</p>
+    #[serde(rename = "HttpEndpointDestinationDescription")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub http_endpoint_destination_description: Option<HttpEndpointDestinationDescription>,
     /// <p>The destination in Amazon Redshift.</p>
     #[serde(rename = "RedshiftDestinationDescription")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -382,7 +390,7 @@ pub struct ElasticsearchDestinationConfiguration {
     /// <p>The Amazon Resource Name (ARN) of the IAM role to be assumed by Kinesis Data Firehose for calling the Amazon ES Configuration API and for indexing documents. For more information, see <a href="https://docs.aws.amazon.com/firehose/latest/dev/controlling-access.html#using-iam-s3">Grant Kinesis Data Firehose Access to an Amazon S3 Destination</a> and <a href="https://docs.aws.amazon.com/general/latest/gr/aws-arns-and-namespaces.html">Amazon Resource Names (ARNs) and AWS Service Namespaces</a>.</p>
     #[serde(rename = "RoleARN")]
     pub role_arn: String,
-    /// <p>Defines how documents should be delivered to Amazon S3. When it is set to <code>FailedDocumentsOnly</code>, Kinesis Data Firehose writes any documents that could not be indexed to the configured Amazon S3 destination, with <code>elasticsearch-failed/</code> appended to the key prefix. When set to <code>AllDocuments</code>, Kinesis Data Firehose delivers all incoming records to Amazon S3, and also writes failed documents with <code>elasticsearch-failed/</code> appended to the prefix. For more information, see <a href="https://docs.aws.amazon.com/firehose/latest/dev/basic-deliver.html#es-s3-backup">Amazon S3 Backup for the Amazon ES Destination</a>. Default value is <code>FailedDocumentsOnly</code>.</p>
+    /// <p>Defines how documents should be delivered to Amazon S3. When it is set to <code>FailedDocumentsOnly</code>, Kinesis Data Firehose writes any documents that could not be indexed to the configured Amazon S3 destination, with <code>elasticsearch-failed/</code> appended to the key prefix. When set to <code>AllDocuments</code>, Kinesis Data Firehose delivers all incoming records to Amazon S3, and also writes failed documents with <code>elasticsearch-failed/</code> appended to the prefix. For more information, see <a href="https://docs.aws.amazon.com/firehose/latest/dev/basic-deliver.html#es-s3-backup">Amazon S3 Backup for the Amazon ES Destination</a>. Default value is <code>FailedDocumentsOnly</code>.</p> <p>You can't change this backup mode after you create the delivery stream. </p>
     #[serde(rename = "S3BackupMode")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub s3_backup_mode: Option<String>,
@@ -575,7 +583,7 @@ pub struct ExtendedS3DestinationConfiguration {
     #[serde(rename = "S3BackupConfiguration")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub s3_backup_configuration: Option<S3DestinationConfiguration>,
-    /// <p>The Amazon S3 backup mode.</p>
+    /// <p>The Amazon S3 backup mode. After you create a delivery stream, you can update it to enable Amazon S3 backup if it is disabled. If backup is enabled, you can't update the delivery stream to disable it. </p>
     #[serde(rename = "S3BackupMode")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub s3_backup_mode: Option<String>,
@@ -674,7 +682,7 @@ pub struct ExtendedS3DestinationUpdate {
     #[serde(rename = "RoleARN")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub role_arn: Option<String>,
-    /// <p>Enables or disables Amazon S3 backup mode.</p>
+    /// <p>You can update a delivery stream to enable Amazon S3 backup if it is disabled. If backup is enabled, you can't update the delivery stream to disable it. </p>
     #[serde(rename = "S3BackupMode")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub s3_backup_mode: Option<String>,
@@ -703,6 +711,198 @@ pub struct HiveJsonSerDe {
     #[serde(rename = "TimestampFormats")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub timestamp_formats: Option<Vec<String>>,
+}
+
+/// <p>Describes the buffering options that can be applied before data is delivered to the HTTP endpoint destination. Kinesis Data Firehose treats these options as hints, and it might choose to use more optimal values. The <code>SizeInMBs</code> and <code>IntervalInSeconds</code> parameters are optional. However, if specify a value for one of them, you must also provide a value for the other. </p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
+pub struct HttpEndpointBufferingHints {
+    /// <p>Buffer incoming data for the specified period of time, in seconds, before delivering it to the destination. The default value is 300 (5 minutes). </p>
+    #[serde(rename = "IntervalInSeconds")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub interval_in_seconds: Option<i64>,
+    /// <p>Buffer incoming data to the specified size, in MBs, before delivering it to the destination. The default value is 5. </p> <p>We recommend setting this parameter to a value greater than the amount of data you typically ingest into the delivery stream in 10 seconds. For example, if you typically ingest data at 1 MB/sec, the value should be 10 MB or higher. </p>
+    #[serde(rename = "SizeInMBs")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub size_in_m_bs: Option<i64>,
+}
+
+/// <p>Describes the metadata that's delivered to the specified HTTP endpoint destination.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
+pub struct HttpEndpointCommonAttribute {
+    /// <p>The name of the HTTP endpoint common attribute.</p>
+    #[serde(rename = "AttributeName")]
+    pub attribute_name: String,
+    /// <p>The value of the HTTP endpoint common attribute.</p>
+    #[serde(rename = "AttributeValue")]
+    pub attribute_value: String,
+}
+
+/// <p>Describes the configuration of the HTTP endpoint to which Kinesis Firehose delivers data.</p>
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct HttpEndpointConfiguration {
+    /// <p>The access key required for Kinesis Firehose to authenticate with the HTTP endpoint selected as the destination.</p>
+    #[serde(rename = "AccessKey")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub access_key: Option<String>,
+    /// <p>The name of the HTTP endpoint selected as the destination.</p>
+    #[serde(rename = "Name")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub name: Option<String>,
+    /// <p>The URL of the HTTP endpoint selected as the destination.</p>
+    #[serde(rename = "Url")]
+    pub url: String,
+}
+
+/// <p>Describes the HTTP endpoint selected as the destination. </p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct HttpEndpointDescription {
+    /// <p>The name of the HTTP endpoint selected as the destination.</p>
+    #[serde(rename = "Name")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub name: Option<String>,
+    /// <p>The URL of the HTTP endpoint selected as the destination.</p>
+    #[serde(rename = "Url")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub url: Option<String>,
+}
+
+/// <p>Describes the configuration of the HTTP endpoint destination.</p>
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct HttpEndpointDestinationConfiguration {
+    /// <p>The buffering options that can be used before data is delivered to the specified destination. Kinesis Data Firehose treats these options as hints, and it might choose to use more optimal values. The <code>SizeInMBs</code> and <code>IntervalInSeconds</code> parameters are optional. However, if you specify a value for one of them, you must also provide a value for the other. </p>
+    #[serde(rename = "BufferingHints")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub buffering_hints: Option<HttpEndpointBufferingHints>,
+    #[serde(rename = "CloudWatchLoggingOptions")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub cloud_watch_logging_options: Option<CloudWatchLoggingOptions>,
+    /// <p>The configuration of the HTTP endpoint selected as the destination.</p>
+    #[serde(rename = "EndpointConfiguration")]
+    pub endpoint_configuration: HttpEndpointConfiguration,
+    #[serde(rename = "ProcessingConfiguration")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub processing_configuration: Option<ProcessingConfiguration>,
+    /// <p>The configuration of the requeste sent to the HTTP endpoint specified as the destination.</p>
+    #[serde(rename = "RequestConfiguration")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub request_configuration: Option<HttpEndpointRequestConfiguration>,
+    /// <p>Describes the retry behavior in case Kinesis Data Firehose is unable to deliver data to the specified HTTP endpoint destination, or if it doesn't receive a valid acknowledgment of receipt from the specified HTTP endpoint destination.</p>
+    #[serde(rename = "RetryOptions")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub retry_options: Option<HttpEndpointRetryOptions>,
+    /// <p>Kinesis Data Firehose uses this IAM role for all the permissions that the delivery stream needs.</p>
+    #[serde(rename = "RoleARN")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub role_arn: Option<String>,
+    /// <p>Describes the S3 bucket backup options for the data that Kinesis Data Firehose delivers to the HTTP endpoint destination. You can back up all documents (<code>AllData</code>) or only the documents that Kinesis Data Firehose could not deliver to the specified HTTP endpoint destination (<code>FailedDataOnly</code>).</p>
+    #[serde(rename = "S3BackupMode")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub s3_backup_mode: Option<String>,
+    #[serde(rename = "S3Configuration")]
+    pub s3_configuration: S3DestinationConfiguration,
+}
+
+/// <p>Describes the HTTP endpoint destination.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct HttpEndpointDestinationDescription {
+    /// <p>Describes buffering options that can be applied to the data before it is delivered to the HTTPS endpoint destination. Kinesis Data Firehose teats these options as hints, and it might choose to use more optimal values. The <code>SizeInMBs</code> and <code>IntervalInSeconds</code> parameters are optional. However, if specify a value for one of them, you must also provide a value for the other. </p>
+    #[serde(rename = "BufferingHints")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub buffering_hints: Option<HttpEndpointBufferingHints>,
+    #[serde(rename = "CloudWatchLoggingOptions")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub cloud_watch_logging_options: Option<CloudWatchLoggingOptions>,
+    /// <p>The configuration of the specified HTTP endpoint destination.</p>
+    #[serde(rename = "EndpointConfiguration")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub endpoint_configuration: Option<HttpEndpointDescription>,
+    #[serde(rename = "ProcessingConfiguration")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub processing_configuration: Option<ProcessingConfiguration>,
+    /// <p>The configuration of request sent to the HTTP endpoint specified as the destination.</p>
+    #[serde(rename = "RequestConfiguration")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub request_configuration: Option<HttpEndpointRequestConfiguration>,
+    /// <p>Describes the retry behavior in case Kinesis Data Firehose is unable to deliver data to the specified HTTP endpoint destination, or if it doesn't receive a valid acknowledgment of receipt from the specified HTTP endpoint destination.</p>
+    #[serde(rename = "RetryOptions")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub retry_options: Option<HttpEndpointRetryOptions>,
+    /// <p>Kinesis Data Firehose uses this IAM role for all the permissions that the delivery stream needs.</p>
+    #[serde(rename = "RoleARN")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub role_arn: Option<String>,
+    /// <p>Describes the S3 bucket backup options for the data that Kinesis Firehose delivers to the HTTP endpoint destination. You can back up all documents (<code>AllData</code>) or only the documents that Kinesis Data Firehose could not deliver to the specified HTTP endpoint destination (<code>FailedDataOnly</code>).</p>
+    #[serde(rename = "S3BackupMode")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub s3_backup_mode: Option<String>,
+    #[serde(rename = "S3DestinationDescription")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub s3_destination_description: Option<S3DestinationDescription>,
+}
+
+/// <p>Updates the specified HTTP endpoint destination.</p>
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct HttpEndpointDestinationUpdate {
+    /// <p>Describes buffering options that can be applied to the data before it is delivered to the HTTPS endpoint destination. Kinesis Data Firehose teats these options as hints, and it might choose to use more optimal values. The <code>SizeInMBs</code> and <code>IntervalInSeconds</code> parameters are optional. However, if specify a value for one of them, you must also provide a value for the other. </p>
+    #[serde(rename = "BufferingHints")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub buffering_hints: Option<HttpEndpointBufferingHints>,
+    #[serde(rename = "CloudWatchLoggingOptions")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub cloud_watch_logging_options: Option<CloudWatchLoggingOptions>,
+    /// <p>Describes the configuration of the HTTP endpoint destination.</p>
+    #[serde(rename = "EndpointConfiguration")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub endpoint_configuration: Option<HttpEndpointConfiguration>,
+    #[serde(rename = "ProcessingConfiguration")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub processing_configuration: Option<ProcessingConfiguration>,
+    /// <p>The configuration of the request sent to the HTTP endpoint specified as the destination.</p>
+    #[serde(rename = "RequestConfiguration")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub request_configuration: Option<HttpEndpointRequestConfiguration>,
+    /// <p>Describes the retry behavior in case Kinesis Data Firehose is unable to deliver data to the specified HTTP endpoint destination, or if it doesn't receive a valid acknowledgment of receipt from the specified HTTP endpoint destination.</p>
+    #[serde(rename = "RetryOptions")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub retry_options: Option<HttpEndpointRetryOptions>,
+    /// <p>Kinesis Data Firehose uses this IAM role for all the permissions that the delivery stream needs.</p>
+    #[serde(rename = "RoleARN")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub role_arn: Option<String>,
+    /// <p>Describes the S3 bucket backup options for the data that Kinesis Firehose delivers to the HTTP endpoint destination. You can back up all documents (<code>AllData</code>) or only the documents that Kinesis Data Firehose could not deliver to the specified HTTP endpoint destination (<code>FailedDataOnly</code>).</p>
+    #[serde(rename = "S3BackupMode")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub s3_backup_mode: Option<String>,
+    #[serde(rename = "S3Update")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub s3_update: Option<S3DestinationUpdate>,
+}
+
+/// <p>The configuration of the HTTP endpoint request.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
+pub struct HttpEndpointRequestConfiguration {
+    /// <p>Describes the metadata sent to the HTTP endpoint destination.</p>
+    #[serde(rename = "CommonAttributes")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub common_attributes: Option<Vec<HttpEndpointCommonAttribute>>,
+    /// <p>Kinesis Data Firehose uses the content encoding to compress the body of a request before sending the request to the destination. For more information, see <a href="https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Content-Encoding">Content-Encoding</a> in MDN Web Docs, the official Mozilla documentation.</p>
+    #[serde(rename = "ContentEncoding")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub content_encoding: Option<String>,
+}
+
+/// <p>Describes the retry behavior in case Kinesis Data Firehose is unable to deliver data to the specified HTTP endpoint destination, or if it doesn't receive a valid acknowledgment of receipt from the specified HTTP endpoint destination.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
+pub struct HttpEndpointRetryOptions {
+    /// <p>The total amount of time that Kinesis Data Firehose spends on retries. This duration starts after the initial attempt to send data to the custom destination via HTTPS endpoint fails. It doesn't include the periods during which Kinesis Data Firehose waits for acknowledgment from the specified destination after each attempt. </p>
+    #[serde(rename = "DurationInSeconds")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub duration_in_seconds: Option<i64>,
 }
 
 /// <p>Specifies the deserializer you want to use to convert the format of the input data. This parameter is required if <code>Enabled</code> is set to true.</p>
@@ -1056,7 +1256,7 @@ pub struct RedshiftDestinationConfiguration {
     #[serde(rename = "S3BackupConfiguration")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub s3_backup_configuration: Option<S3DestinationConfiguration>,
-    /// <p>The Amazon S3 backup mode.</p>
+    /// <p>The Amazon S3 backup mode. After you create a delivery stream, you can update it to enable Amazon S3 backup if it is disabled. If backup is enabled, you can't update the delivery stream to disable it. </p>
     #[serde(rename = "S3BackupMode")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub s3_backup_mode: Option<String>,
@@ -1141,7 +1341,7 @@ pub struct RedshiftDestinationUpdate {
     #[serde(rename = "RoleARN")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub role_arn: Option<String>,
-    /// <p>The Amazon S3 backup mode.</p>
+    /// <p>You can update a delivery stream to enable Amazon S3 backup if it is disabled. If backup is enabled, you can't update the delivery stream to disable it. </p>
     #[serde(rename = "S3BackupMode")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub s3_backup_mode: Option<String>,
@@ -1356,7 +1556,7 @@ pub struct SplunkDestinationConfiguration {
     #[serde(rename = "RetryOptions")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub retry_options: Option<SplunkRetryOptions>,
-    /// <p>Defines how documents should be delivered to Amazon S3. When set to <code>FailedDocumentsOnly</code>, Kinesis Data Firehose writes any data that could not be indexed to the configured Amazon S3 destination. When set to <code>AllDocuments</code>, Kinesis Data Firehose delivers all incoming records to Amazon S3, and also writes failed documents to Amazon S3. Default value is <code>FailedDocumentsOnly</code>. </p>
+    /// <p>Defines how documents should be delivered to Amazon S3. When set to <code>FailedEventsOnly</code>, Kinesis Data Firehose writes any data that could not be indexed to the configured Amazon S3 destination. When set to <code>AllEvents</code>, Kinesis Data Firehose delivers all incoming records to Amazon S3, and also writes failed documents to Amazon S3. The default value is <code>FailedEventsOnly</code>.</p> <p>You can update this backup mode from <code>FailedEventsOnly</code> to <code>AllEvents</code>. You can't update it from <code>AllEvents</code> to <code>FailedEventsOnly</code>.</p>
     #[serde(rename = "S3BackupMode")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub s3_backup_mode: Option<String>,
@@ -1439,7 +1639,7 @@ pub struct SplunkDestinationUpdate {
     #[serde(rename = "RetryOptions")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub retry_options: Option<SplunkRetryOptions>,
-    /// <p>Defines how documents should be delivered to Amazon S3. When set to <code>FailedDocumentsOnly</code>, Kinesis Data Firehose writes any data that could not be indexed to the configured Amazon S3 destination. When set to <code>AllDocuments</code>, Kinesis Data Firehose delivers all incoming records to Amazon S3, and also writes failed documents to Amazon S3. Default value is <code>FailedDocumentsOnly</code>. </p>
+    /// <p>Specifies how you want Kinesis Data Firehose to back up documents to Amazon S3. When set to <code>FailedDocumentsOnly</code>, Kinesis Data Firehose writes any data that could not be indexed to the configured Amazon S3 destination. When set to <code>AllEvents</code>, Kinesis Data Firehose delivers all incoming records to Amazon S3, and also writes failed documents to Amazon S3. The default value is <code>FailedEventsOnly</code>.</p> <p>You can update this backup mode from <code>FailedEventsOnly</code> to <code>AllEvents</code>. You can't update it from <code>AllEvents</code> to <code>FailedEventsOnly</code>.</p>
     #[serde(rename = "S3BackupMode")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub s3_backup_mode: Option<String>,
@@ -1549,6 +1749,10 @@ pub struct UpdateDestinationInput {
     #[serde(rename = "ExtendedS3DestinationUpdate")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub extended_s3_destination_update: Option<ExtendedS3DestinationUpdate>,
+    /// <p>Describes an update to the specified HTTP endpoint destination.</p>
+    #[serde(rename = "HttpEndpointDestinationUpdate")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub http_endpoint_destination_update: Option<HttpEndpointDestinationUpdate>,
     /// <p>Describes an update for a destination in Amazon Redshift.</p>
     #[serde(rename = "RedshiftDestinationUpdate")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1567,10 +1771,10 @@ pub struct UpdateDestinationOutput {}
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct VpcConfiguration {
-    /// <p>The ARN of the IAM role that you want the delivery stream to use to create endpoints in the destination VPC.</p>
+    /// <p>The ARN of the IAM role that you want the delivery stream to use to create endpoints in the destination VPC. You can use your existing Kinesis Data Firehose delivery role or you can specify a new role. In either case, make sure that the role trusts the Kinesis Data Firehose service principal and that it grants the following permissions:</p> <ul> <li> <p> <code>ec2:DescribeVpcs</code> </p> </li> <li> <p> <code>ec2:DescribeVpcAttribute</code> </p> </li> <li> <p> <code>ec2:DescribeSubnets</code> </p> </li> <li> <p> <code>ec2:DescribeSecurityGroups</code> </p> </li> <li> <p> <code>ec2:DescribeNetworkInterfaces</code> </p> </li> <li> <p> <code>ec2:CreateNetworkInterface</code> </p> </li> <li> <p> <code>ec2:CreateNetworkInterfacePermission</code> </p> </li> <li> <p> <code>ec2:DeleteNetworkInterface</code> </p> </li> </ul> <p>If you revoke these permissions after you create the delivery stream, Kinesis Data Firehose can't scale out by creating more ENIs when necessary. You might therefore see a degradation in performance.</p>
     #[serde(rename = "RoleARN")]
     pub role_arn: String,
-    /// <p>The IDs of the security groups that you want Kinesis Data Firehose to use when it creates ENIs in the VPC of the Amazon ES destination.</p>
+    /// <p>The IDs of the security groups that you want Kinesis Data Firehose to use when it creates ENIs in the VPC of the Amazon ES destination. You can use the same security group that the Amazon ES domain uses or different ones. If you specify different security groups here, ensure that they allow outbound HTTPS traffic to the Amazon ES domain's security group. Also ensure that the Amazon ES domain's security group allows HTTPS traffic from the security groups specified here. If you use the same security group for both your delivery stream and the Amazon ES domain, make sure the security group inbound rule allows HTTPS traffic. For more information about security group rules, see <a href="https://docs.aws.amazon.com/vpc/latest/userguide/VPC_SecurityGroups.html#SecurityGroupRules">Security group rules</a> in the Amazon VPC documentation.</p>
     #[serde(rename = "SecurityGroupIds")]
     pub security_group_ids: Vec<String>,
     /// <p>The IDs of the subnets that you want Kinesis Data Firehose to use to create ENIs in the VPC of the Amazon ES destination. Make sure that the routing tables and inbound and outbound rules allow traffic to flow from the subnets whose IDs are specified here to the subnets that have the destination Amazon ES endpoints. Kinesis Data Firehose creates at least one ENI in each of the subnets that are specified here. Do not delete or modify these ENIs.</p> <p>The number of ENIs that Kinesis Data Firehose creates in the subnets specified here scales up and down automatically based on throughput. To enable Kinesis Data Firehose to scale up the number of ENIs to match throughput, ensure that you have sufficient quota. To help you calculate the quota you need, assume that Kinesis Data Firehose can create up to three ENIs for this delivery stream for each of the subnets specified here. For more information about ENI quota, see <a href="https://docs.aws.amazon.com/vpc/latest/userguide/amazon-vpc-limits.html#vpc-limits-enis">Network Interfaces </a> in the Amazon VPC Quotas topic.</p>
@@ -1582,10 +1786,10 @@ pub struct VpcConfiguration {
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct VpcConfigurationDescription {
-    /// <p>The ARN of the IAM role that you want the delivery stream uses to create endpoints in the destination VPC.</p>
+    /// <p>The ARN of the IAM role that the delivery stream uses to create endpoints in the destination VPC. You can use your existing Kinesis Data Firehose delivery role or you can specify a new role. In either case, make sure that the role trusts the Kinesis Data Firehose service principal and that it grants the following permissions:</p> <ul> <li> <p> <code>ec2:DescribeVpcs</code> </p> </li> <li> <p> <code>ec2:DescribeVpcAttribute</code> </p> </li> <li> <p> <code>ec2:DescribeSubnets</code> </p> </li> <li> <p> <code>ec2:DescribeSecurityGroups</code> </p> </li> <li> <p> <code>ec2:DescribeNetworkInterfaces</code> </p> </li> <li> <p> <code>ec2:CreateNetworkInterface</code> </p> </li> <li> <p> <code>ec2:CreateNetworkInterfacePermission</code> </p> </li> <li> <p> <code>ec2:DeleteNetworkInterface</code> </p> </li> </ul> <p>If you revoke these permissions after you create the delivery stream, Kinesis Data Firehose can't scale out by creating more ENIs when necessary. You might therefore see a degradation in performance.</p>
     #[serde(rename = "RoleARN")]
     pub role_arn: String,
-    /// <p>The IDs of the security groups that Kinesis Data Firehose uses when it creates ENIs in the VPC of the Amazon ES destination.</p>
+    /// <p>The IDs of the security groups that Kinesis Data Firehose uses when it creates ENIs in the VPC of the Amazon ES destination. You can use the same security group that the Amazon ES domain uses or different ones. If you specify different security groups, ensure that they allow outbound HTTPS traffic to the Amazon ES domain's security group. Also ensure that the Amazon ES domain's security group allows HTTPS traffic from the security groups specified here. If you use the same security group for both your delivery stream and the Amazon ES domain, make sure the security group inbound rule allows HTTPS traffic. For more information about security group rules, see <a href="https://docs.aws.amazon.com/vpc/latest/userguide/VPC_SecurityGroups.html#SecurityGroupRules">Security group rules</a> in the Amazon VPC documentation.</p>
     #[serde(rename = "SecurityGroupIds")]
     pub security_group_ids: Vec<String>,
     /// <p>The IDs of the subnets that Kinesis Data Firehose uses to create ENIs in the VPC of the Amazon ES destination. Make sure that the routing tables and inbound and outbound rules allow traffic to flow from the subnets whose IDs are specified here to the subnets that have the destination Amazon ES endpoints. Kinesis Data Firehose creates at least one ENI in each of the subnets that are specified here. Do not delete or modify these ENIs.</p> <p>The number of ENIs that Kinesis Data Firehose creates in the subnets specified here scales up and down automatically based on throughput. To enable Kinesis Data Firehose to scale up the number of ENIs to match throughput, ensure that you have sufficient quota. To help you calculate the quota you need, assume that Kinesis Data Firehose can create up to three ENIs for this delivery stream for each of the subnets specified here. For more information about ENI quota, see <a href="https://docs.aws.amazon.com/vpc/latest/userguide/amazon-vpc-limits.html#vpc-limits-enis">Network Interfaces </a> in the Amazon VPC Quotas topic.</p>
@@ -2203,7 +2407,7 @@ pub trait KinesisFirehose {
         input: PutRecordInput,
     ) -> Result<PutRecordOutput, RusotoError<PutRecordError>>;
 
-    /// <p><p>Writes multiple data records into a delivery stream in a single call, which can achieve higher throughput per producer than when writing single records. To write single data records into a delivery stream, use <a>PutRecord</a>. Applications using these operations are referred to as producers.</p> <p>By default, each delivery stream can take in up to 2,000 transactions per second, 5,000 records per second, or 5 MB per second. If you use <a>PutRecord</a> and <a>PutRecordBatch</a>, the limits are an aggregate across these two operations for each delivery stream. For more information about limits, see <a href="https://docs.aws.amazon.com/firehose/latest/dev/limits.html">Amazon Kinesis Data Firehose Limits</a>.</p> <p>Each <a>PutRecordBatch</a> request supports up to 500 records. Each record in the request can be as large as 1,000 KB (before 64-bit encoding), up to a limit of 4 MB for the entire request. These limits cannot be changed.</p> <p>You must specify the name of the delivery stream and the data record when using <a>PutRecord</a>. The data record consists of a data blob that can be up to 1,000 KB in size, and any kind of data. For example, it could be a segment from a log file, geographic location data, website clickstream data, and so on.</p> <p>Kinesis Data Firehose buffers records before delivering them to the destination. To disambiguate the data blobs at the destination, a common solution is to use delimiters in the data, such as a newline (<code>\n</code>) or some other character unique within the data. This allows the consumer application to parse individual data items when reading the data from the destination.</p> <p>The <a>PutRecordBatch</a> response includes a count of failed records, <code>FailedPutCount</code>, and an array of responses, <code>RequestResponses</code>. Even if the <a>PutRecordBatch</a> call succeeds, the value of <code>FailedPutCount</code> may be greater than 0, indicating that there are records for which the operation didn&#39;t succeed. Each entry in the <code>RequestResponses</code> array provides additional information about the processed record. It directly correlates with a record in the request array using the same ordering, from the top to the bottom. The response array always includes the same number of records as the request array. <code>RequestResponses</code> includes both successfully and unsuccessfully processed records. Kinesis Data Firehose tries to process all records in each <a>PutRecordBatch</a> request. A single record failure does not stop the processing of subsequent records. </p> <p>A successfully processed record includes a <code>RecordId</code> value, which is unique for the record. An unsuccessfully processed record includes <code>ErrorCode</code> and <code>ErrorMessage</code> values. <code>ErrorCode</code> reflects the type of error, and is one of the following values: <code>ServiceUnavailableException</code> or <code>InternalFailure</code>. <code>ErrorMessage</code> provides more detailed information about the error.</p> <p>If there is an internal server error or a timeout, the write might have completed or it might have failed. If <code>FailedPutCount</code> is greater than 0, retry the request, resending only those records that might have failed processing. This minimizes the possible duplicate records and also reduces the total bytes sent (and corresponding charges). We recommend that you handle any duplicates at the destination.</p> <p>If <a>PutRecordBatch</a> throws <code>ServiceUnavailableException</code>, back off and retry. If the exception persists, it is possible that the throughput limits have been exceeded for the delivery stream.</p> <p>Data records sent to Kinesis Data Firehose are stored for 24 hours from the time they are added to a delivery stream as it attempts to send the records to the destination. If the destination is unreachable for more than 24 hours, the data is no longer available.</p> <important> <p>Don&#39;t concatenate two or more base64 strings to form the data fields of your records. Instead, concatenate the raw data, then perform base64 encoding.</p> </important></p>
+    /// <p><p>Writes multiple data records into a delivery stream in a single call, which can achieve higher throughput per producer than when writing single records. To write single data records into a delivery stream, use <a>PutRecord</a>. Applications using these operations are referred to as producers.</p> <p>For information about service quota, see <a href="https://docs.aws.amazon.com/firehose/latest/dev/limits.html">Amazon Kinesis Data Firehose Quota</a>.</p> <p>Each <a>PutRecordBatch</a> request supports up to 500 records. Each record in the request can be as large as 1,000 KB (before 64-bit encoding), up to a limit of 4 MB for the entire request. These limits cannot be changed.</p> <p>You must specify the name of the delivery stream and the data record when using <a>PutRecord</a>. The data record consists of a data blob that can be up to 1,000 KB in size, and any kind of data. For example, it could be a segment from a log file, geographic location data, website clickstream data, and so on.</p> <p>Kinesis Data Firehose buffers records before delivering them to the destination. To disambiguate the data blobs at the destination, a common solution is to use delimiters in the data, such as a newline (<code>\n</code>) or some other character unique within the data. This allows the consumer application to parse individual data items when reading the data from the destination.</p> <p>The <a>PutRecordBatch</a> response includes a count of failed records, <code>FailedPutCount</code>, and an array of responses, <code>RequestResponses</code>. Even if the <a>PutRecordBatch</a> call succeeds, the value of <code>FailedPutCount</code> may be greater than 0, indicating that there are records for which the operation didn&#39;t succeed. Each entry in the <code>RequestResponses</code> array provides additional information about the processed record. It directly correlates with a record in the request array using the same ordering, from the top to the bottom. The response array always includes the same number of records as the request array. <code>RequestResponses</code> includes both successfully and unsuccessfully processed records. Kinesis Data Firehose tries to process all records in each <a>PutRecordBatch</a> request. A single record failure does not stop the processing of subsequent records. </p> <p>A successfully processed record includes a <code>RecordId</code> value, which is unique for the record. An unsuccessfully processed record includes <code>ErrorCode</code> and <code>ErrorMessage</code> values. <code>ErrorCode</code> reflects the type of error, and is one of the following values: <code>ServiceUnavailableException</code> or <code>InternalFailure</code>. <code>ErrorMessage</code> provides more detailed information about the error.</p> <p>If there is an internal server error or a timeout, the write might have completed or it might have failed. If <code>FailedPutCount</code> is greater than 0, retry the request, resending only those records that might have failed processing. This minimizes the possible duplicate records and also reduces the total bytes sent (and corresponding charges). We recommend that you handle any duplicates at the destination.</p> <p>If <a>PutRecordBatch</a> throws <code>ServiceUnavailableException</code>, back off and retry. If the exception persists, it is possible that the throughput limits have been exceeded for the delivery stream.</p> <p>Data records sent to Kinesis Data Firehose are stored for 24 hours from the time they are added to a delivery stream as it attempts to send the records to the destination. If the destination is unreachable for more than 24 hours, the data is no longer available.</p> <important> <p>Don&#39;t concatenate two or more base64 strings to form the data fields of your records. Instead, concatenate the raw data, then perform base64 encoding.</p> </important></p>
     async fn put_record_batch(
         &self,
         input: PutRecordBatchInput,
@@ -2392,7 +2596,7 @@ impl KinesisFirehose for KinesisFirehoseClient {
         proto::json::ResponsePayload::new(&response).deserialize::<PutRecordOutput, _>()
     }
 
-    /// <p><p>Writes multiple data records into a delivery stream in a single call, which can achieve higher throughput per producer than when writing single records. To write single data records into a delivery stream, use <a>PutRecord</a>. Applications using these operations are referred to as producers.</p> <p>By default, each delivery stream can take in up to 2,000 transactions per second, 5,000 records per second, or 5 MB per second. If you use <a>PutRecord</a> and <a>PutRecordBatch</a>, the limits are an aggregate across these two operations for each delivery stream. For more information about limits, see <a href="https://docs.aws.amazon.com/firehose/latest/dev/limits.html">Amazon Kinesis Data Firehose Limits</a>.</p> <p>Each <a>PutRecordBatch</a> request supports up to 500 records. Each record in the request can be as large as 1,000 KB (before 64-bit encoding), up to a limit of 4 MB for the entire request. These limits cannot be changed.</p> <p>You must specify the name of the delivery stream and the data record when using <a>PutRecord</a>. The data record consists of a data blob that can be up to 1,000 KB in size, and any kind of data. For example, it could be a segment from a log file, geographic location data, website clickstream data, and so on.</p> <p>Kinesis Data Firehose buffers records before delivering them to the destination. To disambiguate the data blobs at the destination, a common solution is to use delimiters in the data, such as a newline (<code>\n</code>) or some other character unique within the data. This allows the consumer application to parse individual data items when reading the data from the destination.</p> <p>The <a>PutRecordBatch</a> response includes a count of failed records, <code>FailedPutCount</code>, and an array of responses, <code>RequestResponses</code>. Even if the <a>PutRecordBatch</a> call succeeds, the value of <code>FailedPutCount</code> may be greater than 0, indicating that there are records for which the operation didn&#39;t succeed. Each entry in the <code>RequestResponses</code> array provides additional information about the processed record. It directly correlates with a record in the request array using the same ordering, from the top to the bottom. The response array always includes the same number of records as the request array. <code>RequestResponses</code> includes both successfully and unsuccessfully processed records. Kinesis Data Firehose tries to process all records in each <a>PutRecordBatch</a> request. A single record failure does not stop the processing of subsequent records. </p> <p>A successfully processed record includes a <code>RecordId</code> value, which is unique for the record. An unsuccessfully processed record includes <code>ErrorCode</code> and <code>ErrorMessage</code> values. <code>ErrorCode</code> reflects the type of error, and is one of the following values: <code>ServiceUnavailableException</code> or <code>InternalFailure</code>. <code>ErrorMessage</code> provides more detailed information about the error.</p> <p>If there is an internal server error or a timeout, the write might have completed or it might have failed. If <code>FailedPutCount</code> is greater than 0, retry the request, resending only those records that might have failed processing. This minimizes the possible duplicate records and also reduces the total bytes sent (and corresponding charges). We recommend that you handle any duplicates at the destination.</p> <p>If <a>PutRecordBatch</a> throws <code>ServiceUnavailableException</code>, back off and retry. If the exception persists, it is possible that the throughput limits have been exceeded for the delivery stream.</p> <p>Data records sent to Kinesis Data Firehose are stored for 24 hours from the time they are added to a delivery stream as it attempts to send the records to the destination. If the destination is unreachable for more than 24 hours, the data is no longer available.</p> <important> <p>Don&#39;t concatenate two or more base64 strings to form the data fields of your records. Instead, concatenate the raw data, then perform base64 encoding.</p> </important></p>
+    /// <p><p>Writes multiple data records into a delivery stream in a single call, which can achieve higher throughput per producer than when writing single records. To write single data records into a delivery stream, use <a>PutRecord</a>. Applications using these operations are referred to as producers.</p> <p>For information about service quota, see <a href="https://docs.aws.amazon.com/firehose/latest/dev/limits.html">Amazon Kinesis Data Firehose Quota</a>.</p> <p>Each <a>PutRecordBatch</a> request supports up to 500 records. Each record in the request can be as large as 1,000 KB (before 64-bit encoding), up to a limit of 4 MB for the entire request. These limits cannot be changed.</p> <p>You must specify the name of the delivery stream and the data record when using <a>PutRecord</a>. The data record consists of a data blob that can be up to 1,000 KB in size, and any kind of data. For example, it could be a segment from a log file, geographic location data, website clickstream data, and so on.</p> <p>Kinesis Data Firehose buffers records before delivering them to the destination. To disambiguate the data blobs at the destination, a common solution is to use delimiters in the data, such as a newline (<code>\n</code>) or some other character unique within the data. This allows the consumer application to parse individual data items when reading the data from the destination.</p> <p>The <a>PutRecordBatch</a> response includes a count of failed records, <code>FailedPutCount</code>, and an array of responses, <code>RequestResponses</code>. Even if the <a>PutRecordBatch</a> call succeeds, the value of <code>FailedPutCount</code> may be greater than 0, indicating that there are records for which the operation didn&#39;t succeed. Each entry in the <code>RequestResponses</code> array provides additional information about the processed record. It directly correlates with a record in the request array using the same ordering, from the top to the bottom. The response array always includes the same number of records as the request array. <code>RequestResponses</code> includes both successfully and unsuccessfully processed records. Kinesis Data Firehose tries to process all records in each <a>PutRecordBatch</a> request. A single record failure does not stop the processing of subsequent records. </p> <p>A successfully processed record includes a <code>RecordId</code> value, which is unique for the record. An unsuccessfully processed record includes <code>ErrorCode</code> and <code>ErrorMessage</code> values. <code>ErrorCode</code> reflects the type of error, and is one of the following values: <code>ServiceUnavailableException</code> or <code>InternalFailure</code>. <code>ErrorMessage</code> provides more detailed information about the error.</p> <p>If there is an internal server error or a timeout, the write might have completed or it might have failed. If <code>FailedPutCount</code> is greater than 0, retry the request, resending only those records that might have failed processing. This minimizes the possible duplicate records and also reduces the total bytes sent (and corresponding charges). We recommend that you handle any duplicates at the destination.</p> <p>If <a>PutRecordBatch</a> throws <code>ServiceUnavailableException</code>, back off and retry. If the exception persists, it is possible that the throughput limits have been exceeded for the delivery stream.</p> <p>Data records sent to Kinesis Data Firehose are stored for 24 hours from the time they are added to a delivery stream as it attempts to send the records to the destination. If the destination is unreachable for more than 24 hours, the data is no longer available.</p> <important> <p>Don&#39;t concatenate two or more base64 strings to form the data fields of your records. Instead, concatenate the raw data, then perform base64 encoding.</p> </important></p>
     async fn put_record_batch(
         &self,
         input: PutRecordBatchInput,

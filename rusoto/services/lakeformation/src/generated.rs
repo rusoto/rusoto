@@ -227,6 +227,16 @@ pub struct DescribeResourceResponse {
     pub resource_info: Option<ResourceInfo>,
 }
 
+/// <p>A structure containing the additional details to be returned in the <code>AdditionalDetails</code> attribute of <code>PrincipalResourcePermissions</code>.</p> <p>If a catalog resource is shared through AWS Resource Access Manager (AWS RAM), then there will exist a corresponding RAM share resource ARN.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct DetailsMap {
+    /// <p>A share resource ARN for a catalog resource shared through AWS Resource Access Manager (AWS RAM).</p>
+    #[serde(rename = "ResourceShare")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub resource_share: Option<Vec<String>>,
+}
+
 /// <p>Contains details about an error.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
@@ -425,6 +435,10 @@ pub struct PrincipalPermissions {
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct PrincipalResourcePermissions {
+    /// <p>This attribute can be used to return any additional details of <code>PrincipalResourcePermissions</code>. Currently returns only as a RAM share resource ARN.</p>
+    #[serde(rename = "AdditionalDetails")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub additional_details: Option<DetailsMap>,
     /// <p>The permissions to be granted or revoked on the resource.</p>
     #[serde(rename = "Permissions")]
     #[serde(skip_serializing_if = "Option::is_none")]

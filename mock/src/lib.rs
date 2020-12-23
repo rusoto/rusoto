@@ -34,6 +34,7 @@
 #![deny(missing_docs)]
 use std::fs::File;
 use std::io::Read;
+use std::sync::Mutex;
 use std::time::Duration;
 
 use async_trait::async_trait;
@@ -189,7 +190,7 @@ pub struct MultipleMockRequestDispatcher<I>
 where
     I: Iterator<Item = MockRequestDispatcher>,
 {
-    iterator: I,
+    iterator: Mutex<I>,
 }
 
 impl<I> MultipleMockRequestDispatcher<I>
@@ -203,7 +204,7 @@ where
         C: IntoIterator<IntoIter = I>,
     {
         MultipleMockRequestDispatcher {
-            iterator: collection.into_iter(),
+            iterator: Mutex::new(collection.into_iter()),
         }
     }
 }
@@ -217,13 +218,11 @@ where
         request: SignedRequest,
         _timeout: Option<Duration>,
     ) -> rusoto_core::request::DispatchSignedRequestFuture {
-        // Unsafe code required to increment iterator due to non-mutable &self
-        unsafe {
-            (*(self as *const Self as *mut Self))
-                .iterator
-                .next()
-                .unwrap()
-                .dispatch(request, _timeout)
-        }
+        self.iterator
+            .lock()
+            .unwrap()
+            .next()
+            .expect("Ran out of mock responses to return from MultipleMockRequestDispatcher")
+            .dispatch(request, _timeout)
     }
 }

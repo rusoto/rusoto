@@ -25,6 +25,19 @@ use rusoto_core::signature::SignedRequest;
 #[allow(unused_imports)]
 use serde::{Deserialize, Serialize};
 use serde_json;
+/// <p>A list of backup options for each resource type.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
+pub struct AdvancedBackupSetting {
+    /// <p>Specifies the backup option for a selected resource. This option is only available for Windows VSS backup jobs.</p> <p>Valid values: </p> <p>Set to <code>"WindowsVSS":"enabled"</code> to enable the WindowsVSS backup option and create a VSS Windows backup. </p> <p>Set to <code>"WindowsVSS":"disabled"</code> to create a regular backup. The WindowsVSS option is not enabled by default.</p> <p>If you specify an invalid option, you get an <code>InvalidParameterValueException</code> exception.</p> <p>For more information about Windows VSS backups, see <a href="https://docs.aws.amazon.com/aws-backup/latest/devguide/windows-backups.html">Creating a VSS-Enabled Windows Backup</a>.</p>
+    #[serde(rename = "BackupOptions")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub backup_options: Option<::std::collections::HashMap<String, String>>,
+    /// <p>The type of AWS resource to be backed up. For VSS Windows backups, the only supported resource type is Amazon EC2.</p> <p>Valid values: <code>EC2</code>.</p>
+    #[serde(rename = "ResourceType")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub resource_type: Option<String>,
+}
+
 /// <p>Contains detailed information about a backup job.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
@@ -37,10 +50,18 @@ pub struct BackupJob {
     #[serde(rename = "BackupJobId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub backup_job_id: Option<String>,
+    /// <p>Specifies the backup option for a selected resource. This option is only available for Windows VSS backup jobs.</p> <p>Valid values: Set to <code>"WindowsVSS”:“enabled"</code> to enable WindowsVSS backup option and create a VSS Windows backup. Set to “WindowsVSS”:”disabled” to create a regular backup. If you specify an invalid option, you get an <code>InvalidParameterValueException</code> exception.</p>
+    #[serde(rename = "BackupOptions")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub backup_options: Option<::std::collections::HashMap<String, String>>,
     /// <p>The size, in bytes, of a backup.</p>
     #[serde(rename = "BackupSizeInBytes")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub backup_size_in_bytes: Option<i64>,
+    /// <p>Represents the type of backup for a backup job.</p>
+    #[serde(rename = "BackupType")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub backup_type: Option<String>,
     /// <p>An Amazon Resource Name (ARN) that uniquely identifies a backup vault; for example, <code>arn:aws:backup:us-east-1:123456789012:vault:aBackupVault</code>.</p>
     #[serde(rename = "BackupVaultArn")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -85,7 +106,7 @@ pub struct BackupJob {
     #[serde(rename = "ResourceArn")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub resource_arn: Option<String>,
-    /// <p>The type of AWS resource to be backed up; for example, an Amazon Elastic Block Store (Amazon EBS) volume or an Amazon Relational Database Service (Amazon RDS) database.</p>
+    /// <p>The type of AWS resource to be backed up; for example, an Amazon Elastic Block Store (Amazon EBS) volume or an Amazon Relational Database Service (Amazon RDS) database. For VSS Windows backups, the only supported resource type is Amazon EC2.</p>
     #[serde(rename = "ResourceType")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub resource_type: Option<String>,
@@ -107,6 +128,10 @@ pub struct BackupJob {
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct BackupPlan {
+    /// <p>Contains a list of <code>BackupOptions</code> for each resource type.</p>
+    #[serde(rename = "AdvancedBackupSettings")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub advanced_backup_settings: Option<Vec<AdvancedBackupSetting>>,
     /// <p>The display name of a backup plan.</p>
     #[serde(rename = "BackupPlanName")]
     pub backup_plan_name: String,
@@ -119,6 +144,10 @@ pub struct BackupPlan {
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct BackupPlanInput {
+    /// <p>Specifies a list of <code>BackupOptions</code> for each resource type. These settings are only available for Windows VSS backup jobs.</p>
+    #[serde(rename = "AdvancedBackupSettings")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub advanced_backup_settings: Option<Vec<AdvancedBackupSetting>>,
     /// <p>The optional display name of a backup plan.</p>
     #[serde(rename = "BackupPlanName")]
     pub backup_plan_name: String,
@@ -145,6 +174,10 @@ pub struct BackupPlanTemplatesListMember {
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct BackupPlansListMember {
+    /// <p>Contains a list of <code>BackupOptions</code> for a resource type.</p>
+    #[serde(rename = "AdvancedBackupSettings")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub advanced_backup_settings: Option<Vec<AdvancedBackupSetting>>,
     /// <p>An Amazon Resource Name (ARN) that uniquely identifies a backup plan; for example, <code>arn:aws:backup:us-east-1:123456789012:plan:8F81F553-3A74-4A3F-B93D-B3360DC80C50</code>.</p>
     #[serde(rename = "BackupPlanArn")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -161,7 +194,7 @@ pub struct BackupPlansListMember {
     #[serde(rename = "CreationDate")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub creation_date: Option<f64>,
-    /// <p>A unique string that identifies the request and allows failed requests to be retried without the risk of executing the operation twice.</p>
+    /// <p>A unique string that identifies the request and allows failed requests to be retried without the risk of running the operation twice.</p>
     #[serde(rename = "CreatorRequestId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub creator_request_id: Option<String>,
@@ -169,7 +202,7 @@ pub struct BackupPlansListMember {
     #[serde(rename = "DeletionDate")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub deletion_date: Option<f64>,
-    /// <p>The last time a job to back up resources was executed with this rule. A date and time, in Unix format and Coordinated Universal Time (UTC). The value of <code>LastExecutionDate</code> is accurate to milliseconds. For example, the value 1516925490.087 represents Friday, January 26, 2018 12:11:30.087 AM.</p>
+    /// <p>The last time a job to back up resources was run with this rule. A date and time, in Unix format and Coordinated Universal Time (UTC). The value of <code>LastExecutionDate</code> is accurate to milliseconds. For example, the value 1516925490.087 represents Friday, January 26, 2018 12:11:30.087 AM.</p>
     #[serde(rename = "LastExecutionDate")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub last_execution_date: Option<f64>,
@@ -206,7 +239,7 @@ pub struct BackupRule {
     /// <p>An optional display name for a backup rule.</p>
     #[serde(rename = "RuleName")]
     pub rule_name: String,
-    /// <p>A CRON expression specifying when AWS Backup initiates a backup job.</p>
+    /// <p>A CRON expression specifying when AWS Backup initiates a backup job. For more information about cron expressions, see <a href="https://docs.aws.amazon.com/AmazonCloudWatch/latest/events/ScheduledEvents.html">Schedule Expressions for Rules</a> in the <i>Amazon CloudWatch Events User Guide.</i>. Prior to specifying a value for this parameter, we recommend testing your cron expression using one of the many available cron generator and testing tools.</p>
     #[serde(rename = "ScheduleExpression")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub schedule_expression: Option<String>,
@@ -258,10 +291,10 @@ pub struct BackupRuleInput {
 /// <p>Used to specify a set of resources to a backup plan.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct BackupSelection {
-    /// <p>The ARN of the IAM role that AWS Backup uses to authenticate when restoring the target resource; for example, <code>arn:aws:iam::123456789012:role/S3Access</code>.</p>
+    /// <p>The ARN of the IAM role that AWS Backup uses to authenticate when backing up the target resource; for example, <code>arn:aws:iam::123456789012:role/S3Access</code>.</p>
     #[serde(rename = "IamRoleArn")]
     pub iam_role_arn: String,
-    /// <p>An array of conditions used to specify a set of resources to assign to a backup plan; for example, <code>"STRINGEQUALS": {"ec2:ResourceTag/Department": "accounting"</code>.</p>
+    /// <p>An array of conditions used to specify a set of resources to assign to a backup plan; for example, <code>"StringEquals": {"ec2:ResourceTag/Department": "accounting"</code>.</p>
     #[serde(rename = "ListOfTags")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub list_of_tags: Option<Vec<Condition>>,
@@ -286,7 +319,7 @@ pub struct BackupSelectionsListMember {
     #[serde(rename = "CreationDate")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub creation_date: Option<f64>,
-    /// <p>A unique string that identifies the request and allows failed requests to be retried without the risk of executing the operation twice.</p>
+    /// <p>A unique string that identifies the request and allows failed requests to be retried without the risk of running the operation twice.</p>
     #[serde(rename = "CreatorRequestId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub creator_request_id: Option<String>,
@@ -320,7 +353,7 @@ pub struct BackupVaultListMember {
     #[serde(rename = "CreationDate")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub creation_date: Option<f64>,
-    /// <p>A unique string that identifies the request and allows failed requests to be retried without the risk of executing the operation twice.</p>
+    /// <p>A unique string that identifies the request and allows failed requests to be retried without the risk of running the operation twice.</p>
     #[serde(rename = "CreatorRequestId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub creator_request_id: Option<String>,
@@ -348,13 +381,13 @@ pub struct CalculatedLifecycle {
     pub move_to_cold_storage_at: Option<f64>,
 }
 
-/// <p>Contains an array of triplets made up of a condition type (such as <code>STRINGEQUALS</code>), a key, and a value. Conditions are used to filter resources in a selection that is assigned to a backup plan.</p>
+/// <p>Contains an array of triplets made up of a condition type (such as <code>StringEquals</code>), a key, and a value. Conditions are used to filter resources in a selection that is assigned to a backup plan.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct Condition {
     /// <p>The key in a key-value pair. For example, in <code>"ec2:ResourceTag/Department": "accounting"</code>, <code>"ec2:ResourceTag/Department"</code> is the key.</p>
     #[serde(rename = "ConditionKey")]
     pub condition_key: String,
-    /// <p>An operation, such as <code>STRINGEQUALS</code>, that is applied to a key-value pair used to filter resources in a selection.</p>
+    /// <p>An operation, such as <code>StringEquals</code>, that is applied to a key-value pair used to filter resources in a selection.</p>
     #[serde(rename = "ConditionType")]
     pub condition_type: String,
     /// <p>The value in a key-value pair. For example, in <code>"ec2:ResourceTag/Department": "accounting"</code>, <code>"accounting"</code> is the value.</p>
@@ -416,7 +449,7 @@ pub struct CopyJob {
     #[serde(rename = "ResourceArn")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub resource_arn: Option<String>,
-    /// <p>The type of AWS resource to be copied; for example, an Amazon Elastic Block Store (Amazon EBS) volume or an Amazon Relational Database Service (Amazon RDS) database.</p>
+    /// <p>The type of AWS resource to be copied; for example, an Amazon Elastic Block Store (Amazon EBS) volume or an Amazon Relational Database Service (Amazon RDS) database. </p>
     #[serde(rename = "ResourceType")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub resource_type: Option<String>,
@@ -448,7 +481,7 @@ pub struct CreateBackupPlanInput {
     #[serde(rename = "BackupPlanTags")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub backup_plan_tags: Option<::std::collections::HashMap<String, String>>,
-    /// <p>Identifies the request and allows failed requests to be retried without the risk of executing the operation twice. If the request includes a <code>CreatorRequestId</code> that matches an existing backup plan, that plan is returned. This parameter is optional.</p>
+    /// <p>Identifies the request and allows failed requests to be retried without the risk of running the operation twice. If the request includes a <code>CreatorRequestId</code> that matches an existing backup plan, that plan is returned. This parameter is optional.</p>
     #[serde(rename = "CreatorRequestId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub creator_request_id: Option<String>,
@@ -457,6 +490,10 @@ pub struct CreateBackupPlanInput {
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateBackupPlanOutput {
+    /// <p>A list of <code>BackupOptions</code> settings for a resource type. This option is only available for Windows VSS backup jobs.</p>
+    #[serde(rename = "AdvancedBackupSettings")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub advanced_backup_settings: Option<Vec<AdvancedBackupSetting>>,
     /// <p>An Amazon Resource Name (ARN) that uniquely identifies a backup plan; for example, <code>arn:aws:backup:us-east-1:123456789012:plan:8F81F553-3A74-4A3F-B93D-B3360DC80C50</code>.</p>
     #[serde(rename = "BackupPlanArn")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -484,7 +521,7 @@ pub struct CreateBackupSelectionInput {
     /// <p>Specifies the body of a request to assign a set of resources to a backup plan.</p>
     #[serde(rename = "BackupSelection")]
     pub backup_selection: BackupSelection,
-    /// <p>A unique string that identifies the request and allows failed requests to be retried without the risk of executing the operation twice.</p>
+    /// <p>A unique string that identifies the request and allows failed requests to be retried without the risk of running the operation twice.</p>
     #[serde(rename = "CreatorRequestId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub creator_request_id: Option<String>,
@@ -517,7 +554,7 @@ pub struct CreateBackupVaultInput {
     #[serde(rename = "BackupVaultTags")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub backup_vault_tags: Option<::std::collections::HashMap<String, String>>,
-    /// <p>A unique string that identifies the request and allows failed requests to be retried without the risk of executing the operation twice.</p>
+    /// <p>A unique string that identifies the request and allows failed requests to be retried without the risk of running the operation twice.</p>
     #[serde(rename = "CreatorRequestId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub creator_request_id: Option<String>,
@@ -567,7 +604,7 @@ pub struct DeleteBackupPlanOutput {
     #[serde(rename = "DeletionDate")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub deletion_date: Option<f64>,
-    /// <p>Unique, randomly generated, Unicode, UTF-8 encoded strings that are at most 1,024 bytes long. Version Ids cannot be edited.</p>
+    /// <p>Unique, randomly generated, Unicode, UTF-8 encoded strings that are at most 1,024 bytes long. Version IDs cannot be edited.</p>
     #[serde(rename = "VersionId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub version_id: Option<String>,
@@ -638,10 +675,18 @@ pub struct DescribeBackupJobOutput {
     #[serde(rename = "BackupJobId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub backup_job_id: Option<String>,
+    /// <p>Represents the options specified as part of backup plan or on-demand backup job.</p>
+    #[serde(rename = "BackupOptions")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub backup_options: Option<::std::collections::HashMap<String, String>>,
     /// <p>The size, in bytes, of a backup.</p>
     #[serde(rename = "BackupSizeInBytes")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub backup_size_in_bytes: Option<i64>,
+    /// <p>Represents the actual backup type selected for a backup job. For example, if a successful WindowsVSS backup was taken, <code>BackupType</code> returns "WindowsVSS". If <code>BackupType</code> is empty, then the backup type that was is a regular backup.</p>
+    #[serde(rename = "BackupType")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub backup_type: Option<String>,
     /// <p>An Amazon Resource Name (ARN) that uniquely identifies a backup vault; for example, <code>arn:aws:backup:us-east-1:123456789012:vault:aBackupVault</code>.</p>
     #[serde(rename = "BackupVaultArn")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -727,7 +772,7 @@ pub struct DescribeBackupVaultOutput {
     #[serde(rename = "CreationDate")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub creation_date: Option<f64>,
-    /// <p>A unique string that identifies the request and allows failed requests to be retried without the risk of executing the operation twice.</p>
+    /// <p>A unique string that identifies the request and allows failed requests to be retried without the risk of running the operation twice.</p>
     #[serde(rename = "CreatorRequestId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub creator_request_id: Option<String>,
@@ -756,6 +801,23 @@ pub struct DescribeCopyJobOutput {
     #[serde(rename = "CopyJob")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub copy_job: Option<CopyJob>,
+}
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct DescribeGlobalSettingsInput {}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct DescribeGlobalSettingsOutput {
+    /// <p>A list of resources along with the opt-in preferences for the account.</p>
+    #[serde(rename = "GlobalSettings")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub global_settings: Option<::std::collections::HashMap<String, String>>,
+    /// <p>The date and time that the global settings was last updated. This update is in Unix format and Coordinated Universal Time (UTC). The value of <code>LastUpdateTime</code> is accurate to milliseconds. For example, the value 1516925490.087 represents Friday, January 26, 2018 12:11:30.087 AM.</p>
+    #[serde(rename = "LastUpdateTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub last_update_time: Option<f64>,
 }
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
@@ -857,6 +919,10 @@ pub struct DescribeRecoveryPointOutput {
     #[serde(rename = "ResourceType")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub resource_type: Option<String>,
+    /// <p>An Amazon Resource Name (ARN) that uniquely identifies the source vault where the resource was originally backed up in; for example, <code>arn:aws:backup:us-east-1:123456789012:vault:BackupVault</code>. If the recovery is restored to the same AWS account or Region, this value will be <code>null</code>.</p>
+    #[serde(rename = "SourceBackupVaultArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub source_backup_vault_arn: Option<String>,
     /// <p><p>A status code specifying the state of the recovery point.</p> <note> <p>A partial status indicates that the recovery point was not successfully re-created and must be retried.</p> </note></p>
     #[serde(rename = "Status")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -874,7 +940,7 @@ pub struct DescribeRegionSettingsInput {}
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeRegionSettingsOutput {
-    /// <p>Returns a list of all services along with the opt-in preferences in the region.</p>
+    /// <p>Returns a list of all services along with the opt-in preferences in the Region.</p>
     #[serde(rename = "ResourceTypeOptInPreference")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub resource_type_opt_in_preference: Option<::std::collections::HashMap<String, bool>>,
@@ -1011,6 +1077,10 @@ pub struct GetBackupPlanInput {
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetBackupPlanOutput {
+    /// <p>Contains a list of <code>BackupOptions</code> for each resource type. The list is populated only if the advanced option is set for the backup plan.</p>
+    #[serde(rename = "AdvancedBackupSettings")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub advanced_backup_settings: Option<Vec<AdvancedBackupSetting>>,
     /// <p>Specifies the body of a backup plan. Includes a <code>BackupPlanName</code> and one or more sets of <code>Rules</code>.</p>
     #[serde(rename = "BackupPlan")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1027,7 +1097,7 @@ pub struct GetBackupPlanOutput {
     #[serde(rename = "CreationDate")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub creation_date: Option<f64>,
-    /// <p>A unique string that identifies the request and allows failed requests to be retried without the risk of executing the operation twice.</p>
+    /// <p>A unique string that identifies the request and allows failed requests to be retried without the risk of running the operation twice.</p>
     #[serde(rename = "CreatorRequestId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub creator_request_id: Option<String>,
@@ -1035,7 +1105,7 @@ pub struct GetBackupPlanOutput {
     #[serde(rename = "DeletionDate")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub deletion_date: Option<f64>,
-    /// <p>The last time a job to back up resources was executed with this backup plan. A date and time, in Unix format and Coordinated Universal Time (UTC). The value of <code>LastExecutionDate</code> is accurate to milliseconds. For example, the value 1516925490.087 represents Friday, January 26, 2018 12:11:30.087 AM.</p>
+    /// <p>The last time a job to back up resources was run with this backup plan. A date and time, in Unix format and Coordinated Universal Time (UTC). The value of <code>LastExecutionDate</code> is accurate to milliseconds. For example, the value 1516925490.087 represents Friday, January 26, 2018 12:11:30.087 AM.</p>
     #[serde(rename = "LastExecutionDate")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub last_execution_date: Option<f64>,
@@ -1071,7 +1141,7 @@ pub struct GetBackupSelectionOutput {
     #[serde(rename = "CreationDate")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub creation_date: Option<f64>,
-    /// <p>A unique string that identifies the request and allows failed requests to be retried without the risk of executing the operation twice.</p>
+    /// <p>A unique string that identifies the request and allows failed requests to be retried without the risk of running the operation twice.</p>
     #[serde(rename = "CreatorRequestId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub creator_request_id: Option<String>,
@@ -1157,7 +1227,7 @@ pub struct GetRecoveryPointRestoreMetadataOutput {
     #[serde(rename = "RecoveryPointArn")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub recovery_point_arn: Option<String>,
-    /// <p>The set of metadata key-value pairs that describes the original configuration of the backed-up resource. These values vary depending on the service that is being restored.</p>
+    /// <p>The set of metadata key-value pairs that describe the original configuration of the backed-up resource. These values vary depending on the service that is being restored.</p>
     #[serde(rename = "RestoreMetadata")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub restore_metadata: Option<::std::collections::HashMap<String, String>>,
@@ -1620,7 +1690,7 @@ pub struct ProtectedResource {
     #[serde(rename = "ResourceArn")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub resource_arn: Option<String>,
-    /// <p>The type of AWS resource; for example, an Amazon Elastic Block Store (Amazon EBS) volume or an Amazon Relational Database Service (Amazon RDS) database.</p>
+    /// <p>The type of AWS resource; for example, an Amazon Elastic Block Store (Amazon EBS) volume or an Amazon Relational Database Service (Amazon RDS) database. For VSS Windows backups, the only supported resource type is Amazon EC2.</p>
     #[serde(rename = "ResourceType")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub resource_type: Option<String>,
@@ -1712,10 +1782,14 @@ pub struct RecoveryPointByBackupVault {
     #[serde(rename = "ResourceArn")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub resource_arn: Option<String>,
-    /// <p>The type of AWS resource saved as a recovery point; for example, an Amazon Elastic Block Store (Amazon EBS) volume or an Amazon Relational Database Service (Amazon RDS) database.</p>
+    /// <p>The type of AWS resource saved as a recovery point; for example, an Amazon Elastic Block Store (Amazon EBS) volume or an Amazon Relational Database Service (Amazon RDS) database. For VSS Windows backups, the only supported resource type is Amazon EC2.</p>
     #[serde(rename = "ResourceType")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub resource_type: Option<String>,
+    /// <p>The backup vault where the recovery point was originally copied from. If the recovery point is restored to the same account this value will be <code>null</code>.</p>
+    #[serde(rename = "SourceBackupVaultArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub source_backup_vault_arn: Option<String>,
     /// <p>A status code specifying the state of the recovery point.</p>
     #[serde(rename = "Status")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1814,7 +1888,7 @@ pub struct RestoreJobsListMember {
     #[serde(rename = "RecoveryPointArn")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub recovery_point_arn: Option<String>,
-    /// <p>The resource type of the listed restore jobs; for example, an Amazon Elastic Block Store (Amazon EBS) volume or an Amazon Relational Database Service (Amazon RDS) database.</p>
+    /// <p>The resource type of the listed restore jobs; for example, an Amazon Elastic Block Store (Amazon EBS) volume or an Amazon Relational Database Service (Amazon RDS) database. For VSS Windows backups, the only supported resource type is Amazon EC2.</p>
     #[serde(rename = "ResourceType")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub resource_type: Option<String>,
@@ -1835,6 +1909,10 @@ pub struct RestoreJobsListMember {
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct StartBackupJobInput {
+    /// <p>Specifies the backup option for a selected resource. This option is only available for Windows VSS backup jobs.</p> <p>Valid values: Set to <code>"WindowsVSS”:“enabled"</code> to enable WindowsVSS backup option and create a VSS Windows backup. Set to “WindowsVSS”:”disabled” to create a regular backup. The WindowsVSS option is not enabled by default.</p>
+    #[serde(rename = "BackupOptions")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub backup_options: Option<::std::collections::HashMap<String, String>>,
     /// <p>The name of a logical container where backups are stored. Backup vaults are identified by names that are unique to the account used to create them and the AWS Region where they are created. They consist of lowercase letters, numbers, and hyphens.</p>
     #[serde(rename = "BackupVaultName")]
     pub backup_vault_name: String,
@@ -1930,7 +2008,7 @@ pub struct StartRestoreJobInput {
     #[serde(rename = "IdempotencyToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub idempotency_token: Option<String>,
-    /// <p><p>A set of metadata key-value pairs. Contains information, such as a resource name, required to restore a recovery point.</p> <p> You can get configuration metadata about a resource at the time it was backed up by calling <code>GetRecoveryPointRestoreMetadata</code>. However, values in addition to those provided by <code>GetRecoveryPointRestoreMetadata</code> might be required to restore a resource. For example, you might need to provide a new resource name if the original already exists.</p> <p>You need to specify specific metadata to restore an Amazon Elastic File System (Amazon EFS) instance:</p> <ul> <li> <p> <code>file-system-id</code>: ID of the Amazon EFS file system that is backed up by AWS Backup. Returned in <code>GetRecoveryPointRestoreMetadata</code>.</p> </li> <li> <p> <code>Encrypted</code>: A Boolean value that, if true, specifies that the file system is encrypted. If <code>KmsKeyId</code> is specified, <code>Encrypted</code> must be set to <code>true</code>.</p> </li> <li> <p> <code>KmsKeyId</code>: Specifies the AWS KMS key that is used to encrypt the restored file system.</p> </li> <li> <p> <code>PerformanceMode</code>: Specifies the throughput mode of the file system.</p> </li> <li> <p> <code>CreationToken</code>: A user-supplied value that ensures the uniqueness (idempotency) of the request.</p> </li> <li> <p> <code>newFileSystem</code>: A Boolean value that, if true, specifies that the recovery point is restored to a new Amazon EFS file system.</p> </li> </ul></p>
+    /// <p><p>A set of metadata key-value pairs. Contains information, such as a resource name, required to restore a recovery point.</p> <p> You can get configuration metadata about a resource at the time it was backed up by calling <code>GetRecoveryPointRestoreMetadata</code>. However, values in addition to those provided by <code>GetRecoveryPointRestoreMetadata</code> might be required to restore a resource. For example, you might need to provide a new resource name if the original already exists.</p> <p>You need to specify specific metadata to restore an Amazon Elastic File System (Amazon EFS) instance:</p> <ul> <li> <p> <code>file-system-id</code>: The ID of the Amazon EFS file system that is backed up by AWS Backup. Returned in <code>GetRecoveryPointRestoreMetadata</code>.</p> </li> <li> <p> <code>Encrypted</code>: A Boolean value that, if true, specifies that the file system is encrypted. If <code>KmsKeyId</code> is specified, <code>Encrypted</code> must be set to <code>true</code>.</p> </li> <li> <p> <code>KmsKeyId</code>: Specifies the AWS KMS key that is used to encrypt the restored file system. You can specify a key from another AWS account provided that key it is properly shared with your account via AWS KMS.</p> </li> <li> <p> <code>PerformanceMode</code>: Specifies the throughput mode of the file system.</p> </li> <li> <p> <code>CreationToken</code>: A user-supplied value that ensures the uniqueness (idempotency) of the request.</p> </li> <li> <p> <code>newFileSystem</code>: A Boolean value that, if true, specifies that the recovery point is restored to a new Amazon EFS file system.</p> </li> <li> <p> <code>ItemsToRestore </code>: A serialized list of up to five strings where each string is a file path. Use <code>ItemsToRestore</code> to restore specific files or directories rather than the entire file system. This parameter is optional.</p> </li> </ul></p>
     #[serde(rename = "Metadata")]
     pub metadata: ::std::collections::HashMap<String, String>,
     /// <p>An ARN that uniquely identifies a recovery point; for example, <code>arn:aws:backup:us-east-1:123456789012:recovery-point:1EB3B5E7-9EB0-435A-A80B-108B488B0D45</code>.</p>
@@ -1995,6 +2073,10 @@ pub struct UpdateBackupPlanInput {
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateBackupPlanOutput {
+    /// <p>Contains a list of <code>BackupOptions</code> for each resource type.</p>
+    #[serde(rename = "AdvancedBackupSettings")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub advanced_backup_settings: Option<Vec<AdvancedBackupSetting>>,
     /// <p>An Amazon Resource Name (ARN) that uniquely identifies a backup plan; for example, <code>arn:aws:backup:us-east-1:123456789012:plan:8F81F553-3A74-4A3F-B93D-B3360DC80C50</code>.</p>
     #[serde(rename = "BackupPlanArn")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -2011,6 +2093,15 @@ pub struct UpdateBackupPlanOutput {
     #[serde(rename = "VersionId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub version_id: Option<String>,
+}
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct UpdateGlobalSettingsInput {
+    /// <p>A list of resources along with the opt-in preferences for the account.</p>
+    #[serde(rename = "GlobalSettings")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub global_settings: Option<::std::collections::HashMap<String, String>>,
 }
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
@@ -2052,7 +2143,7 @@ pub struct UpdateRecoveryPointLifecycleOutput {
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateRegionSettingsInput {
-    /// <p>Updates the list of services along with the opt-in preferences for the region.</p>
+    /// <p>Updates the list of services along with the opt-in preferences for the Region.</p>
     #[serde(rename = "ResourceTypeOptInPreference")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub resource_type_opt_in_preference: Option<::std::collections::HashMap<String, bool>>,
@@ -2772,6 +2863,38 @@ impl fmt::Display for DescribeCopyJobError {
     }
 }
 impl Error for DescribeCopyJobError {}
+/// Errors returned by DescribeGlobalSettings
+#[derive(Debug, PartialEq)]
+pub enum DescribeGlobalSettingsError {
+    /// <p>The request failed due to a temporary failure of the server.</p>
+    ServiceUnavailable(String),
+}
+
+impl DescribeGlobalSettingsError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeGlobalSettingsError> {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
+                "ServiceUnavailableException" => {
+                    return RusotoError::Service(DescribeGlobalSettingsError::ServiceUnavailable(
+                        err.msg,
+                    ))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for DescribeGlobalSettingsError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            DescribeGlobalSettingsError::ServiceUnavailable(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for DescribeGlobalSettingsError {}
 /// Errors returned by DescribeProtectedResource
 #[derive(Debug, PartialEq)]
 pub enum DescribeProtectedResourceError {
@@ -4247,6 +4370,8 @@ impl Error for PutBackupVaultNotificationsError {}
 pub enum StartBackupJobError {
     /// <p>Indicates that something is wrong with a parameter's value. For example, the value is out of range.</p>
     InvalidParameterValue(String),
+    /// <p>Indicates that something is wrong with the input to the request. For example, a parameter is of the wrong type.</p>
+    InvalidRequest(String),
     /// <p>A limit in the request has been exceeded; for example, a maximum number of items allowed in a request.</p>
     LimitExceeded(String),
     /// <p>Indicates that a required parameter is missing.</p>
@@ -4265,6 +4390,9 @@ impl StartBackupJobError {
                     return RusotoError::Service(StartBackupJobError::InvalidParameterValue(
                         err.msg,
                     ))
+                }
+                "InvalidRequestException" => {
+                    return RusotoError::Service(StartBackupJobError::InvalidRequest(err.msg))
                 }
                 "LimitExceededException" => {
                     return RusotoError::Service(StartBackupJobError::LimitExceeded(err.msg))
@@ -4292,6 +4420,7 @@ impl fmt::Display for StartBackupJobError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match *self {
             StartBackupJobError::InvalidParameterValue(ref cause) => write!(f, "{}", cause),
+            StartBackupJobError::InvalidRequest(ref cause) => write!(f, "{}", cause),
             StartBackupJobError::LimitExceeded(ref cause) => write!(f, "{}", cause),
             StartBackupJobError::MissingParameterValue(ref cause) => write!(f, "{}", cause),
             StartBackupJobError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
@@ -4614,6 +4743,60 @@ impl fmt::Display for UpdateBackupPlanError {
     }
 }
 impl Error for UpdateBackupPlanError {}
+/// Errors returned by UpdateGlobalSettings
+#[derive(Debug, PartialEq)]
+pub enum UpdateGlobalSettingsError {
+    /// <p>Indicates that something is wrong with a parameter's value. For example, the value is out of range.</p>
+    InvalidParameterValue(String),
+    /// <p>Indicates that something is wrong with the input to the request. For example, a parameter is of the wrong type.</p>
+    InvalidRequest(String),
+    /// <p>Indicates that a required parameter is missing.</p>
+    MissingParameterValue(String),
+    /// <p>The request failed due to a temporary failure of the server.</p>
+    ServiceUnavailable(String),
+}
+
+impl UpdateGlobalSettingsError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateGlobalSettingsError> {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
+                "InvalidParameterValueException" => {
+                    return RusotoError::Service(UpdateGlobalSettingsError::InvalidParameterValue(
+                        err.msg,
+                    ))
+                }
+                "InvalidRequestException" => {
+                    return RusotoError::Service(UpdateGlobalSettingsError::InvalidRequest(err.msg))
+                }
+                "MissingParameterValueException" => {
+                    return RusotoError::Service(UpdateGlobalSettingsError::MissingParameterValue(
+                        err.msg,
+                    ))
+                }
+                "ServiceUnavailableException" => {
+                    return RusotoError::Service(UpdateGlobalSettingsError::ServiceUnavailable(
+                        err.msg,
+                    ))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for UpdateGlobalSettingsError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            UpdateGlobalSettingsError::InvalidParameterValue(ref cause) => write!(f, "{}", cause),
+            UpdateGlobalSettingsError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+            UpdateGlobalSettingsError::MissingParameterValue(ref cause) => write!(f, "{}", cause),
+            UpdateGlobalSettingsError::ServiceUnavailable(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for UpdateGlobalSettingsError {}
 /// Errors returned by UpdateRecoveryPointLifecycle
 #[derive(Debug, PartialEq)]
 pub enum UpdateRecoveryPointLifecycleError {
@@ -4731,13 +4914,13 @@ impl Error for UpdateRegionSettingsError {}
 /// Trait representing the capabilities of the AWS Backup API. AWS Backup clients implement this trait.
 #[async_trait]
 pub trait Backup {
-    /// <p>Backup plans are documents that contain information that AWS Backup uses to schedule tasks that create recovery points of resources.</p> <p>If you call <code>CreateBackupPlan</code> with a plan that already exists, an <code>AlreadyExistsException</code> is returned.</p>
+    /// <p>Creates a backup plan using a backup plan name and backup rules. A backup plan is a document that contains information that AWS Backup uses to schedule tasks that create recovery points for resources.</p> <p>If you call <code>CreateBackupPlan</code> with a plan that already exists, an <code>AlreadyExistsException</code> is returned.</p>
     async fn create_backup_plan(
         &self,
         input: CreateBackupPlanInput,
     ) -> Result<CreateBackupPlanOutput, RusotoError<CreateBackupPlanError>>;
 
-    /// <p>Creates a JSON document that specifies a set of resources to assign to a backup plan. Resources can be included by specifying patterns for a <code>ListOfTags</code> and selected <code>Resources</code>. </p> <p>For example, consider the following patterns:</p> <ul> <li> <p> <code>Resources: "arn:aws:ec2:region:account-id:volume/volume-id"</code> </p> </li> <li> <p> <code>ConditionKey:"department"</code> </p> <p> <code>ConditionValue:"finance"</code> </p> <p> <code>ConditionType:"STRINGEQUALS"</code> </p> </li> <li> <p> <code>ConditionKey:"importance"</code> </p> <p> <code>ConditionValue:"critical"</code> </p> <p> <code>ConditionType:"STRINGEQUALS"</code> </p> </li> </ul> <p>Using these patterns would back up all Amazon Elastic Block Store (Amazon EBS) volumes that are tagged as <code>"department=finance"</code>, <code>"importance=critical"</code>, in addition to an EBS volume with the specified volume Id.</p> <p>Resources and conditions are additive in that all resources that match the pattern are selected. This shouldn't be confused with a logical AND, where all conditions must match. The matching patterns are logically 'put together using the OR operator. In other words, all patterns that match are selected for backup.</p>
+    /// <p>Creates a JSON document that specifies a set of resources to assign to a backup plan. Resources can be included by specifying patterns for a <code>ListOfTags</code> and selected <code>Resources</code>. </p> <p>For example, consider the following patterns:</p> <ul> <li> <p> <code>Resources: "arn:aws:ec2:region:account-id:volume/volume-id"</code> </p> </li> <li> <p> <code>ConditionKey:"department"</code> </p> <p> <code>ConditionValue:"finance"</code> </p> <p> <code>ConditionType:"StringEquals"</code> </p> </li> <li> <p> <code>ConditionKey:"importance"</code> </p> <p> <code>ConditionValue:"critical"</code> </p> <p> <code>ConditionType:"StringEquals"</code> </p> </li> </ul> <p>Using these patterns would back up all Amazon Elastic Block Store (Amazon EBS) volumes that are tagged as <code>"department=finance"</code>, <code>"importance=critical"</code>, in addition to an EBS volume with the specified volume ID.</p> <p>Resources and conditions are additive in that all resources that match the pattern are selected. This shouldn't be confused with a logical AND, where all conditions must match. The matching patterns are logically put together using the OR operator. In other words, all patterns that match are selected for backup.</p>
     async fn create_backup_selection(
         &self,
         input: CreateBackupSelectionInput,
@@ -4785,7 +4968,7 @@ pub trait Backup {
         input: DeleteRecoveryPointInput,
     ) -> Result<(), RusotoError<DeleteRecoveryPointError>>;
 
-    /// <p>Returns metadata associated with creating a backup of a resource.</p>
+    /// <p>Returns backup job details for the specified <code>BackupJobId</code>.</p>
     async fn describe_backup_job(
         &self,
         input: DescribeBackupJobInput,
@@ -4803,6 +4986,11 @@ pub trait Backup {
         input: DescribeCopyJobInput,
     ) -> Result<DescribeCopyJobOutput, RusotoError<DescribeCopyJobError>>;
 
+    /// <p>The current feature settings for the AWS Account.</p>
+    async fn describe_global_settings(
+        &self,
+    ) -> Result<DescribeGlobalSettingsOutput, RusotoError<DescribeGlobalSettingsError>>;
+
     /// <p>Returns information about a saved resource, including the last time it was backed up, its Amazon Resource Name (ARN), and the AWS service type of the saved resource.</p>
     async fn describe_protected_resource(
         &self,
@@ -4815,7 +5003,7 @@ pub trait Backup {
         input: DescribeRecoveryPointInput,
     ) -> Result<DescribeRecoveryPointOutput, RusotoError<DescribeRecoveryPointError>>;
 
-    /// <p>Returns the current service opt-in settings for the Region. If the service has a value set to <code>true</code>, AWS Backup attempts to protect that service's resources in this Region, when included in an on-demand backup or scheduled backup plan. If the value is set to <code>false</code> for a service, AWS Backup does not attempt to protect that service's resources in this Region.</p>
+    /// <p>Returns the current service opt-in settings for the Region. If service-opt-in is enabled for a service, AWS Backup tries to protect that service's resources in this Region, when the resource is included in an on-demand backup or scheduled backup plan. Otherwise, AWS Backup does not try to protect that service's resources in this Region, AWS Backup does not try to protect that service's resources in this Region.</p>
     async fn describe_region_settings(
         &self,
     ) -> Result<DescribeRegionSettingsOutput, RusotoError<DescribeRegionSettingsError>>;
@@ -4832,7 +5020,7 @@ pub trait Backup {
         input: ExportBackupPlanTemplateInput,
     ) -> Result<ExportBackupPlanTemplateOutput, RusotoError<ExportBackupPlanTemplateError>>;
 
-    /// <p>Returns the body of a backup plan in JSON format, in addition to plan metadata.</p>
+    /// <p>Returns <code>BackupPlan</code> details for the specified <code>BackupPlanId</code>. Returns the body of a backup plan in JSON format, in addition to plan metadata.</p>
     async fn get_backup_plan(
         &self,
         input: GetBackupPlanInput,
@@ -4882,7 +5070,7 @@ pub trait Backup {
         &self,
     ) -> Result<GetSupportedResourceTypesOutput, RusotoError<GetSupportedResourceTypesError>>;
 
-    /// <p>Returns metadata about your backup jobs.</p>
+    /// <p>Returns a list of existing backup jobs for an authenticated account.</p>
     async fn list_backup_jobs(
         &self,
         input: ListBackupJobsInput,
@@ -4900,7 +5088,7 @@ pub trait Backup {
         input: ListBackupPlanVersionsInput,
     ) -> Result<ListBackupPlanVersionsOutput, RusotoError<ListBackupPlanVersionsError>>;
 
-    /// <p>Returns metadata of your saved backup plans, including Amazon Resource Names (ARNs), plan IDs, creation and deletion dates, version IDs, plan names, and creator request IDs.</p>
+    /// <p>Returns a list of existing backup plans for an authenticated account. The list is populated only if the advanced option is set for the backup plan. The list contains information such as Amazon Resource Names (ARNs), plan IDs, creation and deletion dates, version IDs, plan names, and creator request IDs.</p>
     async fn list_backup_plans(
         &self,
         input: ListBackupPlansInput,
@@ -4969,7 +5157,7 @@ pub trait Backup {
         input: PutBackupVaultNotificationsInput,
     ) -> Result<(), RusotoError<PutBackupVaultNotificationsError>>;
 
-    /// <p>Starts a job to create a one-time backup of the specified resource.</p>
+    /// <p>Starts an on-demand backup job for the specified resource.</p>
     async fn start_backup_job(
         &self,
         input: StartBackupJobInput,
@@ -4981,7 +5169,7 @@ pub trait Backup {
         input: StartCopyJobInput,
     ) -> Result<StartCopyJobOutput, RusotoError<StartCopyJobError>>;
 
-    /// <p>Recovers the saved resource identified by an Amazon Resource Name (ARN). </p> <p>If the resource ARN is included in the request, then the last complete backup of that resource is recovered. If the ARN of a recovery point is supplied, then that recovery point is restored.</p>
+    /// <p>Recovers the saved resource identified by an Amazon Resource Name (ARN). </p>
     async fn start_restore_job(
         &self,
         input: StartRestoreJobInput,
@@ -5005,11 +5193,17 @@ pub trait Backup {
         input: UntagResourceInput,
     ) -> Result<(), RusotoError<UntagResourceError>>;
 
-    /// <p>Replaces the body of a saved backup plan identified by its <code>backupPlanId</code> with the input document in JSON format. The new version is uniquely identified by a <code>VersionId</code>.</p>
+    /// <p>Updates an existing backup plan identified by its <code>backupPlanId</code> with the input document in JSON format. The new version is uniquely identified by a <code>VersionId</code>.</p>
     async fn update_backup_plan(
         &self,
         input: UpdateBackupPlanInput,
     ) -> Result<UpdateBackupPlanOutput, RusotoError<UpdateBackupPlanError>>;
+
+    /// <p>Updates the current global settings for the AWS Account. Use the <code>DescribeGlobalSettings</code> API to determine the current settings.</p>
+    async fn update_global_settings(
+        &self,
+        input: UpdateGlobalSettingsInput,
+    ) -> Result<(), RusotoError<UpdateGlobalSettingsError>>;
 
     /// <p>Sets the transition lifecycle of a recovery point.</p> <p>The lifecycle defines when a protected resource is transitioned to cold storage and when it expires. AWS Backup transitions and expires backups automatically according to the lifecycle that you define. </p> <p>Backups transitioned to cold storage must be stored in cold storage for a minimum of 90 days. Therefore, the “expire after days” setting must be 90 days greater than the “transition to cold after days” setting. The “transition to cold after days” setting cannot be changed after a backup has been transitioned to cold. </p>
     async fn update_recovery_point_lifecycle(
@@ -5017,7 +5211,7 @@ pub trait Backup {
         input: UpdateRecoveryPointLifecycleInput,
     ) -> Result<UpdateRecoveryPointLifecycleOutput, RusotoError<UpdateRecoveryPointLifecycleError>>;
 
-    /// <p>Updates the current service opt-in settings for the Region. If the service has a value set to <code>true</code>, AWS Backup attempts to protect that service's resources in this Region, when included in an on-demand backup or scheduled backup plan. If the value is set to <code>false</code> for a service, AWS Backup does not attempt to protect that service's resources in this Region.</p>
+    /// <p>Updates the current service opt-in settings for the Region. If service-opt-in is enabled for a service, AWS Backup tries to protect that service's resources in this Region, when the resource is included in an on-demand backup or scheduled backup plan. Otherwise, AWS Backup does not try to protect that service's resources in this Region. Use the <code>DescribeRegionSettings</code> API to determine the resource types that are supported.</p>
     async fn update_region_settings(
         &self,
         input: UpdateRegionSettingsInput,
@@ -5063,7 +5257,7 @@ impl BackupClient {
 
 #[async_trait]
 impl Backup for BackupClient {
-    /// <p>Backup plans are documents that contain information that AWS Backup uses to schedule tasks that create recovery points of resources.</p> <p>If you call <code>CreateBackupPlan</code> with a plan that already exists, an <code>AlreadyExistsException</code> is returned.</p>
+    /// <p>Creates a backup plan using a backup plan name and backup rules. A backup plan is a document that contains information that AWS Backup uses to schedule tasks that create recovery points for resources.</p> <p>If you call <code>CreateBackupPlan</code> with a plan that already exists, an <code>AlreadyExistsException</code> is returned.</p>
     #[allow(unused_mut)]
     async fn create_backup_plan(
         &self,
@@ -5094,7 +5288,7 @@ impl Backup for BackupClient {
         }
     }
 
-    /// <p>Creates a JSON document that specifies a set of resources to assign to a backup plan. Resources can be included by specifying patterns for a <code>ListOfTags</code> and selected <code>Resources</code>. </p> <p>For example, consider the following patterns:</p> <ul> <li> <p> <code>Resources: "arn:aws:ec2:region:account-id:volume/volume-id"</code> </p> </li> <li> <p> <code>ConditionKey:"department"</code> </p> <p> <code>ConditionValue:"finance"</code> </p> <p> <code>ConditionType:"STRINGEQUALS"</code> </p> </li> <li> <p> <code>ConditionKey:"importance"</code> </p> <p> <code>ConditionValue:"critical"</code> </p> <p> <code>ConditionType:"STRINGEQUALS"</code> </p> </li> </ul> <p>Using these patterns would back up all Amazon Elastic Block Store (Amazon EBS) volumes that are tagged as <code>"department=finance"</code>, <code>"importance=critical"</code>, in addition to an EBS volume with the specified volume Id.</p> <p>Resources and conditions are additive in that all resources that match the pattern are selected. This shouldn't be confused with a logical AND, where all conditions must match. The matching patterns are logically 'put together using the OR operator. In other words, all patterns that match are selected for backup.</p>
+    /// <p>Creates a JSON document that specifies a set of resources to assign to a backup plan. Resources can be included by specifying patterns for a <code>ListOfTags</code> and selected <code>Resources</code>. </p> <p>For example, consider the following patterns:</p> <ul> <li> <p> <code>Resources: "arn:aws:ec2:region:account-id:volume/volume-id"</code> </p> </li> <li> <p> <code>ConditionKey:"department"</code> </p> <p> <code>ConditionValue:"finance"</code> </p> <p> <code>ConditionType:"StringEquals"</code> </p> </li> <li> <p> <code>ConditionKey:"importance"</code> </p> <p> <code>ConditionValue:"critical"</code> </p> <p> <code>ConditionType:"StringEquals"</code> </p> </li> </ul> <p>Using these patterns would back up all Amazon Elastic Block Store (Amazon EBS) volumes that are tagged as <code>"department=finance"</code>, <code>"importance=critical"</code>, in addition to an EBS volume with the specified volume ID.</p> <p>Resources and conditions are additive in that all resources that match the pattern are selected. This shouldn't be confused with a logical AND, where all conditions must match. The matching patterns are logically put together using the OR operator. In other words, all patterns that match are selected for backup.</p>
     #[allow(unused_mut)]
     async fn create_backup_selection(
         &self,
@@ -5345,7 +5539,7 @@ impl Backup for BackupClient {
         }
     }
 
-    /// <p>Returns metadata associated with creating a backup of a resource.</p>
+    /// <p>Returns backup job details for the specified <code>BackupJobId</code>.</p>
     #[allow(unused_mut)]
     async fn describe_backup_job(
         &self,
@@ -5435,6 +5629,33 @@ impl Backup for BackupClient {
         }
     }
 
+    /// <p>The current feature settings for the AWS Account.</p>
+    #[allow(unused_mut)]
+    async fn describe_global_settings(
+        &self,
+    ) -> Result<DescribeGlobalSettingsOutput, RusotoError<DescribeGlobalSettingsError>> {
+        let request_uri = "/global-settings";
+
+        let mut request = SignedRequest::new("GET", "backup", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<DescribeGlobalSettingsOutput, _>()?;
+
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(DescribeGlobalSettingsError::from_response(response))
+        }
+    }
+
     /// <p>Returns information about a saved resource, including the last time it was backed up, its Amazon Resource Name (ARN), and the AWS service type of the saved resource.</p>
     #[allow(unused_mut)]
     async fn describe_protected_resource(
@@ -5498,7 +5719,7 @@ impl Backup for BackupClient {
         }
     }
 
-    /// <p>Returns the current service opt-in settings for the Region. If the service has a value set to <code>true</code>, AWS Backup attempts to protect that service's resources in this Region, when included in an on-demand backup or scheduled backup plan. If the value is set to <code>false</code> for a service, AWS Backup does not attempt to protect that service's resources in this Region.</p>
+    /// <p>Returns the current service opt-in settings for the Region. If service-opt-in is enabled for a service, AWS Backup tries to protect that service's resources in this Region, when the resource is included in an on-demand backup or scheduled backup plan. Otherwise, AWS Backup does not try to protect that service's resources in this Region, AWS Backup does not try to protect that service's resources in this Region.</p>
     #[allow(unused_mut)]
     async fn describe_region_settings(
         &self,
@@ -5587,7 +5808,7 @@ impl Backup for BackupClient {
         }
     }
 
-    /// <p>Returns the body of a backup plan in JSON format, in addition to plan metadata.</p>
+    /// <p>Returns <code>BackupPlan</code> details for the specified <code>BackupPlanId</code>. Returns the body of a backup plan in JSON format, in addition to plan metadata.</p>
     #[allow(unused_mut)]
     async fn get_backup_plan(
         &self,
@@ -5842,7 +6063,7 @@ impl Backup for BackupClient {
         }
     }
 
-    /// <p>Returns metadata about your backup jobs.</p>
+    /// <p>Returns a list of existing backup jobs for an authenticated account.</p>
     #[allow(unused_mut)]
     async fn list_backup_jobs(
         &self,
@@ -5977,7 +6198,7 @@ impl Backup for BackupClient {
         }
     }
 
-    /// <p>Returns metadata of your saved backup plans, including Amazon Resource Names (ARNs), plan IDs, creation and deletion dates, version IDs, plan names, and creator request IDs.</p>
+    /// <p>Returns a list of existing backup plans for an authenticated account. The list is populated only if the advanced option is set for the backup plan. The list contains information such as Amazon Resource Names (ARNs), plan IDs, creation and deletion dates, version IDs, plan names, and creator request IDs.</p>
     #[allow(unused_mut)]
     async fn list_backup_plans(
         &self,
@@ -6442,7 +6663,7 @@ impl Backup for BackupClient {
         }
     }
 
-    /// <p>Starts a job to create a one-time backup of the specified resource.</p>
+    /// <p>Starts an on-demand backup job for the specified resource.</p>
     #[allow(unused_mut)]
     async fn start_backup_job(
         &self,
@@ -6504,7 +6725,7 @@ impl Backup for BackupClient {
         }
     }
 
-    /// <p>Recovers the saved resource identified by an Amazon Resource Name (ARN). </p> <p>If the resource ARN is included in the request, then the last complete backup of that resource is recovered. If the ARN of a recovery point is supplied, then that recovery point is restored.</p>
+    /// <p>Recovers the saved resource identified by an Amazon Resource Name (ARN). </p>
     #[allow(unused_mut)]
     async fn start_restore_job(
         &self,
@@ -6625,7 +6846,7 @@ impl Backup for BackupClient {
         }
     }
 
-    /// <p>Replaces the body of a saved backup plan identified by its <code>backupPlanId</code> with the input document in JSON format. The new version is uniquely identified by a <code>VersionId</code>.</p>
+    /// <p>Updates an existing backup plan identified by its <code>backupPlanId</code> with the input document in JSON format. The new version is uniquely identified by a <code>VersionId</code>.</p>
     #[allow(unused_mut)]
     async fn update_backup_plan(
         &self,
@@ -6656,6 +6877,36 @@ impl Backup for BackupClient {
         } else {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             Err(UpdateBackupPlanError::from_response(response))
+        }
+    }
+
+    /// <p>Updates the current global settings for the AWS Account. Use the <code>DescribeGlobalSettings</code> API to determine the current settings.</p>
+    #[allow(unused_mut)]
+    async fn update_global_settings(
+        &self,
+        input: UpdateGlobalSettingsInput,
+    ) -> Result<(), RusotoError<UpdateGlobalSettingsError>> {
+        let request_uri = "/global-settings";
+
+        let mut request = SignedRequest::new("PUT", "backup", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        request.set_payload(encoded);
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = ::std::mem::drop(response);
+
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(UpdateGlobalSettingsError::from_response(response))
         }
     }
 
@@ -6695,7 +6946,7 @@ impl Backup for BackupClient {
         }
     }
 
-    /// <p>Updates the current service opt-in settings for the Region. If the service has a value set to <code>true</code>, AWS Backup attempts to protect that service's resources in this Region, when included in an on-demand backup or scheduled backup plan. If the value is set to <code>false</code> for a service, AWS Backup does not attempt to protect that service's resources in this Region.</p>
+    /// <p>Updates the current service opt-in settings for the Region. If service-opt-in is enabled for a service, AWS Backup tries to protect that service's resources in this Region, when the resource is included in an on-demand backup or scheduled backup plan. Otherwise, AWS Backup does not try to protect that service's resources in this Region. Use the <code>DescribeRegionSettings</code> API to determine the resource types that are supported.</p>
     #[allow(unused_mut)]
     async fn update_region_settings(
         &self,

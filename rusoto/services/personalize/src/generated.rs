@@ -140,6 +140,10 @@ pub struct BatchInferenceJob {
     #[serde(rename = "batchInferenceJobArn")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub batch_inference_job_arn: Option<String>,
+    /// <p>A string to string map of the configuration details of a batch inference job.</p>
+    #[serde(rename = "batchInferenceJobConfig")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub batch_inference_job_config: Option<BatchInferenceJobConfig>,
     /// <p>The time at which the batch inference job was created.</p>
     #[serde(rename = "creationDateTime")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -184,6 +188,15 @@ pub struct BatchInferenceJob {
     #[serde(rename = "status")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub status: Option<String>,
+}
+
+/// <p>The configuration details of a batch inference job.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
+pub struct BatchInferenceJobConfig {
+    /// <p>A string to string map specifying the inference hyperparameters you wish to use for hyperparameter optimization. See <a>customizing-solution-config-hpo</a>.</p>
+    #[serde(rename = "itemExplorationConfig")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub item_exploration_config: Option<::std::collections::HashMap<String, String>>,
 }
 
 /// <p>The input configuration of a batch inference job.</p>
@@ -244,6 +257,10 @@ pub struct Campaign {
     #[serde(rename = "campaignArn")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub campaign_arn: Option<String>,
+    /// <p>The configuration details of a campaign.</p>
+    #[serde(rename = "campaignConfig")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub campaign_config: Option<CampaignConfig>,
     /// <p>The date and time (in Unix format) that the campaign was created.</p>
     #[serde(rename = "creationDateTime")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -275,6 +292,15 @@ pub struct Campaign {
     #[serde(rename = "status")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub status: Option<String>,
+}
+
+/// <p>The configuration details of a campaign.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
+pub struct CampaignConfig {
+    /// <p>A string to string map specifying the inference hyperparameters you wish to use for hyperparameter optimization. See <a>customizing-solution-config-hpo</a>.</p>
+    #[serde(rename = "itemExplorationConfig")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub item_exploration_config: Option<::std::collections::HashMap<String, String>>,
 }
 
 /// <p>Provides a summary of the properties of a campaign. For a complete listing, call the <a>DescribeCampaign</a> API.</p>
@@ -311,6 +337,9 @@ pub struct CampaignSummary {
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CampaignUpdateSummary {
+    #[serde(rename = "campaignConfig")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub campaign_config: Option<CampaignConfig>,
     /// <p>The date and time (in Unix time) that the campaign update was created.</p>
     #[serde(rename = "creationDateTime")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -370,6 +399,10 @@ pub struct ContinuousHyperParameterRange {
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateBatchInferenceJobRequest {
+    /// <p>The configuration details of a batch inference job.</p>
+    #[serde(rename = "batchInferenceJobConfig")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub batch_inference_job_config: Option<BatchInferenceJobConfig>,
     /// <p>The ARN of the filter to apply to the batch inference job. For more information on using filters, see Using Filters with Amazon Personalize.</p>
     #[serde(rename = "filterArn")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -407,6 +440,10 @@ pub struct CreateBatchInferenceJobResponse {
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateCampaignRequest {
+    /// <p>The configuration details of a campaign.</p>
+    #[serde(rename = "campaignConfig")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub campaign_config: Option<CampaignConfig>,
     /// <p>Specifies the requested minimum provisioned transactions (recommendations) per second that Amazon Personalize will support.</p>
     #[serde(rename = "minProvisionedTPS")]
     pub min_provisioned_tps: i64,
@@ -534,7 +571,7 @@ pub struct CreateFilterRequest {
     /// <p>The ARN of the dataset group that the filter will belong to.</p>
     #[serde(rename = "datasetGroupArn")]
     pub dataset_group_arn: String,
-    /// <p>The filter expression that designates the interaction types that the filter will filter out. A filter expression must follow the following format:</p> <p> <code>EXCLUDE itemId WHERE INTERACTIONS.event_type in ("EVENT_TYPE")</code> </p> <p>Where "EVENT_TYPE" is the type of event to filter out. To filter out all items with any interactions history, set <code>"*"</code> as the EVENT_TYPE. For more information, see Using Filters with Amazon Personalize.</p>
+    /// <p>The filter expression that designates the interaction types that the filter will filter out. A filter expression must follow the following format:</p> <p> <code>EXCLUDE itemId WHERE INTERACTIONS.event_type in ("EVENT_TYPE")</code> </p> <p>Where "EVENT_TYPE" is the type of event to filter out. To filter out all items with any interactions history, set <code>"*"</code> as the EVENT_TYPE. For more information, see <a href="https://docs.aws.amazon.com/personalize/latest/dg/filters.html">Using Filters with Amazon Personalize</a>.</p>
     #[serde(rename = "filterExpression")]
     pub filter_expression: String,
     /// <p>The name of the filter to create.</p>
@@ -1368,7 +1405,7 @@ pub struct Filter {
     #[serde(rename = "filterArn")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub filter_arn: Option<String>,
-    /// <p>Specifies the type of item interactions to filter out of recommendation results. The filter expression must follow the following format:</p> <p> <code>EXCLUDE itemId WHERE INTERACTIONS.event_type in ("EVENT_TYPE")</code> </p> <p>Where "EVENT_TYPE" is the type of event to filter out. For more information, see Using Filters with Amazon Personalize.</p>
+    /// <p>Specifies the type of item interactions to filter out of recommendation results. The filter expression must follow the following format:</p> <p> <code>EXCLUDE itemId WHERE INTERACTIONS.event_type in ("EVENT_TYPE")</code> </p> <p>Where "EVENT_TYPE" is the type of event to filter out. For more information, see <a href="https://docs.aws.amazon.com/personalize/latest/dg/filters.html">Using Filters with Amazon Personalize</a>.</p>
     #[serde(rename = "filterExpression")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub filter_expression: Option<String>,
@@ -2141,6 +2178,10 @@ pub struct UpdateCampaignRequest {
     /// <p>The Amazon Resource Name (ARN) of the campaign.</p>
     #[serde(rename = "campaignArn")]
     pub campaign_arn: String,
+    /// <p>The configuration details of a campaign.</p>
+    #[serde(rename = "campaignConfig")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub campaign_config: Option<CampaignConfig>,
     /// <p>Specifies the requested minimum provisioned transactions (recommendations) per second that Amazon Personalize will support.</p>
     #[serde(rename = "minProvisionedTPS")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -2649,6 +2690,8 @@ impl Error for CreateSolutionError {}
 pub enum CreateSolutionVersionError {
     /// <p>Provide a valid value for the field or parameter.</p>
     InvalidInput(String),
+    /// <p>The limit on the number of requests per second has been exceeded.</p>
+    LimitExceeded(String),
     /// <p>The specified resource is in use.</p>
     ResourceInUse(String),
     /// <p>Could not find the specified resource.</p>
@@ -2661,6 +2704,9 @@ impl CreateSolutionVersionError {
             match err.typ.as_str() {
                 "InvalidInputException" => {
                     return RusotoError::Service(CreateSolutionVersionError::InvalidInput(err.msg))
+                }
+                "LimitExceededException" => {
+                    return RusotoError::Service(CreateSolutionVersionError::LimitExceeded(err.msg))
                 }
                 "ResourceInUseException" => {
                     return RusotoError::Service(CreateSolutionVersionError::ResourceInUse(err.msg))
@@ -2682,6 +2728,7 @@ impl fmt::Display for CreateSolutionVersionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match *self {
             CreateSolutionVersionError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            CreateSolutionVersionError::LimitExceeded(ref cause) => write!(f, "{}", cause),
             CreateSolutionVersionError::ResourceInUse(ref cause) => write!(f, "{}", cause),
             CreateSolutionVersionError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
         }
@@ -2861,6 +2908,8 @@ impl Error for DeleteEventTrackerError {}
 pub enum DeleteFilterError {
     /// <p>Provide a valid value for the field or parameter.</p>
     InvalidInput(String),
+    /// <p>The specified resource is in use.</p>
+    ResourceInUse(String),
     /// <p>Could not find the specified resource.</p>
     ResourceNotFound(String),
 }
@@ -2871,6 +2920,9 @@ impl DeleteFilterError {
             match err.typ.as_str() {
                 "InvalidInputException" => {
                     return RusotoError::Service(DeleteFilterError::InvalidInput(err.msg))
+                }
+                "ResourceInUseException" => {
+                    return RusotoError::Service(DeleteFilterError::ResourceInUse(err.msg))
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(DeleteFilterError::ResourceNotFound(err.msg))
@@ -2887,6 +2939,7 @@ impl fmt::Display for DeleteFilterError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match *self {
             DeleteFilterError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            DeleteFilterError::ResourceInUse(ref cause) => write!(f, "{}", cause),
             DeleteFilterError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
@@ -3971,7 +4024,7 @@ pub trait Personalize {
         input: CreateDatasetGroupRequest,
     ) -> Result<CreateDatasetGroupResponse, RusotoError<CreateDatasetGroupError>>;
 
-    /// <p><p>Creates a job that imports training data from your data source (an Amazon S3 bucket) to an Amazon Personalize dataset. To allow Amazon Personalize to import the training data, you must specify an AWS Identity and Access Management (IAM) role that has permission to read from the data source.</p> <important> <p>The dataset import job replaces any previous data in the dataset.</p> </important> <p> <b>Status</b> </p> <p>A dataset import job can be in one of the following states:</p> <ul> <li> <p>CREATE PENDING &gt; CREATE IN_PROGRESS &gt; ACTIVE -or- CREATE FAILED</p> </li> </ul> <p>To get the status of the import job, call <a>DescribeDatasetImportJob</a>, providing the Amazon Resource Name (ARN) of the dataset import job. The dataset import is complete when the status shows as ACTIVE. If the status shows as CREATE FAILED, the response includes a <code>failureReason</code> key, which describes why the job failed.</p> <note> <p>Importing takes time. You must wait until the status shows as ACTIVE before training a model using the dataset.</p> </note> <p class="title"> <b>Related APIs</b> </p> <ul> <li> <p> <a>ListDatasetImportJobs</a> </p> </li> <li> <p> <a>DescribeDatasetImportJob</a> </p> </li> </ul></p>
+    /// <p><p>Creates a job that imports training data from your data source (an Amazon S3 bucket) to an Amazon Personalize dataset. To allow Amazon Personalize to import the training data, you must specify an AWS Identity and Access Management (IAM) role that has permission to read from the data source, as Amazon Personalize makes a copy of your data and processes it in an internal AWS system.</p> <important> <p>The dataset import job replaces any previous data in the dataset.</p> </important> <p> <b>Status</b> </p> <p>A dataset import job can be in one of the following states:</p> <ul> <li> <p>CREATE PENDING &gt; CREATE IN_PROGRESS &gt; ACTIVE -or- CREATE FAILED</p> </li> </ul> <p>To get the status of the import job, call <a>DescribeDatasetImportJob</a>, providing the Amazon Resource Name (ARN) of the dataset import job. The dataset import is complete when the status shows as ACTIVE. If the status shows as CREATE FAILED, the response includes a <code>failureReason</code> key, which describes why the job failed.</p> <note> <p>Importing takes time. You must wait until the status shows as ACTIVE before training a model using the dataset.</p> </note> <p class="title"> <b>Related APIs</b> </p> <ul> <li> <p> <a>ListDatasetImportJobs</a> </p> </li> <li> <p> <a>DescribeDatasetImportJob</a> </p> </li> </ul></p>
     async fn create_dataset_import_job(
         &self,
         input: CreateDatasetImportJobRequest,
@@ -3983,7 +4036,7 @@ pub trait Personalize {
         input: CreateEventTrackerRequest,
     ) -> Result<CreateEventTrackerResponse, RusotoError<CreateEventTrackerError>>;
 
-    /// <p>Creates a recommendation filter. For more information, see Using Filters with Amazon Personalize.</p>
+    /// <p>Creates a recommendation filter. For more information, see <a href="https://docs.aws.amazon.com/personalize/latest/dg/filters.html">Using Filters with Amazon Personalize</a>.</p>
     async fn create_filter(
         &self,
         input: CreateFilterRequest,
@@ -4321,7 +4374,7 @@ impl Personalize for PersonalizeClient {
         proto::json::ResponsePayload::new(&response).deserialize::<CreateDatasetGroupResponse, _>()
     }
 
-    /// <p><p>Creates a job that imports training data from your data source (an Amazon S3 bucket) to an Amazon Personalize dataset. To allow Amazon Personalize to import the training data, you must specify an AWS Identity and Access Management (IAM) role that has permission to read from the data source.</p> <important> <p>The dataset import job replaces any previous data in the dataset.</p> </important> <p> <b>Status</b> </p> <p>A dataset import job can be in one of the following states:</p> <ul> <li> <p>CREATE PENDING &gt; CREATE IN_PROGRESS &gt; ACTIVE -or- CREATE FAILED</p> </li> </ul> <p>To get the status of the import job, call <a>DescribeDatasetImportJob</a>, providing the Amazon Resource Name (ARN) of the dataset import job. The dataset import is complete when the status shows as ACTIVE. If the status shows as CREATE FAILED, the response includes a <code>failureReason</code> key, which describes why the job failed.</p> <note> <p>Importing takes time. You must wait until the status shows as ACTIVE before training a model using the dataset.</p> </note> <p class="title"> <b>Related APIs</b> </p> <ul> <li> <p> <a>ListDatasetImportJobs</a> </p> </li> <li> <p> <a>DescribeDatasetImportJob</a> </p> </li> </ul></p>
+    /// <p><p>Creates a job that imports training data from your data source (an Amazon S3 bucket) to an Amazon Personalize dataset. To allow Amazon Personalize to import the training data, you must specify an AWS Identity and Access Management (IAM) role that has permission to read from the data source, as Amazon Personalize makes a copy of your data and processes it in an internal AWS system.</p> <important> <p>The dataset import job replaces any previous data in the dataset.</p> </important> <p> <b>Status</b> </p> <p>A dataset import job can be in one of the following states:</p> <ul> <li> <p>CREATE PENDING &gt; CREATE IN_PROGRESS &gt; ACTIVE -or- CREATE FAILED</p> </li> </ul> <p>To get the status of the import job, call <a>DescribeDatasetImportJob</a>, providing the Amazon Resource Name (ARN) of the dataset import job. The dataset import is complete when the status shows as ACTIVE. If the status shows as CREATE FAILED, the response includes a <code>failureReason</code> key, which describes why the job failed.</p> <note> <p>Importing takes time. You must wait until the status shows as ACTIVE before training a model using the dataset.</p> </note> <p class="title"> <b>Related APIs</b> </p> <ul> <li> <p> <a>ListDatasetImportJobs</a> </p> </li> <li> <p> <a>DescribeDatasetImportJob</a> </p> </li> </ul></p>
     async fn create_dataset_import_job(
         &self,
         input: CreateDatasetImportJobRequest,
@@ -4358,7 +4411,7 @@ impl Personalize for PersonalizeClient {
         proto::json::ResponsePayload::new(&response).deserialize::<CreateEventTrackerResponse, _>()
     }
 
-    /// <p>Creates a recommendation filter. For more information, see Using Filters with Amazon Personalize.</p>
+    /// <p>Creates a recommendation filter. For more information, see <a href="https://docs.aws.amazon.com/personalize/latest/dg/filters.html">Using Filters with Amazon Personalize</a>.</p>
     async fn create_filter(
         &self,
         input: CreateFilterRequest,

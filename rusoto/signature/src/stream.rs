@@ -5,15 +5,16 @@ use std::task::{Context, Poll};
 
 use bytes::{BufMut, Bytes, BytesMut};
 use futures::{future, stream, Stream, StreamExt};
-use pin_project::pin_project;
+use pin_project_lite::pin_project;
 use tokio::io::AsyncRead;
 
-/// Stream of bytes.
-#[pin_project]
-pub struct ByteStream {
-    size_hint: Option<usize>,
-    #[pin]
-    inner: Pin<Box<dyn Stream<Item = Result<Bytes, io::Error>> + Send + Sync + 'static>>,
+pin_project! {
+    /// Stream of bytes.
+    pub struct ByteStream {
+        size_hint: Option<usize>,
+        #[pin]
+        inner: Pin<Box<dyn Stream<Item = Result<Bytes, io::Error>> + Send + Sync + 'static>>,
+    }
 }
 
 impl ByteStream {
@@ -79,11 +80,12 @@ impl Stream for ByteStream {
     }
 }
 
-#[pin_project]
-struct ImplAsyncRead {
-    buffer: BytesMut,
-    #[pin]
-    stream: futures::stream::Fuse<Pin<Box<dyn Stream<Item = Result<Bytes, io::Error>> + Send + Sync>>>,
+pin_project! {
+    struct ImplAsyncRead {
+        buffer: BytesMut,
+        #[pin]
+        stream: futures::stream::Fuse<Pin<Box<dyn Stream<Item = Result<Bytes, io::Error>> + Send + Sync>>>,
+    }
 }
 
 impl ImplAsyncRead {
@@ -119,10 +121,11 @@ impl AsyncRead for ImplAsyncRead {
     }
 }
 
-#[pin_project]
-struct ImplBlockingRead {
-    #[pin]
-    inner: ImplAsyncRead,
+pin_project! {
+    struct ImplBlockingRead {
+        #[pin]
+        inner: ImplAsyncRead,
+    }
 }
 
 impl ImplBlockingRead {

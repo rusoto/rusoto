@@ -151,7 +151,7 @@ pub struct AttackProperty {
     #[serde(rename = "AttackPropertyIdentifier")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub attack_property_identifier: Option<String>,
-    /// <p>The array of <a>Contributor</a> objects that includes the top five contributors to an attack. </p>
+    /// <p>The array of contributor objects that includes the top five contributors to an attack. </p>
     #[serde(rename = "TopContributors")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub top_contributors: Option<Vec<Contributor>>,
@@ -163,6 +163,19 @@ pub struct AttackProperty {
     #[serde(rename = "Unit")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub unit: Option<String>,
+}
+
+/// <p>A single attack statistics data record. This is returned by <a>DescribeAttackStatistics</a> along with a time range indicating the time period that the attack statistics apply to. </p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct AttackStatisticsDataItem {
+    /// <p>The number of attacks detected during the time period. This is always present, but might be zero. </p>
+    #[serde(rename = "AttackCount")]
+    pub attack_count: i64,
+    /// <p>Information about the volume of attacks during the time period. If the accompanying <code>AttackCount</code> is zero, this setting might be empty.</p>
+    #[serde(rename = "AttackVolume")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub attack_volume: Option<AttackVolume>,
 }
 
 /// <p>Summarizes all DDoS attacks for a specified time period.</p>
@@ -200,6 +213,33 @@ pub struct AttackVectorDescription {
     pub vector_type: String,
 }
 
+/// <p>Information about the volume of attacks during the time period, included in an <a>AttackStatisticsDataItem</a>. If the accompanying <code>AttackCount</code> in the statistics object is zero, this setting might be empty.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct AttackVolume {
+    /// <p>A statistics object that uses bits per second as the unit. This is included for network level attacks. </p>
+    #[serde(rename = "BitsPerSecond")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub bits_per_second: Option<AttackVolumeStatistics>,
+    /// <p>A statistics object that uses packets per second as the unit. This is included for network level attacks. </p>
+    #[serde(rename = "PacketsPerSecond")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub packets_per_second: Option<AttackVolumeStatistics>,
+    /// <p>A statistics object that uses requests per second as the unit. This is included for application level attacks, and is only available for accounts that are subscribed to Shield Advanced.</p>
+    #[serde(rename = "RequestsPerSecond")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub requests_per_second: Option<AttackVolumeStatistics>,
+}
+
+/// <p>Statistics objects for the various data types in <a>AttackVolume</a>. </p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct AttackVolumeStatistics {
+    /// <p>The maximum attack volume observed for the given unit.</p>
+    #[serde(rename = "Max")]
+    pub max: f64,
+}
+
 /// <p>A contributor to the attack and their contribution.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
@@ -213,6 +253,32 @@ pub struct Contributor {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub value: Option<i64>,
 }
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct CreateProtectionGroupRequest {
+    /// <p><p>Defines how AWS Shield combines resource data for the group in order to detect, mitigate, and report events.</p> <ul> <li> <p>Sum - Use the total traffic across the group. This is a good choice for most cases. Examples include Elastic IP addresses for EC2 instances that scale manually or automatically.</p> </li> <li> <p>Mean - Use the average of the traffic across the group. This is a good choice for resources that share traffic uniformly. Examples include accelerators and load balancers.</p> </li> <li> <p>Max - Use the highest traffic from each resource. This is useful for resources that don&#39;t share traffic and for resources that share that traffic in a non-uniform way. Examples include CloudFront distributions and origin resources for CloudFront distributions.</p> </li> </ul></p>
+    #[serde(rename = "Aggregation")]
+    pub aggregation: String,
+    /// <p>The Amazon Resource Names (ARNs) of the resources to include in the protection group. You must set this when you set <code>Pattern</code> to <code>ARBITRARY</code> and you must not set it for any other <code>Pattern</code> setting. </p>
+    #[serde(rename = "Members")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub members: Option<Vec<String>>,
+    /// <p>The criteria to use to choose the protected resources for inclusion in the group. You can include all resources that have protections, provide a list of resource Amazon Resource Names (ARNs), or include all resources of a specified resource type. </p>
+    #[serde(rename = "Pattern")]
+    pub pattern: String,
+    /// <p>The name of the protection group. You use this to identify the protection group in lists and to manage the protection group, for example to update, delete, or describe it. </p>
+    #[serde(rename = "ProtectionGroupId")]
+    pub protection_group_id: String,
+    /// <p>The resource type to include in the protection group. All protected resources of this type are included in the protection group. Newly protected resources of this type are automatically added to the group. You must set this when you set <code>Pattern</code> to <code>BY_RESOURCE_TYPE</code> and you must not set it for any other <code>Pattern</code> setting. </p>
+    #[serde(rename = "ResourceType")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub resource_type: Option<String>,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct CreateProtectionGroupResponse {}
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
@@ -241,6 +307,18 @@ pub struct CreateSubscriptionRequest {}
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateSubscriptionResponse {}
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct DeleteProtectionGroupRequest {
+    /// <p>The name of the protection group. You use this to identify the protection group in lists and to manage the protection group, for example to update, delete, or describe it. </p>
+    #[serde(rename = "ProtectionGroupId")]
+    pub protection_group_id: String,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct DeleteProtectionGroupResponse {}
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
@@ -281,6 +359,20 @@ pub struct DescribeAttackResponse {
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct DescribeAttackStatisticsRequest {}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct DescribeAttackStatisticsResponse {
+    /// <p>The data that describes the attacks detected during the time period.</p>
+    #[serde(rename = "DataItems")]
+    pub data_items: Vec<AttackStatisticsDataItem>,
+    #[serde(rename = "TimeRange")]
+    pub time_range: TimeRange,
+}
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeDRTAccessRequest {}
 
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
@@ -307,6 +399,22 @@ pub struct DescribeEmergencyContactSettingsResponse {
     #[serde(rename = "EmergencyContactList")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub emergency_contact_list: Option<Vec<EmergencyContact>>,
+}
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct DescribeProtectionGroupRequest {
+    /// <p>The name of the protection group. You use this to identify the protection group in lists and to manage the protection group, for example to update, delete, or describe it. </p>
+    #[serde(rename = "ProtectionGroupId")]
+    pub protection_group_id: String,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct DescribeProtectionGroupResponse {
+    /// <p>A grouping of protected resources that you and AWS Shield Advanced can monitor as a collective. This resource grouping improves the accuracy of detection and reduces false positives. </p>
+    #[serde(rename = "ProtectionGroup")]
+    pub protection_group: ProtectionGroup,
 }
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
@@ -444,7 +552,7 @@ pub struct ListAttacksRequest {
     #[serde(rename = "EndTime")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub end_time: Option<TimeRange>,
-    /// <p>The maximum number of <a>AttackSummary</a> objects to be returned. If this is left blank, the first 20 results will be returned.</p> <p>This is a maximum value; it is possible that AWS WAF will return the results in smaller batches. That is, the number of <a>AttackSummary</a> objects returned could be less than <code>MaxResults</code>, even if there are still more <a>AttackSummary</a> objects yet to return. If there are more <a>AttackSummary</a> objects to return, AWS WAF will always also return a <code>NextToken</code>.</p>
+    /// <p>The maximum number of <a>AttackSummary</a> objects to return. If you leave this blank, Shield Advanced returns the first 20 results.</p> <p>This is a maximum value. Shield Advanced might return the results in smaller batches. That is, the number of objects returned could be less than <code>MaxResults</code>, even if there are still more objects yet to return. If there are more objects to return, Shield Advanced returns a value in <code>NextToken</code> that you can use in your next request, to get the next batch of objects.</p>
     #[serde(rename = "MaxResults")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub max_results: Option<i64>,
@@ -469,7 +577,7 @@ pub struct ListAttacksResponse {
     #[serde(rename = "AttackSummaries")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub attack_summaries: Option<Vec<AttackSummary>>,
-    /// <p>The token returned by a previous call to indicate that there is more data available. If not null, more results are available. Pass this value for the <code>NextMarker</code> parameter in a subsequent call to <code>ListAttacks</code> to retrieve the next set of items.</p> <p>AWS WAF might return the list of <a>AttackSummary</a> objects in batches smaller than the number specified by MaxResults. If there are more <a>AttackSummary</a> objects to return, AWS WAF will always also return a <code>NextToken</code>.</p>
+    /// <p>The token returned by a previous call to indicate that there is more data available. If not null, more results are available. Pass this value for the <code>NextMarker</code> parameter in a subsequent call to <code>ListAttacks</code> to retrieve the next set of items.</p> <p>Shield Advanced might return the list of <a>AttackSummary</a> objects in batches smaller than the number specified by MaxResults. If there are more attack summary objects to return, Shield Advanced will always also return a <code>NextToken</code>.</p>
     #[serde(rename = "NextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
@@ -477,8 +585,33 @@ pub struct ListAttacksResponse {
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct ListProtectionGroupsRequest {
+    /// <p>The maximum number of <a>ProtectionGroup</a> objects to return. If you leave this blank, Shield Advanced returns the first 20 results.</p> <p>This is a maximum value. Shield Advanced might return the results in smaller batches. That is, the number of objects returned could be less than <code>MaxResults</code>, even if there are still more objects yet to return. If there are more objects to return, Shield Advanced returns a value in <code>NextToken</code> that you can use in your next request, to get the next batch of objects.</p>
+    #[serde(rename = "MaxResults")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub max_results: Option<i64>,
+    /// <p>The next token value from a previous call to <code>ListProtectionGroups</code>. Pass null if this is the first call.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct ListProtectionGroupsResponse {
+    /// <p>If you specify a value for <code>MaxResults</code> and you have more protection groups than the value of MaxResults, AWS Shield Advanced returns this token that you can use in your next request, to get the next batch of objects. </p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+    /// <p><p/></p>
+    #[serde(rename = "ProtectionGroups")]
+    pub protection_groups: Vec<ProtectionGroup>,
+}
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListProtectionsRequest {
-    /// <p>The maximum number of <a>Protection</a> objects to be returned. If this is left blank the first 20 results will be returned.</p> <p>This is a maximum value; it is possible that AWS WAF will return the results in smaller batches. That is, the number of <a>Protection</a> objects returned could be less than <code>MaxResults</code>, even if there are still more <a>Protection</a> objects yet to return. If there are more <a>Protection</a> objects to return, AWS WAF will always also return a <code>NextToken</code>.</p>
+    /// <p>The maximum number of <a>Protection</a> objects to return. If you leave this blank, Shield Advanced returns the first 20 results.</p> <p>This is a maximum value. Shield Advanced might return the results in smaller batches. That is, the number of objects returned could be less than <code>MaxResults</code>, even if there are still more objects yet to return. If there are more objects to return, Shield Advanced returns a value in <code>NextToken</code> that you can use in your next request, to get the next batch of objects.</p>
     #[serde(rename = "MaxResults")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub max_results: Option<i64>,
@@ -491,7 +624,7 @@ pub struct ListProtectionsRequest {
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListProtectionsResponse {
-    /// <p>If you specify a value for <code>MaxResults</code> and you have more Protections than the value of MaxResults, AWS Shield Advanced returns a NextToken value in the response that allows you to list another group of Protections. For the second and subsequent ListProtections requests, specify the value of NextToken from the previous response to get information about another batch of Protections.</p> <p>AWS WAF might return the list of <a>Protection</a> objects in batches smaller than the number specified by MaxResults. If there are more <a>Protection</a> objects to return, AWS WAF will always also return a <code>NextToken</code>.</p>
+    /// <p>If you specify a value for <code>MaxResults</code> and you have more Protections than the value of MaxResults, AWS Shield Advanced returns a NextToken value in the response that allows you to list another group of Protections. For the second and subsequent ListProtections requests, specify the value of NextToken from the previous response to get information about another batch of Protections.</p> <p>Shield Advanced might return the list of <a>Protection</a> objects in batches smaller than the number specified by MaxResults. If there are more <a>Protection</a> objects to return, Shield Advanced will always also return a <code>NextToken</code>.</p>
     #[serde(rename = "NextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
@@ -499,6 +632,34 @@ pub struct ListProtectionsResponse {
     #[serde(rename = "Protections")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub protections: Option<Vec<Protection>>,
+}
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct ListResourcesInProtectionGroupRequest {
+    /// <p>The maximum number of resource ARN objects to return. If you leave this blank, Shield Advanced returns the first 20 results.</p> <p>This is a maximum value. Shield Advanced might return the results in smaller batches. That is, the number of objects returned could be less than <code>MaxResults</code>, even if there are still more objects yet to return. If there are more objects to return, Shield Advanced returns a value in <code>NextToken</code> that you can use in your next request, to get the next batch of objects.</p>
+    #[serde(rename = "MaxResults")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub max_results: Option<i64>,
+    /// <p>The next token value from a previous call to <code>ListResourcesInProtectionGroup</code>. Pass null if this is the first call.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+    /// <p>The name of the protection group. You use this to identify the protection group in lists and to manage the protection group, for example to update, delete, or describe it. </p>
+    #[serde(rename = "ProtectionGroupId")]
+    pub protection_group_id: String,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct ListResourcesInProtectionGroupResponse {
+    /// <p>If you specify a value for <code>MaxResults</code> and you have more resources in the protection group than the value of MaxResults, AWS Shield Advanced returns this token that you can use in your next request, to get the next batch of objects. </p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+    /// <p>The Amazon Resource Names (ARNs) of the resources that are included in the protection group.</p>
+    #[serde(rename = "ResourceArns")]
+    pub resource_arns: Vec<String>,
 }
 
 /// <p>The mitigation applied to a DDoS attack.</p>
@@ -523,7 +684,7 @@ pub struct Protection {
     #[serde(rename = "Id")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub id: Option<String>,
-    /// <p>The friendly name of the protection. For example, <code>My CloudFront distributions</code>.</p>
+    /// <p>The name of the protection. For example, <code>My CloudFront distributions</code>.</p>
     #[serde(rename = "Name")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub name: Option<String>,
@@ -531,6 +692,67 @@ pub struct Protection {
     #[serde(rename = "ResourceArn")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub resource_arn: Option<String>,
+}
+
+/// <p>A grouping of protected resources that you and AWS Shield Advanced can monitor as a collective. This resource grouping improves the accuracy of detection and reduces false positives. </p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct ProtectionGroup {
+    /// <p><p>Defines how AWS Shield combines resource data for the group in order to detect, mitigate, and report events.</p> <ul> <li> <p>Sum - Use the total traffic across the group. This is a good choice for most cases. Examples include Elastic IP addresses for EC2 instances that scale manually or automatically.</p> </li> <li> <p>Mean - Use the average of the traffic across the group. This is a good choice for resources that share traffic uniformly. Examples include accelerators and load balancers.</p> </li> <li> <p>Max - Use the highest traffic from each resource. This is useful for resources that don&#39;t share traffic and for resources that share that traffic in a non-uniform way. Examples include CloudFront distributions and origin resources for CloudFront distributions.</p> </li> </ul></p>
+    #[serde(rename = "Aggregation")]
+    pub aggregation: String,
+    /// <p>The Amazon Resource Names (ARNs) of the resources to include in the protection group. You must set this when you set <code>Pattern</code> to <code>ARBITRARY</code> and you must not set it for any other <code>Pattern</code> setting. </p>
+    #[serde(rename = "Members")]
+    pub members: Vec<String>,
+    /// <p>The criteria to use to choose the protected resources for inclusion in the group. You can include all resources that have protections, provide a list of resource Amazon Resource Names (ARNs), or include all resources of a specified resource type.</p>
+    #[serde(rename = "Pattern")]
+    pub pattern: String,
+    /// <p>The name of the protection group. You use this to identify the protection group in lists and to manage the protection group, for example to update, delete, or describe it. </p>
+    #[serde(rename = "ProtectionGroupId")]
+    pub protection_group_id: String,
+    /// <p>The resource type to include in the protection group. All protected resources of this type are included in the protection group. You must set this when you set <code>Pattern</code> to <code>BY_RESOURCE_TYPE</code> and you must not set it for any other <code>Pattern</code> setting. </p>
+    #[serde(rename = "ResourceType")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub resource_type: Option<String>,
+}
+
+/// <p>Limits settings on protection groups with arbitrary pattern type. </p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct ProtectionGroupArbitraryPatternLimits {
+    /// <p>The maximum number of resources you can specify for a single arbitrary pattern in a protection group.</p>
+    #[serde(rename = "MaxMembers")]
+    pub max_members: i64,
+}
+
+/// <p>Limits settings on protection groups for your subscription. </p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct ProtectionGroupLimits {
+    /// <p>The maximum number of protection groups that you can have at one time. </p>
+    #[serde(rename = "MaxProtectionGroups")]
+    pub max_protection_groups: i64,
+    /// <p>Limits settings by pattern type in the protection groups for your subscription. </p>
+    #[serde(rename = "PatternTypeLimits")]
+    pub pattern_type_limits: ProtectionGroupPatternTypeLimits,
+}
+
+/// <p>Limits settings by pattern type in the protection groups for your subscription. </p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct ProtectionGroupPatternTypeLimits {
+    /// <p>Limits settings on protection groups with arbitrary pattern type. </p>
+    #[serde(rename = "ArbitraryPatternLimits")]
+    pub arbitrary_pattern_limits: ProtectionGroupArbitraryPatternLimits,
+}
+
+/// <p>Limits settings on protections for your subscription. </p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct ProtectionLimits {
+    /// <p>The maximum number of resource types that you can specify in a protection.</p>
+    #[serde(rename = "ProtectedResourceTypeLimits")]
+    pub protected_resource_type_limits: Vec<Limit>,
 }
 
 /// <p>The attack information for the specified SubResource.</p>
@@ -579,10 +801,25 @@ pub struct Subscription {
     #[serde(rename = "StartTime")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub start_time: Option<f64>,
+    /// <p>Limits settings for your subscription. </p>
+    #[serde(rename = "SubscriptionLimits")]
+    pub subscription_limits: SubscriptionLimits,
     /// <p>The length, in seconds, of the AWS Shield Advanced subscription for the account.</p>
     #[serde(rename = "TimeCommitmentInSeconds")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub time_commitment_in_seconds: Option<i64>,
+}
+
+/// <p>Limits settings for your subscription. </p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct SubscriptionLimits {
+    /// <p>Limits settings on protection groups for your subscription. </p>
+    #[serde(rename = "ProtectionGroupLimits")]
+    pub protection_group_limits: ProtectionGroupLimits,
+    /// <p>Limits settings on protections for your subscription. </p>
+    #[serde(rename = "ProtectionLimits")]
+    pub protection_limits: ProtectionLimits,
 }
 
 /// <p>A summary of information about the attack.</p>
@@ -628,9 +865,8 @@ pub struct SummarizedCounter {
     pub unit: Option<String>,
 }
 
-/// <p>The time range.</p>
-#[derive(Clone, Debug, Default, PartialEq, Serialize)]
-#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+/// <p>The time range. </p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct TimeRange {
     /// <p>The start time, in Unix time in seconds. For more information see <a href="http://docs.aws.amazon.com/cli/latest/userguide/cli-using-param.html#parameter-types">timestamp</a>.</p>
     #[serde(rename = "FromInclusive")]
@@ -657,6 +893,32 @@ pub struct UpdateEmergencyContactSettingsResponse {}
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct UpdateProtectionGroupRequest {
+    /// <p><p>Defines how AWS Shield combines resource data for the group in order to detect, mitigate, and report events.</p> <ul> <li> <p>Sum - Use the total traffic across the group. This is a good choice for most cases. Examples include Elastic IP addresses for EC2 instances that scale manually or automatically.</p> </li> <li> <p>Mean - Use the average of the traffic across the group. This is a good choice for resources that share traffic uniformly. Examples include accelerators and load balancers.</p> </li> <li> <p>Max - Use the highest traffic from each resource. This is useful for resources that don&#39;t share traffic and for resources that share that traffic in a non-uniform way. Examples include CloudFront distributions and origin resources for CloudFront distributions.</p> </li> </ul></p>
+    #[serde(rename = "Aggregation")]
+    pub aggregation: String,
+    /// <p>The Amazon Resource Names (ARNs) of the resources to include in the protection group. You must set this when you set <code>Pattern</code> to <code>ARBITRARY</code> and you must not set it for any other <code>Pattern</code> setting. </p>
+    #[serde(rename = "Members")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub members: Option<Vec<String>>,
+    /// <p>The criteria to use to choose the protected resources for inclusion in the group. You can include all resources that have protections, provide a list of resource Amazon Resource Names (ARNs), or include all resources of a specified resource type.</p>
+    #[serde(rename = "Pattern")]
+    pub pattern: String,
+    /// <p>The name of the protection group. You use this to identify the protection group in lists and to manage the protection group, for example to update, delete, or describe it. </p>
+    #[serde(rename = "ProtectionGroupId")]
+    pub protection_group_id: String,
+    /// <p>The resource type to include in the protection group. All protected resources of this type are included in the protection group. You must set this when you set <code>Pattern</code> to <code>BY_RESOURCE_TYPE</code> and you must not set it for any other <code>Pattern</code> setting. </p>
+    #[serde(rename = "ResourceType")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub resource_type: Option<String>,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct UpdateProtectionGroupResponse {}
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateSubscriptionRequest {
     /// <p>When you initally create a subscription, <code>AutoRenew</code> is set to <code>ENABLED</code>. If <code>ENABLED</code>, the subscription will be automatically renewed at the end of the existing subscription period. You can change this by submitting an <code>UpdateSubscription</code> request. If the <code>UpdateSubscription</code> request does not included a value for <code>AutoRenew</code>, the existing value for <code>AutoRenew</code> remains unchanged.</p>
     #[serde(rename = "AutoRenew")]
@@ -668,6 +930,15 @@ pub struct UpdateSubscriptionRequest {
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateSubscriptionResponse {}
 
+/// <p>Provides information about a particular parameter passed inside a request that resulted in an exception.</p>
+#[derive(Clone, Debug, Default, PartialEq)]
+pub struct ValidationExceptionField {
+    /// <p>The message describing why the parameter failed validation.</p>
+    pub message: String,
+    /// <p>The name of the parameter that failed validation.</p>
+    pub name: String,
+}
+
 /// Errors returned by AssociateDRTLogBucket
 #[derive(Debug, PartialEq)]
 pub enum AssociateDRTLogBucketError {
@@ -677,7 +948,7 @@ pub enum AssociateDRTLogBucketError {
     InternalError(String),
     /// <p>Exception that indicates that the operation would not cause any change to occur.</p>
     InvalidOperation(String),
-    /// <p>Exception that indicates that the parameters passed to the API are invalid. </p>
+    /// <p>Exception that indicates that the parameters passed to the API are invalid. If available, this exception includes details in additional properties. </p>
     InvalidParameter(String),
     /// <p>Exception that indicates that the operation would exceed a limit.</p> <p> <code>Type</code> is the type of limit that would be exceeded.</p> <p> <code>Limit</code> is the threshold that would be exceeded.</p>
     LimitsExceeded(String),
@@ -685,7 +956,7 @@ pub enum AssociateDRTLogBucketError {
     NoAssociatedRole(String),
     /// <p>Exception that indicates that the resource state has been modified by another client. Retrieve the resource and then retry your request.</p>
     OptimisticLock(String),
-    /// <p>Exception indicating the specified resource does not exist.</p>
+    /// <p>Exception indicating the specified resource does not exist. If available, this exception includes details in additional properties. </p>
     ResourceNotFound(String),
 }
 
@@ -765,11 +1036,11 @@ pub enum AssociateDRTRoleError {
     InternalError(String),
     /// <p>Exception that indicates that the operation would not cause any change to occur.</p>
     InvalidOperation(String),
-    /// <p>Exception that indicates that the parameters passed to the API are invalid. </p>
+    /// <p>Exception that indicates that the parameters passed to the API are invalid. If available, this exception includes details in additional properties. </p>
     InvalidParameter(String),
     /// <p>Exception that indicates that the resource state has been modified by another client. Retrieve the resource and then retry your request.</p>
     OptimisticLock(String),
-    /// <p>Exception indicating the specified resource does not exist.</p>
+    /// <p>Exception indicating the specified resource does not exist. If available, this exception includes details in additional properties. </p>
     ResourceNotFound(String),
 }
 
@@ -823,13 +1094,13 @@ impl Error for AssociateDRTRoleError {}
 pub enum AssociateHealthCheckError {
     /// <p>Exception that indicates that a problem occurred with the service infrastructure. You can retry the request.</p>
     InternalError(String),
-    /// <p>Exception that indicates that the parameters passed to the API are invalid. </p>
+    /// <p>Exception that indicates that the parameters passed to the API are invalid. If available, this exception includes details in additional properties. </p>
     InvalidParameter(String),
     /// <p>Exception that indicates that the operation would exceed a limit.</p> <p> <code>Type</code> is the type of limit that would be exceeded.</p> <p> <code>Limit</code> is the threshold that would be exceeded.</p>
     LimitsExceeded(String),
     /// <p>Exception that indicates that the resource state has been modified by another client. Retrieve the resource and then retry your request.</p>
     OptimisticLock(String),
-    /// <p>Exception indicating the specified resource does not exist.</p>
+    /// <p>Exception indicating the specified resource does not exist. If available, this exception includes details in additional properties. </p>
     ResourceNotFound(String),
 }
 
@@ -883,11 +1154,11 @@ pub enum AssociateProactiveEngagementDetailsError {
     InternalError(String),
     /// <p>Exception that indicates that the operation would not cause any change to occur.</p>
     InvalidOperation(String),
-    /// <p>Exception that indicates that the parameters passed to the API are invalid. </p>
+    /// <p>Exception that indicates that the parameters passed to the API are invalid. If available, this exception includes details in additional properties. </p>
     InvalidParameter(String),
     /// <p>Exception that indicates that the resource state has been modified by another client. Retrieve the resource and then retry your request.</p>
     OptimisticLock(String),
-    /// <p>Exception indicating the specified resource does not exist.</p>
+    /// <p>Exception indicating the specified resource does not exist. If available, this exception includes details in additional properties. </p>
     ResourceNotFound(String),
 }
 
@@ -965,9 +1236,9 @@ pub enum CreateProtectionError {
     LimitsExceeded(String),
     /// <p>Exception that indicates that the resource state has been modified by another client. Retrieve the resource and then retry your request.</p>
     OptimisticLock(String),
-    /// <p>Exception indicating the specified resource already exists.</p>
+    /// <p>Exception indicating the specified resource already exists. If available, this exception includes details in additional properties. </p>
     ResourceAlreadyExists(String),
-    /// <p>Exception indicating the specified resource does not exist.</p>
+    /// <p>Exception indicating the specified resource does not exist. If available, this exception includes details in additional properties. </p>
     ResourceNotFound(String),
 }
 
@@ -1020,12 +1291,82 @@ impl fmt::Display for CreateProtectionError {
     }
 }
 impl Error for CreateProtectionError {}
+/// Errors returned by CreateProtectionGroup
+#[derive(Debug, PartialEq)]
+pub enum CreateProtectionGroupError {
+    /// <p>Exception that indicates that a problem occurred with the service infrastructure. You can retry the request.</p>
+    InternalError(String),
+    /// <p>Exception that indicates that the parameters passed to the API are invalid. If available, this exception includes details in additional properties. </p>
+    InvalidParameter(String),
+    /// <p>Exception that indicates that the operation would exceed a limit.</p> <p> <code>Type</code> is the type of limit that would be exceeded.</p> <p> <code>Limit</code> is the threshold that would be exceeded.</p>
+    LimitsExceeded(String),
+    /// <p>Exception that indicates that the resource state has been modified by another client. Retrieve the resource and then retry your request.</p>
+    OptimisticLock(String),
+    /// <p>Exception indicating the specified resource already exists. If available, this exception includes details in additional properties. </p>
+    ResourceAlreadyExists(String),
+    /// <p>Exception indicating the specified resource does not exist. If available, this exception includes details in additional properties. </p>
+    ResourceNotFound(String),
+}
+
+impl CreateProtectionGroupError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateProtectionGroupError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "InternalErrorException" => {
+                    return RusotoError::Service(CreateProtectionGroupError::InternalError(err.msg))
+                }
+                "InvalidParameterException" => {
+                    return RusotoError::Service(CreateProtectionGroupError::InvalidParameter(
+                        err.msg,
+                    ))
+                }
+                "LimitsExceededException" => {
+                    return RusotoError::Service(CreateProtectionGroupError::LimitsExceeded(
+                        err.msg,
+                    ))
+                }
+                "OptimisticLockException" => {
+                    return RusotoError::Service(CreateProtectionGroupError::OptimisticLock(
+                        err.msg,
+                    ))
+                }
+                "ResourceAlreadyExistsException" => {
+                    return RusotoError::Service(CreateProtectionGroupError::ResourceAlreadyExists(
+                        err.msg,
+                    ))
+                }
+                "ResourceNotFoundException" => {
+                    return RusotoError::Service(CreateProtectionGroupError::ResourceNotFound(
+                        err.msg,
+                    ))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for CreateProtectionGroupError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            CreateProtectionGroupError::InternalError(ref cause) => write!(f, "{}", cause),
+            CreateProtectionGroupError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            CreateProtectionGroupError::LimitsExceeded(ref cause) => write!(f, "{}", cause),
+            CreateProtectionGroupError::OptimisticLock(ref cause) => write!(f, "{}", cause),
+            CreateProtectionGroupError::ResourceAlreadyExists(ref cause) => write!(f, "{}", cause),
+            CreateProtectionGroupError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for CreateProtectionGroupError {}
 /// Errors returned by CreateSubscription
 #[derive(Debug, PartialEq)]
 pub enum CreateSubscriptionError {
     /// <p>Exception that indicates that a problem occurred with the service infrastructure. You can retry the request.</p>
     InternalError(String),
-    /// <p>Exception indicating the specified resource already exists.</p>
+    /// <p>Exception indicating the specified resource already exists. If available, this exception includes details in additional properties. </p>
     ResourceAlreadyExists(String),
 }
 
@@ -1065,7 +1406,7 @@ pub enum DeleteProtectionError {
     InternalError(String),
     /// <p>Exception that indicates that the resource state has been modified by another client. Retrieve the resource and then retry your request.</p>
     OptimisticLock(String),
-    /// <p>Exception indicating the specified resource does not exist.</p>
+    /// <p>Exception indicating the specified resource does not exist. If available, this exception includes details in additional properties. </p>
     ResourceNotFound(String),
 }
 
@@ -1100,6 +1441,52 @@ impl fmt::Display for DeleteProtectionError {
     }
 }
 impl Error for DeleteProtectionError {}
+/// Errors returned by DeleteProtectionGroup
+#[derive(Debug, PartialEq)]
+pub enum DeleteProtectionGroupError {
+    /// <p>Exception that indicates that a problem occurred with the service infrastructure. You can retry the request.</p>
+    InternalError(String),
+    /// <p>Exception that indicates that the resource state has been modified by another client. Retrieve the resource and then retry your request.</p>
+    OptimisticLock(String),
+    /// <p>Exception indicating the specified resource does not exist. If available, this exception includes details in additional properties. </p>
+    ResourceNotFound(String),
+}
+
+impl DeleteProtectionGroupError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteProtectionGroupError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "InternalErrorException" => {
+                    return RusotoError::Service(DeleteProtectionGroupError::InternalError(err.msg))
+                }
+                "OptimisticLockException" => {
+                    return RusotoError::Service(DeleteProtectionGroupError::OptimisticLock(
+                        err.msg,
+                    ))
+                }
+                "ResourceNotFoundException" => {
+                    return RusotoError::Service(DeleteProtectionGroupError::ResourceNotFound(
+                        err.msg,
+                    ))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for DeleteProtectionGroupError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            DeleteProtectionGroupError::InternalError(ref cause) => write!(f, "{}", cause),
+            DeleteProtectionGroupError::OptimisticLock(ref cause) => write!(f, "{}", cause),
+            DeleteProtectionGroupError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for DeleteProtectionGroupError {}
 /// Errors returned by DeleteSubscription
 #[derive(Debug, PartialEq)]
 pub enum DeleteSubscriptionError {
@@ -1107,7 +1494,7 @@ pub enum DeleteSubscriptionError {
     InternalError(String),
     /// <p>You are trying to update a subscription that has not yet completed the 1-year commitment. You can change the <code>AutoRenew</code> parameter during the last 30 days of your subscription. This exception indicates that you are attempting to change <code>AutoRenew</code> prior to that period.</p>
     LockedSubscription(String),
-    /// <p>Exception indicating the specified resource does not exist.</p>
+    /// <p>Exception indicating the specified resource does not exist. If available, this exception includes details in additional properties. </p>
     ResourceNotFound(String),
 }
 
@@ -1180,12 +1567,44 @@ impl fmt::Display for DescribeAttackError {
     }
 }
 impl Error for DescribeAttackError {}
+/// Errors returned by DescribeAttackStatistics
+#[derive(Debug, PartialEq)]
+pub enum DescribeAttackStatisticsError {
+    /// <p>Exception that indicates that a problem occurred with the service infrastructure. You can retry the request.</p>
+    InternalError(String),
+}
+
+impl DescribeAttackStatisticsError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeAttackStatisticsError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "InternalErrorException" => {
+                    return RusotoError::Service(DescribeAttackStatisticsError::InternalError(
+                        err.msg,
+                    ))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for DescribeAttackStatisticsError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            DescribeAttackStatisticsError::InternalError(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for DescribeAttackStatisticsError {}
 /// Errors returned by DescribeDRTAccess
 #[derive(Debug, PartialEq)]
 pub enum DescribeDRTAccessError {
     /// <p>Exception that indicates that a problem occurred with the service infrastructure. You can retry the request.</p>
     InternalError(String),
-    /// <p>Exception indicating the specified resource does not exist.</p>
+    /// <p>Exception indicating the specified resource does not exist. If available, this exception includes details in additional properties. </p>
     ResourceNotFound(String),
 }
 
@@ -1221,7 +1640,7 @@ impl Error for DescribeDRTAccessError {}
 pub enum DescribeEmergencyContactSettingsError {
     /// <p>Exception that indicates that a problem occurred with the service infrastructure. You can retry the request.</p>
     InternalError(String),
-    /// <p>Exception indicating the specified resource does not exist.</p>
+    /// <p>Exception indicating the specified resource does not exist. If available, this exception includes details in additional properties. </p>
     ResourceNotFound(String),
 }
 
@@ -1267,9 +1686,9 @@ impl Error for DescribeEmergencyContactSettingsError {}
 pub enum DescribeProtectionError {
     /// <p>Exception that indicates that a problem occurred with the service infrastructure. You can retry the request.</p>
     InternalError(String),
-    /// <p>Exception that indicates that the parameters passed to the API are invalid. </p>
+    /// <p>Exception that indicates that the parameters passed to the API are invalid. If available, this exception includes details in additional properties. </p>
     InvalidParameter(String),
-    /// <p>Exception indicating the specified resource does not exist.</p>
+    /// <p>Exception indicating the specified resource does not exist. If available, this exception includes details in additional properties. </p>
     ResourceNotFound(String),
 }
 
@@ -1304,12 +1723,52 @@ impl fmt::Display for DescribeProtectionError {
     }
 }
 impl Error for DescribeProtectionError {}
+/// Errors returned by DescribeProtectionGroup
+#[derive(Debug, PartialEq)]
+pub enum DescribeProtectionGroupError {
+    /// <p>Exception that indicates that a problem occurred with the service infrastructure. You can retry the request.</p>
+    InternalError(String),
+    /// <p>Exception indicating the specified resource does not exist. If available, this exception includes details in additional properties. </p>
+    ResourceNotFound(String),
+}
+
+impl DescribeProtectionGroupError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeProtectionGroupError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "InternalErrorException" => {
+                    return RusotoError::Service(DescribeProtectionGroupError::InternalError(
+                        err.msg,
+                    ))
+                }
+                "ResourceNotFoundException" => {
+                    return RusotoError::Service(DescribeProtectionGroupError::ResourceNotFound(
+                        err.msg,
+                    ))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for DescribeProtectionGroupError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            DescribeProtectionGroupError::InternalError(ref cause) => write!(f, "{}", cause),
+            DescribeProtectionGroupError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for DescribeProtectionGroupError {}
 /// Errors returned by DescribeSubscription
 #[derive(Debug, PartialEq)]
 pub enum DescribeSubscriptionError {
     /// <p>Exception that indicates that a problem occurred with the service infrastructure. You can retry the request.</p>
     InternalError(String),
-    /// <p>Exception indicating the specified resource does not exist.</p>
+    /// <p>Exception indicating the specified resource does not exist. If available, this exception includes details in additional properties. </p>
     ResourceNotFound(String),
 }
 
@@ -1349,11 +1808,11 @@ pub enum DisableProactiveEngagementError {
     InternalError(String),
     /// <p>Exception that indicates that the operation would not cause any change to occur.</p>
     InvalidOperation(String),
-    /// <p>Exception that indicates that the parameters passed to the API are invalid. </p>
+    /// <p>Exception that indicates that the parameters passed to the API are invalid. If available, this exception includes details in additional properties. </p>
     InvalidParameter(String),
     /// <p>Exception that indicates that the resource state has been modified by another client. Retrieve the resource and then retry your request.</p>
     OptimisticLock(String),
-    /// <p>Exception indicating the specified resource does not exist.</p>
+    /// <p>Exception indicating the specified resource does not exist. If available, this exception includes details in additional properties. </p>
     ResourceNotFound(String),
 }
 
@@ -1421,7 +1880,7 @@ pub enum DisassociateDRTLogBucketError {
     NoAssociatedRole(String),
     /// <p>Exception that indicates that the resource state has been modified by another client. Retrieve the resource and then retry your request.</p>
     OptimisticLock(String),
-    /// <p>Exception indicating the specified resource does not exist.</p>
+    /// <p>Exception indicating the specified resource does not exist. If available, this exception includes details in additional properties. </p>
     ResourceNotFound(String),
 }
 
@@ -1491,7 +1950,7 @@ pub enum DisassociateDRTRoleError {
     InvalidOperation(String),
     /// <p>Exception that indicates that the resource state has been modified by another client. Retrieve the resource and then retry your request.</p>
     OptimisticLock(String),
-    /// <p>Exception indicating the specified resource does not exist.</p>
+    /// <p>Exception indicating the specified resource does not exist. If available, this exception includes details in additional properties. </p>
     ResourceNotFound(String),
 }
 
@@ -1539,11 +1998,11 @@ impl Error for DisassociateDRTRoleError {}
 pub enum DisassociateHealthCheckError {
     /// <p>Exception that indicates that a problem occurred with the service infrastructure. You can retry the request.</p>
     InternalError(String),
-    /// <p>Exception that indicates that the parameters passed to the API are invalid. </p>
+    /// <p>Exception that indicates that the parameters passed to the API are invalid. If available, this exception includes details in additional properties. </p>
     InvalidParameter(String),
     /// <p>Exception that indicates that the resource state has been modified by another client. Retrieve the resource and then retry your request.</p>
     OptimisticLock(String),
-    /// <p>Exception indicating the specified resource does not exist.</p>
+    /// <p>Exception indicating the specified resource does not exist. If available, this exception includes details in additional properties. </p>
     ResourceNotFound(String),
 }
 
@@ -1597,11 +2056,11 @@ pub enum EnableProactiveEngagementError {
     InternalError(String),
     /// <p>Exception that indicates that the operation would not cause any change to occur.</p>
     InvalidOperation(String),
-    /// <p>Exception that indicates that the parameters passed to the API are invalid. </p>
+    /// <p>Exception that indicates that the parameters passed to the API are invalid. If available, this exception includes details in additional properties. </p>
     InvalidParameter(String),
     /// <p>Exception that indicates that the resource state has been modified by another client. Retrieve the resource and then retry your request.</p>
     OptimisticLock(String),
-    /// <p>Exception indicating the specified resource does not exist.</p>
+    /// <p>Exception indicating the specified resource does not exist. If available, this exception includes details in additional properties. </p>
     ResourceNotFound(String),
 }
 
@@ -1691,7 +2150,7 @@ pub enum ListAttacksError {
     InternalError(String),
     /// <p>Exception that indicates that the operation would not cause any change to occur.</p>
     InvalidOperation(String),
-    /// <p>Exception that indicates that the parameters passed to the API are invalid. </p>
+    /// <p>Exception that indicates that the parameters passed to the API are invalid. If available, this exception includes details in additional properties. </p>
     InvalidParameter(String),
 }
 
@@ -1726,6 +2185,52 @@ impl fmt::Display for ListAttacksError {
     }
 }
 impl Error for ListAttacksError {}
+/// Errors returned by ListProtectionGroups
+#[derive(Debug, PartialEq)]
+pub enum ListProtectionGroupsError {
+    /// <p>Exception that indicates that a problem occurred with the service infrastructure. You can retry the request.</p>
+    InternalError(String),
+    /// <p>Exception that indicates that the NextToken specified in the request is invalid. Submit the request using the NextToken value that was returned in the response.</p>
+    InvalidPaginationToken(String),
+    /// <p>Exception indicating the specified resource does not exist. If available, this exception includes details in additional properties. </p>
+    ResourceNotFound(String),
+}
+
+impl ListProtectionGroupsError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListProtectionGroupsError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "InternalErrorException" => {
+                    return RusotoError::Service(ListProtectionGroupsError::InternalError(err.msg))
+                }
+                "InvalidPaginationTokenException" => {
+                    return RusotoError::Service(ListProtectionGroupsError::InvalidPaginationToken(
+                        err.msg,
+                    ))
+                }
+                "ResourceNotFoundException" => {
+                    return RusotoError::Service(ListProtectionGroupsError::ResourceNotFound(
+                        err.msg,
+                    ))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for ListProtectionGroupsError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            ListProtectionGroupsError::InternalError(ref cause) => write!(f, "{}", cause),
+            ListProtectionGroupsError::InvalidPaginationToken(ref cause) => write!(f, "{}", cause),
+            ListProtectionGroupsError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for ListProtectionGroupsError {}
 /// Errors returned by ListProtections
 #[derive(Debug, PartialEq)]
 pub enum ListProtectionsError {
@@ -1733,7 +2238,7 @@ pub enum ListProtectionsError {
     InternalError(String),
     /// <p>Exception that indicates that the NextToken specified in the request is invalid. Submit the request using the NextToken value that was returned in the response.</p>
     InvalidPaginationToken(String),
-    /// <p>Exception indicating the specified resource does not exist.</p>
+    /// <p>Exception indicating the specified resource does not exist. If available, this exception includes details in additional properties. </p>
     ResourceNotFound(String),
 }
 
@@ -1770,16 +2275,70 @@ impl fmt::Display for ListProtectionsError {
     }
 }
 impl Error for ListProtectionsError {}
+/// Errors returned by ListResourcesInProtectionGroup
+#[derive(Debug, PartialEq)]
+pub enum ListResourcesInProtectionGroupError {
+    /// <p>Exception that indicates that a problem occurred with the service infrastructure. You can retry the request.</p>
+    InternalError(String),
+    /// <p>Exception that indicates that the NextToken specified in the request is invalid. Submit the request using the NextToken value that was returned in the response.</p>
+    InvalidPaginationToken(String),
+    /// <p>Exception indicating the specified resource does not exist. If available, this exception includes details in additional properties. </p>
+    ResourceNotFound(String),
+}
+
+impl ListResourcesInProtectionGroupError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<ListResourcesInProtectionGroupError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "InternalErrorException" => {
+                    return RusotoError::Service(
+                        ListResourcesInProtectionGroupError::InternalError(err.msg),
+                    )
+                }
+                "InvalidPaginationTokenException" => {
+                    return RusotoError::Service(
+                        ListResourcesInProtectionGroupError::InvalidPaginationToken(err.msg),
+                    )
+                }
+                "ResourceNotFoundException" => {
+                    return RusotoError::Service(
+                        ListResourcesInProtectionGroupError::ResourceNotFound(err.msg),
+                    )
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for ListResourcesInProtectionGroupError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            ListResourcesInProtectionGroupError::InternalError(ref cause) => write!(f, "{}", cause),
+            ListResourcesInProtectionGroupError::InvalidPaginationToken(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            ListResourcesInProtectionGroupError::ResourceNotFound(ref cause) => {
+                write!(f, "{}", cause)
+            }
+        }
+    }
+}
+impl Error for ListResourcesInProtectionGroupError {}
 /// Errors returned by UpdateEmergencyContactSettings
 #[derive(Debug, PartialEq)]
 pub enum UpdateEmergencyContactSettingsError {
     /// <p>Exception that indicates that a problem occurred with the service infrastructure. You can retry the request.</p>
     InternalError(String),
-    /// <p>Exception that indicates that the parameters passed to the API are invalid. </p>
+    /// <p>Exception that indicates that the parameters passed to the API are invalid. If available, this exception includes details in additional properties. </p>
     InvalidParameter(String),
     /// <p>Exception that indicates that the resource state has been modified by another client. Retrieve the resource and then retry your request.</p>
     OptimisticLock(String),
-    /// <p>Exception indicating the specified resource does not exist.</p>
+    /// <p>Exception indicating the specified resource does not exist. If available, this exception includes details in additional properties. </p>
     ResourceNotFound(String),
 }
 
@@ -1834,18 +2393,72 @@ impl fmt::Display for UpdateEmergencyContactSettingsError {
     }
 }
 impl Error for UpdateEmergencyContactSettingsError {}
+/// Errors returned by UpdateProtectionGroup
+#[derive(Debug, PartialEq)]
+pub enum UpdateProtectionGroupError {
+    /// <p>Exception that indicates that a problem occurred with the service infrastructure. You can retry the request.</p>
+    InternalError(String),
+    /// <p>Exception that indicates that the parameters passed to the API are invalid. If available, this exception includes details in additional properties. </p>
+    InvalidParameter(String),
+    /// <p>Exception that indicates that the resource state has been modified by another client. Retrieve the resource and then retry your request.</p>
+    OptimisticLock(String),
+    /// <p>Exception indicating the specified resource does not exist. If available, this exception includes details in additional properties. </p>
+    ResourceNotFound(String),
+}
+
+impl UpdateProtectionGroupError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateProtectionGroupError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "InternalErrorException" => {
+                    return RusotoError::Service(UpdateProtectionGroupError::InternalError(err.msg))
+                }
+                "InvalidParameterException" => {
+                    return RusotoError::Service(UpdateProtectionGroupError::InvalidParameter(
+                        err.msg,
+                    ))
+                }
+                "OptimisticLockException" => {
+                    return RusotoError::Service(UpdateProtectionGroupError::OptimisticLock(
+                        err.msg,
+                    ))
+                }
+                "ResourceNotFoundException" => {
+                    return RusotoError::Service(UpdateProtectionGroupError::ResourceNotFound(
+                        err.msg,
+                    ))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for UpdateProtectionGroupError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            UpdateProtectionGroupError::InternalError(ref cause) => write!(f, "{}", cause),
+            UpdateProtectionGroupError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            UpdateProtectionGroupError::OptimisticLock(ref cause) => write!(f, "{}", cause),
+            UpdateProtectionGroupError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for UpdateProtectionGroupError {}
 /// Errors returned by UpdateSubscription
 #[derive(Debug, PartialEq)]
 pub enum UpdateSubscriptionError {
     /// <p>Exception that indicates that a problem occurred with the service infrastructure. You can retry the request.</p>
     InternalError(String),
-    /// <p>Exception that indicates that the parameters passed to the API are invalid. </p>
+    /// <p>Exception that indicates that the parameters passed to the API are invalid. If available, this exception includes details in additional properties. </p>
     InvalidParameter(String),
     /// <p>You are trying to update a subscription that has not yet completed the 1-year commitment. You can change the <code>AutoRenew</code> parameter during the last 30 days of your subscription. This exception indicates that you are attempting to change <code>AutoRenew</code> prior to that period.</p>
     LockedSubscription(String),
     /// <p>Exception that indicates that the resource state has been modified by another client. Retrieve the resource and then retry your request.</p>
     OptimisticLock(String),
-    /// <p>Exception indicating the specified resource does not exist.</p>
+    /// <p>Exception indicating the specified resource does not exist. If available, this exception includes details in additional properties. </p>
     ResourceNotFound(String),
 }
 
@@ -1926,6 +2539,12 @@ pub trait Shield {
         input: CreateProtectionRequest,
     ) -> Result<CreateProtectionResponse, RusotoError<CreateProtectionError>>;
 
+    /// <p>Creates a grouping of protected resources so they can be handled as a collective. This resource grouping improves the accuracy of detection and reduces false positives. </p>
+    async fn create_protection_group(
+        &self,
+        input: CreateProtectionGroupRequest,
+    ) -> Result<CreateProtectionGroupResponse, RusotoError<CreateProtectionGroupError>>;
+
     /// <p>Activates AWS Shield Advanced for an account.</p> <p>When you initally create a subscription, your subscription is set to be automatically renewed at the end of the existing subscription period. You can change this by submitting an <code>UpdateSubscription</code> request. </p>
     async fn create_subscription(
         &self,
@@ -1937,6 +2556,12 @@ pub trait Shield {
         input: DeleteProtectionRequest,
     ) -> Result<DeleteProtectionResponse, RusotoError<DeleteProtectionError>>;
 
+    /// <p>Removes the specified protection group.</p>
+    async fn delete_protection_group(
+        &self,
+        input: DeleteProtectionGroupRequest,
+    ) -> Result<DeleteProtectionGroupResponse, RusotoError<DeleteProtectionGroupError>>;
+
     /// <p>Removes AWS Shield Advanced from an account. AWS Shield Advanced requires a 1-year subscription commitment. You cannot delete a subscription prior to the completion of that commitment. </p>
     async fn delete_subscription(
         &self,
@@ -1947,6 +2572,11 @@ pub trait Shield {
         &self,
         input: DescribeAttackRequest,
     ) -> Result<DescribeAttackResponse, RusotoError<DescribeAttackError>>;
+
+    /// <p>Provides information about the number and type of attacks AWS Shield has detected in the last year for all resources that belong to your account, regardless of whether you've defined Shield protections for them. This operation is available to Shield customers as well as to Shield Advanced customers.</p> <p>The operation returns data for the time range of midnight UTC, one year ago, to midnight UTC, today. For example, if the current time is <code>2020-10-26 15:39:32 PDT</code>, equal to <code>2020-10-26 22:39:32 UTC</code>, then the time range for the attack data returned is from <code>2019-10-26 00:00:00 UTC</code> to <code>2020-10-26 00:00:00 UTC</code>. </p> <p>The time range indicates the period covered by the attack statistics data items.</p>
+    async fn describe_attack_statistics(
+        &self,
+    ) -> Result<DescribeAttackStatisticsResponse, RusotoError<DescribeAttackStatisticsError>>;
 
     /// <p>Returns the current role and list of Amazon S3 log buckets used by the DDoS Response Team (DRT) to access your AWS account while assisting with attack mitigation.</p>
     async fn describe_drt_access(
@@ -1966,6 +2596,12 @@ pub trait Shield {
         &self,
         input: DescribeProtectionRequest,
     ) -> Result<DescribeProtectionResponse, RusotoError<DescribeProtectionError>>;
+
+    /// <p>Returns the specification for the specified protection group.</p>
+    async fn describe_protection_group(
+        &self,
+        input: DescribeProtectionGroupRequest,
+    ) -> Result<DescribeProtectionGroupResponse, RusotoError<DescribeProtectionGroupError>>;
 
     /// <p>Provides details about the AWS Shield Advanced subscription for an account.</p>
     async fn describe_subscription(
@@ -2010,11 +2646,26 @@ pub trait Shield {
         input: ListAttacksRequest,
     ) -> Result<ListAttacksResponse, RusotoError<ListAttacksError>>;
 
+    /// <p>Retrieves the <a>ProtectionGroup</a> objects for the account.</p>
+    async fn list_protection_groups(
+        &self,
+        input: ListProtectionGroupsRequest,
+    ) -> Result<ListProtectionGroupsResponse, RusotoError<ListProtectionGroupsError>>;
+
     /// <p>Lists all <a>Protection</a> objects for the account.</p>
     async fn list_protections(
         &self,
         input: ListProtectionsRequest,
     ) -> Result<ListProtectionsResponse, RusotoError<ListProtectionsError>>;
+
+    /// <p>Retrieves the resources that are included in the protection group. </p>
+    async fn list_resources_in_protection_group(
+        &self,
+        input: ListResourcesInProtectionGroupRequest,
+    ) -> Result<
+        ListResourcesInProtectionGroupResponse,
+        RusotoError<ListResourcesInProtectionGroupError>,
+    >;
 
     /// <p>Updates the details of the list of email addresses and phone numbers that the DDoS Response Team (DRT) can use to contact you if you have proactive engagement enabled, for escalations to the DRT and to initiate proactive customer support.</p>
     async fn update_emergency_contact_settings(
@@ -2024,6 +2675,12 @@ pub trait Shield {
         UpdateEmergencyContactSettingsResponse,
         RusotoError<UpdateEmergencyContactSettingsError>,
     >;
+
+    /// <p>Updates an existing protection group. A protection group is a grouping of protected resources so they can be handled as a collective. This resource grouping improves the accuracy of detection and reduces false positives. </p>
+    async fn update_protection_group(
+        &self,
+        input: UpdateProtectionGroupRequest,
+    ) -> Result<UpdateProtectionGroupResponse, RusotoError<UpdateProtectionGroupError>>;
 
     /// <p>Updates the details of an existing subscription. Only enter values for parameters you want to change. Empty parameters are not updated.</p>
     async fn update_subscription(
@@ -2173,6 +2830,25 @@ impl Shield for ShieldClient {
         proto::json::ResponsePayload::new(&response).deserialize::<CreateProtectionResponse, _>()
     }
 
+    /// <p>Creates a grouping of protected resources so they can be handled as a collective. This resource grouping improves the accuracy of detection and reduces false positives. </p>
+    async fn create_protection_group(
+        &self,
+        input: CreateProtectionGroupRequest,
+    ) -> Result<CreateProtectionGroupResponse, RusotoError<CreateProtectionGroupError>> {
+        let mut request = self.new_signed_request("POST", "/");
+        request.add_header("x-amz-target", "AWSShield_20160616.CreateProtectionGroup");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        let response = self
+            .sign_and_dispatch(request, CreateProtectionGroupError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<CreateProtectionGroupResponse, _>()
+    }
+
     /// <p>Activates AWS Shield Advanced for an account.</p> <p>When you initally create a subscription, your subscription is set to be automatically renewed at the end of the existing subscription period. You can change this by submitting an <code>UpdateSubscription</code> request. </p>
     async fn create_subscription(
         &self,
@@ -2207,6 +2883,25 @@ impl Shield for ShieldClient {
         proto::json::ResponsePayload::new(&response).deserialize::<DeleteProtectionResponse, _>()
     }
 
+    /// <p>Removes the specified protection group.</p>
+    async fn delete_protection_group(
+        &self,
+        input: DeleteProtectionGroupRequest,
+    ) -> Result<DeleteProtectionGroupResponse, RusotoError<DeleteProtectionGroupError>> {
+        let mut request = self.new_signed_request("POST", "/");
+        request.add_header("x-amz-target", "AWSShield_20160616.DeleteProtectionGroup");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        let response = self
+            .sign_and_dispatch(request, DeleteProtectionGroupError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<DeleteProtectionGroupResponse, _>()
+    }
+
     /// <p>Removes AWS Shield Advanced from an account. AWS Shield Advanced requires a 1-year subscription commitment. You cannot delete a subscription prior to the completion of that commitment. </p>
     async fn delete_subscription(
         &self,
@@ -2239,6 +2934,26 @@ impl Shield for ShieldClient {
         let mut response = response;
         let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         proto::json::ResponsePayload::new(&response).deserialize::<DescribeAttackResponse, _>()
+    }
+
+    /// <p>Provides information about the number and type of attacks AWS Shield has detected in the last year for all resources that belong to your account, regardless of whether you've defined Shield protections for them. This operation is available to Shield customers as well as to Shield Advanced customers.</p> <p>The operation returns data for the time range of midnight UTC, one year ago, to midnight UTC, today. For example, if the current time is <code>2020-10-26 15:39:32 PDT</code>, equal to <code>2020-10-26 22:39:32 UTC</code>, then the time range for the attack data returned is from <code>2019-10-26 00:00:00 UTC</code> to <code>2020-10-26 00:00:00 UTC</code>. </p> <p>The time range indicates the period covered by the attack statistics data items.</p>
+    async fn describe_attack_statistics(
+        &self,
+    ) -> Result<DescribeAttackStatisticsResponse, RusotoError<DescribeAttackStatisticsError>> {
+        let mut request = self.new_signed_request("POST", "/");
+        request.add_header(
+            "x-amz-target",
+            "AWSShield_20160616.DescribeAttackStatistics",
+        );
+        request.set_payload(Some(bytes::Bytes::from_static(b"{}")));
+
+        let response = self
+            .sign_and_dispatch(request, DescribeAttackStatisticsError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<DescribeAttackStatisticsResponse, _>()
     }
 
     /// <p>Returns the current role and list of Amazon S3 log buckets used by the DDoS Response Team (DRT) to access your AWS account while assisting with attack mitigation.</p>
@@ -2299,6 +3014,25 @@ impl Shield for ShieldClient {
         let mut response = response;
         let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         proto::json::ResponsePayload::new(&response).deserialize::<DescribeProtectionResponse, _>()
+    }
+
+    /// <p>Returns the specification for the specified protection group.</p>
+    async fn describe_protection_group(
+        &self,
+        input: DescribeProtectionGroupRequest,
+    ) -> Result<DescribeProtectionGroupResponse, RusotoError<DescribeProtectionGroupError>> {
+        let mut request = self.new_signed_request("POST", "/");
+        request.add_header("x-amz-target", "AWSShield_20160616.DescribeProtectionGroup");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        let response = self
+            .sign_and_dispatch(request, DescribeProtectionGroupError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<DescribeProtectionGroupResponse, _>()
     }
 
     /// <p>Provides details about the AWS Shield Advanced subscription for an account.</p>
@@ -2452,6 +3186,25 @@ impl Shield for ShieldClient {
         proto::json::ResponsePayload::new(&response).deserialize::<ListAttacksResponse, _>()
     }
 
+    /// <p>Retrieves the <a>ProtectionGroup</a> objects for the account.</p>
+    async fn list_protection_groups(
+        &self,
+        input: ListProtectionGroupsRequest,
+    ) -> Result<ListProtectionGroupsResponse, RusotoError<ListProtectionGroupsError>> {
+        let mut request = self.new_signed_request("POST", "/");
+        request.add_header("x-amz-target", "AWSShield_20160616.ListProtectionGroups");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        let response = self
+            .sign_and_dispatch(request, ListProtectionGroupsError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<ListProtectionGroupsResponse, _>()
+    }
+
     /// <p>Lists all <a>Protection</a> objects for the account.</p>
     async fn list_protections(
         &self,
@@ -2468,6 +3221,31 @@ impl Shield for ShieldClient {
         let mut response = response;
         let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         proto::json::ResponsePayload::new(&response).deserialize::<ListProtectionsResponse, _>()
+    }
+
+    /// <p>Retrieves the resources that are included in the protection group. </p>
+    async fn list_resources_in_protection_group(
+        &self,
+        input: ListResourcesInProtectionGroupRequest,
+    ) -> Result<
+        ListResourcesInProtectionGroupResponse,
+        RusotoError<ListResourcesInProtectionGroupError>,
+    > {
+        let mut request = self.new_signed_request("POST", "/");
+        request.add_header(
+            "x-amz-target",
+            "AWSShield_20160616.ListResourcesInProtectionGroup",
+        );
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        let response = self
+            .sign_and_dispatch(request, ListResourcesInProtectionGroupError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<ListResourcesInProtectionGroupResponse, _>()
     }
 
     /// <p>Updates the details of the list of email addresses and phone numbers that the DDoS Response Team (DRT) can use to contact you if you have proactive engagement enabled, for escalations to the DRT and to initiate proactive customer support.</p>
@@ -2493,6 +3271,25 @@ impl Shield for ShieldClient {
         let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         proto::json::ResponsePayload::new(&response)
             .deserialize::<UpdateEmergencyContactSettingsResponse, _>()
+    }
+
+    /// <p>Updates an existing protection group. A protection group is a grouping of protected resources so they can be handled as a collective. This resource grouping improves the accuracy of detection and reduces false positives. </p>
+    async fn update_protection_group(
+        &self,
+        input: UpdateProtectionGroupRequest,
+    ) -> Result<UpdateProtectionGroupResponse, RusotoError<UpdateProtectionGroupError>> {
+        let mut request = self.new_signed_request("POST", "/");
+        request.add_header("x-amz-target", "AWSShield_20160616.UpdateProtectionGroup");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        let response = self
+            .sign_and_dispatch(request, UpdateProtectionGroupError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<UpdateProtectionGroupResponse, _>()
     }
 
     /// <p>Updates the details of an existing subscription. Only enter values for parameters you want to change. Empty parameters are not updated.</p>

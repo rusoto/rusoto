@@ -245,7 +245,8 @@ pub struct CreateDirectoryConfigRequest {
     pub organizational_unit_distinguished_names: Vec<String>,
     /// <p>The credentials for the service account used by the fleet or image builder to connect to the directory.</p>
     #[serde(rename = "ServiceAccountCredentials")]
-    pub service_account_credentials: ServiceAccountCredentials,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub service_account_credentials: Option<ServiceAccountCredentials>,
 }
 
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
@@ -287,7 +288,7 @@ pub struct CreateFleetRequest {
     #[serde(rename = "FleetType")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub fleet_type: Option<String>,
-    /// <p>The Amazon Resource Name (ARN) of the IAM role to apply to the fleet. To assume a role, a fleet instance calls the AWS Security Token Service (STS) <code>AssumeRole</code> API operation and passes the ARN of the role to use. The operation creates a new session with temporary credentials. AppStream 2.0 retrieves the temporary credentials and creates the <b>AppStream_Machine_Role</b> credential profile on the instance.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/appstream2/latest/developerguide/using-iam-roles-to-grant-permissions-to-applications-scripts-streaming-instances.html">Using an IAM Role to Grant Permissions to Applications and Scripts Running on AppStream 2.0 Streaming Instances</a> in the <i>Amazon AppStream 2.0 Administration Guide</i>.</p>
+    /// <p>The Amazon Resource Name (ARN) of the IAM role to apply to the fleet. To assume a role, a fleet instance calls the AWS Security Token Service (STS) <code>AssumeRole</code> API operation and passes the ARN of the role to use. The operation creates a new session with temporary credentials. AppStream 2.0 retrieves the temporary credentials and creates the <b>appstream_machine_role</b> credential profile on the instance.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/appstream2/latest/developerguide/using-iam-roles-to-grant-permissions-to-applications-scripts-streaming-instances.html">Using an IAM Role to Grant Permissions to Applications and Scripts Running on AppStream 2.0 Streaming Instances</a> in the <i>Amazon AppStream 2.0 Administration Guide</i>.</p>
     #[serde(rename = "IamRoleArn")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub iam_role_arn: Option<String>,
@@ -303,7 +304,7 @@ pub struct CreateFleetRequest {
     #[serde(rename = "ImageName")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub image_name: Option<String>,
-    /// <p><p>The instance type to use when launching fleet instances. The following instance types are available:</p> <ul> <li> <p>stream.standard.medium</p> </li> <li> <p>stream.standard.large</p> </li> <li> <p>stream.compute.large</p> </li> <li> <p>stream.compute.xlarge</p> </li> <li> <p>stream.compute.2xlarge</p> </li> <li> <p>stream.compute.4xlarge</p> </li> <li> <p>stream.compute.8xlarge</p> </li> <li> <p>stream.memory.large</p> </li> <li> <p>stream.memory.xlarge</p> </li> <li> <p>stream.memory.2xlarge</p> </li> <li> <p>stream.memory.4xlarge</p> </li> <li> <p>stream.memory.8xlarge</p> </li> <li> <p>stream.graphics-design.large</p> </li> <li> <p>stream.graphics-design.xlarge</p> </li> <li> <p>stream.graphics-design.2xlarge</p> </li> <li> <p>stream.graphics-design.4xlarge</p> </li> <li> <p>stream.graphics-desktop.2xlarge</p> </li> <li> <p>stream.graphics-pro.4xlarge</p> </li> <li> <p>stream.graphics-pro.8xlarge</p> </li> <li> <p>stream.graphics-pro.16xlarge</p> </li> </ul></p>
+    /// <p><p>The instance type to use when launching fleet instances. The following instance types are available:</p> <ul> <li> <p>stream.standard.medium</p> </li> <li> <p>stream.standard.large</p> </li> <li> <p>stream.compute.large</p> </li> <li> <p>stream.compute.xlarge</p> </li> <li> <p>stream.compute.2xlarge</p> </li> <li> <p>stream.compute.4xlarge</p> </li> <li> <p>stream.compute.8xlarge</p> </li> <li> <p>stream.memory.large</p> </li> <li> <p>stream.memory.xlarge</p> </li> <li> <p>stream.memory.2xlarge</p> </li> <li> <p>stream.memory.4xlarge</p> </li> <li> <p>stream.memory.8xlarge</p> </li> <li> <p>stream.memory.z1d.large</p> </li> <li> <p>stream.memory.z1d.xlarge</p> </li> <li> <p>stream.memory.z1d.2xlarge</p> </li> <li> <p>stream.memory.z1d.3xlarge</p> </li> <li> <p>stream.memory.z1d.6xlarge</p> </li> <li> <p>stream.memory.z1d.12xlarge</p> </li> <li> <p>stream.graphics-design.large</p> </li> <li> <p>stream.graphics-design.xlarge</p> </li> <li> <p>stream.graphics-design.2xlarge</p> </li> <li> <p>stream.graphics-design.4xlarge</p> </li> <li> <p>stream.graphics-desktop.2xlarge</p> </li> <li> <p>stream.graphics.g4dn.xlarge</p> </li> <li> <p>stream.graphics.g4dn.2xlarge</p> </li> <li> <p>stream.graphics.g4dn.4xlarge</p> </li> <li> <p>stream.graphics.g4dn.8xlarge</p> </li> <li> <p>stream.graphics.g4dn.12xlarge</p> </li> <li> <p>stream.graphics.g4dn.16xlarge</p> </li> <li> <p>stream.graphics-pro.4xlarge</p> </li> <li> <p>stream.graphics-pro.8xlarge</p> </li> <li> <p>stream.graphics-pro.16xlarge</p> </li> </ul></p>
     #[serde(rename = "InstanceType")]
     pub instance_type: String,
     /// <p>The maximum amount of time that a streaming session can remain active, in seconds. If users are still connected to a streaming instance five minutes before this limit is reached, they are prompted to save any open documents before being disconnected. After this time elapses, the instance is terminated and replaced by a new instance.</p> <p>Specify a value between 600 and 360000.</p>
@@ -313,6 +314,10 @@ pub struct CreateFleetRequest {
     /// <p>A unique name for the fleet.</p>
     #[serde(rename = "Name")]
     pub name: String,
+    /// <p>The AppStream 2.0 view that is displayed to your users when they stream from the fleet. When <code>APP</code> is specified, only the windows of applications opened by users display. When <code>DESKTOP</code> is specified, the standard desktop that is provided by the operating system displays.</p> <p>The default value is <code>APP</code>.</p>
+    #[serde(rename = "StreamView")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub stream_view: Option<String>,
     /// <p>The tags to associate with the fleet. A tag is a key-value pair, and the value is optional. For example, Environment=Test. If you do not specify a value, Environment=. </p> <p>If you do not specify a value, the value is set to an empty string.</p> <p>Generally allowed characters are: letters, numbers, and spaces representable in UTF-8, and the following special characters: </p> <p>_ . : / = + \ - @</p> <p>For more information, see <a href="https://docs.aws.amazon.com/appstream2/latest/developerguide/tagging-basic.html">Tagging Your Resources</a> in the <i>Amazon AppStream 2.0 Administration Guide</i>.</p>
     #[serde(rename = "Tags")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -359,7 +364,7 @@ pub struct CreateImageBuilderRequest {
     #[serde(rename = "EnableDefaultInternetAccess")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub enable_default_internet_access: Option<bool>,
-    /// <p>The Amazon Resource Name (ARN) of the IAM role to apply to the image builder. To assume a role, the image builder calls the AWS Security Token Service (STS) <code>AssumeRole</code> API operation and passes the ARN of the role to use. The operation creates a new session with temporary credentials. AppStream 2.0 retrieves the temporary credentials and creates the <b>AppStream_Machine_Role</b> credential profile on the instance.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/appstream2/latest/developerguide/using-iam-roles-to-grant-permissions-to-applications-scripts-streaming-instances.html">Using an IAM Role to Grant Permissions to Applications and Scripts Running on AppStream 2.0 Streaming Instances</a> in the <i>Amazon AppStream 2.0 Administration Guide</i>.</p>
+    /// <p>The Amazon Resource Name (ARN) of the IAM role to apply to the image builder. To assume a role, the image builder calls the AWS Security Token Service (STS) <code>AssumeRole</code> API operation and passes the ARN of the role to use. The operation creates a new session with temporary credentials. AppStream 2.0 retrieves the temporary credentials and creates the <b>appstream_machine_role</b> credential profile on the instance.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/appstream2/latest/developerguide/using-iam-roles-to-grant-permissions-to-applications-scripts-streaming-instances.html">Using an IAM Role to Grant Permissions to Applications and Scripts Running on AppStream 2.0 Streaming Instances</a> in the <i>Amazon AppStream 2.0 Administration Guide</i>.</p>
     #[serde(rename = "IamRoleArn")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub iam_role_arn: Option<String>,
@@ -371,7 +376,7 @@ pub struct CreateImageBuilderRequest {
     #[serde(rename = "ImageName")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub image_name: Option<String>,
-    /// <p><p>The instance type to use when launching the image builder. The following instance types are available:</p> <ul> <li> <p>stream.standard.medium</p> </li> <li> <p>stream.standard.large</p> </li> <li> <p>stream.compute.large</p> </li> <li> <p>stream.compute.xlarge</p> </li> <li> <p>stream.compute.2xlarge</p> </li> <li> <p>stream.compute.4xlarge</p> </li> <li> <p>stream.compute.8xlarge</p> </li> <li> <p>stream.memory.large</p> </li> <li> <p>stream.memory.xlarge</p> </li> <li> <p>stream.memory.2xlarge</p> </li> <li> <p>stream.memory.4xlarge</p> </li> <li> <p>stream.memory.8xlarge</p> </li> <li> <p>stream.graphics-design.large</p> </li> <li> <p>stream.graphics-design.xlarge</p> </li> <li> <p>stream.graphics-design.2xlarge</p> </li> <li> <p>stream.graphics-design.4xlarge</p> </li> <li> <p>stream.graphics-desktop.2xlarge</p> </li> <li> <p>stream.graphics-pro.4xlarge</p> </li> <li> <p>stream.graphics-pro.8xlarge</p> </li> <li> <p>stream.graphics-pro.16xlarge</p> </li> </ul></p>
+    /// <p><p>The instance type to use when launching the image builder. The following instance types are available:</p> <ul> <li> <p>stream.standard.medium</p> </li> <li> <p>stream.standard.large</p> </li> <li> <p>stream.compute.large</p> </li> <li> <p>stream.compute.xlarge</p> </li> <li> <p>stream.compute.2xlarge</p> </li> <li> <p>stream.compute.4xlarge</p> </li> <li> <p>stream.compute.8xlarge</p> </li> <li> <p>stream.memory.large</p> </li> <li> <p>stream.memory.xlarge</p> </li> <li> <p>stream.memory.2xlarge</p> </li> <li> <p>stream.memory.4xlarge</p> </li> <li> <p>stream.memory.8xlarge</p> </li> <li> <p>stream.memory.z1d.large</p> </li> <li> <p>stream.memory.z1d.xlarge</p> </li> <li> <p>stream.memory.z1d.2xlarge</p> </li> <li> <p>stream.memory.z1d.3xlarge</p> </li> <li> <p>stream.memory.z1d.6xlarge</p> </li> <li> <p>stream.memory.z1d.12xlarge</p> </li> <li> <p>stream.graphics-design.large</p> </li> <li> <p>stream.graphics-design.xlarge</p> </li> <li> <p>stream.graphics-design.2xlarge</p> </li> <li> <p>stream.graphics-design.4xlarge</p> </li> <li> <p>stream.graphics-desktop.2xlarge</p> </li> <li> <p>stream.graphics.g4dn.xlarge</p> </li> <li> <p>stream.graphics.g4dn.2xlarge</p> </li> <li> <p>stream.graphics.g4dn.4xlarge</p> </li> <li> <p>stream.graphics.g4dn.8xlarge</p> </li> <li> <p>stream.graphics.g4dn.12xlarge</p> </li> <li> <p>stream.graphics.g4dn.16xlarge</p> </li> <li> <p>stream.graphics-pro.4xlarge</p> </li> <li> <p>stream.graphics-pro.8xlarge</p> </li> <li> <p>stream.graphics-pro.16xlarge</p> </li> </ul></p>
     #[serde(rename = "InstanceType")]
     pub instance_type: String,
     /// <p>A unique name for the image builder.</p>
@@ -440,7 +445,7 @@ pub struct CreateStackRequest {
     #[serde(rename = "DisplayName")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub display_name: Option<String>,
-    /// <p>The domains where AppStream 2.0 streaming sessions can be embedded in an iframe. You must approve the domains that you want to host embedded AppStream 2.0 streaming sessions.</p>
+    /// <p>The domains where AppStream 2.0 streaming sessions can be embedded in an iframe. You must approve the domains that you want to host embedded AppStream 2.0 streaming sessions. </p>
     #[serde(rename = "EmbedHostDomains")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub embed_host_domains: Option<Vec<String>>,
@@ -851,7 +856,7 @@ pub struct DescribeSessionsRequest {
     /// <p>The name of the stack. This value is case-sensitive.</p>
     #[serde(rename = "StackName")]
     pub stack_name: String,
-    /// <p>The user identifier.</p>
+    /// <p>The user identifier (ID). If you specify a user ID, you must also specify the authentication type.</p>
     #[serde(rename = "UserId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub user_id: Option<String>,
@@ -1122,7 +1127,7 @@ pub struct Fleet {
     #[serde(rename = "FleetType")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub fleet_type: Option<String>,
-    /// <p>The ARN of the IAM role that is applied to the fleet. To assume a role, the fleet instance calls the AWS Security Token Service (STS) <code>AssumeRole</code> API operation and passes the ARN of the role to use. The operation creates a new session with temporary credentials. AppStream 2.0 retrieves the temporary credentials and creates the <b>AppStream_Machine_Role</b> credential profile on the instance.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/appstream2/latest/developerguide/using-iam-roles-to-grant-permissions-to-applications-scripts-streaming-instances.html">Using an IAM Role to Grant Permissions to Applications and Scripts Running on AppStream 2.0 Streaming Instances</a> in the <i>Amazon AppStream 2.0 Administration Guide</i>.</p>
+    /// <p>The ARN of the IAM role that is applied to the fleet. To assume a role, the fleet instance calls the AWS Security Token Service (STS) <code>AssumeRole</code> API operation and passes the ARN of the role to use. The operation creates a new session with temporary credentials. AppStream 2.0 retrieves the temporary credentials and creates the <b>appstream_machine_role</b> credential profile on the instance.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/appstream2/latest/developerguide/using-iam-roles-to-grant-permissions-to-applications-scripts-streaming-instances.html">Using an IAM Role to Grant Permissions to Applications and Scripts Running on AppStream 2.0 Streaming Instances</a> in the <i>Amazon AppStream 2.0 Administration Guide</i>.</p>
     #[serde(rename = "IamRoleArn")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub iam_role_arn: Option<String>,
@@ -1138,7 +1143,7 @@ pub struct Fleet {
     #[serde(rename = "ImageName")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub image_name: Option<String>,
-    /// <p><p>The instance type to use when launching fleet instances. The following instance types are available:</p> <ul> <li> <p>stream.standard.medium</p> </li> <li> <p>stream.standard.large</p> </li> <li> <p>stream.compute.large</p> </li> <li> <p>stream.compute.xlarge</p> </li> <li> <p>stream.compute.2xlarge</p> </li> <li> <p>stream.compute.4xlarge</p> </li> <li> <p>stream.compute.8xlarge</p> </li> <li> <p>stream.memory.large</p> </li> <li> <p>stream.memory.xlarge</p> </li> <li> <p>stream.memory.2xlarge</p> </li> <li> <p>stream.memory.4xlarge</p> </li> <li> <p>stream.memory.8xlarge</p> </li> <li> <p>stream.graphics-design.large</p> </li> <li> <p>stream.graphics-design.xlarge</p> </li> <li> <p>stream.graphics-design.2xlarge</p> </li> <li> <p>stream.graphics-design.4xlarge</p> </li> <li> <p>stream.graphics-desktop.2xlarge</p> </li> <li> <p>stream.graphics-pro.4xlarge</p> </li> <li> <p>stream.graphics-pro.8xlarge</p> </li> <li> <p>stream.graphics-pro.16xlarge</p> </li> </ul></p>
+    /// <p><p>The instance type to use when launching fleet instances. The following instance types are available:</p> <ul> <li> <p>stream.standard.medium</p> </li> <li> <p>stream.standard.large</p> </li> <li> <p>stream.compute.large</p> </li> <li> <p>stream.compute.xlarge</p> </li> <li> <p>stream.compute.2xlarge</p> </li> <li> <p>stream.compute.4xlarge</p> </li> <li> <p>stream.compute.8xlarge</p> </li> <li> <p>stream.memory.large</p> </li> <li> <p>stream.memory.xlarge</p> </li> <li> <p>stream.memory.2xlarge</p> </li> <li> <p>stream.memory.4xlarge</p> </li> <li> <p>stream.memory.8xlarge</p> </li> <li> <p>stream.memory.z1d.large</p> </li> <li> <p>stream.memory.z1d.xlarge</p> </li> <li> <p>stream.memory.z1d.2xlarge</p> </li> <li> <p>stream.memory.z1d.3xlarge</p> </li> <li> <p>stream.memory.z1d.6xlarge</p> </li> <li> <p>stream.memory.z1d.12xlarge</p> </li> <li> <p>stream.graphics-design.large</p> </li> <li> <p>stream.graphics-design.xlarge</p> </li> <li> <p>stream.graphics-design.2xlarge</p> </li> <li> <p>stream.graphics-design.4xlarge</p> </li> <li> <p>stream.graphics-desktop.2xlarge</p> </li> <li> <p>stream.graphics.g4dn.xlarge</p> </li> <li> <p>stream.graphics.g4dn.2xlarge</p> </li> <li> <p>stream.graphics.g4dn.4xlarge</p> </li> <li> <p>stream.graphics.g4dn.8xlarge</p> </li> <li> <p>stream.graphics.g4dn.12xlarge</p> </li> <li> <p>stream.graphics.g4dn.16xlarge</p> </li> <li> <p>stream.graphics-pro.4xlarge</p> </li> <li> <p>stream.graphics-pro.8xlarge</p> </li> <li> <p>stream.graphics-pro.16xlarge</p> </li> </ul></p>
     #[serde(rename = "InstanceType")]
     pub instance_type: String,
     /// <p>The maximum amount of time that a streaming session can remain active, in seconds. If users are still connected to a streaming instance five minutes before this limit is reached, they are prompted to save any open documents before being disconnected. After this time elapses, the instance is terminated and replaced by a new instance. </p> <p>Specify a value between 600 and 360000.</p>
@@ -1151,6 +1156,10 @@ pub struct Fleet {
     /// <p>The current state for the fleet.</p>
     #[serde(rename = "State")]
     pub state: String,
+    /// <p>The AppStream 2.0 view that is displayed to your users when they stream from the fleet. When <code>APP</code> is specified, only the windows of applications opened by users display. When <code>DESKTOP</code> is specified, the standard desktop that is provided by the operating system displays.</p> <p>The default value is <code>APP</code>.</p>
+    #[serde(rename = "StreamView")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub stream_view: Option<String>,
     /// <p>The VPC configuration for the fleet.</p>
     #[serde(rename = "VpcConfig")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1276,7 +1285,7 @@ pub struct ImageBuilder {
     #[serde(rename = "EnableDefaultInternetAccess")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub enable_default_internet_access: Option<bool>,
-    /// <p>The ARN of the IAM role that is applied to the image builder. To assume a role, the image builder calls the AWS Security Token Service (STS) <code>AssumeRole</code> API operation and passes the ARN of the role to use. The operation creates a new session with temporary credentials. AppStream 2.0 retrieves the temporary credentials and creates the <b>AppStream_Machine_Role</b> credential profile on the instance.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/appstream2/latest/developerguide/using-iam-roles-to-grant-permissions-to-applications-scripts-streaming-instances.html">Using an IAM Role to Grant Permissions to Applications and Scripts Running on AppStream 2.0 Streaming Instances</a> in the <i>Amazon AppStream 2.0 Administration Guide</i>.</p>
+    /// <p>The ARN of the IAM role that is applied to the image builder. To assume a role, the image builder calls the AWS Security Token Service (STS) <code>AssumeRole</code> API operation and passes the ARN of the role to use. The operation creates a new session with temporary credentials. AppStream 2.0 retrieves the temporary credentials and creates the <b>appstream_machine_role</b> credential profile on the instance.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/appstream2/latest/developerguide/using-iam-roles-to-grant-permissions-to-applications-scripts-streaming-instances.html">Using an IAM Role to Grant Permissions to Applications and Scripts Running on AppStream 2.0 Streaming Instances</a> in the <i>Amazon AppStream 2.0 Administration Guide</i>.</p>
     #[serde(rename = "IamRoleArn")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub iam_role_arn: Option<String>,
@@ -1288,7 +1297,7 @@ pub struct ImageBuilder {
     #[serde(rename = "ImageBuilderErrors")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub image_builder_errors: Option<Vec<ResourceError>>,
-    /// <p><p>The instance type for the image builder. The following instance types are available:</p> <ul> <li> <p>stream.standard.medium</p> </li> <li> <p>stream.standard.large</p> </li> <li> <p>stream.compute.large</p> </li> <li> <p>stream.compute.xlarge</p> </li> <li> <p>stream.compute.2xlarge</p> </li> <li> <p>stream.compute.4xlarge</p> </li> <li> <p>stream.compute.8xlarge</p> </li> <li> <p>stream.memory.large</p> </li> <li> <p>stream.memory.xlarge</p> </li> <li> <p>stream.memory.2xlarge</p> </li> <li> <p>stream.memory.4xlarge</p> </li> <li> <p>stream.memory.8xlarge</p> </li> <li> <p>stream.graphics-design.large</p> </li> <li> <p>stream.graphics-design.xlarge</p> </li> <li> <p>stream.graphics-design.2xlarge</p> </li> <li> <p>stream.graphics-design.4xlarge</p> </li> <li> <p>stream.graphics-desktop.2xlarge</p> </li> <li> <p>stream.graphics-pro.4xlarge</p> </li> <li> <p>stream.graphics-pro.8xlarge</p> </li> <li> <p>stream.graphics-pro.16xlarge</p> </li> </ul></p>
+    /// <p><p>The instance type for the image builder. The following instance types are available:</p> <ul> <li> <p>stream.standard.medium</p> </li> <li> <p>stream.standard.large</p> </li> <li> <p>stream.compute.large</p> </li> <li> <p>stream.compute.xlarge</p> </li> <li> <p>stream.compute.2xlarge</p> </li> <li> <p>stream.compute.4xlarge</p> </li> <li> <p>stream.compute.8xlarge</p> </li> <li> <p>stream.memory.large</p> </li> <li> <p>stream.memory.xlarge</p> </li> <li> <p>stream.memory.2xlarge</p> </li> <li> <p>stream.memory.4xlarge</p> </li> <li> <p>stream.memory.8xlarge</p> </li> <li> <p>stream.memory.z1d.large</p> </li> <li> <p>stream.memory.z1d.xlarge</p> </li> <li> <p>stream.memory.z1d.2xlarge</p> </li> <li> <p>stream.memory.z1d.3xlarge</p> </li> <li> <p>stream.memory.z1d.6xlarge</p> </li> <li> <p>stream.memory.z1d.12xlarge</p> </li> <li> <p>stream.graphics-design.large</p> </li> <li> <p>stream.graphics-design.xlarge</p> </li> <li> <p>stream.graphics-design.2xlarge</p> </li> <li> <p>stream.graphics-design.4xlarge</p> </li> <li> <p>stream.graphics-desktop.2xlarge</p> </li> <li> <p>stream.graphics.g4dn.xlarge</p> </li> <li> <p>stream.graphics.g4dn.2xlarge</p> </li> <li> <p>stream.graphics.g4dn.4xlarge</p> </li> <li> <p>stream.graphics.g4dn.8xlarge</p> </li> <li> <p>stream.graphics.g4dn.12xlarge</p> </li> <li> <p>stream.graphics.g4dn.16xlarge</p> </li> <li> <p>stream.graphics-pro.4xlarge</p> </li> <li> <p>stream.graphics-pro.8xlarge</p> </li> <li> <p>stream.graphics-pro.16xlarge</p> </li> </ul></p>
     #[serde(rename = "InstanceType")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub instance_type: Option<String>,
@@ -1769,7 +1778,7 @@ pub struct UpdateFleetRequest {
     #[serde(rename = "EnableDefaultInternetAccess")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub enable_default_internet_access: Option<bool>,
-    /// <p>The Amazon Resource Name (ARN) of the IAM role to apply to the fleet. To assume a role, a fleet instance calls the AWS Security Token Service (STS) <code>AssumeRole</code> API operation and passes the ARN of the role to use. The operation creates a new session with temporary credentials. AppStream 2.0 retrieves the temporary credentials and creates the <b>AppStream_Machine_Role</b> credential profile on the instance.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/appstream2/latest/developerguide/using-iam-roles-to-grant-permissions-to-applications-scripts-streaming-instances.html">Using an IAM Role to Grant Permissions to Applications and Scripts Running on AppStream 2.0 Streaming Instances</a> in the <i>Amazon AppStream 2.0 Administration Guide</i>.</p>
+    /// <p>The Amazon Resource Name (ARN) of the IAM role to apply to the fleet. To assume a role, a fleet instance calls the AWS Security Token Service (STS) <code>AssumeRole</code> API operation and passes the ARN of the role to use. The operation creates a new session with temporary credentials. AppStream 2.0 retrieves the temporary credentials and creates the <b>appstream_machine_role</b> credential profile on the instance.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/appstream2/latest/developerguide/using-iam-roles-to-grant-permissions-to-applications-scripts-streaming-instances.html">Using an IAM Role to Grant Permissions to Applications and Scripts Running on AppStream 2.0 Streaming Instances</a> in the <i>Amazon AppStream 2.0 Administration Guide</i>.</p>
     #[serde(rename = "IamRoleArn")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub iam_role_arn: Option<String>,
@@ -1785,7 +1794,7 @@ pub struct UpdateFleetRequest {
     #[serde(rename = "ImageName")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub image_name: Option<String>,
-    /// <p><p>The instance type to use when launching fleet instances. The following instance types are available:</p> <ul> <li> <p>stream.standard.medium</p> </li> <li> <p>stream.standard.large</p> </li> <li> <p>stream.compute.large</p> </li> <li> <p>stream.compute.xlarge</p> </li> <li> <p>stream.compute.2xlarge</p> </li> <li> <p>stream.compute.4xlarge</p> </li> <li> <p>stream.compute.8xlarge</p> </li> <li> <p>stream.memory.large</p> </li> <li> <p>stream.memory.xlarge</p> </li> <li> <p>stream.memory.2xlarge</p> </li> <li> <p>stream.memory.4xlarge</p> </li> <li> <p>stream.memory.8xlarge</p> </li> <li> <p>stream.graphics-design.large</p> </li> <li> <p>stream.graphics-design.xlarge</p> </li> <li> <p>stream.graphics-design.2xlarge</p> </li> <li> <p>stream.graphics-design.4xlarge</p> </li> <li> <p>stream.graphics-desktop.2xlarge</p> </li> <li> <p>stream.graphics-pro.4xlarge</p> </li> <li> <p>stream.graphics-pro.8xlarge</p> </li> <li> <p>stream.graphics-pro.16xlarge</p> </li> </ul></p>
+    /// <p><p>The instance type to use when launching fleet instances. The following instance types are available:</p> <ul> <li> <p>stream.standard.medium</p> </li> <li> <p>stream.standard.large</p> </li> <li> <p>stream.compute.large</p> </li> <li> <p>stream.compute.xlarge</p> </li> <li> <p>stream.compute.2xlarge</p> </li> <li> <p>stream.compute.4xlarge</p> </li> <li> <p>stream.compute.8xlarge</p> </li> <li> <p>stream.memory.large</p> </li> <li> <p>stream.memory.xlarge</p> </li> <li> <p>stream.memory.2xlarge</p> </li> <li> <p>stream.memory.4xlarge</p> </li> <li> <p>stream.memory.8xlarge</p> </li> <li> <p>stream.memory.z1d.large</p> </li> <li> <p>stream.memory.z1d.xlarge</p> </li> <li> <p>stream.memory.z1d.2xlarge</p> </li> <li> <p>stream.memory.z1d.3xlarge</p> </li> <li> <p>stream.memory.z1d.6xlarge</p> </li> <li> <p>stream.memory.z1d.12xlarge</p> </li> <li> <p>stream.graphics-design.large</p> </li> <li> <p>stream.graphics-design.xlarge</p> </li> <li> <p>stream.graphics-design.2xlarge</p> </li> <li> <p>stream.graphics-design.4xlarge</p> </li> <li> <p>stream.graphics-desktop.2xlarge</p> </li> <li> <p>stream.graphics.g4dn.xlarge</p> </li> <li> <p>stream.graphics.g4dn.2xlarge</p> </li> <li> <p>stream.graphics.g4dn.4xlarge</p> </li> <li> <p>stream.graphics.g4dn.8xlarge</p> </li> <li> <p>stream.graphics.g4dn.12xlarge</p> </li> <li> <p>stream.graphics.g4dn.16xlarge</p> </li> <li> <p>stream.graphics-pro.4xlarge</p> </li> <li> <p>stream.graphics-pro.8xlarge</p> </li> <li> <p>stream.graphics-pro.16xlarge</p> </li> </ul></p>
     #[serde(rename = "InstanceType")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub instance_type: Option<String>,
@@ -1797,6 +1806,10 @@ pub struct UpdateFleetRequest {
     #[serde(rename = "Name")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub name: Option<String>,
+    /// <p>The AppStream 2.0 view that is displayed to your users when they stream from the fleet. When <code>APP</code> is specified, only the windows of applications opened by users display. When <code>DESKTOP</code> is specified, the standard desktop that is provided by the operating system displays.</p> <p>The default value is <code>APP</code>.</p>
+    #[serde(rename = "StreamView")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub stream_view: Option<String>,
     /// <p>The VPC configuration for the fleet.</p>
     #[serde(rename = "VpcConfig")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1853,7 +1866,7 @@ pub struct UpdateStackRequest {
     #[serde(rename = "DisplayName")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub display_name: Option<String>,
-    /// <p>The domains where AppStream 2.0 streaming sessions can be embedded in an iframe. You must approve the domains that you want to host embedded AppStream 2.0 streaming sessions.</p>
+    /// <p>The domains where AppStream 2.0 streaming sessions can be embedded in an iframe. You must approve the domains that you want to host embedded AppStream 2.0 streaming sessions. </p>
     #[serde(rename = "EmbedHostDomains")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub embed_host_domains: Option<Vec<String>>,
@@ -2073,6 +2086,8 @@ impl Error for AssociateFleetError {}
 /// Errors returned by BatchAssociateUserStack
 #[derive(Debug, PartialEq)]
 pub enum BatchAssociateUserStackError {
+    /// <p>Indicates an incorrect combination of parameters, or a missing parameter.</p>
+    InvalidParameterCombination(String),
     /// <p>The attempted operation is not permitted.</p>
     OperationNotPermitted(String),
 }
@@ -2081,6 +2096,11 @@ impl BatchAssociateUserStackError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<BatchAssociateUserStackError> {
         if let Some(err) = proto::json::Error::parse(&res) {
             match err.typ.as_str() {
+                "InvalidParameterCombinationException" => {
+                    return RusotoError::Service(
+                        BatchAssociateUserStackError::InvalidParameterCombination(err.msg),
+                    )
+                }
                 "OperationNotPermittedException" => {
                     return RusotoError::Service(
                         BatchAssociateUserStackError::OperationNotPermitted(err.msg),
@@ -2097,6 +2117,9 @@ impl fmt::Display for BatchAssociateUserStackError {
     #[allow(unused_variables)]
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match *self {
+            BatchAssociateUserStackError::InvalidParameterCombination(ref cause) => {
+                write!(f, "{}", cause)
+            }
             BatchAssociateUserStackError::OperationNotPermitted(ref cause) => {
                 write!(f, "{}", cause)
             }
@@ -2106,7 +2129,12 @@ impl fmt::Display for BatchAssociateUserStackError {
 impl Error for BatchAssociateUserStackError {}
 /// Errors returned by BatchDisassociateUserStack
 #[derive(Debug, PartialEq)]
-pub enum BatchDisassociateUserStackError {}
+pub enum BatchDisassociateUserStackError {
+    /// <p>Indicates an incorrect combination of parameters, or a missing parameter.</p>
+    InvalidParameterCombination(String),
+    /// <p>The attempted operation is not permitted.</p>
+    OperationNotPermitted(String),
+}
 
 impl BatchDisassociateUserStackError {
     pub fn from_response(
@@ -2114,6 +2142,16 @@ impl BatchDisassociateUserStackError {
     ) -> RusotoError<BatchDisassociateUserStackError> {
         if let Some(err) = proto::json::Error::parse(&res) {
             match err.typ.as_str() {
+                "InvalidParameterCombinationException" => {
+                    return RusotoError::Service(
+                        BatchDisassociateUserStackError::InvalidParameterCombination(err.msg),
+                    )
+                }
+                "OperationNotPermittedException" => {
+                    return RusotoError::Service(
+                        BatchDisassociateUserStackError::OperationNotPermitted(err.msg),
+                    )
+                }
                 "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
@@ -2124,7 +2162,14 @@ impl BatchDisassociateUserStackError {
 impl fmt::Display for BatchDisassociateUserStackError {
     #[allow(unused_variables)]
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        match *self {}
+        match *self {
+            BatchDisassociateUserStackError::InvalidParameterCombination(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            BatchDisassociateUserStackError::OperationNotPermitted(ref cause) => {
+                write!(f, "{}", cause)
+            }
+        }
     }
 }
 impl Error for BatchDisassociateUserStackError {}
@@ -2193,10 +2238,16 @@ impl Error for CopyImageError {}
 pub enum CreateDirectoryConfigError {
     /// <p>The resource cannot be created because your AWS account is suspended. For assistance, contact AWS Support. </p>
     InvalidAccountStatus(String),
+    /// <p>The specified role is invalid.</p>
+    InvalidRole(String),
     /// <p>The requested limit exceeds the permitted limit for an account.</p>
     LimitExceeded(String),
+    /// <p>The attempted operation is not permitted.</p>
+    OperationNotPermitted(String),
     /// <p>The specified resource already exists.</p>
     ResourceAlreadyExists(String),
+    /// <p>The specified resource was not found.</p>
+    ResourceNotFound(String),
 }
 
 impl CreateDirectoryConfigError {
@@ -2208,11 +2259,24 @@ impl CreateDirectoryConfigError {
                         err.msg,
                     ))
                 }
+                "InvalidRoleException" => {
+                    return RusotoError::Service(CreateDirectoryConfigError::InvalidRole(err.msg))
+                }
                 "LimitExceededException" => {
                     return RusotoError::Service(CreateDirectoryConfigError::LimitExceeded(err.msg))
                 }
+                "OperationNotPermittedException" => {
+                    return RusotoError::Service(CreateDirectoryConfigError::OperationNotPermitted(
+                        err.msg,
+                    ))
+                }
                 "ResourceAlreadyExistsException" => {
                     return RusotoError::Service(CreateDirectoryConfigError::ResourceAlreadyExists(
+                        err.msg,
+                    ))
+                }
+                "ResourceNotFoundException" => {
+                    return RusotoError::Service(CreateDirectoryConfigError::ResourceNotFound(
                         err.msg,
                     ))
                 }
@@ -2228,8 +2292,11 @@ impl fmt::Display for CreateDirectoryConfigError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match *self {
             CreateDirectoryConfigError::InvalidAccountStatus(ref cause) => write!(f, "{}", cause),
+            CreateDirectoryConfigError::InvalidRole(ref cause) => write!(f, "{}", cause),
             CreateDirectoryConfigError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            CreateDirectoryConfigError::OperationNotPermitted(ref cause) => write!(f, "{}", cause),
             CreateDirectoryConfigError::ResourceAlreadyExists(ref cause) => write!(f, "{}", cause),
+            CreateDirectoryConfigError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
@@ -2251,6 +2318,8 @@ pub enum CreateFleetError {
     LimitExceeded(String),
     /// <p>The attempted operation is not permitted.</p>
     OperationNotPermitted(String),
+    /// <p>AppStream 2.0 can’t process the request right now because the Describe calls from your AWS account are being throttled by Amazon EC2. Try again later.</p>
+    RequestLimitExceeded(String),
     /// <p>The specified resource already exists.</p>
     ResourceAlreadyExists(String),
     /// <p>The specified resource exists and is not in use, but isn't available.</p>
@@ -2286,6 +2355,9 @@ impl CreateFleetError {
                 "OperationNotPermittedException" => {
                     return RusotoError::Service(CreateFleetError::OperationNotPermitted(err.msg))
                 }
+                "RequestLimitExceededException" => {
+                    return RusotoError::Service(CreateFleetError::RequestLimitExceeded(err.msg))
+                }
                 "ResourceAlreadyExistsException" => {
                     return RusotoError::Service(CreateFleetError::ResourceAlreadyExists(err.msg))
                 }
@@ -2313,6 +2385,7 @@ impl fmt::Display for CreateFleetError {
             CreateFleetError::InvalidRole(ref cause) => write!(f, "{}", cause),
             CreateFleetError::LimitExceeded(ref cause) => write!(f, "{}", cause),
             CreateFleetError::OperationNotPermitted(ref cause) => write!(f, "{}", cause),
+            CreateFleetError::RequestLimitExceeded(ref cause) => write!(f, "{}", cause),
             CreateFleetError::ResourceAlreadyExists(ref cause) => write!(f, "{}", cause),
             CreateFleetError::ResourceNotAvailable(ref cause) => write!(f, "{}", cause),
             CreateFleetError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
@@ -2337,6 +2410,8 @@ pub enum CreateImageBuilderError {
     LimitExceeded(String),
     /// <p>The attempted operation is not permitted.</p>
     OperationNotPermitted(String),
+    /// <p>AppStream 2.0 can’t process the request right now because the Describe calls from your AWS account are being throttled by Amazon EC2. Try again later.</p>
+    RequestLimitExceeded(String),
     /// <p>The specified resource already exists.</p>
     ResourceAlreadyExists(String),
     /// <p>The specified resource exists and is not in use, but isn't available.</p>
@@ -2380,6 +2455,11 @@ impl CreateImageBuilderError {
                         err.msg,
                     ))
                 }
+                "RequestLimitExceededException" => {
+                    return RusotoError::Service(CreateImageBuilderError::RequestLimitExceeded(
+                        err.msg,
+                    ))
+                }
                 "ResourceAlreadyExistsException" => {
                     return RusotoError::Service(CreateImageBuilderError::ResourceAlreadyExists(
                         err.msg,
@@ -2413,6 +2493,7 @@ impl fmt::Display for CreateImageBuilderError {
             CreateImageBuilderError::InvalidRole(ref cause) => write!(f, "{}", cause),
             CreateImageBuilderError::LimitExceeded(ref cause) => write!(f, "{}", cause),
             CreateImageBuilderError::OperationNotPermitted(ref cause) => write!(f, "{}", cause),
+            CreateImageBuilderError::RequestLimitExceeded(ref cause) => write!(f, "{}", cause),
             CreateImageBuilderError::ResourceAlreadyExists(ref cause) => write!(f, "{}", cause),
             CreateImageBuilderError::ResourceNotAvailable(ref cause) => write!(f, "{}", cause),
             CreateImageBuilderError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
@@ -3307,6 +3388,8 @@ impl Error for DescribeUsageReportSubscriptionsError {}
 pub enum DescribeUserStackAssociationsError {
     /// <p>Indicates an incorrect combination of parameters, or a missing parameter.</p>
     InvalidParameterCombination(String),
+    /// <p>The attempted operation is not permitted.</p>
+    OperationNotPermitted(String),
 }
 
 impl DescribeUserStackAssociationsError {
@@ -3318,6 +3401,11 @@ impl DescribeUserStackAssociationsError {
                 "InvalidParameterCombinationException" => {
                     return RusotoError::Service(
                         DescribeUserStackAssociationsError::InvalidParameterCombination(err.msg),
+                    )
+                }
+                "OperationNotPermittedException" => {
+                    return RusotoError::Service(
+                        DescribeUserStackAssociationsError::OperationNotPermitted(err.msg),
                     )
                 }
                 "ValidationException" => return RusotoError::Validation(err.msg),
@@ -3332,6 +3420,9 @@ impl fmt::Display for DescribeUserStackAssociationsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match *self {
             DescribeUserStackAssociationsError::InvalidParameterCombination(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DescribeUserStackAssociationsError::OperationNotPermitted(ref cause) => {
                 write!(f, "{}", cause)
             }
         }
@@ -3411,6 +3502,8 @@ impl Error for DisableUserError {}
 pub enum DisassociateFleetError {
     /// <p>An API error occurred. Wait a few minutes and try again.</p>
     ConcurrentModification(String),
+    /// <p>The attempted operation is not permitted.</p>
+    OperationNotPermitted(String),
     /// <p>The specified resource is in use.</p>
     ResourceInUse(String),
     /// <p>The specified resource was not found.</p>
@@ -3423,6 +3516,11 @@ impl DisassociateFleetError {
             match err.typ.as_str() {
                 "ConcurrentModificationException" => {
                     return RusotoError::Service(DisassociateFleetError::ConcurrentModification(
+                        err.msg,
+                    ))
+                }
+                "OperationNotPermittedException" => {
+                    return RusotoError::Service(DisassociateFleetError::OperationNotPermitted(
                         err.msg,
                     ))
                 }
@@ -3444,6 +3542,7 @@ impl fmt::Display for DisassociateFleetError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match *self {
             DisassociateFleetError::ConcurrentModification(ref cause) => write!(f, "{}", cause),
+            DisassociateFleetError::OperationNotPermitted(ref cause) => write!(f, "{}", cause),
             DisassociateFleetError::ResourceInUse(ref cause) => write!(f, "{}", cause),
             DisassociateFleetError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
         }
@@ -3597,6 +3696,8 @@ pub enum StartFleetError {
     LimitExceeded(String),
     /// <p>The attempted operation is not permitted.</p>
     OperationNotPermitted(String),
+    /// <p>AppStream 2.0 can’t process the request right now because the Describe calls from your AWS account are being throttled by Amazon EC2. Try again later.</p>
+    RequestLimitExceeded(String),
     /// <p>The specified resource exists and is not in use, but isn't available.</p>
     ResourceNotAvailable(String),
     /// <p>The specified resource was not found.</p>
@@ -3622,6 +3723,9 @@ impl StartFleetError {
                 "OperationNotPermittedException" => {
                     return RusotoError::Service(StartFleetError::OperationNotPermitted(err.msg))
                 }
+                "RequestLimitExceededException" => {
+                    return RusotoError::Service(StartFleetError::RequestLimitExceeded(err.msg))
+                }
                 "ResourceNotAvailableException" => {
                     return RusotoError::Service(StartFleetError::ResourceNotAvailable(err.msg))
                 }
@@ -3644,6 +3748,7 @@ impl fmt::Display for StartFleetError {
             StartFleetError::InvalidRole(ref cause) => write!(f, "{}", cause),
             StartFleetError::LimitExceeded(ref cause) => write!(f, "{}", cause),
             StartFleetError::OperationNotPermitted(ref cause) => write!(f, "{}", cause),
+            StartFleetError::RequestLimitExceeded(ref cause) => write!(f, "{}", cause),
             StartFleetError::ResourceNotAvailable(ref cause) => write!(f, "{}", cause),
             StartFleetError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
         }
@@ -3869,6 +3974,10 @@ impl Error for UntagResourceError {}
 pub enum UpdateDirectoryConfigError {
     /// <p>An API error occurred. Wait a few minutes and try again.</p>
     ConcurrentModification(String),
+    /// <p>The specified role is invalid.</p>
+    InvalidRole(String),
+    /// <p>The attempted operation is not permitted.</p>
+    OperationNotPermitted(String),
     /// <p>The specified resource is in use.</p>
     ResourceInUse(String),
     /// <p>The specified resource was not found.</p>
@@ -3883,6 +3992,14 @@ impl UpdateDirectoryConfigError {
                     return RusotoError::Service(
                         UpdateDirectoryConfigError::ConcurrentModification(err.msg),
                     )
+                }
+                "InvalidRoleException" => {
+                    return RusotoError::Service(UpdateDirectoryConfigError::InvalidRole(err.msg))
+                }
+                "OperationNotPermittedException" => {
+                    return RusotoError::Service(UpdateDirectoryConfigError::OperationNotPermitted(
+                        err.msg,
+                    ))
                 }
                 "ResourceInUseException" => {
                     return RusotoError::Service(UpdateDirectoryConfigError::ResourceInUse(err.msg))
@@ -3904,6 +4021,8 @@ impl fmt::Display for UpdateDirectoryConfigError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match *self {
             UpdateDirectoryConfigError::ConcurrentModification(ref cause) => write!(f, "{}", cause),
+            UpdateDirectoryConfigError::InvalidRole(ref cause) => write!(f, "{}", cause),
+            UpdateDirectoryConfigError::OperationNotPermitted(ref cause) => write!(f, "{}", cause),
             UpdateDirectoryConfigError::ResourceInUse(ref cause) => write!(f, "{}", cause),
             UpdateDirectoryConfigError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
         }
@@ -3927,6 +4046,8 @@ pub enum UpdateFleetError {
     LimitExceeded(String),
     /// <p>The attempted operation is not permitted.</p>
     OperationNotPermitted(String),
+    /// <p>AppStream 2.0 can’t process the request right now because the Describe calls from your AWS account are being throttled by Amazon EC2. Try again later.</p>
+    RequestLimitExceeded(String),
     /// <p>The specified resource is in use.</p>
     ResourceInUse(String),
     /// <p>The specified resource exists and is not in use, but isn't available.</p>
@@ -3962,6 +4083,9 @@ impl UpdateFleetError {
                 "OperationNotPermittedException" => {
                     return RusotoError::Service(UpdateFleetError::OperationNotPermitted(err.msg))
                 }
+                "RequestLimitExceededException" => {
+                    return RusotoError::Service(UpdateFleetError::RequestLimitExceeded(err.msg))
+                }
                 "ResourceInUseException" => {
                     return RusotoError::Service(UpdateFleetError::ResourceInUse(err.msg))
                 }
@@ -3989,6 +4113,7 @@ impl fmt::Display for UpdateFleetError {
             UpdateFleetError::InvalidRole(ref cause) => write!(f, "{}", cause),
             UpdateFleetError::LimitExceeded(ref cause) => write!(f, "{}", cause),
             UpdateFleetError::OperationNotPermitted(ref cause) => write!(f, "{}", cause),
+            UpdateFleetError::RequestLimitExceeded(ref cause) => write!(f, "{}", cause),
             UpdateFleetError::ResourceInUse(ref cause) => write!(f, "{}", cause),
             UpdateFleetError::ResourceNotAvailable(ref cause) => write!(f, "{}", cause),
             UpdateFleetError::ResourceNotFound(ref cause) => write!(f, "{}", cause),

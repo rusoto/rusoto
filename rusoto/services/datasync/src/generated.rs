@@ -104,7 +104,7 @@ pub struct CreateAgentRequest {
     #[serde(rename = "Tags")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub tags: Option<Vec<TagListEntry>>,
-    /// <p>The ID of the VPC (Virtual Private Cloud) endpoint that the agent has access to. This is the client-side VPC endpoint, also called a PrivateLink. If you don't have a PrivateLink VPC endpoint, see <a href="https://docs.aws.amazon.com/vpc/latest/userguide/endpoint-service.html#create-endpoint-service">Creating a VPC Endpoint Service Configuration</a> in the AWS VPC User Guide.</p> <p>VPC endpoint ID looks like this: <code>vpce-01234d5aff67890e1</code>.</p>
+    /// <p>The ID of the VPC (virtual private cloud) endpoint that the agent has access to. This is the client-side VPC endpoint, also called a PrivateLink. If you don't have a PrivateLink VPC endpoint, see <a href="https://docs.aws.amazon.com/vpc/latest/userguide/endpoint-service.html#create-endpoint-service">Creating a VPC Endpoint Service Configuration</a> in the Amazon VPC User Guide.</p> <p>VPC endpoint ID looks like this: <code>vpce-01234d5aff67890e1</code>.</p>
     #[serde(rename = "VpcEndpointId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub vpc_endpoint_id: Option<String>,
@@ -130,7 +130,7 @@ pub struct CreateLocationEfsRequest {
     /// <p>The Amazon Resource Name (ARN) for the Amazon EFS file system.</p>
     #[serde(rename = "EfsFilesystemArn")]
     pub efs_filesystem_arn: String,
-    /// <p><p>A subdirectory in the location’s path. This subdirectory in the EFS file system is used to read data from the EFS source location or write data to the EFS destination. By default, AWS DataSync uses the root directory.</p> <note> <p> <code>Subdirectory</code> must be specified with forward slashes. For example <code>/path/to/folder</code>.</p> </note></p>
+    /// <p><p>A subdirectory in the location’s path. This subdirectory in the EFS file system is used to read data from the EFS source location or write data to the EFS destination. By default, AWS DataSync uses the root directory.</p> <note> <p> <code>Subdirectory</code> must be specified with forward slashes. For example, <code>/path/to/folder</code>.</p> </note></p>
     #[serde(rename = "Subdirectory")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub subdirectory: Option<String>,
@@ -196,13 +196,13 @@ pub struct CreateLocationNfsRequest {
     #[serde(rename = "MountOptions")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub mount_options: Option<NfsMountOptions>,
-    /// <p>Contains a list of Amazon Resource Names (ARNs) of agents that are used to connect to an NFS server.</p>
+    /// <p>Contains a list of Amazon Resource Names (ARNs) of agents that are used to connect to an NFS server. </p> <p>If you are copying data to or from your AWS Snowcone device, see <a href="https://docs.aws.amazon.com/datasync/latest/userguide/create-nfs-location.html#nfs-on-snowcone">NFS Server on AWS Snowcone</a> for more information.</p>
     #[serde(rename = "OnPremConfig")]
     pub on_prem_config: OnPremConfig,
-    /// <p><p>The name of the NFS server. This value is the IP address or Domain Name Service (DNS) name of the NFS server. An agent that is installed on-premises uses this host name to mount the NFS server in a network. </p> <note> <p>This name must either be DNS-compliant or must be an IP version 4 (IPv4) address.</p> </note></p>
+    /// <p><p>The name of the NFS server. This value is the IP address or Domain Name Service (DNS) name of the NFS server. An agent that is installed on-premises uses this host name to mount the NFS server in a network. </p> <p>If you are copying data to or from your AWS Snowcone device, see <a href="https://docs.aws.amazon.com/datasync/latest/userguide/create-nfs-location.html#nfs-on-snowcone">NFS Server on AWS Snowcone</a> for more information.</p> <note> <p>This name must either be DNS-compliant or must be an IP version 4 (IPv4) address.</p> </note></p>
     #[serde(rename = "ServerHostname")]
     pub server_hostname: String,
-    /// <p>The subdirectory in the NFS file system that is used to read data from the NFS source location or write data to the NFS destination. The NFS path should be a path that's exported by the NFS server, or a subdirectory of that path. The path should be such that it can be mounted by other NFS clients in your network. </p> <p>To see all the paths exported by your NFS server. run "<code>showmount -e nfs-server-name</code>" from an NFS client that has access to your server. You can specify any directory that appears in the results, and any subdirectory of that directory. Ensure that the NFS export is accessible without Kerberos authentication. </p> <p>To transfer all the data in the folder you specified, DataSync needs to have permissions to read all the data. To ensure this, either configure the NFS export with <code>no_root_squash,</code> or ensure that the permissions for all of the files that you want DataSync allow read access for all users. Doing either enables the agent to read the files. For the agent to access directories, you must additionally enable all execute access.</p> <p>For information about NFS export configuration, see 18.7. The /etc/exports Configuration File in the Red Hat Enterprise Linux documentation.</p>
+    /// <p>The subdirectory in the NFS file system that is used to read data from the NFS source location or write data to the NFS destination. The NFS path should be a path that's exported by the NFS server, or a subdirectory of that path. The path should be such that it can be mounted by other NFS clients in your network. </p> <p>To see all the paths exported by your NFS server, run "<code>showmount -e nfs-server-name</code>" from an NFS client that has access to your server. You can specify any directory that appears in the results, and any subdirectory of that directory. Ensure that the NFS export is accessible without Kerberos authentication. </p> <p>To transfer all the data in the folder you specified, DataSync needs to have permissions to read all the data. To ensure this, either configure the NFS export with <code>no_root_squash,</code> or ensure that the permissions for all of the files that you want DataSync allow read access for all users. Doing either enables the agent to read the files. For the agent to access directories, you must additionally enable all execute access.</p> <p>If you are copying data to or from your AWS Snowcone device, see <a href="https://docs.aws.amazon.com/datasync/latest/userguide/create-nfs-location.html#nfs-on-snowcone">NFS Server on AWS Snowcone</a> for more information.</p> <p>For information about NFS export configuration, see 18.7. The /etc/exports Configuration File in the Red Hat Enterprise Linux documentation.</p>
     #[serde(rename = "Subdirectory")]
     pub subdirectory: String,
     /// <p>The key-value pair that represents the tag that you want to add to the location. The value can be an empty string. We recommend using tags to name your resources.</p>
@@ -221,16 +221,69 @@ pub struct CreateLocationNfsResponse {
     pub location_arn: Option<String>,
 }
 
+/// <p>CreateLocationObjectStorageRequest</p>
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct CreateLocationObjectStorageRequest {
+    /// <p>Optional. The access key is used if credentials are required to access the self-managed object storage server. If your object storage requires a user name and password to authenticate, use <code>AccessKey</code> and <code>SecretKey</code> to provide the user name and password, respectively.</p>
+    #[serde(rename = "AccessKey")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub access_key: Option<String>,
+    /// <p>The Amazon Resource Name (ARN) of the agents associated with the self-managed object storage server location.</p>
+    #[serde(rename = "AgentArns")]
+    pub agent_arns: Vec<String>,
+    /// <p>The bucket on the self-managed object storage server that is used to read data from.</p>
+    #[serde(rename = "BucketName")]
+    pub bucket_name: String,
+    /// <p>Optional. The secret key is used if credentials are required to access the self-managed object storage server. If your object storage requires a user name and password to authenticate, use <code>AccessKey</code> and <code>SecretKey</code> to provide the user name and password, respectively.</p>
+    #[serde(rename = "SecretKey")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub secret_key: Option<String>,
+    /// <p>The name of the self-managed object storage server. This value is the IP address or Domain Name Service (DNS) name of the object storage server. An agent uses this host name to mount the object storage server in a network. </p>
+    #[serde(rename = "ServerHostname")]
+    pub server_hostname: String,
+    /// <p>The port that your self-managed object storage server accepts inbound network traffic on. The server port is set by default to TCP 80 (HTTP) or TCP 443 (HTTPS). You can specify a custom port if your self-managed object storage server requires one.</p>
+    #[serde(rename = "ServerPort")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub server_port: Option<i64>,
+    /// <p>The protocol that the object storage server uses to communicate. Valid values are HTTP or HTTPS.</p>
+    #[serde(rename = "ServerProtocol")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub server_protocol: Option<String>,
+    /// <p>The subdirectory in the self-managed object storage server that is used to read data from.</p>
+    #[serde(rename = "Subdirectory")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub subdirectory: Option<String>,
+    /// <p>The key-value pair that represents the tag that you want to add to the location. The value can be an empty string. We recommend using tags to name your resources.</p>
+    #[serde(rename = "Tags")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub tags: Option<Vec<TagListEntry>>,
+}
+
+/// <p>CreateLocationObjectStorageResponse</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct CreateLocationObjectStorageResponse {
+    /// <p>The Amazon Resource Name (ARN) of the agents associated with the self-managed object storage server location.</p>
+    #[serde(rename = "LocationArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub location_arn: Option<String>,
+}
+
 /// <p>CreateLocationS3Request</p>
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateLocationS3Request {
-    /// <p>The Amazon Resource Name (ARN) of the Amazon S3 bucket.</p>
+    /// <p>If you are using DataSync on an AWS Outpost, specify the Amazon Resource Names (ARNs) of the DataSync agents deployed on your Outpost. For more information about launching a DataSync agent on an AWS Outpost, see <a>outposts-agent</a>.</p>
+    #[serde(rename = "AgentArns")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub agent_arns: Option<Vec<String>>,
+    /// <p>The ARN of the Amazon S3 bucket. If the bucket is on an AWS Outpost, this must be an access point ARN.</p>
     #[serde(rename = "S3BucketArn")]
     pub s3_bucket_arn: String,
     #[serde(rename = "S3Config")]
     pub s3_config: S3Config,
-    /// <p>The Amazon S3 storage class that you want to store your files in when this location is used as a task destination. For more information about S3 storage classes, see <a href="https://aws.amazon.com/s3/storage-classes/">Amazon S3 Storage Classes</a> in the <i>Amazon Simple Storage Service Developer Guide</i>. Some storage classes have behaviors that can affect your S3 storage cost. For detailed information, see <a>using-storage-classes</a>.</p>
+    /// <p>The Amazon S3 storage class that you want to store your files in when this location is used as a task destination. For buckets in AWS Regions, the storage class defaults to Standard. For buckets on AWS Outposts, the storage class defaults to AWS S3 Outposts.</p> <p>For more information about S3 storage classes, see <a href="http://aws.amazon.com/s3/storage-classes/">Amazon S3 Storage Classes</a>. Some storage classes have behaviors that can affect your S3 storage cost. For detailed information, see <a>using-storage-classes</a>.</p>
     #[serde(rename = "S3StorageClass")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub s3_storage_class: Option<String>,
@@ -275,7 +328,7 @@ pub struct CreateLocationSmbRequest {
     /// <p><p>The name of the SMB server. This value is the IP address or Domain Name Service (DNS) name of the SMB server. An agent that is installed on-premises uses this hostname to mount the SMB server in a network.</p> <note> <p>This name must either be DNS-compliant or must be an IP version 4 (IPv4) address.</p> </note></p>
     #[serde(rename = "ServerHostname")]
     pub server_hostname: String,
-    /// <p>The subdirectory in the SMB file system that is used to read data from the SMB source location or write data to the SMB destination. The SMB path should be a path that's exported by the SMB server, or a subdirectory of that path. The path should be such that it can be mounted by other SMB clients in your network.</p> <note> <p> <code>Subdirectory</code> must be specified with forward slashes. For example <code>/path/to/folder</code>.</p> </note> <p>To transfer all the data in the folder you specified, DataSync needs to have permissions to mount the SMB share, as well as to access all the data in that share. To ensure this, either ensure that the user/password specified belongs to the user who can mount the share, and who has the appropriate permissions for all of the files and directories that you want DataSync to access, or use credentials of a member of the Backup Operators group to mount the share. Doing either enables the agent to access the data. For the agent to access directories, you must additionally enable all execute access.</p>
+    /// <p>The subdirectory in the SMB file system that is used to read data from the SMB source location or write data to the SMB destination. The SMB path should be a path that's exported by the SMB server, or a subdirectory of that path. The path should be such that it can be mounted by other SMB clients in your network.</p> <note> <p> <code>Subdirectory</code> must be specified with forward slashes. For example, <code>/path/to/folder</code>.</p> </note> <p>To transfer all the data in the folder you specified, DataSync needs to have permissions to mount the SMB share, as well as to access all the data in that share. To ensure this, either ensure that the user/password specified belongs to the user who can mount the share, and who has the appropriate permissions for all of the files and directories that you want DataSync to access, or use credentials of a member of the Backup Operators group to mount the share. Doing either enables the agent to access the data. For the agent to access directories, you must additionally enable all execute access.</p>
     #[serde(rename = "Subdirectory")]
     pub subdirectory: String,
     /// <p>The key-value pair that represents the tag that you want to add to the location. The value can be an empty string. We recommend using tags to name your resources.</p>
@@ -301,14 +354,14 @@ pub struct CreateLocationSmbResponse {
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateTaskRequest {
-    /// <p>The Amazon Resource Name (ARN) of the Amazon CloudWatch log group that is used to monitor and log events in the task. </p> <p>For more information on these groups, see Working with Log Groups and Log Streams in the <i>Amazon CloudWatch User Guide.</i> </p> <p>For more information about how to use CloudWatch Logs with DataSync, see Monitoring Your Task in the <i>AWS DataSync User Guide.</i> </p>
+    /// <p>The Amazon Resource Name (ARN) of the Amazon CloudWatch log group that is used to monitor and log events in the task. </p>
     #[serde(rename = "CloudWatchLogGroupArn")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub cloud_watch_log_group_arn: Option<String>,
     /// <p>The Amazon Resource Name (ARN) of an AWS storage resource's location. </p>
     #[serde(rename = "DestinationLocationArn")]
     pub destination_location_arn: String,
-    /// <p>A list of filter rules that determines which files to exclude from a task. The list should contain a single filter string that consists of the patterns to exclude. The patterns are delimited by "|" (that is, a pipe), for example, <code>"/folder1|/folder2"</code> </p> <p> </p>
+    /// <p>A list of filter rules that determines which files to exclude from a task. The list should contain a single filter string that consists of the patterns to exclude. The patterns are delimited by "|" (that is, a pipe), for example, <code>"/folder1|/folder2"</code>. </p> <p> </p>
     #[serde(rename = "Excludes")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub excludes: Option<Vec<FilterRule>>,
@@ -316,7 +369,7 @@ pub struct CreateTaskRequest {
     #[serde(rename = "Name")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub name: Option<String>,
-    /// <p>The set of configuration options that control the behavior of a single execution of the task that occurs when you call <code>StartTaskExecution</code>. You can configure these options to preserve metadata such as user ID (UID) and group ID (GID), file permissions, data integrity verification, and so on.</p> <p>For each individual task execution, you can override these options by specifying the <code>OverrideOptions</code> before starting a the task execution. For more information, see the operation. </p>
+    /// <p>The set of configuration options that control the behavior of a single execution of the task that occurs when you call <code>StartTaskExecution</code>. You can configure these options to preserve metadata such as user ID (UID) and group ID (GID), file permissions, data integrity verification, and so on.</p> <p>For each individual task execution, you can override these options by specifying the <code>OverrideOptions</code> before starting the task execution. For more information, see the operation. </p>
     #[serde(rename = "Options")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub options: Option<Options>,
@@ -403,7 +456,7 @@ pub struct DescribeAgentResponse {
     #[serde(rename = "CreationTime")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub creation_time: Option<f64>,
-    /// <p>The type of endpoint that your agent is connected to. If the endpoint is a VPC endpoint, the agent is not accessible over the public Internet. </p>
+    /// <p>The type of endpoint that your agent is connected to. If the endpoint is a VPC endpoint, the agent is not accessible over the public internet. </p>
     #[serde(rename = "EndpointType")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub endpoint_type: Option<String>,
@@ -445,7 +498,7 @@ pub struct DescribeLocationEfsResponse {
     #[serde(rename = "Ec2Config")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub ec_2_config: Option<Ec2Config>,
-    /// <p>The Amazon resource Name (ARN) of the EFS location that was described.</p>
+    /// <p>The Amazon Resource Name (ARN) of the EFS location that was described.</p>
     #[serde(rename = "LocationArn")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub location_arn: Option<String>,
@@ -474,7 +527,7 @@ pub struct DescribeLocationFsxWindowsResponse {
     #[serde(rename = "Domain")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub domain: Option<String>,
-    /// <p>The Amazon resource Name (ARN) of the FSx for Windows location that was described.</p>
+    /// <p>The Amazon Resource Name (ARN) of the FSx for Windows location that was described.</p>
     #[serde(rename = "LocationArn")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub location_arn: Option<String>,
@@ -482,7 +535,7 @@ pub struct DescribeLocationFsxWindowsResponse {
     #[serde(rename = "LocationUri")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub location_uri: Option<String>,
-    /// <p>The Amazon Resource Names (ARNs) of the security groups that are configured for the for the FSx for Windows file system.</p>
+    /// <p>The Amazon Resource Names (ARNs) of the security groups that are configured for the FSx for Windows file system.</p>
     #[serde(rename = "SecurityGroupArns")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub security_group_arns: Option<Vec<String>>,
@@ -496,7 +549,7 @@ pub struct DescribeLocationFsxWindowsResponse {
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeLocationNfsRequest {
-    /// <p>The Amazon resource Name (ARN) of the NFS location to describe.</p>
+    /// <p>The Amazon Resource Name (ARN) of the NFS location to describe.</p>
     #[serde(rename = "LocationArn")]
     pub location_arn: String,
 }
@@ -509,7 +562,7 @@ pub struct DescribeLocationNfsResponse {
     #[serde(rename = "CreationTime")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub creation_time: Option<f64>,
-    /// <p>The Amazon resource Name (ARN) of the NFS location that was described.</p>
+    /// <p>The Amazon Resource Name (ARN) of the NFS location that was described.</p>
     #[serde(rename = "LocationArn")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub location_arn: Option<String>,
@@ -526,6 +579,49 @@ pub struct DescribeLocationNfsResponse {
     pub on_prem_config: Option<OnPremConfig>,
 }
 
+/// <p>DescribeLocationObjectStorageRequest</p>
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct DescribeLocationObjectStorageRequest {
+    /// <p>The Amazon Resource Name (ARN) of the self-managed object storage server location that was described.</p>
+    #[serde(rename = "LocationArn")]
+    pub location_arn: String,
+}
+
+/// <p>DescribeLocationObjectStorageResponse</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct DescribeLocationObjectStorageResponse {
+    /// <p>Optional. The access key is used if credentials are required to access the self-managed object storage server. If your object storage requires a user name and password to authenticate, use <code>AccessKey</code> and <code>SecretKey</code> to provide the user name and password, respectively.</p>
+    #[serde(rename = "AccessKey")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub access_key: Option<String>,
+    /// <p>The Amazon Resource Name (ARN) of the agents associated with the self-managed object storage server location.</p>
+    #[serde(rename = "AgentArns")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub agent_arns: Option<Vec<String>>,
+    /// <p>The time that the self-managed object storage server agent was created.</p>
+    #[serde(rename = "CreationTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub creation_time: Option<f64>,
+    /// <p>The Amazon Resource Name (ARN) of the self-managed object storage server location to describe.</p>
+    #[serde(rename = "LocationArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub location_arn: Option<String>,
+    /// <p>The URL of the source self-managed object storage server location that was described.</p>
+    #[serde(rename = "LocationUri")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub location_uri: Option<String>,
+    /// <p>The port that your self-managed object storage server accepts inbound network traffic on. The server port is set by default to TCP 80 (HTTP) or TCP 443 (HTTPS).</p>
+    #[serde(rename = "ServerPort")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub server_port: Option<i64>,
+    /// <p>The protocol that the object storage server uses to communicate. Valid values are HTTP or HTTPS.</p>
+    #[serde(rename = "ServerProtocol")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub server_protocol: Option<String>,
+}
+
 /// <p>DescribeLocationS3Request</p>
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
@@ -539,11 +635,15 @@ pub struct DescribeLocationS3Request {
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeLocationS3Response {
+    /// <p>If you are using DataSync on an AWS Outpost, the Amazon Resource Name (ARNs) of the EC2 agents deployed on your Outpost. For more information about launching a DataSync agent on an AWS Outpost, see <a>outposts-agent</a>.</p>
+    #[serde(rename = "AgentArns")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub agent_arns: Option<Vec<String>>,
     /// <p>The time that the Amazon S3 bucket location was created.</p>
     #[serde(rename = "CreationTime")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub creation_time: Option<f64>,
-    /// <p>The Amazon Resource Name (ARN) of the Amazon S3 bucket location.</p>
+    /// <p>The Amazon Resource Name (ARN) of the Amazon S3 bucket or access point.</p>
     #[serde(rename = "LocationArn")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub location_arn: Option<String>,
@@ -554,7 +654,7 @@ pub struct DescribeLocationS3Response {
     #[serde(rename = "S3Config")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub s3_config: Option<S3Config>,
-    /// <p>The Amazon S3 storage class that you chose to store your files in when this location is used as a task destination. For more information about S3 storage classes, see <a href="https://aws.amazon.com/s3/storage-classes/">Amazon S3 Storage Classes</a> in the <i>Amazon Simple Storage Service Developer Guide</i>. Some storage classes have behaviors that can affect your S3 storage cost. For detailed information, see <a>using-storage-classes</a>.</p>
+    /// <p>The Amazon S3 storage class that you chose to store your files in when this location is used as a task destination. For more information about S3 storage classes, see <a href="http://aws.amazon.com/s3/storage-classes/">Amazon S3 Storage Classes</a>. Some storage classes have behaviors that can affect your S3 storage cost. For detailed information, see <a>using-storage-classes</a>.</p>
     #[serde(rename = "S3StorageClass")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub s3_storage_class: Option<String>,
@@ -564,7 +664,7 @@ pub struct DescribeLocationS3Response {
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeLocationSmbRequest {
-    /// <p>The Amazon resource Name (ARN) of the SMB location to describe.</p>
+    /// <p>The Amazon Resource Name (ARN) of the SMB location to describe.</p>
     #[serde(rename = "LocationArn")]
     pub location_arn: String,
 }
@@ -585,7 +685,7 @@ pub struct DescribeLocationSmbResponse {
     #[serde(rename = "Domain")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub domain: Option<String>,
-    /// <p>The Amazon resource Name (ARN) of the SMB location that was described.</p>
+    /// <p>The Amazon Resource Name (ARN) of the SMB location that was described.</p>
     #[serde(rename = "LocationArn")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub location_arn: Option<String>,
@@ -730,7 +830,7 @@ pub struct DescribeTaskResponse {
     #[serde(rename = "SourceNetworkInterfaceArns")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub source_network_interface_arns: Option<Vec<String>>,
-    /// <p>The status of the task that was described.</p> <p>For detailed information about task execution statuses, see Understanding Task Statuses in the <i>AWS DataSync User Guide.</i> </p>
+    /// <p>The status of the task that was described.</p> <p>For detailed information about task execution statuses, see Understanding Task Statuses in the <i>AWS DataSync User Guide</i>.</p>
     #[serde(rename = "Status")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub status: Option<String>,
@@ -796,6 +896,10 @@ pub struct ListAgentsResponse {
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListLocationsRequest {
+    /// <p>You can use API filters to narrow down the list of resources returned by <code>ListLocations</code>. For example, to retrieve all tasks on a specific source location, you can use <code>ListLocations</code> with filter name <code>LocationType S3</code> and <code>Operator Equals</code>.</p>
+    #[serde(rename = "Filters")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub filters: Option<Vec<LocationFilter>>,
     /// <p>The maximum number of locations to return.</p>
     #[serde(rename = "MaxResults")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -887,6 +991,10 @@ pub struct ListTaskExecutionsResponse {
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListTasksRequest {
+    /// <p>You can use API filters to narrow down the list of resources returned by <code>ListTasks</code>. For example, to retrieve all tasks on a specific source location, you can use <code>ListTasks</code> with filter name <code>LocationId</code> and <code>Operator Equals</code> with the ARN for the location.</p>
+    #[serde(rename = "Filters")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub filters: Option<Vec<TaskFilter>>,
     /// <p>The maximum number of tasks to return.</p>
     #[serde(rename = "MaxResults")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -909,6 +1017,21 @@ pub struct ListTasksResponse {
     #[serde(rename = "Tasks")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub tasks: Option<Vec<TaskListEntry>>,
+}
+
+/// <p>You can use API filters to narrow down the list of resources returned by <code>ListLocations</code>. For example, to retrieve all your Amazon S3 locations, you can use <code>ListLocations</code> with filter name <code>LocationType S3</code> and <code>Operator Equals</code>.</p>
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct LocationFilter {
+    /// <p>The name of the filter being used. Each API call supports a list of filters that are available for it (for example, <code>LocationType</code> for <code>ListLocations</code>).</p>
+    #[serde(rename = "Name")]
+    pub name: String,
+    /// <p>The operator that is used to compare filter values (for example, <code>Equals</code> or <code>Contains</code>). For more about API filtering operators, see <a>query-resources</a>.</p>
+    #[serde(rename = "Operator")]
+    pub operator: String,
+    /// <p>The values that you want to filter for. For example, you might want to display only Amazon S3 locations.</p>
+    #[serde(rename = "Values")]
+    pub values: Vec<String>,
 }
 
 /// <p>Represents a single entry in a list of locations. <code>LocationListEntry</code> returns an array that contains a list of locations when the <a>ListLocations</a> operation is called.</p>
@@ -937,7 +1060,7 @@ pub struct NfsMountOptions {
 /// <p>A list of Amazon Resource Names (ARNs) of agents to use for a Network File System (NFS) location.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct OnPremConfig {
-    /// <p>ARNs)of the agents to use for an NFS location.</p>
+    /// <p>ARNs of the agents to use for an NFS location.</p>
     #[serde(rename = "AgentArns")]
     pub agent_arns: Vec<String>,
 }
@@ -957,7 +1080,7 @@ pub struct Options {
     #[serde(rename = "Gid")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub gid: Option<String>,
-    /// <p>A value that determines the type of logs DataSync will deliver to your AWS CloudWatch Logs file. If set to <code>OFF</code>, no logs will be delivered. <code>BASIC</code> will deliver a few logs per transfer operation and <code>TRANSFER</code> will deliver a verbose log that contains logs for every file that is transferred.</p>
+    /// <p>A value that determines the type of logs that DataSync publishes to a log stream in the Amazon CloudWatch log group that you provide. For more information about providing a log group for DataSync, see <a href="https://docs.aws.amazon.com/datasync/latest/userguide/API_CreateTask.html#DataSync-CreateTask-request-CloudWatchLogGroupArn">CloudWatchLogGroupArn</a>. If set to <code>OFF</code>, no logs are published. <code>BASIC</code> publishes logs on errors for individual files transferred, and <code>TRANSFER</code> publishes logs for every file or object that is transferred and integrity checked.</p>
     #[serde(rename = "LogLevel")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub log_level: Option<String>,
@@ -981,25 +1104,29 @@ pub struct Options {
     #[serde(rename = "PreserveDevices")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub preserve_devices: Option<String>,
-    /// <p>A value that determines whether tasks should be queued before executing the tasks. If set to <code>ENABLED</code>, the tasks will be queued. The default is <code>ENABLED</code>.</p> <p>If you use the same agent to run multiple tasks you can enable the tasks to run in series. For more information see <a>queue-task-execution</a>.</p>
+    /// <p>A value that determines whether tasks should be queued before executing the tasks. If set to <code>ENABLED</code>, the tasks will be queued. The default is <code>ENABLED</code>.</p> <p>If you use the same agent to run multiple tasks, you can enable the tasks to run in series. For more information, see <a>queue-task-execution</a>.</p>
     #[serde(rename = "TaskQueueing")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub task_queueing: Option<String>,
+    /// <p>A value that determines whether DataSync transfers only the data and metadata that differ between the source and the destination location, or whether DataSync transfers all the content from the source, without comparing to the destination location. </p> <p>CHANGED: DataSync copies only data or metadata that is new or different content from the source location to the destination location.</p> <p>ALL: DataSync copies all source location content to the destination, without comparing to existing content on the destination.</p>
+    #[serde(rename = "TransferMode")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub transfer_mode: Option<String>,
     /// <p>The user ID (UID) of the file's owner. </p> <p>Default value: INT_VALUE. This preserves the integer value of the ID.</p> <p>INT_VALUE: Preserve the integer value of UID and group ID (GID) (recommended).</p> <p>NONE: Ignore UID and GID. </p>
     #[serde(rename = "Uid")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub uid: Option<String>,
-    /// <p>A value that determines whether a data integrity verification should be performed at the end of a task execution after all data and metadata have been transferred. </p> <p>Default value: POINT_IN_TIME_CONSISTENT.</p> <p>POINT_IN_TIME_CONSISTENT: Perform verification (recommended). </p> <p>ONLY_FILES_TRANSFERRED: Perform verification on only files that were transferred.</p> <p>NONE: Skip verification.</p>
+    /// <p>A value that determines whether a data integrity verification should be performed at the end of a task execution after all data and metadata have been transferred. For more information, see <a>create-task</a> </p> <p>Default value: POINT_IN_TIME_CONSISTENT.</p> <p>ONLY_FILES_TRANSFERRED (recommended): Perform verification only on files that were transferred. </p> <p>POINT_IN_TIME_CONSISTENT: Scan the entire source and entire destination at the end of the transfer to verify that source and destination are fully synchronized. This option isn't supported when transferring to S3 Glacier or S3 Glacier Deep Archive storage classes.</p> <p>NONE: No additional verification is done at the end of the transfer, but all data transmissions are integrity-checked with checksum verification during the transfer.</p>
     #[serde(rename = "VerifyMode")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub verify_mode: Option<String>,
 }
 
-/// <p>The VPC endpoint, subnet and security group that an agent uses to access IP addresses in a VPC (Virtual Private Cloud).</p>
+/// <p>The VPC endpoint, subnet, and security group that an agent uses to access IP addresses in a VPC (Virtual Private Cloud).</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct PrivateLinkConfig {
-    /// <p>The private endpoint that is configured for an agent that has access to IP addresses in a <a href="https://docs.aws.amazon.com/vpc/latest/userguide/endpoint-service.html">PrivateLink</a>. An agent that is configured with this endpoint will not be accessible over the public Internet.</p>
+    /// <p>The private endpoint that is configured for an agent that has access to IP addresses in a <a href="https://docs.aws.amazon.com/vpc/latest/userguide/endpoint-service.html">PrivateLink</a>. An agent that is configured with this endpoint will not be accessible over the public internet.</p>
     #[serde(rename = "PrivateLinkEndpoint")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub private_link_endpoint: Option<String>,
@@ -1011,7 +1138,7 @@ pub struct PrivateLinkConfig {
     #[serde(rename = "SubnetArns")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub subnet_arns: Option<Vec<String>>,
-    /// <p>The ID of the VPC endpoint that is configured for an agent. An agent that is configured with a VPC endpoint will not be accessible over the public Internet.</p>
+    /// <p>The ID of the VPC endpoint that is configured for an agent. An agent that is configured with a VPC endpoint will not be accessible over the public internet.</p>
     #[serde(rename = "VpcEndpointId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub vpc_endpoint_id: Option<String>,
@@ -1130,7 +1257,7 @@ pub struct TaskExecutionResultDetail {
     #[serde(rename = "TransferDuration")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub transfer_duration: Option<i64>,
-    /// <p>The status of the TRANSFERRING Phase.</p>
+    /// <p>The status of the TRANSFERRING phase.</p>
     #[serde(rename = "TransferStatus")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub transfer_status: Option<String>,
@@ -1138,10 +1265,25 @@ pub struct TaskExecutionResultDetail {
     #[serde(rename = "VerifyDuration")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub verify_duration: Option<i64>,
-    /// <p>The status of the VERIFYING Phase.</p>
+    /// <p>The status of the VERIFYING phase.</p>
     #[serde(rename = "VerifyStatus")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub verify_status: Option<String>,
+}
+
+/// <p>You can use API filters to narrow down the list of resources returned by <code>ListTasks</code>. For example, to retrieve all tasks on a source location, you can use <code>ListTasks</code> with filter name <code>LocationId</code> and <code>Operator Equals</code> with the ARN for the location.</p>
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct TaskFilter {
+    /// <p>The name of the filter being used. Each API call supports a list of filters that are available for it. For example, <code>LocationId</code> for <code>ListTasks</code>.</p>
+    #[serde(rename = "Name")]
+    pub name: String,
+    /// <p>The operator that is used to compare filter values (for example, <code>Equals</code> or <code>Contains</code>). For more about API filtering operators, see <a>query-resources</a>.</p>
+    #[serde(rename = "Operator")]
+    pub operator: String,
+    /// <p>The values that you want to filter for. For example, you might want to display only tasks for a specific destination location.</p>
+    #[serde(rename = "Values")]
+    pub values: Vec<String>,
 }
 
 /// <p>Represents a single entry in a list of tasks. <code>TaskListEntry</code> returns an array that contains a list of tasks when the <a>ListTasks</a> operation is called. A task includes the source and destination file systems to sync and the options to use for the tasks.</p>
@@ -1202,6 +1344,20 @@ pub struct UpdateAgentRequest {
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateAgentResponse {}
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct UpdateTaskExecutionRequest {
+    #[serde(rename = "Options")]
+    pub options: Options,
+    /// <p>The Amazon Resource Name (ARN) of the specific task execution that is being updated. </p>
+    #[serde(rename = "TaskExecutionArn")]
+    pub task_execution_arn: String,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct UpdateTaskExecutionResponse {}
 
 /// <p>UpdateTaskResponse</p>
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
@@ -1417,6 +1573,48 @@ impl fmt::Display for CreateLocationNfsError {
     }
 }
 impl Error for CreateLocationNfsError {}
+/// Errors returned by CreateLocationObjectStorage
+#[derive(Debug, PartialEq)]
+pub enum CreateLocationObjectStorageError {
+    /// <p>This exception is thrown when an error occurs in the AWS DataSync service.</p>
+    Internal(String),
+    /// <p>This exception is thrown when the client submits a malformed request.</p>
+    InvalidRequest(String),
+}
+
+impl CreateLocationObjectStorageError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<CreateLocationObjectStorageError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "InternalException" => {
+                    return RusotoError::Service(CreateLocationObjectStorageError::Internal(
+                        err.msg,
+                    ))
+                }
+                "InvalidRequestException" => {
+                    return RusotoError::Service(CreateLocationObjectStorageError::InvalidRequest(
+                        err.msg,
+                    ))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for CreateLocationObjectStorageError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            CreateLocationObjectStorageError::Internal(ref cause) => write!(f, "{}", cause),
+            CreateLocationObjectStorageError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for CreateLocationObjectStorageError {}
 /// Errors returned by CreateLocationS3
 #[derive(Debug, PartialEq)]
 pub enum CreateLocationS3Error {
@@ -1781,6 +1979,48 @@ impl fmt::Display for DescribeLocationNfsError {
     }
 }
 impl Error for DescribeLocationNfsError {}
+/// Errors returned by DescribeLocationObjectStorage
+#[derive(Debug, PartialEq)]
+pub enum DescribeLocationObjectStorageError {
+    /// <p>This exception is thrown when an error occurs in the AWS DataSync service.</p>
+    Internal(String),
+    /// <p>This exception is thrown when the client submits a malformed request.</p>
+    InvalidRequest(String),
+}
+
+impl DescribeLocationObjectStorageError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<DescribeLocationObjectStorageError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "InternalException" => {
+                    return RusotoError::Service(DescribeLocationObjectStorageError::Internal(
+                        err.msg,
+                    ))
+                }
+                "InvalidRequestException" => {
+                    return RusotoError::Service(
+                        DescribeLocationObjectStorageError::InvalidRequest(err.msg),
+                    )
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for DescribeLocationObjectStorageError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            DescribeLocationObjectStorageError::Internal(ref cause) => write!(f, "{}", cause),
+            DescribeLocationObjectStorageError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for DescribeLocationObjectStorageError {}
 /// Errors returned by DescribeLocationS3
 #[derive(Debug, PartialEq)]
 pub enum DescribeLocationS3Error {
@@ -2287,16 +2527,52 @@ impl fmt::Display for UpdateTaskError {
     }
 }
 impl Error for UpdateTaskError {}
+/// Errors returned by UpdateTaskExecution
+#[derive(Debug, PartialEq)]
+pub enum UpdateTaskExecutionError {
+    /// <p>This exception is thrown when an error occurs in the AWS DataSync service.</p>
+    Internal(String),
+    /// <p>This exception is thrown when the client submits a malformed request.</p>
+    InvalidRequest(String),
+}
+
+impl UpdateTaskExecutionError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateTaskExecutionError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "InternalException" => {
+                    return RusotoError::Service(UpdateTaskExecutionError::Internal(err.msg))
+                }
+                "InvalidRequestException" => {
+                    return RusotoError::Service(UpdateTaskExecutionError::InvalidRequest(err.msg))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for UpdateTaskExecutionError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            UpdateTaskExecutionError::Internal(ref cause) => write!(f, "{}", cause),
+            UpdateTaskExecutionError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for UpdateTaskExecutionError {}
 /// Trait representing the capabilities of the DataSync API. DataSync clients implement this trait.
 #[async_trait]
 pub trait DataSync {
-    /// <p>Cancels execution of a task. </p> <p>When you cancel a task execution, the transfer of some files are abruptly interrupted. The contents of files that are transferred to the destination might be incomplete or inconsistent with the source files. However, if you start a new task execution on the same task and you allow the task execution to complete, file content on the destination is complete and consistent. This applies to other unexpected failures that interrupt a task execution. In all of these cases, AWS DataSync successfully complete the transfer when you start the next task execution.</p>
+    /// <p>Cancels execution of a task. </p> <p>When you cancel a task execution, the transfer of some files is abruptly interrupted. The contents of files that are transferred to the destination might be incomplete or inconsistent with the source files. However, if you start a new task execution on the same task and you allow the task execution to complete, file content on the destination is complete and consistent. This applies to other unexpected failures that interrupt a task execution. In all of these cases, AWS DataSync successfully complete the transfer when you start the next task execution.</p>
     async fn cancel_task_execution(
         &self,
         input: CancelTaskExecutionRequest,
     ) -> Result<CancelTaskExecutionResponse, RusotoError<CancelTaskExecutionError>>;
 
-    /// <p><p>Activates an AWS DataSync agent that you have deployed on your host. The activation process associates your agent with your account. In the activation process, you specify information such as the AWS Region that you want to activate the agent in. You activate the agent in the AWS Region where your target locations (in Amazon S3 or Amazon EFS) reside. Your tasks are created in this AWS Region.</p> <p>You can activate the agent in a VPC (Virtual private Cloud) or provide the agent access to a VPC endpoint so you can run tasks without going over the public Internet.</p> <p>You can use an agent for more than one location. If a task uses multiple agents, all of them need to have status AVAILABLE for the task to run. If you use multiple agents for a source location, the status of all the agents must be AVAILABLE for the task to run. </p> <p>Agents are automatically updated by AWS on a regular basis, using a mechanism that ensures minimal interruption to your tasks.</p> <p/></p>
+    /// <p><p>Activates an AWS DataSync agent that you have deployed on your host. The activation process associates your agent with your account. In the activation process, you specify information such as the AWS Region that you want to activate the agent in. You activate the agent in the AWS Region where your target locations (in Amazon S3 or Amazon EFS) reside. Your tasks are created in this AWS Region.</p> <p>You can activate the agent in a VPC (virtual private cloud) or provide the agent access to a VPC endpoint so you can run tasks without going over the public internet.</p> <p>You can use an agent for more than one location. If a task uses multiple agents, all of them need to have status AVAILABLE for the task to run. If you use multiple agents for a source location, the status of all the agents must be AVAILABLE for the task to run. </p> <p>Agents are automatically updated by AWS on a regular basis, using a mechanism that ensures minimal interruption to your tasks.</p> <p/></p>
     async fn create_agent(
         &self,
         input: CreateAgentRequest,
@@ -2314,25 +2590,31 @@ pub trait DataSync {
         input: CreateLocationFsxWindowsRequest,
     ) -> Result<CreateLocationFsxWindowsResponse, RusotoError<CreateLocationFsxWindowsError>>;
 
-    /// <p>Defines a file system on a Network File System (NFS) server that can be read from or written to</p>
+    /// <p>Defines a file system on a Network File System (NFS) server that can be read from or written to.</p>
     async fn create_location_nfs(
         &self,
         input: CreateLocationNfsRequest,
     ) -> Result<CreateLocationNfsResponse, RusotoError<CreateLocationNfsError>>;
 
-    /// <p>Creates an endpoint for an Amazon S3 bucket.</p> <p>For AWS DataSync to access a destination S3 bucket, it needs an AWS Identity and Access Management (IAM) role that has the required permissions. You can set up the required permissions by creating an IAM policy that grants the required permissions and attaching the policy to the role. An example of such a policy is shown in the examples section.</p> <p>For more information, see https://docs.aws.amazon.com/datasync/latest/userguide/working-with-locations.html#create-s3-location in the <i>AWS DataSync User Guide.</i> </p>
+    /// <p>Creates an endpoint for a self-managed object storage bucket. For more information about self-managed object storage locations, see <a>create-object-location</a>.</p>
+    async fn create_location_object_storage(
+        &self,
+        input: CreateLocationObjectStorageRequest,
+    ) -> Result<CreateLocationObjectStorageResponse, RusotoError<CreateLocationObjectStorageError>>;
+
+    /// <p>Creates an endpoint for an Amazon S3 bucket.</p> <p>For more information, see https://docs.aws.amazon.com/datasync/latest/userguide/create-locations-cli.html#create-location-s3-cli in the <i>AWS DataSync User Guide</i>.</p>
     async fn create_location_s3(
         &self,
         input: CreateLocationS3Request,
     ) -> Result<CreateLocationS3Response, RusotoError<CreateLocationS3Error>>;
 
-    /// <p>Defines a file system on an Server Message Block (SMB) server that can be read from or written to.</p>
+    /// <p>Defines a file system on a Server Message Block (SMB) server that can be read from or written to.</p>
     async fn create_location_smb(
         &self,
         input: CreateLocationSmbRequest,
     ) -> Result<CreateLocationSmbResponse, RusotoError<CreateLocationSmbError>>;
 
-    /// <p>Creates a task. A task is a set of two locations (source and destination) and a set of Options that you use to control the behavior of a task. If you don't specify Options when you create a task, AWS DataSync populates them with service defaults.</p> <p>When you create a task, it first enters the CREATING state. During CREATING AWS DataSync attempts to mount the on-premises Network File System (NFS) location. The task transitions to the AVAILABLE state without waiting for the AWS location to become mounted. If required, AWS DataSync mounts the AWS location before each task execution.</p> <p>If an agent that is associated with a source (NFS) location goes offline, the task transitions to the UNAVAILABLE status. If the status of the task remains in the CREATING status for more than a few minutes, it means that your agent might be having trouble mounting the source NFS file system. Check the task's ErrorCode and ErrorDetail. Mount issues are often caused by either a misconfigured firewall or a mistyped NFS server host name.</p>
+    /// <p>Creates a task. A task is a set of two locations (source and destination) and a set of Options that you use to control the behavior of a task. If you don't specify Options when you create a task, AWS DataSync populates them with service defaults.</p> <p>When you create a task, it first enters the CREATING state. During CREATING AWS DataSync attempts to mount the on-premises Network File System (NFS) location. The task transitions to the AVAILABLE state without waiting for the AWS location to become mounted. If required, AWS DataSync mounts the AWS location before each task execution.</p> <p>If an agent that is associated with a source (NFS) location goes offline, the task transitions to the UNAVAILABLE status. If the status of the task remains in the CREATING status for more than a few minutes, it means that your agent might be having trouble mounting the source NFS file system. Check the task's ErrorCode and ErrorDetail. Mount issues are often caused by either a misconfigured firewall or a mistyped NFS server hostname.</p>
     async fn create_task(
         &self,
         input: CreateTaskRequest,
@@ -2374,11 +2656,20 @@ pub trait DataSync {
         input: DescribeLocationFsxWindowsRequest,
     ) -> Result<DescribeLocationFsxWindowsResponse, RusotoError<DescribeLocationFsxWindowsError>>;
 
-    /// <p>Returns metadata, such as the path information, about a NFS location.</p>
+    /// <p>Returns metadata, such as the path information, about an NFS location.</p>
     async fn describe_location_nfs(
         &self,
         input: DescribeLocationNfsRequest,
     ) -> Result<DescribeLocationNfsResponse, RusotoError<DescribeLocationNfsError>>;
+
+    /// <p>Returns metadata about a self-managed object storage server location. For more information about self-managed object storage locations, see <a>create-object-location</a>.</p>
+    async fn describe_location_object_storage(
+        &self,
+        input: DescribeLocationObjectStorageRequest,
+    ) -> Result<
+        DescribeLocationObjectStorageResponse,
+        RusotoError<DescribeLocationObjectStorageError>,
+    >;
 
     /// <p>Returns metadata, such as bucket name, about an Amazon S3 bucket location.</p>
     async fn describe_location_s3(
@@ -2386,7 +2677,7 @@ pub trait DataSync {
         input: DescribeLocationS3Request,
     ) -> Result<DescribeLocationS3Response, RusotoError<DescribeLocationS3Error>>;
 
-    /// <p>Returns metadata, such as the path and user information about a SMB location.</p>
+    /// <p>Returns metadata, such as the path and user information about an SMB location.</p>
     async fn describe_location_smb(
         &self,
         input: DescribeLocationSmbRequest,
@@ -2410,13 +2701,13 @@ pub trait DataSync {
         input: ListAgentsRequest,
     ) -> Result<ListAgentsResponse, RusotoError<ListAgentsError>>;
 
-    /// <p>Returns a lists of source and destination locations.</p> <p>If you have more locations than are returned in a response (that is, the response returns only a truncated list of your agents), the response contains a token that you can specify in your next request to fetch the next page of locations.</p>
+    /// <p>Returns a list of source and destination locations.</p> <p>If you have more locations than are returned in a response (that is, the response returns only a truncated list of your agents), the response contains a token that you can specify in your next request to fetch the next page of locations.</p>
     async fn list_locations(
         &self,
         input: ListLocationsRequest,
     ) -> Result<ListLocationsResponse, RusotoError<ListLocationsError>>;
 
-    /// <p>Returns all the tags associated with a specified resources. </p>
+    /// <p>Returns all the tags associated with a specified resource. </p>
     async fn list_tags_for_resource(
         &self,
         input: ListTagsForResourceRequest,
@@ -2463,6 +2754,12 @@ pub trait DataSync {
         &self,
         input: UpdateTaskRequest,
     ) -> Result<UpdateTaskResponse, RusotoError<UpdateTaskError>>;
+
+    /// <p><p>Updates execution of a task.</p> <p>You can modify bandwidth throttling for a task execution that is running or queued. For more information, see <a href="https://docs.aws.amazon.com/datasync/latest/working-with-task-executions.html#adjust-bandwidth-throttling">Adjusting Bandwidth Throttling for a Task Execution</a>.</p> <note> <p>The only <code>Option</code> that can be modified by <code>UpdateTaskExecution</code> is <code> <a href="https://docs.aws.amazon.com/datasync/latest/userguide/API_Options.html#DataSync-Type-Options-BytesPerSecond">BytesPerSecond</a> </code>.</p> </note></p>
+    async fn update_task_execution(
+        &self,
+        input: UpdateTaskExecutionRequest,
+    ) -> Result<UpdateTaskExecutionResponse, RusotoError<UpdateTaskExecutionError>>;
 }
 /// A client for the DataSync API.
 #[derive(Clone)]
@@ -2504,7 +2801,7 @@ impl DataSyncClient {
 
 #[async_trait]
 impl DataSync for DataSyncClient {
-    /// <p>Cancels execution of a task. </p> <p>When you cancel a task execution, the transfer of some files are abruptly interrupted. The contents of files that are transferred to the destination might be incomplete or inconsistent with the source files. However, if you start a new task execution on the same task and you allow the task execution to complete, file content on the destination is complete and consistent. This applies to other unexpected failures that interrupt a task execution. In all of these cases, AWS DataSync successfully complete the transfer when you start the next task execution.</p>
+    /// <p>Cancels execution of a task. </p> <p>When you cancel a task execution, the transfer of some files is abruptly interrupted. The contents of files that are transferred to the destination might be incomplete or inconsistent with the source files. However, if you start a new task execution on the same task and you allow the task execution to complete, file content on the destination is complete and consistent. This applies to other unexpected failures that interrupt a task execution. In all of these cases, AWS DataSync successfully complete the transfer when you start the next task execution.</p>
     async fn cancel_task_execution(
         &self,
         input: CancelTaskExecutionRequest,
@@ -2522,7 +2819,7 @@ impl DataSync for DataSyncClient {
         proto::json::ResponsePayload::new(&response).deserialize::<CancelTaskExecutionResponse, _>()
     }
 
-    /// <p><p>Activates an AWS DataSync agent that you have deployed on your host. The activation process associates your agent with your account. In the activation process, you specify information such as the AWS Region that you want to activate the agent in. You activate the agent in the AWS Region where your target locations (in Amazon S3 or Amazon EFS) reside. Your tasks are created in this AWS Region.</p> <p>You can activate the agent in a VPC (Virtual private Cloud) or provide the agent access to a VPC endpoint so you can run tasks without going over the public Internet.</p> <p>You can use an agent for more than one location. If a task uses multiple agents, all of them need to have status AVAILABLE for the task to run. If you use multiple agents for a source location, the status of all the agents must be AVAILABLE for the task to run. </p> <p>Agents are automatically updated by AWS on a regular basis, using a mechanism that ensures minimal interruption to your tasks.</p> <p/></p>
+    /// <p><p>Activates an AWS DataSync agent that you have deployed on your host. The activation process associates your agent with your account. In the activation process, you specify information such as the AWS Region that you want to activate the agent in. You activate the agent in the AWS Region where your target locations (in Amazon S3 or Amazon EFS) reside. Your tasks are created in this AWS Region.</p> <p>You can activate the agent in a VPC (virtual private cloud) or provide the agent access to a VPC endpoint so you can run tasks without going over the public internet.</p> <p>You can use an agent for more than one location. If a task uses multiple agents, all of them need to have status AVAILABLE for the task to run. If you use multiple agents for a source location, the status of all the agents must be AVAILABLE for the task to run. </p> <p>Agents are automatically updated by AWS on a regular basis, using a mechanism that ensures minimal interruption to your tasks.</p> <p/></p>
     async fn create_agent(
         &self,
         input: CreateAgentRequest,
@@ -2577,7 +2874,7 @@ impl DataSync for DataSyncClient {
             .deserialize::<CreateLocationFsxWindowsResponse, _>()
     }
 
-    /// <p>Defines a file system on a Network File System (NFS) server that can be read from or written to</p>
+    /// <p>Defines a file system on a Network File System (NFS) server that can be read from or written to.</p>
     async fn create_location_nfs(
         &self,
         input: CreateLocationNfsRequest,
@@ -2595,7 +2892,27 @@ impl DataSync for DataSyncClient {
         proto::json::ResponsePayload::new(&response).deserialize::<CreateLocationNfsResponse, _>()
     }
 
-    /// <p>Creates an endpoint for an Amazon S3 bucket.</p> <p>For AWS DataSync to access a destination S3 bucket, it needs an AWS Identity and Access Management (IAM) role that has the required permissions. You can set up the required permissions by creating an IAM policy that grants the required permissions and attaching the policy to the role. An example of such a policy is shown in the examples section.</p> <p>For more information, see https://docs.aws.amazon.com/datasync/latest/userguide/working-with-locations.html#create-s3-location in the <i>AWS DataSync User Guide.</i> </p>
+    /// <p>Creates an endpoint for a self-managed object storage bucket. For more information about self-managed object storage locations, see <a>create-object-location</a>.</p>
+    async fn create_location_object_storage(
+        &self,
+        input: CreateLocationObjectStorageRequest,
+    ) -> Result<CreateLocationObjectStorageResponse, RusotoError<CreateLocationObjectStorageError>>
+    {
+        let mut request = self.new_signed_request("POST", "/");
+        request.add_header("x-amz-target", "FmrsService.CreateLocationObjectStorage");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        let response = self
+            .sign_and_dispatch(request, CreateLocationObjectStorageError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<CreateLocationObjectStorageResponse, _>()
+    }
+
+    /// <p>Creates an endpoint for an Amazon S3 bucket.</p> <p>For more information, see https://docs.aws.amazon.com/datasync/latest/userguide/create-locations-cli.html#create-location-s3-cli in the <i>AWS DataSync User Guide</i>.</p>
     async fn create_location_s3(
         &self,
         input: CreateLocationS3Request,
@@ -2613,7 +2930,7 @@ impl DataSync for DataSyncClient {
         proto::json::ResponsePayload::new(&response).deserialize::<CreateLocationS3Response, _>()
     }
 
-    /// <p>Defines a file system on an Server Message Block (SMB) server that can be read from or written to.</p>
+    /// <p>Defines a file system on a Server Message Block (SMB) server that can be read from or written to.</p>
     async fn create_location_smb(
         &self,
         input: CreateLocationSmbRequest,
@@ -2631,7 +2948,7 @@ impl DataSync for DataSyncClient {
         proto::json::ResponsePayload::new(&response).deserialize::<CreateLocationSmbResponse, _>()
     }
 
-    /// <p>Creates a task. A task is a set of two locations (source and destination) and a set of Options that you use to control the behavior of a task. If you don't specify Options when you create a task, AWS DataSync populates them with service defaults.</p> <p>When you create a task, it first enters the CREATING state. During CREATING AWS DataSync attempts to mount the on-premises Network File System (NFS) location. The task transitions to the AVAILABLE state without waiting for the AWS location to become mounted. If required, AWS DataSync mounts the AWS location before each task execution.</p> <p>If an agent that is associated with a source (NFS) location goes offline, the task transitions to the UNAVAILABLE status. If the status of the task remains in the CREATING status for more than a few minutes, it means that your agent might be having trouble mounting the source NFS file system. Check the task's ErrorCode and ErrorDetail. Mount issues are often caused by either a misconfigured firewall or a mistyped NFS server host name.</p>
+    /// <p>Creates a task. A task is a set of two locations (source and destination) and a set of Options that you use to control the behavior of a task. If you don't specify Options when you create a task, AWS DataSync populates them with service defaults.</p> <p>When you create a task, it first enters the CREATING state. During CREATING AWS DataSync attempts to mount the on-premises Network File System (NFS) location. The task transitions to the AVAILABLE state without waiting for the AWS location to become mounted. If required, AWS DataSync mounts the AWS location before each task execution.</p> <p>If an agent that is associated with a source (NFS) location goes offline, the task transitions to the UNAVAILABLE status. If the status of the task remains in the CREATING status for more than a few minutes, it means that your agent might be having trouble mounting the source NFS file system. Check the task's ErrorCode and ErrorDetail. Mount issues are often caused by either a misconfigured firewall or a mistyped NFS server hostname.</p>
     async fn create_task(
         &self,
         input: CreateTaskRequest,
@@ -2759,7 +3076,7 @@ impl DataSync for DataSyncClient {
             .deserialize::<DescribeLocationFsxWindowsResponse, _>()
     }
 
-    /// <p>Returns metadata, such as the path information, about a NFS location.</p>
+    /// <p>Returns metadata, such as the path information, about an NFS location.</p>
     async fn describe_location_nfs(
         &self,
         input: DescribeLocationNfsRequest,
@@ -2775,6 +3092,28 @@ impl DataSync for DataSyncClient {
         let mut response = response;
         let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         proto::json::ResponsePayload::new(&response).deserialize::<DescribeLocationNfsResponse, _>()
+    }
+
+    /// <p>Returns metadata about a self-managed object storage server location. For more information about self-managed object storage locations, see <a>create-object-location</a>.</p>
+    async fn describe_location_object_storage(
+        &self,
+        input: DescribeLocationObjectStorageRequest,
+    ) -> Result<
+        DescribeLocationObjectStorageResponse,
+        RusotoError<DescribeLocationObjectStorageError>,
+    > {
+        let mut request = self.new_signed_request("POST", "/");
+        request.add_header("x-amz-target", "FmrsService.DescribeLocationObjectStorage");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        let response = self
+            .sign_and_dispatch(request, DescribeLocationObjectStorageError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<DescribeLocationObjectStorageResponse, _>()
     }
 
     /// <p>Returns metadata, such as bucket name, about an Amazon S3 bucket location.</p>
@@ -2795,7 +3134,7 @@ impl DataSync for DataSyncClient {
         proto::json::ResponsePayload::new(&response).deserialize::<DescribeLocationS3Response, _>()
     }
 
-    /// <p>Returns metadata, such as the path and user information about a SMB location.</p>
+    /// <p>Returns metadata, such as the path and user information about an SMB location.</p>
     async fn describe_location_smb(
         &self,
         input: DescribeLocationSmbRequest,
@@ -2868,7 +3207,7 @@ impl DataSync for DataSyncClient {
         proto::json::ResponsePayload::new(&response).deserialize::<ListAgentsResponse, _>()
     }
 
-    /// <p>Returns a lists of source and destination locations.</p> <p>If you have more locations than are returned in a response (that is, the response returns only a truncated list of your agents), the response contains a token that you can specify in your next request to fetch the next page of locations.</p>
+    /// <p>Returns a list of source and destination locations.</p> <p>If you have more locations than are returned in a response (that is, the response returns only a truncated list of your agents), the response contains a token that you can specify in your next request to fetch the next page of locations.</p>
     async fn list_locations(
         &self,
         input: ListLocationsRequest,
@@ -2886,7 +3225,7 @@ impl DataSync for DataSyncClient {
         proto::json::ResponsePayload::new(&response).deserialize::<ListLocationsResponse, _>()
     }
 
-    /// <p>Returns all the tags associated with a specified resources. </p>
+    /// <p>Returns all the tags associated with a specified resource. </p>
     async fn list_tags_for_resource(
         &self,
         input: ListTagsForResourceRequest,
@@ -3028,5 +3367,23 @@ impl DataSync for DataSyncClient {
         let mut response = response;
         let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         proto::json::ResponsePayload::new(&response).deserialize::<UpdateTaskResponse, _>()
+    }
+
+    /// <p><p>Updates execution of a task.</p> <p>You can modify bandwidth throttling for a task execution that is running or queued. For more information, see <a href="https://docs.aws.amazon.com/datasync/latest/working-with-task-executions.html#adjust-bandwidth-throttling">Adjusting Bandwidth Throttling for a Task Execution</a>.</p> <note> <p>The only <code>Option</code> that can be modified by <code>UpdateTaskExecution</code> is <code> <a href="https://docs.aws.amazon.com/datasync/latest/userguide/API_Options.html#DataSync-Type-Options-BytesPerSecond">BytesPerSecond</a> </code>.</p> </note></p>
+    async fn update_task_execution(
+        &self,
+        input: UpdateTaskExecutionRequest,
+    ) -> Result<UpdateTaskExecutionResponse, RusotoError<UpdateTaskExecutionError>> {
+        let mut request = self.new_signed_request("POST", "/");
+        request.add_header("x-amz-target", "FmrsService.UpdateTaskExecution");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        let response = self
+            .sign_and_dispatch(request, UpdateTaskExecutionError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<UpdateTaskExecutionResponse, _>()
     }
 }

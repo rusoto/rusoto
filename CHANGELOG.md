@@ -8,6 +8,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 (Please put changes here)
 
 - Display `rusoto_core::Client` in docs
+- Fix unsoundness in `rusoto_mock::MultipleMockRequestDispatcher`
+- Swap the unmaintained `dirs` crate for its replacement `dirs-next`
+- Swap `pin-project` for the lighter weight `pin-project-lite`
+- Update to `base64` 0.13
+- Update to `hmac` 0.10
+- Update to `hyper-rustls` 0.21.
+- Disable `chrono`'s `oldtime` feature
+- Remove dependency on `regex`
+- Update to botocore 1.19.42
 - Add ability to set local agent appended to the default User-Agent
 
 ## [0.45.0] - 2020-07-22

@@ -25,6 +25,33 @@ use rusoto_core::signature::SignedRequest;
 #[allow(unused_imports)]
 use serde::{Deserialize, Serialize};
 use serde_json;
+/// <p>A context is a variable that contains information about the current state of the conversation between a user and Amazon Lex. Context can be set automatically by Amazon Lex when an intent is fulfilled, or it can be set at runtime using the <code>PutContent</code>, <code>PutText</code>, or <code>PutSession</code> operation.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
+pub struct ActiveContext {
+    /// <p>The name of the context.</p>
+    #[serde(rename = "name")]
+    pub name: String,
+    /// <p>State variables for the current context. You can use these values as default values for slots in subsequent events.</p>
+    #[serde(rename = "parameters")]
+    pub parameters: ::std::collections::HashMap<String, String>,
+    /// <p>The length of time or number of turns that a context remains active.</p>
+    #[serde(rename = "timeToLive")]
+    pub time_to_live: ActiveContextTimeToLive,
+}
+
+/// <p>The length of time or number of turns that a context remains active.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
+pub struct ActiveContextTimeToLive {
+    /// <p>The number of seconds that the context should be active after it is first sent in a <code>PostContent</code> or <code>PostText</code> response. You can set the value between 5 and 86,400 seconds (24 hours).</p>
+    #[serde(rename = "timeToLiveInSeconds")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub time_to_live_in_seconds: Option<i64>,
+    /// <p>The number of conversation turns that the context should be active. A conversation turn is one <code>PostContent</code> or <code>PostText</code> request and the corresponding response from Amazon Lex.</p>
+    #[serde(rename = "turnsToLive")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub turns_to_live: Option<i64>,
+}
+
 /// <p>Represents an option to be shown on the client platform (Facebook, Slack, etc.)</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
@@ -151,6 +178,10 @@ pub struct GetSessionRequest {
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetSessionResponse {
+    /// <p>A list of active contexts for the session. A context can be set when an intent is fulfilled or by calling the <code>PostContent</code>, <code>PostText</code>, or <code>PutSession</code> operation.</p> <p>You can use a context to control the intents that can follow up an intent, or to modify the operation of your application.</p>
+    #[serde(rename = "activeContexts")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub active_contexts: Option<Vec<ActiveContext>>,
     /// <p>Describes the current state of the bot.</p>
     #[serde(rename = "dialogAction")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -167,6 +198,16 @@ pub struct GetSessionResponse {
     #[serde(rename = "sessionId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub session_id: Option<String>,
+}
+
+/// <p>Provides a score that indicates the confidence that Amazon Lex has that an intent is the one that satisfies the user's intent.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct IntentConfidence {
+    /// <p>A score that indicates how confident Amazon Lex is that an intent satisfies the user's intent. Ranges between 0.00 and 1.00. Higher scores indicate higher confidence.</p>
+    #[serde(rename = "score")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub score: Option<f64>,
 }
 
 /// <p>Provides information about the state of an intent. You can use this information to get the current state of an intent so that you can process the intent, or so that you can return the intent to its previous state.</p>
@@ -208,6 +249,10 @@ pub struct PostContentRequest {
     #[serde(rename = "accept")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub accept: Option<String>,
+    /// <p>A list of contexts active for the request. A context can be activated when a previous intent is fulfilled, or by including the context in the request,</p> <p>If you don't specify a list of contexts, Amazon Lex will use the current list of contexts for the session. If you specify an empty list, all contexts for the session are cleared.</p>
+    #[serde(rename = "activeContexts")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub active_contexts: Option<String>,
     /// <p>Alias of the Amazon Lex bot.</p>
     #[serde(rename = "botAlias")]
     pub bot_alias: String,
@@ -240,8 +285,14 @@ pub struct PostContentRequest {
 
 #[derive(Clone, Debug, Default, PartialEq)]
 pub struct PostContentResponse {
+    /// <p>A list of active contexts for the session. A context can be set when an intent is fulfilled or by calling the <code>PostContent</code>, <code>PostText</code>, or <code>PutSession</code> operation.</p> <p>You can use a context to control the intents that can follow up an intent, or to modify the operation of your application.</p>
+    pub active_contexts: Option<String>,
+    /// <p>One to four alternative intents that may be applicable to the user's intent.</p> <p>Each alternative includes a score that indicates how confident Amazon Lex is that the intent matches the user's intent. The intents are sorted by the confidence score.</p>
+    pub alternative_intents: Option<String>,
     /// <p>The prompt (or statement) to convey to the user. This is based on the bot configuration and context. For example, if Amazon Lex did not understand the user intent, it sends the <code>clarificationPrompt</code> configured for the bot. If the intent requires confirmation before taking the fulfillment action, it sends the <code>confirmationPrompt</code>. Another example: Suppose that the Lambda function successfully fulfilled the intent, and sent a message to convey to the user. Then Amazon Lex sends that message in the response. </p>
     pub audio_stream: Option<bytes::Bytes>,
+    /// <p>The version of the bot that responded to the conversation. You can use this information to help determine if one version of a bot is performing better than another version.</p>
+    pub bot_version: Option<String>,
     /// <p>Content type as specified in the <code>Accept</code> HTTP header in the request.</p>
     pub content_type: Option<String>,
     /// <p><p>Identifies the current state of the user interaction. Amazon Lex returns one of the following values as <code>dialogState</code>. The client can optionally use this information to customize the user interface. </p> <ul> <li> <p> <code>ElicitIntent</code> - Amazon Lex wants to elicit the user&#39;s intent. Consider the following examples: </p> <p> For example, a user might utter an intent (&quot;I want to order a pizza&quot;). If Amazon Lex cannot infer the user intent from this utterance, it will return this dialog state. </p> </li> <li> <p> <code>ConfirmIntent</code> - Amazon Lex is expecting a &quot;yes&quot; or &quot;no&quot; response. </p> <p>For example, Amazon Lex wants user confirmation before fulfilling an intent. Instead of a simple &quot;yes&quot; or &quot;no&quot; response, a user might respond with additional information. For example, &quot;yes, but make it a thick crust pizza&quot; or &quot;no, I want to order a drink.&quot; Amazon Lex can process such additional information (in these examples, update the crust type slot or change the intent from OrderPizza to OrderDrink). </p> </li> <li> <p> <code>ElicitSlot</code> - Amazon Lex is expecting the value of a slot for the current intent. </p> <p> For example, suppose that in the response Amazon Lex sends this message: &quot;What size pizza would you like?&quot;. A user might reply with the slot value (e.g., &quot;medium&quot;). The user might also provide additional information in the response (e.g., &quot;medium thick crust pizza&quot;). Amazon Lex can process such additional information appropriately. </p> </li> <li> <p> <code>Fulfilled</code> - Conveys that the Lambda function has successfully fulfilled the intent. </p> </li> <li> <p> <code>ReadyForFulfillment</code> - Conveys that the client has to fulfill the request. </p> </li> <li> <p> <code>Failed</code> - Conveys that the conversation with the user failed. </p> <p> This can happen for various reasons, including that the user does not provide an appropriate response to prompts from the service (you can configure how many times Amazon Lex can prompt a user for specific information), or if the Lambda function fails to fulfill the intent. </p> </li> </ul></p>
@@ -254,7 +305,9 @@ pub struct PostContentResponse {
     pub message: Option<String>,
     /// <p><p>The format of the response message. One of the following values:</p> <ul> <li> <p> <code>PlainText</code> - The message contains plain UTF-8 text.</p> </li> <li> <p> <code>CustomPayload</code> - The message is a custom format for the client.</p> </li> <li> <p> <code>SSML</code> - The message contains text formatted for voice output.</p> </li> <li> <p> <code>Composite</code> - The message contains an escaped JSON object containing one or more messages from the groups that messages were assigned to when the intent was created.</p> </li> </ul></p>
     pub message_format: Option<String>,
-    /// <p>The sentiment expressed in and utterance.</p> <p>When the bot is configured to send utterances to Amazon Comprehend for sentiment analysis, this field contains the result of the analysis.</p>
+    /// <p>Provides a score that indicates how confident Amazon Lex is that the returned intent is the one that matches the user's intent. The score is between 0.0 and 1.0.</p> <p>The score is a relative score, not an absolute score. The score may change based on improvements to Amazon Lex. </p>
+    pub nlu_intent_confidence: Option<String>,
+    /// <p>The sentiment expressed in an utterance.</p> <p>When the bot is configured to send utterances to Amazon Comprehend for sentiment analysis, this field contains the result of the analysis.</p>
     pub sentiment_response: Option<String>,
     /// <p> Map of key/value pairs representing the session-specific context information. </p>
     pub session_attributes: Option<String>,
@@ -269,6 +322,10 @@ pub struct PostContentResponse {
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct PostTextRequest {
+    /// <p>A list of contexts active for the request. A context can be activated when a previous intent is fulfilled, or by including the context in the request,</p> <p>If you don't specify a list of contexts, Amazon Lex will use the current list of contexts for the session. If you specify an empty list, all contexts for the session are cleared.</p>
+    #[serde(rename = "activeContexts")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub active_contexts: Option<Vec<ActiveContext>>,
     /// <p>The alias of the Amazon Lex bot.</p>
     #[serde(rename = "botAlias")]
     pub bot_alias: String,
@@ -294,6 +351,18 @@ pub struct PostTextRequest {
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct PostTextResponse {
+    /// <p>A list of active contexts for the session. A context can be set when an intent is fulfilled or by calling the <code>PostContent</code>, <code>PostText</code>, or <code>PutSession</code> operation.</p> <p>You can use a context to control the intents that can follow up an intent, or to modify the operation of your application.</p>
+    #[serde(rename = "activeContexts")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub active_contexts: Option<Vec<ActiveContext>>,
+    /// <p>One to four alternative intents that may be applicable to the user's intent.</p> <p>Each alternative includes a score that indicates how confident Amazon Lex is that the intent matches the user's intent. The intents are sorted by the confidence score.</p>
+    #[serde(rename = "alternativeIntents")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub alternative_intents: Option<Vec<PredictedIntent>>,
+    /// <p>The version of the bot that responded to the conversation. You can use this information to help determine if one version of a bot is performing better than another version.</p>
+    #[serde(rename = "botVersion")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub bot_version: Option<String>,
     /// <p><p> Identifies the current state of the user interaction. Amazon Lex returns one of the following values as <code>dialogState</code>. The client can optionally use this information to customize the user interface. </p> <ul> <li> <p> <code>ElicitIntent</code> - Amazon Lex wants to elicit user intent. </p> <p>For example, a user might utter an intent (&quot;I want to order a pizza&quot;). If Amazon Lex cannot infer the user intent from this utterance, it will return this dialogState.</p> </li> <li> <p> <code>ConfirmIntent</code> - Amazon Lex is expecting a &quot;yes&quot; or &quot;no&quot; response. </p> <p> For example, Amazon Lex wants user confirmation before fulfilling an intent. </p> <p>Instead of a simple &quot;yes&quot; or &quot;no,&quot; a user might respond with additional information. For example, &quot;yes, but make it thick crust pizza&quot; or &quot;no, I want to order a drink&quot;. Amazon Lex can process such additional information (in these examples, update the crust type slot value, or change intent from OrderPizza to OrderDrink).</p> </li> <li> <p> <code>ElicitSlot</code> - Amazon Lex is expecting a slot value for the current intent. </p> <p>For example, suppose that in the response Amazon Lex sends this message: &quot;What size pizza would you like?&quot;. A user might reply with the slot value (e.g., &quot;medium&quot;). The user might also provide additional information in the response (e.g., &quot;medium thick crust pizza&quot;). Amazon Lex can process such additional information appropriately. </p> </li> <li> <p> <code>Fulfilled</code> - Conveys that the Lambda function configured for the intent has successfully fulfilled the intent. </p> </li> <li> <p> <code>ReadyForFulfillment</code> - Conveys that the client has to fulfill the intent. </p> </li> <li> <p> <code>Failed</code> - Conveys that the conversation with the user failed. </p> <p> This can happen for various reasons including that the user did not provide an appropriate response to prompts from the service (you can configure how many times Amazon Lex can prompt a user for specific information), or the Lambda function failed to fulfill the intent. </p> </li> </ul></p>
     #[serde(rename = "dialogState")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -310,6 +379,10 @@ pub struct PostTextResponse {
     #[serde(rename = "messageFormat")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub message_format: Option<String>,
+    /// <p>Provides a score that indicates how confident Amazon Lex is that the returned intent is the one that matches the user's intent. The score is between 0.0 and 1.0. For more information, see <a href="https://docs.aws.amazon.com/lex/latest/dg/confidence-scores.html">Confidence Scores</a>.</p> <p>The score is a relative score, not an absolute score. The score may change based on improvements to Amazon Lex.</p>
+    #[serde(rename = "nluIntentConfidence")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub nlu_intent_confidence: Option<IntentConfidence>,
     /// <p>Represents the options that the user has to respond to the current prompt. Response Card can come from the bot configuration (in the Amazon Lex console, choose the settings button next to a slot) or from a code hook (Lambda function). </p>
     #[serde(rename = "responseCard")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -336,6 +409,24 @@ pub struct PostTextResponse {
     pub slots: Option<::std::collections::HashMap<String, Option<String>>>,
 }
 
+/// <p>An intent that Amazon Lex suggests satisfies the user's intent. Includes the name of the intent, the confidence that Amazon Lex has that the user's intent is satisfied, and the slots defined for the intent.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct PredictedIntent {
+    /// <p>The name of the intent that Amazon Lex suggests satisfies the user's intent.</p>
+    #[serde(rename = "intentName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub intent_name: Option<String>,
+    /// <p>Indicates how confident Amazon Lex is that an intent satisfies the user's intent.</p>
+    #[serde(rename = "nluIntentConfidence")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub nlu_intent_confidence: Option<IntentConfidence>,
+    /// <p>The slot and slot values associated with the predicted intent.</p>
+    #[serde(rename = "slots")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub slots: Option<::std::collections::HashMap<String, String>>,
+}
+
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct PutSessionRequest {
@@ -343,6 +434,10 @@ pub struct PutSessionRequest {
     #[serde(rename = "accept")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub accept: Option<String>,
+    /// <p>A list of contexts active for the request. A context can be activated when a previous intent is fulfilled, or by including the context in the request,</p> <p>If you don't specify a list of contexts, Amazon Lex will use the current list of contexts for the session. If you specify an empty list, all contexts for the session are cleared.</p>
+    #[serde(rename = "activeContexts")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub active_contexts: Option<Vec<ActiveContext>>,
     /// <p>The alias in use for the bot that contains the session data.</p>
     #[serde(rename = "botAlias")]
     pub bot_alias: String,
@@ -368,6 +463,8 @@ pub struct PutSessionRequest {
 
 #[derive(Clone, Debug, Default, PartialEq)]
 pub struct PutSessionResponse {
+    /// <p>A list of active contexts for the session.</p>
+    pub active_contexts: Option<String>,
     /// <p>The audio version of the message to convey to the user.</p>
     pub audio_stream: Option<bytes::Bytes>,
     /// <p>Content type as specified in the <code>Accept</code> HTTP header in the request.</p>
@@ -927,6 +1024,7 @@ impl LexRuntime for LexRuntimeClient {
         let encoded = Some(input.input_stream.to_owned());
         request.set_payload(encoded);
         request.add_optional_header("Accept", input.accept.as_ref());
+        request.add_optional_header("x-amz-lex-active-contexts", input.active_contexts.as_ref());
         request.add_header("Content-Type", &input.content_type.to_string());
         request.add_optional_header(
             "x-amz-lex-request-attributes",
@@ -948,12 +1046,17 @@ impl LexRuntime for LexRuntimeClient {
             let mut result = PostContentResponse::default();
             result.audio_stream = Some(response.body);
 
+            result.active_contexts = response.headers.remove("x-amz-lex-active-contexts");
+            result.alternative_intents = response.headers.remove("x-amz-lex-alternative-intents");
+            result.bot_version = response.headers.remove("x-amz-lex-bot-version");
             result.content_type = response.headers.remove("Content-Type");
             result.dialog_state = response.headers.remove("x-amz-lex-dialog-state");
             result.input_transcript = response.headers.remove("x-amz-lex-input-transcript");
             result.intent_name = response.headers.remove("x-amz-lex-intent-name");
             result.message = response.headers.remove("x-amz-lex-message");
             result.message_format = response.headers.remove("x-amz-lex-message-format");
+            result.nlu_intent_confidence =
+                response.headers.remove("x-amz-lex-nlu-intent-confidence");
             result.sentiment_response = response.headers.remove("x-amz-lex-sentiment");
             result.session_attributes = response.headers.remove("x-amz-lex-session-attributes");
             result.session_id = response.headers.remove("x-amz-lex-session-id");
@@ -1036,6 +1139,7 @@ impl LexRuntime for LexRuntimeClient {
             let mut result = PutSessionResponse::default();
             result.audio_stream = Some(response.body);
 
+            result.active_contexts = response.headers.remove("x-amz-lex-active-contexts");
             result.content_type = response.headers.remove("Content-Type");
             result.dialog_state = response.headers.remove("x-amz-lex-dialog-state");
             result.intent_name = response.headers.remove("x-amz-lex-intent-name");

@@ -150,17 +150,15 @@ impl SignedRequest {
 
     /// Computes and sets the Content-MD5 header based on the current payload.
     ///
-    /// Has no effect if the payload is not set, or is not a buffer.
-    pub fn set_content_md5_header(&mut self) {
-        let digest;
-        if let Some(SignedRequestPayload::Buffer(ref payload)) = self.payload {
-            digest = Some(md5::compute(payload));
-        } else {
-            digest = None;
+    /// Has no effect if the payload is not set, or is not a buffer. Will not
+    /// override an existing value for the `Content-MD5` header.
+    pub fn maybe_set_content_md5_header(&mut self) {
+        if self.headers.contains_key("Content-MD5") {
+            return;
         }
-        if let Some(digest) = digest {
-            // need to deref digest and then pass that reference:
-            self.add_header("Content-MD5", &base64::encode(&(*digest)));
+        if let Some(SignedRequestPayload::Buffer(ref payload)) = self.payload {
+            let digest = md5::compute(payload);
+            self.add_header("Content-MD5", &base64::encode(&*digest));
         }
     }
 

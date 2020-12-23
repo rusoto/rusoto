@@ -57,11 +57,11 @@ pub struct CreateServerRequest {
     #[serde(rename = "Certificate")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub certificate: Option<String>,
-    /// <p>The virtual private cloud (VPC) endpoint settings that are configured for your file transfer protocol-enabled server. When you host your endpoint within your VPC, you can make it accessible only to resources within your VPC, or you can attach Elastic IPs and make it accessible to clients over the internet. Your VPC's default security groups are automatically assigned to your endpoint.</p>
+    /// <p>The virtual private cloud (VPC) endpoint settings that are configured for your server. When you host your endpoint within your VPC, you can make it accessible only to resources within your VPC, or you can attach Elastic IPs and make it accessible to clients over the internet. Your VPC's default security groups are automatically assigned to your endpoint.</p>
     #[serde(rename = "EndpointDetails")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub endpoint_details: Option<EndpointDetails>,
-    /// <p><p>The type of VPC endpoint that you want your file transfer protocol-enabled server to connect to. You can choose to connect to the public internet or a VPC endpoint. With a VPC endpoint, you can restrict access to your server and resources only within your VPC.</p> <note> <p>It is recommended that you use <code>VPC</code> as the <code>EndpointType</code>. With this endpoint type, you have the option to directly associate up to three Elastic IPv4 addresses (BYO IP included) with your server&#39;s endpoint and use VPC security groups to restrict traffic by the client&#39;s public IP address. This is not possible with <code>EndpointType</code> set to <code>VPC_ENDPOINT</code>.</p> </note></p>
+    /// <p><p>The type of VPC endpoint that you want your server to connect to. You can choose to connect to the public internet or a VPC endpoint. With a VPC endpoint, you can restrict access to your server and resources only within your VPC.</p> <note> <p>It is recommended that you use <code>VPC</code> as the <code>EndpointType</code>. With this endpoint type, you have the option to directly associate up to three Elastic IPv4 addresses (BYO IP included) with your server&#39;s endpoint and use VPC security groups to restrict traffic by the client&#39;s public IP address. This is not possible with <code>EndpointType</code> set to <code>VPC_ENDPOINT</code>.</p> </note></p>
     #[serde(rename = "EndpointType")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub endpoint_type: Option<String>,
@@ -73,7 +73,7 @@ pub struct CreateServerRequest {
     #[serde(rename = "IdentityProviderDetails")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub identity_provider_details: Option<IdentityProviderDetails>,
-    /// <p>Specifies the mode of authentication for a file transfer protocol-enabled server. The default value is <code>SERVICE_MANAGED</code>, which allows you to store and access user credentials within the AWS Transfer Family service. Use the <code>API_GATEWAY</code> value to integrate with an identity provider of your choosing. The <code>API_GATEWAY</code> setting requires you to provide an API Gateway endpoint URL to call for authentication using the <code>IdentityProviderDetails</code> parameter.</p>
+    /// <p>Specifies the mode of authentication for a server. The default value is <code>SERVICE_MANAGED</code>, which allows you to store and access user credentials within the AWS Transfer Family service. Use the <code>API_GATEWAY</code> value to integrate with an identity provider of your choosing. The <code>API_GATEWAY</code> setting requires you to provide an API Gateway endpoint URL to call for authentication using the <code>IdentityProviderDetails</code> parameter.</p>
     #[serde(rename = "IdentityProviderType")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub identity_provider_type: Option<String>,
@@ -85,7 +85,11 @@ pub struct CreateServerRequest {
     #[serde(rename = "Protocols")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub protocols: Option<Vec<String>>,
-    /// <p>Key-value pairs that can be used to group and search for file transfer protocol-enabled servers.</p>
+    /// <p>Specifies the name of the security policy that is attached to the server.</p>
+    #[serde(rename = "SecurityPolicyName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub security_policy_name: Option<String>,
+    /// <p>Key-value pairs that can be used to group and search for servers.</p>
     #[serde(rename = "Tags")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub tags: Option<Vec<Tag>>,
@@ -94,7 +98,7 @@ pub struct CreateServerRequest {
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateServerResponse {
-    /// <p>The service-assigned ID of the file transfer protocol-enabled server that is created.</p>
+    /// <p>The service-assigned ID of the server that is created.</p>
     #[serde(rename = "ServerId")]
     pub server_id: String,
 }
@@ -102,15 +106,15 @@ pub struct CreateServerResponse {
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateUserRequest {
-    /// <p>The landing directory (folder) for a user when they log in to the file transfer protocol-enabled server using the client.</p> <p>An example is <i> <code>your-Amazon-S3-bucket-name&gt;/home/username</code> </i>.</p>
+    /// <p>The landing directory (folder) for a user when they log in to the server using the client.</p> <p>An example is <i> <code>your-Amazon-S3-bucket-name&gt;/home/username</code> </i>.</p>
     #[serde(rename = "HomeDirectory")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub home_directory: Option<String>,
-    /// <p><p>Logical directory mappings that specify what Amazon S3 paths and keys should be visible to your user and how you want to make them visible. You will need to specify the &quot;<code>Entry</code>&quot; and &quot;<code>Target</code>&quot; pair, where <code>Entry</code> shows how the path is made visible and <code>Target</code> is the actual Amazon S3 path. If you only specify a target, it will be displayed as is. You will need to also make sure that your IAM role provides access to paths in <code>Target</code>. The following is an example.</p> <p> <code>&#39;[ &quot;/bucket2/documentation&quot;, { &quot;Entry&quot;: &quot;your-personal-report.pdf&quot;, &quot;Target&quot;: &quot;/bucket3/customized-reports/${transfer:UserName}.pdf&quot; } ]&#39;</code> </p> <p>In most cases, you can use this value instead of the scope-down policy to lock your user down to the designated home directory (&quot;chroot&quot;). To do this, you can set <code>Entry</code> to &#39;/&#39; and set <code>Target</code> to the HomeDirectory parameter value.</p> <note> <p>If the target of a logical directory entry does not exist in Amazon S3, the entry will be ignored. As a workaround, you can use the Amazon S3 api to create 0 byte objects as place holders for your directory. If using the CLI, use the <code>s3api</code> call instead of <code>s3</code> so you can use the put-object operation. For example, you use the following: <code>aws s3api put-object --bucket bucketname --key path/to/folder/</code>. Make sure that the end of the key name ends in a &#39;/&#39; for it to be considered a folder.</p> </note></p>
+    /// <p><p>Logical directory mappings that specify what Amazon S3 paths and keys should be visible to your user and how you want to make them visible. You will need to specify the &quot;<code>Entry</code>&quot; and &quot;<code>Target</code>&quot; pair, where <code>Entry</code> shows how the path is made visible and <code>Target</code> is the actual Amazon S3 path. If you only specify a target, it will be displayed as is. You will need to also make sure that your IAM role provides access to paths in <code>Target</code>. The following is an example.</p> <p> <code>&#39;[ &quot;/bucket2/documentation&quot;, { &quot;Entry&quot;: &quot;your-personal-report.pdf&quot;, &quot;Target&quot;: &quot;/bucket3/customized-reports/${transfer:UserName}.pdf&quot; } ]&#39;</code> </p> <p>In most cases, you can use this value instead of the scope-down policy to lock your user down to the designated home directory (&quot;chroot&quot;). To do this, you can set <code>Entry</code> to &#39;/&#39; and set <code>Target</code> to the HomeDirectory parameter value.</p> <note> <p>If the target of a logical directory entry does not exist in Amazon S3, the entry will be ignored. As a workaround, you can use the Amazon S3 API to create 0 byte objects as place holders for your directory. If using the CLI, use the <code>s3api</code> call instead of <code>s3</code> so you can use the put-object operation. For example, you use the following: <code>aws s3api put-object --bucket bucketname --key path/to/folder/</code>. Make sure that the end of the key name ends in a &#39;/&#39; for it to be considered a folder.</p> </note></p>
     #[serde(rename = "HomeDirectoryMappings")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub home_directory_mappings: Option<Vec<HomeDirectoryMapEntry>>,
-    /// <p>The type of landing directory (folder) you want your users' home directory to be when they log into the file transfer protocol-enabled server. If you set it to <code>PATH</code>, the user will see the absolute Amazon S3 bucket paths as is in their file transfer protocol clients. If you set it <code>LOGICAL</code>, you will need to provide mappings in the <code>HomeDirectoryMappings</code> for how you want to make Amazon S3 paths visible to your users.</p>
+    /// <p>The type of landing directory (folder) you want your users' home directory to be when they log into the server. If you set it to <code>PATH</code>, the user will see the absolute Amazon S3 bucket paths as is in their file transfer protocol clients. If you set it <code>LOGICAL</code>, you will need to provide mappings in the <code>HomeDirectoryMappings</code> for how you want to make Amazon S3 paths visible to your users.</p>
     #[serde(rename = "HomeDirectoryType")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub home_directory_type: Option<String>,
@@ -118,13 +122,13 @@ pub struct CreateUserRequest {
     #[serde(rename = "Policy")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub policy: Option<String>,
-    /// <p>The IAM role that controls your users' access to your Amazon S3 bucket. The policies attached to this role will determine the level of access you want to provide your users when transferring files into and out of your Amazon S3 bucket or buckets. The IAM role should also contain a trust relationship that allows the file transfer protocol-enabled server to access your resources when servicing your users' transfer requests.</p>
+    /// <p>The IAM role that controls your users' access to your Amazon S3 bucket. The policies attached to this role will determine the level of access you want to provide your users when transferring files into and out of your Amazon S3 bucket or buckets. The IAM role should also contain a trust relationship that allows the server to access your resources when servicing your users' transfer requests.</p>
     #[serde(rename = "Role")]
     pub role: String,
-    /// <p>A system-assigned unique identifier for a file transfer protocol-enabled server instance. This is the specific server that you added your user to.</p>
+    /// <p>A system-assigned unique identifier for a server instance. This is the specific server that you added your user to.</p>
     #[serde(rename = "ServerId")]
     pub server_id: String,
-    /// <p>The public portion of the Secure Shell (SSH) key used to authenticate the user to the file transfer protocol-enabled server.</p>
+    /// <p>The public portion of the Secure Shell (SSH) key used to authenticate the user to the server.</p>
     #[serde(rename = "SshPublicKeyBody")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub ssh_public_key_body: Option<String>,
@@ -132,7 +136,7 @@ pub struct CreateUserRequest {
     #[serde(rename = "Tags")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub tags: Option<Vec<Tag>>,
-    /// <p>A unique string that identifies a user and is associated with a file transfer protocol-enabled server as specified by the <code>ServerId</code>. This user name must be a minimum of 3 and a maximum of 32 characters long. The following are valid characters: a-z, A-Z, 0-9, underscore, and hyphen. The user name can't start with a hyphen.</p>
+    /// <p>A unique string that identifies a user and is associated with a as specified by the <code>ServerId</code>. This user name must be a minimum of 3 and a maximum of 100 characters long. The following are valid characters: a-z, A-Z, 0-9, underscore '_', hyphen '-', period '.', and at sign '@'. The user name can't start with a hyphen, period, or at sign.</p>
     #[serde(rename = "UserName")]
     pub user_name: String,
 }
@@ -140,10 +144,10 @@ pub struct CreateUserRequest {
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateUserResponse {
-    /// <p>The ID of the file transfer protocol-enabled server that the user is attached to.</p>
+    /// <p>The ID of the server that the user is attached to.</p>
     #[serde(rename = "ServerId")]
     pub server_id: String,
-    /// <p>A unique string that identifies a user account associated with a file transfer protocol-enabled server.</p>
+    /// <p>A unique string that identifies a user account associated with a server.</p>
     #[serde(rename = "UserName")]
     pub user_name: String,
 }
@@ -151,7 +155,7 @@ pub struct CreateUserResponse {
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteServerRequest {
-    /// <p>A unique system-assigned identifier for a file transfer protocol-enabled server instance.</p>
+    /// <p>A unique system-assigned identifier for a server instance.</p>
     #[serde(rename = "ServerId")]
     pub server_id: String,
 }
@@ -173,18 +177,34 @@ pub struct DeleteSshPublicKeyRequest {
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteUserRequest {
-    /// <p>A system-assigned unique identifier for a file transfer protocol-enabled server instance that has the user assigned to it.</p>
+    /// <p>A system-assigned unique identifier for a server instance that has the user assigned to it.</p>
     #[serde(rename = "ServerId")]
     pub server_id: String,
-    /// <p>A unique string that identifies a user that is being deleted from a file transfer protocol-enabled server.</p>
+    /// <p>A unique string that identifies a user that is being deleted from a server.</p>
     #[serde(rename = "UserName")]
     pub user_name: String,
 }
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct DescribeSecurityPolicyRequest {
+    /// <p>Specifies the name of the security policy that is attached to the server.</p>
+    #[serde(rename = "SecurityPolicyName")]
+    pub security_policy_name: String,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct DescribeSecurityPolicyResponse {
+    /// <p>An array containing the properties of the security policy.</p>
+    #[serde(rename = "SecurityPolicy")]
+    pub security_policy: DescribedSecurityPolicy,
+}
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeServerRequest {
-    /// <p>A system-assigned unique identifier for a file transfer protocol-enabled server.</p>
+    /// <p>A system-assigned unique identifier for a server.</p>
     #[serde(rename = "ServerId")]
     pub server_id: String,
 }
@@ -192,7 +212,7 @@ pub struct DescribeServerRequest {
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeServerResponse {
-    /// <p>An array containing the properties of a file transfer protocol-enabled server with the <code>ServerID</code> you specified.</p>
+    /// <p>An array containing the properties of a server with the <code>ServerID</code> you specified.</p>
     #[serde(rename = "Server")]
     pub server: DescribedServer,
 }
@@ -200,10 +220,10 @@ pub struct DescribeServerResponse {
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeUserRequest {
-    /// <p>A system-assigned unique identifier for a file transfer protocol-enabled server that has this user assigned.</p>
+    /// <p>A system-assigned unique identifier for a server that has this user assigned.</p>
     #[serde(rename = "ServerId")]
     pub server_id: String,
-    /// <p>The name of the user assigned to one or more file transfer protocol-enabled servers. User names are part of the sign-in credentials to use the AWS Transfer Family service and perform file transfer tasks.</p>
+    /// <p>The name of the user assigned to one or more servers. User names are part of the sign-in credentials to use the AWS Transfer Family service and perform file transfer tasks.</p>
     #[serde(rename = "UserName")]
     pub user_name: String,
 }
@@ -211,7 +231,7 @@ pub struct DescribeUserRequest {
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeUserResponse {
-    /// <p>A system-assigned unique identifier for a file transfer protocol-enabled server that has this user assigned.</p>
+    /// <p>A system-assigned unique identifier for a server that has this user assigned.</p>
     #[serde(rename = "ServerId")]
     pub server_id: String,
     /// <p>An array containing the properties of the user account for the <code>ServerID</code> value that you specified.</p>
@@ -219,22 +239,51 @@ pub struct DescribeUserResponse {
     pub user: DescribedUser,
 }
 
-/// <p>Describes the properties of a file transfer protocol-enabled server that was specified. Information returned includes the following: the server Amazon Resource Name (ARN), the certificate ARN (if the FTPS protocol was selected), the endpoint type and details, the authentication configuration and type, the logging role, the file transfer protocol or protocols, the server ID and state, and assigned tags or metadata.</p>
+/// <p>Describes the properties of a security policy that was specified. For more information about security policies, see <a href="https://docs.aws.amazon.com/transfer/latest/userguide/security-policies.html">Working with security policies</a>.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct DescribedSecurityPolicy {
+    /// <p>Specifies whether this policy enables Federal Information Processing Standards (FIPS).</p>
+    #[serde(rename = "Fips")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub fips: Option<bool>,
+    /// <p>Specifies the name of the security policy that is attached to the server.</p>
+    #[serde(rename = "SecurityPolicyName")]
+    pub security_policy_name: String,
+    /// <p>Specifies the enabled Secure Shell (SSH) cipher encryption algorithms in the security policy that is attached to the server.</p>
+    #[serde(rename = "SshCiphers")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub ssh_ciphers: Option<Vec<String>>,
+    /// <p>Specifies the enabled SSH key exchange (KEX) encryption algorithms in the security policy that is attached to the server.</p>
+    #[serde(rename = "SshKexs")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub ssh_kexs: Option<Vec<String>>,
+    /// <p>Specifies the enabled SSH message authentication code (MAC) encryption algorithms in the security policy that is attached to the server.</p>
+    #[serde(rename = "SshMacs")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub ssh_macs: Option<Vec<String>>,
+    /// <p>Specifies the enabled Transport Layer Security (TLS) cipher encryption algorithms in the security policy that is attached to the server.</p>
+    #[serde(rename = "TlsCiphers")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub tls_ciphers: Option<Vec<String>>,
+}
+
+/// <p>Describes the properties of a file transfer protocol-enabled server that was specified.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribedServer {
-    /// <p>Specifies the unique Amazon Resource Name (ARN) for a file transfer protocol-enabled server to be described.</p>
+    /// <p>Specifies the unique Amazon Resource Name (ARN) of the server.</p>
     #[serde(rename = "Arn")]
     pub arn: String,
     /// <p>Specifies the ARN of the AWS Certificate Manager (ACM) certificate. Required when <code>Protocols</code> is set to <code>FTPS</code>.</p>
     #[serde(rename = "Certificate")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub certificate: Option<String>,
-    /// <p>Specifies the virtual private cloud (VPC) endpoint settings that you configured for your file transfer protocol-enabled server.</p>
+    /// <p>Specifies the virtual private cloud (VPC) endpoint settings that you configured for your server.</p>
     #[serde(rename = "EndpointDetails")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub endpoint_details: Option<EndpointDetails>,
-    /// <p>Defines the type of endpoint that your file transfer protocol-enabled server is connected to. If your server is connected to a VPC endpoint, your server isn't accessible over the public internet.</p>
+    /// <p>Defines the type of endpoint that your server is connected to. If your server is connected to a VPC endpoint, your server isn't accessible over the public internet.</p>
     #[serde(rename = "EndpointType")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub endpoint_type: Option<String>,
@@ -242,15 +291,15 @@ pub struct DescribedServer {
     #[serde(rename = "HostKeyFingerprint")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub host_key_fingerprint: Option<String>,
-    /// <p>Specifies information to call a customer-supplied authentication API. This field is not populated when the <code>IdentityProviderType</code> of a file transfer protocol-enabled server is <code>SERVICE_MANAGED</code>.</p>
+    /// <p>Specifies information to call a customer-supplied authentication API. This field is not populated when the <code>IdentityProviderType</code> of a server is <code>SERVICE_MANAGED</code>.</p>
     #[serde(rename = "IdentityProviderDetails")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub identity_provider_details: Option<IdentityProviderDetails>,
-    /// <p>Specifies the mode of authentication method enabled for this service. A value of <code>SERVICE_MANAGED</code> means that you are using this file transfer protocol-enabled server to store and access user credentials within the service. A value of <code>API_GATEWAY</code> indicates that you have integrated an API Gateway endpoint that will be invoked for authenticating your user into the service.</p>
+    /// <p>Specifies the mode of authentication method enabled for this service. A value of <code>SERVICE_MANAGED</code> means that you are using this server to store and access user credentials within the service. A value of <code>API_GATEWAY</code> indicates that you have integrated an API Gateway endpoint that will be invoked for authenticating your user into the service.</p>
     #[serde(rename = "IdentityProviderType")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub identity_provider_type: Option<String>,
-    /// <p>Specifies the AWS Identity and Access Management (IAM) role that allows a file transfer protocol-enabled server to turn on Amazon CloudWatch logging for Amazon S3 events. When set, user activity can be viewed in your CloudWatch logs.</p>
+    /// <p>Specifies the AWS Identity and Access Management (IAM) role that allows a server to turn on Amazon CloudWatch logging for Amazon S3 events. When set, user activity can be viewed in your CloudWatch logs.</p>
     #[serde(rename = "LoggingRole")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub logging_role: Option<String>,
@@ -258,25 +307,29 @@ pub struct DescribedServer {
     #[serde(rename = "Protocols")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub protocols: Option<Vec<String>>,
-    /// <p>Specifies the unique system-assigned identifier for a file transfer protocol-enabled server that you instantiate.</p>
+    /// <p>Specifies the name of the security policy that is attached to the server.</p>
+    #[serde(rename = "SecurityPolicyName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub security_policy_name: Option<String>,
+    /// <p>Specifies the unique system-assigned identifier for a server that you instantiate.</p>
     #[serde(rename = "ServerId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub server_id: Option<String>,
-    /// <p>Specifies the condition of a file transfer protocol-enabled server for the server that was described. A value of <code>ONLINE</code> indicates that the server can accept jobs and transfer files. A <code>State</code> value of <code>OFFLINE</code> means that the server cannot perform file transfer operations.</p> <p>The states of <code>STARTING</code> and <code>STOPPING</code> indicate that the server is in an intermediate state, either not fully able to respond, or not fully offline. The values of <code>START_FAILED</code> or <code>STOP_FAILED</code> can indicate an error condition.</p>
+    /// <p>Specifies the condition of a server for the server that was described. A value of <code>ONLINE</code> indicates that the server can accept jobs and transfer files. A <code>State</code> value of <code>OFFLINE</code> means that the server cannot perform file transfer operations.</p> <p>The states of <code>STARTING</code> and <code>STOPPING</code> indicate that the server is in an intermediate state, either not fully able to respond, or not fully offline. The values of <code>START_FAILED</code> or <code>STOP_FAILED</code> can indicate an error condition.</p>
     #[serde(rename = "State")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub state: Option<String>,
-    /// <p>Specifies the key-value pairs that you can use to search for and group file transfer protocol-enabled servers that were assigned to the server that was described.</p>
+    /// <p>Specifies the key-value pairs that you can use to search for and group servers that were assigned to the server that was described.</p>
     #[serde(rename = "Tags")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub tags: Option<Vec<Tag>>,
-    /// <p>Specifies the number of users that are assigned to a file transfer protocol-enabled server you specified with the <code>ServerId</code>.</p>
+    /// <p>Specifies the number of users that are assigned to a server you specified with the <code>ServerId</code>.</p>
     #[serde(rename = "UserCount")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub user_count: Option<i64>,
 }
 
-/// <p>Returns properties of the user that you want to describe.</p>
+/// <p>Describes the properties of a user that was specified.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribedUser {
@@ -299,7 +352,7 @@ pub struct DescribedUser {
     #[serde(rename = "Policy")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub policy: Option<String>,
-    /// <p>Specifies the IAM role that controls your users' access to your Amazon S3 bucket. The policies attached to this role will determine the level of access you want to provide your users when transferring files into and out of your Amazon S3 bucket or buckets. The IAM role should also contain a trust relationship that allows a file transfer protocol-enabled server to access your resources when servicing your users' transfer requests.</p>
+    /// <p>Specifies the IAM role that controls your users' access to your Amazon S3 bucket. The policies attached to this role will determine the level of access you want to provide your users when transferring files into and out of your Amazon S3 bucket or buckets. The IAM role should also contain a trust relationship that allows a server to access your resources when servicing your users' transfer requests.</p>
     #[serde(rename = "Role")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub role: Option<String>,
@@ -311,7 +364,7 @@ pub struct DescribedUser {
     #[serde(rename = "Tags")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub tags: Option<Vec<Tag>>,
-    /// <p>Specifies the name of the user that was requested to be described. User names are used for authentication purposes. This is the string that will be used by your user when they log in to your file transfer protocol-enabled server.</p>
+    /// <p>Specifies the name of the user that was requested to be described. User names are used for authentication purposes. This is the string that will be used by your user when they log in to your server.</p>
     #[serde(rename = "UserName")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub user_name: Option<String>,
@@ -320,25 +373,29 @@ pub struct DescribedUser {
 /// <p>The virtual private cloud (VPC) endpoint settings that are configured for your file transfer protocol-enabled server. With a VPC endpoint, you can restrict access to your server and resources only within your VPC. To control incoming internet traffic, invoke the <code>UpdateServer</code> API and attach an Elastic IP to your server's endpoint.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct EndpointDetails {
-    /// <p><p>A list of address allocation IDs that are required to attach an Elastic IP address to your file transfer protocol-enabled server&#39;s endpoint. This is only valid in the <code>UpdateServer</code> API.</p> <note> <p>This property can only be use when <code>EndpointType</code> is set to <code>VPC</code>.</p> </note></p>
+    /// <p><p>A list of address allocation IDs that are required to attach an Elastic IP address to your server&#39;s endpoint.</p> <note> <p>This property can only be set when <code>EndpointType</code> is set to <code>VPC</code> and it is only valid in the <code>UpdateServer</code> API.</p> </note></p>
     #[serde(rename = "AddressAllocationIds")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub address_allocation_ids: Option<Vec<String>>,
-    /// <p><p>A list of subnet IDs that are required to host your file transfer protocol-enabled server endpoint in your VPC.</p> <note> <p>This property can only be used when <code>EndpointType</code> is set to <code>VPC</code>.</p> </note></p>
+    /// <p><p>A list of security groups IDs that are available to attach to your server&#39;s endpoint.</p> <note> <p>This property can only be set when <code>EndpointType</code> is set to <code>VPC</code>.</p> <p>You can only edit the <code>SecurityGroupIds</code> property in the <code>UpdateServer</code> API and only if you are changing the <code>EndpointType</code> from <code>PUBLIC</code> or <code>VPC_ENDPOINT</code> to <code>VPC</code>.</p> </note></p>
+    #[serde(rename = "SecurityGroupIds")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub security_group_ids: Option<Vec<String>>,
+    /// <p><p>A list of subnet IDs that are required to host your server endpoint in your VPC.</p> <note> <p>This property can only be set when <code>EndpointType</code> is set to <code>VPC</code>.</p> </note></p>
     #[serde(rename = "SubnetIds")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub subnet_ids: Option<Vec<String>>,
-    /// <p><p>The ID of the VPC endpoint.</p> <note> <p>This property can only be used when <code>EndpointType</code> is set to <code>VPC_ENDPOINT</code>.</p> </note></p>
+    /// <p><p>The ID of the VPC endpoint.</p> <note> <p>This property can only be set when <code>EndpointType</code> is set to <code>VPC_ENDPOINT</code>.</p> </note></p>
     #[serde(rename = "VpcEndpointId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub vpc_endpoint_id: Option<String>,
-    /// <p><p>The VPC ID of the VPC in which a file transfer protocol-enabled server&#39;s endpoint will be hosted.</p> <note> <p>This property can only be used when <code>EndpointType</code> is set to <code>VPC</code>.</p> </note></p>
+    /// <p><p>The VPC ID of the VPC in which a server&#39;s endpoint will be hosted.</p> <note> <p>This property can only be set when <code>EndpointType</code> is set to <code>VPC</code>.</p> </note></p>
     #[serde(rename = "VpcId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub vpc_id: Option<String>,
 }
 
-/// <p>Represents an object that contains entries and a targets for <code>HomeDirectoryMappings</code>.</p>
+/// <p>Represents an object that contains entries and targets for <code>HomeDirectoryMappings</code>.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct HomeDirectoryMapEntry {
     /// <p>Represents an entry and a target for <code>HomeDirectoryMappings</code>.</p>
@@ -365,22 +422,22 @@ pub struct IdentityProviderDetails {
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ImportSshPublicKeyRequest {
-    /// <p>A system-assigned unique identifier for a file transfer protocol-enabled server.</p>
+    /// <p>A system-assigned unique identifier for a server.</p>
     #[serde(rename = "ServerId")]
     pub server_id: String,
     /// <p>The public key portion of an SSH key pair.</p>
     #[serde(rename = "SshPublicKeyBody")]
     pub ssh_public_key_body: String,
-    /// <p>The name of the user account that is assigned to one or more file transfer protocol-enabled servers.</p>
+    /// <p>The name of the user account that is assigned to one or more servers.</p>
     #[serde(rename = "UserName")]
     pub user_name: String,
 }
 
-/// <p>Identifies the user, the file transfer protocol-enabled server they belong to, and the identifier of the SSH public key associated with that user. A user can have more than one key on each server that they are associated with.</p>
+/// <p>Identifies the user, the server they belong to, and the identifier of the SSH public key associated with that user. A user can have more than one key on each server that they are associated with.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ImportSshPublicKeyResponse {
-    /// <p>A system-assigned unique identifier for a file transfer protocol-enabled server.</p>
+    /// <p>A system-assigned unique identifier for a server.</p>
     #[serde(rename = "ServerId")]
     pub server_id: String,
     /// <p>The name given to a public key by the system that was imported.</p>
@@ -393,12 +450,37 @@ pub struct ImportSshPublicKeyResponse {
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
-pub struct ListServersRequest {
-    /// <p>Specifies the number of file transfer protocol-enabled servers to return as a response to the <code>ListServers</code> query.</p>
+pub struct ListSecurityPoliciesRequest {
+    /// <p>Specifies the number of security policies to return as a response to the <code>ListSecurityPolicies</code> query.</p>
     #[serde(rename = "MaxResults")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub max_results: Option<i64>,
-    /// <p>When additional results are obtained from the<code>ListServers</code> command, a <code>NextToken</code> parameter is returned in the output. You can then pass the <code>NextToken</code> parameter in a subsequent command to continue listing additional file transfer protocol-enabled servers.</p>
+    /// <p>When additional results are obtained from the <code>ListSecurityPolicies</code> command, a <code>NextToken</code> parameter is returned in the output. You can then pass the <code>NextToken</code> parameter in a subsequent command to continue listing additional security policies.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct ListSecurityPoliciesResponse {
+    /// <p>When you can get additional results from the <code>ListSecurityPolicies</code> operation, a <code>NextToken</code> parameter is returned in the output. In a following command, you can pass in the <code>NextToken</code> parameter to continue listing security policies.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+    /// <p>An array of security policies that were listed.</p>
+    #[serde(rename = "SecurityPolicyNames")]
+    pub security_policy_names: Vec<String>,
+}
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct ListServersRequest {
+    /// <p>Specifies the number of servers to return as a response to the <code>ListServers</code> query.</p>
+    #[serde(rename = "MaxResults")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub max_results: Option<i64>,
+    /// <p>When additional results are obtained from the <code>ListServers</code> command, a <code>NextToken</code> parameter is returned in the output. You can then pass the <code>NextToken</code> parameter in a subsequent command to continue listing additional servers.</p>
     #[serde(rename = "NextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
@@ -407,11 +489,11 @@ pub struct ListServersRequest {
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListServersResponse {
-    /// <p>When you can get additional results from the <code>ListServers</code> operation, a <code>NextToken</code> parameter is returned in the output. In a following command, you can pass in the <code>NextToken</code> parameter to continue listing additional file transfer protocol-enabled servers.</p>
+    /// <p>When you can get additional results from the <code>ListServers</code> operation, a <code>NextToken</code> parameter is returned in the output. In a following command, you can pass in the <code>NextToken</code> parameter to continue listing additional servers.</p>
     #[serde(rename = "NextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
-    /// <p>An array of file transfer protocol-enabled servers that were listed.</p>
+    /// <p>An array of servers that were listed.</p>
     #[serde(rename = "Servers")]
     pub servers: Vec<ListedServer>,
 }
@@ -460,7 +542,7 @@ pub struct ListUsersRequest {
     #[serde(rename = "NextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
-    /// <p>A system-assigned unique identifier for a file transfer protocol-enabled server that has users assigned to it.</p>
+    /// <p>A system-assigned unique identifier for a server that has users assigned to it.</p>
     #[serde(rename = "ServerId")]
     pub server_id: String,
 }
@@ -472,7 +554,7 @@ pub struct ListUsersResponse {
     #[serde(rename = "NextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
-    /// <p>A system-assigned unique identifier for a file transfer protocol-enabled server that the users are assigned to.</p>
+    /// <p>A system-assigned unique identifier for a server that the users are assigned to.</p>
     #[serde(rename = "ServerId")]
     pub server_id: String,
     /// <p>Returns the user accounts and their properties for the <code>ServerId</code> value that you specify.</p>
@@ -484,30 +566,30 @@ pub struct ListUsersResponse {
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListedServer {
-    /// <p>Specifies the unique Amazon Resource Name (ARN) for a file transfer protocol-enabled server to be listed.</p>
+    /// <p>Specifies the unique Amazon Resource Name (ARN) for a server to be listed.</p>
     #[serde(rename = "Arn")]
     pub arn: String,
-    /// <p>Specifies the type of VPC endpoint that your file transfer protocol-enabled server is connected to. If your server is connected to a VPC endpoint, your server isn't accessible over the public internet.</p>
+    /// <p>Specifies the type of VPC endpoint that your server is connected to. If your server is connected to a VPC endpoint, your server isn't accessible over the public internet.</p>
     #[serde(rename = "EndpointType")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub endpoint_type: Option<String>,
-    /// <p>Specifies the authentication method used to validate a user for a file transfer protocol-enabled server that was specified. This can include Secure Shell (SSH), user name and password combinations, or your own custom authentication method. Valid values include <code>SERVICE_MANAGED</code> or <code>API_GATEWAY</code>.</p>
+    /// <p>Specifies the authentication method used to validate a user for a server that was specified. This can include Secure Shell (SSH), user name and password combinations, or your own custom authentication method. Valid values include <code>SERVICE_MANAGED</code> or <code>API_GATEWAY</code>.</p>
     #[serde(rename = "IdentityProviderType")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub identity_provider_type: Option<String>,
-    /// <p>Specifies the AWS Identity and Access Management (IAM) role that allows a file transfer protocol-enabled server to turn on Amazon CloudWatch logging.</p>
+    /// <p>Specifies the AWS Identity and Access Management (IAM) role that allows a server to turn on Amazon CloudWatch logging.</p>
     #[serde(rename = "LoggingRole")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub logging_role: Option<String>,
-    /// <p>Specifies the unique system assigned identifier for a file transfer protocol-enabled servers that were listed.</p>
+    /// <p>Specifies the unique system assigned identifier for the servers that were listed.</p>
     #[serde(rename = "ServerId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub server_id: Option<String>,
-    /// <p>Specifies the condition of a file transfer protocol-enabled server for the server that was described. A value of <code>ONLINE</code> indicates that the server can accept jobs and transfer files. A <code>State</code> value of <code>OFFLINE</code> means that the server cannot perform file transfer operations.</p> <p>The states of <code>STARTING</code> and <code>STOPPING</code> indicate that the server is in an intermediate state, either not fully able to respond, or not fully offline. The values of <code>START_FAILED</code> or <code>STOP_FAILED</code> can indicate an error condition.</p>
+    /// <p>Specifies the condition of a server for the server that was described. A value of <code>ONLINE</code> indicates that the server can accept jobs and transfer files. A <code>State</code> value of <code>OFFLINE</code> means that the server cannot perform file transfer operations.</p> <p>The states of <code>STARTING</code> and <code>STOPPING</code> indicate that the server is in an intermediate state, either not fully able to respond, or not fully offline. The values of <code>START_FAILED</code> or <code>STOP_FAILED</code> can indicate an error condition.</p>
     #[serde(rename = "State")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub state: Option<String>,
-    /// <p>Specifies the number of users that are assigned to a file transfer protocol-enabled server you specified with the <code>ServerId</code>.</p>
+    /// <p>Specifies the number of users that are assigned to a server you specified with the <code>ServerId</code>.</p>
     #[serde(rename = "UserCount")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub user_count: Option<i64>,
@@ -560,7 +642,7 @@ pub struct SshPublicKey {
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct StartServerRequest {
-    /// <p>A system-assigned unique identifier for a file transfer protocol-enabled server that you start.</p>
+    /// <p>A system-assigned unique identifier for a server that you start.</p>
     #[serde(rename = "ServerId")]
     pub server_id: String,
 }
@@ -568,7 +650,7 @@ pub struct StartServerRequest {
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct StopServerRequest {
-    /// <p>A system-assigned unique identifier for a file transfer protocol-enabled server that you stopped.</p>
+    /// <p>A system-assigned unique identifier for a server that you stopped.</p>
     #[serde(rename = "ServerId")]
     pub server_id: String,
 }
@@ -598,7 +680,7 @@ pub struct TagResourceRequest {
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct TestIdentityProviderRequest {
-    /// <p>A system-assigned identifier for a specific file transfer protocol-enabled server. That server's user authentication method is tested with a user name and password.</p>
+    /// <p>A system-assigned identifier for a specific server. That server's user authentication method is tested with a user name and password.</p>
     #[serde(rename = "ServerId")]
     pub server_id: String,
     /// <p><p>The type of file transfer protocol to be tested.</p> <p>The available protocols are:</p> <ul> <li> <p>Secure Shell (SSH) File Transfer Protocol (SFTP)</p> </li> <li> <p>File Transfer Protocol Secure (FTPS)</p> </li> <li> <p>File Transfer Protocol (FTP)</p> </li> </ul></p>
@@ -655,15 +737,15 @@ pub struct UpdateServerRequest {
     #[serde(rename = "Certificate")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub certificate: Option<String>,
-    /// <p>The virtual private cloud (VPC) endpoint settings that are configured for your file transfer protocol-enabled server. With a VPC endpoint, you can restrict access to your server to resources only within your VPC. To control incoming internet traffic, you will need to associate one or more Elastic IP addresses with your server's endpoint.</p>
+    /// <p>The virtual private cloud (VPC) endpoint settings that are configured for your server. With a VPC endpoint, you can restrict access to your server to resources only within your VPC. To control incoming internet traffic, you will need to associate one or more Elastic IP addresses with your server's endpoint.</p>
     #[serde(rename = "EndpointDetails")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub endpoint_details: Option<EndpointDetails>,
-    /// <p><p>The type of endpoint that you want your file transfer protocol-enabled server to connect to. You can choose to connect to the public internet or a VPC endpoint. With a VPC endpoint, you can restrict access to your server and resources only within your VPC.</p> <note> <p>It is recommended that you use <code>VPC</code> as the <code>EndpointType</code>. With this endpoint type, you have the option to directly associate up to three Elastic IPv4 addresses (BYO IP included) with your server&#39;s endpoint and use VPC security groups to restrict traffic by the client&#39;s public IP address. This is not possible with <code>EndpointType</code> set to <code>VPC_ENDPOINT</code>.</p> </note></p>
+    /// <p><p>The type of endpoint that you want your server to connect to. You can choose to connect to the public internet or a VPC endpoint. With a VPC endpoint, you can restrict access to your server and resources only within your VPC.</p> <note> <p>It is recommended that you use <code>VPC</code> as the <code>EndpointType</code>. With this endpoint type, you have the option to directly associate up to three Elastic IPv4 addresses (BYO IP included) with your server&#39;s endpoint and use VPC security groups to restrict traffic by the client&#39;s public IP address. This is not possible with <code>EndpointType</code> set to <code>VPC_ENDPOINT</code>.</p> </note></p>
     #[serde(rename = "EndpointType")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub endpoint_type: Option<String>,
-    /// <p>The RSA private key as generated by <code>ssh-keygen -N "" -m PEM -f my-new-server-key</code>.</p> <important> <p>If you aren't planning to migrate existing users from an existing file transfer protocol-enabled server to a new server, don't update the host key. Accidentally changing a server's host key can be disruptive.</p> </important> <p>For more information, see <a href="https://docs.aws.amazon.com/transfer/latest/userguide/edit-server-config.html#configuring-servers-change-host-key">Change the host key for your SFTP-enabled server</a> in the <i>AWS Transfer Family User Guide</i>.</p>
+    /// <p>The RSA private key as generated by <code>ssh-keygen -N "" -m PEM -f my-new-server-key</code>.</p> <important> <p>If you aren't planning to migrate existing users from an existing server to a new server, don't update the host key. Accidentally changing a server's host key can be disruptive.</p> </important> <p>For more information, see <a href="https://docs.aws.amazon.com/transfer/latest/userguide/edit-server-config.html#configuring-servers-change-host-key">Change the host key for your SFTP-enabled server</a> in the <i>AWS Transfer Family User Guide</i>.</p>
     #[serde(rename = "HostKey")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub host_key: Option<String>,
@@ -679,7 +761,11 @@ pub struct UpdateServerRequest {
     #[serde(rename = "Protocols")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub protocols: Option<Vec<String>>,
-    /// <p>A system-assigned unique identifier for a file transfer protocol-enabled server instance that the user account is assigned to.</p>
+    /// <p>Specifies the name of the security policy that is attached to the server.</p>
+    #[serde(rename = "SecurityPolicyName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub security_policy_name: Option<String>,
+    /// <p>A system-assigned unique identifier for a server instance that the user account is assigned to.</p>
     #[serde(rename = "ServerId")]
     pub server_id: String,
 }
@@ -687,7 +773,7 @@ pub struct UpdateServerRequest {
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateServerResponse {
-    /// <p>A system-assigned unique identifier for a file transfer protocol-enabled server that the user account is assigned to.</p>
+    /// <p>A system-assigned unique identifier for a server that the user account is assigned to.</p>
     #[serde(rename = "ServerId")]
     pub server_id: String,
 }
@@ -695,15 +781,15 @@ pub struct UpdateServerResponse {
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateUserRequest {
-    /// <p>Specifies the landing directory (folder) for a user when they log in to the file transfer protocol-enabled server using their file transfer protocol client.</p> <p>An example is <code>your-Amazon-S3-bucket-name&gt;/home/username</code>.</p>
+    /// <p>Specifies the landing directory (folder) for a user when they log in to the server using their file transfer protocol client.</p> <p>An example is <code>your-Amazon-S3-bucket-name&gt;/home/username</code>.</p>
     #[serde(rename = "HomeDirectory")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub home_directory: Option<String>,
-    /// <p><p>Logical directory mappings that specify what Amazon S3 paths and keys should be visible to your user and how you want to make them visible. You will need to specify the &quot;<code>Entry</code>&quot; and &quot;<code>Target</code>&quot; pair, where <code>Entry</code> shows how the path is made visible and <code>Target</code> is the actual Amazon S3 path. If you only specify a target, it will be displayed as is. You will need to also make sure that your IAM role provides access to paths in <code>Target</code>. The following is an example.</p> <p> <code>&#39;[ &quot;/bucket2/documentation&quot;, { &quot;Entry&quot;: &quot;your-personal-report.pdf&quot;, &quot;Target&quot;: &quot;/bucket3/customized-reports/${transfer:UserName}.pdf&quot; } ]&#39;</code> </p> <p>In most cases, you can use this value instead of the scope-down policy to lock your user down to the designated home directory (&quot;chroot&quot;). To do this, you can set <code>Entry</code> to &#39;/&#39; and set <code>Target</code> to the HomeDirectory parameter value.</p> <note> <p>If the target of a logical directory entry does not exist in Amazon S3, the entry will be ignored. As a workaround, you can use the Amazon S3 api to create 0 byte objects as place holders for your directory. If using the CLI, use the <code>s3api</code> call instead of <code>s3</code> so you can use the put-object operation. For example, you use the following: <code>aws s3api put-object --bucket bucketname --key path/to/folder/</code>. Make sure that the end of the key name ends in a / for it to be considered a folder.</p> </note></p>
+    /// <p><p>Logical directory mappings that specify what Amazon S3 paths and keys should be visible to your user and how you want to make them visible. You will need to specify the &quot;<code>Entry</code>&quot; and &quot;<code>Target</code>&quot; pair, where <code>Entry</code> shows how the path is made visible and <code>Target</code> is the actual Amazon S3 path. If you only specify a target, it will be displayed as is. You will need to also make sure that your IAM role provides access to paths in <code>Target</code>. The following is an example.</p> <p> <code>&#39;[ &quot;/bucket2/documentation&quot;, { &quot;Entry&quot;: &quot;your-personal-report.pdf&quot;, &quot;Target&quot;: &quot;/bucket3/customized-reports/${transfer:UserName}.pdf&quot; } ]&#39;</code> </p> <p>In most cases, you can use this value instead of the scope-down policy to lock your user down to the designated home directory (&quot;chroot&quot;). To do this, you can set <code>Entry</code> to &#39;/&#39; and set <code>Target</code> to the HomeDirectory parameter value.</p> <note> <p>If the target of a logical directory entry does not exist in Amazon S3, the entry will be ignored. As a workaround, you can use the Amazon S3 API to create 0 byte objects as place holders for your directory. If using the CLI, use the <code>s3api</code> call instead of <code>s3</code> so you can use the put-object operation. For example, you use the following: <code>aws s3api put-object --bucket bucketname --key path/to/folder/</code>. Make sure that the end of the key name ends in a / for it to be considered a folder.</p> </note></p>
     #[serde(rename = "HomeDirectoryMappings")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub home_directory_mappings: Option<Vec<HomeDirectoryMapEntry>>,
-    /// <p>The type of landing directory (folder) you want your users' home directory to be when they log into the file transfer protocol-enabled server. If you set it to <code>PATH</code>, the user will see the absolute Amazon S3 bucket paths as is in their file transfer protocol clients. If you set it <code>LOGICAL</code>, you will need to provide mappings in the <code>HomeDirectoryMappings</code> for how you want to make Amazon S3 paths visible to your users.</p>
+    /// <p>The type of landing directory (folder) you want your users' home directory to be when they log into the server. If you set it to <code>PATH</code>, the user will see the absolute Amazon S3 bucket paths as is in their file transfer protocol clients. If you set it <code>LOGICAL</code>, you will need to provide mappings in the <code>HomeDirectoryMappings</code> for how you want to make Amazon S3 paths visible to your users.</p>
     #[serde(rename = "HomeDirectoryType")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub home_directory_type: Option<String>,
@@ -711,26 +797,26 @@ pub struct UpdateUserRequest {
     #[serde(rename = "Policy")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub policy: Option<String>,
-    /// <p>The IAM role that controls your users' access to your Amazon S3 bucket. The policies attached to this role will determine the level of access you want to provide your users when transferring files into and out of your Amazon S3 bucket or buckets. The IAM role should also contain a trust relationship that allows the file transfer protocol-enabled server to access your resources when servicing your users' transfer requests.</p>
+    /// <p>The IAM role that controls your users' access to your Amazon S3 bucket. The policies attached to this role will determine the level of access you want to provide your users when transferring files into and out of your Amazon S3 bucket or buckets. The IAM role should also contain a trust relationship that allows the server to access your resources when servicing your users' transfer requests.</p>
     #[serde(rename = "Role")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub role: Option<String>,
-    /// <p>A system-assigned unique identifier for a file transfer protocol-enabled server instance that the user account is assigned to.</p>
+    /// <p>A system-assigned unique identifier for a server instance that the user account is assigned to.</p>
     #[serde(rename = "ServerId")]
     pub server_id: String,
-    /// <p>A unique string that identifies a user and is associated with a file transfer protocol-enabled server as specified by the <code>ServerId</code>. This is the string that will be used by your user when they log in to your server. This user name is a minimum of 3 and a maximum of 32 characters long. The following are valid characters: a-z, A-Z, 0-9, underscore, and hyphen. The user name can't start with a hyphen.</p>
+    /// <p>A unique string that identifies a user and is associated with a server as specified by the <code>ServerId</code>. This user name must be a minimum of 3 and a maximum of 100 characters long. The following are valid characters: a-z, A-Z, 0-9, underscore '_', hyphen '-', period '.', and at sign '@'. The user name can't start with a hyphen, period, or at sign.</p>
     #[serde(rename = "UserName")]
     pub user_name: String,
 }
 
-/// <p> <code>UpdateUserResponse</code> returns the user name and file transfer protocol-enabled server identifier for the request to update a user's properties.</p>
+/// <p> <code>UpdateUserResponse</code> returns the user name and identifier for the request to update a user's properties.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateUserResponse {
-    /// <p>A system-assigned unique identifier for a file transfer protocol-enabled server instance that the user account is assigned to.</p>
+    /// <p>A system-assigned unique identifier for a server instance that the user account is assigned to.</p>
     #[serde(rename = "ServerId")]
     pub server_id: String,
-    /// <p>The unique identifier for a user that is assigned to a file transfer protocol-enabled server instance that was specified in the request.</p>
+    /// <p>The unique identifier for a user that is assigned to a server instance that was specified in the request.</p>
     #[serde(rename = "UserName")]
     pub user_name: String,
 }
@@ -1009,6 +1095,62 @@ impl fmt::Display for DeleteUserError {
     }
 }
 impl Error for DeleteUserError {}
+/// Errors returned by DescribeSecurityPolicy
+#[derive(Debug, PartialEq)]
+pub enum DescribeSecurityPolicyError {
+    /// <p>This exception is thrown when an error occurs in the AWS Transfer Family service.</p>
+    InternalServiceError(String),
+    /// <p>This exception is thrown when the client submits a malformed request.</p>
+    InvalidRequest(String),
+    /// <p>This exception is thrown when a resource is not found by the AWS Transfer Family service.</p>
+    ResourceNotFound(String),
+    /// <p>The request has failed because the AWS Transfer Family service is not available.</p>
+    ServiceUnavailable(String),
+}
+
+impl DescribeSecurityPolicyError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeSecurityPolicyError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "InternalServiceError" => {
+                    return RusotoError::Service(DescribeSecurityPolicyError::InternalServiceError(
+                        err.msg,
+                    ))
+                }
+                "InvalidRequestException" => {
+                    return RusotoError::Service(DescribeSecurityPolicyError::InvalidRequest(
+                        err.msg,
+                    ))
+                }
+                "ResourceNotFoundException" => {
+                    return RusotoError::Service(DescribeSecurityPolicyError::ResourceNotFound(
+                        err.msg,
+                    ))
+                }
+                "ServiceUnavailableException" => {
+                    return RusotoError::Service(DescribeSecurityPolicyError::ServiceUnavailable(
+                        err.msg,
+                    ))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for DescribeSecurityPolicyError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            DescribeSecurityPolicyError::InternalServiceError(ref cause) => write!(f, "{}", cause),
+            DescribeSecurityPolicyError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+            DescribeSecurityPolicyError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            DescribeSecurityPolicyError::ServiceUnavailable(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for DescribeSecurityPolicyError {}
 /// Errors returned by DescribeServer
 #[derive(Debug, PartialEq)]
 pub enum DescribeServerError {
@@ -1169,6 +1311,60 @@ impl fmt::Display for ImportSshPublicKeyError {
     }
 }
 impl Error for ImportSshPublicKeyError {}
+/// Errors returned by ListSecurityPolicies
+#[derive(Debug, PartialEq)]
+pub enum ListSecurityPoliciesError {
+    /// <p>This exception is thrown when an error occurs in the AWS Transfer Family service.</p>
+    InternalServiceError(String),
+    /// <p>The <code>NextToken</code> parameter that was passed is invalid.</p>
+    InvalidNextToken(String),
+    /// <p>This exception is thrown when the client submits a malformed request.</p>
+    InvalidRequest(String),
+    /// <p>The request has failed because the AWS Transfer Family service is not available.</p>
+    ServiceUnavailable(String),
+}
+
+impl ListSecurityPoliciesError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListSecurityPoliciesError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "InternalServiceError" => {
+                    return RusotoError::Service(ListSecurityPoliciesError::InternalServiceError(
+                        err.msg,
+                    ))
+                }
+                "InvalidNextTokenException" => {
+                    return RusotoError::Service(ListSecurityPoliciesError::InvalidNextToken(
+                        err.msg,
+                    ))
+                }
+                "InvalidRequestException" => {
+                    return RusotoError::Service(ListSecurityPoliciesError::InvalidRequest(err.msg))
+                }
+                "ServiceUnavailableException" => {
+                    return RusotoError::Service(ListSecurityPoliciesError::ServiceUnavailable(
+                        err.msg,
+                    ))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for ListSecurityPoliciesError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            ListSecurityPoliciesError::InternalServiceError(ref cause) => write!(f, "{}", cause),
+            ListSecurityPoliciesError::InvalidNextToken(ref cause) => write!(f, "{}", cause),
+            ListSecurityPoliciesError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+            ListSecurityPoliciesError::ServiceUnavailable(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for ListSecurityPoliciesError {}
 /// Errors returned by ListServers
 #[derive(Debug, PartialEq)]
 pub enum ListServersError {
@@ -1742,6 +1938,12 @@ pub trait Transfer {
         input: DeleteUserRequest,
     ) -> Result<(), RusotoError<DeleteUserError>>;
 
+    /// <p>Describes the security policy that is attached to your file transfer protocol-enabled server. The response contains a description of the security policy's properties. For more information about security policies, see <a href="https://docs.aws.amazon.com/transfer/latest/userguide/security-policies.html">Working with security policies</a>.</p>
+    async fn describe_security_policy(
+        &self,
+        input: DescribeSecurityPolicyRequest,
+    ) -> Result<DescribeSecurityPolicyResponse, RusotoError<DescribeSecurityPolicyError>>;
+
     /// <p>Describes a file transfer protocol-enabled server that you specify by passing the <code>ServerId</code> parameter.</p> <p>The response contains a description of a server's properties. When you set <code>EndpointType</code> to VPC, the response will contain the <code>EndpointDetails</code>.</p>
     async fn describe_server(
         &self,
@@ -1759,6 +1961,12 @@ pub trait Transfer {
         &self,
         input: ImportSshPublicKeyRequest,
     ) -> Result<ImportSshPublicKeyResponse, RusotoError<ImportSshPublicKeyError>>;
+
+    /// <p>Lists the security policies that are attached to your file transfer protocol-enabled servers.</p>
+    async fn list_security_policies(
+        &self,
+        input: ListSecurityPoliciesRequest,
+    ) -> Result<ListSecurityPoliciesResponse, RusotoError<ListSecurityPoliciesError>>;
 
     /// <p>Lists the file transfer protocol-enabled servers that are associated with your AWS account.</p>
     async fn list_servers(
@@ -1784,7 +1992,7 @@ pub trait Transfer {
         input: StartServerRequest,
     ) -> Result<(), RusotoError<StartServerError>>;
 
-    /// <p>Changes the state of a file transfer protocol-enabled server from <code>ONLINE</code> to <code>OFFLINE</code>. An <code>OFFLINE</code> server cannot accept and process file transfer jobs. Information tied to your server, such as server and user properties, are not affected by stopping your server. Stopping the server will not reduce or impact your file transfer protocol endpoint billing.</p> <p>The state of <code>STOPPING</code> indicates that the server is in an intermediate state, either not fully able to respond, or not fully offline. The values of <code>STOP_FAILED</code> can indicate an error condition.</p> <p>No response is returned from this call.</p>
+    /// <p>Changes the state of a file transfer protocol-enabled server from <code>ONLINE</code> to <code>OFFLINE</code>. An <code>OFFLINE</code> server cannot accept and process file transfer jobs. Information tied to your server, such as server and user properties, are not affected by stopping your server.</p> <note> <p>Stopping the server will not reduce or impact your file transfer protocol endpoint billing; you must delete the server to stop being billed.</p> </note> <p>The state of <code>STOPPING</code> indicates that the server is in an intermediate state, either not fully able to respond, or not fully offline. The values of <code>STOP_FAILED</code> can indicate an error condition.</p> <p>No response is returned from this call.</p>
     async fn stop_server(
         &self,
         input: StopServerRequest,
@@ -1947,6 +2155,25 @@ impl Transfer for TransferClient {
         Ok(())
     }
 
+    /// <p>Describes the security policy that is attached to your file transfer protocol-enabled server. The response contains a description of the security policy's properties. For more information about security policies, see <a href="https://docs.aws.amazon.com/transfer/latest/userguide/security-policies.html">Working with security policies</a>.</p>
+    async fn describe_security_policy(
+        &self,
+        input: DescribeSecurityPolicyRequest,
+    ) -> Result<DescribeSecurityPolicyResponse, RusotoError<DescribeSecurityPolicyError>> {
+        let mut request = self.new_signed_request("POST", "/");
+        request.add_header("x-amz-target", "TransferService.DescribeSecurityPolicy");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        let response = self
+            .sign_and_dispatch(request, DescribeSecurityPolicyError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<DescribeSecurityPolicyResponse, _>()
+    }
+
     /// <p>Describes a file transfer protocol-enabled server that you specify by passing the <code>ServerId</code> parameter.</p> <p>The response contains a description of a server's properties. When you set <code>EndpointType</code> to VPC, the response will contain the <code>EndpointDetails</code>.</p>
     async fn describe_server(
         &self,
@@ -1999,6 +2226,25 @@ impl Transfer for TransferClient {
         let mut response = response;
         let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         proto::json::ResponsePayload::new(&response).deserialize::<ImportSshPublicKeyResponse, _>()
+    }
+
+    /// <p>Lists the security policies that are attached to your file transfer protocol-enabled servers.</p>
+    async fn list_security_policies(
+        &self,
+        input: ListSecurityPoliciesRequest,
+    ) -> Result<ListSecurityPoliciesResponse, RusotoError<ListSecurityPoliciesError>> {
+        let mut request = self.new_signed_request("POST", "/");
+        request.add_header("x-amz-target", "TransferService.ListSecurityPolicies");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        let response = self
+            .sign_and_dispatch(request, ListSecurityPoliciesError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<ListSecurityPoliciesResponse, _>()
     }
 
     /// <p>Lists the file transfer protocol-enabled servers that are associated with your AWS account.</p>
@@ -2072,7 +2318,7 @@ impl Transfer for TransferClient {
         Ok(())
     }
 
-    /// <p>Changes the state of a file transfer protocol-enabled server from <code>ONLINE</code> to <code>OFFLINE</code>. An <code>OFFLINE</code> server cannot accept and process file transfer jobs. Information tied to your server, such as server and user properties, are not affected by stopping your server. Stopping the server will not reduce or impact your file transfer protocol endpoint billing.</p> <p>The state of <code>STOPPING</code> indicates that the server is in an intermediate state, either not fully able to respond, or not fully offline. The values of <code>STOP_FAILED</code> can indicate an error condition.</p> <p>No response is returned from this call.</p>
+    /// <p>Changes the state of a file transfer protocol-enabled server from <code>ONLINE</code> to <code>OFFLINE</code>. An <code>OFFLINE</code> server cannot accept and process file transfer jobs. Information tied to your server, such as server and user properties, are not affected by stopping your server.</p> <note> <p>Stopping the server will not reduce or impact your file transfer protocol endpoint billing; you must delete the server to stop being billed.</p> </note> <p>The state of <code>STOPPING</code> indicates that the server is in an intermediate state, either not fully able to respond, or not fully offline. The values of <code>STOP_FAILED</code> can indicate an error condition.</p> <p>No response is returned from this call.</p>
     async fn stop_server(
         &self,
         input: StopServerRequest,

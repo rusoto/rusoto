@@ -209,6 +209,10 @@ pub struct ActionDeclaration {
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ActionExecution {
+    /// <p><p>ID of the workflow action execution in the current stage. Use the <a>GetPipelineState</a> action to retrieve the current action execution details of the current stage.</p> <note> <p>For older executions, this field might be empty. The action execution ID is available for executions run on or after March 2020.</p> </note></p>
+    #[serde(rename = "actionExecutionId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub action_execution_id: Option<String>,
     /// <p>The details of an error returned by a URL external to AWS.</p>
     #[serde(rename = "errorDetails")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -438,10 +442,10 @@ pub struct ActionType {
 /// <p>Represents information about an action type.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct ActionTypeId {
-    /// <p>A category defines what kind of action can be taken in the stage, and constrains the provider type for the action. Valid categories are limited to one of the following values. </p>
+    /// <p><p>A category defines what kind of action can be taken in the stage, and constrains the provider type for the action. Valid categories are limited to one of the following values. </p> <ul> <li> <p>Source</p> </li> <li> <p>Build</p> </li> <li> <p>Test</p> </li> <li> <p>Deploy</p> </li> <li> <p>Invoke</p> </li> <li> <p>Approval</p> </li> </ul></p>
     #[serde(rename = "category")]
     pub category: String,
-    /// <p>The creator of the action being called.</p>
+    /// <p>The creator of the action being called. There are three valid values for the <code>Owner</code> field in the action category section within your pipeline structure: <code>AWS</code>, <code>ThirdParty</code>, and <code>Custom</code>. For more information, see <a href="https://docs.aws.amazon.com/codepipeline/latest/userguide/reference-pipeline-structure.html#actions-valid-providers">Valid Action Types and Providers in CodePipeline</a>.</p>
     #[serde(rename = "owner")]
     pub owner: String,
     /// <p>The provider of the service being called by the action. Valid providers are determined by the action category. For example, an action in the Deploy category type might have a provider of AWS CodeDeploy, which would be specified as CodeDeploy. For more information, see <a href="https://docs.aws.amazon.com/codepipeline/latest/userguide/reference-pipeline-structure.html#actions-valid-providers">Valid Action Types and Providers in CodePipeline</a>.</p>
@@ -602,7 +606,7 @@ pub struct BlockerDeclaration {
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateCustomActionTypeInput {
-    /// <p><p>The category of the custom action, such as a build action or a test action.</p> <note> <p>Although <code>Source</code> and <code>Approval</code> are listed as valid values, they are not currently functional. These values are reserved for future use.</p> </note></p>
+    /// <p>The category of the custom action, such as a build action or a test action.</p>
     #[serde(rename = "category")]
     pub category: String,
     /// <p><p>The configuration properties for the custom action.</p> <note> <p>You can refer to a name in the configuration properties of the custom action within the URL templates by following the format of {Config:name}, as long as the configuration property is both required and not secret. For more information, see <a href="https://docs.aws.amazon.com/codepipeline/latest/userguide/how-to-create-custom-action.html">Create a Custom Action for a Pipeline</a>.</p> </note></p>
@@ -1304,7 +1308,7 @@ pub struct PipelineDeclaration {
     #[serde(rename = "artifactStores")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub artifact_stores: Option<::std::collections::HashMap<String, ArtifactStore>>,
-    /// <p>The name of the action to be performed.</p>
+    /// <p>The name of the pipeline.</p>
     #[serde(rename = "name")]
     pub name: String,
     /// <p>The Amazon Resource Name (ARN) for AWS CodePipeline to use to either perform actions with no <code>actionRoleArn</code>, or to use to assume roles for actions with an <code>actionRoleArn</code>.</p>
@@ -1762,6 +1766,9 @@ pub struct StageState {
     #[serde(rename = "actionStates")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub action_states: Option<Vec<ActionState>>,
+    #[serde(rename = "inboundExecution")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub inbound_execution: Option<StageExecution>,
     /// <p>The state of the inbound transition, which is either enabled or disabled.</p>
     #[serde(rename = "inboundTransitionState")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -3344,6 +3351,8 @@ impl Error for RegisterWebhookWithThirdPartyError {}
 /// Errors returned by RetryStageExecution
 #[derive(Debug, PartialEq)]
 pub enum RetryStageExecutionError {
+    /// <p>Your request cannot be handled because the pipeline is busy handling ongoing activities. Try again later.</p>
+    Conflict(String),
     /// <p>The stage has failed in a later run of the pipeline and the pipelineExecutionId associated with the request is out of date.</p>
     NotLatestPipelineExecution(String),
     /// <p>The pipeline was specified in an invalid format or cannot be found.</p>
@@ -3358,6 +3367,9 @@ impl RetryStageExecutionError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<RetryStageExecutionError> {
         if let Some(err) = proto::json::Error::parse(&res) {
             match err.typ.as_str() {
+                "ConflictException" => {
+                    return RusotoError::Service(RetryStageExecutionError::Conflict(err.msg))
+                }
                 "NotLatestPipelineExecutionException" => {
                     return RusotoError::Service(
                         RetryStageExecutionError::NotLatestPipelineExecution(err.msg),
@@ -3387,6 +3399,7 @@ impl fmt::Display for RetryStageExecutionError {
     #[allow(unused_variables)]
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match *self {
+            RetryStageExecutionError::Conflict(ref cause) => write!(f, "{}", cause),
             RetryStageExecutionError::NotLatestPipelineExecution(ref cause) => {
                 write!(f, "{}", cause)
             }
@@ -3400,6 +3413,8 @@ impl Error for RetryStageExecutionError {}
 /// Errors returned by StartPipelineExecution
 #[derive(Debug, PartialEq)]
 pub enum StartPipelineExecutionError {
+    /// <p>Your request cannot be handled because the pipeline is busy handling ongoing activities. Try again later.</p>
+    Conflict(String),
     /// <p>The pipeline was specified in an invalid format or cannot be found.</p>
     PipelineNotFound(String),
 }
@@ -3408,6 +3423,9 @@ impl StartPipelineExecutionError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<StartPipelineExecutionError> {
         if let Some(err) = proto::json::Error::parse(&res) {
             match err.typ.as_str() {
+                "ConflictException" => {
+                    return RusotoError::Service(StartPipelineExecutionError::Conflict(err.msg))
+                }
                 "PipelineNotFoundException" => {
                     return RusotoError::Service(StartPipelineExecutionError::PipelineNotFound(
                         err.msg,
@@ -3424,6 +3442,7 @@ impl fmt::Display for StartPipelineExecutionError {
     #[allow(unused_variables)]
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match *self {
+            StartPipelineExecutionError::Conflict(ref cause) => write!(f, "{}", cause),
             StartPipelineExecutionError::PipelineNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
@@ -3432,6 +3451,8 @@ impl Error for StartPipelineExecutionError {}
 /// Errors returned by StopPipelineExecution
 #[derive(Debug, PartialEq)]
 pub enum StopPipelineExecutionError {
+    /// <p>Your request cannot be handled because the pipeline is busy handling ongoing activities. Try again later.</p>
+    Conflict(String),
     /// <p>The pipeline execution is already in a <code>Stopping</code> state. If you already chose to stop and wait, you cannot make that request again. You can choose to stop and abandon now, but be aware that this option can lead to failed tasks or out of sequence tasks. If you already chose to stop and abandon, you cannot make that request again.</p>
     DuplicatedStopRequest(String),
     /// <p>Unable to stop the pipeline execution. The execution might already be in a <code>Stopped</code> state, or it might no longer be in progress.</p>
@@ -3444,6 +3465,9 @@ impl StopPipelineExecutionError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<StopPipelineExecutionError> {
         if let Some(err) = proto::json::Error::parse(&res) {
             match err.typ.as_str() {
+                "ConflictException" => {
+                    return RusotoError::Service(StopPipelineExecutionError::Conflict(err.msg))
+                }
                 "DuplicatedStopRequestException" => {
                     return RusotoError::Service(StopPipelineExecutionError::DuplicatedStopRequest(
                         err.msg,
@@ -3470,6 +3494,7 @@ impl fmt::Display for StopPipelineExecutionError {
     #[allow(unused_variables)]
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match *self {
+            StopPipelineExecutionError::Conflict(ref cause) => write!(f, "{}", cause),
             StopPipelineExecutionError::DuplicatedStopRequest(ref cause) => write!(f, "{}", cause),
             StopPipelineExecutionError::PipelineExecutionNotStoppable(ref cause) => {
                 write!(f, "{}", cause)

@@ -54,6 +54,10 @@ pub struct App {
     /// <p> Creates a date and time for the Amplify app. </p>
     #[serde(rename = "createTime")]
     pub create_time: f64,
+    /// <p>Describes the custom HTTP headers for the Amplify app.</p>
+    #[serde(rename = "customHeaders")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub custom_headers: Option<String>,
     /// <p> Describes the custom redirect and rewrite rules for the Amplify app. </p>
     #[serde(rename = "customRules")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -138,7 +142,11 @@ pub struct AutoBranchCreationConfig {
     #[serde(rename = "enableBasicAuth")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub enable_basic_auth: Option<bool>,
-    /// <p> Enables pull request preview for the autocreated branch. </p>
+    /// <p>Enables performance mode for the branch.</p> <p>Performance mode optimizes for faster hosting performance by keeping content cached at the edge for a longer interval. When performance mode is enabled, hosting configuration or code changes can take up to 10 minutes to roll out. </p>
+    #[serde(rename = "enablePerformanceMode")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub enable_performance_mode: Option<bool>,
+    /// <p> Enables pull request previews for the autocreated branch. </p>
     #[serde(rename = "enablePullRequestPreview")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub enable_pull_request_preview: Option<bool>,
@@ -240,7 +248,11 @@ pub struct Branch {
     /// <p> Enables notifications for a branch that is part of an Amplify app. </p>
     #[serde(rename = "enableNotification")]
     pub enable_notification: bool,
-    /// <p> Enables pull request preview for the branch. </p>
+    /// <p>Enables performance mode for the branch.</p> <p>Performance mode optimizes for faster hosting performance by keeping content cached at the edge for a longer interval. When performance mode is enabled, hosting configuration or code changes can take up to 10 minutes to roll out. </p>
+    #[serde(rename = "enablePerformanceMode")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub enable_performance_mode: Option<bool>,
+    /// <p> Enables pull request previews for the branch. </p>
     #[serde(rename = "enablePullRequestPreview")]
     pub enable_pull_request_preview: bool,
     /// <p> The environment variables specific to a branch of an Amplify app. </p>
@@ -287,11 +299,11 @@ pub struct CreateAppRequest {
     #[serde(rename = "accessToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub access_token: Option<String>,
-    /// <p> The automated branch creation configuration for the Amplify app. </p>
+    /// <p> The automated branch creation configuration for an Amplify app. </p>
     #[serde(rename = "autoBranchCreationConfig")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub auto_branch_creation_config: Option<AutoBranchCreationConfig>,
-    /// <p> The automated branch creation glob patterns for the Amplify app. </p>
+    /// <p> The automated branch creation glob patterns for an Amplify app. </p>
     #[serde(rename = "autoBranchCreationPatterns")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub auto_branch_creation_patterns: Option<Vec<String>>,
@@ -303,6 +315,10 @@ pub struct CreateAppRequest {
     #[serde(rename = "buildSpec")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub build_spec: Option<String>,
+    /// <p>The custom HTTP headers for an Amplify app.</p>
+    #[serde(rename = "customHeaders")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub custom_headers: Option<String>,
     /// <p> The custom rewrite and redirect rules for an Amplify app. </p>
     #[serde(rename = "customRules")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -311,7 +327,7 @@ pub struct CreateAppRequest {
     #[serde(rename = "description")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub description: Option<String>,
-    /// <p> Enables automated branch creation for the Amplify app. </p>
+    /// <p> Enables automated branch creation for an Amplify app. </p>
     #[serde(rename = "enableAutoBranchCreation")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub enable_auto_branch_creation: Option<bool>,
@@ -335,7 +351,7 @@ pub struct CreateAppRequest {
     #[serde(rename = "iamServiceRoleArn")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub iam_service_role_arn: Option<String>,
-    /// <p> The name for the Amplify app. </p>
+    /// <p> The name for an Amplify app. </p>
     #[serde(rename = "name")]
     pub name: String,
     /// <p> The OAuth token for a third-party source control system for an Amplify app. The OAuth token is used to create a webhook and a read-only deploy key. The OAuth token is not stored. </p>
@@ -434,7 +450,11 @@ pub struct CreateBranchRequest {
     #[serde(rename = "enableNotification")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub enable_notification: Option<bool>,
-    /// <p> Enables pull request preview for this branch. </p>
+    /// <p>Enables performance mode for the branch.</p> <p>Performance mode optimizes for faster hosting performance by keeping content cached at the edge for a longer interval. When performance mode is enabled, hosting configuration or code changes can take up to 10 minutes to roll out. </p>
+    #[serde(rename = "enablePerformanceMode")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub enable_performance_mode: Option<bool>,
+    /// <p> Enables pull request previews for this branch. </p>
     #[serde(rename = "enablePullRequestPreview")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub enable_pull_request_preview: Option<bool>,
@@ -576,7 +596,7 @@ pub struct CustomRule {
     /// <p> The source pattern for a URL rewrite or redirect rule. </p>
     #[serde(rename = "source")]
     pub source: String,
-    /// <p> The status code for a URL rewrite or redirect rule. </p>
+    /// <p><p> The status code for a URL rewrite or redirect rule. </p> <dl> <dt>200</dt> <dd> <p>Represents a 200 rewrite rule.</p> </dd> <dt>301</dt> <dd> <p>Represents a 301 (moved pemanently) redirect rule. This and all future requests should be directed to the target URL. </p> </dd> <dt>302</dt> <dd> <p>Represents a 302 temporary redirect rule.</p> </dd> <dt>404</dt> <dd> <p>Represents a 404 redirect rule.</p> </dd> <dt>404-200</dt> <dd> <p>Represents a 404 rewrite rule.</p> </dd> </dl></p>
     #[serde(rename = "status")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub status: Option<String>,
@@ -1429,11 +1449,11 @@ pub struct UpdateAppRequest {
     /// <p> The unique ID for an Amplify app. </p>
     #[serde(rename = "appId")]
     pub app_id: String,
-    /// <p> The automated branch creation configuration for the Amplify app. </p>
+    /// <p> The automated branch creation configuration for an Amplify app. </p>
     #[serde(rename = "autoBranchCreationConfig")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub auto_branch_creation_config: Option<AutoBranchCreationConfig>,
-    /// <p> Describes the automated branch creation glob patterns for the Amplify app. </p>
+    /// <p> Describes the automated branch creation glob patterns for an Amplify app. </p>
     #[serde(rename = "autoBranchCreationPatterns")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub auto_branch_creation_patterns: Option<Vec<String>>,
@@ -1445,6 +1465,10 @@ pub struct UpdateAppRequest {
     #[serde(rename = "buildSpec")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub build_spec: Option<String>,
+    /// <p>The custom HTTP headers for an Amplify app.</p>
+    #[serde(rename = "customHeaders")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub custom_headers: Option<String>,
     /// <p> The custom redirect and rewrite rules for an Amplify app. </p>
     #[serde(rename = "customRules")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1453,7 +1477,7 @@ pub struct UpdateAppRequest {
     #[serde(rename = "description")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub description: Option<String>,
-    /// <p> Enables automated branch creation for the Amplify app. </p>
+    /// <p> Enables automated branch creation for an Amplify app. </p>
     #[serde(rename = "enableAutoBranchCreation")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub enable_auto_branch_creation: Option<bool>,
@@ -1546,7 +1570,11 @@ pub struct UpdateBranchRequest {
     #[serde(rename = "enableNotification")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub enable_notification: Option<bool>,
-    /// <p> Enables pull request preview for this branch. </p>
+    /// <p>Enables performance mode for the branch.</p> <p>Performance mode optimizes for faster hosting performance by keeping content cached at the edge for a longer interval. When performance mode is enabled, hosting configuration or code changes can take up to 10 minutes to roll out. </p>
+    #[serde(rename = "enablePerformanceMode")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub enable_performance_mode: Option<bool>,
+    /// <p> Enables pull request previews for this branch. </p>
     #[serde(rename = "enablePullRequestPreview")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub enable_pull_request_preview: Option<bool>,

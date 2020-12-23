@@ -66,6 +66,61 @@ pub struct AppliedTerminology {
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct CreateParallelDataRequest {
+    /// <p>A unique identifier for the request. This token is automatically generated when you use Amazon Translate through an AWS SDK.</p>
+    #[serde(rename = "ClientToken")]
+    pub client_token: String,
+    /// <p>A custom description for the parallel data resource in Amazon Translate.</p>
+    #[serde(rename = "Description")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub description: Option<String>,
+    #[serde(rename = "EncryptionKey")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub encryption_key: Option<EncryptionKey>,
+    /// <p>A custom name for the parallel data resource in Amazon Translate. You must assign a name that is unique in the account and region.</p>
+    #[serde(rename = "Name")]
+    pub name: String,
+    /// <p>Specifies the format and S3 location of the parallel data input file.</p>
+    #[serde(rename = "ParallelDataConfig")]
+    pub parallel_data_config: ParallelDataConfig,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct CreateParallelDataResponse {
+    /// <p>The custom name that you assigned to the parallel data resource.</p>
+    #[serde(rename = "Name")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub name: Option<String>,
+    /// <p>The status of the parallel data resource. When the resource is ready for you to use, the status is <code>ACTIVE</code>.</p>
+    #[serde(rename = "Status")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub status: Option<String>,
+}
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct DeleteParallelDataRequest {
+    /// <p>The name of the parallel data resource that is being deleted.</p>
+    #[serde(rename = "Name")]
+    pub name: String,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct DeleteParallelDataResponse {
+    /// <p>The name of the parallel data resource that is being deleted.</p>
+    #[serde(rename = "Name")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub name: Option<String>,
+    /// <p>The status of the parallel data deletion.</p>
+    #[serde(rename = "Status")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub status: Option<String>,
+}
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteTerminologyRequest {
     /// <p>The name of the custom terminology being deleted. </p>
     #[serde(rename = "Name")]
@@ -89,7 +144,7 @@ pub struct DescribeTextTranslationJobResponse {
     pub text_translation_job_properties: Option<TextTranslationJobProperties>,
 }
 
-/// <p>The encryption key used to encrypt the custom terminologies used by Amazon Translate.</p>
+/// <p>The encryption key used to encrypt this object.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct EncryptionKey {
     /// <p>The Amazon Resource Name (ARN) of the encryption key being used to encrypt the custom terminology.</p>
@@ -98,6 +153,35 @@ pub struct EncryptionKey {
     /// <p>The type of encryption key used by Amazon Translate to encrypt custom terminologies.</p>
     #[serde(rename = "Type")]
     pub type_: String,
+}
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct GetParallelDataRequest {
+    /// <p>The name of the parallel data resource that is being retrieved.</p>
+    #[serde(rename = "Name")]
+    pub name: String,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct GetParallelDataResponse {
+    /// <p>The Amazon S3 location of a file that provides any errors or warnings that were produced by your input file. This file was created when Amazon Translate attempted to create a parallel data resource. The location is returned as a presigned URL to that has a 30 minute expiration.</p>
+    #[serde(rename = "AuxiliaryDataLocation")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub auxiliary_data_location: Option<ParallelDataDataLocation>,
+    /// <p>The location of the most recent parallel data input file that was successfully imported into Amazon Translate. The location is returned as a presigned URL that has a 30 minute expiration.</p>
+    #[serde(rename = "DataLocation")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub data_location: Option<ParallelDataDataLocation>,
+    /// <p>The Amazon S3 location of a file that provides any errors or warnings that were produced by your input file. This file was created when Amazon Translate attempted to update a parallel data resource. The location is returned as a presigned URL to that has a 30 minute expiration.</p>
+    #[serde(rename = "LatestUpdateAttemptAuxiliaryDataLocation")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub latest_update_attempt_auxiliary_data_location: Option<ParallelDataDataLocation>,
+    /// <p>The properties of the parallel data resource that is being retrieved.</p>
+    #[serde(rename = "ParallelDataProperties")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub parallel_data_properties: Option<ParallelDataProperties>,
 }
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
@@ -158,7 +242,7 @@ pub struct ImportTerminologyResponse {
 /// <p>The input configuration properties for requesting a batch translation job.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct InputDataConfig {
-    /// <p>The multipurpose internet mail extension (MIME) type of the input files. Valid values are <code>text/plain</code> for plaintext files and <code>text/html</code> for HTML files.</p>
+    /// <p><p>Describes the format of the data that you submit to Amazon Translate as input. You can specify one of the following multipurpose internet mail extension (MIME) types:</p> <ul> <li> <p> <code>text/html</code>: The input data consists of one or more HTML files. Amazon Translate translates only the text that resides in the <code>html</code> element in each file.</p> </li> <li> <p> <code>text/plain</code>: The input data consists of one or more unformatted text files. Amazon Translate translates every character in this type of input.</p> </li> <li> <p> <code>application/vnd.openxmlformats-officedocument.wordprocessingml.document</code>: The input data consists of one or more Word documents (.docx).</p> </li> <li> <p> <code>application/vnd.openxmlformats-officedocument.presentationml.presentation</code>: The input data consists of one or more PowerPoint Presentation files (.pptx).</p> </li> <li> <p> <code>application/vnd.openxmlformats-officedocument.spreadsheetml.sheet</code>: The input data consists of one or more Excel Workbook files (.xlsx).</p> </li> </ul> <important> <p>If you structure your input data as HTML, ensure that you set this parameter to <code>text/html</code>. By doing so, you cut costs by limiting the translation to the contents of the <code>html</code> element in each file. Otherwise, if you set this parameter to <code>text/plain</code>, your costs will cover the translation of every character.</p> </important></p>
     #[serde(rename = "ContentType")]
     pub content_type: String,
     /// <p>The URI of the AWS S3 folder that contains the input file. The folder must be in the same Region as the API endpoint you are calling.</p>
@@ -182,6 +266,32 @@ pub struct JobDetails {
     #[serde(rename = "TranslatedDocumentsCount")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub translated_documents_count: Option<i64>,
+}
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct ListParallelDataRequest {
+    /// <p>The maximum number of parallel data resources returned for each request.</p>
+    #[serde(rename = "MaxResults")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub max_results: Option<i64>,
+    /// <p>A string that specifies the next page of results to return in a paginated response.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct ListParallelDataResponse {
+    /// <p>The string to use in a subsequent request to get the next page of results in a paginated response. This value is null if there are no additional pages.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+    /// <p>The properties of the parallel data resources returned by this request.</p>
+    #[serde(rename = "ParallelDataPropertiesList")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub parallel_data_properties_list: Option<Vec<ParallelDataProperties>>,
 }
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
@@ -248,10 +358,106 @@ pub struct OutputDataConfig {
     pub s3_uri: String,
 }
 
+/// <p>Specifies the format and S3 location of the parallel data input file.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
+pub struct ParallelDataConfig {
+    /// <p>The format of the parallel data input file.</p>
+    #[serde(rename = "Format")]
+    pub format: String,
+    /// <p>The URI of the Amazon S3 folder that contains the parallel data input file. The folder must be in the same Region as the API endpoint you are calling.</p>
+    #[serde(rename = "S3Uri")]
+    pub s3_uri: String,
+}
+
+/// <p>The location of the most recent parallel data input file that was successfully imported into Amazon Translate.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct ParallelDataDataLocation {
+    /// <p>The Amazon S3 location of the parallel data input file. The location is returned as a presigned URL to that has a 30 minute expiration.</p>
+    #[serde(rename = "Location")]
+    pub location: String,
+    /// <p>Describes the repository that contains the parallel data input file.</p>
+    #[serde(rename = "RepositoryType")]
+    pub repository_type: String,
+}
+
+/// <p>The properties of a parallel data resource.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct ParallelDataProperties {
+    /// <p>The Amazon Resource Name (ARN) of the parallel data resource.</p>
+    #[serde(rename = "Arn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub arn: Option<String>,
+    /// <p>The time at which the parallel data resource was created.</p>
+    #[serde(rename = "CreatedAt")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub created_at: Option<f64>,
+    /// <p>The description assigned to the parallel data resource.</p>
+    #[serde(rename = "Description")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub description: Option<String>,
+    #[serde(rename = "EncryptionKey")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub encryption_key: Option<EncryptionKey>,
+    /// <p>The number of records unsuccessfully imported from the parallel data input file.</p>
+    #[serde(rename = "FailedRecordCount")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub failed_record_count: Option<i64>,
+    /// <p>The number of UTF-8 characters that Amazon Translate imported from the parallel data input file. This number includes only the characters in your translation examples. It does not include characters that are used to format your file. For example, if you provided a Translation Memory Exchange (.tmx) file, this number does not include the tags.</p>
+    #[serde(rename = "ImportedDataSize")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub imported_data_size: Option<i64>,
+    /// <p>The number of records successfully imported from the parallel data input file.</p>
+    #[serde(rename = "ImportedRecordCount")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub imported_record_count: Option<i64>,
+    /// <p>The time at which the parallel data resource was last updated.</p>
+    #[serde(rename = "LastUpdatedAt")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub last_updated_at: Option<f64>,
+    /// <p>The time that the most recent update was attempted.</p>
+    #[serde(rename = "LatestUpdateAttemptAt")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub latest_update_attempt_at: Option<f64>,
+    /// <p>The status of the most recent update attempt for the parallel data resource.</p>
+    #[serde(rename = "LatestUpdateAttemptStatus")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub latest_update_attempt_status: Option<String>,
+    /// <p>Additional information from Amazon Translate about the parallel data resource. </p>
+    #[serde(rename = "Message")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub message: Option<String>,
+    /// <p>The custom name assigned to the parallel data resource.</p>
+    #[serde(rename = "Name")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub name: Option<String>,
+    /// <p>Specifies the format and S3 location of the parallel data input file.</p>
+    #[serde(rename = "ParallelDataConfig")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub parallel_data_config: Option<ParallelDataConfig>,
+    /// <p>The number of items in the input file that Amazon Translate skipped when you created or updated the parallel data resource. For example, Amazon Translate skips empty records, empty target texts, and empty lines.</p>
+    #[serde(rename = "SkippedRecordCount")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub skipped_record_count: Option<i64>,
+    /// <p>The source language of the translations in the parallel data file.</p>
+    #[serde(rename = "SourceLanguageCode")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub source_language_code: Option<String>,
+    /// <p>The status of the parallel data resource. When the parallel data is ready for you to use, the status is <code>ACTIVE</code>.</p>
+    #[serde(rename = "Status")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub status: Option<String>,
+    /// <p>The language codes for the target languages available in the parallel data file. All possible target languages are returned as an array.</p>
+    #[serde(rename = "TargetLanguageCodes")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub target_language_codes: Option<Vec<String>>,
+}
+
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct StartTextTranslationJobRequest {
-    /// <p>The client token of the EC2 instance calling the request. This token is auto-generated when using the Amazon Translate SDK. Otherwise, use the <a href="docs.aws.amazon.com/AWSEC2/latest/APIReference/API_DescribeInstances.html">DescribeInstances</a> EC2 operation to retreive an instance's client token. For more information, see <a href="docs.aws.amazon.com/AWSEC2/latest/APIReference/Run_Instance_Idempotency.html#client-tokens">Client Tokens</a> in the EC2 User Guide.</p>
+    /// <p>A unique identifier for the request. This token is auto-generated when using the Amazon Translate SDK.</p>
     #[serde(rename = "ClientToken")]
     pub client_token: String,
     /// <p>The Amazon Resource Name (ARN) of an AWS Identity Access and Management (IAM) role that grants Amazon Translate read access to your input data. For more nformation, see <a>identity-and-access-management</a>.</p>
@@ -267,6 +473,10 @@ pub struct StartTextTranslationJobRequest {
     /// <p>Specifies the S3 folder to which your job output will be saved. </p>
     #[serde(rename = "OutputDataConfig")]
     pub output_data_config: OutputDataConfig,
+    /// <p>The names of the parallel data resources to use in the batch translation job. For a list of available parallel data resources, use the <a>ListParallelData</a> operation.</p>
+    #[serde(rename = "ParallelDataNames")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub parallel_data_names: Option<Vec<String>>,
     /// <p>The language code of the input language. For a list of language codes, see <a>what-is-languages</a>.</p> <p>Amazon Translate does not automatically detect a source language during batch translation jobs.</p>
     #[serde(rename = "SourceLanguageCode")]
     pub source_language_code: String,
@@ -286,7 +496,7 @@ pub struct StartTextTranslationJobResponse {
     #[serde(rename = "JobId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub job_id: Option<String>,
-    /// <p><p>The status of the job. Possible values include:</p> <ul> <li> <p> <code>SUBMITTED</code> - The job has been received and is queued for processing.</p> </li> <li> <p> <code>IN<em>PROGRESS</code> - Amazon Translate is processing the job.</p> </li> <li> <p> <code>COMPLETED</code> - The job was successfully completed and the output is available.</p> </li> <li> <p> <code>COMPLETED</em>WITH<em>ERRORS</code> - The job was completed with errors. The errors can be analyzed in the job&#39;s output.</p> </li> <li> <p> <code>FAILED</code> - The job did not complete. To get details, use the <a>DescribeTextTranslationJob</a> operation.</p> </li> <li> <p> <code>STOP</em>REQUESTED</code> - The user who started the job has requested that it be stopped.</p> </li> <li> <p> <code>STOPPED</code> - The job has been stopped.</p> </li> </ul></p>
+    /// <p><p>The status of the job. Possible values include:</p> <ul> <li> <p> <code>SUBMITTED</code> - The job has been received and is queued for processing.</p> </li> <li> <p> <code>IN<em>PROGRESS</code> - Amazon Translate is processing the job.</p> </li> <li> <p> <code>COMPLETED</code> - The job was successfully completed and the output is available.</p> </li> <li> <p> <code>COMPLETED</em>WITH<em>ERROR</code> - The job was completed with errors. The errors can be analyzed in the job&#39;s output.</p> </li> <li> <p> <code>FAILED</code> - The job did not complete. To get details, use the <a>DescribeTextTranslationJob</a> operation.</p> </li> <li> <p> <code>STOP</em>REQUESTED</code> - The user who started the job has requested that it be stopped.</p> </li> <li> <p> <code>STOPPED</code> - The job has been stopped.</p> </li> </ul></p>
     #[serde(rename = "JobStatus")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub job_status: Option<String>,
@@ -464,6 +674,10 @@ pub struct TextTranslationJobProperties {
     #[serde(rename = "OutputDataConfig")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub output_data_config: Option<OutputDataConfig>,
+    /// <p>A list containing the names of the parallel data resources applied to the translation job.</p>
+    #[serde(rename = "ParallelDataNames")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub parallel_data_names: Option<Vec<String>>,
     /// <p>The language code of the language of the source text. The language must be a language supported by Amazon Translate.</p>
     #[serde(rename = "SourceLanguageCode")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -518,11 +732,164 @@ pub struct TranslateTextResponse {
     pub translated_text: String,
 }
 
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct UpdateParallelDataRequest {
+    /// <p>A unique identifier for the request. This token is automatically generated when you use Amazon Translate through an AWS SDK.</p>
+    #[serde(rename = "ClientToken")]
+    pub client_token: String,
+    /// <p>A custom description for the parallel data resource in Amazon Translate.</p>
+    #[serde(rename = "Description")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub description: Option<String>,
+    /// <p>The name of the parallel data resource being updated.</p>
+    #[serde(rename = "Name")]
+    pub name: String,
+    /// <p>Specifies the format and S3 location of the parallel data input file.</p>
+    #[serde(rename = "ParallelDataConfig")]
+    pub parallel_data_config: ParallelDataConfig,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct UpdateParallelDataResponse {
+    /// <p>The time that the most recent update was attempted.</p>
+    #[serde(rename = "LatestUpdateAttemptAt")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub latest_update_attempt_at: Option<f64>,
+    /// <p>The status of the parallel data update attempt. When the updated parallel data resource is ready for you to use, the status is <code>ACTIVE</code>.</p>
+    #[serde(rename = "LatestUpdateAttemptStatus")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub latest_update_attempt_status: Option<String>,
+    /// <p>The name of the parallel data resource being updated.</p>
+    #[serde(rename = "Name")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub name: Option<String>,
+    /// <p>The status of the parallel data resource that you are attempting to update. Your update request is accepted only if this status is either <code>ACTIVE</code> or <code>FAILED</code>.</p>
+    #[serde(rename = "Status")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub status: Option<String>,
+}
+
+/// Errors returned by CreateParallelData
+#[derive(Debug, PartialEq)]
+pub enum CreateParallelDataError {
+    /// <p>There was a conflict processing the request. Try your request again.</p>
+    Conflict(String),
+    /// <p>An internal server error occurred. Retry your request.</p>
+    InternalServer(String),
+    /// <p>The value of the parameter is invalid. Review the value of the parameter you are using to correct it, and then retry your operation.</p>
+    InvalidParameterValue(String),
+    /// <p> The request that you made is invalid. Check your request to determine why it's invalid and then retry the request. </p>
+    InvalidRequest(String),
+    /// <p>The specified limit has been exceeded. Review your request and retry it with a quantity below the stated limit.</p>
+    LimitExceeded(String),
+    /// <p> You have made too many requests within a short period of time. Wait for a short time and then try your request again.</p>
+    TooManyRequests(String),
+}
+
+impl CreateParallelDataError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateParallelDataError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "ConflictException" => {
+                    return RusotoError::Service(CreateParallelDataError::Conflict(err.msg))
+                }
+                "InternalServerException" => {
+                    return RusotoError::Service(CreateParallelDataError::InternalServer(err.msg))
+                }
+                "InvalidParameterValueException" => {
+                    return RusotoError::Service(CreateParallelDataError::InvalidParameterValue(
+                        err.msg,
+                    ))
+                }
+                "InvalidRequestException" => {
+                    return RusotoError::Service(CreateParallelDataError::InvalidRequest(err.msg))
+                }
+                "LimitExceededException" => {
+                    return RusotoError::Service(CreateParallelDataError::LimitExceeded(err.msg))
+                }
+                "TooManyRequestsException" => {
+                    return RusotoError::Service(CreateParallelDataError::TooManyRequests(err.msg))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for CreateParallelDataError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            CreateParallelDataError::Conflict(ref cause) => write!(f, "{}", cause),
+            CreateParallelDataError::InternalServer(ref cause) => write!(f, "{}", cause),
+            CreateParallelDataError::InvalidParameterValue(ref cause) => write!(f, "{}", cause),
+            CreateParallelDataError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+            CreateParallelDataError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            CreateParallelDataError::TooManyRequests(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for CreateParallelDataError {}
+/// Errors returned by DeleteParallelData
+#[derive(Debug, PartialEq)]
+pub enum DeleteParallelDataError {
+    /// <p>Another modification is being made. That modification must complete before you can make your change.</p>
+    ConcurrentModification(String),
+    /// <p>An internal server error occurred. Retry your request.</p>
+    InternalServer(String),
+    /// <p>The resource you are looking for has not been found. Review the resource you're looking for and see if a different resource will accomplish your needs before retrying the revised request.</p>
+    ResourceNotFound(String),
+    /// <p> You have made too many requests within a short period of time. Wait for a short time and then try your request again.</p>
+    TooManyRequests(String),
+}
+
+impl DeleteParallelDataError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteParallelDataError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "ConcurrentModificationException" => {
+                    return RusotoError::Service(DeleteParallelDataError::ConcurrentModification(
+                        err.msg,
+                    ))
+                }
+                "InternalServerException" => {
+                    return RusotoError::Service(DeleteParallelDataError::InternalServer(err.msg))
+                }
+                "ResourceNotFoundException" => {
+                    return RusotoError::Service(DeleteParallelDataError::ResourceNotFound(err.msg))
+                }
+                "TooManyRequestsException" => {
+                    return RusotoError::Service(DeleteParallelDataError::TooManyRequests(err.msg))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for DeleteParallelDataError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            DeleteParallelDataError::ConcurrentModification(ref cause) => write!(f, "{}", cause),
+            DeleteParallelDataError::InternalServer(ref cause) => write!(f, "{}", cause),
+            DeleteParallelDataError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            DeleteParallelDataError::TooManyRequests(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for DeleteParallelDataError {}
 /// Errors returned by DeleteTerminology
 #[derive(Debug, PartialEq)]
 pub enum DeleteTerminologyError {
     /// <p>An internal server error occurred. Retry your request.</p>
     InternalServer(String),
+    /// <p>The value of the parameter is invalid. Review the value of the parameter you are using to correct it, and then retry your operation.</p>
+    InvalidParameterValue(String),
     /// <p>The resource you are looking for has not been found. Review the resource you're looking for and see if a different resource will accomplish your needs before retrying the revised request.</p>
     ResourceNotFound(String),
     /// <p> You have made too many requests within a short period of time. Wait for a short time and then try your request again.</p>
@@ -535,6 +902,11 @@ impl DeleteTerminologyError {
             match err.typ.as_str() {
                 "InternalServerException" => {
                     return RusotoError::Service(DeleteTerminologyError::InternalServer(err.msg))
+                }
+                "InvalidParameterValueException" => {
+                    return RusotoError::Service(DeleteTerminologyError::InvalidParameterValue(
+                        err.msg,
+                    ))
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(DeleteTerminologyError::ResourceNotFound(err.msg))
@@ -554,6 +926,7 @@ impl fmt::Display for DeleteTerminologyError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match *self {
             DeleteTerminologyError::InternalServer(ref cause) => write!(f, "{}", cause),
+            DeleteTerminologyError::InvalidParameterValue(ref cause) => write!(f, "{}", cause),
             DeleteTerminologyError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
             DeleteTerminologyError::TooManyRequests(ref cause) => write!(f, "{}", cause),
         }
@@ -610,6 +983,56 @@ impl fmt::Display for DescribeTextTranslationJobError {
     }
 }
 impl Error for DescribeTextTranslationJobError {}
+/// Errors returned by GetParallelData
+#[derive(Debug, PartialEq)]
+pub enum GetParallelDataError {
+    /// <p>An internal server error occurred. Retry your request.</p>
+    InternalServer(String),
+    /// <p>The value of the parameter is invalid. Review the value of the parameter you are using to correct it, and then retry your operation.</p>
+    InvalidParameterValue(String),
+    /// <p>The resource you are looking for has not been found. Review the resource you're looking for and see if a different resource will accomplish your needs before retrying the revised request.</p>
+    ResourceNotFound(String),
+    /// <p> You have made too many requests within a short period of time. Wait for a short time and then try your request again.</p>
+    TooManyRequests(String),
+}
+
+impl GetParallelDataError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetParallelDataError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "InternalServerException" => {
+                    return RusotoError::Service(GetParallelDataError::InternalServer(err.msg))
+                }
+                "InvalidParameterValueException" => {
+                    return RusotoError::Service(GetParallelDataError::InvalidParameterValue(
+                        err.msg,
+                    ))
+                }
+                "ResourceNotFoundException" => {
+                    return RusotoError::Service(GetParallelDataError::ResourceNotFound(err.msg))
+                }
+                "TooManyRequestsException" => {
+                    return RusotoError::Service(GetParallelDataError::TooManyRequests(err.msg))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for GetParallelDataError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            GetParallelDataError::InternalServer(ref cause) => write!(f, "{}", cause),
+            GetParallelDataError::InvalidParameterValue(ref cause) => write!(f, "{}", cause),
+            GetParallelDataError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            GetParallelDataError::TooManyRequests(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for GetParallelDataError {}
 /// Errors returned by GetTerminology
 #[derive(Debug, PartialEq)]
 pub enum GetTerminologyError {
@@ -710,6 +1133,50 @@ impl fmt::Display for ImportTerminologyError {
     }
 }
 impl Error for ImportTerminologyError {}
+/// Errors returned by ListParallelData
+#[derive(Debug, PartialEq)]
+pub enum ListParallelDataError {
+    /// <p>An internal server error occurred. Retry your request.</p>
+    InternalServer(String),
+    /// <p>The value of the parameter is invalid. Review the value of the parameter you are using to correct it, and then retry your operation.</p>
+    InvalidParameterValue(String),
+    /// <p> You have made too many requests within a short period of time. Wait for a short time and then try your request again.</p>
+    TooManyRequests(String),
+}
+
+impl ListParallelDataError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListParallelDataError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "InternalServerException" => {
+                    return RusotoError::Service(ListParallelDataError::InternalServer(err.msg))
+                }
+                "InvalidParameterValueException" => {
+                    return RusotoError::Service(ListParallelDataError::InvalidParameterValue(
+                        err.msg,
+                    ))
+                }
+                "TooManyRequestsException" => {
+                    return RusotoError::Service(ListParallelDataError::TooManyRequests(err.msg))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for ListParallelDataError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            ListParallelDataError::InternalServer(ref cause) => write!(f, "{}", cause),
+            ListParallelDataError::InvalidParameterValue(ref cause) => write!(f, "{}", cause),
+            ListParallelDataError::TooManyRequests(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for ListParallelDataError {}
 /// Errors returned by ListTerminologies
 #[derive(Debug, PartialEq)]
 pub enum ListTerminologiesError {
@@ -1000,9 +1467,97 @@ impl fmt::Display for TranslateTextError {
     }
 }
 impl Error for TranslateTextError {}
+/// Errors returned by UpdateParallelData
+#[derive(Debug, PartialEq)]
+pub enum UpdateParallelDataError {
+    /// <p>Another modification is being made. That modification must complete before you can make your change.</p>
+    ConcurrentModification(String),
+    /// <p>There was a conflict processing the request. Try your request again.</p>
+    Conflict(String),
+    /// <p>An internal server error occurred. Retry your request.</p>
+    InternalServer(String),
+    /// <p>The value of the parameter is invalid. Review the value of the parameter you are using to correct it, and then retry your operation.</p>
+    InvalidParameterValue(String),
+    /// <p> The request that you made is invalid. Check your request to determine why it's invalid and then retry the request. </p>
+    InvalidRequest(String),
+    /// <p>The specified limit has been exceeded. Review your request and retry it with a quantity below the stated limit.</p>
+    LimitExceeded(String),
+    /// <p>The resource you are looking for has not been found. Review the resource you're looking for and see if a different resource will accomplish your needs before retrying the revised request.</p>
+    ResourceNotFound(String),
+    /// <p> You have made too many requests within a short period of time. Wait for a short time and then try your request again.</p>
+    TooManyRequests(String),
+}
+
+impl UpdateParallelDataError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateParallelDataError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "ConcurrentModificationException" => {
+                    return RusotoError::Service(UpdateParallelDataError::ConcurrentModification(
+                        err.msg,
+                    ))
+                }
+                "ConflictException" => {
+                    return RusotoError::Service(UpdateParallelDataError::Conflict(err.msg))
+                }
+                "InternalServerException" => {
+                    return RusotoError::Service(UpdateParallelDataError::InternalServer(err.msg))
+                }
+                "InvalidParameterValueException" => {
+                    return RusotoError::Service(UpdateParallelDataError::InvalidParameterValue(
+                        err.msg,
+                    ))
+                }
+                "InvalidRequestException" => {
+                    return RusotoError::Service(UpdateParallelDataError::InvalidRequest(err.msg))
+                }
+                "LimitExceededException" => {
+                    return RusotoError::Service(UpdateParallelDataError::LimitExceeded(err.msg))
+                }
+                "ResourceNotFoundException" => {
+                    return RusotoError::Service(UpdateParallelDataError::ResourceNotFound(err.msg))
+                }
+                "TooManyRequestsException" => {
+                    return RusotoError::Service(UpdateParallelDataError::TooManyRequests(err.msg))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for UpdateParallelDataError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            UpdateParallelDataError::ConcurrentModification(ref cause) => write!(f, "{}", cause),
+            UpdateParallelDataError::Conflict(ref cause) => write!(f, "{}", cause),
+            UpdateParallelDataError::InternalServer(ref cause) => write!(f, "{}", cause),
+            UpdateParallelDataError::InvalidParameterValue(ref cause) => write!(f, "{}", cause),
+            UpdateParallelDataError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+            UpdateParallelDataError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            UpdateParallelDataError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            UpdateParallelDataError::TooManyRequests(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for UpdateParallelDataError {}
 /// Trait representing the capabilities of the Amazon Translate API. Amazon Translate clients implement this trait.
 #[async_trait]
 pub trait Translate {
+    /// <p>Creates a parallel data resource in Amazon Translate by importing an input file from Amazon S3. Parallel data files contain examples of source phrases and their translations from your translation memory. By adding parallel data, you can influence the style, tone, and word choice in your translation output.</p>
+    async fn create_parallel_data(
+        &self,
+        input: CreateParallelDataRequest,
+    ) -> Result<CreateParallelDataResponse, RusotoError<CreateParallelDataError>>;
+
+    /// <p>Deletes a parallel data resource in Amazon Translate.</p>
+    async fn delete_parallel_data(
+        &self,
+        input: DeleteParallelDataRequest,
+    ) -> Result<DeleteParallelDataResponse, RusotoError<DeleteParallelDataError>>;
+
     /// <p>A synchronous action that deletes a custom terminology.</p>
     async fn delete_terminology(
         &self,
@@ -1015,6 +1570,12 @@ pub trait Translate {
         input: DescribeTextTranslationJobRequest,
     ) -> Result<DescribeTextTranslationJobResponse, RusotoError<DescribeTextTranslationJobError>>;
 
+    /// <p>Provides information about a parallel data resource.</p>
+    async fn get_parallel_data(
+        &self,
+        input: GetParallelDataRequest,
+    ) -> Result<GetParallelDataResponse, RusotoError<GetParallelDataError>>;
+
     /// <p>Retrieves a custom terminology.</p>
     async fn get_terminology(
         &self,
@@ -1026,6 +1587,12 @@ pub trait Translate {
         &self,
         input: ImportTerminologyRequest,
     ) -> Result<ImportTerminologyResponse, RusotoError<ImportTerminologyError>>;
+
+    /// <p>Provides a list of your parallel data resources in Amazon Translate.</p>
+    async fn list_parallel_data(
+        &self,
+        input: ListParallelDataRequest,
+    ) -> Result<ListParallelDataResponse, RusotoError<ListParallelDataError>>;
 
     /// <p>Provides a list of custom terminologies associated with your account.</p>
     async fn list_terminologies(
@@ -1056,6 +1623,12 @@ pub trait Translate {
         &self,
         input: TranslateTextRequest,
     ) -> Result<TranslateTextResponse, RusotoError<TranslateTextError>>;
+
+    /// <p>Updates a previously created parallel data resource by importing a new input file from Amazon S3.</p>
+    async fn update_parallel_data(
+        &self,
+        input: UpdateParallelDataRequest,
+    ) -> Result<UpdateParallelDataResponse, RusotoError<UpdateParallelDataError>>;
 }
 /// A client for the Amazon Translate API.
 #[derive(Clone)]
@@ -1097,6 +1670,48 @@ impl TranslateClient {
 
 #[async_trait]
 impl Translate for TranslateClient {
+    /// <p>Creates a parallel data resource in Amazon Translate by importing an input file from Amazon S3. Parallel data files contain examples of source phrases and their translations from your translation memory. By adding parallel data, you can influence the style, tone, and word choice in your translation output.</p>
+    async fn create_parallel_data(
+        &self,
+        input: CreateParallelDataRequest,
+    ) -> Result<CreateParallelDataResponse, RusotoError<CreateParallelDataError>> {
+        let mut request = self.new_signed_request("POST", "/");
+        request.add_header(
+            "x-amz-target",
+            "AWSShineFrontendService_20170701.CreateParallelData",
+        );
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        let response = self
+            .sign_and_dispatch(request, CreateParallelDataError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<CreateParallelDataResponse, _>()
+    }
+
+    /// <p>Deletes a parallel data resource in Amazon Translate.</p>
+    async fn delete_parallel_data(
+        &self,
+        input: DeleteParallelDataRequest,
+    ) -> Result<DeleteParallelDataResponse, RusotoError<DeleteParallelDataError>> {
+        let mut request = self.new_signed_request("POST", "/");
+        request.add_header(
+            "x-amz-target",
+            "AWSShineFrontendService_20170701.DeleteParallelData",
+        );
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        let response = self
+            .sign_and_dispatch(request, DeleteParallelDataError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<DeleteParallelDataResponse, _>()
+    }
+
     /// <p>A synchronous action that deletes a custom terminology.</p>
     async fn delete_terminology(
         &self,
@@ -1140,6 +1755,27 @@ impl Translate for TranslateClient {
             .deserialize::<DescribeTextTranslationJobResponse, _>()
     }
 
+    /// <p>Provides information about a parallel data resource.</p>
+    async fn get_parallel_data(
+        &self,
+        input: GetParallelDataRequest,
+    ) -> Result<GetParallelDataResponse, RusotoError<GetParallelDataError>> {
+        let mut request = self.new_signed_request("POST", "/");
+        request.add_header(
+            "x-amz-target",
+            "AWSShineFrontendService_20170701.GetParallelData",
+        );
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        let response = self
+            .sign_and_dispatch(request, GetParallelDataError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<GetParallelDataResponse, _>()
+    }
+
     /// <p>Retrieves a custom terminology.</p>
     async fn get_terminology(
         &self,
@@ -1180,6 +1816,27 @@ impl Translate for TranslateClient {
         let mut response = response;
         let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         proto::json::ResponsePayload::new(&response).deserialize::<ImportTerminologyResponse, _>()
+    }
+
+    /// <p>Provides a list of your parallel data resources in Amazon Translate.</p>
+    async fn list_parallel_data(
+        &self,
+        input: ListParallelDataRequest,
+    ) -> Result<ListParallelDataResponse, RusotoError<ListParallelDataError>> {
+        let mut request = self.new_signed_request("POST", "/");
+        request.add_header(
+            "x-amz-target",
+            "AWSShineFrontendService_20170701.ListParallelData",
+        );
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        let response = self
+            .sign_and_dispatch(request, ListParallelDataError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<ListParallelDataResponse, _>()
     }
 
     /// <p>Provides a list of custom terminologies associated with your account.</p>
@@ -1288,5 +1945,26 @@ impl Translate for TranslateClient {
         let mut response = response;
         let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         proto::json::ResponsePayload::new(&response).deserialize::<TranslateTextResponse, _>()
+    }
+
+    /// <p>Updates a previously created parallel data resource by importing a new input file from Amazon S3.</p>
+    async fn update_parallel_data(
+        &self,
+        input: UpdateParallelDataRequest,
+    ) -> Result<UpdateParallelDataResponse, RusotoError<UpdateParallelDataError>> {
+        let mut request = self.new_signed_request("POST", "/");
+        request.add_header(
+            "x-amz-target",
+            "AWSShineFrontendService_20170701.UpdateParallelData",
+        );
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        let response = self
+            .sign_and_dispatch(request, UpdateParallelDataError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<UpdateParallelDataResponse, _>()
     }
 }

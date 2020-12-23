@@ -25,6 +25,17 @@ use rusoto_core::signature::SignedRequest;
 #[allow(unused_imports)]
 use serde::{Deserialize, Serialize};
 use serde_json;
+/// <p>Specifies an action for an event-based policy.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
+pub struct Action {
+    /// <p>The rule for copying shared snapshots across Regions.</p>
+    #[serde(rename = "CrossRegionCopy")]
+    pub cross_region_copy: Vec<CrossRegionCopyAction>,
+    /// <p>A descriptive name for the action.</p>
+    #[serde(rename = "Name")]
+    pub name: String,
+}
+
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateLifecyclePolicyRequest {
@@ -76,6 +87,20 @@ pub struct CreateRule {
     pub times: Option<Vec<String>>,
 }
 
+/// <p>Specifies a rule for copying shared snapshots across Regions.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
+pub struct CrossRegionCopyAction {
+    /// <p>The encryption settings for the copied snapshot.</p>
+    #[serde(rename = "EncryptionConfiguration")]
+    pub encryption_configuration: EncryptionConfiguration,
+    #[serde(rename = "RetainRule")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub retain_rule: Option<CrossRegionCopyRetainRule>,
+    /// <p>The target Region.</p>
+    #[serde(rename = "Target")]
+    pub target: String,
+}
+
 /// <p>Specifies the retention rule for cross-Region snapshot copies.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct CrossRegionCopyRetainRule {
@@ -123,6 +148,44 @@ pub struct DeleteLifecyclePolicyRequest {
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteLifecyclePolicyResponse {}
+
+/// <p>Specifies the encryption settings for shared snapshots that are copied across Regions.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
+pub struct EncryptionConfiguration {
+    /// <p>The Amazon Resource Name (ARN) of the AWS KMS customer master key (CMK) to use for EBS encryption. If this parameter is not specified, your AWS managed CMK for EBS is used.</p>
+    #[serde(rename = "CmkArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub cmk_arn: Option<String>,
+    /// <p>To encrypt a copy of an unencrypted snapshot when encryption by default is not enabled, enable encryption using this parameter. Copies of encrypted snapshots are encrypted, even if this parameter is false or when encryption by default is not enabled.</p>
+    #[serde(rename = "Encrypted")]
+    pub encrypted: bool,
+}
+
+/// <p>Specifies an event that triggers an event-based policy.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
+pub struct EventParameters {
+    /// <p>The snapshot description that can trigger the policy. The description pattern is specified using a regular expression. The policy runs only if a snapshot with a description that matches the specified pattern is shared with your account.</p> <p>For example, specifying <code>^.*Created for policy: policy-1234567890abcdef0.*$</code> configures the policy to run only if snapshots created by policy <code>policy-1234567890abcdef0</code> are shared with your account.</p>
+    #[serde(rename = "DescriptionRegex")]
+    pub description_regex: String,
+    /// <p>The type of event. Currently, only snapshot sharing events are supported.</p>
+    #[serde(rename = "EventType")]
+    pub event_type: String,
+    /// <p>The IDs of the AWS accounts that can trigger policy by sharing snapshots with your account. The policy only runs if one of the specified AWS accounts shares a snapshot with your account.</p>
+    #[serde(rename = "SnapshotOwner")]
+    pub snapshot_owner: Vec<String>,
+}
+
+/// <p>Specifies an event that triggers an event-based policy.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
+pub struct EventSource {
+    /// <p>Information about the event.</p>
+    #[serde(rename = "Parameters")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub parameters: Option<EventParameters>,
+    /// <p>The source of the event. Currently only managed AWS CloudWatch Events rules are supported.</p>
+    #[serde(rename = "Type")]
+    pub type_: String,
+}
 
 /// <p>Specifies a rule for enabling fast snapshot restore. You can enable fast snapshot restore based on either a count or a time interval.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
@@ -253,6 +316,10 @@ pub struct LifecyclePolicySummary {
     #[serde(rename = "PolicyId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub policy_id: Option<String>,
+    /// <p>The type of policy. <code>EBS_SNAPSHOT_MANAGEMENT</code> indicates that the policy manages the lifecycle of Amazon EBS snapshots. <code>IMAGE_MANAGEMENT</code> indicates that the policy manages the lifecycle of EBS-backed AMIs.</p>
+    #[serde(rename = "PolicyType")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub policy_type: Option<String>,
     /// <p>The activation state of the lifecycle policy.</p>
     #[serde(rename = "State")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -287,28 +354,40 @@ pub struct Parameters {
     #[serde(rename = "ExcludeBootVolume")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub exclude_boot_volume: Option<bool>,
+    /// <p>Applies to AMI lifecycle policies only. Indicates whether targeted instances are rebooted when the lifecycle policy runs. <code>true</code> indicates that targeted instances are not rebooted when the policy runs. <code>false</code> indicates that target instances are rebooted when the policy runs. The default is <code>true</code> (instances are not rebooted).</p>
+    #[serde(rename = "NoReboot")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub no_reboot: Option<bool>,
 }
 
 /// <p>Specifies the configuration of a lifecycle policy.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct PolicyDetails {
-    /// <p>A set of optional parameters for the policy. </p>
+    /// <p>The actions to be performed when the event-based policy is triggered. You can specify only one action per policy.</p> <p>This parameter is required for event-based policies only. If you are creating a snapshot or AMI policy, omit this parameter.</p>
+    #[serde(rename = "Actions")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub actions: Option<Vec<Action>>,
+    /// <p>The event that triggers the event-based policy. </p> <p>This parameter is required for event-based policies only. If you are creating a snapshot or AMI policy, omit this parameter.</p>
+    #[serde(rename = "EventSource")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub event_source: Option<EventSource>,
+    /// <p>A set of optional parameters for snapshot and AMI lifecycle policies. </p> <p>This parameter is required for snapshot and AMI policies only. If you are creating an event-based policy, omit this parameter.</p>
     #[serde(rename = "Parameters")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub parameters: Option<Parameters>,
-    /// <p>The valid target resource types and actions a policy can manage. The default is EBS_SNAPSHOT_MANAGEMENT.</p>
+    /// <p>The valid target resource types and actions a policy can manage. Specify <code>EBS_SNAPSHOT_MANAGEMENT</code> to create a lifecycle policy that manages the lifecycle of Amazon EBS snapshots. Specify <code>IMAGE_MANAGEMENT</code> to create a lifecycle policy that manages the lifecycle of EBS-backed AMIs. Specify <code>EVENT_BASED_POLICY </code> to create an event-based policy that performs specific actions when a defined event occurs in your AWS account.</p> <p>The default is <code>EBS_SNAPSHOT_MANAGEMENT</code>.</p>
     #[serde(rename = "PolicyType")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub policy_type: Option<String>,
-    /// <p>The resource type. Use VOLUME to create snapshots of individual volumes or use INSTANCE to create multi-volume snapshots from the volumes for an instance.</p>
+    /// <p>The target resource type for snapshot and AMI lifecycle policies. Use <code>VOLUME </code>to create snapshots of individual volumes or use <code>INSTANCE</code> to create multi-volume snapshots from the volumes for an instance.</p> <p>This parameter is required for snapshot and AMI policies only. If you are creating an event-based policy, omit this parameter.</p>
     #[serde(rename = "ResourceTypes")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub resource_types: Option<Vec<String>>,
-    /// <p>The schedule of policy-defined actions.</p>
+    /// <p>The schedules of policy-defined actions for snapshot and AMI lifecycle policies. A policy can have up to four schedules—one mandatory schedule and up to three optional schedules.</p> <p>This parameter is required for snapshot and AMI policies only. If you are creating an event-based policy, omit this parameter.</p>
     #[serde(rename = "Schedules")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub schedules: Option<Vec<Schedule>>,
-    /// <p>The single tag that identifies targeted resources for this policy.</p>
+    /// <p>The single tag that identifies targeted resources for this policy.</p> <p>This parameter is required for snapshot and AMI policies only. If you are creating an event-based policy, omit this parameter.</p>
     #[serde(rename = "TargetTags")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub target_tags: Option<Vec<Tag>>,
@@ -331,7 +410,7 @@ pub struct RetainRule {
     pub interval_unit: Option<String>,
 }
 
-/// <p>Specifies a backup schedule.</p>
+/// <p>Specifies a backup schedule for a snapshot or AMI lifecycle policy.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct Schedule {
     /// <p>Copy all user-defined tags on a source volume to snapshots of the volume created by this policy.</p>
@@ -358,6 +437,10 @@ pub struct Schedule {
     #[serde(rename = "RetainRule")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub retain_rule: Option<RetainRule>,
+    /// <p>The rule for sharing snapshots with other AWS accounts.</p>
+    #[serde(rename = "ShareRules")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub share_rules: Option<Vec<ShareRule>>,
     /// <p>The tags to apply to policy-created resources. These user-defined tags are in addition to the AWS-added lifecycle tags.</p>
     #[serde(rename = "TagsToAdd")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -366,6 +449,22 @@ pub struct Schedule {
     #[serde(rename = "VariableTags")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub variable_tags: Option<Vec<Tag>>,
+}
+
+/// <p>Specifies a rule for sharing snapshots across AWS accounts.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
+pub struct ShareRule {
+    /// <p>The IDs of the AWS accounts with which to share the snapshots.</p>
+    #[serde(rename = "TargetAccounts")]
+    pub target_accounts: Vec<String>,
+    /// <p>The period after which snapshots that are shared with other AWS accounts are automatically unshared.</p>
+    #[serde(rename = "UnshareInterval")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub unshare_interval: Option<i64>,
+    /// <p>The unit of time for the automatic unsharing interval.</p>
+    #[serde(rename = "UnshareIntervalUnit")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub unshare_interval_unit: Option<String>,
 }
 
 /// <p>Specifies a tag for a resource.</p>

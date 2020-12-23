@@ -113,6 +113,30 @@ pub struct AcceleratorAttributes {
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct AddCustomRoutingEndpointsRequest {
+    /// <p>The list of endpoint objects to add to a custom routing accelerator.</p>
+    #[serde(rename = "EndpointConfigurations")]
+    pub endpoint_configurations: Vec<CustomRoutingEndpointConfiguration>,
+    /// <p>The Amazon Resource Name (ARN) of the endpoint group for the custom routing endpoint.</p>
+    #[serde(rename = "EndpointGroupArn")]
+    pub endpoint_group_arn: String,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct AddCustomRoutingEndpointsResponse {
+    /// <p>The endpoint objects added to the custom routing accelerator.</p>
+    #[serde(rename = "EndpointDescriptions")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub endpoint_descriptions: Option<Vec<CustomRoutingEndpointDescription>>,
+    /// <p>The Amazon Resource Name (ARN) of the endpoint group for the custom routing endpoint.</p>
+    #[serde(rename = "EndpointGroupArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub endpoint_group_arn: Option<String>,
+}
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct AdvertiseByoipCidrRequest {
     /// <p>The address range, in CIDR notation. This must be the exact range that you provisioned. You can't advertise only a portion of the provisioned range.</p>
     #[serde(rename = "Cidr")]
@@ -128,6 +152,29 @@ pub struct AdvertiseByoipCidrResponse {
     pub byoip_cidr: Option<ByoipCidr>,
 }
 
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct AllowCustomRoutingTrafficRequest {
+    /// <p>Indicates whether all destination IP addresses and ports for a specified VPC subnet endpoint can receive traffic from a custom routing accelerator. The value is TRUE or FALSE. </p> <p>When set to TRUE, <i>all</i> destinations in the custom routing VPC subnet can receive traffic. Note that you cannot specify destination IP addresses and ports when the value is set to TRUE.</p> <p>When set to FALSE (or not specified), you <i>must</i> specify a list of destination IP addresses that are allowed to receive traffic. A list of ports is optional. If you don't specify a list of ports, the ports that can accept traffic is the same as the ports configured for the endpoint group.</p> <p>The default value is FALSE.</p>
+    #[serde(rename = "AllowAllTrafficToEndpoint")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub allow_all_traffic_to_endpoint: Option<bool>,
+    /// <p>A list of specific Amazon EC2 instance IP addresses (destination addresses) in a subnet that you want to allow to receive traffic. The IP addresses must be a subset of the IP addresses that you specified for the endpoint group.</p> <p> <code>DestinationAddresses</code> is required if <code>AllowAllTrafficToEndpoint</code> is <code>FALSE</code> or is not specified.</p>
+    #[serde(rename = "DestinationAddresses")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub destination_addresses: Option<Vec<String>>,
+    /// <p>A list of specific Amazon EC2 instance ports (destination ports) that you want to allow to receive traffic.</p>
+    #[serde(rename = "DestinationPorts")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub destination_ports: Option<Vec<i64>>,
+    /// <p>The Amazon Resource Name (ARN) of the endpoint group.</p>
+    #[serde(rename = "EndpointGroupArn")]
+    pub endpoint_group_arn: String,
+    /// <p>An ID for the endpoint. For custom routing accelerators, this is the virtual private cloud (VPC) subnet ID.</p>
+    #[serde(rename = "EndpointId")]
+    pub endpoint_id: String,
+}
+
 /// <p><p>Information about an IP address range that is provisioned for use with your AWS resources through bring your own IP address (BYOIP).</p> <p>The following describes each BYOIP <code>State</code> that your IP address range can be in.</p> <ul> <li> <p> <b>PENDING<em>PROVISIONING</b> — You’ve submitted a request to provision an IP address range but it is not yet provisioned with AWS Global Accelerator.</p> </li> <li> <p> <b>READY</b> — The address range is provisioned with AWS Global Accelerator and can be advertised.</p> </li> <li> <p> <b>PENDING</em>ADVERTISING</b> — You’ve submitted a request for AWS Global Accelerator to advertise an address range but it is not yet being advertised.</p> </li> <li> <p> <b>ADVERTISING</b> — The address range is being advertised by AWS Global Accelerator.</p> </li> <li> <p> <b>PENDING<em>WITHDRAWING</b> — You’ve submitted a request to withdraw an address range from being advertised but it is still being advertised by AWS Global Accelerator.</p> </li> <li> <p> <b>PENDING</em>DEPROVISIONING</b> — You’ve submitted a request to deprovision an address range from AWS Global Accelerator but it is still provisioned.</p> </li> <li> <p> <b>DEPROVISIONED</b> — The address range is deprovisioned from AWS Global Accelerator.</p> </li> <li> <p> <b>FAILED<em>PROVISION </b> — The request to provision the address range from AWS Global Accelerator was not successful. Please make sure that you provide all of the correct information, and try again. If the request fails a second time, contact AWS support.</p> </li> <li> <p> <b>FAILED</em>ADVERTISING</b> — The request for AWS Global Accelerator to advertise the address range was not successful. Please make sure that you provide all of the correct information, and try again. If the request fails a second time, contact AWS support.</p> </li> <li> <p> <b>FAILED<em>WITHDRAW</b> — The request to withdraw the address range from advertising by AWS Global Accelerator was not successful. Please make sure that you provide all of the correct information, and try again. If the request fails a second time, contact AWS support.</p> </li> <li> <p> <b>FAILED</em>DEPROVISION </b> — The request to deprovision the address range from AWS Global Accelerator was not successful. Please make sure that you provide all of the correct information, and try again. If the request fails a second time, contact AWS support.</p> </li> </ul></p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
@@ -136,7 +183,7 @@ pub struct ByoipCidr {
     #[serde(rename = "Cidr")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub cidr: Option<String>,
-    /// <p>A history of status changes for an IP address range that that you bring to AWS Global Accelerator through bring your own IP address (BYOIP).</p>
+    /// <p>A history of status changes for an IP address range that you bring to AWS Global Accelerator through bring your own IP address (BYOIP).</p>
     #[serde(rename = "Events")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub events: Option<Vec<ByoipCidrEvent>>,
@@ -182,11 +229,11 @@ pub struct CreateAcceleratorRequest {
     /// <p>A unique, case-sensitive identifier that you provide to ensure the idempotency—that is, the uniqueness—of an accelerator.</p>
     #[serde(rename = "IdempotencyToken")]
     pub idempotency_token: String,
-    /// <p>The value for the address type must be IPv4. </p>
+    /// <p>The value for the address type must be IPv4.</p>
     #[serde(rename = "IpAddressType")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub ip_address_type: Option<String>,
-    /// <p>Optionally, if you've added your own IP address pool to Global Accelerator, you can choose IP addresses from your own pool to use for the accelerator's static IP addresses. You can specify one or two addresses, separated by a comma. Do not include the /32 suffix.</p> <p>If you specify only one IP address from your IP address range, Global Accelerator assigns a second static IP address for the accelerator from the AWS IP address pool.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/global-accelerator/latest/dg/using-byoip.html">Bring Your Own IP Addresses (BYOIP)</a> in the <i>AWS Global Accelerator Developer Guide</i>.</p>
+    /// <p>Optionally, if you've added your own IP address pool to Global Accelerator (BYOIP), you can choose IP addresses from your own pool to use for the accelerator's static IP addresses when you create an accelerator. You can specify one or two addresses, separated by a comma. Do not include the /32 suffix.</p> <p>Only one IP address from each of your IP address ranges can be used for each accelerator. If you specify only one IP address from your IP address range, Global Accelerator assigns a second static IP address for the accelerator from the AWS IP address pool.</p> <p> Note that you can't update IP addresses for an existing accelerator. To change them, you must create a new accelerator with the new addresses.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/global-accelerator/latest/dg/using-byoip.html">Bring Your Own IP Addresses (BYOIP)</a> in the <i>AWS Global Accelerator Developer Guide</i>.</p>
     #[serde(rename = "IpAddresses")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub ip_addresses: Option<Vec<String>>,
@@ -210,12 +257,93 @@ pub struct CreateAcceleratorResponse {
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct CreateCustomRoutingAcceleratorRequest {
+    /// <p>Indicates whether an accelerator is enabled. The value is true or false. The default value is true. </p> <p>If the value is set to true, an accelerator cannot be deleted. If set to false, the accelerator can be deleted.</p>
+    #[serde(rename = "Enabled")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub enabled: Option<bool>,
+    /// <p>A unique, case-sensitive identifier that you provide to ensure the idempotency—that is, the uniqueness—of the request.</p>
+    #[serde(rename = "IdempotencyToken")]
+    pub idempotency_token: String,
+    /// <p>The value for the address type must be IPv4.</p>
+    #[serde(rename = "IpAddressType")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub ip_address_type: Option<String>,
+    /// <p>The name of a custom routing accelerator. The name can have a maximum of 64 characters, must contain only alphanumeric characters or hyphens (-), and must not begin or end with a hyphen.</p>
+    #[serde(rename = "Name")]
+    pub name: String,
+    /// <p>Create tags for an accelerator.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/global-accelerator/latest/dg/tagging-in-global-accelerator.html">Tagging in AWS Global Accelerator</a> in the <i>AWS Global Accelerator Developer Guide</i>.</p>
+    #[serde(rename = "Tags")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub tags: Option<Vec<Tag>>,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct CreateCustomRoutingAcceleratorResponse {
+    /// <p>The accelerator that is created.</p>
+    #[serde(rename = "Accelerator")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub accelerator: Option<CustomRoutingAccelerator>,
+}
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct CreateCustomRoutingEndpointGroupRequest {
+    /// <p>Sets the port range and protocol for all endpoints (virtual private cloud subnets) in a custom routing endpoint group to accept client traffic on.</p>
+    #[serde(rename = "DestinationConfigurations")]
+    pub destination_configurations: Vec<CustomRoutingDestinationConfiguration>,
+    /// <p>The AWS Region where the endpoint group is located. A listener can have only one endpoint group in a specific Region.</p>
+    #[serde(rename = "EndpointGroupRegion")]
+    pub endpoint_group_region: String,
+    /// <p>A unique, case-sensitive identifier that you provide to ensure the idempotency—that is, the uniqueness—of the request.</p>
+    #[serde(rename = "IdempotencyToken")]
+    pub idempotency_token: String,
+    /// <p>The Amazon Resource Name (ARN) of the listener for a custom routing endpoint.</p>
+    #[serde(rename = "ListenerArn")]
+    pub listener_arn: String,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct CreateCustomRoutingEndpointGroupResponse {
+    /// <p>The information about the endpoint group created for a custom routing accelerator.</p>
+    #[serde(rename = "EndpointGroup")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub endpoint_group: Option<CustomRoutingEndpointGroup>,
+}
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct CreateCustomRoutingListenerRequest {
+    /// <p>The Amazon Resource Name (ARN) of the accelerator for a custom routing listener.</p>
+    #[serde(rename = "AcceleratorArn")]
+    pub accelerator_arn: String,
+    /// <p>A unique, case-sensitive identifier that you provide to ensure the idempotency—that is, the uniqueness—of the request.</p>
+    #[serde(rename = "IdempotencyToken")]
+    pub idempotency_token: String,
+    /// <p>The port range to support for connections from clients to your accelerator.</p> <p>Separately, you set port ranges for endpoints. For more information, see <a href="https://docs.aws.amazon.com/global-accelerator/latest/dg/about-custom-routing-endpoints.html">About endpoints for custom routing accelerators</a>.</p>
+    #[serde(rename = "PortRanges")]
+    pub port_ranges: Vec<PortRange>,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct CreateCustomRoutingListenerResponse {
+    /// <p>The listener that you've created for a custom routing accelerator.</p>
+    #[serde(rename = "Listener")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub listener: Option<CustomRoutingListener>,
+}
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateEndpointGroupRequest {
     /// <p>The list of endpoint objects.</p>
     #[serde(rename = "EndpointConfigurations")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub endpoint_configurations: Option<Vec<EndpointConfiguration>>,
-    /// <p>The name of the AWS Region where the endpoint group is located. A listener can have only one endpoint group in a specific Region.</p>
+    /// <p>The AWS Region where the endpoint group is located. A listener can have only one endpoint group in a specific Region.</p>
     #[serde(rename = "EndpointGroupRegion")]
     pub endpoint_group_region: String,
     /// <p>The time—10 seconds or 30 seconds—between each health check for an endpoint. The default value is 30.</p>
@@ -240,6 +368,10 @@ pub struct CreateEndpointGroupRequest {
     /// <p>The Amazon Resource Name (ARN) of the listener.</p>
     #[serde(rename = "ListenerArn")]
     pub listener_arn: String,
+    /// <p>Override specific listener ports used to route traffic to endpoints that are part of this endpoint group. For example, you can create a port override in which the listener receives user traffic on ports 80 and 443, but your accelerator routes that traffic to ports 1080 and 1443, respectively, on the endpoints.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/global-accelerator/latest/dg/about-endpoint-groups-port-override.html"> Port overrides</a> in the <i>AWS Global Accelerator Developer Guide</i>.</p>
+    #[serde(rename = "PortOverrides")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub port_overrides: Option<Vec<PortOverride>>,
     /// <p>The number of consecutive health checks required to set the state of a healthy endpoint to unhealthy, or to set an unhealthy endpoint to healthy. The default value is 3.</p>
     #[serde(rename = "ThresholdCount")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -265,7 +397,7 @@ pub struct CreateListenerRequest {
     /// <p>The Amazon Resource Name (ARN) of your accelerator.</p>
     #[serde(rename = "AcceleratorArn")]
     pub accelerator_arn: String,
-    /// <p>Client affinity lets you direct all requests from a user to the same endpoint, if you have stateful applications, regardless of the port and protocol of the client request. Clienty affinity gives you control over whether to always route each client to the same specific endpoint.</p> <p>AWS Global Accelerator uses a consistent-flow hashing algorithm to choose the optimal endpoint for a connection. If client affinity is <code>NONE</code>, Global Accelerator uses the "five-tuple" (5-tuple) properties—source IP address, source port, destination IP address, destination port, and protocol—to select the hash value, and then chooses the best endpoint. However, with this setting, if someone uses different ports to connect to Global Accelerator, their connections might not be always routed to the same endpoint because the hash value changes. </p> <p>If you want a given client to always be routed to the same endpoint, set client affinity to <code>SOURCE_IP</code> instead. When you use the <code>SOURCE_IP</code> setting, Global Accelerator uses the "two-tuple" (2-tuple) properties— source (client) IP address and destination IP address—to select the hash value.</p> <p>The default value is <code>NONE</code>.</p>
+    /// <p>Client affinity lets you direct all requests from a user to the same endpoint, if you have stateful applications, regardless of the port and protocol of the client request. Client affinity gives you control over whether to always route each client to the same specific endpoint.</p> <p>AWS Global Accelerator uses a consistent-flow hashing algorithm to choose the optimal endpoint for a connection. If client affinity is <code>NONE</code>, Global Accelerator uses the "five-tuple" (5-tuple) properties—source IP address, source port, destination IP address, destination port, and protocol—to select the hash value, and then chooses the best endpoint. However, with this setting, if someone uses different ports to connect to Global Accelerator, their connections might not be always routed to the same endpoint because the hash value changes. </p> <p>If you want a given client to always be routed to the same endpoint, set client affinity to <code>SOURCE_IP</code> instead. When you use the <code>SOURCE_IP</code> setting, Global Accelerator uses the "two-tuple" (2-tuple) properties— source (client) IP address and destination IP address—to select the hash value.</p> <p>The default value is <code>NONE</code>.</p>
     #[serde(rename = "ClientAffinity")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub client_affinity: Option<String>,
@@ -289,12 +421,185 @@ pub struct CreateListenerResponse {
     pub listener: Option<Listener>,
 }
 
+/// <p>Attributes of a custom routing accelerator.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct CustomRoutingAccelerator {
+    /// <p>The Amazon Resource Name (ARN) of the custom routing accelerator.</p>
+    #[serde(rename = "AcceleratorArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub accelerator_arn: Option<String>,
+    /// <p>The date and time that the accelerator was created.</p>
+    #[serde(rename = "CreatedTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub created_time: Option<f64>,
+    /// <p>The Domain Name System (DNS) name that Global Accelerator creates that points to your accelerator's static IP addresses. </p> <p>The naming convention for the DNS name is the following: A lowercase letter a, followed by a 16-bit random hex string, followed by .awsglobalaccelerator.com. For example: a1234567890abcdef.awsglobalaccelerator.com.</p> <p>For more information about the default DNS name, see <a href="https://docs.aws.amazon.com/global-accelerator/latest/dg/about-accelerators.html#about-accelerators.dns-addressing"> Support for DNS Addressing in Global Accelerator</a> in the <i>AWS Global Accelerator Developer Guide</i>.</p>
+    #[serde(rename = "DnsName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub dns_name: Option<String>,
+    /// <p>Indicates whether the accelerator is enabled. The value is true or false. The default value is true. </p> <p>If the value is set to true, the accelerator cannot be deleted. If set to false, accelerator can be deleted.</p>
+    #[serde(rename = "Enabled")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub enabled: Option<bool>,
+    /// <p>The value for the address type must be IPv4.</p>
+    #[serde(rename = "IpAddressType")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub ip_address_type: Option<String>,
+    /// <p>The static IP addresses that Global Accelerator associates with the accelerator.</p>
+    #[serde(rename = "IpSets")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub ip_sets: Option<Vec<IpSet>>,
+    /// <p>The date and time that the accelerator was last modified.</p>
+    #[serde(rename = "LastModifiedTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub last_modified_time: Option<f64>,
+    /// <p>The name of the accelerator. The name must contain only alphanumeric characters or hyphens (-), and must not begin or end with a hyphen.</p>
+    #[serde(rename = "Name")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub name: Option<String>,
+    /// <p>Describes the deployment status of the accelerator.</p>
+    #[serde(rename = "Status")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub status: Option<String>,
+}
+
+/// <p>Attributes of a custom routing accelerator.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct CustomRoutingAcceleratorAttributes {
+    /// <p>Indicates whether flow logs are enabled. The default value is false. If the value is true, <code>FlowLogsS3Bucket</code> and <code>FlowLogsS3Prefix</code> must be specified.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/global-accelerator/latest/dg/monitoring-global-accelerator.flow-logs.html">Flow Logs</a> in the <i>AWS Global Accelerator Developer Guide</i>.</p>
+    #[serde(rename = "FlowLogsEnabled")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub flow_logs_enabled: Option<bool>,
+    /// <p>The name of the Amazon S3 bucket for the flow logs. Attribute is required if <code>FlowLogsEnabled</code> is <code>true</code>. The bucket must exist and have a bucket policy that grants AWS Global Accelerator permission to write to the bucket.</p>
+    #[serde(rename = "FlowLogsS3Bucket")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub flow_logs_s3_bucket: Option<String>,
+    /// <p>The prefix for the location in the Amazon S3 bucket for the flow logs. Attribute is required if <code>FlowLogsEnabled</code> is <code>true</code>.</p> <p>If you don’t specify a prefix, the flow logs are stored in the root of the bucket. If you specify slash (/) for the S3 bucket prefix, the log file bucket folder structure will include a double slash (//), like the following:</p> <p>DOC-EXAMPLE-BUCKET//AWSLogs/aws_account_id</p>
+    #[serde(rename = "FlowLogsS3Prefix")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub flow_logs_s3_prefix: Option<String>,
+}
+
+/// <p>For a custom routing accelerator, sets the port range and protocol for all endpoints (virtual private cloud subnets) in an endpoint group to accept client traffic on.</p>
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct CustomRoutingDestinationConfiguration {
+    /// <p>The first port, inclusive, in the range of ports for the endpoint group that is associated with a custom routing accelerator.</p>
+    #[serde(rename = "FromPort")]
+    pub from_port: i64,
+    /// <p>The protocol for the endpoint group that is associated with a custom routing accelerator. The protocol can be either TCP or UDP.</p>
+    #[serde(rename = "Protocols")]
+    pub protocols: Vec<String>,
+    /// <p>The last port, inclusive, in the range of ports for the endpoint group that is associated with a custom routing accelerator.</p>
+    #[serde(rename = "ToPort")]
+    pub to_port: i64,
+}
+
+/// <p>For a custom routing accelerator, describes the port range and protocol for all endpoints (virtual private cloud subnets) in an endpoint group to accept client traffic on.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct CustomRoutingDestinationDescription {
+    /// <p>The first port, inclusive, in the range of ports for the endpoint group that is associated with a custom routing accelerator.</p>
+    #[serde(rename = "FromPort")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub from_port: Option<i64>,
+    /// <p>The protocol for the endpoint group that is associated with a custom routing accelerator. The protocol can be either TCP or UDP.</p>
+    #[serde(rename = "Protocols")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub protocols: Option<Vec<String>>,
+    /// <p>The last port, inclusive, in the range of ports for the endpoint group that is associated with a custom routing accelerator.</p>
+    #[serde(rename = "ToPort")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub to_port: Option<i64>,
+}
+
+/// <p>The list of endpoint objects. For custom routing, this is a list of virtual private cloud (VPC) subnet IDs.</p>
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct CustomRoutingEndpointConfiguration {
+    /// <p>An ID for the endpoint. For custom routing accelerators, this is the virtual private cloud (VPC) subnet ID. </p>
+    #[serde(rename = "EndpointId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub endpoint_id: Option<String>,
+}
+
+/// <p>A complex type for an endpoint for a custom routing accelerator. Each endpoint group can include one or more endpoints, which are virtual private cloud (VPC) subnets.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct CustomRoutingEndpointDescription {
+    /// <p>An ID for the endpoint. For custom routing accelerators, this is the virtual private cloud (VPC) subnet ID. </p>
+    #[serde(rename = "EndpointId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub endpoint_id: Option<String>,
+}
+
+/// <p>A complex type for the endpoint group for a custom routing accelerator. An AWS Region can have only one endpoint group for a specific listener. </p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct CustomRoutingEndpointGroup {
+    /// <p>For a custom routing accelerator, describes the port range and protocol for all endpoints (virtual private cloud subnets) in an endpoint group to accept client traffic on.</p>
+    #[serde(rename = "DestinationDescriptions")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub destination_descriptions: Option<Vec<CustomRoutingDestinationDescription>>,
+    /// <p>For a custom routing accelerator, describes the endpoints (virtual private cloud subnets) in an endpoint group to accept client traffic on.</p>
+    #[serde(rename = "EndpointDescriptions")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub endpoint_descriptions: Option<Vec<CustomRoutingEndpointDescription>>,
+    /// <p>The Amazon Resource Name (ARN) of the endpoint group.</p>
+    #[serde(rename = "EndpointGroupArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub endpoint_group_arn: Option<String>,
+    /// <p>The AWS Region where the endpoint group is located.</p>
+    #[serde(rename = "EndpointGroupRegion")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub endpoint_group_region: Option<String>,
+}
+
+/// <p>A complex type for a listener for a custom routing accelerator.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct CustomRoutingListener {
+    /// <p>The Amazon Resource Name (ARN) of the listener.</p>
+    #[serde(rename = "ListenerArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub listener_arn: Option<String>,
+    /// <p>The port range to support for connections from clients to your accelerator.</p> <p>Separately, you set port ranges for endpoints. For more information, see <a href="https://docs.aws.amazon.com/global-accelerator/latest/dg/about-custom-routing-endpoints.html">About endpoints for custom routing accelerators</a>.</p>
+    #[serde(rename = "PortRanges")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub port_ranges: Option<Vec<PortRange>>,
+}
+
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteAcceleratorRequest {
     /// <p>The Amazon Resource Name (ARN) of an accelerator.</p>
     #[serde(rename = "AcceleratorArn")]
     pub accelerator_arn: String,
+}
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct DeleteCustomRoutingAcceleratorRequest {
+    /// <p>The Amazon Resource Name (ARN) of the custom routing accelerator to delete.</p>
+    #[serde(rename = "AcceleratorArn")]
+    pub accelerator_arn: String,
+}
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct DeleteCustomRoutingEndpointGroupRequest {
+    /// <p>The Amazon Resource Name (ARN) of the endpoint group to delete.</p>
+    #[serde(rename = "EndpointGroupArn")]
+    pub endpoint_group_arn: String,
+}
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct DeleteCustomRoutingListenerRequest {
+    /// <p>The Amazon Resource Name (ARN) of the listener to delete.</p>
+    #[serde(rename = "ListenerArn")]
+    pub listener_arn: String,
 }
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
@@ -311,6 +616,29 @@ pub struct DeleteListenerRequest {
     /// <p>The Amazon Resource Name (ARN) of the listener.</p>
     #[serde(rename = "ListenerArn")]
     pub listener_arn: String,
+}
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct DenyCustomRoutingTrafficRequest {
+    /// <p>Indicates whether all destination IP addresses and ports for a specified VPC subnet endpoint <i>cannot</i> receive traffic from a custom routing accelerator. The value is TRUE or FALSE. </p> <p>When set to TRUE, <i>no</i> destinations in the custom routing VPC subnet can receive traffic. Note that you cannot specify destination IP addresses and ports when the value is set to TRUE.</p> <p>When set to FALSE (or not specified), you <i>must</i> specify a list of destination IP addresses that cannot receive traffic. A list of ports is optional. If you don't specify a list of ports, the ports that can accept traffic is the same as the ports configured for the endpoint group.</p> <p>The default value is FALSE.</p>
+    #[serde(rename = "DenyAllTrafficToEndpoint")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub deny_all_traffic_to_endpoint: Option<bool>,
+    /// <p>A list of specific Amazon EC2 instance IP addresses (destination addresses) in a subnet that you want to prevent from receiving traffic. The IP addresses must be a subset of the IP addresses allowed for the VPC subnet associated with the endpoint group.</p>
+    #[serde(rename = "DestinationAddresses")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub destination_addresses: Option<Vec<String>>,
+    /// <p>A list of specific Amazon EC2 instance ports (destination ports) in a subnet endpoint that you want to prevent from receiving traffic.</p>
+    #[serde(rename = "DestinationPorts")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub destination_ports: Option<Vec<i64>>,
+    /// <p>The Amazon Resource Name (ARN) of the endpoint group.</p>
+    #[serde(rename = "EndpointGroupArn")]
+    pub endpoint_group_arn: String,
+    /// <p>An ID for the endpoint. For custom routing accelerators, this is the virtual private cloud (VPC) subnet ID.</p>
+    #[serde(rename = "EndpointId")]
+    pub endpoint_id: String,
 }
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
@@ -366,6 +694,74 @@ pub struct DescribeAcceleratorResponse {
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct DescribeCustomRoutingAcceleratorAttributesRequest {
+    /// <p>The Amazon Resource Name (ARN) of the custom routing accelerator to describe the attributes for.</p>
+    #[serde(rename = "AcceleratorArn")]
+    pub accelerator_arn: String,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct DescribeCustomRoutingAcceleratorAttributesResponse {
+    /// <p>The attributes of the custom routing accelerator.</p>
+    #[serde(rename = "AcceleratorAttributes")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub accelerator_attributes: Option<CustomRoutingAcceleratorAttributes>,
+}
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct DescribeCustomRoutingAcceleratorRequest {
+    /// <p>The Amazon Resource Name (ARN) of the accelerator to describe.</p>
+    #[serde(rename = "AcceleratorArn")]
+    pub accelerator_arn: String,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct DescribeCustomRoutingAcceleratorResponse {
+    /// <p>The description of the custom routing accelerator.</p>
+    #[serde(rename = "Accelerator")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub accelerator: Option<CustomRoutingAccelerator>,
+}
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct DescribeCustomRoutingEndpointGroupRequest {
+    /// <p>The Amazon Resource Name (ARN) of the endpoint group to describe.</p>
+    #[serde(rename = "EndpointGroupArn")]
+    pub endpoint_group_arn: String,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct DescribeCustomRoutingEndpointGroupResponse {
+    /// <p>The description of an endpoint group for a custom routing accelerator.</p>
+    #[serde(rename = "EndpointGroup")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub endpoint_group: Option<CustomRoutingEndpointGroup>,
+}
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct DescribeCustomRoutingListenerRequest {
+    /// <p>The Amazon Resource Name (ARN) of the listener to describe.</p>
+    #[serde(rename = "ListenerArn")]
+    pub listener_arn: String,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct DescribeCustomRoutingListenerResponse {
+    /// <p>The description of a listener for a custom routing accelerator.</p>
+    #[serde(rename = "Listener")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub listener: Option<CustomRoutingListener>,
+}
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeEndpointGroupRequest {
     /// <p>The Amazon Resource Name (ARN) of the endpoint group to describe.</p>
     #[serde(rename = "EndpointGroupArn")]
@@ -398,7 +794,45 @@ pub struct DescribeListenerResponse {
     pub listener: Option<Listener>,
 }
 
-/// <p>A complex type for endpoints.</p>
+/// <p>The port mappings for a specified endpoint IP address (destination).</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct DestinationPortMapping {
+    /// <p>The Amazon Resource Name (ARN) of the custom routing accelerator that you have port mappings for.</p>
+    #[serde(rename = "AcceleratorArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub accelerator_arn: Option<String>,
+    /// <p>The IP address/port combinations (sockets) that map to a given destination socket address.</p>
+    #[serde(rename = "AcceleratorSocketAddresses")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub accelerator_socket_addresses: Option<Vec<SocketAddress>>,
+    /// <p>The endpoint IP address/port combination for traffic received on the accelerator socket address.</p>
+    #[serde(rename = "DestinationSocketAddress")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub destination_socket_address: Option<SocketAddress>,
+    /// <p>Indicates whether or not a port mapping destination can receive traffic. The value is either ALLOW, if traffic is allowed to the destination, or DENY, if traffic is not allowed to the destination.</p>
+    #[serde(rename = "DestinationTrafficState")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub destination_traffic_state: Option<String>,
+    /// <p>The Amazon Resource Name (ARN) of the endpoint group.</p>
+    #[serde(rename = "EndpointGroupArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub endpoint_group_arn: Option<String>,
+    /// <p>The AWS Region for the endpoint group.</p>
+    #[serde(rename = "EndpointGroupRegion")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub endpoint_group_region: Option<String>,
+    /// <p>The ID for the virtual private cloud (VPC) subnet.</p>
+    #[serde(rename = "EndpointId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub endpoint_id: Option<String>,
+    /// <p>The IP address type, which must be IPv4.</p>
+    #[serde(rename = "IpAddressType")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub ip_address_type: Option<String>,
+}
+
+/// <p>A complex type for endpoints. A resource must be valid and active when you add it as an endpoint.</p>
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct EndpointConfiguration {
@@ -406,7 +840,7 @@ pub struct EndpointConfiguration {
     #[serde(rename = "ClientIPPreservationEnabled")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub client_ip_preservation_enabled: Option<bool>,
-    /// <p>An ID for the endpoint. If the endpoint is a Network Load Balancer or Application Load Balancer, this is the Amazon Resource Name (ARN) of the resource. If the endpoint is an Elastic IP address, this is the Elastic IP address allocation ID. For EC2 instances, this is the EC2 instance ID. </p> <p>An Application Load Balancer can be either internal or internet-facing.</p>
+    /// <p>An ID for the endpoint. If the endpoint is a Network Load Balancer or Application Load Balancer, this is the Amazon Resource Name (ARN) of the resource. If the endpoint is an Elastic IP address, this is the Elastic IP address allocation ID. For Amazon EC2 instances, this is the EC2 instance ID. A resource must be valid and active when you add it as an endpoint.</p> <p>An Application Load Balancer can be either internal or internet-facing.</p>
     #[serde(rename = "EndpointId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub endpoint_id: Option<String>,
@@ -424,11 +858,11 @@ pub struct EndpointDescription {
     #[serde(rename = "ClientIPPreservationEnabled")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub client_ip_preservation_enabled: Option<bool>,
-    /// <p>An ID for the endpoint. If the endpoint is a Network Load Balancer or Application Load Balancer, this is the Amazon Resource Name (ARN) of the resource. If the endpoint is an Elastic IP address, this is the Elastic IP address allocation ID. For EC2 instances, this is the EC2 instance ID. </p> <p>An Application Load Balancer can be either internal or internet-facing.</p>
+    /// <p>An ID for the endpoint. If the endpoint is a Network Load Balancer or Application Load Balancer, this is the Amazon Resource Name (ARN) of the resource. If the endpoint is an Elastic IP address, this is the Elastic IP address allocation ID. For Amazon EC2 instances, this is the EC2 instance ID. </p> <p>An Application Load Balancer can be either internal or internet-facing.</p>
     #[serde(rename = "EndpointId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub endpoint_id: Option<String>,
-    /// <p><p>The reason code associated with why the endpoint is not healthy. If the endpoint state is healthy, a reason code is not provided.</p> <p>If the endpoint state is <b>unhealthy</b>, the reason code can be one of the following values:</p> <ul> <li> <p> <b>Timeout</b>: The health check requests to the endpoint are timing out before returning a status.</p> </li> <li> <p> <b>Failed</b>: The health check failed, for example because the endpoint response was invalid (malformed).</p> </li> </ul> <p>If the endpoint state is <b>initial</b>, the reason code can be one of the following values:</p> <ul> <li> <p> <b>ProvisioningInProgress</b>: The endpoint is in the process of being provisioned.</p> </li> <li> <p> <b>InitialHealthChecking</b>: Global Accelerator is still setting up the minimum number of health checks for the endpoint that are required to determine its health status.</p> </li> </ul></p>
+    /// <p>Returns a null result.</p>
     #[serde(rename = "HealthReason")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub health_reason: Option<String>,
@@ -454,7 +888,7 @@ pub struct EndpointGroup {
     #[serde(rename = "EndpointGroupArn")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub endpoint_group_arn: Option<String>,
-    /// <p>The AWS Region that this endpoint group belongs.</p>
+    /// <p>The AWS Region where the endpoint group is located.</p>
     #[serde(rename = "EndpointGroupRegion")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub endpoint_group_region: Option<String>,
@@ -474,6 +908,10 @@ pub struct EndpointGroup {
     #[serde(rename = "HealthCheckProtocol")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub health_check_protocol: Option<String>,
+    /// <p>Allows you to override the destination ports used to route traffic to an endpoint. Using a port override lets you to map a list of external destination ports (that your users send traffic to) to a list of internal destination ports that you want an application endpoint to receive traffic on. </p>
+    #[serde(rename = "PortOverrides")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub port_overrides: Option<Vec<PortOverride>>,
     /// <p>The number of consecutive health checks required to set the state of a healthy endpoint to unhealthy, or to set an unhealthy endpoint to healthy. The default value is 3.</p>
     #[serde(rename = "ThresholdCount")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -548,6 +986,155 @@ pub struct ListByoipCidrsResponse {
     #[serde(rename = "NextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
+}
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct ListCustomRoutingAcceleratorsRequest {
+    /// <p>The number of custom routing Global Accelerator objects that you want to return with this call. The default value is 10.</p>
+    #[serde(rename = "MaxResults")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub max_results: Option<i64>,
+    /// <p>The token for the next set of results. You receive this token from a previous call.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct ListCustomRoutingAcceleratorsResponse {
+    /// <p>The list of custom routing accelerators for a customer account.</p>
+    #[serde(rename = "Accelerators")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub accelerators: Option<Vec<CustomRoutingAccelerator>>,
+    /// <p>The token for the next set of results. You receive this token from a previous call.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+}
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct ListCustomRoutingEndpointGroupsRequest {
+    /// <p>The Amazon Resource Name (ARN) of the listener to list endpoint groups for.</p>
+    #[serde(rename = "ListenerArn")]
+    pub listener_arn: String,
+    /// <p>The number of endpoint group objects that you want to return with this call. The default value is 10.</p>
+    #[serde(rename = "MaxResults")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub max_results: Option<i64>,
+    /// <p>The token for the next set of results. You receive this token from a previous call.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct ListCustomRoutingEndpointGroupsResponse {
+    /// <p>The list of the endpoint groups associated with a listener for a custom routing accelerator.</p>
+    #[serde(rename = "EndpointGroups")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub endpoint_groups: Option<Vec<CustomRoutingEndpointGroup>>,
+    /// <p>The token for the next set of results. You receive this token from a previous call.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+}
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct ListCustomRoutingListenersRequest {
+    /// <p>The Amazon Resource Name (ARN) of the accelerator to list listeners for.</p>
+    #[serde(rename = "AcceleratorArn")]
+    pub accelerator_arn: String,
+    /// <p>The number of listener objects that you want to return with this call. The default value is 10.</p>
+    #[serde(rename = "MaxResults")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub max_results: Option<i64>,
+    /// <p>The token for the next set of results. You receive this token from a previous call.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct ListCustomRoutingListenersResponse {
+    /// <p>The list of listeners for a custom routing accelerator.</p>
+    #[serde(rename = "Listeners")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub listeners: Option<Vec<CustomRoutingListener>>,
+    /// <p>The token for the next set of results. You receive this token from a previous call.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+}
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct ListCustomRoutingPortMappingsByDestinationRequest {
+    /// <p>The endpoint IP address in a virtual private cloud (VPC) subnet for which you want to receive back port mappings.</p>
+    #[serde(rename = "DestinationAddress")]
+    pub destination_address: String,
+    /// <p>The ID for the virtual private cloud (VPC) subnet.</p>
+    #[serde(rename = "EndpointId")]
+    pub endpoint_id: String,
+    /// <p>The number of destination port mappings that you want to return with this call. The default value is 10.</p>
+    #[serde(rename = "MaxResults")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub max_results: Option<i64>,
+    /// <p>The token for the next set of results. You receive this token from a previous call.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct ListCustomRoutingPortMappingsByDestinationResponse {
+    /// <p>The port mappings for the endpoint IP address that you specified in the request.</p>
+    #[serde(rename = "DestinationPortMappings")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub destination_port_mappings: Option<Vec<DestinationPortMapping>>,
+    /// <p>The token for the next set of results. You receive this token from a previous call.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+}
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct ListCustomRoutingPortMappingsRequest {
+    /// <p>The Amazon Resource Name (ARN) of the accelerator to list the custom routing port mappings for.</p>
+    #[serde(rename = "AcceleratorArn")]
+    pub accelerator_arn: String,
+    /// <p>The Amazon Resource Name (ARN) of the endpoint group to list the custom routing port mappings for.</p>
+    #[serde(rename = "EndpointGroupArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub endpoint_group_arn: Option<String>,
+    /// <p>The number of destination port mappings that you want to return with this call. The default value is 10.</p>
+    #[serde(rename = "MaxResults")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub max_results: Option<i64>,
+    /// <p>The token for the next set of results. You receive this token from a previous call.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct ListCustomRoutingPortMappingsResponse {
+    /// <p>The token for the next set of results. You receive this token from a previous call.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+    /// <p>The port mappings for a custom routing accelerator.</p>
+    #[serde(rename = "PortMappings")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub port_mappings: Option<Vec<PortMapping>>,
 }
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
@@ -629,7 +1216,7 @@ pub struct ListTagsForResourceResponse {
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct Listener {
-    /// <p>Client affinity lets you direct all requests from a user to the same endpoint, if you have stateful applications, regardless of the port and protocol of the client request. Clienty affinity gives you control over whether to always route each client to the same specific endpoint.</p> <p>AWS Global Accelerator uses a consistent-flow hashing algorithm to choose the optimal endpoint for a connection. If client affinity is <code>NONE</code>, Global Accelerator uses the "five-tuple" (5-tuple) properties—source IP address, source port, destination IP address, destination port, and protocol—to select the hash value, and then chooses the best endpoint. However, with this setting, if someone uses different ports to connect to Global Accelerator, their connections might not be always routed to the same endpoint because the hash value changes. </p> <p>If you want a given client to always be routed to the same endpoint, set client affinity to <code>SOURCE_IP</code> instead. When you use the <code>SOURCE_IP</code> setting, Global Accelerator uses the "two-tuple" (2-tuple) properties— source (client) IP address and destination IP address—to select the hash value.</p> <p>The default value is <code>NONE</code>.</p>
+    /// <p>Client affinity lets you direct all requests from a user to the same endpoint, if you have stateful applications, regardless of the port and protocol of the client request. Client affinity gives you control over whether to always route each client to the same specific endpoint.</p> <p>AWS Global Accelerator uses a consistent-flow hashing algorithm to choose the optimal endpoint for a connection. If client affinity is <code>NONE</code>, Global Accelerator uses the "five-tuple" (5-tuple) properties—source IP address, source port, destination IP address, destination port, and protocol—to select the hash value, and then chooses the best endpoint. However, with this setting, if someone uses different ports to connect to Global Accelerator, their connections might not be always routed to the same endpoint because the hash value changes. </p> <p>If you want a given client to always be routed to the same endpoint, set client affinity to <code>SOURCE_IP</code> instead. When you use the <code>SOURCE_IP</code> setting, Global Accelerator uses the "two-tuple" (2-tuple) properties— source (client) IP address and destination IP address—to select the hash value.</p> <p>The default value is <code>NONE</code>.</p>
     #[serde(rename = "ClientAffinity")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub client_affinity: Option<String>,
@@ -645,6 +1232,49 @@ pub struct Listener {
     #[serde(rename = "Protocol")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub protocol: Option<String>,
+}
+
+/// <p>Returns the ports and associated IP addresses and ports of Amazon EC2 instances in your virtual private cloud (VPC) subnets. Custom routing is a port mapping protocol in AWS Global Accelerator that statically associates port ranges with VPC subnets, which allows Global Accelerator to route to specific instances and ports within one or more subnets. </p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct PortMapping {
+    /// <p>The accelerator port.</p>
+    #[serde(rename = "AcceleratorPort")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub accelerator_port: Option<i64>,
+    /// <p>The EC2 instance IP address and port number in the virtual private cloud (VPC) subnet.</p>
+    #[serde(rename = "DestinationSocketAddress")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub destination_socket_address: Option<SocketAddress>,
+    /// <p>Indicates whether or not a port mapping destination can receive traffic. The value is either ALLOW, if traffic is allowed to the destination, or DENY, if traffic is not allowed to the destination.</p>
+    #[serde(rename = "DestinationTrafficState")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub destination_traffic_state: Option<String>,
+    /// <p>The Amazon Resource Name (ARN) of the endpoint group.</p>
+    #[serde(rename = "EndpointGroupArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub endpoint_group_arn: Option<String>,
+    /// <p>The IP address of the VPC subnet (the subnet ID).</p>
+    #[serde(rename = "EndpointId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub endpoint_id: Option<String>,
+    /// <p>The protocols supported by the endpoint group.</p>
+    #[serde(rename = "Protocols")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub protocols: Option<Vec<String>>,
+}
+
+/// <p>Override specific listener ports used to route traffic to endpoints that are part of an endpoint group. For example, you can create a port override in which the listener receives user traffic on ports 80 and 443, but your accelerator routes that traffic to ports 1080 and 1443, respectively, on the endpoints.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/global-accelerator/latest/dg/about-endpoint-groups-port-override.html"> Port overrides</a> in the <i>AWS Global Accelerator Developer Guide</i>.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
+pub struct PortOverride {
+    /// <p>The endpoint port that you want a listener port to be mapped to. This is the port on the endpoint, such as the Application Load Balancer or Amazon EC2 instance.</p>
+    #[serde(rename = "EndpointPort")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub endpoint_port: Option<i64>,
+    /// <p>The listener port that you want to map to a specific endpoint port. This is the port that user traffic arrives to the Global Accelerator on.</p>
+    #[serde(rename = "ListenerPort")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub listener_port: Option<i64>,
 }
 
 /// <p>A complex type for a range of ports for a listener.</p>
@@ -678,6 +1308,31 @@ pub struct ProvisionByoipCidrResponse {
     #[serde(rename = "ByoipCidr")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub byoip_cidr: Option<ByoipCidr>,
+}
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct RemoveCustomRoutingEndpointsRequest {
+    /// <p>The Amazon Resource Name (ARN) of the endpoint group to remove endpoints from.</p>
+    #[serde(rename = "EndpointGroupArn")]
+    pub endpoint_group_arn: String,
+    /// <p>The IDs for the endpoints. For custom routing accelerators, endpoint IDs are the virtual private cloud (VPC) subnet IDs. </p>
+    #[serde(rename = "EndpointIds")]
+    pub endpoint_ids: Vec<String>,
+}
+
+/// <p>An IP address/port combination.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct SocketAddress {
+    /// <p>The IP address for the socket address.</p>
+    #[serde(rename = "IpAddress")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub ip_address: Option<String>,
+    /// <p>The port for the socket address.</p>
+    #[serde(rename = "Port")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub port: Option<i64>,
 }
 
 /// <p>A complex type that contains a <code>Tag</code> key and <code>Tag</code> value.</p>
@@ -760,7 +1415,7 @@ pub struct UpdateAcceleratorRequest {
     #[serde(rename = "Enabled")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub enabled: Option<bool>,
-    /// <p>The value for the address type must be IPv4. </p>
+    /// <p>The IP address type, which must be IPv4.</p>
     #[serde(rename = "IpAddressType")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub ip_address_type: Option<String>,
@@ -781,8 +1436,86 @@ pub struct UpdateAcceleratorResponse {
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct UpdateCustomRoutingAcceleratorAttributesRequest {
+    /// <p>The Amazon Resource Name (ARN) of the custom routing accelerator to update attributes for.</p>
+    #[serde(rename = "AcceleratorArn")]
+    pub accelerator_arn: String,
+    /// <p>Update whether flow logs are enabled. The default value is false. If the value is true, <code>FlowLogsS3Bucket</code> and <code>FlowLogsS3Prefix</code> must be specified.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/global-accelerator/latest/dg/monitoring-global-accelerator.flow-logs.html">Flow Logs</a> in the <i>AWS Global Accelerator Developer Guide</i>.</p>
+    #[serde(rename = "FlowLogsEnabled")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub flow_logs_enabled: Option<bool>,
+    /// <p>The name of the Amazon S3 bucket for the flow logs. Attribute is required if <code>FlowLogsEnabled</code> is <code>true</code>. The bucket must exist and have a bucket policy that grants AWS Global Accelerator permission to write to the bucket.</p>
+    #[serde(rename = "FlowLogsS3Bucket")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub flow_logs_s3_bucket: Option<String>,
+    /// <p>Update the prefix for the location in the Amazon S3 bucket for the flow logs. Attribute is required if <code>FlowLogsEnabled</code> is <code>true</code>. </p> <p>If you don’t specify a prefix, the flow logs are stored in the root of the bucket. If you specify slash (/) for the S3 bucket prefix, the log file bucket folder structure will include a double slash (//), like the following:</p> <p>DOC-EXAMPLE-BUCKET//AWSLogs/aws_account_id</p>
+    #[serde(rename = "FlowLogsS3Prefix")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub flow_logs_s3_prefix: Option<String>,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct UpdateCustomRoutingAcceleratorAttributesResponse {
+    /// <p>Updated custom routing accelerator.</p>
+    #[serde(rename = "AcceleratorAttributes")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub accelerator_attributes: Option<CustomRoutingAcceleratorAttributes>,
+}
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct UpdateCustomRoutingAcceleratorRequest {
+    /// <p>The Amazon Resource Name (ARN) of the accelerator to update.</p>
+    #[serde(rename = "AcceleratorArn")]
+    pub accelerator_arn: String,
+    /// <p>Indicates whether an accelerator is enabled. The value is true or false. The default value is true. </p> <p>If the value is set to true, the accelerator cannot be deleted. If set to false, the accelerator can be deleted.</p>
+    #[serde(rename = "Enabled")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub enabled: Option<bool>,
+    /// <p>The value for the address type must be IPv4.</p>
+    #[serde(rename = "IpAddressType")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub ip_address_type: Option<String>,
+    /// <p>The name of the accelerator. The name can have a maximum of 32 characters, must contain only alphanumeric characters or hyphens (-), and must not begin or end with a hyphen.</p>
+    #[serde(rename = "Name")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub name: Option<String>,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct UpdateCustomRoutingAcceleratorResponse {
+    /// <p>Information about the updated custom routing accelerator.</p>
+    #[serde(rename = "Accelerator")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub accelerator: Option<CustomRoutingAccelerator>,
+}
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct UpdateCustomRoutingListenerRequest {
+    /// <p>The Amazon Resource Name (ARN) of the listener to update.</p>
+    #[serde(rename = "ListenerArn")]
+    pub listener_arn: String,
+    /// <p>The updated port range to support for connections from clients to your accelerator. If you remove ports that are currently being used by a subnet endpoint, the call fails.</p> <p>Separately, you set port ranges for endpoints. For more information, see <a href="https://docs.aws.amazon.com/global-accelerator/latest/dg/about-custom-routing-endpoints.html">About endpoints for custom routing accelerators</a>.</p>
+    #[serde(rename = "PortRanges")]
+    pub port_ranges: Vec<PortRange>,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct UpdateCustomRoutingListenerResponse {
+    /// <p>Information for the updated listener for a custom routing accelerator.</p>
+    #[serde(rename = "Listener")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub listener: Option<CustomRoutingListener>,
+}
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateEndpointGroupRequest {
-    /// <p>The list of endpoint objects.</p>
+    /// <p>The list of endpoint objects. A resource must be valid and active when you add it as an endpoint.</p>
     #[serde(rename = "EndpointConfigurations")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub endpoint_configurations: Option<Vec<EndpointConfiguration>>,
@@ -805,6 +1538,10 @@ pub struct UpdateEndpointGroupRequest {
     #[serde(rename = "HealthCheckProtocol")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub health_check_protocol: Option<String>,
+    /// <p>Override specific listener ports used to route traffic to endpoints that are part of this endpoint group. For example, you can create a port override in which the listener receives user traffic on ports 80 and 443, but your accelerator routes that traffic to ports 1080 and 1443, respectively, on the endpoints.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/global-accelerator/latest/dg/about-endpoint-groups-port-override.html"> Port overrides</a> in the <i>AWS Global Accelerator Developer Guide</i>.</p>
+    #[serde(rename = "PortOverrides")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub port_overrides: Option<Vec<PortOverride>>,
     /// <p>The number of consecutive health checks required to set the state of a healthy endpoint to unhealthy, or to set an unhealthy endpoint to healthy. The default value is 3.</p>
     #[serde(rename = "ThresholdCount")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -827,7 +1564,7 @@ pub struct UpdateEndpointGroupResponse {
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateListenerRequest {
-    /// <p>Client affinity lets you direct all requests from a user to the same endpoint, if you have stateful applications, regardless of the port and protocol of the client request. Clienty affinity gives you control over whether to always route each client to the same specific endpoint.</p> <p>AWS Global Accelerator uses a consistent-flow hashing algorithm to choose the optimal endpoint for a connection. If client affinity is <code>NONE</code>, Global Accelerator uses the "five-tuple" (5-tuple) properties—source IP address, source port, destination IP address, destination port, and protocol—to select the hash value, and then chooses the best endpoint. However, with this setting, if someone uses different ports to connect to Global Accelerator, their connections might not be always routed to the same endpoint because the hash value changes. </p> <p>If you want a given client to always be routed to the same endpoint, set client affinity to <code>SOURCE_IP</code> instead. When you use the <code>SOURCE_IP</code> setting, Global Accelerator uses the "two-tuple" (2-tuple) properties— source (client) IP address and destination IP address—to select the hash value.</p> <p>The default value is <code>NONE</code>.</p>
+    /// <p>Client affinity lets you direct all requests from a user to the same endpoint, if you have stateful applications, regardless of the port and protocol of the client request. Client affinity gives you control over whether to always route each client to the same specific endpoint.</p> <p>AWS Global Accelerator uses a consistent-flow hashing algorithm to choose the optimal endpoint for a connection. If client affinity is <code>NONE</code>, Global Accelerator uses the "five-tuple" (5-tuple) properties—source IP address, source port, destination IP address, destination port, and protocol—to select the hash value, and then chooses the best endpoint. However, with this setting, if someone uses different ports to connect to Global Accelerator, their connections might not be always routed to the same endpoint because the hash value changes. </p> <p>If you want a given client to always be routed to the same endpoint, set client affinity to <code>SOURCE_IP</code> instead. When you use the <code>SOURCE_IP</code> setting, Global Accelerator uses the "two-tuple" (2-tuple) properties— source (client) IP address and destination IP address—to select the hash value.</p> <p>The default value is <code>NONE</code>.</p>
     #[serde(rename = "ClientAffinity")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub client_affinity: Option<String>,
@@ -870,6 +1607,90 @@ pub struct WithdrawByoipCidrResponse {
     pub byoip_cidr: Option<ByoipCidr>,
 }
 
+/// Errors returned by AddCustomRoutingEndpoints
+#[derive(Debug, PartialEq)]
+pub enum AddCustomRoutingEndpointsError {
+    /// <p>You don't have access permission.</p>
+    AccessDenied(String),
+    /// <p>You can't use both of those options.</p>
+    Conflict(String),
+    /// <p>The endpoint that you specified doesn't exist.</p>
+    EndpointAlreadyExists(String),
+    /// <p>The endpoint group that you specified doesn't exist.</p>
+    EndpointGroupNotFound(String),
+    /// <p>There was an internal error for AWS Global Accelerator.</p>
+    InternalServiceError(String),
+    /// <p>An argument that you specified is invalid.</p>
+    InvalidArgument(String),
+    /// <p>Processing your request would cause you to exceed an AWS Global Accelerator limit.</p>
+    LimitExceeded(String),
+}
+
+impl AddCustomRoutingEndpointsError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<AddCustomRoutingEndpointsError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "AccessDeniedException" => {
+                    return RusotoError::Service(AddCustomRoutingEndpointsError::AccessDenied(
+                        err.msg,
+                    ))
+                }
+                "ConflictException" => {
+                    return RusotoError::Service(AddCustomRoutingEndpointsError::Conflict(err.msg))
+                }
+                "EndpointAlreadyExistsException" => {
+                    return RusotoError::Service(
+                        AddCustomRoutingEndpointsError::EndpointAlreadyExists(err.msg),
+                    )
+                }
+                "EndpointGroupNotFoundException" => {
+                    return RusotoError::Service(
+                        AddCustomRoutingEndpointsError::EndpointGroupNotFound(err.msg),
+                    )
+                }
+                "InternalServiceErrorException" => {
+                    return RusotoError::Service(
+                        AddCustomRoutingEndpointsError::InternalServiceError(err.msg),
+                    )
+                }
+                "InvalidArgumentException" => {
+                    return RusotoError::Service(AddCustomRoutingEndpointsError::InvalidArgument(
+                        err.msg,
+                    ))
+                }
+                "LimitExceededException" => {
+                    return RusotoError::Service(AddCustomRoutingEndpointsError::LimitExceeded(
+                        err.msg,
+                    ))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for AddCustomRoutingEndpointsError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            AddCustomRoutingEndpointsError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            AddCustomRoutingEndpointsError::Conflict(ref cause) => write!(f, "{}", cause),
+            AddCustomRoutingEndpointsError::EndpointAlreadyExists(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            AddCustomRoutingEndpointsError::EndpointGroupNotFound(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            AddCustomRoutingEndpointsError::InternalServiceError(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            AddCustomRoutingEndpointsError::InvalidArgument(ref cause) => write!(f, "{}", cause),
+            AddCustomRoutingEndpointsError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for AddCustomRoutingEndpointsError {}
 /// Errors returned by AdvertiseByoipCidr
 #[derive(Debug, PartialEq)]
 pub enum AdvertiseByoipCidrError {
@@ -930,6 +1751,48 @@ impl fmt::Display for AdvertiseByoipCidrError {
     }
 }
 impl Error for AdvertiseByoipCidrError {}
+/// Errors returned by AllowCustomRoutingTraffic
+#[derive(Debug, PartialEq)]
+pub enum AllowCustomRoutingTrafficError {
+    /// <p>There was an internal error for AWS Global Accelerator.</p>
+    InternalServiceError(String),
+    /// <p>An argument that you specified is invalid.</p>
+    InvalidArgument(String),
+}
+
+impl AllowCustomRoutingTrafficError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<AllowCustomRoutingTrafficError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "InternalServiceErrorException" => {
+                    return RusotoError::Service(
+                        AllowCustomRoutingTrafficError::InternalServiceError(err.msg),
+                    )
+                }
+                "InvalidArgumentException" => {
+                    return RusotoError::Service(AllowCustomRoutingTrafficError::InvalidArgument(
+                        err.msg,
+                    ))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for AllowCustomRoutingTrafficError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            AllowCustomRoutingTrafficError::InternalServiceError(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            AllowCustomRoutingTrafficError::InvalidArgument(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for AllowCustomRoutingTrafficError {}
 /// Errors returned by CreateAccelerator
 #[derive(Debug, PartialEq)]
 pub enum CreateAcceleratorError {
@@ -974,6 +1837,244 @@ impl fmt::Display for CreateAcceleratorError {
     }
 }
 impl Error for CreateAcceleratorError {}
+/// Errors returned by CreateCustomRoutingAccelerator
+#[derive(Debug, PartialEq)]
+pub enum CreateCustomRoutingAcceleratorError {
+    /// <p>You don't have access permission.</p>
+    AccessDenied(String),
+    /// <p>There was an internal error for AWS Global Accelerator.</p>
+    InternalServiceError(String),
+    /// <p>An argument that you specified is invalid.</p>
+    InvalidArgument(String),
+    /// <p>Processing your request would cause you to exceed an AWS Global Accelerator limit.</p>
+    LimitExceeded(String),
+}
+
+impl CreateCustomRoutingAcceleratorError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<CreateCustomRoutingAcceleratorError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "AccessDeniedException" => {
+                    return RusotoError::Service(CreateCustomRoutingAcceleratorError::AccessDenied(
+                        err.msg,
+                    ))
+                }
+                "InternalServiceErrorException" => {
+                    return RusotoError::Service(
+                        CreateCustomRoutingAcceleratorError::InternalServiceError(err.msg),
+                    )
+                }
+                "InvalidArgumentException" => {
+                    return RusotoError::Service(
+                        CreateCustomRoutingAcceleratorError::InvalidArgument(err.msg),
+                    )
+                }
+                "LimitExceededException" => {
+                    return RusotoError::Service(
+                        CreateCustomRoutingAcceleratorError::LimitExceeded(err.msg),
+                    )
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for CreateCustomRoutingAcceleratorError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            CreateCustomRoutingAcceleratorError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            CreateCustomRoutingAcceleratorError::InternalServiceError(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            CreateCustomRoutingAcceleratorError::InvalidArgument(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            CreateCustomRoutingAcceleratorError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for CreateCustomRoutingAcceleratorError {}
+/// Errors returned by CreateCustomRoutingEndpointGroup
+#[derive(Debug, PartialEq)]
+pub enum CreateCustomRoutingEndpointGroupError {
+    /// <p>The accelerator that you specified doesn't exist.</p>
+    AcceleratorNotFound(String),
+    /// <p>You don't have access permission.</p>
+    AccessDenied(String),
+    /// <p>The endpoint group that you specified already exists.</p>
+    EndpointGroupAlreadyExists(String),
+    /// <p>There was an internal error for AWS Global Accelerator.</p>
+    InternalServiceError(String),
+    /// <p>An argument that you specified is invalid.</p>
+    InvalidArgument(String),
+    /// <p>The port numbers that you specified are not valid numbers or are not unique for this accelerator.</p>
+    InvalidPortRange(String),
+    /// <p>Processing your request would cause you to exceed an AWS Global Accelerator limit.</p>
+    LimitExceeded(String),
+    /// <p>The listener that you specified doesn't exist.</p>
+    ListenerNotFound(String),
+}
+
+impl CreateCustomRoutingEndpointGroupError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<CreateCustomRoutingEndpointGroupError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "AcceleratorNotFoundException" => {
+                    return RusotoError::Service(
+                        CreateCustomRoutingEndpointGroupError::AcceleratorNotFound(err.msg),
+                    )
+                }
+                "AccessDeniedException" => {
+                    return RusotoError::Service(
+                        CreateCustomRoutingEndpointGroupError::AccessDenied(err.msg),
+                    )
+                }
+                "EndpointGroupAlreadyExistsException" => {
+                    return RusotoError::Service(
+                        CreateCustomRoutingEndpointGroupError::EndpointGroupAlreadyExists(err.msg),
+                    )
+                }
+                "InternalServiceErrorException" => {
+                    return RusotoError::Service(
+                        CreateCustomRoutingEndpointGroupError::InternalServiceError(err.msg),
+                    )
+                }
+                "InvalidArgumentException" => {
+                    return RusotoError::Service(
+                        CreateCustomRoutingEndpointGroupError::InvalidArgument(err.msg),
+                    )
+                }
+                "InvalidPortRangeException" => {
+                    return RusotoError::Service(
+                        CreateCustomRoutingEndpointGroupError::InvalidPortRange(err.msg),
+                    )
+                }
+                "LimitExceededException" => {
+                    return RusotoError::Service(
+                        CreateCustomRoutingEndpointGroupError::LimitExceeded(err.msg),
+                    )
+                }
+                "ListenerNotFoundException" => {
+                    return RusotoError::Service(
+                        CreateCustomRoutingEndpointGroupError::ListenerNotFound(err.msg),
+                    )
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for CreateCustomRoutingEndpointGroupError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            CreateCustomRoutingEndpointGroupError::AcceleratorNotFound(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            CreateCustomRoutingEndpointGroupError::AccessDenied(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            CreateCustomRoutingEndpointGroupError::EndpointGroupAlreadyExists(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            CreateCustomRoutingEndpointGroupError::InternalServiceError(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            CreateCustomRoutingEndpointGroupError::InvalidArgument(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            CreateCustomRoutingEndpointGroupError::InvalidPortRange(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            CreateCustomRoutingEndpointGroupError::LimitExceeded(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            CreateCustomRoutingEndpointGroupError::ListenerNotFound(ref cause) => {
+                write!(f, "{}", cause)
+            }
+        }
+    }
+}
+impl Error for CreateCustomRoutingEndpointGroupError {}
+/// Errors returned by CreateCustomRoutingListener
+#[derive(Debug, PartialEq)]
+pub enum CreateCustomRoutingListenerError {
+    /// <p>The accelerator that you specified doesn't exist.</p>
+    AcceleratorNotFound(String),
+    /// <p>There was an internal error for AWS Global Accelerator.</p>
+    InternalServiceError(String),
+    /// <p>An argument that you specified is invalid.</p>
+    InvalidArgument(String),
+    /// <p>The port numbers that you specified are not valid numbers or are not unique for this accelerator.</p>
+    InvalidPortRange(String),
+    /// <p>Processing your request would cause you to exceed an AWS Global Accelerator limit.</p>
+    LimitExceeded(String),
+}
+
+impl CreateCustomRoutingListenerError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<CreateCustomRoutingListenerError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "AcceleratorNotFoundException" => {
+                    return RusotoError::Service(
+                        CreateCustomRoutingListenerError::AcceleratorNotFound(err.msg),
+                    )
+                }
+                "InternalServiceErrorException" => {
+                    return RusotoError::Service(
+                        CreateCustomRoutingListenerError::InternalServiceError(err.msg),
+                    )
+                }
+                "InvalidArgumentException" => {
+                    return RusotoError::Service(CreateCustomRoutingListenerError::InvalidArgument(
+                        err.msg,
+                    ))
+                }
+                "InvalidPortRangeException" => {
+                    return RusotoError::Service(
+                        CreateCustomRoutingListenerError::InvalidPortRange(err.msg),
+                    )
+                }
+                "LimitExceededException" => {
+                    return RusotoError::Service(CreateCustomRoutingListenerError::LimitExceeded(
+                        err.msg,
+                    ))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for CreateCustomRoutingListenerError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            CreateCustomRoutingListenerError::AcceleratorNotFound(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            CreateCustomRoutingListenerError::InternalServiceError(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            CreateCustomRoutingListenerError::InvalidArgument(ref cause) => write!(f, "{}", cause),
+            CreateCustomRoutingListenerError::InvalidPortRange(ref cause) => write!(f, "{}", cause),
+            CreateCustomRoutingListenerError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for CreateCustomRoutingListenerError {}
 /// Errors returned by CreateEndpointGroup
 #[derive(Debug, PartialEq)]
 pub enum CreateEndpointGroupError {
@@ -1166,6 +2267,200 @@ impl fmt::Display for DeleteAcceleratorError {
     }
 }
 impl Error for DeleteAcceleratorError {}
+/// Errors returned by DeleteCustomRoutingAccelerator
+#[derive(Debug, PartialEq)]
+pub enum DeleteCustomRoutingAcceleratorError {
+    /// <p>The accelerator that you specified could not be disabled.</p>
+    AcceleratorNotDisabled(String),
+    /// <p>The accelerator that you specified doesn't exist.</p>
+    AcceleratorNotFound(String),
+    /// <p>The accelerator that you specified has a listener associated with it. You must remove all dependent resources from an accelerator before you can delete it.</p>
+    AssociatedListenerFound(String),
+    /// <p>There was an internal error for AWS Global Accelerator.</p>
+    InternalServiceError(String),
+    /// <p>An argument that you specified is invalid.</p>
+    InvalidArgument(String),
+}
+
+impl DeleteCustomRoutingAcceleratorError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<DeleteCustomRoutingAcceleratorError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "AcceleratorNotDisabledException" => {
+                    return RusotoError::Service(
+                        DeleteCustomRoutingAcceleratorError::AcceleratorNotDisabled(err.msg),
+                    )
+                }
+                "AcceleratorNotFoundException" => {
+                    return RusotoError::Service(
+                        DeleteCustomRoutingAcceleratorError::AcceleratorNotFound(err.msg),
+                    )
+                }
+                "AssociatedListenerFoundException" => {
+                    return RusotoError::Service(
+                        DeleteCustomRoutingAcceleratorError::AssociatedListenerFound(err.msg),
+                    )
+                }
+                "InternalServiceErrorException" => {
+                    return RusotoError::Service(
+                        DeleteCustomRoutingAcceleratorError::InternalServiceError(err.msg),
+                    )
+                }
+                "InvalidArgumentException" => {
+                    return RusotoError::Service(
+                        DeleteCustomRoutingAcceleratorError::InvalidArgument(err.msg),
+                    )
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for DeleteCustomRoutingAcceleratorError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            DeleteCustomRoutingAcceleratorError::AcceleratorNotDisabled(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DeleteCustomRoutingAcceleratorError::AcceleratorNotFound(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DeleteCustomRoutingAcceleratorError::AssociatedListenerFound(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DeleteCustomRoutingAcceleratorError::InternalServiceError(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DeleteCustomRoutingAcceleratorError::InvalidArgument(ref cause) => {
+                write!(f, "{}", cause)
+            }
+        }
+    }
+}
+impl Error for DeleteCustomRoutingAcceleratorError {}
+/// Errors returned by DeleteCustomRoutingEndpointGroup
+#[derive(Debug, PartialEq)]
+pub enum DeleteCustomRoutingEndpointGroupError {
+    /// <p>The endpoint group that you specified doesn't exist.</p>
+    EndpointGroupNotFound(String),
+    /// <p>There was an internal error for AWS Global Accelerator.</p>
+    InternalServiceError(String),
+    /// <p>An argument that you specified is invalid.</p>
+    InvalidArgument(String),
+}
+
+impl DeleteCustomRoutingEndpointGroupError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<DeleteCustomRoutingEndpointGroupError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "EndpointGroupNotFoundException" => {
+                    return RusotoError::Service(
+                        DeleteCustomRoutingEndpointGroupError::EndpointGroupNotFound(err.msg),
+                    )
+                }
+                "InternalServiceErrorException" => {
+                    return RusotoError::Service(
+                        DeleteCustomRoutingEndpointGroupError::InternalServiceError(err.msg),
+                    )
+                }
+                "InvalidArgumentException" => {
+                    return RusotoError::Service(
+                        DeleteCustomRoutingEndpointGroupError::InvalidArgument(err.msg),
+                    )
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for DeleteCustomRoutingEndpointGroupError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            DeleteCustomRoutingEndpointGroupError::EndpointGroupNotFound(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DeleteCustomRoutingEndpointGroupError::InternalServiceError(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DeleteCustomRoutingEndpointGroupError::InvalidArgument(ref cause) => {
+                write!(f, "{}", cause)
+            }
+        }
+    }
+}
+impl Error for DeleteCustomRoutingEndpointGroupError {}
+/// Errors returned by DeleteCustomRoutingListener
+#[derive(Debug, PartialEq)]
+pub enum DeleteCustomRoutingListenerError {
+    /// <p>The listener that you specified has an endpoint group associated with it. You must remove all dependent resources from a listener before you can delete it.</p>
+    AssociatedEndpointGroupFound(String),
+    /// <p>There was an internal error for AWS Global Accelerator.</p>
+    InternalServiceError(String),
+    /// <p>An argument that you specified is invalid.</p>
+    InvalidArgument(String),
+    /// <p>The listener that you specified doesn't exist.</p>
+    ListenerNotFound(String),
+}
+
+impl DeleteCustomRoutingListenerError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<DeleteCustomRoutingListenerError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "AssociatedEndpointGroupFoundException" => {
+                    return RusotoError::Service(
+                        DeleteCustomRoutingListenerError::AssociatedEndpointGroupFound(err.msg),
+                    )
+                }
+                "InternalServiceErrorException" => {
+                    return RusotoError::Service(
+                        DeleteCustomRoutingListenerError::InternalServiceError(err.msg),
+                    )
+                }
+                "InvalidArgumentException" => {
+                    return RusotoError::Service(DeleteCustomRoutingListenerError::InvalidArgument(
+                        err.msg,
+                    ))
+                }
+                "ListenerNotFoundException" => {
+                    return RusotoError::Service(
+                        DeleteCustomRoutingListenerError::ListenerNotFound(err.msg),
+                    )
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for DeleteCustomRoutingListenerError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            DeleteCustomRoutingListenerError::AssociatedEndpointGroupFound(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DeleteCustomRoutingListenerError::InternalServiceError(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DeleteCustomRoutingListenerError::InvalidArgument(ref cause) => write!(f, "{}", cause),
+            DeleteCustomRoutingListenerError::ListenerNotFound(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for DeleteCustomRoutingListenerError {}
 /// Errors returned by DeleteEndpointGroup
 #[derive(Debug, PartialEq)]
 pub enum DeleteEndpointGroupError {
@@ -1262,6 +2557,48 @@ impl fmt::Display for DeleteListenerError {
     }
 }
 impl Error for DeleteListenerError {}
+/// Errors returned by DenyCustomRoutingTraffic
+#[derive(Debug, PartialEq)]
+pub enum DenyCustomRoutingTrafficError {
+    /// <p>There was an internal error for AWS Global Accelerator.</p>
+    InternalServiceError(String),
+    /// <p>An argument that you specified is invalid.</p>
+    InvalidArgument(String),
+}
+
+impl DenyCustomRoutingTrafficError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DenyCustomRoutingTrafficError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "InternalServiceErrorException" => {
+                    return RusotoError::Service(
+                        DenyCustomRoutingTrafficError::InternalServiceError(err.msg),
+                    )
+                }
+                "InvalidArgumentException" => {
+                    return RusotoError::Service(DenyCustomRoutingTrafficError::InvalidArgument(
+                        err.msg,
+                    ))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for DenyCustomRoutingTrafficError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            DenyCustomRoutingTrafficError::InternalServiceError(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DenyCustomRoutingTrafficError::InvalidArgument(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for DenyCustomRoutingTrafficError {}
 /// Errors returned by DeprovisionByoipCidr
 #[derive(Debug, PartialEq)]
 pub enum DeprovisionByoipCidrError {
@@ -1426,6 +2763,234 @@ impl fmt::Display for DescribeAcceleratorAttributesError {
     }
 }
 impl Error for DescribeAcceleratorAttributesError {}
+/// Errors returned by DescribeCustomRoutingAccelerator
+#[derive(Debug, PartialEq)]
+pub enum DescribeCustomRoutingAcceleratorError {
+    /// <p>The accelerator that you specified doesn't exist.</p>
+    AcceleratorNotFound(String),
+    /// <p>There was an internal error for AWS Global Accelerator.</p>
+    InternalServiceError(String),
+    /// <p>An argument that you specified is invalid.</p>
+    InvalidArgument(String),
+}
+
+impl DescribeCustomRoutingAcceleratorError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<DescribeCustomRoutingAcceleratorError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "AcceleratorNotFoundException" => {
+                    return RusotoError::Service(
+                        DescribeCustomRoutingAcceleratorError::AcceleratorNotFound(err.msg),
+                    )
+                }
+                "InternalServiceErrorException" => {
+                    return RusotoError::Service(
+                        DescribeCustomRoutingAcceleratorError::InternalServiceError(err.msg),
+                    )
+                }
+                "InvalidArgumentException" => {
+                    return RusotoError::Service(
+                        DescribeCustomRoutingAcceleratorError::InvalidArgument(err.msg),
+                    )
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for DescribeCustomRoutingAcceleratorError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            DescribeCustomRoutingAcceleratorError::AcceleratorNotFound(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DescribeCustomRoutingAcceleratorError::InternalServiceError(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DescribeCustomRoutingAcceleratorError::InvalidArgument(ref cause) => {
+                write!(f, "{}", cause)
+            }
+        }
+    }
+}
+impl Error for DescribeCustomRoutingAcceleratorError {}
+/// Errors returned by DescribeCustomRoutingAcceleratorAttributes
+#[derive(Debug, PartialEq)]
+pub enum DescribeCustomRoutingAcceleratorAttributesError {
+    /// <p>The accelerator that you specified doesn't exist.</p>
+    AcceleratorNotFound(String),
+    /// <p>There was an internal error for AWS Global Accelerator.</p>
+    InternalServiceError(String),
+    /// <p>An argument that you specified is invalid.</p>
+    InvalidArgument(String),
+}
+
+impl DescribeCustomRoutingAcceleratorAttributesError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<DescribeCustomRoutingAcceleratorAttributesError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "AcceleratorNotFoundException" => {
+                    return RusotoError::Service(
+                        DescribeCustomRoutingAcceleratorAttributesError::AcceleratorNotFound(
+                            err.msg,
+                        ),
+                    )
+                }
+                "InternalServiceErrorException" => {
+                    return RusotoError::Service(
+                        DescribeCustomRoutingAcceleratorAttributesError::InternalServiceError(
+                            err.msg,
+                        ),
+                    )
+                }
+                "InvalidArgumentException" => {
+                    return RusotoError::Service(
+                        DescribeCustomRoutingAcceleratorAttributesError::InvalidArgument(err.msg),
+                    )
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for DescribeCustomRoutingAcceleratorAttributesError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            DescribeCustomRoutingAcceleratorAttributesError::AcceleratorNotFound(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DescribeCustomRoutingAcceleratorAttributesError::InternalServiceError(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DescribeCustomRoutingAcceleratorAttributesError::InvalidArgument(ref cause) => {
+                write!(f, "{}", cause)
+            }
+        }
+    }
+}
+impl Error for DescribeCustomRoutingAcceleratorAttributesError {}
+/// Errors returned by DescribeCustomRoutingEndpointGroup
+#[derive(Debug, PartialEq)]
+pub enum DescribeCustomRoutingEndpointGroupError {
+    /// <p>The endpoint group that you specified doesn't exist.</p>
+    EndpointGroupNotFound(String),
+    /// <p>There was an internal error for AWS Global Accelerator.</p>
+    InternalServiceError(String),
+    /// <p>An argument that you specified is invalid.</p>
+    InvalidArgument(String),
+}
+
+impl DescribeCustomRoutingEndpointGroupError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<DescribeCustomRoutingEndpointGroupError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "EndpointGroupNotFoundException" => {
+                    return RusotoError::Service(
+                        DescribeCustomRoutingEndpointGroupError::EndpointGroupNotFound(err.msg),
+                    )
+                }
+                "InternalServiceErrorException" => {
+                    return RusotoError::Service(
+                        DescribeCustomRoutingEndpointGroupError::InternalServiceError(err.msg),
+                    )
+                }
+                "InvalidArgumentException" => {
+                    return RusotoError::Service(
+                        DescribeCustomRoutingEndpointGroupError::InvalidArgument(err.msg),
+                    )
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for DescribeCustomRoutingEndpointGroupError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            DescribeCustomRoutingEndpointGroupError::EndpointGroupNotFound(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DescribeCustomRoutingEndpointGroupError::InternalServiceError(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DescribeCustomRoutingEndpointGroupError::InvalidArgument(ref cause) => {
+                write!(f, "{}", cause)
+            }
+        }
+    }
+}
+impl Error for DescribeCustomRoutingEndpointGroupError {}
+/// Errors returned by DescribeCustomRoutingListener
+#[derive(Debug, PartialEq)]
+pub enum DescribeCustomRoutingListenerError {
+    /// <p>There was an internal error for AWS Global Accelerator.</p>
+    InternalServiceError(String),
+    /// <p>An argument that you specified is invalid.</p>
+    InvalidArgument(String),
+    /// <p>The listener that you specified doesn't exist.</p>
+    ListenerNotFound(String),
+}
+
+impl DescribeCustomRoutingListenerError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<DescribeCustomRoutingListenerError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "InternalServiceErrorException" => {
+                    return RusotoError::Service(
+                        DescribeCustomRoutingListenerError::InternalServiceError(err.msg),
+                    )
+                }
+                "InvalidArgumentException" => {
+                    return RusotoError::Service(
+                        DescribeCustomRoutingListenerError::InvalidArgument(err.msg),
+                    )
+                }
+                "ListenerNotFoundException" => {
+                    return RusotoError::Service(
+                        DescribeCustomRoutingListenerError::ListenerNotFound(err.msg),
+                    )
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for DescribeCustomRoutingListenerError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            DescribeCustomRoutingListenerError::InternalServiceError(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DescribeCustomRoutingListenerError::InvalidArgument(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DescribeCustomRoutingListenerError::ListenerNotFound(ref cause) => {
+                write!(f, "{}", cause)
+            }
+        }
+    }
+}
+impl Error for DescribeCustomRoutingListenerError {}
 /// Errors returned by DescribeEndpointGroup
 #[derive(Debug, PartialEq)]
 pub enum DescribeEndpointGroupError {
@@ -1610,6 +3175,334 @@ impl fmt::Display for ListByoipCidrsError {
     }
 }
 impl Error for ListByoipCidrsError {}
+/// Errors returned by ListCustomRoutingAccelerators
+#[derive(Debug, PartialEq)]
+pub enum ListCustomRoutingAcceleratorsError {
+    /// <p>There was an internal error for AWS Global Accelerator.</p>
+    InternalServiceError(String),
+    /// <p>An argument that you specified is invalid.</p>
+    InvalidArgument(String),
+    /// <p>There isn't another item to return.</p>
+    InvalidNextToken(String),
+}
+
+impl ListCustomRoutingAcceleratorsError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<ListCustomRoutingAcceleratorsError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "InternalServiceErrorException" => {
+                    return RusotoError::Service(
+                        ListCustomRoutingAcceleratorsError::InternalServiceError(err.msg),
+                    )
+                }
+                "InvalidArgumentException" => {
+                    return RusotoError::Service(
+                        ListCustomRoutingAcceleratorsError::InvalidArgument(err.msg),
+                    )
+                }
+                "InvalidNextTokenException" => {
+                    return RusotoError::Service(
+                        ListCustomRoutingAcceleratorsError::InvalidNextToken(err.msg),
+                    )
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for ListCustomRoutingAcceleratorsError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            ListCustomRoutingAcceleratorsError::InternalServiceError(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            ListCustomRoutingAcceleratorsError::InvalidArgument(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            ListCustomRoutingAcceleratorsError::InvalidNextToken(ref cause) => {
+                write!(f, "{}", cause)
+            }
+        }
+    }
+}
+impl Error for ListCustomRoutingAcceleratorsError {}
+/// Errors returned by ListCustomRoutingEndpointGroups
+#[derive(Debug, PartialEq)]
+pub enum ListCustomRoutingEndpointGroupsError {
+    /// <p>There was an internal error for AWS Global Accelerator.</p>
+    InternalServiceError(String),
+    /// <p>An argument that you specified is invalid.</p>
+    InvalidArgument(String),
+    /// <p>There isn't another item to return.</p>
+    InvalidNextToken(String),
+    /// <p>The listener that you specified doesn't exist.</p>
+    ListenerNotFound(String),
+}
+
+impl ListCustomRoutingEndpointGroupsError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<ListCustomRoutingEndpointGroupsError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "InternalServiceErrorException" => {
+                    return RusotoError::Service(
+                        ListCustomRoutingEndpointGroupsError::InternalServiceError(err.msg),
+                    )
+                }
+                "InvalidArgumentException" => {
+                    return RusotoError::Service(
+                        ListCustomRoutingEndpointGroupsError::InvalidArgument(err.msg),
+                    )
+                }
+                "InvalidNextTokenException" => {
+                    return RusotoError::Service(
+                        ListCustomRoutingEndpointGroupsError::InvalidNextToken(err.msg),
+                    )
+                }
+                "ListenerNotFoundException" => {
+                    return RusotoError::Service(
+                        ListCustomRoutingEndpointGroupsError::ListenerNotFound(err.msg),
+                    )
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for ListCustomRoutingEndpointGroupsError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            ListCustomRoutingEndpointGroupsError::InternalServiceError(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            ListCustomRoutingEndpointGroupsError::InvalidArgument(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            ListCustomRoutingEndpointGroupsError::InvalidNextToken(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            ListCustomRoutingEndpointGroupsError::ListenerNotFound(ref cause) => {
+                write!(f, "{}", cause)
+            }
+        }
+    }
+}
+impl Error for ListCustomRoutingEndpointGroupsError {}
+/// Errors returned by ListCustomRoutingListeners
+#[derive(Debug, PartialEq)]
+pub enum ListCustomRoutingListenersError {
+    /// <p>The accelerator that you specified doesn't exist.</p>
+    AcceleratorNotFound(String),
+    /// <p>There was an internal error for AWS Global Accelerator.</p>
+    InternalServiceError(String),
+    /// <p>An argument that you specified is invalid.</p>
+    InvalidArgument(String),
+    /// <p>There isn't another item to return.</p>
+    InvalidNextToken(String),
+}
+
+impl ListCustomRoutingListenersError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<ListCustomRoutingListenersError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "AcceleratorNotFoundException" => {
+                    return RusotoError::Service(
+                        ListCustomRoutingListenersError::AcceleratorNotFound(err.msg),
+                    )
+                }
+                "InternalServiceErrorException" => {
+                    return RusotoError::Service(
+                        ListCustomRoutingListenersError::InternalServiceError(err.msg),
+                    )
+                }
+                "InvalidArgumentException" => {
+                    return RusotoError::Service(ListCustomRoutingListenersError::InvalidArgument(
+                        err.msg,
+                    ))
+                }
+                "InvalidNextTokenException" => {
+                    return RusotoError::Service(ListCustomRoutingListenersError::InvalidNextToken(
+                        err.msg,
+                    ))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for ListCustomRoutingListenersError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            ListCustomRoutingListenersError::AcceleratorNotFound(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            ListCustomRoutingListenersError::InternalServiceError(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            ListCustomRoutingListenersError::InvalidArgument(ref cause) => write!(f, "{}", cause),
+            ListCustomRoutingListenersError::InvalidNextToken(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for ListCustomRoutingListenersError {}
+/// Errors returned by ListCustomRoutingPortMappings
+#[derive(Debug, PartialEq)]
+pub enum ListCustomRoutingPortMappingsError {
+    /// <p>The accelerator that you specified doesn't exist.</p>
+    AcceleratorNotFound(String),
+    /// <p>The endpoint group that you specified doesn't exist.</p>
+    EndpointGroupNotFound(String),
+    /// <p>There was an internal error for AWS Global Accelerator.</p>
+    InternalServiceError(String),
+    /// <p>An argument that you specified is invalid.</p>
+    InvalidArgument(String),
+    /// <p>There isn't another item to return.</p>
+    InvalidNextToken(String),
+}
+
+impl ListCustomRoutingPortMappingsError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<ListCustomRoutingPortMappingsError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "AcceleratorNotFoundException" => {
+                    return RusotoError::Service(
+                        ListCustomRoutingPortMappingsError::AcceleratorNotFound(err.msg),
+                    )
+                }
+                "EndpointGroupNotFoundException" => {
+                    return RusotoError::Service(
+                        ListCustomRoutingPortMappingsError::EndpointGroupNotFound(err.msg),
+                    )
+                }
+                "InternalServiceErrorException" => {
+                    return RusotoError::Service(
+                        ListCustomRoutingPortMappingsError::InternalServiceError(err.msg),
+                    )
+                }
+                "InvalidArgumentException" => {
+                    return RusotoError::Service(
+                        ListCustomRoutingPortMappingsError::InvalidArgument(err.msg),
+                    )
+                }
+                "InvalidNextTokenException" => {
+                    return RusotoError::Service(
+                        ListCustomRoutingPortMappingsError::InvalidNextToken(err.msg),
+                    )
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for ListCustomRoutingPortMappingsError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            ListCustomRoutingPortMappingsError::AcceleratorNotFound(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            ListCustomRoutingPortMappingsError::EndpointGroupNotFound(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            ListCustomRoutingPortMappingsError::InternalServiceError(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            ListCustomRoutingPortMappingsError::InvalidArgument(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            ListCustomRoutingPortMappingsError::InvalidNextToken(ref cause) => {
+                write!(f, "{}", cause)
+            }
+        }
+    }
+}
+impl Error for ListCustomRoutingPortMappingsError {}
+/// Errors returned by ListCustomRoutingPortMappingsByDestination
+#[derive(Debug, PartialEq)]
+pub enum ListCustomRoutingPortMappingsByDestinationError {
+    /// <p>The endpoint that you specified doesn't exist.</p>
+    EndpointNotFound(String),
+    /// <p>There was an internal error for AWS Global Accelerator.</p>
+    InternalServiceError(String),
+    /// <p>An argument that you specified is invalid.</p>
+    InvalidArgument(String),
+    /// <p>There isn't another item to return.</p>
+    InvalidNextToken(String),
+}
+
+impl ListCustomRoutingPortMappingsByDestinationError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<ListCustomRoutingPortMappingsByDestinationError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "EndpointNotFoundException" => {
+                    return RusotoError::Service(
+                        ListCustomRoutingPortMappingsByDestinationError::EndpointNotFound(err.msg),
+                    )
+                }
+                "InternalServiceErrorException" => {
+                    return RusotoError::Service(
+                        ListCustomRoutingPortMappingsByDestinationError::InternalServiceError(
+                            err.msg,
+                        ),
+                    )
+                }
+                "InvalidArgumentException" => {
+                    return RusotoError::Service(
+                        ListCustomRoutingPortMappingsByDestinationError::InvalidArgument(err.msg),
+                    )
+                }
+                "InvalidNextTokenException" => {
+                    return RusotoError::Service(
+                        ListCustomRoutingPortMappingsByDestinationError::InvalidNextToken(err.msg),
+                    )
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for ListCustomRoutingPortMappingsByDestinationError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            ListCustomRoutingPortMappingsByDestinationError::EndpointNotFound(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            ListCustomRoutingPortMappingsByDestinationError::InternalServiceError(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            ListCustomRoutingPortMappingsByDestinationError::InvalidArgument(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            ListCustomRoutingPortMappingsByDestinationError::InvalidNextToken(ref cause) => {
+                write!(f, "{}", cause)
+            }
+        }
+    }
+}
+impl Error for ListCustomRoutingPortMappingsByDestinationError {}
 /// Errors returned by ListEndpointGroups
 #[derive(Debug, PartialEq)]
 pub enum ListEndpointGroupsError {
@@ -1812,6 +3705,86 @@ impl fmt::Display for ProvisionByoipCidrError {
     }
 }
 impl Error for ProvisionByoipCidrError {}
+/// Errors returned by RemoveCustomRoutingEndpoints
+#[derive(Debug, PartialEq)]
+pub enum RemoveCustomRoutingEndpointsError {
+    /// <p>You don't have access permission.</p>
+    AccessDenied(String),
+    /// <p>You can't use both of those options.</p>
+    Conflict(String),
+    /// <p>The endpoint group that you specified doesn't exist.</p>
+    EndpointGroupNotFound(String),
+    /// <p>The endpoint that you specified doesn't exist.</p>
+    EndpointNotFound(String),
+    /// <p>There was an internal error for AWS Global Accelerator.</p>
+    InternalServiceError(String),
+    /// <p>An argument that you specified is invalid.</p>
+    InvalidArgument(String),
+}
+
+impl RemoveCustomRoutingEndpointsError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<RemoveCustomRoutingEndpointsError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "AccessDeniedException" => {
+                    return RusotoError::Service(RemoveCustomRoutingEndpointsError::AccessDenied(
+                        err.msg,
+                    ))
+                }
+                "ConflictException" => {
+                    return RusotoError::Service(RemoveCustomRoutingEndpointsError::Conflict(
+                        err.msg,
+                    ))
+                }
+                "EndpointGroupNotFoundException" => {
+                    return RusotoError::Service(
+                        RemoveCustomRoutingEndpointsError::EndpointGroupNotFound(err.msg),
+                    )
+                }
+                "EndpointNotFoundException" => {
+                    return RusotoError::Service(
+                        RemoveCustomRoutingEndpointsError::EndpointNotFound(err.msg),
+                    )
+                }
+                "InternalServiceErrorException" => {
+                    return RusotoError::Service(
+                        RemoveCustomRoutingEndpointsError::InternalServiceError(err.msg),
+                    )
+                }
+                "InvalidArgumentException" => {
+                    return RusotoError::Service(
+                        RemoveCustomRoutingEndpointsError::InvalidArgument(err.msg),
+                    )
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for RemoveCustomRoutingEndpointsError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            RemoveCustomRoutingEndpointsError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            RemoveCustomRoutingEndpointsError::Conflict(ref cause) => write!(f, "{}", cause),
+            RemoveCustomRoutingEndpointsError::EndpointGroupNotFound(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            RemoveCustomRoutingEndpointsError::EndpointNotFound(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            RemoveCustomRoutingEndpointsError::InternalServiceError(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            RemoveCustomRoutingEndpointsError::InvalidArgument(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for RemoveCustomRoutingEndpointsError {}
 /// Errors returned by TagResource
 #[derive(Debug, PartialEq)]
 pub enum TagResourceError {
@@ -2004,6 +3977,198 @@ impl fmt::Display for UpdateAcceleratorAttributesError {
     }
 }
 impl Error for UpdateAcceleratorAttributesError {}
+/// Errors returned by UpdateCustomRoutingAccelerator
+#[derive(Debug, PartialEq)]
+pub enum UpdateCustomRoutingAcceleratorError {
+    /// <p>The accelerator that you specified doesn't exist.</p>
+    AcceleratorNotFound(String),
+    /// <p>There was an internal error for AWS Global Accelerator.</p>
+    InternalServiceError(String),
+    /// <p>An argument that you specified is invalid.</p>
+    InvalidArgument(String),
+}
+
+impl UpdateCustomRoutingAcceleratorError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<UpdateCustomRoutingAcceleratorError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "AcceleratorNotFoundException" => {
+                    return RusotoError::Service(
+                        UpdateCustomRoutingAcceleratorError::AcceleratorNotFound(err.msg),
+                    )
+                }
+                "InternalServiceErrorException" => {
+                    return RusotoError::Service(
+                        UpdateCustomRoutingAcceleratorError::InternalServiceError(err.msg),
+                    )
+                }
+                "InvalidArgumentException" => {
+                    return RusotoError::Service(
+                        UpdateCustomRoutingAcceleratorError::InvalidArgument(err.msg),
+                    )
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for UpdateCustomRoutingAcceleratorError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            UpdateCustomRoutingAcceleratorError::AcceleratorNotFound(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            UpdateCustomRoutingAcceleratorError::InternalServiceError(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            UpdateCustomRoutingAcceleratorError::InvalidArgument(ref cause) => {
+                write!(f, "{}", cause)
+            }
+        }
+    }
+}
+impl Error for UpdateCustomRoutingAcceleratorError {}
+/// Errors returned by UpdateCustomRoutingAcceleratorAttributes
+#[derive(Debug, PartialEq)]
+pub enum UpdateCustomRoutingAcceleratorAttributesError {
+    /// <p>The accelerator that you specified doesn't exist.</p>
+    AcceleratorNotFound(String),
+    /// <p>You don't have access permission.</p>
+    AccessDenied(String),
+    /// <p>There was an internal error for AWS Global Accelerator.</p>
+    InternalServiceError(String),
+    /// <p>An argument that you specified is invalid.</p>
+    InvalidArgument(String),
+}
+
+impl UpdateCustomRoutingAcceleratorAttributesError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<UpdateCustomRoutingAcceleratorAttributesError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "AcceleratorNotFoundException" => {
+                    return RusotoError::Service(
+                        UpdateCustomRoutingAcceleratorAttributesError::AcceleratorNotFound(err.msg),
+                    )
+                }
+                "AccessDeniedException" => {
+                    return RusotoError::Service(
+                        UpdateCustomRoutingAcceleratorAttributesError::AccessDenied(err.msg),
+                    )
+                }
+                "InternalServiceErrorException" => {
+                    return RusotoError::Service(
+                        UpdateCustomRoutingAcceleratorAttributesError::InternalServiceError(
+                            err.msg,
+                        ),
+                    )
+                }
+                "InvalidArgumentException" => {
+                    return RusotoError::Service(
+                        UpdateCustomRoutingAcceleratorAttributesError::InvalidArgument(err.msg),
+                    )
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for UpdateCustomRoutingAcceleratorAttributesError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            UpdateCustomRoutingAcceleratorAttributesError::AcceleratorNotFound(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            UpdateCustomRoutingAcceleratorAttributesError::AccessDenied(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            UpdateCustomRoutingAcceleratorAttributesError::InternalServiceError(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            UpdateCustomRoutingAcceleratorAttributesError::InvalidArgument(ref cause) => {
+                write!(f, "{}", cause)
+            }
+        }
+    }
+}
+impl Error for UpdateCustomRoutingAcceleratorAttributesError {}
+/// Errors returned by UpdateCustomRoutingListener
+#[derive(Debug, PartialEq)]
+pub enum UpdateCustomRoutingListenerError {
+    /// <p>There was an internal error for AWS Global Accelerator.</p>
+    InternalServiceError(String),
+    /// <p>An argument that you specified is invalid.</p>
+    InvalidArgument(String),
+    /// <p>The port numbers that you specified are not valid numbers or are not unique for this accelerator.</p>
+    InvalidPortRange(String),
+    /// <p>Processing your request would cause you to exceed an AWS Global Accelerator limit.</p>
+    LimitExceeded(String),
+    /// <p>The listener that you specified doesn't exist.</p>
+    ListenerNotFound(String),
+}
+
+impl UpdateCustomRoutingListenerError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<UpdateCustomRoutingListenerError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "InternalServiceErrorException" => {
+                    return RusotoError::Service(
+                        UpdateCustomRoutingListenerError::InternalServiceError(err.msg),
+                    )
+                }
+                "InvalidArgumentException" => {
+                    return RusotoError::Service(UpdateCustomRoutingListenerError::InvalidArgument(
+                        err.msg,
+                    ))
+                }
+                "InvalidPortRangeException" => {
+                    return RusotoError::Service(
+                        UpdateCustomRoutingListenerError::InvalidPortRange(err.msg),
+                    )
+                }
+                "LimitExceededException" => {
+                    return RusotoError::Service(UpdateCustomRoutingListenerError::LimitExceeded(
+                        err.msg,
+                    ))
+                }
+                "ListenerNotFoundException" => {
+                    return RusotoError::Service(
+                        UpdateCustomRoutingListenerError::ListenerNotFound(err.msg),
+                    )
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for UpdateCustomRoutingListenerError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            UpdateCustomRoutingListenerError::InternalServiceError(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            UpdateCustomRoutingListenerError::InvalidArgument(ref cause) => write!(f, "{}", cause),
+            UpdateCustomRoutingListenerError::InvalidPortRange(ref cause) => write!(f, "{}", cause),
+            UpdateCustomRoutingListenerError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            UpdateCustomRoutingListenerError::ListenerNotFound(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for UpdateCustomRoutingListenerError {}
 /// Errors returned by UpdateEndpointGroup
 #[derive(Debug, PartialEq)]
 pub enum UpdateEndpointGroupError {
@@ -2177,25 +4342,61 @@ impl Error for WithdrawByoipCidrError {}
 /// Trait representing the capabilities of the AWS Global Accelerator API. AWS Global Accelerator clients implement this trait.
 #[async_trait]
 pub trait GlobalAccelerator {
-    /// <p>Advertises an IPv4 address range that is provisioned for use with your AWS resources through bring your own IP addresses (BYOIP). It can take a few minutes before traffic to the specified addresses starts routing to AWS because of propagation delays. To see an AWS CLI example of advertising an address range, scroll down to <b>Example</b>.</p> <p>To stop advertising the BYOIP address range, use <a href="https://docs.aws.amazon.com/global-accelerator/latest/api/WithdrawByoipCidr.html"> WithdrawByoipCidr</a>.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/global-accelerator/latest/dg/using-byoip.html">Bring Your Own IP Addresses (BYOIP)</a> in the <i>AWS Global Accelerator Developer Guide</i>.</p>
+    /// <p>Associate a virtual private cloud (VPC) subnet endpoint with your custom routing accelerator.</p> <p>The listener port range must be large enough to support the number of IP addresses that can be specified in your subnet. The number of ports required is: subnet size times the number of ports per destination EC2 instances. For example, a subnet defined as /24 requires a listener port range of at least 255 ports. </p> <p>Note: You must have enough remaining listener ports available to map to the subnet ports, or the call will fail with a LimitExceededException.</p> <p>By default, all destinations in a subnet in a custom routing accelerator cannot receive traffic. To enable all destinations to receive traffic, or to specify individual port mappings that can receive traffic, see the <a href="https://docs.aws.amazon.com/global-accelerator/latest/api/API_AllowCustomRoutingTraffic.html"> AllowCustomRoutingTraffic</a> operation.</p>
+    async fn add_custom_routing_endpoints(
+        &self,
+        input: AddCustomRoutingEndpointsRequest,
+    ) -> Result<AddCustomRoutingEndpointsResponse, RusotoError<AddCustomRoutingEndpointsError>>;
+
+    /// <p>Advertises an IPv4 address range that is provisioned for use with your AWS resources through bring your own IP addresses (BYOIP). It can take a few minutes before traffic to the specified addresses starts routing to AWS because of propagation delays. </p> <p>To stop advertising the BYOIP address range, use <a href="https://docs.aws.amazon.com/global-accelerator/latest/api/WithdrawByoipCidr.html"> WithdrawByoipCidr</a>.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/global-accelerator/latest/dg/using-byoip.html">Bring Your Own IP Addresses (BYOIP)</a> in the <i>AWS Global Accelerator Developer Guide</i>.</p>
     async fn advertise_byoip_cidr(
         &self,
         input: AdvertiseByoipCidrRequest,
     ) -> Result<AdvertiseByoipCidrResponse, RusotoError<AdvertiseByoipCidrError>>;
 
-    /// <p><p>Create an accelerator. An accelerator includes one or more listeners that process inbound connections and direct traffic to one or more endpoint groups, each of which includes endpoints, such as Network Load Balancers. To see an AWS CLI example of creating an accelerator, scroll down to <b>Example</b>.</p> <p>If you bring your own IP address ranges to AWS Global Accelerator (BYOIP), you can assign IP addresses from your own pool to your accelerator as the static IP address entry points. Only one IP address from each of your IP address ranges can be used for each accelerator.</p> <important> <p>You must specify the US West (Oregon) Region to create or update accelerators.</p> </important></p>
+    /// <p>Specify the Amazon EC2 instance (destination) IP addresses and ports for a VPC subnet endpoint that can receive traffic for a custom routing accelerator. You can allow traffic to all destinations in the subnet endpoint, or allow traffic to a specified list of destination IP addresses and ports in the subnet. Note that you cannot specify IP addresses or ports outside of the range that you configured for the endpoint group.</p> <p>After you make changes, you can verify that the updates are complete by checking the status of your accelerator: the status changes from IN_PROGRESS to DEPLOYED.</p>
+    async fn allow_custom_routing_traffic(
+        &self,
+        input: AllowCustomRoutingTrafficRequest,
+    ) -> Result<(), RusotoError<AllowCustomRoutingTrafficError>>;
+
+    /// <p><p>Create an accelerator. An accelerator includes one or more listeners that process inbound connections and direct traffic to one or more endpoint groups, each of which includes endpoints, such as Network Load Balancers. </p> <important> <p>Global Accelerator is a global service that supports endpoints in multiple AWS Regions but you must specify the US West (Oregon) Region to create or update accelerators.</p> </important></p>
     async fn create_accelerator(
         &self,
         input: CreateAcceleratorRequest,
     ) -> Result<CreateAcceleratorResponse, RusotoError<CreateAcceleratorError>>;
 
-    /// <p>Create an endpoint group for the specified listener. An endpoint group is a collection of endpoints in one AWS Region. To see an AWS CLI example of creating an endpoint group, scroll down to <b>Example</b>.</p>
+    /// <p>Create a custom routing accelerator. A custom routing accelerator directs traffic to one of possibly thousands of Amazon EC2 instance destinations running in a single or multiple virtual private clouds (VPC) subnet endpoints.</p> <p>Be aware that, by default, all destination EC2 instances in a VPC subnet endpoint cannot receive traffic. To enable all destinations to receive traffic, or to specify individual port mappings that can receive traffic, see the <a href="https://docs.aws.amazon.com/global-accelerator/latest/api/API_AllowCustomRoutingTraffic.html"> AllowCustomRoutingTraffic</a> operation.</p>
+    async fn create_custom_routing_accelerator(
+        &self,
+        input: CreateCustomRoutingAcceleratorRequest,
+    ) -> Result<
+        CreateCustomRoutingAcceleratorResponse,
+        RusotoError<CreateCustomRoutingAcceleratorError>,
+    >;
+
+    /// <p>Create an endpoint group for the specified listener for a custom routing accelerator. An endpoint group is a collection of endpoints in one AWS Region. </p>
+    async fn create_custom_routing_endpoint_group(
+        &self,
+        input: CreateCustomRoutingEndpointGroupRequest,
+    ) -> Result<
+        CreateCustomRoutingEndpointGroupResponse,
+        RusotoError<CreateCustomRoutingEndpointGroupError>,
+    >;
+
+    /// <p>Create a listener to process inbound connections from clients to a custom routing accelerator. Connections arrive to assigned static IP addresses on the port range that you specify. </p>
+    async fn create_custom_routing_listener(
+        &self,
+        input: CreateCustomRoutingListenerRequest,
+    ) -> Result<CreateCustomRoutingListenerResponse, RusotoError<CreateCustomRoutingListenerError>>;
+
+    /// <p>Create an endpoint group for the specified listener. An endpoint group is a collection of endpoints in one AWS Region. A resource must be valid and active when you add it as an endpoint.</p>
     async fn create_endpoint_group(
         &self,
         input: CreateEndpointGroupRequest,
     ) -> Result<CreateEndpointGroupResponse, RusotoError<CreateEndpointGroupError>>;
 
-    /// <p>Create a listener to process inbound connections from clients to an accelerator. Connections arrive to assigned static IP addresses on a port, port range, or list of port ranges that you specify. To see an AWS CLI example of creating a listener, scroll down to <b>Example</b>.</p>
+    /// <p>Create a listener to process inbound connections from clients to an accelerator. Connections arrive to assigned static IP addresses on a port, port range, or list of port ranges that you specify. </p>
     async fn create_listener(
         &self,
         input: CreateListenerRequest,
@@ -2206,6 +4407,24 @@ pub trait GlobalAccelerator {
         &self,
         input: DeleteAcceleratorRequest,
     ) -> Result<(), RusotoError<DeleteAcceleratorError>>;
+
+    /// <p><p>Delete a custom routing accelerator. Before you can delete an accelerator, you must disable it and remove all dependent resources (listeners and endpoint groups). To disable the accelerator, update the accelerator to set <code>Enabled</code> to false.</p> <important> <p>When you create a custom routing accelerator, by default, Global Accelerator provides you with a set of two static IP addresses. </p> <p>The IP addresses are assigned to your accelerator for as long as it exists, even if you disable the accelerator and it no longer accepts or routes traffic. However, when you <i>delete</i> an accelerator, you lose the static IP addresses that are assigned to the accelerator, so you can no longer route traffic by using them. As a best practice, ensure that you have permissions in place to avoid inadvertently deleting accelerators. You can use IAM policies with Global Accelerator to limit the users who have permissions to delete an accelerator. For more information, see <a href="https://docs.aws.amazon.com/global-accelerator/latest/dg/auth-and-access-control.html">Authentication and Access Control</a> in the <i>AWS Global Accelerator Developer Guide</i>.</p> </important></p>
+    async fn delete_custom_routing_accelerator(
+        &self,
+        input: DeleteCustomRoutingAcceleratorRequest,
+    ) -> Result<(), RusotoError<DeleteCustomRoutingAcceleratorError>>;
+
+    /// <p>Delete an endpoint group from a listener for a custom routing accelerator.</p>
+    async fn delete_custom_routing_endpoint_group(
+        &self,
+        input: DeleteCustomRoutingEndpointGroupRequest,
+    ) -> Result<(), RusotoError<DeleteCustomRoutingEndpointGroupError>>;
+
+    /// <p>Delete a listener for a custom routing accelerator.</p>
+    async fn delete_custom_routing_listener(
+        &self,
+        input: DeleteCustomRoutingListenerRequest,
+    ) -> Result<(), RusotoError<DeleteCustomRoutingListenerError>>;
 
     /// <p>Delete an endpoint group from a listener.</p>
     async fn delete_endpoint_group(
@@ -2219,19 +4438,25 @@ pub trait GlobalAccelerator {
         input: DeleteListenerRequest,
     ) -> Result<(), RusotoError<DeleteListenerError>>;
 
-    /// <p>Releases the specified address range that you provisioned to use with your AWS resources through bring your own IP addresses (BYOIP) and deletes the corresponding address pool. To see an AWS CLI example of deprovisioning an address range, scroll down to <b>Example</b>.</p> <p>Before you can release an address range, you must stop advertising it by using <a href="https://docs.aws.amazon.com/global-accelerator/latest/api/WithdrawByoipCidr.html">WithdrawByoipCidr</a> and you must not have any accelerators that are using static IP addresses allocated from its address range. </p> <p>For more information, see <a href="https://docs.aws.amazon.com/global-accelerator/latest/dg/using-byoip.html">Bring Your Own IP Addresses (BYOIP)</a> in the <i>AWS Global Accelerator Developer Guide</i>.</p>
+    /// <p>Specify the Amazon EC2 instance (destination) IP addresses and ports for a VPC subnet endpoint that cannot receive traffic for a custom routing accelerator. You can deny traffic to all destinations in the VPC endpoint, or deny traffic to a specified list of destination IP addresses and ports. Note that you cannot specify IP addresses or ports outside of the range that you configured for the endpoint group.</p> <p>After you make changes, you can verify that the updates are complete by checking the status of your accelerator: the status changes from IN_PROGRESS to DEPLOYED.</p>
+    async fn deny_custom_routing_traffic(
+        &self,
+        input: DenyCustomRoutingTrafficRequest,
+    ) -> Result<(), RusotoError<DenyCustomRoutingTrafficError>>;
+
+    /// <p>Releases the specified address range that you provisioned to use with your AWS resources through bring your own IP addresses (BYOIP) and deletes the corresponding address pool. </p> <p>Before you can release an address range, you must stop advertising it by using <a href="https://docs.aws.amazon.com/global-accelerator/latest/api/WithdrawByoipCidr.html">WithdrawByoipCidr</a> and you must not have any accelerators that are using static IP addresses allocated from its address range. </p> <p>For more information, see <a href="https://docs.aws.amazon.com/global-accelerator/latest/dg/using-byoip.html">Bring Your Own IP Addresses (BYOIP)</a> in the <i>AWS Global Accelerator Developer Guide</i>.</p>
     async fn deprovision_byoip_cidr(
         &self,
         input: DeprovisionByoipCidrRequest,
     ) -> Result<DeprovisionByoipCidrResponse, RusotoError<DeprovisionByoipCidrError>>;
 
-    /// <p>Describe an accelerator. To see an AWS CLI example of describing an accelerator, scroll down to <b>Example</b>.</p>
+    /// <p>Describe an accelerator. </p>
     async fn describe_accelerator(
         &self,
         input: DescribeAcceleratorRequest,
     ) -> Result<DescribeAcceleratorResponse, RusotoError<DescribeAcceleratorError>>;
 
-    /// <p>Describe the attributes of an accelerator. To see an AWS CLI example of describing the attributes of an accelerator, scroll down to <b>Example</b>.</p>
+    /// <p>Describe the attributes of an accelerator. </p>
     async fn describe_accelerator_attributes(
         &self,
         input: DescribeAcceleratorAttributesRequest,
@@ -2240,91 +4465,199 @@ pub trait GlobalAccelerator {
         RusotoError<DescribeAcceleratorAttributesError>,
     >;
 
-    /// <p>Describe an endpoint group. To see an AWS CLI example of describing an endpoint group, scroll down to <b>Example</b>.</p>
+    /// <p>Describe a custom routing accelerator. </p>
+    async fn describe_custom_routing_accelerator(
+        &self,
+        input: DescribeCustomRoutingAcceleratorRequest,
+    ) -> Result<
+        DescribeCustomRoutingAcceleratorResponse,
+        RusotoError<DescribeCustomRoutingAcceleratorError>,
+    >;
+
+    /// <p>Describe the attributes of a custom routing accelerator. </p>
+    async fn describe_custom_routing_accelerator_attributes(
+        &self,
+        input: DescribeCustomRoutingAcceleratorAttributesRequest,
+    ) -> Result<
+        DescribeCustomRoutingAcceleratorAttributesResponse,
+        RusotoError<DescribeCustomRoutingAcceleratorAttributesError>,
+    >;
+
+    /// <p>Describe an endpoint group for a custom routing accelerator. </p>
+    async fn describe_custom_routing_endpoint_group(
+        &self,
+        input: DescribeCustomRoutingEndpointGroupRequest,
+    ) -> Result<
+        DescribeCustomRoutingEndpointGroupResponse,
+        RusotoError<DescribeCustomRoutingEndpointGroupError>,
+    >;
+
+    /// <p>The description of a listener for a custom routing accelerator.</p>
+    async fn describe_custom_routing_listener(
+        &self,
+        input: DescribeCustomRoutingListenerRequest,
+    ) -> Result<
+        DescribeCustomRoutingListenerResponse,
+        RusotoError<DescribeCustomRoutingListenerError>,
+    >;
+
+    /// <p>Describe an endpoint group. </p>
     async fn describe_endpoint_group(
         &self,
         input: DescribeEndpointGroupRequest,
     ) -> Result<DescribeEndpointGroupResponse, RusotoError<DescribeEndpointGroupError>>;
 
-    /// <p>Describe a listener. To see an AWS CLI example of describing a listener, scroll down to <b>Example</b>.</p>
+    /// <p>Describe a listener. </p>
     async fn describe_listener(
         &self,
         input: DescribeListenerRequest,
     ) -> Result<DescribeListenerResponse, RusotoError<DescribeListenerError>>;
 
-    /// <p>List the accelerators for an AWS account. To see an AWS CLI example of listing the accelerators for an AWS account, scroll down to <b>Example</b>.</p>
+    /// <p>List the accelerators for an AWS account. </p>
     async fn list_accelerators(
         &self,
         input: ListAcceleratorsRequest,
     ) -> Result<ListAcceleratorsResponse, RusotoError<ListAcceleratorsError>>;
 
-    /// <p>Lists the IP address ranges that were specified in calls to <a href="https://docs.aws.amazon.com/global-accelerator/latest/api/ProvisionByoipCidr.html">ProvisionByoipCidr</a>, including the current state and a history of state changes.</p> <p>To see an AWS CLI example of listing BYOIP CIDR addresses, scroll down to <b>Example</b>.</p>
+    /// <p>Lists the IP address ranges that were specified in calls to <a href="https://docs.aws.amazon.com/global-accelerator/latest/api/ProvisionByoipCidr.html">ProvisionByoipCidr</a>, including the current state and a history of state changes.</p>
     async fn list_byoip_cidrs(
         &self,
         input: ListByoipCidrsRequest,
     ) -> Result<ListByoipCidrsResponse, RusotoError<ListByoipCidrsError>>;
 
-    /// <p>List the endpoint groups that are associated with a listener. To see an AWS CLI example of listing the endpoint groups for listener, scroll down to <b>Example</b>.</p>
+    /// <p>List the custom routing accelerators for an AWS account. </p>
+    async fn list_custom_routing_accelerators(
+        &self,
+        input: ListCustomRoutingAcceleratorsRequest,
+    ) -> Result<
+        ListCustomRoutingAcceleratorsResponse,
+        RusotoError<ListCustomRoutingAcceleratorsError>,
+    >;
+
+    /// <p>List the endpoint groups that are associated with a listener for a custom routing accelerator. </p>
+    async fn list_custom_routing_endpoint_groups(
+        &self,
+        input: ListCustomRoutingEndpointGroupsRequest,
+    ) -> Result<
+        ListCustomRoutingEndpointGroupsResponse,
+        RusotoError<ListCustomRoutingEndpointGroupsError>,
+    >;
+
+    /// <p>List the listeners for a custom routing accelerator. </p>
+    async fn list_custom_routing_listeners(
+        &self,
+        input: ListCustomRoutingListenersRequest,
+    ) -> Result<ListCustomRoutingListenersResponse, RusotoError<ListCustomRoutingListenersError>>;
+
+    /// <p>Provides a complete mapping from the public accelerator IP address and port to destination EC2 instance IP addresses and ports in the virtual public cloud (VPC) subnet endpoint for a custom routing accelerator. For each subnet endpoint that you add, Global Accelerator creates a new static port mapping for the accelerator. The port mappings don't change after Global Accelerator generates them, so you can retrieve and cache the full mapping on your servers. </p> <p>If you remove a subnet from your accelerator, Global Accelerator removes (reclaims) the port mappings. If you add a subnet to your accelerator, Global Accelerator creates new port mappings (the existing ones don't change). If you add or remove EC2 instances in your subnet, the port mappings don't change, because the mappings are created when you add the subnet to Global Accelerator.</p> <p>The mappings also include a flag for each destination denoting which destination IP addresses and ports are allowed or denied traffic.</p>
+    async fn list_custom_routing_port_mappings(
+        &self,
+        input: ListCustomRoutingPortMappingsRequest,
+    ) -> Result<
+        ListCustomRoutingPortMappingsResponse,
+        RusotoError<ListCustomRoutingPortMappingsError>,
+    >;
+
+    /// <p>List the port mappings for a specific EC2 instance (destination) in a VPC subnet endpoint. The response is the mappings for one destination IP address. This is useful when your subnet endpoint has mappings that span multiple custom routing accelerators in your account, or for scenarios where you only want to list the port mappings for a specific destination instance.</p>
+    async fn list_custom_routing_port_mappings_by_destination(
+        &self,
+        input: ListCustomRoutingPortMappingsByDestinationRequest,
+    ) -> Result<
+        ListCustomRoutingPortMappingsByDestinationResponse,
+        RusotoError<ListCustomRoutingPortMappingsByDestinationError>,
+    >;
+
+    /// <p>List the endpoint groups that are associated with a listener. </p>
     async fn list_endpoint_groups(
         &self,
         input: ListEndpointGroupsRequest,
     ) -> Result<ListEndpointGroupsResponse, RusotoError<ListEndpointGroupsError>>;
 
-    /// <p>List the listeners for an accelerator. To see an AWS CLI example of listing the listeners for an accelerator, scroll down to <b>Example</b>.</p>
+    /// <p>List the listeners for an accelerator. </p>
     async fn list_listeners(
         &self,
         input: ListListenersRequest,
     ) -> Result<ListListenersResponse, RusotoError<ListListenersError>>;
 
-    /// <p>List all tags for an accelerator. To see an AWS CLI example of listing tags for an accelerator, scroll down to <b>Example</b>.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/global-accelerator/latest/dg/tagging-in-global-accelerator.html">Tagging in AWS Global Accelerator</a> in the <i>AWS Global Accelerator Developer Guide</i>. </p>
+    /// <p>List all tags for an accelerator. </p> <p>For more information, see <a href="https://docs.aws.amazon.com/global-accelerator/latest/dg/tagging-in-global-accelerator.html">Tagging in AWS Global Accelerator</a> in the <i>AWS Global Accelerator Developer Guide</i>. </p>
     async fn list_tags_for_resource(
         &self,
         input: ListTagsForResourceRequest,
     ) -> Result<ListTagsForResourceResponse, RusotoError<ListTagsForResourceError>>;
 
-    /// <p>Provisions an IP address range to use with your AWS resources through bring your own IP addresses (BYOIP) and creates a corresponding address pool. After the address range is provisioned, it is ready to be advertised using <a href="https://docs.aws.amazon.com/global-accelerator/latest/api/AdvertiseByoipCidr.html"> AdvertiseByoipCidr</a>.</p> <p>To see an AWS CLI example of provisioning an address range for BYOIP, scroll down to <b>Example</b>.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/global-accelerator/latest/dg/using-byoip.html">Bring Your Own IP Addresses (BYOIP)</a> in the <i>AWS Global Accelerator Developer Guide</i>.</p>
+    /// <p>Provisions an IP address range to use with your AWS resources through bring your own IP addresses (BYOIP) and creates a corresponding address pool. After the address range is provisioned, it is ready to be advertised using <a href="https://docs.aws.amazon.com/global-accelerator/latest/api/AdvertiseByoipCidr.html"> AdvertiseByoipCidr</a>.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/global-accelerator/latest/dg/using-byoip.html">Bring Your Own IP Addresses (BYOIP)</a> in the <i>AWS Global Accelerator Developer Guide</i>.</p>
     async fn provision_byoip_cidr(
         &self,
         input: ProvisionByoipCidrRequest,
     ) -> Result<ProvisionByoipCidrResponse, RusotoError<ProvisionByoipCidrError>>;
 
-    /// <p>Add tags to an accelerator resource. To see an AWS CLI example of adding tags to an accelerator, scroll down to <b>Example</b>.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/global-accelerator/latest/dg/tagging-in-global-accelerator.html">Tagging in AWS Global Accelerator</a> in the <i>AWS Global Accelerator Developer Guide</i>. </p>
+    /// <p>Remove endpoints from a custom routing accelerator.</p>
+    async fn remove_custom_routing_endpoints(
+        &self,
+        input: RemoveCustomRoutingEndpointsRequest,
+    ) -> Result<(), RusotoError<RemoveCustomRoutingEndpointsError>>;
+
+    /// <p>Add tags to an accelerator resource. </p> <p>For more information, see <a href="https://docs.aws.amazon.com/global-accelerator/latest/dg/tagging-in-global-accelerator.html">Tagging in AWS Global Accelerator</a> in the <i>AWS Global Accelerator Developer Guide</i>. </p>
     async fn tag_resource(
         &self,
         input: TagResourceRequest,
     ) -> Result<TagResourceResponse, RusotoError<TagResourceError>>;
 
-    /// <p>Remove tags from a Global Accelerator resource. When you specify a tag key, the action removes both that key and its associated value. To see an AWS CLI example of removing tags from an accelerator, scroll down to <b>Example</b>. The operation succeeds even if you attempt to remove tags from an accelerator that was already removed.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/global-accelerator/latest/dg/tagging-in-global-accelerator.html">Tagging in AWS Global Accelerator</a> in the <i>AWS Global Accelerator Developer Guide</i>.</p>
+    /// <p>Remove tags from a Global Accelerator resource. When you specify a tag key, the action removes both that key and its associated value. The operation succeeds even if you attempt to remove tags from an accelerator that was already removed.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/global-accelerator/latest/dg/tagging-in-global-accelerator.html">Tagging in AWS Global Accelerator</a> in the <i>AWS Global Accelerator Developer Guide</i>.</p>
     async fn untag_resource(
         &self,
         input: UntagResourceRequest,
     ) -> Result<UntagResourceResponse, RusotoError<UntagResourceError>>;
 
-    /// <p><p>Update an accelerator. To see an AWS CLI example of updating an accelerator, scroll down to <b>Example</b>.</p> <important> <p>You must specify the US West (Oregon) Region to create or update accelerators.</p> </important></p>
+    /// <p><p>Update an accelerator. </p> <important> <p>Global Accelerator is a global service that supports endpoints in multiple AWS Regions but you must specify the US West (Oregon) Region to create or update accelerators.</p> </important></p>
     async fn update_accelerator(
         &self,
         input: UpdateAcceleratorRequest,
     ) -> Result<UpdateAcceleratorResponse, RusotoError<UpdateAcceleratorError>>;
 
-    /// <p>Update the attributes for an accelerator. To see an AWS CLI example of updating an accelerator to enable flow logs, scroll down to <b>Example</b>.</p>
+    /// <p>Update the attributes for an accelerator. </p>
     async fn update_accelerator_attributes(
         &self,
         input: UpdateAcceleratorAttributesRequest,
     ) -> Result<UpdateAcceleratorAttributesResponse, RusotoError<UpdateAcceleratorAttributesError>>;
 
-    /// <p>Update an endpoint group. To see an AWS CLI example of updating an endpoint group, scroll down to <b>Example</b>.</p>
+    /// <p>Update a custom routing accelerator. </p>
+    async fn update_custom_routing_accelerator(
+        &self,
+        input: UpdateCustomRoutingAcceleratorRequest,
+    ) -> Result<
+        UpdateCustomRoutingAcceleratorResponse,
+        RusotoError<UpdateCustomRoutingAcceleratorError>,
+    >;
+
+    /// <p>Update the attributes for a custom routing accelerator. </p>
+    async fn update_custom_routing_accelerator_attributes(
+        &self,
+        input: UpdateCustomRoutingAcceleratorAttributesRequest,
+    ) -> Result<
+        UpdateCustomRoutingAcceleratorAttributesResponse,
+        RusotoError<UpdateCustomRoutingAcceleratorAttributesError>,
+    >;
+
+    /// <p>Update a listener for a custom routing accelerator. </p>
+    async fn update_custom_routing_listener(
+        &self,
+        input: UpdateCustomRoutingListenerRequest,
+    ) -> Result<UpdateCustomRoutingListenerResponse, RusotoError<UpdateCustomRoutingListenerError>>;
+
+    /// <p>Update an endpoint group. A resource must be valid and active when you add it as an endpoint.</p>
     async fn update_endpoint_group(
         &self,
         input: UpdateEndpointGroupRequest,
     ) -> Result<UpdateEndpointGroupResponse, RusotoError<UpdateEndpointGroupError>>;
 
-    /// <p>Update a listener. To see an AWS CLI example of updating listener, scroll down to <b>Example</b>.</p>
+    /// <p>Update a listener. </p>
     async fn update_listener(
         &self,
         input: UpdateListenerRequest,
     ) -> Result<UpdateListenerResponse, RusotoError<UpdateListenerError>>;
 
-    /// <p>Stops advertising an address range that is provisioned as an address pool. You can perform this operation at most once every 10 seconds, even if you specify different address ranges each time. To see an AWS CLI example of withdrawing an address range for BYOIP so it will no longer be advertised by AWS, scroll down to <b>Example</b>.</p> <p>It can take a few minutes before traffic to the specified addresses stops routing to AWS because of propagation delays.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/global-accelerator/latest/dg/using-byoip.html">Bring Your Own IP Addresses (BYOIP)</a> in the <i>AWS Global Accelerator Developer Guide</i>.</p>
+    /// <p>Stops advertising an address range that is provisioned as an address pool. You can perform this operation at most once every 10 seconds, even if you specify different address ranges each time.</p> <p>It can take a few minutes before traffic to the specified addresses stops routing to AWS because of propagation delays.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/global-accelerator/latest/dg/using-byoip.html">Bring Your Own IP Addresses (BYOIP)</a> in the <i>AWS Global Accelerator Developer Guide</i>.</p>
     async fn withdraw_byoip_cidr(
         &self,
         input: WithdrawByoipCidrRequest,
@@ -2370,7 +4703,30 @@ impl GlobalAcceleratorClient {
 
 #[async_trait]
 impl GlobalAccelerator for GlobalAcceleratorClient {
-    /// <p>Advertises an IPv4 address range that is provisioned for use with your AWS resources through bring your own IP addresses (BYOIP). It can take a few minutes before traffic to the specified addresses starts routing to AWS because of propagation delays. To see an AWS CLI example of advertising an address range, scroll down to <b>Example</b>.</p> <p>To stop advertising the BYOIP address range, use <a href="https://docs.aws.amazon.com/global-accelerator/latest/api/WithdrawByoipCidr.html"> WithdrawByoipCidr</a>.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/global-accelerator/latest/dg/using-byoip.html">Bring Your Own IP Addresses (BYOIP)</a> in the <i>AWS Global Accelerator Developer Guide</i>.</p>
+    /// <p>Associate a virtual private cloud (VPC) subnet endpoint with your custom routing accelerator.</p> <p>The listener port range must be large enough to support the number of IP addresses that can be specified in your subnet. The number of ports required is: subnet size times the number of ports per destination EC2 instances. For example, a subnet defined as /24 requires a listener port range of at least 255 ports. </p> <p>Note: You must have enough remaining listener ports available to map to the subnet ports, or the call will fail with a LimitExceededException.</p> <p>By default, all destinations in a subnet in a custom routing accelerator cannot receive traffic. To enable all destinations to receive traffic, or to specify individual port mappings that can receive traffic, see the <a href="https://docs.aws.amazon.com/global-accelerator/latest/api/API_AllowCustomRoutingTraffic.html"> AllowCustomRoutingTraffic</a> operation.</p>
+    async fn add_custom_routing_endpoints(
+        &self,
+        input: AddCustomRoutingEndpointsRequest,
+    ) -> Result<AddCustomRoutingEndpointsResponse, RusotoError<AddCustomRoutingEndpointsError>>
+    {
+        let mut request = self.new_signed_request("POST", "/");
+        request.add_header(
+            "x-amz-target",
+            "GlobalAccelerator_V20180706.AddCustomRoutingEndpoints",
+        );
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        let response = self
+            .sign_and_dispatch(request, AddCustomRoutingEndpointsError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<AddCustomRoutingEndpointsResponse, _>()
+    }
+
+    /// <p>Advertises an IPv4 address range that is provisioned for use with your AWS resources through bring your own IP addresses (BYOIP). It can take a few minutes before traffic to the specified addresses starts routing to AWS because of propagation delays. </p> <p>To stop advertising the BYOIP address range, use <a href="https://docs.aws.amazon.com/global-accelerator/latest/api/WithdrawByoipCidr.html"> WithdrawByoipCidr</a>.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/global-accelerator/latest/dg/using-byoip.html">Bring Your Own IP Addresses (BYOIP)</a> in the <i>AWS Global Accelerator Developer Guide</i>.</p>
     async fn advertise_byoip_cidr(
         &self,
         input: AdvertiseByoipCidrRequest,
@@ -2391,7 +4747,27 @@ impl GlobalAccelerator for GlobalAcceleratorClient {
         proto::json::ResponsePayload::new(&response).deserialize::<AdvertiseByoipCidrResponse, _>()
     }
 
-    /// <p><p>Create an accelerator. An accelerator includes one or more listeners that process inbound connections and direct traffic to one or more endpoint groups, each of which includes endpoints, such as Network Load Balancers. To see an AWS CLI example of creating an accelerator, scroll down to <b>Example</b>.</p> <p>If you bring your own IP address ranges to AWS Global Accelerator (BYOIP), you can assign IP addresses from your own pool to your accelerator as the static IP address entry points. Only one IP address from each of your IP address ranges can be used for each accelerator.</p> <important> <p>You must specify the US West (Oregon) Region to create or update accelerators.</p> </important></p>
+    /// <p>Specify the Amazon EC2 instance (destination) IP addresses and ports for a VPC subnet endpoint that can receive traffic for a custom routing accelerator. You can allow traffic to all destinations in the subnet endpoint, or allow traffic to a specified list of destination IP addresses and ports in the subnet. Note that you cannot specify IP addresses or ports outside of the range that you configured for the endpoint group.</p> <p>After you make changes, you can verify that the updates are complete by checking the status of your accelerator: the status changes from IN_PROGRESS to DEPLOYED.</p>
+    async fn allow_custom_routing_traffic(
+        &self,
+        input: AllowCustomRoutingTrafficRequest,
+    ) -> Result<(), RusotoError<AllowCustomRoutingTrafficError>> {
+        let mut request = self.new_signed_request("POST", "/");
+        request.add_header(
+            "x-amz-target",
+            "GlobalAccelerator_V20180706.AllowCustomRoutingTraffic",
+        );
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        let response = self
+            .sign_and_dispatch(request, AllowCustomRoutingTrafficError::from_response)
+            .await?;
+        std::mem::drop(response);
+        Ok(())
+    }
+
+    /// <p><p>Create an accelerator. An accelerator includes one or more listeners that process inbound connections and direct traffic to one or more endpoint groups, each of which includes endpoints, such as Network Load Balancers. </p> <important> <p>Global Accelerator is a global service that supports endpoints in multiple AWS Regions but you must specify the US West (Oregon) Region to create or update accelerators.</p> </important></p>
     async fn create_accelerator(
         &self,
         input: CreateAcceleratorRequest,
@@ -2412,7 +4788,83 @@ impl GlobalAccelerator for GlobalAcceleratorClient {
         proto::json::ResponsePayload::new(&response).deserialize::<CreateAcceleratorResponse, _>()
     }
 
-    /// <p>Create an endpoint group for the specified listener. An endpoint group is a collection of endpoints in one AWS Region. To see an AWS CLI example of creating an endpoint group, scroll down to <b>Example</b>.</p>
+    /// <p>Create a custom routing accelerator. A custom routing accelerator directs traffic to one of possibly thousands of Amazon EC2 instance destinations running in a single or multiple virtual private clouds (VPC) subnet endpoints.</p> <p>Be aware that, by default, all destination EC2 instances in a VPC subnet endpoint cannot receive traffic. To enable all destinations to receive traffic, or to specify individual port mappings that can receive traffic, see the <a href="https://docs.aws.amazon.com/global-accelerator/latest/api/API_AllowCustomRoutingTraffic.html"> AllowCustomRoutingTraffic</a> operation.</p>
+    async fn create_custom_routing_accelerator(
+        &self,
+        input: CreateCustomRoutingAcceleratorRequest,
+    ) -> Result<
+        CreateCustomRoutingAcceleratorResponse,
+        RusotoError<CreateCustomRoutingAcceleratorError>,
+    > {
+        let mut request = self.new_signed_request("POST", "/");
+        request.add_header(
+            "x-amz-target",
+            "GlobalAccelerator_V20180706.CreateCustomRoutingAccelerator",
+        );
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        let response = self
+            .sign_and_dispatch(request, CreateCustomRoutingAcceleratorError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<CreateCustomRoutingAcceleratorResponse, _>()
+    }
+
+    /// <p>Create an endpoint group for the specified listener for a custom routing accelerator. An endpoint group is a collection of endpoints in one AWS Region. </p>
+    async fn create_custom_routing_endpoint_group(
+        &self,
+        input: CreateCustomRoutingEndpointGroupRequest,
+    ) -> Result<
+        CreateCustomRoutingEndpointGroupResponse,
+        RusotoError<CreateCustomRoutingEndpointGroupError>,
+    > {
+        let mut request = self.new_signed_request("POST", "/");
+        request.add_header(
+            "x-amz-target",
+            "GlobalAccelerator_V20180706.CreateCustomRoutingEndpointGroup",
+        );
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        let response = self
+            .sign_and_dispatch(
+                request,
+                CreateCustomRoutingEndpointGroupError::from_response,
+            )
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<CreateCustomRoutingEndpointGroupResponse, _>()
+    }
+
+    /// <p>Create a listener to process inbound connections from clients to a custom routing accelerator. Connections arrive to assigned static IP addresses on the port range that you specify. </p>
+    async fn create_custom_routing_listener(
+        &self,
+        input: CreateCustomRoutingListenerRequest,
+    ) -> Result<CreateCustomRoutingListenerResponse, RusotoError<CreateCustomRoutingListenerError>>
+    {
+        let mut request = self.new_signed_request("POST", "/");
+        request.add_header(
+            "x-amz-target",
+            "GlobalAccelerator_V20180706.CreateCustomRoutingListener",
+        );
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        let response = self
+            .sign_and_dispatch(request, CreateCustomRoutingListenerError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<CreateCustomRoutingListenerResponse, _>()
+    }
+
+    /// <p>Create an endpoint group for the specified listener. An endpoint group is a collection of endpoints in one AWS Region. A resource must be valid and active when you add it as an endpoint.</p>
     async fn create_endpoint_group(
         &self,
         input: CreateEndpointGroupRequest,
@@ -2433,7 +4885,7 @@ impl GlobalAccelerator for GlobalAcceleratorClient {
         proto::json::ResponsePayload::new(&response).deserialize::<CreateEndpointGroupResponse, _>()
     }
 
-    /// <p>Create a listener to process inbound connections from clients to an accelerator. Connections arrive to assigned static IP addresses on a port, port range, or list of port ranges that you specify. To see an AWS CLI example of creating a listener, scroll down to <b>Example</b>.</p>
+    /// <p>Create a listener to process inbound connections from clients to an accelerator. Connections arrive to assigned static IP addresses on a port, port range, or list of port ranges that you specify. </p>
     async fn create_listener(
         &self,
         input: CreateListenerRequest,
@@ -2466,6 +4918,69 @@ impl GlobalAccelerator for GlobalAcceleratorClient {
 
         let response = self
             .sign_and_dispatch(request, DeleteAcceleratorError::from_response)
+            .await?;
+        std::mem::drop(response);
+        Ok(())
+    }
+
+    /// <p><p>Delete a custom routing accelerator. Before you can delete an accelerator, you must disable it and remove all dependent resources (listeners and endpoint groups). To disable the accelerator, update the accelerator to set <code>Enabled</code> to false.</p> <important> <p>When you create a custom routing accelerator, by default, Global Accelerator provides you with a set of two static IP addresses. </p> <p>The IP addresses are assigned to your accelerator for as long as it exists, even if you disable the accelerator and it no longer accepts or routes traffic. However, when you <i>delete</i> an accelerator, you lose the static IP addresses that are assigned to the accelerator, so you can no longer route traffic by using them. As a best practice, ensure that you have permissions in place to avoid inadvertently deleting accelerators. You can use IAM policies with Global Accelerator to limit the users who have permissions to delete an accelerator. For more information, see <a href="https://docs.aws.amazon.com/global-accelerator/latest/dg/auth-and-access-control.html">Authentication and Access Control</a> in the <i>AWS Global Accelerator Developer Guide</i>.</p> </important></p>
+    async fn delete_custom_routing_accelerator(
+        &self,
+        input: DeleteCustomRoutingAcceleratorRequest,
+    ) -> Result<(), RusotoError<DeleteCustomRoutingAcceleratorError>> {
+        let mut request = self.new_signed_request("POST", "/");
+        request.add_header(
+            "x-amz-target",
+            "GlobalAccelerator_V20180706.DeleteCustomRoutingAccelerator",
+        );
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        let response = self
+            .sign_and_dispatch(request, DeleteCustomRoutingAcceleratorError::from_response)
+            .await?;
+        std::mem::drop(response);
+        Ok(())
+    }
+
+    /// <p>Delete an endpoint group from a listener for a custom routing accelerator.</p>
+    async fn delete_custom_routing_endpoint_group(
+        &self,
+        input: DeleteCustomRoutingEndpointGroupRequest,
+    ) -> Result<(), RusotoError<DeleteCustomRoutingEndpointGroupError>> {
+        let mut request = self.new_signed_request("POST", "/");
+        request.add_header(
+            "x-amz-target",
+            "GlobalAccelerator_V20180706.DeleteCustomRoutingEndpointGroup",
+        );
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        let response = self
+            .sign_and_dispatch(
+                request,
+                DeleteCustomRoutingEndpointGroupError::from_response,
+            )
+            .await?;
+        std::mem::drop(response);
+        Ok(())
+    }
+
+    /// <p>Delete a listener for a custom routing accelerator.</p>
+    async fn delete_custom_routing_listener(
+        &self,
+        input: DeleteCustomRoutingListenerRequest,
+    ) -> Result<(), RusotoError<DeleteCustomRoutingListenerError>> {
+        let mut request = self.new_signed_request("POST", "/");
+        request.add_header(
+            "x-amz-target",
+            "GlobalAccelerator_V20180706.DeleteCustomRoutingListener",
+        );
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        let response = self
+            .sign_and_dispatch(request, DeleteCustomRoutingListenerError::from_response)
             .await?;
         std::mem::drop(response);
         Ok(())
@@ -2508,7 +5023,27 @@ impl GlobalAccelerator for GlobalAcceleratorClient {
         Ok(())
     }
 
-    /// <p>Releases the specified address range that you provisioned to use with your AWS resources through bring your own IP addresses (BYOIP) and deletes the corresponding address pool. To see an AWS CLI example of deprovisioning an address range, scroll down to <b>Example</b>.</p> <p>Before you can release an address range, you must stop advertising it by using <a href="https://docs.aws.amazon.com/global-accelerator/latest/api/WithdrawByoipCidr.html">WithdrawByoipCidr</a> and you must not have any accelerators that are using static IP addresses allocated from its address range. </p> <p>For more information, see <a href="https://docs.aws.amazon.com/global-accelerator/latest/dg/using-byoip.html">Bring Your Own IP Addresses (BYOIP)</a> in the <i>AWS Global Accelerator Developer Guide</i>.</p>
+    /// <p>Specify the Amazon EC2 instance (destination) IP addresses and ports for a VPC subnet endpoint that cannot receive traffic for a custom routing accelerator. You can deny traffic to all destinations in the VPC endpoint, or deny traffic to a specified list of destination IP addresses and ports. Note that you cannot specify IP addresses or ports outside of the range that you configured for the endpoint group.</p> <p>After you make changes, you can verify that the updates are complete by checking the status of your accelerator: the status changes from IN_PROGRESS to DEPLOYED.</p>
+    async fn deny_custom_routing_traffic(
+        &self,
+        input: DenyCustomRoutingTrafficRequest,
+    ) -> Result<(), RusotoError<DenyCustomRoutingTrafficError>> {
+        let mut request = self.new_signed_request("POST", "/");
+        request.add_header(
+            "x-amz-target",
+            "GlobalAccelerator_V20180706.DenyCustomRoutingTraffic",
+        );
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        let response = self
+            .sign_and_dispatch(request, DenyCustomRoutingTrafficError::from_response)
+            .await?;
+        std::mem::drop(response);
+        Ok(())
+    }
+
+    /// <p>Releases the specified address range that you provisioned to use with your AWS resources through bring your own IP addresses (BYOIP) and deletes the corresponding address pool. </p> <p>Before you can release an address range, you must stop advertising it by using <a href="https://docs.aws.amazon.com/global-accelerator/latest/api/WithdrawByoipCidr.html">WithdrawByoipCidr</a> and you must not have any accelerators that are using static IP addresses allocated from its address range. </p> <p>For more information, see <a href="https://docs.aws.amazon.com/global-accelerator/latest/dg/using-byoip.html">Bring Your Own IP Addresses (BYOIP)</a> in the <i>AWS Global Accelerator Developer Guide</i>.</p>
     async fn deprovision_byoip_cidr(
         &self,
         input: DeprovisionByoipCidrRequest,
@@ -2530,7 +5065,7 @@ impl GlobalAccelerator for GlobalAcceleratorClient {
             .deserialize::<DeprovisionByoipCidrResponse, _>()
     }
 
-    /// <p>Describe an accelerator. To see an AWS CLI example of describing an accelerator, scroll down to <b>Example</b>.</p>
+    /// <p>Describe an accelerator. </p>
     async fn describe_accelerator(
         &self,
         input: DescribeAcceleratorRequest,
@@ -2551,7 +5086,7 @@ impl GlobalAccelerator for GlobalAcceleratorClient {
         proto::json::ResponsePayload::new(&response).deserialize::<DescribeAcceleratorResponse, _>()
     }
 
-    /// <p>Describe the attributes of an accelerator. To see an AWS CLI example of describing the attributes of an accelerator, scroll down to <b>Example</b>.</p>
+    /// <p>Describe the attributes of an accelerator. </p>
     async fn describe_accelerator_attributes(
         &self,
         input: DescribeAcceleratorAttributesRequest,
@@ -2576,7 +5111,116 @@ impl GlobalAccelerator for GlobalAcceleratorClient {
             .deserialize::<DescribeAcceleratorAttributesResponse, _>()
     }
 
-    /// <p>Describe an endpoint group. To see an AWS CLI example of describing an endpoint group, scroll down to <b>Example</b>.</p>
+    /// <p>Describe a custom routing accelerator. </p>
+    async fn describe_custom_routing_accelerator(
+        &self,
+        input: DescribeCustomRoutingAcceleratorRequest,
+    ) -> Result<
+        DescribeCustomRoutingAcceleratorResponse,
+        RusotoError<DescribeCustomRoutingAcceleratorError>,
+    > {
+        let mut request = self.new_signed_request("POST", "/");
+        request.add_header(
+            "x-amz-target",
+            "GlobalAccelerator_V20180706.DescribeCustomRoutingAccelerator",
+        );
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        let response = self
+            .sign_and_dispatch(
+                request,
+                DescribeCustomRoutingAcceleratorError::from_response,
+            )
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<DescribeCustomRoutingAcceleratorResponse, _>()
+    }
+
+    /// <p>Describe the attributes of a custom routing accelerator. </p>
+    async fn describe_custom_routing_accelerator_attributes(
+        &self,
+        input: DescribeCustomRoutingAcceleratorAttributesRequest,
+    ) -> Result<
+        DescribeCustomRoutingAcceleratorAttributesResponse,
+        RusotoError<DescribeCustomRoutingAcceleratorAttributesError>,
+    > {
+        let mut request = self.new_signed_request("POST", "/");
+        request.add_header(
+            "x-amz-target",
+            "GlobalAccelerator_V20180706.DescribeCustomRoutingAcceleratorAttributes",
+        );
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        let response = self
+            .sign_and_dispatch(
+                request,
+                DescribeCustomRoutingAcceleratorAttributesError::from_response,
+            )
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<DescribeCustomRoutingAcceleratorAttributesResponse, _>()
+    }
+
+    /// <p>Describe an endpoint group for a custom routing accelerator. </p>
+    async fn describe_custom_routing_endpoint_group(
+        &self,
+        input: DescribeCustomRoutingEndpointGroupRequest,
+    ) -> Result<
+        DescribeCustomRoutingEndpointGroupResponse,
+        RusotoError<DescribeCustomRoutingEndpointGroupError>,
+    > {
+        let mut request = self.new_signed_request("POST", "/");
+        request.add_header(
+            "x-amz-target",
+            "GlobalAccelerator_V20180706.DescribeCustomRoutingEndpointGroup",
+        );
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        let response = self
+            .sign_and_dispatch(
+                request,
+                DescribeCustomRoutingEndpointGroupError::from_response,
+            )
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<DescribeCustomRoutingEndpointGroupResponse, _>()
+    }
+
+    /// <p>The description of a listener for a custom routing accelerator.</p>
+    async fn describe_custom_routing_listener(
+        &self,
+        input: DescribeCustomRoutingListenerRequest,
+    ) -> Result<
+        DescribeCustomRoutingListenerResponse,
+        RusotoError<DescribeCustomRoutingListenerError>,
+    > {
+        let mut request = self.new_signed_request("POST", "/");
+        request.add_header(
+            "x-amz-target",
+            "GlobalAccelerator_V20180706.DescribeCustomRoutingListener",
+        );
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        let response = self
+            .sign_and_dispatch(request, DescribeCustomRoutingListenerError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<DescribeCustomRoutingListenerResponse, _>()
+    }
+
+    /// <p>Describe an endpoint group. </p>
     async fn describe_endpoint_group(
         &self,
         input: DescribeEndpointGroupRequest,
@@ -2598,7 +5242,7 @@ impl GlobalAccelerator for GlobalAcceleratorClient {
             .deserialize::<DescribeEndpointGroupResponse, _>()
     }
 
-    /// <p>Describe a listener. To see an AWS CLI example of describing a listener, scroll down to <b>Example</b>.</p>
+    /// <p>Describe a listener. </p>
     async fn describe_listener(
         &self,
         input: DescribeListenerRequest,
@@ -2619,7 +5263,7 @@ impl GlobalAccelerator for GlobalAcceleratorClient {
         proto::json::ResponsePayload::new(&response).deserialize::<DescribeListenerResponse, _>()
     }
 
-    /// <p>List the accelerators for an AWS account. To see an AWS CLI example of listing the accelerators for an AWS account, scroll down to <b>Example</b>.</p>
+    /// <p>List the accelerators for an AWS account. </p>
     async fn list_accelerators(
         &self,
         input: ListAcceleratorsRequest,
@@ -2640,7 +5284,7 @@ impl GlobalAccelerator for GlobalAcceleratorClient {
         proto::json::ResponsePayload::new(&response).deserialize::<ListAcceleratorsResponse, _>()
     }
 
-    /// <p>Lists the IP address ranges that were specified in calls to <a href="https://docs.aws.amazon.com/global-accelerator/latest/api/ProvisionByoipCidr.html">ProvisionByoipCidr</a>, including the current state and a history of state changes.</p> <p>To see an AWS CLI example of listing BYOIP CIDR addresses, scroll down to <b>Example</b>.</p>
+    /// <p>Lists the IP address ranges that were specified in calls to <a href="https://docs.aws.amazon.com/global-accelerator/latest/api/ProvisionByoipCidr.html">ProvisionByoipCidr</a>, including the current state and a history of state changes.</p>
     async fn list_byoip_cidrs(
         &self,
         input: ListByoipCidrsRequest,
@@ -2658,7 +5302,133 @@ impl GlobalAccelerator for GlobalAcceleratorClient {
         proto::json::ResponsePayload::new(&response).deserialize::<ListByoipCidrsResponse, _>()
     }
 
-    /// <p>List the endpoint groups that are associated with a listener. To see an AWS CLI example of listing the endpoint groups for listener, scroll down to <b>Example</b>.</p>
+    /// <p>List the custom routing accelerators for an AWS account. </p>
+    async fn list_custom_routing_accelerators(
+        &self,
+        input: ListCustomRoutingAcceleratorsRequest,
+    ) -> Result<
+        ListCustomRoutingAcceleratorsResponse,
+        RusotoError<ListCustomRoutingAcceleratorsError>,
+    > {
+        let mut request = self.new_signed_request("POST", "/");
+        request.add_header(
+            "x-amz-target",
+            "GlobalAccelerator_V20180706.ListCustomRoutingAccelerators",
+        );
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        let response = self
+            .sign_and_dispatch(request, ListCustomRoutingAcceleratorsError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<ListCustomRoutingAcceleratorsResponse, _>()
+    }
+
+    /// <p>List the endpoint groups that are associated with a listener for a custom routing accelerator. </p>
+    async fn list_custom_routing_endpoint_groups(
+        &self,
+        input: ListCustomRoutingEndpointGroupsRequest,
+    ) -> Result<
+        ListCustomRoutingEndpointGroupsResponse,
+        RusotoError<ListCustomRoutingEndpointGroupsError>,
+    > {
+        let mut request = self.new_signed_request("POST", "/");
+        request.add_header(
+            "x-amz-target",
+            "GlobalAccelerator_V20180706.ListCustomRoutingEndpointGroups",
+        );
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        let response = self
+            .sign_and_dispatch(request, ListCustomRoutingEndpointGroupsError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<ListCustomRoutingEndpointGroupsResponse, _>()
+    }
+
+    /// <p>List the listeners for a custom routing accelerator. </p>
+    async fn list_custom_routing_listeners(
+        &self,
+        input: ListCustomRoutingListenersRequest,
+    ) -> Result<ListCustomRoutingListenersResponse, RusotoError<ListCustomRoutingListenersError>>
+    {
+        let mut request = self.new_signed_request("POST", "/");
+        request.add_header(
+            "x-amz-target",
+            "GlobalAccelerator_V20180706.ListCustomRoutingListeners",
+        );
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        let response = self
+            .sign_and_dispatch(request, ListCustomRoutingListenersError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<ListCustomRoutingListenersResponse, _>()
+    }
+
+    /// <p>Provides a complete mapping from the public accelerator IP address and port to destination EC2 instance IP addresses and ports in the virtual public cloud (VPC) subnet endpoint for a custom routing accelerator. For each subnet endpoint that you add, Global Accelerator creates a new static port mapping for the accelerator. The port mappings don't change after Global Accelerator generates them, so you can retrieve and cache the full mapping on your servers. </p> <p>If you remove a subnet from your accelerator, Global Accelerator removes (reclaims) the port mappings. If you add a subnet to your accelerator, Global Accelerator creates new port mappings (the existing ones don't change). If you add or remove EC2 instances in your subnet, the port mappings don't change, because the mappings are created when you add the subnet to Global Accelerator.</p> <p>The mappings also include a flag for each destination denoting which destination IP addresses and ports are allowed or denied traffic.</p>
+    async fn list_custom_routing_port_mappings(
+        &self,
+        input: ListCustomRoutingPortMappingsRequest,
+    ) -> Result<
+        ListCustomRoutingPortMappingsResponse,
+        RusotoError<ListCustomRoutingPortMappingsError>,
+    > {
+        let mut request = self.new_signed_request("POST", "/");
+        request.add_header(
+            "x-amz-target",
+            "GlobalAccelerator_V20180706.ListCustomRoutingPortMappings",
+        );
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        let response = self
+            .sign_and_dispatch(request, ListCustomRoutingPortMappingsError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<ListCustomRoutingPortMappingsResponse, _>()
+    }
+
+    /// <p>List the port mappings for a specific EC2 instance (destination) in a VPC subnet endpoint. The response is the mappings for one destination IP address. This is useful when your subnet endpoint has mappings that span multiple custom routing accelerators in your account, or for scenarios where you only want to list the port mappings for a specific destination instance.</p>
+    async fn list_custom_routing_port_mappings_by_destination(
+        &self,
+        input: ListCustomRoutingPortMappingsByDestinationRequest,
+    ) -> Result<
+        ListCustomRoutingPortMappingsByDestinationResponse,
+        RusotoError<ListCustomRoutingPortMappingsByDestinationError>,
+    > {
+        let mut request = self.new_signed_request("POST", "/");
+        request.add_header(
+            "x-amz-target",
+            "GlobalAccelerator_V20180706.ListCustomRoutingPortMappingsByDestination",
+        );
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        let response = self
+            .sign_and_dispatch(
+                request,
+                ListCustomRoutingPortMappingsByDestinationError::from_response,
+            )
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<ListCustomRoutingPortMappingsByDestinationResponse, _>()
+    }
+
+    /// <p>List the endpoint groups that are associated with a listener. </p>
     async fn list_endpoint_groups(
         &self,
         input: ListEndpointGroupsRequest,
@@ -2679,7 +5449,7 @@ impl GlobalAccelerator for GlobalAcceleratorClient {
         proto::json::ResponsePayload::new(&response).deserialize::<ListEndpointGroupsResponse, _>()
     }
 
-    /// <p>List the listeners for an accelerator. To see an AWS CLI example of listing the listeners for an accelerator, scroll down to <b>Example</b>.</p>
+    /// <p>List the listeners for an accelerator. </p>
     async fn list_listeners(
         &self,
         input: ListListenersRequest,
@@ -2697,7 +5467,7 @@ impl GlobalAccelerator for GlobalAcceleratorClient {
         proto::json::ResponsePayload::new(&response).deserialize::<ListListenersResponse, _>()
     }
 
-    /// <p>List all tags for an accelerator. To see an AWS CLI example of listing tags for an accelerator, scroll down to <b>Example</b>.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/global-accelerator/latest/dg/tagging-in-global-accelerator.html">Tagging in AWS Global Accelerator</a> in the <i>AWS Global Accelerator Developer Guide</i>. </p>
+    /// <p>List all tags for an accelerator. </p> <p>For more information, see <a href="https://docs.aws.amazon.com/global-accelerator/latest/dg/tagging-in-global-accelerator.html">Tagging in AWS Global Accelerator</a> in the <i>AWS Global Accelerator Developer Guide</i>. </p>
     async fn list_tags_for_resource(
         &self,
         input: ListTagsForResourceRequest,
@@ -2718,7 +5488,7 @@ impl GlobalAccelerator for GlobalAcceleratorClient {
         proto::json::ResponsePayload::new(&response).deserialize::<ListTagsForResourceResponse, _>()
     }
 
-    /// <p>Provisions an IP address range to use with your AWS resources through bring your own IP addresses (BYOIP) and creates a corresponding address pool. After the address range is provisioned, it is ready to be advertised using <a href="https://docs.aws.amazon.com/global-accelerator/latest/api/AdvertiseByoipCidr.html"> AdvertiseByoipCidr</a>.</p> <p>To see an AWS CLI example of provisioning an address range for BYOIP, scroll down to <b>Example</b>.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/global-accelerator/latest/dg/using-byoip.html">Bring Your Own IP Addresses (BYOIP)</a> in the <i>AWS Global Accelerator Developer Guide</i>.</p>
+    /// <p>Provisions an IP address range to use with your AWS resources through bring your own IP addresses (BYOIP) and creates a corresponding address pool. After the address range is provisioned, it is ready to be advertised using <a href="https://docs.aws.amazon.com/global-accelerator/latest/api/AdvertiseByoipCidr.html"> AdvertiseByoipCidr</a>.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/global-accelerator/latest/dg/using-byoip.html">Bring Your Own IP Addresses (BYOIP)</a> in the <i>AWS Global Accelerator Developer Guide</i>.</p>
     async fn provision_byoip_cidr(
         &self,
         input: ProvisionByoipCidrRequest,
@@ -2739,7 +5509,27 @@ impl GlobalAccelerator for GlobalAcceleratorClient {
         proto::json::ResponsePayload::new(&response).deserialize::<ProvisionByoipCidrResponse, _>()
     }
 
-    /// <p>Add tags to an accelerator resource. To see an AWS CLI example of adding tags to an accelerator, scroll down to <b>Example</b>.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/global-accelerator/latest/dg/tagging-in-global-accelerator.html">Tagging in AWS Global Accelerator</a> in the <i>AWS Global Accelerator Developer Guide</i>. </p>
+    /// <p>Remove endpoints from a custom routing accelerator.</p>
+    async fn remove_custom_routing_endpoints(
+        &self,
+        input: RemoveCustomRoutingEndpointsRequest,
+    ) -> Result<(), RusotoError<RemoveCustomRoutingEndpointsError>> {
+        let mut request = self.new_signed_request("POST", "/");
+        request.add_header(
+            "x-amz-target",
+            "GlobalAccelerator_V20180706.RemoveCustomRoutingEndpoints",
+        );
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        let response = self
+            .sign_and_dispatch(request, RemoveCustomRoutingEndpointsError::from_response)
+            .await?;
+        std::mem::drop(response);
+        Ok(())
+    }
+
+    /// <p>Add tags to an accelerator resource. </p> <p>For more information, see <a href="https://docs.aws.amazon.com/global-accelerator/latest/dg/tagging-in-global-accelerator.html">Tagging in AWS Global Accelerator</a> in the <i>AWS Global Accelerator Developer Guide</i>. </p>
     async fn tag_resource(
         &self,
         input: TagResourceRequest,
@@ -2757,7 +5547,7 @@ impl GlobalAccelerator for GlobalAcceleratorClient {
         proto::json::ResponsePayload::new(&response).deserialize::<TagResourceResponse, _>()
     }
 
-    /// <p>Remove tags from a Global Accelerator resource. When you specify a tag key, the action removes both that key and its associated value. To see an AWS CLI example of removing tags from an accelerator, scroll down to <b>Example</b>. The operation succeeds even if you attempt to remove tags from an accelerator that was already removed.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/global-accelerator/latest/dg/tagging-in-global-accelerator.html">Tagging in AWS Global Accelerator</a> in the <i>AWS Global Accelerator Developer Guide</i>.</p>
+    /// <p>Remove tags from a Global Accelerator resource. When you specify a tag key, the action removes both that key and its associated value. The operation succeeds even if you attempt to remove tags from an accelerator that was already removed.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/global-accelerator/latest/dg/tagging-in-global-accelerator.html">Tagging in AWS Global Accelerator</a> in the <i>AWS Global Accelerator Developer Guide</i>.</p>
     async fn untag_resource(
         &self,
         input: UntagResourceRequest,
@@ -2775,7 +5565,7 @@ impl GlobalAccelerator for GlobalAcceleratorClient {
         proto::json::ResponsePayload::new(&response).deserialize::<UntagResourceResponse, _>()
     }
 
-    /// <p><p>Update an accelerator. To see an AWS CLI example of updating an accelerator, scroll down to <b>Example</b>.</p> <important> <p>You must specify the US West (Oregon) Region to create or update accelerators.</p> </important></p>
+    /// <p><p>Update an accelerator. </p> <important> <p>Global Accelerator is a global service that supports endpoints in multiple AWS Regions but you must specify the US West (Oregon) Region to create or update accelerators.</p> </important></p>
     async fn update_accelerator(
         &self,
         input: UpdateAcceleratorRequest,
@@ -2796,7 +5586,7 @@ impl GlobalAccelerator for GlobalAcceleratorClient {
         proto::json::ResponsePayload::new(&response).deserialize::<UpdateAcceleratorResponse, _>()
     }
 
-    /// <p>Update the attributes for an accelerator. To see an AWS CLI example of updating an accelerator to enable flow logs, scroll down to <b>Example</b>.</p>
+    /// <p>Update the attributes for an accelerator. </p>
     async fn update_accelerator_attributes(
         &self,
         input: UpdateAcceleratorAttributesRequest,
@@ -2819,7 +5609,83 @@ impl GlobalAccelerator for GlobalAcceleratorClient {
             .deserialize::<UpdateAcceleratorAttributesResponse, _>()
     }
 
-    /// <p>Update an endpoint group. To see an AWS CLI example of updating an endpoint group, scroll down to <b>Example</b>.</p>
+    /// <p>Update a custom routing accelerator. </p>
+    async fn update_custom_routing_accelerator(
+        &self,
+        input: UpdateCustomRoutingAcceleratorRequest,
+    ) -> Result<
+        UpdateCustomRoutingAcceleratorResponse,
+        RusotoError<UpdateCustomRoutingAcceleratorError>,
+    > {
+        let mut request = self.new_signed_request("POST", "/");
+        request.add_header(
+            "x-amz-target",
+            "GlobalAccelerator_V20180706.UpdateCustomRoutingAccelerator",
+        );
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        let response = self
+            .sign_and_dispatch(request, UpdateCustomRoutingAcceleratorError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<UpdateCustomRoutingAcceleratorResponse, _>()
+    }
+
+    /// <p>Update the attributes for a custom routing accelerator. </p>
+    async fn update_custom_routing_accelerator_attributes(
+        &self,
+        input: UpdateCustomRoutingAcceleratorAttributesRequest,
+    ) -> Result<
+        UpdateCustomRoutingAcceleratorAttributesResponse,
+        RusotoError<UpdateCustomRoutingAcceleratorAttributesError>,
+    > {
+        let mut request = self.new_signed_request("POST", "/");
+        request.add_header(
+            "x-amz-target",
+            "GlobalAccelerator_V20180706.UpdateCustomRoutingAcceleratorAttributes",
+        );
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        let response = self
+            .sign_and_dispatch(
+                request,
+                UpdateCustomRoutingAcceleratorAttributesError::from_response,
+            )
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<UpdateCustomRoutingAcceleratorAttributesResponse, _>()
+    }
+
+    /// <p>Update a listener for a custom routing accelerator. </p>
+    async fn update_custom_routing_listener(
+        &self,
+        input: UpdateCustomRoutingListenerRequest,
+    ) -> Result<UpdateCustomRoutingListenerResponse, RusotoError<UpdateCustomRoutingListenerError>>
+    {
+        let mut request = self.new_signed_request("POST", "/");
+        request.add_header(
+            "x-amz-target",
+            "GlobalAccelerator_V20180706.UpdateCustomRoutingListener",
+        );
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        let response = self
+            .sign_and_dispatch(request, UpdateCustomRoutingListenerError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<UpdateCustomRoutingListenerResponse, _>()
+    }
+
+    /// <p>Update an endpoint group. A resource must be valid and active when you add it as an endpoint.</p>
     async fn update_endpoint_group(
         &self,
         input: UpdateEndpointGroupRequest,
@@ -2840,7 +5706,7 @@ impl GlobalAccelerator for GlobalAcceleratorClient {
         proto::json::ResponsePayload::new(&response).deserialize::<UpdateEndpointGroupResponse, _>()
     }
 
-    /// <p>Update a listener. To see an AWS CLI example of updating listener, scroll down to <b>Example</b>.</p>
+    /// <p>Update a listener. </p>
     async fn update_listener(
         &self,
         input: UpdateListenerRequest,
@@ -2858,7 +5724,7 @@ impl GlobalAccelerator for GlobalAcceleratorClient {
         proto::json::ResponsePayload::new(&response).deserialize::<UpdateListenerResponse, _>()
     }
 
-    /// <p>Stops advertising an address range that is provisioned as an address pool. You can perform this operation at most once every 10 seconds, even if you specify different address ranges each time. To see an AWS CLI example of withdrawing an address range for BYOIP so it will no longer be advertised by AWS, scroll down to <b>Example</b>.</p> <p>It can take a few minutes before traffic to the specified addresses stops routing to AWS because of propagation delays.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/global-accelerator/latest/dg/using-byoip.html">Bring Your Own IP Addresses (BYOIP)</a> in the <i>AWS Global Accelerator Developer Guide</i>.</p>
+    /// <p>Stops advertising an address range that is provisioned as an address pool. You can perform this operation at most once every 10 seconds, even if you specify different address ranges each time.</p> <p>It can take a few minutes before traffic to the specified addresses stops routing to AWS because of propagation delays.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/global-accelerator/latest/dg/using-byoip.html">Bring Your Own IP Addresses (BYOIP)</a> in the <i>AWS Global Accelerator Developer Guide</i>.</p>
     async fn withdraw_byoip_cidr(
         &self,
         input: WithdrawByoipCidrRequest,
