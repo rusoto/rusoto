@@ -6,23 +6,23 @@ extern crate rusoto_core;
 extern crate time;
 
 use rusoto_cognito_identity::{
-    SetIdentityPoolRolesInput, 
-    CognitoIdentity, 
-    CognitoIdentityClient, 
-    ListIdentitiesInput, 
-    ListIdentityPoolsInput, 
-    GetOpenIdTokenForDeveloperIdentityInput, 
-    CreateIdentityPoolInput, 
-    DeleteIdentityPoolInput, 
+    SetIdentityPoolRolesInput,
+    CognitoIdentity,
+    CognitoIdentityClient,
+    ListIdentitiesInput,
+    ListIdentityPoolsInput,
+    GetOpenIdTokenForDeveloperIdentityInput,
+    CreateIdentityPoolInput,
+    DeleteIdentityPoolInput,
     CognitoProvider
 };
 
 use rusoto_iam::{
-    Iam, 
-    IamClient, 
-    CreateRoleRequest, 
-    PutRolePolicyRequest, 
-    DeleteRoleRequest, 
+    Iam,
+    IamClient,
+    CreateRoleRequest,
+    PutRolePolicyRequest,
+    DeleteRoleRequest,
     DeleteRolePolicyRequest
 };
 
@@ -32,7 +32,7 @@ use rusoto_credential::ProvideAwsCredentials;
 use time::OffsetDateTime;
 use std::collections::HashMap;
 use std::time::Duration;
-use tokio::time::delay_for;
+use tokio::time::sleep;
 use chrono::offset::Utc;
 
 #[tokio::test]
@@ -98,7 +98,7 @@ async fn should_work_with_credential_provider() {
           }}
         ]
       }}", identity_pool.identity_pool_id).replace("'", "\"");
-      
+
     let input_create_role = CreateRoleRequest {
         assume_role_policy_document: policy,
         role_name: role_name,
@@ -131,7 +131,7 @@ async fn should_work_with_credential_provider() {
     };
 
     client_iam.put_role_policy(role_policy_input).await.unwrap();
-    
+
     // Assigning the role to the identity pool
     let mut roles = HashMap::new();
     roles.insert("authenticated".to_string(), role.arn.clone());
@@ -143,7 +143,7 @@ async fn should_work_with_credential_provider() {
     };
     client_cognito.set_identity_pool_roles(roles_input).await.unwrap();
 
-    
+
     // Registering a user whose credentials will be tested
     let login = "login";
     let mut logins = HashMap::new();
@@ -157,7 +157,7 @@ async fn should_work_with_credential_provider() {
     let response = client_cognito.get_open_id_token_for_developer_identity(register_input).await.unwrap();
 
     // It can take time for IAM role to be ready for use
-    delay_for(Duration::from_secs(10)).await;
+    sleep(Duration::from_secs(10)).await;
 
     // The test itself
     let provider = CognitoProvider::builder()

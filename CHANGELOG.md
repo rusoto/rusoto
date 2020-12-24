@@ -13,7 +13,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Swap `pin-project` for the lighter weight `pin-project-lite`
 - Update to `base64` 0.13
 - Update to `hmac` 0.10
-- Update to `hyper-rustls` 0.21.
+- Update to `hyper-rustls` 0.22
+- Update to `hyper-tls` 0.5
+- Update to `tokio` 1.0
+- Update to `bytes` 1.0
+- Update to `hyper` 0.14
 - Disable `chrono`'s `oldtime` feature
 - Remove dependency on `regex`
 - Update to botocore 1.19.42

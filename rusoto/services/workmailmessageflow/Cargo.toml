@@ -18,7 +18,7 @@ targets = []
 
 [dependencies]
 async-trait = "0.1"
-bytes = "0.5"
+bytes = "1.0"
 serde = "1.0.2"
 serde_derive = "1.0.2"
 
@@ -31,7 +31,7 @@ path = "../../core"
 default-features = false
 
 [dev-dependencies]
-tokio = "0.2"
+tokio = "1.0"
 
 [dev-dependencies.rusoto_mock]
 version = "0.45.0"
