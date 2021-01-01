@@ -32,8 +32,6 @@ hyper-rustls = { version = "0.21", optional = true }
 hyper-tls = { version = "0.4", optional = true }
 lazy_static = "1.4"
 log = "0.4"
-md5 = "0.7"
-percent-encoding = "2.1"
 base64 = "0.13"
 serde = { version = "1.0", features = ["derive"] }
 serde_json = "1.0"
