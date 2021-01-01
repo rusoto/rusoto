@@ -1210,7 +1210,9 @@
     "coreVersion": "0.45.0",
     "protocolVersion": "2011-06-15",
     "customDependencies": {
-      "chrono": { "version": "0.4.0", "default-features": false },
+      "chrono": { "version": "0.4.0", "default-features": false }
+    },
+    "customDevDependencies": {
       "tempfile": "^3.1.0"
     },
     "baseTypeName": "Sts"
