@@ -24,7 +24,6 @@ use rusoto_core::proto;
 use rusoto_core::signature::SignedRequest;
 #[allow(unused_imports)]
 use serde::{Deserialize, Serialize};
-use serde_json;
 /// <p>The configuration for Ad Marker Passthrough. Ad marker passthrough can be used to pass ad markers from the origin to the customized manifest.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct AdMarkerPassthrough {

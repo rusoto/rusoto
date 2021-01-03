@@ -24,7 +24,6 @@ use rusoto_core::proto;
 use rusoto_core::signature::SignedRequest;
 #[allow(unused_imports)]
 use serde::{Deserialize, Serialize};
-use serde_json;
 /// <pre><code>        &lt;p&gt;Associates sasl scram secrets to cluster.&lt;/p&gt;
 /// </code></pre>
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]

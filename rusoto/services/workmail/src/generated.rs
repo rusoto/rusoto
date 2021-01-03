@@ -49,7 +49,6 @@ impl WorkmailClient {
     }
 }
 
-use serde_json;
 /// <p>A rule that controls access to an Amazon WorkMail organization.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]

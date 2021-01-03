@@ -49,7 +49,6 @@ impl DiscoveryClient {
     }
 }
 
-use serde_json;
 /// <p>Information about agents or connectors that were instructed to start collecting data. Information includes the agent/connector ID, a description of the operation, and whether the agent/connector configuration was updated.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]

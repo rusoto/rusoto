@@ -49,7 +49,6 @@ impl MediaStoreClient {
     }
 }
 
-use serde_json;
 /// <p>This section describes operations that you can perform on an AWS Elemental MediaStore container.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]

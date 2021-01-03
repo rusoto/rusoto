@@ -50,7 +50,6 @@ impl DataPipelineClient {
     }
 }
 
-use serde_json;
 /// <p>Contains the parameters for ActivatePipeline.</p>
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]

@@ -54,7 +54,6 @@ impl CodeStarConnectionsClient {
     }
 }
 
-use serde_json;
 /// <p>A resource that is used to connect third-party source providers with services like AWS CodePipeline.</p> <p>Note: A connection created through CloudFormation, the CLI, or the SDK is in `PENDING` status by default. You can make its status `AVAILABLE` by updating the connection in the console.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]

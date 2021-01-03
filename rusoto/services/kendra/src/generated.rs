@@ -49,7 +49,6 @@ impl KendraClient {
     }
 }
 
-use serde_json;
 /// <p>Access Control List files for the documents in a data source. For the format of the file, see <a href="https://docs.aws.amazon.com/kendra/latest/dg/s3-acl.html">Access control for S3 data sources</a>.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct AccessControlListConfiguration {

@@ -49,7 +49,6 @@ impl CodeCommitClient {
     }
 }
 
-use serde_json;
 /// <p>Returns information about a specific approval on a pull request.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]

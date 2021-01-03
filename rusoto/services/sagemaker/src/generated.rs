@@ -50,7 +50,6 @@ impl SageMakerClient {
     }
 }
 
-use serde_json;
 /// <p>A structure describing the source of an action.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct ActionSource {

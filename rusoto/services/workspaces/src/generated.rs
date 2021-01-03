@@ -49,7 +49,6 @@ impl WorkspacesClient {
     }
 }
 
-use serde_json;
 /// <p>Describes a modification to the configuration of Bring Your Own License (BYOL) for the specified account. </p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]

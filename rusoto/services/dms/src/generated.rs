@@ -49,7 +49,6 @@ impl DatabaseMigrationServiceClient {
     }
 }
 
-use serde_json;
 /// <p>Describes a quota for an AWS account, for example, the number of replication instances allowed.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]

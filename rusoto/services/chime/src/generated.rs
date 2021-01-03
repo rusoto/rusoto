@@ -24,7 +24,6 @@ use rusoto_core::proto;
 use rusoto_core::signature::SignedRequest;
 #[allow(unused_imports)]
 use serde::{Deserialize, Serialize};
-use serde_json;
 /// <p>The Amazon Chime account details. An AWS account can have multiple Amazon Chime accounts.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]

@@ -49,7 +49,6 @@ impl FsxClient {
     }
 }
 
-use serde_json;
 /// <p>The Microsoft AD attributes of the Amazon FSx for Windows File Server file system.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]

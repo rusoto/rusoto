@@ -24,7 +24,6 @@ use rusoto_core::proto;
 use rusoto_core::signature::SignedRequest;
 #[allow(unused_imports)]
 use serde::{Deserialize, Serialize};
-use serde_json;
 /// <p>An object that represents the access logging information for a virtual node.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct AccessLog {

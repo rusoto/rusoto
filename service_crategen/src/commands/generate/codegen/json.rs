@@ -112,9 +112,6 @@ impl GenerateProtocol for JsonGenerator {
                 generate_endpoint_modification(service).unwrap_or_else(|| "".to_owned()),
             json_version = service.json_version().unwrap(),
         )?;
-        if service.needs_serde_json_crate() {
-            writeln!(writer, "use serde_json;")?;
-        }
         if service.has_event_streams() {
             writeln!(
                 writer,

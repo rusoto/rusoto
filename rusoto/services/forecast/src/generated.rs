@@ -49,7 +49,6 @@ impl ForecastClient {
     }
 }
 
-use serde_json;
 /// <p>Specifies a categorical hyperparameter and it's range of tunable values. This object is part of the <a>ParameterRanges</a> object.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct CategoricalParameterRange {

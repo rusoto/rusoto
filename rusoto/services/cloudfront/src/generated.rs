@@ -33,7 +33,6 @@ use serde::Deserialize;
 use serde::Serialize;
 use std::io::Write;
 use std::str::FromStr;
-use xml;
 use xml::EventReader;
 use xml::EventWriter;
 

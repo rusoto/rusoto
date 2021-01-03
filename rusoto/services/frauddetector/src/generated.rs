@@ -50,7 +50,6 @@ impl FraudDetectorClient {
     }
 }
 
-use serde_json;
 /// <p>Provides the error of the batch create variable API.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]

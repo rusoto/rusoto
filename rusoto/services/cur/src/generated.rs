@@ -49,7 +49,6 @@ impl CostAndUsageReportClient {
     }
 }
 
-use serde_json;
 /// <p>Deletes the specified report.</p>
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]

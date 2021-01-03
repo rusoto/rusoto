@@ -50,7 +50,6 @@ impl KinesisClient {
 }
 
 use rusoto_core::event_stream::{DeserializeEvent, EventStream};
-use serde_json;
 /// <p>Represents the input for <code>AddTagsToStream</code>.</p>
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]

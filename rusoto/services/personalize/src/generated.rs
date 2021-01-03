@@ -49,7 +49,6 @@ impl PersonalizeClient {
     }
 }
 
-use serde_json;
 /// <p>Describes a custom algorithm.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]

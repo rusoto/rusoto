@@ -49,7 +49,6 @@ impl AWSHealthClient {
     }
 }
 
-use serde_json;
 /// <p>Information about an entity that is affected by a Health event.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]

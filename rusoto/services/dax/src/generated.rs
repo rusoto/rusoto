@@ -49,7 +49,6 @@ impl DynamodbAcceleratorClient {
     }
 }
 
-use serde_json;
 /// <p>Contains all of the attributes of a specific DAX cluster.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]

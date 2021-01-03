@@ -50,7 +50,6 @@ impl Route53DomainsClient {
     }
 }
 
-use serde_json;
 /// <p>The AcceptDomainTransferFromAnotherAwsAccount request includes the following elements.</p>
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]

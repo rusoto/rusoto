@@ -122,10 +122,6 @@ impl GenerateProtocol for RestJsonGenerator {
                   use serde::{{Deserialize, Serialize}};"
         )?;
 
-        if service.needs_serde_json_crate() {
-            writeln!(writer, "use serde_json;")?;
-        }
-
         Ok(())
     }
 

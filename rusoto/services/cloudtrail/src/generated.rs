@@ -49,7 +49,6 @@ impl CloudTrailClient {
     }
 }
 
-use serde_json;
 /// <p>Specifies the tags to add to a trail.</p>
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]

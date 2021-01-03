@@ -49,7 +49,6 @@ impl ComprehendClient {
     }
 }
 
-use serde_json;
 /// <p>An augmented manifest file that provides training data for your custom model. An augmented manifest file is a labeled dataset that is produced by Amazon SageMaker Ground Truth.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct AugmentedManifestsListItem {

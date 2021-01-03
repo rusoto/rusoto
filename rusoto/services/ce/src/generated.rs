@@ -49,7 +49,6 @@ impl CostExplorerClient {
     }
 }
 
-use serde_json;
 /// <p> An unusual cost pattern. This consists of the detailed metadata and the current status of the anomaly object. </p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]

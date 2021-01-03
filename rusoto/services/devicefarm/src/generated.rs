@@ -49,7 +49,6 @@ impl DeviceFarmClient {
     }
 }
 
-use serde_json;
 /// <p>A container for account-level settings in AWS Device Farm.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]

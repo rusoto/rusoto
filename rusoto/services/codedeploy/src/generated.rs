@@ -49,7 +49,6 @@ impl CodeDeployClient {
     }
 }
 
-use serde_json;
 /// <p>Represents the input of, and adds tags to, an on-premises instance operation.</p>
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]

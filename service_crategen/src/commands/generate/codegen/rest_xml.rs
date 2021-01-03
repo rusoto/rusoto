@@ -85,7 +85,6 @@ impl GenerateProtocol for RestXmlGenerator {
             use std::io::Write;
             use rusoto_core::param::{Params, ServiceParams};
             use rusoto_core::signature::SignedRequest;
-            use xml;
             use xml::EventReader;
             use xml::EventWriter;
             use rusoto_core::request::HttpResponse;

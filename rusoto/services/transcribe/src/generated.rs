@@ -49,7 +49,6 @@ impl TranscribeClient {
     }
 }
 
-use serde_json;
 /// <p>Settings for content redaction within a transcription job.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct ContentRedaction {

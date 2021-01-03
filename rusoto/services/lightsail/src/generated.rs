@@ -49,7 +49,6 @@ impl LightsailClient {
     }
 }
 
-use serde_json;
 /// <p>Describes an add-on that is enabled for an Amazon Lightsail resource.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]

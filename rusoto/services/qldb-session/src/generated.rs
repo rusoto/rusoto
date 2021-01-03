@@ -50,7 +50,6 @@ impl QldbSessionClient {
     }
 }
 
-use serde_json;
 /// <p>Contains the details of the transaction to abort.</p>
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]

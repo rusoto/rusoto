@@ -31,7 +31,6 @@ use rusoto_core::signature::SignedRequest;
 use serde::Deserialize;
 #[cfg(feature = "serialize_structs")]
 use serde::Serialize;
-use serde_urlencoded;
 use std::str::FromStr;
 use xml::EventReader;
 

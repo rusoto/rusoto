@@ -50,7 +50,6 @@ impl Route53ResolverClient {
     }
 }
 
-use serde_json;
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct AssociateResolverEndpointIpAddressRequest {

@@ -50,7 +50,6 @@ impl ForecastQueryClient {
     }
 }
 
-use serde_json;
 /// <p>The forecast value for a specific date. Part of the <a>Forecast</a> object.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
