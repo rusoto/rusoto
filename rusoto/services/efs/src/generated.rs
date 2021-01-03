@@ -2492,9 +2492,9 @@ impl Efs for EfsClient {
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 204 {
             let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = ::std::mem::drop(response);
+            ::std::mem::drop(response);
 
-            Ok(result)
+            Ok(())
         } else {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             Err(CreateTagsError::from_response(response))
@@ -2523,9 +2523,9 @@ impl Efs for EfsClient {
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 204 {
             let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = ::std::mem::drop(response);
+            ::std::mem::drop(response);
 
-            Ok(result)
+            Ok(())
         } else {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             Err(DeleteAccessPointError::from_response(response))
@@ -2554,9 +2554,9 @@ impl Efs for EfsClient {
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 204 {
             let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = ::std::mem::drop(response);
+            ::std::mem::drop(response);
 
-            Ok(result)
+            Ok(())
         } else {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             Err(DeleteFileSystemError::from_response(response))
@@ -2585,9 +2585,9 @@ impl Efs for EfsClient {
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
             let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = ::std::mem::drop(response);
+            ::std::mem::drop(response);
 
-            Ok(result)
+            Ok(())
         } else {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             Err(DeleteFileSystemPolicyError::from_response(response))
@@ -2616,9 +2616,9 @@ impl Efs for EfsClient {
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 204 {
             let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = ::std::mem::drop(response);
+            ::std::mem::drop(response);
 
-            Ok(result)
+            Ok(())
         } else {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             Err(DeleteMountTargetError::from_response(response))
@@ -2650,9 +2650,9 @@ impl Efs for EfsClient {
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 204 {
             let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = ::std::mem::drop(response);
+            ::std::mem::drop(response);
 
-            Ok(result)
+            Ok(())
         } else {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             Err(DeleteTagsError::from_response(response))
@@ -3035,9 +3035,9 @@ impl Efs for EfsClient {
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 204 {
             let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = ::std::mem::drop(response);
+            ::std::mem::drop(response);
 
-            Ok(result)
+            Ok(())
         } else {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             Err(ModifyMountTargetSecurityGroupsError::from_response(
@@ -3177,9 +3177,9 @@ impl Efs for EfsClient {
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
             let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = ::std::mem::drop(response);
+            ::std::mem::drop(response);
 
-            Ok(result)
+            Ok(())
         } else {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             Err(TagResourceError::from_response(response))
@@ -3214,9 +3214,9 @@ impl Efs for EfsClient {
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
             let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = ::std::mem::drop(response);
+            ::std::mem::drop(response);
 
-            Ok(result)
+            Ok(())
         } else {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             Err(UntagResourceError::from_response(response))

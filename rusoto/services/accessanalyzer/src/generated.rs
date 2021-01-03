@@ -1860,9 +1860,9 @@ impl AccessAnalyzer for AccessAnalyzerClient {
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
             let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = ::std::mem::drop(response);
+            ::std::mem::drop(response);
 
-            Ok(result)
+            Ok(())
         } else {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             Err(ApplyArchiveRuleError::from_response(response))
@@ -1924,9 +1924,9 @@ impl AccessAnalyzer for AccessAnalyzerClient {
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
             let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = ::std::mem::drop(response);
+            ::std::mem::drop(response);
 
-            Ok(result)
+            Ok(())
         } else {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             Err(CreateArchiveRuleError::from_response(response))
@@ -1961,9 +1961,9 @@ impl AccessAnalyzer for AccessAnalyzerClient {
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
             let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = ::std::mem::drop(response);
+            ::std::mem::drop(response);
 
-            Ok(result)
+            Ok(())
         } else {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             Err(DeleteAnalyzerError::from_response(response))
@@ -1999,9 +1999,9 @@ impl AccessAnalyzer for AccessAnalyzerClient {
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
             let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = ::std::mem::drop(response);
+            ::std::mem::drop(response);
 
-            Ok(result)
+            Ok(())
         } else {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             Err(DeleteArchiveRuleError::from_response(response))
@@ -2327,9 +2327,9 @@ impl AccessAnalyzer for AccessAnalyzerClient {
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
             let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = ::std::mem::drop(response);
+            ::std::mem::drop(response);
 
-            Ok(result)
+            Ok(())
         } else {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             Err(StartResourceScanError::from_response(response))
@@ -2427,9 +2427,9 @@ impl AccessAnalyzer for AccessAnalyzerClient {
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
             let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = ::std::mem::drop(response);
+            ::std::mem::drop(response);
 
-            Ok(result)
+            Ok(())
         } else {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             Err(UpdateArchiveRuleError::from_response(response))
@@ -2457,9 +2457,9 @@ impl AccessAnalyzer for AccessAnalyzerClient {
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
             let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = ::std::mem::drop(response);
+            ::std::mem::drop(response);
 
-            Ok(result)
+            Ok(())
         } else {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             Err(UpdateFindingsError::from_response(response))

@@ -3358,9 +3358,9 @@ impl Glacier for GlacierClient {
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 204 {
             let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = ::std::mem::drop(response);
+            ::std::mem::drop(response);
 
-            Ok(result)
+            Ok(())
         } else {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             Err(AbortMultipartUploadError::from_response(response))
@@ -3390,9 +3390,9 @@ impl Glacier for GlacierClient {
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 204 {
             let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = ::std::mem::drop(response);
+            ::std::mem::drop(response);
 
-            Ok(result)
+            Ok(())
         } else {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             Err(AbortVaultLockError::from_response(response))
@@ -3429,9 +3429,9 @@ impl Glacier for GlacierClient {
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 204 {
             let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = ::std::mem::drop(response);
+            ::std::mem::drop(response);
 
-            Ok(result)
+            Ok(())
         } else {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             Err(AddTagsToVaultError::from_response(response))
@@ -3502,9 +3502,9 @@ impl Glacier for GlacierClient {
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 204 {
             let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = ::std::mem::drop(response);
+            ::std::mem::drop(response);
 
-            Ok(result)
+            Ok(())
         } else {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             Err(CompleteVaultLockError::from_response(response))
@@ -3569,9 +3569,9 @@ impl Glacier for GlacierClient {
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 204 {
             let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = ::std::mem::drop(response);
+            ::std::mem::drop(response);
 
-            Ok(result)
+            Ok(())
         } else {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             Err(DeleteArchiveError::from_response(response))
@@ -3601,9 +3601,9 @@ impl Glacier for GlacierClient {
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 204 {
             let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = ::std::mem::drop(response);
+            ::std::mem::drop(response);
 
-            Ok(result)
+            Ok(())
         } else {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             Err(DeleteVaultError::from_response(response))
@@ -3633,9 +3633,9 @@ impl Glacier for GlacierClient {
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 204 {
             let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = ::std::mem::drop(response);
+            ::std::mem::drop(response);
 
-            Ok(result)
+            Ok(())
         } else {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             Err(DeleteVaultAccessPolicyError::from_response(response))
@@ -3665,9 +3665,9 @@ impl Glacier for GlacierClient {
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 204 {
             let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = ::std::mem::drop(response);
+            ::std::mem::drop(response);
 
-            Ok(result)
+            Ok(())
         } else {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             Err(DeleteVaultNotificationsError::from_response(response))
@@ -4332,9 +4332,9 @@ impl Glacier for GlacierClient {
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 204 {
             let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = ::std::mem::drop(response);
+            ::std::mem::drop(response);
 
-            Ok(result)
+            Ok(())
         } else {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             Err(RemoveTagsFromVaultError::from_response(response))
@@ -4366,9 +4366,9 @@ impl Glacier for GlacierClient {
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 204 {
             let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = ::std::mem::drop(response);
+            ::std::mem::drop(response);
 
-            Ok(result)
+            Ok(())
         } else {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             Err(SetDataRetrievalPolicyError::from_response(response))
@@ -4401,9 +4401,9 @@ impl Glacier for GlacierClient {
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 204 {
             let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = ::std::mem::drop(response);
+            ::std::mem::drop(response);
 
-            Ok(result)
+            Ok(())
         } else {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             Err(SetVaultAccessPolicyError::from_response(response))
@@ -4436,9 +4436,9 @@ impl Glacier for GlacierClient {
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 204 {
             let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = ::std::mem::drop(response);
+            ::std::mem::drop(response);
 
-            Ok(result)
+            Ok(())
         } else {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             Err(SetVaultNotificationsError::from_response(response))

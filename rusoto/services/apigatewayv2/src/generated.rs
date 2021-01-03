@@ -7991,9 +7991,9 @@ impl ApiGatewayV2 for ApiGatewayV2Client {
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 204 {
             let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = ::std::mem::drop(response);
+            ::std::mem::drop(response);
 
-            Ok(result)
+            Ok(())
         } else {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             Err(DeleteAccessLogSettingsError::from_response(response))
@@ -8015,9 +8015,9 @@ impl ApiGatewayV2 for ApiGatewayV2Client {
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 204 {
             let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = ::std::mem::drop(response);
+            ::std::mem::drop(response);
 
-            Ok(result)
+            Ok(())
         } else {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             Err(DeleteApiError::from_response(response))
@@ -8046,9 +8046,9 @@ impl ApiGatewayV2 for ApiGatewayV2Client {
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 204 {
             let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = ::std::mem::drop(response);
+            ::std::mem::drop(response);
 
-            Ok(result)
+            Ok(())
         } else {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             Err(DeleteApiMappingError::from_response(response))
@@ -8077,9 +8077,9 @@ impl ApiGatewayV2 for ApiGatewayV2Client {
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 204 {
             let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = ::std::mem::drop(response);
+            ::std::mem::drop(response);
 
-            Ok(result)
+            Ok(())
         } else {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             Err(DeleteAuthorizerError::from_response(response))
@@ -8104,9 +8104,9 @@ impl ApiGatewayV2 for ApiGatewayV2Client {
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 204 {
             let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = ::std::mem::drop(response);
+            ::std::mem::drop(response);
 
-            Ok(result)
+            Ok(())
         } else {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             Err(DeleteCorsConfigurationError::from_response(response))
@@ -8135,9 +8135,9 @@ impl ApiGatewayV2 for ApiGatewayV2Client {
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 204 {
             let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = ::std::mem::drop(response);
+            ::std::mem::drop(response);
 
-            Ok(result)
+            Ok(())
         } else {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             Err(DeleteDeploymentError::from_response(response))
@@ -8165,9 +8165,9 @@ impl ApiGatewayV2 for ApiGatewayV2Client {
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 204 {
             let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = ::std::mem::drop(response);
+            ::std::mem::drop(response);
 
-            Ok(result)
+            Ok(())
         } else {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             Err(DeleteDomainNameError::from_response(response))
@@ -8196,9 +8196,9 @@ impl ApiGatewayV2 for ApiGatewayV2Client {
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 204 {
             let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = ::std::mem::drop(response);
+            ::std::mem::drop(response);
 
-            Ok(result)
+            Ok(())
         } else {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             Err(DeleteIntegrationError::from_response(response))
@@ -8223,9 +8223,9 @@ impl ApiGatewayV2 for ApiGatewayV2Client {
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 204 {
             let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = ::std::mem::drop(response);
+            ::std::mem::drop(response);
 
-            Ok(result)
+            Ok(())
         } else {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             Err(DeleteIntegrationResponseError::from_response(response))
@@ -8254,9 +8254,9 @@ impl ApiGatewayV2 for ApiGatewayV2Client {
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 204 {
             let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = ::std::mem::drop(response);
+            ::std::mem::drop(response);
 
-            Ok(result)
+            Ok(())
         } else {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             Err(DeleteModelError::from_response(response))
@@ -8285,9 +8285,9 @@ impl ApiGatewayV2 for ApiGatewayV2Client {
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 204 {
             let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = ::std::mem::drop(response);
+            ::std::mem::drop(response);
 
-            Ok(result)
+            Ok(())
         } else {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             Err(DeleteRouteError::from_response(response))
@@ -8317,9 +8317,9 @@ impl ApiGatewayV2 for ApiGatewayV2Client {
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 204 {
             let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = ::std::mem::drop(response);
+            ::std::mem::drop(response);
 
-            Ok(result)
+            Ok(())
         } else {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             Err(DeleteRouteRequestParameterError::from_response(response))
@@ -8349,9 +8349,9 @@ impl ApiGatewayV2 for ApiGatewayV2Client {
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 204 {
             let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = ::std::mem::drop(response);
+            ::std::mem::drop(response);
 
-            Ok(result)
+            Ok(())
         } else {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             Err(DeleteRouteResponseError::from_response(response))
@@ -8381,9 +8381,9 @@ impl ApiGatewayV2 for ApiGatewayV2Client {
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 204 {
             let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = ::std::mem::drop(response);
+            ::std::mem::drop(response);
 
-            Ok(result)
+            Ok(())
         } else {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             Err(DeleteRouteSettingsError::from_response(response))
@@ -8412,9 +8412,9 @@ impl ApiGatewayV2 for ApiGatewayV2Client {
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 204 {
             let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = ::std::mem::drop(response);
+            ::std::mem::drop(response);
 
-            Ok(result)
+            Ok(())
         } else {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             Err(DeleteStageError::from_response(response))
@@ -9489,9 +9489,9 @@ impl ApiGatewayV2 for ApiGatewayV2Client {
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 204 {
             let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = ::std::mem::drop(response);
+            ::std::mem::drop(response);
 
-            Ok(result)
+            Ok(())
         } else {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             Err(ResetAuthorizersCacheError::from_response(response))
@@ -9553,9 +9553,9 @@ impl ApiGatewayV2 for ApiGatewayV2Client {
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 204 {
             let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = ::std::mem::drop(response);
+            ::std::mem::drop(response);
 
-            Ok(result)
+            Ok(())
         } else {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             Err(UntagResourceError::from_response(response))

@@ -3212,9 +3212,9 @@ impl Schemas for SchemasClient {
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 204 {
             let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = ::std::mem::drop(response);
+            ::std::mem::drop(response);
 
-            Ok(result)
+            Ok(())
         } else {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             Err(DeleteDiscovererError::from_response(response))
@@ -3242,9 +3242,9 @@ impl Schemas for SchemasClient {
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 204 {
             let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = ::std::mem::drop(response);
+            ::std::mem::drop(response);
 
-            Ok(result)
+            Ok(())
         } else {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             Err(DeleteRegistryError::from_response(response))
@@ -3275,9 +3275,9 @@ impl Schemas for SchemasClient {
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 204 {
             let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = ::std::mem::drop(response);
+            ::std::mem::drop(response);
 
-            Ok(result)
+            Ok(())
         } else {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             Err(DeleteResourcePolicyError::from_response(response))
@@ -3306,9 +3306,9 @@ impl Schemas for SchemasClient {
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 204 {
             let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = ::std::mem::drop(response);
+            ::std::mem::drop(response);
 
-            Ok(result)
+            Ok(())
         } else {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             Err(DeleteSchemaError::from_response(response))
@@ -3333,9 +3333,9 @@ impl Schemas for SchemasClient {
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 204 {
             let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = ::std::mem::drop(response);
+            ::std::mem::drop(response);
 
-            Ok(result)
+            Ok(())
         } else {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             Err(DeleteSchemaVersionError::from_response(response))
@@ -4017,9 +4017,9 @@ impl Schemas for SchemasClient {
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 204 {
             let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = ::std::mem::drop(response);
+            ::std::mem::drop(response);
 
-            Ok(result)
+            Ok(())
         } else {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             Err(TagResourceError::from_response(response))
@@ -4050,9 +4050,9 @@ impl Schemas for SchemasClient {
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 204 {
             let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = ::std::mem::drop(response);
+            ::std::mem::drop(response);
 
-            Ok(result)
+            Ok(())
         } else {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             Err(UntagResourceError::from_response(response))

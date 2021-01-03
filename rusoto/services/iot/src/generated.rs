@@ -24749,9 +24749,9 @@ impl Iot for IotClient {
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
             let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = ::std::mem::drop(response);
+            ::std::mem::drop(response);
 
-            Ok(result)
+            Ok(())
         } else {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             Err(AcceptCertificateTransferError::from_response(response))
@@ -24885,9 +24885,9 @@ impl Iot for IotClient {
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
             let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = ::std::mem::drop(response);
+            ::std::mem::drop(response);
 
-            Ok(result)
+            Ok(())
         } else {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             Err(AttachPolicyError::from_response(response))
@@ -24919,9 +24919,9 @@ impl Iot for IotClient {
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
             let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = ::std::mem::drop(response);
+            ::std::mem::drop(response);
 
-            Ok(result)
+            Ok(())
         } else {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             Err(AttachPrincipalPolicyError::from_response(response))
@@ -25094,9 +25094,9 @@ impl Iot for IotClient {
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
             let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = ::std::mem::drop(response);
+            ::std::mem::drop(response);
 
-            Ok(result)
+            Ok(())
         } else {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             Err(CancelCertificateTransferError::from_response(response))
@@ -25211,9 +25211,9 @@ impl Iot for IotClient {
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
             let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = ::std::mem::drop(response);
+            ::std::mem::drop(response);
 
-            Ok(result)
+            Ok(())
         } else {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             Err(CancelJobExecutionError::from_response(response))
@@ -26143,9 +26143,9 @@ impl Iot for IotClient {
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
             let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = ::std::mem::drop(response);
+            ::std::mem::drop(response);
 
-            Ok(result)
+            Ok(())
         } else {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             Err(CreateTopicRuleError::from_response(response))
@@ -26392,9 +26392,9 @@ impl Iot for IotClient {
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
             let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = ::std::mem::drop(response);
+            ::std::mem::drop(response);
 
-            Ok(result)
+            Ok(())
         } else {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             Err(DeleteCertificateError::from_response(response))
@@ -26563,9 +26563,9 @@ impl Iot for IotClient {
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
             let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = ::std::mem::drop(response);
+            ::std::mem::drop(response);
 
-            Ok(result)
+            Ok(())
         } else {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             Err(DeleteJobError::from_response(response))
@@ -26606,9 +26606,9 @@ impl Iot for IotClient {
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
             let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = ::std::mem::drop(response);
+            ::std::mem::drop(response);
 
-            Ok(result)
+            Ok(())
         } else {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             Err(DeleteJobExecutionError::from_response(response))
@@ -26710,9 +26710,9 @@ impl Iot for IotClient {
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
             let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = ::std::mem::drop(response);
+            ::std::mem::drop(response);
 
-            Ok(result)
+            Ok(())
         } else {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             Err(DeletePolicyError::from_response(response))
@@ -26743,9 +26743,9 @@ impl Iot for IotClient {
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
             let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = ::std::mem::drop(response);
+            ::std::mem::drop(response);
 
-            Ok(result)
+            Ok(())
         } else {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             Err(DeletePolicyVersionError::from_response(response))
@@ -27114,9 +27114,9 @@ impl Iot for IotClient {
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
             let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = ::std::mem::drop(response);
+            ::std::mem::drop(response);
 
-            Ok(result)
+            Ok(())
         } else {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             Err(DeleteTopicRuleError::from_response(response))
@@ -27179,9 +27179,9 @@ impl Iot for IotClient {
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
             let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = ::std::mem::drop(response);
+            ::std::mem::drop(response);
 
-            Ok(result)
+            Ok(())
         } else {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             Err(DeleteV2LoggingLevelError::from_response(response))
@@ -28242,9 +28242,9 @@ impl Iot for IotClient {
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
             let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = ::std::mem::drop(response);
+            ::std::mem::drop(response);
 
-            Ok(result)
+            Ok(())
         } else {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             Err(DetachPolicyError::from_response(response))
@@ -28276,9 +28276,9 @@ impl Iot for IotClient {
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
             let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = ::std::mem::drop(response);
+            ::std::mem::drop(response);
 
-            Ok(result)
+            Ok(())
         } else {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             Err(DetachPrincipalPolicyError::from_response(response))
@@ -28380,9 +28380,9 @@ impl Iot for IotClient {
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
             let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = ::std::mem::drop(response);
+            ::std::mem::drop(response);
 
-            Ok(result)
+            Ok(())
         } else {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             Err(DisableTopicRuleError::from_response(response))
@@ -28409,9 +28409,9 @@ impl Iot for IotClient {
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
             let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = ::std::mem::drop(response);
+            ::std::mem::drop(response);
 
-            Ok(result)
+            Ok(())
         } else {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             Err(EnableTopicRuleError::from_response(response))
@@ -31330,9 +31330,9 @@ impl Iot for IotClient {
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
             let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = ::std::mem::drop(response);
+            ::std::mem::drop(response);
 
-            Ok(result)
+            Ok(())
         } else {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             Err(RejectCertificateTransferError::from_response(response))
@@ -31427,9 +31427,9 @@ impl Iot for IotClient {
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
             let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = ::std::mem::drop(response);
+            ::std::mem::drop(response);
 
-            Ok(result)
+            Ok(())
         } else {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             Err(ReplaceTopicRuleError::from_response(response))
@@ -31524,9 +31524,9 @@ impl Iot for IotClient {
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
             let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = ::std::mem::drop(response);
+            ::std::mem::drop(response);
 
-            Ok(result)
+            Ok(())
         } else {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             Err(SetDefaultPolicyVersionError::from_response(response))
@@ -31555,9 +31555,9 @@ impl Iot for IotClient {
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
             let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = ::std::mem::drop(response);
+            ::std::mem::drop(response);
 
-            Ok(result)
+            Ok(())
         } else {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             Err(SetLoggingOptionsError::from_response(response))
@@ -31586,9 +31586,9 @@ impl Iot for IotClient {
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
             let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = ::std::mem::drop(response);
+            ::std::mem::drop(response);
 
-            Ok(result)
+            Ok(())
         } else {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             Err(SetV2LoggingLevelError::from_response(response))
@@ -31617,9 +31617,9 @@ impl Iot for IotClient {
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
             let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = ::std::mem::drop(response);
+            ::std::mem::drop(response);
 
-            Ok(result)
+            Ok(())
         } else {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             Err(SetV2LoggingOptionsError::from_response(response))
@@ -32154,9 +32154,9 @@ impl Iot for IotClient {
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
             let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = ::std::mem::drop(response);
+            ::std::mem::drop(response);
 
-            Ok(result)
+            Ok(())
         } else {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             Err(UpdateCACertificateError::from_response(response))
@@ -32190,9 +32190,9 @@ impl Iot for IotClient {
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
             let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = ::std::mem::drop(response);
+            ::std::mem::drop(response);
 
-            Ok(result)
+            Ok(())
         } else {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             Err(UpdateCertificateError::from_response(response))
@@ -32428,9 +32428,9 @@ impl Iot for IotClient {
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
             let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = ::std::mem::drop(response);
+            ::std::mem::drop(response);
 
-            Ok(result)
+            Ok(())
         } else {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             Err(UpdateJobError::from_response(response))

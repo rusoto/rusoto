@@ -4649,9 +4649,9 @@ impl Es for EsClient {
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
             let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = ::std::mem::drop(response);
+            ::std::mem::drop(response);
 
-            Ok(result)
+            Ok(())
         } else {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             Err(AddTagsError::from_response(response))
@@ -4870,9 +4870,9 @@ impl Es for EsClient {
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
             let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = ::std::mem::drop(response);
+            ::std::mem::drop(response);
 
-            Ok(result)
+            Ok(())
         } else {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             Err(DeleteElasticsearchServiceRoleError::from_response(response))
@@ -5806,9 +5806,9 @@ impl Es for EsClient {
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
             let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = ::std::mem::drop(response);
+            ::std::mem::drop(response);
 
-            Ok(result)
+            Ok(())
         } else {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             Err(RemoveTagsError::from_response(response))

@@ -9160,9 +9160,9 @@ impl Connect for ConnectClient {
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
             let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = ::std::mem::drop(response);
+            ::std::mem::drop(response);
 
-            Ok(result)
+            Ok(())
         } else {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             Err(AssociateApprovedOriginError::from_response(response))
@@ -9230,9 +9230,9 @@ impl Connect for ConnectClient {
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
             let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = ::std::mem::drop(response);
+            ::std::mem::drop(response);
 
-            Ok(result)
+            Ok(())
         } else {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             Err(AssociateLambdaFunctionError::from_response(response))
@@ -9263,9 +9263,9 @@ impl Connect for ConnectClient {
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
             let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = ::std::mem::drop(response);
+            ::std::mem::drop(response);
 
-            Ok(result)
+            Ok(())
         } else {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             Err(AssociateLexBotError::from_response(response))
@@ -9297,9 +9297,9 @@ impl Connect for ConnectClient {
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
             let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = ::std::mem::drop(response);
+            ::std::mem::drop(response);
 
-            Ok(result)
+            Ok(())
         } else {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             Err(AssociateRoutingProfileQueuesError::from_response(response))
@@ -9622,9 +9622,9 @@ impl Connect for ConnectClient {
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
             let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = ::std::mem::drop(response);
+            ::std::mem::drop(response);
 
-            Ok(result)
+            Ok(())
         } else {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             Err(DeleteInstanceError::from_response(response))
@@ -9653,9 +9653,9 @@ impl Connect for ConnectClient {
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
             let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = ::std::mem::drop(response);
+            ::std::mem::drop(response);
 
-            Ok(result)
+            Ok(())
         } else {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             Err(DeleteIntegrationAssociationError::from_response(response))
@@ -9684,9 +9684,9 @@ impl Connect for ConnectClient {
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
             let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = ::std::mem::drop(response);
+            ::std::mem::drop(response);
 
-            Ok(result)
+            Ok(())
         } else {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             Err(DeleteQuickConnectError::from_response(response))
@@ -9711,9 +9711,9 @@ impl Connect for ConnectClient {
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
             let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = ::std::mem::drop(response);
+            ::std::mem::drop(response);
 
-            Ok(result)
+            Ok(())
         } else {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             Err(DeleteUseCaseError::from_response(response))
@@ -9742,9 +9742,9 @@ impl Connect for ConnectClient {
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
             let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = ::std::mem::drop(response);
+            ::std::mem::drop(response);
 
-            Ok(result)
+            Ok(())
         } else {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             Err(DeleteUserError::from_response(response))
@@ -9773,9 +9773,9 @@ impl Connect for ConnectClient {
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
             let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = ::std::mem::drop(response);
+            ::std::mem::drop(response);
 
-            Ok(result)
+            Ok(())
         } else {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             Err(DeleteUserHierarchyGroupError::from_response(response))
@@ -10102,9 +10102,9 @@ impl Connect for ConnectClient {
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
             let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = ::std::mem::drop(response);
+            ::std::mem::drop(response);
 
-            Ok(result)
+            Ok(())
         } else {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             Err(DisassociateApprovedOriginError::from_response(response))
@@ -10137,9 +10137,9 @@ impl Connect for ConnectClient {
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
             let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = ::std::mem::drop(response);
+            ::std::mem::drop(response);
 
-            Ok(result)
+            Ok(())
         } else {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             Err(DisassociateInstanceStorageConfigError::from_response(
@@ -10173,9 +10173,9 @@ impl Connect for ConnectClient {
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
             let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = ::std::mem::drop(response);
+            ::std::mem::drop(response);
 
-            Ok(result)
+            Ok(())
         } else {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             Err(DisassociateLambdaFunctionError::from_response(response))
@@ -10208,9 +10208,9 @@ impl Connect for ConnectClient {
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
             let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = ::std::mem::drop(response);
+            ::std::mem::drop(response);
 
-            Ok(result)
+            Ok(())
         } else {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             Err(DisassociateLexBotError::from_response(response))
@@ -10242,9 +10242,9 @@ impl Connect for ConnectClient {
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
             let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = ::std::mem::drop(response);
+            ::std::mem::drop(response);
 
-            Ok(result)
+            Ok(())
         } else {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             Err(DisassociateRoutingProfileQueuesError::from_response(
@@ -10275,9 +10275,9 @@ impl Connect for ConnectClient {
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
             let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = ::std::mem::drop(response);
+            ::std::mem::drop(response);
 
-            Ok(result)
+            Ok(())
         } else {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             Err(DisassociateSecurityKeyError::from_response(response))
@@ -11536,9 +11536,9 @@ impl Connect for ConnectClient {
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
             let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = ::std::mem::drop(response);
+            ::std::mem::drop(response);
 
-            Ok(result)
+            Ok(())
         } else {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             Err(TagResourceError::from_response(response))
@@ -11569,9 +11569,9 @@ impl Connect for ConnectClient {
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
             let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = ::std::mem::drop(response);
+            ::std::mem::drop(response);
 
-            Ok(result)
+            Ok(())
         } else {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             Err(UntagResourceError::from_response(response))
@@ -11634,9 +11634,9 @@ impl Connect for ConnectClient {
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
             let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = ::std::mem::drop(response);
+            ::std::mem::drop(response);
 
-            Ok(result)
+            Ok(())
         } else {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             Err(UpdateContactFlowContentError::from_response(response))
@@ -11668,9 +11668,9 @@ impl Connect for ConnectClient {
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
             let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = ::std::mem::drop(response);
+            ::std::mem::drop(response);
 
-            Ok(result)
+            Ok(())
         } else {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             Err(UpdateContactFlowNameError::from_response(response))
@@ -11702,9 +11702,9 @@ impl Connect for ConnectClient {
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
             let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = ::std::mem::drop(response);
+            ::std::mem::drop(response);
 
-            Ok(result)
+            Ok(())
         } else {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             Err(UpdateInstanceAttributeError::from_response(response))
@@ -11740,9 +11740,9 @@ impl Connect for ConnectClient {
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
             let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = ::std::mem::drop(response);
+            ::std::mem::drop(response);
 
-            Ok(result)
+            Ok(())
         } else {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             Err(UpdateInstanceStorageConfigError::from_response(response))
@@ -11774,9 +11774,9 @@ impl Connect for ConnectClient {
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
             let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = ::std::mem::drop(response);
+            ::std::mem::drop(response);
 
-            Ok(result)
+            Ok(())
         } else {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             Err(UpdateQuickConnectConfigError::from_response(response))
@@ -11808,9 +11808,9 @@ impl Connect for ConnectClient {
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
             let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = ::std::mem::drop(response);
+            ::std::mem::drop(response);
 
-            Ok(result)
+            Ok(())
         } else {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             Err(UpdateQuickConnectNameError::from_response(response))
@@ -11842,9 +11842,9 @@ impl Connect for ConnectClient {
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
             let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = ::std::mem::drop(response);
+            ::std::mem::drop(response);
 
-            Ok(result)
+            Ok(())
         } else {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             Err(UpdateRoutingProfileConcurrencyError::from_response(
@@ -11878,9 +11878,9 @@ impl Connect for ConnectClient {
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
             let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = ::std::mem::drop(response);
+            ::std::mem::drop(response);
 
-            Ok(result)
+            Ok(())
         } else {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             Err(UpdateRoutingProfileDefaultOutboundQueueError::from_response(response))
@@ -11912,9 +11912,9 @@ impl Connect for ConnectClient {
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
             let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = ::std::mem::drop(response);
+            ::std::mem::drop(response);
 
-            Ok(result)
+            Ok(())
         } else {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             Err(UpdateRoutingProfileNameError::from_response(response))
@@ -11946,9 +11946,9 @@ impl Connect for ConnectClient {
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
             let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = ::std::mem::drop(response);
+            ::std::mem::drop(response);
 
-            Ok(result)
+            Ok(())
         } else {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             Err(UpdateRoutingProfileQueuesError::from_response(response))
@@ -11980,9 +11980,9 @@ impl Connect for ConnectClient {
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
             let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = ::std::mem::drop(response);
+            ::std::mem::drop(response);
 
-            Ok(result)
+            Ok(())
         } else {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             Err(UpdateUserHierarchyError::from_response(response))
@@ -12014,9 +12014,9 @@ impl Connect for ConnectClient {
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
             let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = ::std::mem::drop(response);
+            ::std::mem::drop(response);
 
-            Ok(result)
+            Ok(())
         } else {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             Err(UpdateUserHierarchyGroupNameError::from_response(response))
@@ -12047,9 +12047,9 @@ impl Connect for ConnectClient {
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
             let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = ::std::mem::drop(response);
+            ::std::mem::drop(response);
 
-            Ok(result)
+            Ok(())
         } else {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             Err(UpdateUserHierarchyStructureError::from_response(response))
@@ -12081,9 +12081,9 @@ impl Connect for ConnectClient {
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
             let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = ::std::mem::drop(response);
+            ::std::mem::drop(response);
 
-            Ok(result)
+            Ok(())
         } else {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             Err(UpdateUserIdentityInfoError::from_response(response))
@@ -12115,9 +12115,9 @@ impl Connect for ConnectClient {
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
             let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = ::std::mem::drop(response);
+            ::std::mem::drop(response);
 
-            Ok(result)
+            Ok(())
         } else {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             Err(UpdateUserPhoneConfigError::from_response(response))
@@ -12149,9 +12149,9 @@ impl Connect for ConnectClient {
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
             let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = ::std::mem::drop(response);
+            ::std::mem::drop(response);
 
-            Ok(result)
+            Ok(())
         } else {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             Err(UpdateUserRoutingProfileError::from_response(response))
@@ -12183,9 +12183,9 @@ impl Connect for ConnectClient {
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
             let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = ::std::mem::drop(response);
+            ::std::mem::drop(response);
 
-            Ok(result)
+            Ok(())
         } else {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             Err(UpdateUserSecurityProfilesError::from_response(response))

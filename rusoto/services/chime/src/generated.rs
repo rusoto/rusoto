@@ -21584,9 +21584,9 @@ impl Chime for ChimeClient {
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 204 {
             let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = ::std::mem::drop(response);
+            ::std::mem::drop(response);
 
-            Ok(result)
+            Ok(())
         } else {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             Err(DeleteAppInstanceError::from_response(response))
@@ -21615,9 +21615,9 @@ impl Chime for ChimeClient {
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 204 {
             let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = ::std::mem::drop(response);
+            ::std::mem::drop(response);
 
-            Ok(result)
+            Ok(())
         } else {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             Err(DeleteAppInstanceAdminError::from_response(response))
@@ -21645,9 +21645,9 @@ impl Chime for ChimeClient {
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 204 {
             let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = ::std::mem::drop(response);
+            ::std::mem::drop(response);
 
-            Ok(result)
+            Ok(())
         } else {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             Err(DeleteAppInstanceStreamingConfigurationsError::from_response(response))
@@ -21675,9 +21675,9 @@ impl Chime for ChimeClient {
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 204 {
             let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = ::std::mem::drop(response);
+            ::std::mem::drop(response);
 
-            Ok(result)
+            Ok(())
         } else {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             Err(DeleteAppInstanceUserError::from_response(response))
@@ -21706,9 +21706,9 @@ impl Chime for ChimeClient {
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 204 {
             let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = ::std::mem::drop(response);
+            ::std::mem::drop(response);
 
-            Ok(result)
+            Ok(())
         } else {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             Err(DeleteAttendeeError::from_response(response))
@@ -21733,9 +21733,9 @@ impl Chime for ChimeClient {
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 204 {
             let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = ::std::mem::drop(response);
+            ::std::mem::drop(response);
 
-            Ok(result)
+            Ok(())
         } else {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             Err(DeleteChannelError::from_response(response))
@@ -21764,9 +21764,9 @@ impl Chime for ChimeClient {
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 204 {
             let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = ::std::mem::drop(response);
+            ::std::mem::drop(response);
 
-            Ok(result)
+            Ok(())
         } else {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             Err(DeleteChannelBanError::from_response(response))
@@ -21795,9 +21795,9 @@ impl Chime for ChimeClient {
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 204 {
             let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = ::std::mem::drop(response);
+            ::std::mem::drop(response);
 
-            Ok(result)
+            Ok(())
         } else {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             Err(DeleteChannelMembershipError::from_response(response))
@@ -21826,9 +21826,9 @@ impl Chime for ChimeClient {
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 204 {
             let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = ::std::mem::drop(response);
+            ::std::mem::drop(response);
 
-            Ok(result)
+            Ok(())
         } else {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             Err(DeleteChannelMessageError::from_response(response))
@@ -21857,9 +21857,9 @@ impl Chime for ChimeClient {
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 204 {
             let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = ::std::mem::drop(response);
+            ::std::mem::drop(response);
 
-            Ok(result)
+            Ok(())
         } else {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             Err(DeleteChannelModeratorError::from_response(response))
@@ -21888,9 +21888,9 @@ impl Chime for ChimeClient {
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 204 {
             let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = ::std::mem::drop(response);
+            ::std::mem::drop(response);
 
-            Ok(result)
+            Ok(())
         } else {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             Err(DeleteEventsConfigurationError::from_response(response))
@@ -21915,9 +21915,9 @@ impl Chime for ChimeClient {
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 204 {
             let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = ::std::mem::drop(response);
+            ::std::mem::drop(response);
 
-            Ok(result)
+            Ok(())
         } else {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             Err(DeleteMeetingError::from_response(response))
@@ -21945,9 +21945,9 @@ impl Chime for ChimeClient {
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 204 {
             let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = ::std::mem::drop(response);
+            ::std::mem::drop(response);
 
-            Ok(result)
+            Ok(())
         } else {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             Err(DeletePhoneNumberError::from_response(response))
@@ -21976,9 +21976,9 @@ impl Chime for ChimeClient {
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 204 {
             let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = ::std::mem::drop(response);
+            ::std::mem::drop(response);
 
-            Ok(result)
+            Ok(())
         } else {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             Err(DeleteProxySessionError::from_response(response))
@@ -22007,9 +22007,9 @@ impl Chime for ChimeClient {
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 204 {
             let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = ::std::mem::drop(response);
+            ::std::mem::drop(response);
 
-            Ok(result)
+            Ok(())
         } else {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             Err(DeleteRoomError::from_response(response))
@@ -22039,9 +22039,9 @@ impl Chime for ChimeClient {
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 204 {
             let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = ::std::mem::drop(response);
+            ::std::mem::drop(response);
 
-            Ok(result)
+            Ok(())
         } else {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             Err(DeleteRoomMembershipError::from_response(response))
@@ -22069,9 +22069,9 @@ impl Chime for ChimeClient {
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 204 {
             let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = ::std::mem::drop(response);
+            ::std::mem::drop(response);
 
-            Ok(result)
+            Ok(())
         } else {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             Err(DeleteSipMediaApplicationError::from_response(response))
@@ -22096,9 +22096,9 @@ impl Chime for ChimeClient {
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 204 {
             let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = ::std::mem::drop(response);
+            ::std::mem::drop(response);
 
-            Ok(result)
+            Ok(())
         } else {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             Err(DeleteSipRuleError::from_response(response))
@@ -22126,9 +22126,9 @@ impl Chime for ChimeClient {
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 204 {
             let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = ::std::mem::drop(response);
+            ::std::mem::drop(response);
 
-            Ok(result)
+            Ok(())
         } else {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             Err(DeleteVoiceConnectorError::from_response(response))
@@ -22156,9 +22156,9 @@ impl Chime for ChimeClient {
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 204 {
             let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = ::std::mem::drop(response);
+            ::std::mem::drop(response);
 
-            Ok(result)
+            Ok(())
         } else {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             Err(DeleteVoiceConnectorEmergencyCallingConfigurationError::from_response(response))
@@ -22186,9 +22186,9 @@ impl Chime for ChimeClient {
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 204 {
             let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = ::std::mem::drop(response);
+            ::std::mem::drop(response);
 
-            Ok(result)
+            Ok(())
         } else {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             Err(DeleteVoiceConnectorGroupError::from_response(response))
@@ -22216,9 +22216,9 @@ impl Chime for ChimeClient {
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 204 {
             let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = ::std::mem::drop(response);
+            ::std::mem::drop(response);
 
-            Ok(result)
+            Ok(())
         } else {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             Err(DeleteVoiceConnectorOriginationError::from_response(
@@ -22248,9 +22248,9 @@ impl Chime for ChimeClient {
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 204 {
             let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = ::std::mem::drop(response);
+            ::std::mem::drop(response);
 
-            Ok(result)
+            Ok(())
         } else {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             Err(DeleteVoiceConnectorProxyError::from_response(response))
@@ -22278,9 +22278,9 @@ impl Chime for ChimeClient {
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 204 {
             let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = ::std::mem::drop(response);
+            ::std::mem::drop(response);
 
-            Ok(result)
+            Ok(())
         } else {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             Err(DeleteVoiceConnectorStreamingConfigurationError::from_response(response))
@@ -22308,9 +22308,9 @@ impl Chime for ChimeClient {
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 204 {
             let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = ::std::mem::drop(response);
+            ::std::mem::drop(response);
 
-            Ok(result)
+            Ok(())
         } else {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             Err(DeleteVoiceConnectorTerminationError::from_response(
@@ -22347,9 +22347,9 @@ impl Chime for ChimeClient {
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 204 {
             let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = ::std::mem::drop(response);
+            ::std::mem::drop(response);
 
-            Ok(result)
+            Ok(())
         } else {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             Err(DeleteVoiceConnectorTerminationCredentialsError::from_response(response))
@@ -25409,9 +25409,9 @@ impl Chime for ChimeClient {
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 204 {
             let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = ::std::mem::drop(response);
+            ::std::mem::drop(response);
 
-            Ok(result)
+            Ok(())
         } else {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             Err(PutVoiceConnectorTerminationCredentialsError::from_response(
@@ -25755,9 +25755,9 @@ impl Chime for ChimeClient {
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 204 {
             let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = ::std::mem::drop(response);
+            ::std::mem::drop(response);
 
-            Ok(result)
+            Ok(())
         } else {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             Err(TagAttendeeError::from_response(response))
@@ -25789,9 +25789,9 @@ impl Chime for ChimeClient {
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 204 {
             let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = ::std::mem::drop(response);
+            ::std::mem::drop(response);
 
-            Ok(result)
+            Ok(())
         } else {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             Err(TagMeetingError::from_response(response))
@@ -25823,9 +25823,9 @@ impl Chime for ChimeClient {
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 204 {
             let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = ::std::mem::drop(response);
+            ::std::mem::drop(response);
 
-            Ok(result)
+            Ok(())
         } else {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             Err(TagResourceError::from_response(response))
@@ -25861,9 +25861,9 @@ impl Chime for ChimeClient {
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 204 {
             let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = ::std::mem::drop(response);
+            ::std::mem::drop(response);
 
-            Ok(result)
+            Ok(())
         } else {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             Err(UntagAttendeeError::from_response(response))
@@ -25895,9 +25895,9 @@ impl Chime for ChimeClient {
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 204 {
             let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = ::std::mem::drop(response);
+            ::std::mem::drop(response);
 
-            Ok(result)
+            Ok(())
         } else {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             Err(UntagMeetingError::from_response(response))
@@ -25929,9 +25929,9 @@ impl Chime for ChimeClient {
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 204 {
             let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = ::std::mem::drop(response);
+            ::std::mem::drop(response);
 
-            Ok(result)
+            Ok(())
         } else {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             Err(UntagResourceError::from_response(response))
@@ -26224,9 +26224,9 @@ impl Chime for ChimeClient {
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 204 {
             let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = ::std::mem::drop(response);
+            ::std::mem::drop(response);
 
-            Ok(result)
+            Ok(())
         } else {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             Err(UpdateGlobalSettingsError::from_response(response))
@@ -26288,9 +26288,9 @@ impl Chime for ChimeClient {
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 204 {
             let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = ::std::mem::drop(response);
+            ::std::mem::drop(response);
 
-            Ok(result)
+            Ok(())
         } else {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             Err(UpdatePhoneNumberSettingsError::from_response(response))
@@ -26529,9 +26529,9 @@ impl Chime for ChimeClient {
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 204 {
             let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = ::std::mem::drop(response);
+            ::std::mem::drop(response);
 
-            Ok(result)
+            Ok(())
         } else {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             Err(UpdateUserSettingsError::from_response(response))

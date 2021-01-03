@@ -74,7 +74,7 @@ impl GenerateProtocol for RestJsonGenerator {
                         {parse_body}
                         {parse_headers}
                         {parse_status_code}
-                        Ok(result)
+                        Ok({parse_result})
                     }} else {{
                         let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
                         Err({error_type}::from_response(response))
@@ -90,6 +90,7 @@ impl GenerateProtocol for RestJsonGenerator {
                 status_check = http_code_expected(operation.http.response_code),
                 parse_body = generate_body_parser(operation, service),
                 parse_status_code = generate_status_code_parser(operation, service),
+                parse_result = generate_result_parser(operation),
                 output_type = output_type,
                 load_headers = rest_request_generator::generate_headers(service, operation).unwrap_or_else(|| "".to_string()),
                 parse_headers = rest_response_parser::generate_response_headers_parser(service, operation)
@@ -333,7 +334,7 @@ fn generate_status_code_parser(operation: &Operation, service: &Service<'_>) -> 
 /// warnings about unnecessary mutability
 fn generate_body_parser(operation: &Operation, service: &Service<'_>) -> String {
     if operation.output.is_none() {
-        return "let result = ::std::mem::drop(response);".to_string();
+        return "::std::mem::drop(response);".to_string();
     }
 
     let shape_name = &operation.output.as_ref().unwrap().shape;
@@ -378,6 +379,12 @@ fn generate_body_parser(operation: &Operation, service: &Service<'_>) -> String 
             }
         }
     }
+}
+
+/// Return unit type `()` if output of operation is None.
+fn generate_result_parser(operation: &Operation) -> String {
+    let is_none = operation.output.is_none();
+    if is_none { "()" } else { "result" }.to_owned()
 }
 
 /// Take the raw http response body and assign it to the payload field

@@ -298,9 +298,9 @@ impl PersonalizeEvents for PersonalizeEventsClient {
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
             let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = ::std::mem::drop(response);
+            ::std::mem::drop(response);
 
-            Ok(result)
+            Ok(())
         } else {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             Err(PutEventsError::from_response(response))
@@ -326,9 +326,9 @@ impl PersonalizeEvents for PersonalizeEventsClient {
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
             let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = ::std::mem::drop(response);
+            ::std::mem::drop(response);
 
-            Ok(result)
+            Ok(())
         } else {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             Err(PutItemsError::from_response(response))
@@ -354,9 +354,9 @@ impl PersonalizeEvents for PersonalizeEventsClient {
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
             let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = ::std::mem::drop(response);
+            ::std::mem::drop(response);
 
-            Ok(result)
+            Ok(())
         } else {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             Err(PutUsersError::from_response(response))

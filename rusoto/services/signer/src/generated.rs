@@ -2077,9 +2077,9 @@ impl Signer for SignerClient {
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
             let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = ::std::mem::drop(response);
+            ::std::mem::drop(response);
 
-            Ok(result)
+            Ok(())
         } else {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             Err(CancelSigningProfileError::from_response(response))
@@ -2490,9 +2490,9 @@ impl Signer for SignerClient {
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
             let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = ::std::mem::drop(response);
+            ::std::mem::drop(response);
 
-            Ok(result)
+            Ok(())
         } else {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             Err(RevokeSignatureError::from_response(response))
@@ -2523,9 +2523,9 @@ impl Signer for SignerClient {
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
             let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = ::std::mem::drop(response);
+            ::std::mem::drop(response);
 
-            Ok(result)
+            Ok(())
         } else {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             Err(RevokeSigningProfileError::from_response(response))

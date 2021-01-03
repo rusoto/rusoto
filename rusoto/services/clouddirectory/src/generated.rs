@@ -9373,9 +9373,9 @@ impl CloudDirectory for CloudDirectoryClient {
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
             let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = ::std::mem::drop(response);
+            ::std::mem::drop(response);
 
-            Ok(result)
+            Ok(())
         } else {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             Err(DetachTypedLinkError::from_response(response))
