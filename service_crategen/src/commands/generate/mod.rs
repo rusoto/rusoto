@@ -43,8 +43,11 @@ fn generate_examples(crate_dir_path: &Path) -> Option<String> {
                     output.push_str("//!\n//! ```rust,no_run\n");
                     inside_header_section = false;
                 }
-                output.push_str("//! ");
-                output.push_str(line);
+                output.push_str("//!");
+                if !line.is_empty() {
+                    output.push(' ');
+                    output.push_str(line);
+                }
                 output.push('\n');
             }
         }
