@@ -8,7 +8,7 @@ extern crate time;
 extern crate log;
 extern crate env_logger;
 
-use rusoto::{AwsResult, ChainProvider, Region, ProvideAwsCredentials};
+use rusoto::{AwsResult, ChainProvider, ProvideAwsCredentials, Region};
 use rusoto_helpers::sqs::SqsHelper;
 use time::get_time;
 
@@ -28,7 +28,7 @@ fn main() {
     }
 }
 
-fn sqs_roundtrip_tests <P: ProvideAwsCredentials> (sqs: &mut SqsHelper<P>) -> AwsResult<()> {
+fn sqs_roundtrip_tests<P: ProvideAwsCredentials>(sqs: &mut SqsHelper<P>) -> AwsResult<()> {
     debug!("Test logging");
     // list existing queues
     let response = sqs.list_queues()?;
@@ -44,25 +44,33 @@ fn sqs_roundtrip_tests <P: ProvideAwsCredentials> (sqs: &mut SqsHelper<P>) -> Aw
     // query it by name
     let response = sqs.get_queue_url(q_name)?;
     let queue_url = response.queue_url.unwrap();
-    println!("Verified queue url {:?} for queue name {}", queue_url, q_name);
+    println!(
+        "Verified queue url {:?} for queue name {}",
+        queue_url, q_name
+    );
 
     // send it a message
     let msg_str = "lorem ipsum dolor sit amet";
     let response = sqs.send_message(&queue_url, msg_str)?;
-    println!("Send message with body '{}' and created message_id {:?}",
-             msg_str,
-             response.message_id);
+    println!(
+        "Send message with body '{}' and created message_id {:?}",
+        msg_str, response.message_id
+    );
 
     // receive a message
     let response = sqs.receive_message(&queue_url)?;
     match response.messages {
         Some(messages) => {
             for msg in messages {
-                println!("Received message '{:?}' with id {}", msg.body, msg.message_id.unwrap());
+                println!(
+                    "Received message '{:?}' with id {}",
+                    msg.body,
+                    msg.message_id.unwrap()
+                );
                 sqs.delete_message(&queue_url, &msg.receipt_handle.unwrap())?;
             }
-        },
-        None => println!("no messages")
+        }
+        None => println!("no messages"),
     }
 
     // delete the queue

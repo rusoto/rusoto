@@ -1,5 +1,5 @@
 use crate::custom::credential::NewAwsCredsForStsCreds;
-use crate::{AssumeRoleWithWebIdentityRequest, Sts, StsClient, PolicyDescriptorType};
+use crate::{AssumeRoleWithWebIdentityRequest, PolicyDescriptorType, Sts, StsClient};
 use rusoto_core::credential::{
     AwsCredentials, CredentialsError, ProvideAwsCredentials, Secret, Variable,
 };
@@ -55,7 +55,7 @@ impl WebIdentityProvider {
             role_session_name: role_session_name.map(|v| v.into()),
             duration_seconds: None,
             policy: None,
-            policy_arns: None
+            policy_arns: None,
         }
     }
 

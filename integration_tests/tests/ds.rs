@@ -5,7 +5,9 @@ extern crate rusoto_ds;
 
 use rusoto_core::{Region, RusotoError};
 use rusoto_ds::{
-    DescribeDirectoriesRequest, DescribeTrustsRequest, DirectoryService, DirectoryServiceClient, DescribeEventTopicsRequest, DescribeConditionalForwardersRequest, DescribeDomainControllersRequest, DescribeConditionalForwardersError, DescribeDomainControllersError,
+    DescribeConditionalForwardersError, DescribeConditionalForwardersRequest,
+    DescribeDirectoriesRequest, DescribeDomainControllersError, DescribeDomainControllersRequest,
+    DescribeEventTopicsRequest, DescribeTrustsRequest, DirectoryService, DirectoryServiceClient,
 };
 
 #[tokio::test]
@@ -34,7 +36,7 @@ async fn should_conditional_forwarders() {
         Err(RusotoError::Service(DescribeConditionalForwardersError::EntityDoesNotExist(msg))) => {
             assert!(msg.contains("does not exist."))
         }
-        err @ _ => panic!("Expected EntityDoesNotExist error, got {:#?}", err)
+        err @ _ => panic!("Expected EntityDoesNotExist error, got {:#?}", err),
     }
 }
 
@@ -48,7 +50,7 @@ async fn should_describe_domain_controllers() {
         Err(RusotoError::Service(DescribeDomainControllersError::EntityDoesNotExist(msg))) => {
             assert!(msg.contains("does not exist."))
         }
-        err @ _ => panic!("Expected EntityDoesNotExist error, got {:#?}", err)
+        err @ _ => panic!("Expected EntityDoesNotExist error, got {:#?}", err),
     }
 }
 

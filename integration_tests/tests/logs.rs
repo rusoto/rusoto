@@ -19,7 +19,11 @@ use std::fs;
 use std::time::SystemTime;
 use std::{thread, time};
 
-async fn rusoto_logs_test_executor(client: CloudWatchLogsClient, log_group: &str, log_stream: &str) {
+async fn rusoto_logs_test_executor(
+    client: CloudWatchLogsClient,
+    log_group: &str,
+    log_stream: &str,
+) {
     let _ = env_logger::try_init();
 
     // First, create the log group
@@ -175,5 +179,6 @@ async fn should_put_log_events_with_gzip_encoding() {
         client,
         "should_put_log_events_with_encoding",
         "should_put_log_events_with_encoding",
-    ).await;
+    )
+    .await;
 }

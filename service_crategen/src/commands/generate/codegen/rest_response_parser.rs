@@ -110,7 +110,8 @@ fn parse_single_header(
                  result.{field_name} = {primitive_parser};",
             location_name = member.location_name.as_ref().unwrap(),
             field_name = member_name.to_snake_case(),
-            primitive_parser = generate_header_primitive_parser(service, member_shape).unwrap_or("value")
+            primitive_parser =
+                generate_header_primitive_parser(service, member_shape).unwrap_or("value")
         )
     } else {
         format!(

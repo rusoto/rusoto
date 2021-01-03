@@ -9,8 +9,8 @@ use std::panic::AssertUnwindSafe;
 use std::time::Duration;
 
 use async_trait::async_trait;
-use futures::FutureExt;
 use futures::stream::StreamExt;
+use futures::FutureExt;
 use rand::distributions::Alphanumeric;
 use rand::{thread_rng, Rng};
 use tokio::time::{delay_for, timeout};
@@ -66,7 +66,9 @@ impl TestKinesisStream {
                 stream_name: name.clone(),
 
                 ..Default::default()
-            }).await.unwrap();
+            })
+            .await
+            .unwrap();
         let arn = describe_result.stream_description.stream_arn;
 
         TestKinesisStream {
@@ -107,29 +109,33 @@ async fn should_listen_for_shard_events() {
         let stream = test_stream.borrow();
 
         loop {
-            let steam_desc_result = client.describe_stream(rusoto_kinesis::DescribeStreamInput {
-                stream_name: stream.name.clone(),
+            let steam_desc_result = client
+                .describe_stream(rusoto_kinesis::DescribeStreamInput {
+                    stream_name: stream.name.clone(),
 
-                ..Default::default()
-            }).await.unwrap();
+                    ..Default::default()
+                })
+                .await
+                .unwrap();
 
             if steam_desc_result.stream_description.stream_status == "CREATING" {
                 println!("Stream {} still initializing, waiting...", stream.name);
                 delay_for(std::time::Duration::from_secs(2)).await;
                 continue;
             } else {
-                break
+                break;
             }
         }
 
         if let Ok(kms_id) = std::env::var("KMS_ID") {
-            client.start_stream_encryption(rusoto_kinesis::StartStreamEncryptionInput {
-                encryption_type: "KMS".to_string(),
-                key_id: kms_id,
-                stream_name: stream.name.clone(),
-            })
-            .await
-            .unwrap();
+            client
+                .start_stream_encryption(rusoto_kinesis::StartStreamEncryptionInput {
+                    encryption_type: "KMS".to_string(),
+                    key_id: kms_id,
+                    stream_name: stream.name.clone(),
+                })
+                .await
+                .unwrap();
         }
 
         tokio::time::delay_for(Duration::from_secs(10)).await;
@@ -143,19 +149,25 @@ async fn should_listen_for_shard_events() {
             .unwrap();
 
         loop {
-            let consumer_desc_result = client.describe_stream_consumer(rusoto_kinesis::DescribeStreamConsumerInput {
-                consumer_arn: Some(consumer_result.consumer.consumer_arn.clone()),
-                stream_arn: Some(stream.arn.clone()),
+            let consumer_desc_result = client
+                .describe_stream_consumer(rusoto_kinesis::DescribeStreamConsumerInput {
+                    consumer_arn: Some(consumer_result.consumer.consumer_arn.clone()),
+                    stream_arn: Some(stream.arn.clone()),
 
-                ..Default::default()
-            }).await.unwrap();
+                    ..Default::default()
+                })
+                .await
+                .unwrap();
 
             if consumer_desc_result.consumer_description.consumer_status == "CREATING" {
-                println!("Consumer for stream {} still initializing, waiting...", stream.name);
+                println!(
+                    "Consumer for stream {} still initializing, waiting...",
+                    stream.name
+                );
                 delay_for(std::time::Duration::from_secs(2)).await;
                 continue;
             } else {
-                break
+                break;
             }
         }
 
@@ -176,7 +188,7 @@ async fn should_listen_for_shard_events() {
                 starting_position: rusoto_kinesis::StartingPosition {
                     sequence_number: None,
                     timestamp: None,
-                    type_: "TRIM_HORIZON".to_string()
+                    type_: "TRIM_HORIZON".to_string(),
                 },
             })
             .await
@@ -188,15 +200,16 @@ async fn should_listen_for_shard_events() {
         for i in 0i32..5 {
             let message = format!("Record {}", i);
 
-            let result = client.put_record(rusoto_kinesis::PutRecordInput {
-                data: bytes::Bytes::copy_from_slice(message.as_bytes()),
-                partition_key: "hello".to_string(),
-                stream_name: stream.name.clone(),
+            let result = client
+                .put_record(rusoto_kinesis::PutRecordInput {
+                    data: bytes::Bytes::copy_from_slice(message.as_bytes()),
+                    partition_key: "hello".to_string(),
+                    stream_name: stream.name.clone(),
 
-                ..Default::default()
-            })
-            .await
-            .unwrap();
+                    ..Default::default()
+                })
+                .await
+                .unwrap();
 
             eprintln!("Put record result: {:?}", result);
         }
@@ -209,19 +222,19 @@ async fn should_listen_for_shard_events() {
                 match payload {
                     rusoto_kinesis::SubscribeToShardEventStreamItem::SubscribeToShardEvent(e) => {
                         events.extend(e.records);
-                    },
-                    _ => {},
+                    }
+                    _ => {}
                 }
             }
         };
 
-        timeout(
-            Duration::from_secs(10),
-            read_events_future,
-        ).await.unwrap_err();
+        timeout(Duration::from_secs(10), read_events_future)
+            .await
+            .unwrap_err();
 
         println!("Events: {:?}", events);
         assert_eq!(events.len(), 5);
-    }).await;
+    })
+    .await;
     println!("About to exit the upper test fn");
 }
