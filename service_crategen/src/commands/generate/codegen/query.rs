@@ -347,8 +347,8 @@ fn capitalize_if_ec2(service: &Service<'_>, name: &str) -> String {
 fn generate_struct_serializer(service: &Service<'_>, shape: &Shape) -> String {
     format!(
         "let mut prefix = name.to_string();
-        if prefix != \"\" {{
-            prefix.push_str(\".\");
+        if !prefix.is_empty() {{
+            prefix.push('.');
         }}
 
         {struct_field_serializers}

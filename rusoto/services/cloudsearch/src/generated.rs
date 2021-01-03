@@ -176,8 +176,8 @@ struct AnalysisOptionsSerializer;
 impl AnalysisOptionsSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &AnalysisOptions) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         if let Some(ref field_value) = obj.algorithmic_stemming {
@@ -252,8 +252,8 @@ struct AnalysisSchemeSerializer;
 impl AnalysisSchemeSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &AnalysisScheme) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         if let Some(ref field_value) = obj.analysis_options {
@@ -387,8 +387,8 @@ struct BuildSuggestersRequestSerializer;
 impl BuildSuggestersRequestSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &BuildSuggestersRequest) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         params.put(&format!("{}{}", prefix, "DomainName"), &obj.domain_name);
@@ -440,8 +440,8 @@ struct CreateDomainRequestSerializer;
 impl CreateDomainRequestSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &CreateDomainRequest) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         params.put(&format!("{}{}", prefix, "DomainName"), &obj.domain_name);
@@ -538,8 +538,8 @@ struct DateArrayOptionsSerializer;
 impl DateArrayOptionsSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &DateArrayOptions) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         if let Some(ref field_value) = obj.default_value {
@@ -624,8 +624,8 @@ struct DateOptionsSerializer;
 impl DateOptionsSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &DateOptions) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         if let Some(ref field_value) = obj.default_value {
@@ -662,8 +662,8 @@ struct DefineAnalysisSchemeRequestSerializer;
 impl DefineAnalysisSchemeRequestSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &DefineAnalysisSchemeRequest) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         AnalysisSchemeSerializer::serialize(
@@ -719,8 +719,8 @@ struct DefineExpressionRequestSerializer;
 impl DefineExpressionRequestSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &DefineExpressionRequest) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         params.put(&format!("{}{}", prefix, "DomainName"), &obj.domain_name);
@@ -777,8 +777,8 @@ struct DefineIndexFieldRequestSerializer;
 impl DefineIndexFieldRequestSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &DefineIndexFieldRequest) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         params.put(&format!("{}{}", prefix, "DomainName"), &obj.domain_name);
@@ -834,8 +834,8 @@ struct DefineSuggesterRequestSerializer;
 impl DefineSuggesterRequestSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &DefineSuggesterRequest) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         params.put(&format!("{}{}", prefix, "DomainName"), &obj.domain_name);
@@ -892,8 +892,8 @@ struct DeleteAnalysisSchemeRequestSerializer;
 impl DeleteAnalysisSchemeRequestSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &DeleteAnalysisSchemeRequest) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         params.put(
@@ -949,8 +949,8 @@ struct DeleteDomainRequestSerializer;
 impl DeleteDomainRequestSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &DeleteDomainRequest) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         params.put(&format!("{}{}", prefix, "DomainName"), &obj.domain_name);
@@ -1000,8 +1000,8 @@ struct DeleteExpressionRequestSerializer;
 impl DeleteExpressionRequestSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &DeleteExpressionRequest) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         params.put(&format!("{}{}", prefix, "DomainName"), &obj.domain_name);
@@ -1058,8 +1058,8 @@ struct DeleteIndexFieldRequestSerializer;
 impl DeleteIndexFieldRequestSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &DeleteIndexFieldRequest) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         params.put(&format!("{}{}", prefix, "DomainName"), &obj.domain_name);
@@ -1116,8 +1116,8 @@ struct DeleteSuggesterRequestSerializer;
 impl DeleteSuggesterRequestSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &DeleteSuggesterRequest) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         params.put(&format!("{}{}", prefix, "DomainName"), &obj.domain_name);
@@ -1177,8 +1177,8 @@ struct DescribeAnalysisSchemesRequestSerializer;
 impl DescribeAnalysisSchemesRequestSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &DescribeAnalysisSchemesRequest) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         if let Some(ref field_value) = obj.analysis_scheme_names {
@@ -1246,8 +1246,8 @@ struct DescribeAvailabilityOptionsRequestSerializer;
 impl DescribeAvailabilityOptionsRequestSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &DescribeAvailabilityOptionsRequest) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         if let Some(ref field_value) = obj.deployed {
@@ -1307,8 +1307,8 @@ struct DescribeDomainEndpointOptionsRequestSerializer;
 impl DescribeDomainEndpointOptionsRequestSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &DescribeDomainEndpointOptionsRequest) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         if let Some(ref field_value) = obj.deployed {
@@ -1366,8 +1366,8 @@ struct DescribeDomainsRequestSerializer;
 impl DescribeDomainsRequestSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &DescribeDomainsRequest) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         if let Some(ref field_value) = obj.domain_names {
@@ -1431,8 +1431,8 @@ struct DescribeExpressionsRequestSerializer;
 impl DescribeExpressionsRequestSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &DescribeExpressionsRequest) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         if let Some(ref field_value) = obj.deployed {
@@ -1501,8 +1501,8 @@ struct DescribeIndexFieldsRequestSerializer;
 impl DescribeIndexFieldsRequestSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &DescribeIndexFieldsRequest) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         if let Some(ref field_value) = obj.deployed {
@@ -1566,8 +1566,8 @@ struct DescribeScalingParametersRequestSerializer;
 impl DescribeScalingParametersRequestSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &DescribeScalingParametersRequest) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         params.put(&format!("{}{}", prefix, "DomainName"), &obj.domain_name);
@@ -1622,8 +1622,8 @@ struct DescribeServiceAccessPoliciesRequestSerializer;
 impl DescribeServiceAccessPoliciesRequestSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &DescribeServiceAccessPoliciesRequest) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         if let Some(ref field_value) = obj.deployed {
@@ -1682,8 +1682,8 @@ struct DescribeSuggestersRequestSerializer;
 impl DescribeSuggestersRequestSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &DescribeSuggestersRequest) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         if let Some(ref field_value) = obj.deployed {
@@ -1788,8 +1788,8 @@ struct DocumentSuggesterOptionsSerializer;
 impl DocumentSuggesterOptionsSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &DocumentSuggesterOptions) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         if let Some(ref field_value) = obj.fuzzy_matching {
@@ -1845,8 +1845,8 @@ struct DomainEndpointOptionsSerializer;
 impl DomainEndpointOptionsSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &DomainEndpointOptions) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         if let Some(ref field_value) = obj.enforce_https {
@@ -2133,8 +2133,8 @@ struct DoubleArrayOptionsSerializer;
 impl DoubleArrayOptionsSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &DoubleArrayOptions) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         if let Some(ref field_value) = obj.default_value {
@@ -2220,8 +2220,8 @@ struct DoubleOptionsSerializer;
 impl DoubleOptionsSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &DoubleOptions) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         if let Some(ref field_value) = obj.default_value {
@@ -2304,8 +2304,8 @@ struct ExpressionSerializer;
 impl ExpressionSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &Expression) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         params.put(
@@ -2430,8 +2430,8 @@ struct IndexDocumentsRequestSerializer;
 impl IndexDocumentsRequestSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &IndexDocumentsRequest) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         params.put(&format!("{}{}", prefix, "DomainName"), &obj.domain_name);
@@ -2578,8 +2578,8 @@ struct IndexFieldSerializer;
 impl IndexFieldSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &IndexField) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         if let Some(ref field_value) = obj.date_array_options {
@@ -2794,8 +2794,8 @@ struct IntArrayOptionsSerializer;
 impl IntArrayOptionsSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &IntArrayOptions) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         if let Some(ref field_value) = obj.default_value {
@@ -2880,8 +2880,8 @@ struct IntOptionsSerializer;
 impl IntOptionsSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &IntOptions) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         if let Some(ref field_value) = obj.default_value {
@@ -2969,8 +2969,8 @@ struct LatLonOptionsSerializer;
 impl LatLonOptionsSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &LatLonOptions) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         if let Some(ref field_value) = obj.default_value {
@@ -3122,8 +3122,8 @@ struct LiteralArrayOptionsSerializer;
 impl LiteralArrayOptionsSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &LiteralArrayOptions) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         if let Some(ref field_value) = obj.default_value {
@@ -3208,8 +3208,8 @@ struct LiteralOptionsSerializer;
 impl LiteralOptionsSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &LiteralOptions) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         if let Some(ref field_value) = obj.default_value {
@@ -3402,8 +3402,8 @@ struct ScalingParametersSerializer;
 impl ScalingParametersSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &ScalingParameters) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         if let Some(ref field_value) = obj.desired_instance_type {
@@ -3573,8 +3573,8 @@ struct SuggesterSerializer;
 impl SuggesterSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &Suggester) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         DocumentSuggesterOptionsSerializer::serialize(
@@ -3714,8 +3714,8 @@ struct TextArrayOptionsSerializer;
 impl TextArrayOptionsSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &TextArrayOptions) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         if let Some(ref field_value) = obj.analysis_scheme {
@@ -3800,8 +3800,8 @@ struct TextOptionsSerializer;
 impl TextOptionsSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &TextOptions) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         if let Some(ref field_value) = obj.analysis_scheme {
@@ -3847,8 +3847,8 @@ struct UpdateAvailabilityOptionsRequestSerializer;
 impl UpdateAvailabilityOptionsRequestSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &UpdateAvailabilityOptionsRequest) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         params.put(&format!("{}{}", prefix, "DomainName"), &obj.domain_name);
@@ -3906,8 +3906,8 @@ struct UpdateDomainEndpointOptionsRequestSerializer;
 impl UpdateDomainEndpointOptionsRequestSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &UpdateDomainEndpointOptionsRequest) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         DomainEndpointOptionsSerializer::serialize(
@@ -3967,8 +3967,8 @@ struct UpdateScalingParametersRequestSerializer;
 impl UpdateScalingParametersRequestSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &UpdateScalingParametersRequest) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         params.put(&format!("{}{}", prefix, "DomainName"), &obj.domain_name);
@@ -4027,8 +4027,8 @@ struct UpdateServiceAccessPoliciesRequestSerializer;
 impl UpdateServiceAccessPoliciesRequestSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &UpdateServiceAccessPoliciesRequest) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         params.put(

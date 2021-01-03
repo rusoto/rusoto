@@ -82,8 +82,8 @@ struct AbortEnvironmentUpdateMessageSerializer;
 impl AbortEnvironmentUpdateMessageSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &AbortEnvironmentUpdateMessage) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         if let Some(ref field_value) = obj.environment_id {
@@ -422,8 +422,8 @@ struct ApplicationResourceLifecycleConfigSerializer;
 impl ApplicationResourceLifecycleConfigSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &ApplicationResourceLifecycleConfig) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         if let Some(ref field_value) = obj.service_role {
@@ -728,8 +728,8 @@ struct ApplicationVersionLifecycleConfigSerializer;
 impl ApplicationVersionLifecycleConfigSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &ApplicationVersionLifecycleConfig) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         if let Some(ref field_value) = obj.max_age_rule {
@@ -774,8 +774,8 @@ struct ApplyEnvironmentManagedActionRequestSerializer;
 impl ApplyEnvironmentManagedActionRequestSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &ApplyEnvironmentManagedActionRequest) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         params.put(&format!("{}{}", prefix, "ActionId"), &obj.action_id);
@@ -851,8 +851,8 @@ struct AssociateEnvironmentOperationsRoleMessageSerializer;
 impl AssociateEnvironmentOperationsRoleMessageSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &AssociateEnvironmentOperationsRoleMessage) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         params.put(
@@ -1002,8 +1002,8 @@ struct BuildConfigurationSerializer;
 impl BuildConfigurationSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &BuildConfiguration) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         if let Some(ref field_value) = obj.artifact_name {
@@ -1154,8 +1154,8 @@ struct CheckDNSAvailabilityMessageSerializer;
 impl CheckDNSAvailabilityMessageSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &CheckDNSAvailabilityMessage) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         params.put(&format!("{}{}", prefix, "CNAMEPrefix"), &obj.cname_prefix);
@@ -1229,8 +1229,8 @@ struct ComposeEnvironmentsMessageSerializer;
 impl ComposeEnvironmentsMessageSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &ComposeEnvironmentsMessage) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         if let Some(ref field_value) = obj.application_name {
@@ -1500,8 +1500,8 @@ struct ConfigurationOptionSettingSerializer;
 impl ConfigurationOptionSettingSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &ConfigurationOptionSetting) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         if let Some(ref field_value) = obj.namespace {
@@ -1862,8 +1862,8 @@ struct CreateApplicationMessageSerializer;
 impl CreateApplicationMessageSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &CreateApplicationMessage) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         params.put(
@@ -1915,8 +1915,8 @@ struct CreateApplicationVersionMessageSerializer;
 impl CreateApplicationVersionMessageSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &CreateApplicationVersionMessage) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         params.put(
@@ -1992,8 +1992,8 @@ struct CreateConfigurationTemplateMessageSerializer;
 impl CreateConfigurationTemplateMessageSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &CreateConfigurationTemplateMessage) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         params.put(
@@ -2072,8 +2072,8 @@ struct CreateEnvironmentMessageSerializer;
 impl CreateEnvironmentMessageSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &CreateEnvironmentMessage) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         params.put(
@@ -2157,8 +2157,8 @@ struct CreatePlatformVersionRequestSerializer;
 impl CreatePlatformVersionRequestSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &CreatePlatformVersionRequest) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         if let Some(ref field_value) = obj.environment_name {
@@ -2340,8 +2340,8 @@ struct DeleteApplicationMessageSerializer;
 impl DeleteApplicationMessageSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &DeleteApplicationMessage) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         params.put(
@@ -2374,8 +2374,8 @@ struct DeleteApplicationVersionMessageSerializer;
 impl DeleteApplicationVersionMessageSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &DeleteApplicationVersionMessage) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         params.put(
@@ -2404,8 +2404,8 @@ struct DeleteConfigurationTemplateMessageSerializer;
 impl DeleteConfigurationTemplateMessageSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &DeleteConfigurationTemplateMessage) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         params.put(
@@ -2431,8 +2431,8 @@ struct DeleteEnvironmentConfigurationMessageSerializer;
 impl DeleteEnvironmentConfigurationMessageSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &DeleteEnvironmentConfigurationMessage) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         params.put(
@@ -2458,8 +2458,8 @@ struct DeletePlatformVersionRequestSerializer;
 impl DeletePlatformVersionRequestSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &DeletePlatformVersionRequest) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         if let Some(ref field_value) = obj.platform_arn {
@@ -2610,8 +2610,8 @@ struct DescribeApplicationVersionsMessageSerializer;
 impl DescribeApplicationVersionsMessageSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &DescribeApplicationVersionsMessage) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         if let Some(ref field_value) = obj.application_name {
@@ -2646,8 +2646,8 @@ struct DescribeApplicationsMessageSerializer;
 impl DescribeApplicationsMessageSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &DescribeApplicationsMessage) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         if let Some(ref field_value) = obj.application_names {
@@ -2683,8 +2683,8 @@ struct DescribeConfigurationOptionsMessageSerializer;
 impl DescribeConfigurationOptionsMessageSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &DescribeConfigurationOptionsMessage) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         if let Some(ref field_value) = obj.application_name {
@@ -2729,8 +2729,8 @@ struct DescribeConfigurationSettingsMessageSerializer;
 impl DescribeConfigurationSettingsMessageSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &DescribeConfigurationSettingsMessage) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         params.put(
@@ -2763,8 +2763,8 @@ struct DescribeEnvironmentHealthRequestSerializer;
 impl DescribeEnvironmentHealthRequestSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &DescribeEnvironmentHealthRequest) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         if let Some(ref field_value) = obj.attribute_names {
@@ -2888,8 +2888,8 @@ impl DescribeEnvironmentManagedActionHistoryRequestSerializer {
         obj: &DescribeEnvironmentManagedActionHistoryRequest,
     ) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         if let Some(ref field_value) = obj.environment_id {
@@ -2965,8 +2965,8 @@ struct DescribeEnvironmentManagedActionsRequestSerializer;
 impl DescribeEnvironmentManagedActionsRequestSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &DescribeEnvironmentManagedActionsRequest) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         if let Some(ref field_value) = obj.environment_id {
@@ -3029,8 +3029,8 @@ struct DescribeEnvironmentResourcesMessageSerializer;
 impl DescribeEnvironmentResourcesMessageSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &DescribeEnvironmentResourcesMessage) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         if let Some(ref field_value) = obj.environment_id {
@@ -3069,8 +3069,8 @@ struct DescribeEnvironmentsMessageSerializer;
 impl DescribeEnvironmentsMessageSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &DescribeEnvironmentsMessage) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         if let Some(ref field_value) = obj.application_name {
@@ -3146,8 +3146,8 @@ struct DescribeEventsMessageSerializer;
 impl DescribeEventsMessageSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &DescribeEventsMessage) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         if let Some(ref field_value) = obj.application_name {
@@ -3208,8 +3208,8 @@ struct DescribeInstancesHealthRequestSerializer;
 impl DescribeInstancesHealthRequestSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &DescribeInstancesHealthRequest) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         if let Some(ref field_value) = obj.attribute_names {
@@ -3291,8 +3291,8 @@ struct DescribePlatformVersionRequestSerializer;
 impl DescribePlatformVersionRequestSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &DescribePlatformVersionRequest) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         if let Some(ref field_value) = obj.platform_arn {
@@ -3360,8 +3360,8 @@ impl DisassociateEnvironmentOperationsRoleMessageSerializer {
         obj: &DisassociateEnvironmentOperationsRoleMessage,
     ) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         params.put(
@@ -4035,8 +4035,8 @@ struct EnvironmentTierSerializer;
 impl EnvironmentTierSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &EnvironmentTier) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         if let Some(ref field_value) = obj.name {
@@ -4615,8 +4615,8 @@ struct ListPlatformBranchesRequestSerializer;
 impl ListPlatformBranchesRequestSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &ListPlatformBranchesRequest) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         if let Some(ref field_value) = obj.filters {
@@ -4691,8 +4691,8 @@ struct ListPlatformVersionsRequestSerializer;
 impl ListPlatformVersionsRequestSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &ListPlatformVersionsRequest) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         if let Some(ref field_value) = obj.filters {
@@ -4763,8 +4763,8 @@ struct ListTagsForResourceMessageSerializer;
 impl ListTagsForResourceMessageSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &ListTagsForResourceMessage) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         params.put(&format!("{}{}", prefix, "ResourceArn"), &obj.resource_arn);
@@ -5161,8 +5161,8 @@ struct MaxAgeRuleSerializer;
 impl MaxAgeRuleSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &MaxAgeRule) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         if let Some(ref field_value) = obj.delete_source_from_s3 {
@@ -5222,8 +5222,8 @@ struct MaxCountRuleSerializer;
 impl MaxCountRuleSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &MaxCountRule) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         if let Some(ref field_value) = obj.delete_source_from_s3 {
@@ -5381,8 +5381,8 @@ struct OptionSpecificationSerializer;
 impl OptionSpecificationSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &OptionSpecification) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         if let Some(ref field_value) = obj.namespace {
@@ -5708,8 +5708,8 @@ struct PlatformFilterSerializer;
 impl PlatformFilterSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &PlatformFilter) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         if let Some(ref field_value) = obj.operator {
@@ -6093,8 +6093,8 @@ struct RebuildEnvironmentMessageSerializer;
 impl RebuildEnvironmentMessageSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &RebuildEnvironmentMessage) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         if let Some(ref field_value) = obj.environment_id {
@@ -6155,8 +6155,8 @@ struct RequestEnvironmentInfoMessageSerializer;
 impl RequestEnvironmentInfoMessageSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &RequestEnvironmentInfoMessage) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         if let Some(ref field_value) = obj.environment_id {
@@ -6344,8 +6344,8 @@ struct RestartAppServerMessageSerializer;
 impl RestartAppServerMessageSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &RestartAppServerMessage) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         if let Some(ref field_value) = obj.environment_id {
@@ -6374,8 +6374,8 @@ struct RetrieveEnvironmentInfoMessageSerializer;
 impl RetrieveEnvironmentInfoMessageSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &RetrieveEnvironmentInfoMessage) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         if let Some(ref field_value) = obj.environment_id {
@@ -6479,8 +6479,8 @@ struct S3LocationSerializer;
 impl S3LocationSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &S3Location) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         if let Some(ref field_value) = obj.s3_bucket {
@@ -6517,8 +6517,8 @@ struct SearchFilterSerializer;
 impl SearchFilterSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &SearchFilter) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         if let Some(ref field_value) = obj.attribute {
@@ -6758,8 +6758,8 @@ struct SourceBuildInformationSerializer;
 impl SourceBuildInformationSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &SourceBuildInformation) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         params.put(
@@ -6789,8 +6789,8 @@ struct SourceConfigurationSerializer;
 impl SourceConfigurationSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &SourceConfiguration) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         if let Some(ref field_value) = obj.application_name {
@@ -6959,8 +6959,8 @@ struct SwapEnvironmentCNAMEsMessageSerializer;
 impl SwapEnvironmentCNAMEsMessageSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &SwapEnvironmentCNAMEsMessage) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         if let Some(ref field_value) = obj.destination_environment_id {
@@ -7063,8 +7063,8 @@ struct TagSerializer;
 impl TagSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &Tag) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         if let Some(ref field_value) = obj.key {
@@ -7165,8 +7165,8 @@ struct TerminateEnvironmentMessageSerializer;
 impl TerminateEnvironmentMessageSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &TerminateEnvironmentMessage) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         if let Some(ref field_value) = obj.environment_id {
@@ -7260,8 +7260,8 @@ struct UpdateApplicationMessageSerializer;
 impl UpdateApplicationMessageSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &UpdateApplicationMessage) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         params.put(
@@ -7288,8 +7288,8 @@ struct UpdateApplicationResourceLifecycleMessageSerializer;
 impl UpdateApplicationResourceLifecycleMessageSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &UpdateApplicationResourceLifecycleMessage) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         params.put(
@@ -7321,8 +7321,8 @@ struct UpdateApplicationVersionMessageSerializer;
 impl UpdateApplicationVersionMessageSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &UpdateApplicationVersionMessage) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         params.put(
@@ -7357,8 +7357,8 @@ struct UpdateConfigurationTemplateMessageSerializer;
 impl UpdateConfigurationTemplateMessageSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &UpdateConfigurationTemplateMessage) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         params.put(
@@ -7429,8 +7429,8 @@ struct UpdateEnvironmentMessageSerializer;
 impl UpdateEnvironmentMessageSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &UpdateEnvironmentMessage) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         if let Some(ref field_value) = obj.application_name {
@@ -7500,8 +7500,8 @@ struct UpdateTagsForResourceMessageSerializer;
 impl UpdateTagsForResourceMessageSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &UpdateTagsForResourceMessage) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         params.put(&format!("{}{}", prefix, "ResourceArn"), &obj.resource_arn);
@@ -7549,8 +7549,8 @@ struct ValidateConfigurationSettingsMessageSerializer;
 impl ValidateConfigurationSettingsMessageSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &ValidateConfigurationSettingsMessage) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         params.put(

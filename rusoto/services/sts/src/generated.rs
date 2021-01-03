@@ -121,8 +121,8 @@ struct AssumeRoleRequestSerializer;
 impl AssumeRoleRequestSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &AssumeRoleRequest) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         if let Some(ref field_value) = obj.duration_seconds {
@@ -231,8 +231,8 @@ struct AssumeRoleWithSAMLRequestSerializer;
 impl AssumeRoleWithSAMLRequestSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &AssumeRoleWithSAMLRequest) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         if let Some(ref field_value) = obj.duration_seconds {
@@ -359,8 +359,8 @@ struct AssumeRoleWithWebIdentityRequestSerializer;
 impl AssumeRoleWithWebIdentityRequestSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &AssumeRoleWithWebIdentityRequest) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         if let Some(ref field_value) = obj.duration_seconds {
@@ -572,8 +572,8 @@ struct DecodeAuthorizationMessageRequestSerializer;
 impl DecodeAuthorizationMessageRequestSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &DecodeAuthorizationMessageRequest) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         params.put(
@@ -678,8 +678,8 @@ struct GetAccessKeyInfoRequestSerializer;
 impl GetAccessKeyInfoRequestSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &GetAccessKeyInfoRequest) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         params.put(&format!("{}{}", prefix, "AccessKeyId"), &obj.access_key_id);
@@ -725,8 +725,8 @@ struct GetCallerIdentityRequestSerializer;
 impl GetCallerIdentityRequestSerializer {
     fn serialize(_params: &mut Params, name: &str, _obj: &GetCallerIdentityRequest) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
     }
 }
@@ -792,8 +792,8 @@ struct GetFederationTokenRequestSerializer;
 impl GetFederationTokenRequestSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &GetFederationTokenRequest) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         if let Some(ref field_value) = obj.duration_seconds {
@@ -881,8 +881,8 @@ struct GetSessionTokenRequestSerializer;
 impl GetSessionTokenRequestSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &GetSessionTokenRequest) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         if let Some(ref field_value) = obj.duration_seconds {
@@ -978,8 +978,8 @@ struct PolicyDescriptorTypeSerializer;
 impl PolicyDescriptorTypeSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &PolicyDescriptorType) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         if let Some(ref field_value) = obj.arn {
@@ -1019,8 +1019,8 @@ struct TagSerializer;
 impl TagSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &Tag) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         params.put(&format!("{}{}", prefix, "Key"), &obj.key);

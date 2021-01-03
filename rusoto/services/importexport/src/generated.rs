@@ -121,8 +121,8 @@ struct CancelJobInputSerializer;
 impl CancelJobInputSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &CancelJobInput) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         if let Some(ref field_value) = obj.api_version {
@@ -182,8 +182,8 @@ struct CreateJobInputSerializer;
 impl CreateJobInputSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &CreateJobInput) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         if let Some(ref field_value) = obj.api_version {
@@ -315,8 +315,8 @@ struct GetShippingLabelInputSerializer;
 impl GetShippingLabelInputSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &GetShippingLabelInput) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         if let Some(ref field_value) = obj.api_version {
@@ -401,8 +401,8 @@ struct GetStatusInputSerializer;
 impl GetStatusInputSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &GetStatusInput) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         if let Some(ref field_value) = obj.api_version {
@@ -640,8 +640,8 @@ struct ListJobsInputSerializer;
 impl ListJobsInputSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &ListJobsInput) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         if let Some(ref field_value) = obj.api_version {
@@ -793,8 +793,8 @@ struct UpdateJobInputSerializer;
 impl UpdateJobInputSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &UpdateJobInput) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         if let Some(ref field_value) = obj.api_version {

@@ -97,8 +97,8 @@ struct AddPermissionInputSerializer;
 impl AddPermissionInputSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &AddPermissionInput) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         DelegatesListSerializer::serialize(
@@ -153,8 +153,8 @@ struct CheckIfPhoneNumberIsOptedOutInputSerializer;
 impl CheckIfPhoneNumberIsOptedOutInputSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &CheckIfPhoneNumberIsOptedOutInput) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         params.put(&format!("{}{}", prefix, "phoneNumber"), &obj.phone_number);
@@ -210,8 +210,8 @@ struct ConfirmSubscriptionInputSerializer;
 impl ConfirmSubscriptionInputSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &ConfirmSubscriptionInput) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         if let Some(ref field_value) = obj.authenticate_on_unsubscribe {
@@ -303,8 +303,8 @@ struct CreatePlatformApplicationInputSerializer;
 impl CreatePlatformApplicationInputSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &CreatePlatformApplicationInput) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         MapStringToStringSerializer::serialize(
@@ -370,8 +370,8 @@ struct CreatePlatformEndpointInputSerializer;
 impl CreatePlatformEndpointInputSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &CreatePlatformEndpointInput) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         if let Some(ref field_value) = obj.attributes {
@@ -409,8 +409,8 @@ struct CreateTopicInputSerializer;
 impl CreateTopicInputSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &CreateTopicInput) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         if let Some(ref field_value) = obj.attributes {
@@ -479,8 +479,8 @@ struct DeleteEndpointInputSerializer;
 impl DeleteEndpointInputSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &DeleteEndpointInput) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         params.put(&format!("{}{}", prefix, "EndpointArn"), &obj.endpoint_arn);
@@ -500,8 +500,8 @@ struct DeletePlatformApplicationInputSerializer;
 impl DeletePlatformApplicationInputSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &DeletePlatformApplicationInput) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         params.put(
@@ -523,8 +523,8 @@ struct DeleteTopicInputSerializer;
 impl DeleteTopicInputSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &DeleteTopicInput) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         params.put(&format!("{}{}", prefix, "TopicArn"), &obj.topic_arn);
@@ -552,8 +552,8 @@ struct GetEndpointAttributesInputSerializer;
 impl GetEndpointAttributesInputSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &GetEndpointAttributesInput) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         params.put(&format!("{}{}", prefix, "EndpointArn"), &obj.endpoint_arn);
@@ -607,8 +607,8 @@ struct GetPlatformApplicationAttributesInputSerializer;
 impl GetPlatformApplicationAttributesInputSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &GetPlatformApplicationAttributesInput) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         params.put(
@@ -665,8 +665,8 @@ struct GetSMSAttributesInputSerializer;
 impl GetSMSAttributesInputSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &GetSMSAttributesInput) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         if let Some(ref field_value) = obj.attributes {
@@ -726,8 +726,8 @@ struct GetSubscriptionAttributesInputSerializer;
 impl GetSubscriptionAttributesInputSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &GetSubscriptionAttributesInput) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         params.put(
@@ -784,8 +784,8 @@ struct GetTopicAttributesInputSerializer;
 impl GetTopicAttributesInputSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &GetTopicAttributesInput) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         params.put(&format!("{}{}", prefix, "TopicArn"), &obj.topic_arn);
@@ -841,8 +841,8 @@ struct ListEndpointsByPlatformApplicationInputSerializer;
 impl ListEndpointsByPlatformApplicationInputSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &ListEndpointsByPlatformApplicationInput) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         if let Some(ref field_value) = obj.next_token {
@@ -944,8 +944,8 @@ struct ListPhoneNumbersOptedOutInputSerializer;
 impl ListPhoneNumbersOptedOutInputSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &ListPhoneNumbersOptedOutInput) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         if let Some(ref field_value) = obj.next_token {
@@ -1005,8 +1005,8 @@ struct ListPlatformApplicationsInputSerializer;
 impl ListPlatformApplicationsInputSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &ListPlatformApplicationsInput) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         if let Some(ref field_value) = obj.next_token {
@@ -1083,8 +1083,8 @@ struct ListSubscriptionsByTopicInputSerializer;
 impl ListSubscriptionsByTopicInputSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &ListSubscriptionsByTopicInput) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         if let Some(ref field_value) = obj.next_token {
@@ -1146,8 +1146,8 @@ struct ListSubscriptionsInputSerializer;
 impl ListSubscriptionsInputSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &ListSubscriptionsInput) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         if let Some(ref field_value) = obj.next_token {
@@ -1207,8 +1207,8 @@ struct ListTagsForResourceRequestSerializer;
 impl ListTagsForResourceRequestSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &ListTagsForResourceRequest) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         params.put(&format!("{}{}", prefix, "ResourceArn"), &obj.resource_arn);
@@ -1259,8 +1259,8 @@ struct ListTopicsInputSerializer;
 impl ListTopicsInputSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &ListTopicsInput) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         if let Some(ref field_value) = obj.next_token {
@@ -1381,8 +1381,8 @@ struct MessageAttributeValueSerializer;
 impl MessageAttributeValueSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &MessageAttributeValue) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         if let Some(ref field_value) = obj.binary_value {
@@ -1427,8 +1427,8 @@ struct OptInPhoneNumberInputSerializer;
 impl OptInPhoneNumberInputSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &OptInPhoneNumberInput) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         params.put(&format!("{}{}", prefix, "phoneNumber"), &obj.phone_number);
@@ -1558,8 +1558,8 @@ struct PublishInputSerializer;
 impl PublishInputSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &PublishInput) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         params.put(&format!("{}{}", prefix, "Message"), &obj.message);
@@ -1645,8 +1645,8 @@ struct RemovePermissionInputSerializer;
 impl RemovePermissionInputSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &RemovePermissionInput) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         params.put(&format!("{}{}", prefix, "Label"), &obj.label);
@@ -1669,8 +1669,8 @@ struct SetEndpointAttributesInputSerializer;
 impl SetEndpointAttributesInputSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &SetEndpointAttributesInput) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         MapStringToStringSerializer::serialize(
@@ -1697,8 +1697,8 @@ struct SetPlatformApplicationAttributesInputSerializer;
 impl SetPlatformApplicationAttributesInputSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &SetPlatformApplicationAttributesInput) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         MapStringToStringSerializer::serialize(
@@ -1726,8 +1726,8 @@ struct SetSMSAttributesInputSerializer;
 impl SetSMSAttributesInputSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &SetSMSAttributesInput) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         MapStringToStringSerializer::serialize(
@@ -1777,8 +1777,8 @@ struct SetSubscriptionAttributesInputSerializer;
 impl SetSubscriptionAttributesInputSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &SetSubscriptionAttributesInput) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         params.put(
@@ -1812,8 +1812,8 @@ struct SetTopicAttributesInputSerializer;
 impl SetTopicAttributesInputSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &SetTopicAttributesInput) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         params.put(
@@ -1856,8 +1856,8 @@ struct SubscribeInputSerializer;
 impl SubscribeInputSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &SubscribeInput) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         if let Some(ref field_value) = obj.attributes {
@@ -2064,8 +2064,8 @@ struct TagSerializer;
 impl TagSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &Tag) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         params.put(&format!("{}{}", prefix, "Key"), &obj.key);
@@ -2137,8 +2137,8 @@ struct TagResourceRequestSerializer;
 impl TagResourceRequestSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &TagResourceRequest) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         params.put(&format!("{}{}", prefix, "ResourceArn"), &obj.resource_arn);
@@ -2279,8 +2279,8 @@ struct UnsubscribeInputSerializer;
 impl UnsubscribeInputSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &UnsubscribeInput) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         params.put(
@@ -2304,8 +2304,8 @@ struct UntagResourceRequestSerializer;
 impl UntagResourceRequestSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &UntagResourceRequest) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         params.put(&format!("{}{}", prefix, "ResourceArn"), &obj.resource_arn);
