@@ -27,11 +27,7 @@ impl<'b> Service<'b> {
     }
 
     pub fn service_id(&self) -> Option<&str> {
-        self.definition
-            .metadata
-            .service_id
-            .as_ref()
-            .map(std::string::String::as_str)
+        self.definition.metadata.service_id.as_deref()
     }
 
     pub fn documentation(&self) -> Option<&String> {
@@ -86,7 +82,7 @@ impl<'b> Service<'b> {
         self.definition.shapes.get(&member.shape)
     }
 
-    pub fn shape_type_for_member<'a>(&'a self, member: &Member) -> Option<ShapeType> {
+    pub fn shape_type_for_member(&self, member: &Member) -> Option<ShapeType> {
         self.definition
             .shapes
             .get(&member.shape)
@@ -101,16 +97,16 @@ impl<'b> Service<'b> {
     }
 
     pub fn needs_serde_json_crate(&self) -> bool {
-        match self.name() {
+        !matches!(
+            self.name(),
             "AmazonApiGatewayManagementApi"
-            | "Amazon CloudSearch Domain"
-            | "AWS Mobile"
-            | "AWS IoT Data Plane"
-            | "Amazon SageMaker Runtime"
-            | "Amazon WorkMail Message Flow"
-            | "SSO" => false,
-            _ => true,
-        }
+                | "Amazon CloudSearch Domain"
+                | "AWS Mobile"
+                | "AWS IoT Data Plane"
+                | "Amazon SageMaker Runtime"
+                | "Amazon WorkMail Message Flow"
+                | "SSO"
+        )
     }
 
     pub fn has_event_streams(&self) -> bool {

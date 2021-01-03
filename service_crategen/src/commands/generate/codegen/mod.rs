@@ -322,7 +322,7 @@ fn eventstream_field_name(service: &Service<'_>, shape: &Shape) -> Option<String
         .map(|map| map.iter())
         .flatten()
         .filter_map(|(name, member)| {
-            service.get_shape(&member.shape).map_or(None, |s| {
+            service.get_shape(&member.shape).and_then(|s| {
                 if s.eventstream() {
                     Some(generate_field_name(name))
                 } else {
@@ -441,7 +441,8 @@ fn find_shapes_to_generate(service: &Service<'_>) -> BTreeSet<String> {
             }
         }
     }
-    return shapes_to_generate;
+
+    shapes_to_generate
 }
 
 fn generate_types<P>(
@@ -633,7 +634,7 @@ where
         }
     }
 
-    derived.sort();
+    derived.sort_unstable();
 
     let attributes = format!("#[derive({})]", derived.join(","));
     let mut test_attributes = String::new();
@@ -752,11 +753,10 @@ fn generate_struct_fields<P: GenerateProtocol>(
             // In the official documentation the fields revision_change_id and created are required
             // but when looking at the responses from aws those are not always set.
             // See https://github.com/rusoto/rusoto/issues/1419 for more information
-            if service.name() == "CodePipeline" && shape_name == "ActionRevision" && name == "revision_change_id" || name == "created" {
-                lines.push(format!("pub {}: Option<{}>,", name, rs_type))
             // In the official documentation the field startedAt is required but responses lack for the field on certain situations.
             // See https://github.com/rusoto/rusoto/issues/1736 and https://github.com/boto/botocore/issues/2030 for more information.
-            } else if service.name() == "AWS Batch" && shape_name == "JobDetail" && name == "started_at" {
+            if (service.name() == "CodePipeline" && shape_name == "ActionRevision" && (name == "revision_change_id" || name == "created"))
+                || (service.name() == "AWS Batch" && shape_name == "JobDetail" && name == "started_at") {
                 lines.push(format!("pub {}: Option<{}>,", name, rs_type))
             // In pratice, Lex can return null values for slots that are not filled. The documentation
             // does not mention that the slot values themselves can be null.

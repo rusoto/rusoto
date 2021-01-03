@@ -5,7 +5,6 @@ use std::path::Path;
 use std::process::Command;
 
 use rayon::prelude::*;
-use toml;
 
 mod codegen;
 
@@ -106,7 +105,7 @@ pub fn generate_services(
         }
 
         features.insert("serialize_structs".into(), serialize_feature_dependencies.clone());
-        features.insert("deserialize_structs".into(), serialize_feature_dependencies.clone());
+        features.insert("deserialize_structs".into(), serialize_feature_dependencies);
 
         let mut cargo_manifest = BufWriter::new(
             OpenOptions::new()
@@ -117,7 +116,7 @@ pub fn generate_services(
                 .expect("Unable to write Cargo.toml")
         );
 
-        let mut name_for_keyword = name.clone().to_string();
+        let mut name_for_keyword = name.clone();
         if name_for_keyword.len() >= 20 {
             name_for_keyword = name_for_keyword[..20].to_string();
         }

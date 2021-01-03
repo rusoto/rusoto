@@ -334,10 +334,7 @@ fn generate_primitive_serializer(shape: &Shape) -> String {
 fn generate_list_serializer(shape: &Shape, service: &Service<'_>) -> String {
     // flattened lists don't have enclosing <FooList> tags
     // around the list elements
-    let flattened = match shape.flattened {
-        Some(true) => true,
-        _ => false,
-    };
+    let flattened = matches!(shape.flattened, Some(true));
 
     let member = shape.member.as_ref().expect("Member shape undefined");
     let element_type = &mutate_type_name(service, &member.shape);

@@ -37,7 +37,7 @@ fn recurse_find_serializable_shapes(
     if !contains_eventstreams(service, &shape) {
         // Event stream container is not plain data because it references an active request
         // and therefore cannot be serialized.
-        types.insert(mutate_type_name(service, shape_name).to_owned());
+        types.insert(mutate_type_name(service, shape_name));
     }
 
     match shape.shape_type {

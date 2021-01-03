@@ -207,10 +207,7 @@ fn generate_list_serializer(service: &Service<'_>, shape: &Shape) -> String {
         .shape_for_member(shape.member.as_ref().unwrap())
         .unwrap();
     let primitive = member_shape.is_primitive();
-    let is_shape_flattened = match shape.flattened {
-        None => false,
-        Some(shape_defined_flatness) => shape_defined_flatness,
-    };
+    let is_shape_flattened = shape.flattened.unwrap_or(false);
     let mut parts = Vec::new();
 
     let lmf = list_member_format(service, is_shape_flattened);
