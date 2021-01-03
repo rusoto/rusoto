@@ -123,7 +123,7 @@ impl HttpResponse {
             })
             .collect();
         let body = hyper_response.into_body().map(|try_chunk| {
-            try_chunk.map(|c| c).map_err(|e| {
+            try_chunk.map_err(|e| {
                 IoError::new(
                     io::ErrorKind::Other,
                     format!("Error obtaining chunk: {}", e),

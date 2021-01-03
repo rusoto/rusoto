@@ -7,7 +7,6 @@
 use crate::credential::ProfileProvider;
 use serde::ser::SerializeTuple;
 use serde::{de, Deserialize, Deserializer, Serialize, Serializer};
-use std;
 use std::error::Error;
 use std::fmt::{self, Display, Error as FmtError, Formatter};
 use std::str::FromStr;

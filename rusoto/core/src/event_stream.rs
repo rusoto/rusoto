@@ -142,9 +142,11 @@ impl<'a> EventStreamHeaderValue<'a> {
             }
             8 => EventStreamHeaderValue::Timestamp(read_u64(reader)?),
             9 => EventStreamHeaderValue::Uuid(read_slice(reader, 16)?.try_into().unwrap()),
-            _ => Err(EventStreamParseError::InvalidData(
-                "Invalid header value type",
-            ))?,
+            _ => {
+                return Err(EventStreamParseError::InvalidData(
+                    "Invalid header value type",
+                ))
+            }
         };
         Ok(value)
     }

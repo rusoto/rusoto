@@ -17,15 +17,12 @@ use std::fmt;
 use std::str;
 use std::time::Duration;
 
-use base64;
 use bytes::Bytes;
-use hex;
 use hmac::{Hmac, Mac, NewMac};
 use http::header::{HeaderMap, HeaderName, HeaderValue};
 use http::{Method, Request};
 use hyper::Body;
 use log::{debug, log_enabled, Level::Debug};
-use md5;
 use percent_encoding::{percent_decode, utf8_percent_encode, AsciiSet, NON_ALPHANUMERIC};
 use sha2::{Digest, Sha256};
 use time::{Date, OffsetDateTime};
@@ -709,10 +706,10 @@ fn build_canonical_query_string(params: &Params) -> String {
     let mut output = String::new();
     for (key, val) in params.iter() {
         if !output.is_empty() {
-            output.push_str("&");
+            output.push('&');
         }
         output.push_str(&encode_uri_strict(&key));
-        output.push_str("=");
+        output.push('=');
 
         if let Some(ref unwrapped_val) = *val {
             output.push_str(&encode_uri_strict(&unwrapped_val));

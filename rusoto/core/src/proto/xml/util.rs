@@ -7,7 +7,6 @@ use std::collections::HashMap;
 use std::io;
 use std::iter::Peekable;
 use std::num::ParseIntError;
-use xml;
 use xml::reader::{EventReader, Events, ParserConfig, XmlEvent};
 use xml::writer::EventWriter;
 
