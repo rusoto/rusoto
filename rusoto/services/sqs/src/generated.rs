@@ -31,7 +31,6 @@ use rusoto_core::signature::SignedRequest;
 use serde::Deserialize;
 #[cfg(feature = "serialize_structs")]
 use serde::Serialize;
-use serde_urlencoded;
 use std::str::FromStr;
 use xml::EventReader;
 
@@ -101,8 +100,8 @@ struct AddPermissionRequestSerializer;
 impl AddPermissionRequestSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &AddPermissionRequest) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         AWSAccountIdListSerializer::serialize(
@@ -267,8 +266,8 @@ struct ChangeMessageVisibilityBatchRequestSerializer;
 impl ChangeMessageVisibilityBatchRequestSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &ChangeMessageVisibilityBatchRequest) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         ChangeMessageVisibilityBatchRequestEntryListSerializer::serialize(
@@ -297,8 +296,8 @@ struct ChangeMessageVisibilityBatchRequestEntrySerializer;
 impl ChangeMessageVisibilityBatchRequestEntrySerializer {
     fn serialize(params: &mut Params, name: &str, obj: &ChangeMessageVisibilityBatchRequestEntry) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         params.put(&format!("{}{}", prefix, "Id"), &obj.id);
@@ -451,8 +450,8 @@ struct ChangeMessageVisibilityRequestSerializer;
 impl ChangeMessageVisibilityRequestSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &ChangeMessageVisibilityRequest) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         params.put(&format!("{}{}", prefix, "QueueUrl"), &obj.queue_url);
@@ -484,8 +483,8 @@ struct CreateQueueRequestSerializer;
 impl CreateQueueRequestSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &CreateQueueRequest) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         if let Some(ref field_value) = obj.attributes {
@@ -544,8 +543,8 @@ struct DeleteMessageBatchRequestSerializer;
 impl DeleteMessageBatchRequestSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &DeleteMessageBatchRequest) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         DeleteMessageBatchRequestEntryListSerializer::serialize(
@@ -572,8 +571,8 @@ struct DeleteMessageBatchRequestEntrySerializer;
 impl DeleteMessageBatchRequestEntrySerializer {
     fn serialize(params: &mut Params, name: &str, obj: &DeleteMessageBatchRequestEntry) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         params.put(&format!("{}{}", prefix, "Id"), &obj.id);
@@ -716,8 +715,8 @@ struct DeleteMessageRequestSerializer;
 impl DeleteMessageRequestSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &DeleteMessageRequest) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         params.put(&format!("{}{}", prefix, "QueueUrl"), &obj.queue_url);
@@ -741,8 +740,8 @@ struct DeleteQueueRequestSerializer;
 impl DeleteQueueRequestSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &DeleteQueueRequest) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         params.put(&format!("{}{}", prefix, "QueueUrl"), &obj.queue_url);
@@ -764,8 +763,8 @@ struct GetQueueAttributesRequestSerializer;
 impl GetQueueAttributesRequestSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &GetQueueAttributesRequest) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         if let Some(ref field_value) = obj.attribute_names {
@@ -828,8 +827,8 @@ struct GetQueueUrlRequestSerializer;
 impl GetQueueUrlRequestSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &GetQueueUrlRequest) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         params.put(&format!("{}{}", prefix, "QueueName"), &obj.queue_name);
@@ -886,8 +885,8 @@ struct ListDeadLetterSourceQueuesRequestSerializer;
 impl ListDeadLetterSourceQueuesRequestSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &ListDeadLetterSourceQueuesRequest) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         if let Some(ref field_value) = obj.max_results {
@@ -949,8 +948,8 @@ struct ListQueueTagsRequestSerializer;
 impl ListQueueTagsRequestSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &ListQueueTagsRequest) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         params.put(&format!("{}{}", prefix, "QueueUrl"), &obj.queue_url);
@@ -1000,8 +999,8 @@ struct ListQueuesRequestSerializer;
 impl ListQueuesRequestSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &ListQueuesRequest) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         if let Some(ref field_value) = obj.max_results {
@@ -1188,8 +1187,8 @@ struct MessageAttributeValueSerializer;
 impl MessageAttributeValueSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &MessageAttributeValue) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         if let Some(ref field_value) = obj.binary_list_values {
@@ -1359,8 +1358,8 @@ struct MessageSystemAttributeValueSerializer;
 impl MessageSystemAttributeValueSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &MessageSystemAttributeValue) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         if let Some(ref field_value) = obj.binary_list_values {
@@ -1403,8 +1402,8 @@ struct PurgeQueueRequestSerializer;
 impl PurgeQueueRequestSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &PurgeQueueRequest) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         params.put(&format!("{}{}", prefix, "QueueUrl"), &obj.queue_url);
@@ -1510,8 +1509,8 @@ struct ReceiveMessageRequestSerializer;
 impl ReceiveMessageRequestSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &ReceiveMessageRequest) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         if let Some(ref field_value) = obj.attribute_names {
@@ -1594,8 +1593,8 @@ struct RemovePermissionRequestSerializer;
 impl RemovePermissionRequestSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &RemovePermissionRequest) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         params.put(&format!("{}{}", prefix, "Label"), &obj.label);
@@ -1618,8 +1617,8 @@ struct SendMessageBatchRequestSerializer;
 impl SendMessageBatchRequestSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &SendMessageBatchRequest) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         SendMessageBatchRequestEntryListSerializer::serialize(
@@ -1657,8 +1656,8 @@ struct SendMessageBatchRequestEntrySerializer;
 impl SendMessageBatchRequestEntrySerializer {
     fn serialize(params: &mut Params, name: &str, obj: &SendMessageBatchRequestEntry) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         if let Some(ref field_value) = obj.delay_seconds {
@@ -1863,8 +1862,8 @@ struct SendMessageRequestSerializer;
 impl SendMessageRequestSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &SendMessageRequest) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         if let Some(ref field_value) = obj.delay_seconds {
@@ -1968,8 +1967,8 @@ struct SetQueueAttributesRequestSerializer;
 impl SetQueueAttributesRequestSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &SetQueueAttributesRequest) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         QueueAttributeMapSerializer::serialize(
@@ -2091,8 +2090,8 @@ struct TagQueueRequestSerializer;
 impl TagQueueRequestSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &TagQueueRequest) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         params.put(&format!("{}{}", prefix, "QueueUrl"), &obj.queue_url);
@@ -2130,8 +2129,8 @@ struct UntagQueueRequestSerializer;
 impl UntagQueueRequestSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &UntagQueueRequest) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         params.put(&format!("{}{}", prefix, "QueueUrl"), &obj.queue_url);

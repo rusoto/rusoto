@@ -17,15 +17,12 @@ use std::fmt;
 use std::str;
 use std::time::Duration;
 
-use base64;
 use bytes::Bytes;
-use hex;
 use hmac::{Hmac, Mac, NewMac};
 use http::header::{HeaderMap, HeaderName, HeaderValue};
 use http::{Method, Request};
 use hyper::Body;
 use log::{debug, log_enabled, Level::Debug};
-use md5;
 use percent_encoding::{percent_decode, utf8_percent_encode, AsciiSet, NON_ALPHANUMERIC};
 use sha2::{Digest, Sha256};
 use time::{Date, OffsetDateTime};
@@ -217,8 +214,12 @@ impl SignedRequest {
             "organizations" => {
                 // Matches https://docs.aws.amazon.com/general/latest/gr/ao.html
                 match self.region {
-                    Region::CnNorth1 | Region::CnNorthwest1 => Region::CnNorthwest1.name().to_string(),
-                    Region::UsGovEast1 | Region::UsGovWest1 => Region::UsGovWest1.name().to_string(),
+                    Region::CnNorth1 | Region::CnNorthwest1 => {
+                        Region::CnNorthwest1.name().to_string()
+                    }
+                    Region::UsGovEast1 | Region::UsGovWest1 => {
+                        Region::UsGovWest1.name().to_string()
+                    }
                     _ => Region::UsEast1.name().to_string(),
                 }
             }
@@ -705,10 +706,10 @@ fn build_canonical_query_string(params: &Params) -> String {
     let mut output = String::new();
     for (key, val) in params.iter() {
         if !output.is_empty() {
-            output.push_str("&");
+            output.push('&');
         }
         output.push_str(&encode_uri_strict(&key));
-        output.push_str("=");
+        output.push('=');
 
         if let Some(ref unwrapped_val) = *val {
             output.push_str(&encode_uri_strict(&unwrapped_val));
@@ -792,8 +793,12 @@ fn build_hostname(service: &str, region: &Region) -> String {
         "organizations" => match *region {
             // organizations is routed specially: see https://docs.aws.amazon.com/organizations/latest/APIReference/Welcome.html and https://docs.aws.amazon.com/general/latest/gr/ao.html
             Region::Custom { ref endpoint, .. } => extract_hostname(endpoint).to_owned(),
-            Region::CnNorth1 | Region::CnNorthwest1 => "organizations.cn-northwest-1.amazonaws.com.cn".to_owned(),
-            Region::UsGovEast1 | Region::UsGovWest1 => "organizations.us-gov-west-1.amazonaws.com".to_owned(),
+            Region::CnNorth1 | Region::CnNorthwest1 => {
+                "organizations.cn-northwest-1.amazonaws.com.cn".to_owned()
+            }
+            Region::UsGovEast1 | Region::UsGovWest1 => {
+                "organizations.us-gov-west-1.amazonaws.com".to_owned()
+            }
             _ => "organizations.us-east-1.amazonaws.com".to_owned(),
         },
         "iam" => match *region {

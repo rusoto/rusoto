@@ -50,7 +50,6 @@ impl ComputeOptimizerClient {
     }
 }
 
-use serde_json;
 /// <p>Describes the configuration of an Auto Scaling group.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]

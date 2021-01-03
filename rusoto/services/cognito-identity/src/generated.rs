@@ -50,7 +50,6 @@ impl CognitoIdentityClient {
     }
 }
 
-use serde_json;
 /// <p>A provider representing an Amazon Cognito user pool and its client ID.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct CognitoIdentityProvider {

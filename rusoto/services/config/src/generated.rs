@@ -49,7 +49,6 @@ impl ConfigServiceClient {
     }
 }
 
-use serde_json;
 /// <p>A collection of accounts and regions.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct AccountAggregationSource {

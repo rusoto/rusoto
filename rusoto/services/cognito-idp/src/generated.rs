@@ -49,7 +49,6 @@ impl CognitoIdentityProviderClient {
     }
 }
 
-use serde_json;
 /// <p>The data type for <code>AccountRecoverySetting</code>.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct AccountRecoverySettingType {

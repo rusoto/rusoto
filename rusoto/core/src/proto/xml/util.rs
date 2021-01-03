@@ -7,7 +7,6 @@ use std::collections::HashMap;
 use std::io;
 use std::iter::Peekable;
 use std::num::ParseIntError;
-use xml;
 use xml::reader::{EventReader, Events, ParserConfig, XmlEvent};
 use xml::writer::EventWriter;
 
@@ -121,10 +120,7 @@ pub fn characters<T: Peek + Next>(stack: &mut T) -> Result<String, XmlParseError
         }
     }
     match stack.next() {
-        Some(Ok(XmlEvent::Characters(data))) |
-        Some(Ok(XmlEvent::CData(data))) => {
-            Ok(data)
-        },
+        Some(Ok(XmlEvent::Characters(data))) | Some(Ok(XmlEvent::CData(data))) => Ok(data),
         _ => Err(XmlParseError::new("Expected characters")),
     }
 }

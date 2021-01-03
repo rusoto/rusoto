@@ -1,39 +1,29 @@
 #![cfg(feature = "cognito-identity")]
 
 extern crate rusoto_cognito_identity;
-extern crate rusoto_iam;
 extern crate rusoto_core;
+extern crate rusoto_iam;
 extern crate time;
 
 use rusoto_cognito_identity::{
-    SetIdentityPoolRolesInput, 
-    CognitoIdentity, 
-    CognitoIdentityClient, 
-    ListIdentitiesInput, 
-    ListIdentityPoolsInput, 
-    GetOpenIdTokenForDeveloperIdentityInput, 
-    CreateIdentityPoolInput, 
-    DeleteIdentityPoolInput, 
-    CognitoProvider
+    CognitoIdentity, CognitoIdentityClient, CognitoProvider, CreateIdentityPoolInput,
+    DeleteIdentityPoolInput, GetOpenIdTokenForDeveloperIdentityInput, ListIdentitiesInput,
+    ListIdentityPoolsInput, SetIdentityPoolRolesInput,
 };
 
 use rusoto_iam::{
-    Iam, 
-    IamClient, 
-    CreateRoleRequest, 
-    PutRolePolicyRequest, 
-    DeleteRoleRequest, 
-    DeleteRolePolicyRequest
+    CreateRoleRequest, DeleteRolePolicyRequest, DeleteRoleRequest, Iam, IamClient,
+    PutRolePolicyRequest,
 };
 
 use rusoto_core::{Region, RusotoError};
 use rusoto_credential::ProvideAwsCredentials;
 
-use time::OffsetDateTime;
+use chrono::offset::Utc;
 use std::collections::HashMap;
 use std::time::Duration;
+use time::OffsetDateTime;
 use tokio::time::delay_for;
-use chrono::offset::Utc;
 
 #[tokio::test]
 async fn should_list_identity_pools() {
@@ -78,10 +68,14 @@ async fn should_work_with_credential_provider() {
         developer_provider_name: Some(developper_provider_name.to_string()),
         ..Default::default()
     };
-    let identity_pool = client_cognito.create_identity_pool(create_identity_input).await.unwrap();
+    let identity_pool = client_cognito
+        .create_identity_pool(create_identity_input)
+        .await
+        .unwrap();
 
     // Creating a role for the identity pool
-    let policy = format!("{{
+    let policy = format!(
+        "{{
         'Version': '2012-10-17',
         'Statement': [
           {{
@@ -97,14 +91,21 @@ async fn should_work_with_credential_provider() {
             }}
           }}
         ]
-      }}", identity_pool.identity_pool_id).replace("'", "\"");
-      
+      }}",
+        identity_pool.identity_pool_id
+    )
+    .replace("'", "\"");
+
     let input_create_role = CreateRoleRequest {
         assume_role_policy_document: policy,
         role_name: role_name,
         ..Default::default()
     };
-    let role = client_iam.create_role(input_create_role).await.unwrap().role;
+    let role = client_iam
+        .create_role(input_create_role)
+        .await
+        .unwrap()
+        .role;
 
     // Adding a policy to the role
     let role_policy = "{
@@ -121,7 +122,8 @@ async fn should_work_with_credential_provider() {
                 ]
             }
         ]
-    }".replace("'", "\"");
+    }"
+    .replace("'", "\"");
 
     let role_policy_input = PutRolePolicyRequest {
         policy_document: role_policy,
@@ -131,7 +133,7 @@ async fn should_work_with_credential_provider() {
     };
 
     client_iam.put_role_policy(role_policy_input).await.unwrap();
-    
+
     // Assigning the role to the identity pool
     let mut roles = HashMap::new();
     roles.insert("authenticated".to_string(), role.arn.clone());
@@ -141,9 +143,11 @@ async fn should_work_with_credential_provider() {
         roles: roles,
         ..Default::default()
     };
-    client_cognito.set_identity_pool_roles(roles_input).await.unwrap();
+    client_cognito
+        .set_identity_pool_roles(roles_input)
+        .await
+        .unwrap();
 
-    
     // Registering a user whose credentials will be tested
     let login = "login";
     let mut logins = HashMap::new();
@@ -154,17 +158,23 @@ async fn should_work_with_credential_provider() {
         token_duration: Some(3600),
         ..Default::default()
     };
-    let response = client_cognito.get_open_id_token_for_developer_identity(register_input).await.unwrap();
+    let response = client_cognito
+        .get_open_id_token_for_developer_identity(register_input)
+        .await
+        .unwrap();
 
     // It can take time for IAM role to be ready for use
     delay_for(Duration::from_secs(10)).await;
 
     // The test itself
     let provider = CognitoProvider::builder()
-         .identity_id(response.identity_id.unwrap())
-         .region(region.clone())
-         .login("cognito-identity.amazonaws.com".to_string(), response.token.unwrap())
-         .build();
+        .identity_id(response.identity_id.unwrap())
+        .region(region.clone())
+        .login(
+            "cognito-identity.amazonaws.com".to_string(),
+            response.token.unwrap(),
+        )
+        .build();
     let creds = provider.credentials().await.unwrap();
     assert!(creds.token().is_some());
     assert!(creds.expires_at().is_some());
@@ -177,7 +187,10 @@ async fn should_work_with_credential_provider() {
         identity_pool_id: identity_pool.identity_pool_id.clone(),
         ..Default::default()
     };
-    client_cognito.delete_identity_pool(delete_identity_pool_input).await.unwrap();
+    client_cognito
+        .delete_identity_pool(delete_identity_pool_input)
+        .await
+        .unwrap();
 
     // In order to delete the role, the policy must be deleted first
     let delete_policy_input = DeleteRolePolicyRequest {
@@ -185,7 +198,10 @@ async fn should_work_with_credential_provider() {
         role_name: role.role_name.clone(),
         ..Default::default()
     };
-    client_iam.delete_role_policy(delete_policy_input).await.unwrap();
+    client_iam
+        .delete_role_policy(delete_policy_input)
+        .await
+        .unwrap();
 
     // Deleting the role
     let delete_role_input = DeleteRoleRequest {

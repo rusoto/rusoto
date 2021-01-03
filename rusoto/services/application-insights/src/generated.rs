@@ -54,7 +54,6 @@ impl ApplicationInsightsClient {
     }
 }
 
-use serde_json;
 /// <p>Describes a standalone resource or similarly grouped resources that the application is made up of.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]

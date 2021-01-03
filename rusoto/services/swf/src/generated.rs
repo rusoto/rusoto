@@ -49,7 +49,6 @@ impl SwfClient {
     }
 }
 
-use serde_json;
 /// <p>Unit of work sent to an activity worker.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]

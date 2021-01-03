@@ -117,7 +117,8 @@ fn payload_body_parser(
 ) -> String {
     match payload_type {
         ShapeType::Blob if !streaming => {
-            format!("
+            format!(
+                "
                 let mut response = response;
                 let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
                 let mut result = {output_shape}::default();
@@ -125,20 +126,23 @@ fn payload_body_parser(
                 {parse_non_payload}
                 Ok(result)
                 ",
-                    output_shape = output_shape,
-                    payload_member = payload_member.to_snake_case(),
-                    parse_non_payload = parse_non_payload)
+                output_shape = output_shape,
+                payload_member = payload_member.to_snake_case(),
+                parse_non_payload = parse_non_payload
+            )
         }
         ShapeType::Blob if streaming => {
-            format!("
+            format!(
+                "
                 let mut result = {output_shape}::default();
                 result.{payload_member} = Some(response.body);
                 {parse_non_payload}
                 Ok(result)
                 ",
-                    output_shape = output_shape,
-                    payload_member = payload_member.to_snake_case(),
-                    parse_non_payload = parse_non_payload)
+                output_shape = output_shape,
+                payload_member = payload_member.to_snake_case(),
+                parse_non_payload = parse_non_payload
+            )
         }
         _ => {
             format!("
@@ -214,40 +218,38 @@ fn xml_body_parser(
 }
 
 fn generate_deserializer_body(name: &str, shape: &Shape, service: &Service<'_>) -> String {
-    match (service.endpoint_prefix(), name) {
-        ("s3", "GetBucketLocationOutput") => {
-            // override custom deserializer
-            let struct_field_deserializers = shape
-                .members
-                .as_ref()
-                .unwrap()
-                .iter()
-                .map(|(member_name, member)| {
-                    format!(
-                        "obj.{field_name} = {parse_expression};",
-                        field_name = generate_field_name(member_name),
-                        parse_expression = generate_struct_field_parse_expression(
-                            shape,
-                            service,
-                            member_name,
-                            member,
-                            &member_name.to_string(),
-                            false,
-                        )
+    if service.endpoint_prefix() == "s3" && name == "GetBucketLocationOutput" {
+        // override custom deserializer
+        let struct_field_deserializers = shape
+            .members
+            .as_ref()
+            .unwrap()
+            .iter()
+            .map(|(member_name, member)| {
+                format!(
+                    "obj.{field_name} = {parse_expression};",
+                    field_name = generate_field_name(member_name),
+                    parse_expression = generate_struct_field_parse_expression(
+                        shape,
+                        service,
+                        member_name,
+                        member,
+                        &member_name.to_string(),
+                        false,
                     )
-                })
-                .collect::<Vec<String>>()
-                .join("\n");
-            return format!(
-                "let mut obj = {name}::default();
-                            {struct_field_deserializers}
-                            Ok(obj)",
-                name = name,
-                struct_field_deserializers = struct_field_deserializers
-            );
-        }
-        _ => {}
+                )
+            })
+            .collect::<Vec<String>>()
+            .join("\n");
+        return format!(
+            "let mut obj = {name}::default();
+                        {struct_field_deserializers}
+                        Ok(obj)",
+            name = name,
+            struct_field_deserializers = struct_field_deserializers
+        );
     }
+
     match shape.shape_type {
         ShapeType::List => generate_list_deserializer(shape, service),
         ShapeType::Map => generate_map_deserializer(shape),
@@ -330,7 +332,7 @@ fn generate_map_deserializer(shape: &Shape) -> String {
         "" => match shape.flattened {
             // if flatten, use tag_name
             Some(true) => "tag_name".to_string(),
-            _ => format!("\"entry\""),
+            _ => "\"entry\"".to_string(),
         },
         _ => format!("\"{}\"", entry_location),
     };

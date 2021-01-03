@@ -31,7 +31,6 @@ use rusoto_core::signature::SignedRequest;
 use serde::Deserialize;
 #[cfg(feature = "serialize_structs")]
 use serde::Serialize;
-use serde_urlencoded;
 use std::str::FromStr;
 use xml::EventReader;
 
@@ -115,8 +114,8 @@ struct AttributeSerializer;
 impl AttributeSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &Attribute) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         if let Some(ref field_value) = obj.alternate_name_encoding {
@@ -201,8 +200,8 @@ struct BatchDeleteAttributesRequestSerializer;
 impl BatchDeleteAttributesRequestSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &BatchDeleteAttributesRequest) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         params.put(&format!("{}{}", prefix, "DomainName"), &obj.domain_name);
@@ -228,8 +227,8 @@ struct BatchPutAttributesRequestSerializer;
 impl BatchPutAttributesRequestSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &BatchPutAttributesRequest) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         params.put(&format!("{}{}", prefix, "DomainName"), &obj.domain_name);
@@ -253,8 +252,8 @@ struct CreateDomainRequestSerializer;
 impl CreateDomainRequestSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &CreateDomainRequest) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         params.put(&format!("{}{}", prefix, "DomainName"), &obj.domain_name);
@@ -273,8 +272,8 @@ struct DeletableItemSerializer;
 impl DeletableItemSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &DeletableItem) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         if let Some(ref field_value) = obj.attributes {
@@ -317,8 +316,8 @@ struct DeleteAttributesRequestSerializer;
 impl DeleteAttributesRequestSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &DeleteAttributesRequest) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         if let Some(ref field_value) = obj.attributes {
@@ -352,8 +351,8 @@ struct DeleteDomainRequestSerializer;
 impl DeleteDomainRequestSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &DeleteDomainRequest) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         params.put(&format!("{}{}", prefix, "DomainName"), &obj.domain_name);
@@ -372,8 +371,8 @@ struct DomainMetadataRequestSerializer;
 impl DomainMetadataRequestSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &DomainMetadataRequest) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         params.put(&format!("{}{}", prefix, "DomainName"), &obj.domain_name);
@@ -495,8 +494,8 @@ struct GetAttributesRequestSerializer;
 impl GetAttributesRequestSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &GetAttributesRequest) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         if let Some(ref field_value) = obj.attribute_names {
@@ -630,8 +629,8 @@ struct ListDomainsRequestSerializer;
 impl ListDomainsRequestSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &ListDomainsRequest) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         if let Some(ref field_value) = obj.max_number_of_domains {
@@ -702,8 +701,8 @@ struct PutAttributesRequestSerializer;
 impl PutAttributesRequestSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &PutAttributesRequest) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         ReplaceableAttributeListSerializer::serialize(
@@ -740,8 +739,8 @@ struct ReplaceableAttributeSerializer;
 impl ReplaceableAttributeSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &ReplaceableAttribute) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         params.put(&format!("{}{}", prefix, "Name"), &obj.name);
@@ -778,8 +777,8 @@ struct ReplaceableItemSerializer;
 impl ReplaceableItemSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &ReplaceableItem) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         ReplaceableAttributeListSerializer::serialize(
@@ -818,8 +817,8 @@ struct SelectRequestSerializer;
 impl SelectRequestSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &SelectRequest) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         if let Some(ref field_value) = obj.consistent_read {
@@ -893,8 +892,8 @@ struct UpdateConditionSerializer;
 impl UpdateConditionSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &UpdateCondition) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         if let Some(ref field_value) = obj.exists {

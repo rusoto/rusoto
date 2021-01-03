@@ -175,9 +175,8 @@ async fn sqs_timeout_test() {
         wait_time_seconds: Some(10),
         ..Default::default()
     };
-    let result = tokio::time::timeout(Duration::from_secs(2), sqs
-        .receive_message(receive_request))
-        .await;
+    let result =
+        tokio::time::timeout(Duration::from_secs(2), sqs.receive_message(receive_request)).await;
     println!("sqs receive result: {:?}", result);
 
     result.err().expect("receive did not fail as expected");

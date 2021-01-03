@@ -8,7 +8,6 @@ use std::path::Path;
 
 use serde::de::{Error as SerdeError, MapAccess, Visitor};
 use serde::{Deserialize, Deserializer};
-use serde_json;
 
 use crate::util;
 
@@ -61,7 +60,7 @@ impl ServiceDefinition {
                 version_dirs.last().cloned().map(|version_path| {
                     (
                         path.file_name().unwrap().to_string_lossy().into_owned(),
-                        version_path.clone(),
+                        version_path,
                     )
                 })
             })
@@ -230,10 +229,10 @@ pub struct Shape {
 
 impl Shape {
     pub fn is_primitive(&self) -> bool {
-        match self.shape_type {
-            ShapeType::Structure | ShapeType::Map | ShapeType::List => false,
-            _ => true,
-        }
+        !matches!(
+            self.shape_type,
+            ShapeType::Structure | ShapeType::Map | ShapeType::List
+        )
     }
 
     pub fn has_query_parameters(&self) -> bool {

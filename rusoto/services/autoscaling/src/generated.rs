@@ -31,7 +31,6 @@ use rusoto_core::signature::SignedRequest;
 use serde::Deserialize;
 #[cfg(feature = "serialize_structs")]
 use serde::Serialize;
-use serde_urlencoded;
 use std::str::FromStr;
 use xml::EventReader;
 
@@ -354,8 +353,8 @@ struct AttachInstancesQuerySerializer;
 impl AttachInstancesQuerySerializer {
     fn serialize(params: &mut Params, name: &str, obj: &AttachInstancesQuery) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         params.put(
@@ -407,8 +406,8 @@ struct AttachLoadBalancerTargetGroupsTypeSerializer;
 impl AttachLoadBalancerTargetGroupsTypeSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &AttachLoadBalancerTargetGroupsType) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         params.put(
@@ -458,8 +457,8 @@ struct AttachLoadBalancersTypeSerializer;
 impl AttachLoadBalancersTypeSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &AttachLoadBalancersType) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         params.put(
@@ -752,8 +751,8 @@ struct AutoScalingGroupNamesTypeSerializer;
 impl AutoScalingGroupNamesTypeSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &AutoScalingGroupNamesType) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         if let Some(ref field_value) = obj.auto_scaling_group_names {
@@ -1099,8 +1098,8 @@ struct BatchDeleteScheduledActionTypeSerializer;
 impl BatchDeleteScheduledActionTypeSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &BatchDeleteScheduledActionType) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         params.put(
@@ -1166,8 +1165,8 @@ struct BatchPutScheduledUpdateGroupActionTypeSerializer;
 impl BatchPutScheduledUpdateGroupActionTypeSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &BatchPutScheduledUpdateGroupActionType) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         params.put(
@@ -1275,8 +1274,8 @@ struct BlockDeviceMappingSerializer;
 impl BlockDeviceMappingSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &BlockDeviceMapping) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         params.put(&format!("{}{}", prefix, "DeviceName"), &obj.device_name);
@@ -1370,8 +1369,8 @@ struct CancelInstanceRefreshTypeSerializer;
 impl CancelInstanceRefreshTypeSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &CancelInstanceRefreshType) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         params.put(
@@ -1462,8 +1461,8 @@ struct CompleteLifecycleActionTypeSerializer;
 impl CompleteLifecycleActionTypeSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &CompleteLifecycleActionType) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         params.put(
@@ -1554,8 +1553,8 @@ struct CreateAutoScalingGroupTypeSerializer;
 impl CreateAutoScalingGroupTypeSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &CreateAutoScalingGroupType) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         params.put(
@@ -1718,8 +1717,8 @@ struct CreateLaunchConfigurationTypeSerializer;
 impl CreateLaunchConfigurationTypeSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &CreateLaunchConfigurationType) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         if let Some(ref field_value) = obj.associate_public_ip_address {
@@ -1818,8 +1817,8 @@ struct CreateOrUpdateTagsTypeSerializer;
 impl CreateOrUpdateTagsTypeSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &CreateOrUpdateTagsType) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         TagsSerializer::serialize(params, &format!("{}{}", prefix, "Tags"), &obj.tags);
@@ -1888,8 +1887,8 @@ struct CustomizedMetricSpecificationSerializer;
 impl CustomizedMetricSpecificationSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &CustomizedMetricSpecification) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         if let Some(ref field_value) = obj.dimensions {
@@ -1922,8 +1921,8 @@ struct DeleteAutoScalingGroupTypeSerializer;
 impl DeleteAutoScalingGroupTypeSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &DeleteAutoScalingGroupType) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         params.put(
@@ -1971,8 +1970,8 @@ struct DeleteLifecycleHookTypeSerializer;
 impl DeleteLifecycleHookTypeSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &DeleteLifecycleHookType) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         params.put(
@@ -2000,8 +1999,8 @@ struct DeleteNotificationConfigurationTypeSerializer;
 impl DeleteNotificationConfigurationTypeSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &DeleteNotificationConfigurationType) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         params.put(
@@ -2026,8 +2025,8 @@ struct DeletePolicyTypeSerializer;
 impl DeletePolicyTypeSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &DeletePolicyType) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         if let Some(ref field_value) = obj.auto_scaling_group_name {
@@ -2054,8 +2053,8 @@ struct DeleteScheduledActionTypeSerializer;
 impl DeleteScheduledActionTypeSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &DeleteScheduledActionType) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         params.put(
@@ -2081,8 +2080,8 @@ struct DeleteTagsTypeSerializer;
 impl DeleteTagsTypeSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &DeleteTagsType) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         TagsSerializer::serialize(params, &format!("{}{}", prefix, "Tags"), &obj.tags);
@@ -2198,8 +2197,8 @@ struct DescribeAutoScalingInstancesTypeSerializer;
 impl DescribeAutoScalingInstancesTypeSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &DescribeAutoScalingInstancesType) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         if let Some(ref field_value) = obj.instance_ids {
@@ -2309,8 +2308,8 @@ struct DescribeInstanceRefreshesTypeSerializer;
 impl DescribeInstanceRefreshesTypeSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &DescribeInstanceRefreshesType) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         params.put(
@@ -2414,8 +2413,8 @@ struct DescribeLifecycleHooksTypeSerializer;
 impl DescribeLifecycleHooksTypeSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &DescribeLifecycleHooksType) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         params.put(
@@ -2448,8 +2447,8 @@ struct DescribeLoadBalancerTargetGroupsRequestSerializer;
 impl DescribeLoadBalancerTargetGroupsRequestSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &DescribeLoadBalancerTargetGroupsRequest) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         params.put(
@@ -2522,8 +2521,8 @@ struct DescribeLoadBalancersRequestSerializer;
 impl DescribeLoadBalancersRequestSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &DescribeLoadBalancersRequest) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         params.put(
@@ -2676,8 +2675,8 @@ struct DescribeNotificationConfigurationsTypeSerializer;
 impl DescribeNotificationConfigurationsTypeSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &DescribeNotificationConfigurationsType) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         if let Some(ref field_value) = obj.auto_scaling_group_names {
@@ -2716,8 +2715,8 @@ struct DescribePoliciesTypeSerializer;
 impl DescribePoliciesTypeSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &DescribePoliciesType) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         if let Some(ref field_value) = obj.auto_scaling_group_name {
@@ -2767,8 +2766,8 @@ struct DescribeScalingActivitiesTypeSerializer;
 impl DescribeScalingActivitiesTypeSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &DescribeScalingActivitiesType) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         if let Some(ref field_value) = obj.activity_ids {
@@ -2815,8 +2814,8 @@ struct DescribeScheduledActionsTypeSerializer;
 impl DescribeScheduledActionsTypeSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &DescribeScheduledActionsType) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         if let Some(ref field_value) = obj.auto_scaling_group_name {
@@ -2863,8 +2862,8 @@ struct DescribeTagsTypeSerializer;
 impl DescribeTagsTypeSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &DescribeTagsType) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         if let Some(ref field_value) = obj.filters {
@@ -2958,8 +2957,8 @@ struct DetachInstancesQuerySerializer;
 impl DetachInstancesQuerySerializer {
     fn serialize(params: &mut Params, name: &str, obj: &DetachInstancesQuery) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         params.put(
@@ -3015,8 +3014,8 @@ struct DetachLoadBalancerTargetGroupsTypeSerializer;
 impl DetachLoadBalancerTargetGroupsTypeSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &DetachLoadBalancerTargetGroupsType) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         params.put(
@@ -3066,8 +3065,8 @@ struct DetachLoadBalancersTypeSerializer;
 impl DetachLoadBalancersTypeSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &DetachLoadBalancersType) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         params.put(
@@ -3096,8 +3095,8 @@ struct DisableMetricsCollectionQuerySerializer;
 impl DisableMetricsCollectionQuerySerializer {
     fn serialize(params: &mut Params, name: &str, obj: &DisableMetricsCollectionQuery) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         params.put(
@@ -3190,8 +3189,8 @@ struct EbsSerializer;
 impl EbsSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &Ebs) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         if let Some(ref field_value) = obj.delete_on_termination {
@@ -3242,8 +3241,8 @@ struct EnableMetricsCollectionQuerySerializer;
 impl EnableMetricsCollectionQuerySerializer {
     fn serialize(params: &mut Params, name: &str, obj: &EnableMetricsCollectionQuery) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         params.put(
@@ -3356,8 +3355,8 @@ struct EnterStandbyQuerySerializer;
 impl EnterStandbyQuerySerializer {
     fn serialize(params: &mut Params, name: &str, obj: &EnterStandbyQuery) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         params.put(
@@ -3406,8 +3405,8 @@ struct ExecutePolicyTypeSerializer;
 impl ExecutePolicyTypeSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &ExecutePolicyType) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         if let Some(ref field_value) = obj.auto_scaling_group_name {
@@ -3471,8 +3470,8 @@ struct ExitStandbyQuerySerializer;
 impl ExitStandbyQuerySerializer {
     fn serialize(params: &mut Params, name: &str, obj: &ExitStandbyQuery) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         params.put(
@@ -3574,8 +3573,8 @@ struct FilterSerializer;
 impl FilterSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &Filter) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         if let Some(ref field_value) = obj.name {
@@ -3805,8 +3804,8 @@ struct InstanceMetadataOptionsSerializer;
 impl InstanceMetadataOptionsSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &InstanceMetadataOptions) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         if let Some(ref field_value) = obj.http_endpoint {
@@ -3860,8 +3859,8 @@ struct InstanceMonitoringSerializer;
 impl InstanceMonitoringSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &InstanceMonitoring) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         if let Some(ref field_value) = obj.enabled {
@@ -4093,8 +4092,8 @@ struct InstancesDistributionSerializer;
 impl InstancesDistributionSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &InstancesDistribution) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         if let Some(ref field_value) = obj.on_demand_allocation_strategy {
@@ -4328,8 +4327,8 @@ struct LaunchConfigurationNameTypeSerializer;
 impl LaunchConfigurationNameTypeSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &LaunchConfigurationNameType) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         params.put(
@@ -4366,8 +4365,8 @@ struct LaunchConfigurationNamesTypeSerializer;
 impl LaunchConfigurationNamesTypeSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &LaunchConfigurationNamesType) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         if let Some(ref field_value) = obj.launch_configuration_names {
@@ -4492,8 +4491,8 @@ struct LaunchTemplateSerializer;
 impl LaunchTemplateSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &LaunchTemplate) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         if let Some(ref field_value) = obj.launch_template_specification {
@@ -4579,8 +4578,8 @@ struct LaunchTemplateOverridesSerializer;
 impl LaunchTemplateOverridesSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &LaunchTemplateOverrides) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         if let Some(ref field_value) = obj.instance_type {
@@ -4656,8 +4655,8 @@ struct LaunchTemplateSpecificationSerializer;
 impl LaunchTemplateSpecificationSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &LaunchTemplateSpecification) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         if let Some(ref field_value) = obj.launch_template_id {
@@ -4810,8 +4809,8 @@ struct LifecycleHookSpecificationSerializer;
 impl LifecycleHookSpecificationSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &LifecycleHookSpecification) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         if let Some(ref field_value) = obj.default_result {
@@ -5149,8 +5148,8 @@ struct MetricDimensionSerializer;
 impl MetricDimensionSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &MetricDimension) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         params.put(&format!("{}{}", prefix, "Name"), &obj.name);
@@ -5384,8 +5383,8 @@ struct MixedInstancesPolicySerializer;
 impl MixedInstancesPolicySerializer {
     fn serialize(params: &mut Params, name: &str, obj: &MixedInstancesPolicy) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         if let Some(ref field_value) = obj.instances_distribution {
@@ -5709,8 +5708,8 @@ struct PredefinedMetricSpecificationSerializer;
 impl PredefinedMetricSpecificationSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &PredefinedMetricSpecification) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         params.put(
@@ -5871,8 +5870,8 @@ struct PutLifecycleHookTypeSerializer;
 impl PutLifecycleHookTypeSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &PutLifecycleHookType) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         params.put(
@@ -5929,8 +5928,8 @@ struct PutNotificationConfigurationTypeSerializer;
 impl PutNotificationConfigurationTypeSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &PutNotificationConfigurationType) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         params.put(
@@ -5982,8 +5981,8 @@ struct PutScalingPolicyTypeSerializer;
 impl PutScalingPolicyTypeSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &PutScalingPolicyType) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         if let Some(ref field_value) = obj.adjustment_type {
@@ -6072,8 +6071,8 @@ struct PutScheduledUpdateGroupActionTypeSerializer;
 impl PutScheduledUpdateGroupActionTypeSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &PutScheduledUpdateGroupActionType) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         params.put(
@@ -6147,8 +6146,8 @@ struct RecordLifecycleActionHeartbeatTypeSerializer;
 impl RecordLifecycleActionHeartbeatTypeSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &RecordLifecycleActionHeartbeatType) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         params.put(
@@ -6186,8 +6185,8 @@ struct RefreshPreferencesSerializer;
 impl RefreshPreferencesSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &RefreshPreferences) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         if let Some(ref field_value) = obj.instance_warmup {
@@ -6394,8 +6393,8 @@ struct ScalingProcessQuerySerializer;
 impl ScalingProcessQuerySerializer {
     fn serialize(params: &mut Params, name: &str, obj: &ScalingProcessQuery) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         params.put(
@@ -6584,8 +6583,8 @@ struct ScheduledUpdateGroupActionRequestSerializer;
 impl ScheduledUpdateGroupActionRequestSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &ScheduledUpdateGroupActionRequest) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         if let Some(ref field_value) = obj.desired_capacity {
@@ -6690,8 +6689,8 @@ struct SetDesiredCapacityTypeSerializer;
 impl SetDesiredCapacityTypeSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &SetDesiredCapacityType) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         params.put(
@@ -6724,8 +6723,8 @@ struct SetInstanceHealthQuerySerializer;
 impl SetInstanceHealthQuerySerializer {
     fn serialize(params: &mut Params, name: &str, obj: &SetInstanceHealthQuery) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         params.put(&format!("{}{}", prefix, "HealthStatus"), &obj.health_status);
@@ -6776,8 +6775,8 @@ struct SetInstanceProtectionQuerySerializer;
 impl SetInstanceProtectionQuerySerializer {
     fn serialize(params: &mut Params, name: &str, obj: &SetInstanceProtectionQuery) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         params.put(
@@ -6862,8 +6861,8 @@ struct StartInstanceRefreshTypeSerializer;
 impl StartInstanceRefreshTypeSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &StartInstanceRefreshType) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         params.put(
@@ -6934,8 +6933,8 @@ struct StepAdjustmentSerializer;
 impl StepAdjustmentSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &StepAdjustment) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         if let Some(ref field_value) = obj.metric_interval_lower_bound {
@@ -7064,8 +7063,8 @@ struct TagSerializer;
 impl TagSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &Tag) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         params.put(&format!("{}{}", prefix, "Key"), &obj.key);
@@ -7312,8 +7311,8 @@ struct TargetTrackingConfigurationSerializer;
 impl TargetTrackingConfigurationSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &TargetTrackingConfiguration) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         if let Some(ref field_value) = obj.customized_metric_specification {
@@ -7351,8 +7350,8 @@ struct TerminateInstanceInAutoScalingGroupTypeSerializer;
 impl TerminateInstanceInAutoScalingGroupTypeSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &TerminateInstanceInAutoScalingGroupType) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         params.put(&format!("{}{}", prefix, "InstanceId"), &obj.instance_id);
@@ -7449,8 +7448,8 @@ struct UpdateAutoScalingGroupTypeSerializer;
 impl UpdateAutoScalingGroupTypeSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &UpdateAutoScalingGroupType) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         params.put(

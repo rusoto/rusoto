@@ -54,7 +54,6 @@ impl MarketplaceCommerceAnalyticsClient {
     }
 }
 
-use serde_json;
 /// <p>Container for the parameters to the GenerateDataSet operation.</p>
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]

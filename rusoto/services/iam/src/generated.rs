@@ -31,7 +31,6 @@ use rusoto_core::signature::SignedRequest;
 use serde::Deserialize;
 #[cfg(feature = "serialize_structs")]
 use serde::Serialize;
-use serde_urlencoded;
 use std::str::FromStr;
 use xml::EventReader;
 
@@ -374,8 +373,8 @@ struct AddClientIDToOpenIDConnectProviderRequestSerializer;
 impl AddClientIDToOpenIDConnectProviderRequestSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &AddClientIDToOpenIDConnectProviderRequest) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         params.put(&format!("{}{}", prefix, "ClientID"), &obj.client_id);
@@ -400,8 +399,8 @@ struct AddRoleToInstanceProfileRequestSerializer;
 impl AddRoleToInstanceProfileRequestSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &AddRoleToInstanceProfileRequest) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         params.put(
@@ -426,8 +425,8 @@ struct AddUserToGroupRequestSerializer;
 impl AddUserToGroupRequestSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &AddUserToGroupRequest) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         params.put(&format!("{}{}", prefix, "GroupName"), &obj.group_name);
@@ -475,8 +474,8 @@ struct AttachGroupPolicyRequestSerializer;
 impl AttachGroupPolicyRequestSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &AttachGroupPolicyRequest) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         params.put(&format!("{}{}", prefix, "GroupName"), &obj.group_name);
@@ -498,8 +497,8 @@ struct AttachRolePolicyRequestSerializer;
 impl AttachRolePolicyRequestSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &AttachRolePolicyRequest) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         params.put(&format!("{}{}", prefix, "PolicyArn"), &obj.policy_arn);
@@ -521,8 +520,8 @@ struct AttachUserPolicyRequestSerializer;
 impl AttachUserPolicyRequestSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &AttachUserPolicyRequest) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         params.put(&format!("{}{}", prefix, "PolicyArn"), &obj.policy_arn);
@@ -718,8 +717,8 @@ struct ChangePasswordRequestSerializer;
 impl ChangePasswordRequestSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &ChangePasswordRequest) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         params.put(&format!("{}{}", prefix, "NewPassword"), &obj.new_password);
@@ -790,8 +789,8 @@ struct ContextEntrySerializer;
 impl ContextEntrySerializer {
     fn serialize(params: &mut Params, name: &str, obj: &ContextEntry) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         if let Some(ref field_value) = obj.context_key_name {
@@ -873,8 +872,8 @@ struct CreateAccessKeyRequestSerializer;
 impl CreateAccessKeyRequestSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &CreateAccessKeyRequest) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         if let Some(ref field_value) = obj.user_name {
@@ -926,8 +925,8 @@ struct CreateAccountAliasRequestSerializer;
 impl CreateAccountAliasRequestSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &CreateAccountAliasRequest) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         params.put(&format!("{}{}", prefix, "AccountAlias"), &obj.account_alias);
@@ -948,8 +947,8 @@ struct CreateGroupRequestSerializer;
 impl CreateGroupRequestSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &CreateGroupRequest) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         params.put(&format!("{}{}", prefix, "GroupName"), &obj.group_name);
@@ -1000,8 +999,8 @@ struct CreateInstanceProfileRequestSerializer;
 impl CreateInstanceProfileRequestSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &CreateInstanceProfileRequest) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         params.put(
@@ -1062,8 +1061,8 @@ struct CreateLoginProfileRequestSerializer;
 impl CreateLoginProfileRequestSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &CreateLoginProfileRequest) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         params.put(&format!("{}{}", prefix, "Password"), &obj.password);
@@ -1125,8 +1124,8 @@ struct CreateOpenIDConnectProviderRequestSerializer;
 impl CreateOpenIDConnectProviderRequestSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &CreateOpenIDConnectProviderRequest) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         if let Some(ref field_value) = obj.client_id_list {
@@ -1197,8 +1196,8 @@ struct CreatePolicyRequestSerializer;
 impl CreatePolicyRequestSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &CreatePolicyRequest) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         if let Some(ref field_value) = obj.description {
@@ -1258,8 +1257,8 @@ struct CreatePolicyVersionRequestSerializer;
 impl CreatePolicyVersionRequestSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &CreatePolicyVersionRequest) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         params.put(&format!("{}{}", prefix, "PolicyArn"), &obj.policy_arn);
@@ -1331,8 +1330,8 @@ struct CreateRoleRequestSerializer;
 impl CreateRoleRequestSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &CreateRoleRequest) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         params.put(
@@ -1402,8 +1401,8 @@ struct CreateSAMLProviderRequestSerializer;
 impl CreateSAMLProviderRequestSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &CreateSAMLProviderRequest) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         params.put(&format!("{}{}", prefix, "Name"), &obj.name);
@@ -1462,8 +1461,8 @@ struct CreateServiceLinkedRoleRequestSerializer;
 impl CreateServiceLinkedRoleRequestSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &CreateServiceLinkedRoleRequest) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         params.put(
@@ -1523,8 +1522,8 @@ struct CreateServiceSpecificCredentialRequestSerializer;
 impl CreateServiceSpecificCredentialRequestSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &CreateServiceSpecificCredentialRequest) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         params.put(&format!("{}{}", prefix, "ServiceName"), &obj.service_name);
@@ -1584,8 +1583,8 @@ struct CreateUserRequestSerializer;
 impl CreateUserRequestSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &CreateUserRequest) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         if let Some(ref field_value) = obj.path {
@@ -1645,8 +1644,8 @@ struct CreateVirtualMFADeviceRequestSerializer;
 impl CreateVirtualMFADeviceRequestSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &CreateVirtualMFADeviceRequest) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         if let Some(ref field_value) = obj.path {
@@ -1713,8 +1712,8 @@ struct DeactivateMFADeviceRequestSerializer;
 impl DeactivateMFADeviceRequestSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &DeactivateMFADeviceRequest) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         params.put(&format!("{}{}", prefix, "SerialNumber"), &obj.serial_number);
@@ -1736,8 +1735,8 @@ struct DeleteAccessKeyRequestSerializer;
 impl DeleteAccessKeyRequestSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &DeleteAccessKeyRequest) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         params.put(&format!("{}{}", prefix, "AccessKeyId"), &obj.access_key_id);
@@ -1759,8 +1758,8 @@ struct DeleteAccountAliasRequestSerializer;
 impl DeleteAccountAliasRequestSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &DeleteAccountAliasRequest) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         params.put(&format!("{}{}", prefix, "AccountAlias"), &obj.account_alias);
@@ -1781,8 +1780,8 @@ struct DeleteGroupPolicyRequestSerializer;
 impl DeleteGroupPolicyRequestSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &DeleteGroupPolicyRequest) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         params.put(&format!("{}{}", prefix, "GroupName"), &obj.group_name);
@@ -1802,8 +1801,8 @@ struct DeleteGroupRequestSerializer;
 impl DeleteGroupRequestSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &DeleteGroupRequest) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         params.put(&format!("{}{}", prefix, "GroupName"), &obj.group_name);
@@ -1822,8 +1821,8 @@ struct DeleteInstanceProfileRequestSerializer;
 impl DeleteInstanceProfileRequestSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &DeleteInstanceProfileRequest) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         params.put(
@@ -1845,8 +1844,8 @@ struct DeleteLoginProfileRequestSerializer;
 impl DeleteLoginProfileRequestSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &DeleteLoginProfileRequest) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         params.put(&format!("{}{}", prefix, "UserName"), &obj.user_name);
@@ -1865,8 +1864,8 @@ struct DeleteOpenIDConnectProviderRequestSerializer;
 impl DeleteOpenIDConnectProviderRequestSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &DeleteOpenIDConnectProviderRequest) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         params.put(
@@ -1888,8 +1887,8 @@ struct DeletePolicyRequestSerializer;
 impl DeletePolicyRequestSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &DeletePolicyRequest) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         params.put(&format!("{}{}", prefix, "PolicyArn"), &obj.policy_arn);
@@ -1910,8 +1909,8 @@ struct DeletePolicyVersionRequestSerializer;
 impl DeletePolicyVersionRequestSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &DeletePolicyVersionRequest) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         params.put(&format!("{}{}", prefix, "PolicyArn"), &obj.policy_arn);
@@ -1931,8 +1930,8 @@ struct DeleteRolePermissionsBoundaryRequestSerializer;
 impl DeleteRolePermissionsBoundaryRequestSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &DeleteRolePermissionsBoundaryRequest) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         params.put(&format!("{}{}", prefix, "RoleName"), &obj.role_name);
@@ -1953,8 +1952,8 @@ struct DeleteRolePolicyRequestSerializer;
 impl DeleteRolePolicyRequestSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &DeleteRolePolicyRequest) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         params.put(&format!("{}{}", prefix, "PolicyName"), &obj.policy_name);
@@ -1974,8 +1973,8 @@ struct DeleteRoleRequestSerializer;
 impl DeleteRoleRequestSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &DeleteRoleRequest) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         params.put(&format!("{}{}", prefix, "RoleName"), &obj.role_name);
@@ -1994,8 +1993,8 @@ struct DeleteSAMLProviderRequestSerializer;
 impl DeleteSAMLProviderRequestSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &DeleteSAMLProviderRequest) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         params.put(
@@ -2019,8 +2018,8 @@ struct DeleteSSHPublicKeyRequestSerializer;
 impl DeleteSSHPublicKeyRequestSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &DeleteSSHPublicKeyRequest) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         params.put(
@@ -2043,8 +2042,8 @@ struct DeleteServerCertificateRequestSerializer;
 impl DeleteServerCertificateRequestSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &DeleteServerCertificateRequest) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         params.put(
@@ -2066,8 +2065,8 @@ struct DeleteServiceLinkedRoleRequestSerializer;
 impl DeleteServiceLinkedRoleRequestSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &DeleteServiceLinkedRoleRequest) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         params.put(&format!("{}{}", prefix, "RoleName"), &obj.role_name);
@@ -2119,8 +2118,8 @@ struct DeleteServiceSpecificCredentialRequestSerializer;
 impl DeleteServiceSpecificCredentialRequestSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &DeleteServiceSpecificCredentialRequest) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         params.put(
@@ -2147,8 +2146,8 @@ struct DeleteSigningCertificateRequestSerializer;
 impl DeleteSigningCertificateRequestSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &DeleteSigningCertificateRequest) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         params.put(
@@ -2173,8 +2172,8 @@ struct DeleteUserPermissionsBoundaryRequestSerializer;
 impl DeleteUserPermissionsBoundaryRequestSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &DeleteUserPermissionsBoundaryRequest) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         params.put(&format!("{}{}", prefix, "UserName"), &obj.user_name);
@@ -2195,8 +2194,8 @@ struct DeleteUserPolicyRequestSerializer;
 impl DeleteUserPolicyRequestSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &DeleteUserPolicyRequest) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         params.put(&format!("{}{}", prefix, "PolicyName"), &obj.policy_name);
@@ -2216,8 +2215,8 @@ struct DeleteUserRequestSerializer;
 impl DeleteUserRequestSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &DeleteUserRequest) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         params.put(&format!("{}{}", prefix, "UserName"), &obj.user_name);
@@ -2236,8 +2235,8 @@ struct DeleteVirtualMFADeviceRequestSerializer;
 impl DeleteVirtualMFADeviceRequestSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &DeleteVirtualMFADeviceRequest) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         params.put(&format!("{}{}", prefix, "SerialNumber"), &obj.serial_number);
@@ -2312,8 +2311,8 @@ struct DetachGroupPolicyRequestSerializer;
 impl DetachGroupPolicyRequestSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &DetachGroupPolicyRequest) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         params.put(&format!("{}{}", prefix, "GroupName"), &obj.group_name);
@@ -2335,8 +2334,8 @@ struct DetachRolePolicyRequestSerializer;
 impl DetachRolePolicyRequestSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &DetachRolePolicyRequest) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         params.put(&format!("{}{}", prefix, "PolicyArn"), &obj.policy_arn);
@@ -2358,8 +2357,8 @@ struct DetachUserPolicyRequestSerializer;
 impl DetachUserPolicyRequestSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &DetachUserPolicyRequest) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         params.put(&format!("{}{}", prefix, "PolicyArn"), &obj.policy_arn);
@@ -2385,8 +2384,8 @@ struct EnableMFADeviceRequestSerializer;
 impl EnableMFADeviceRequestSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &EnableMFADeviceRequest) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         params.put(
@@ -2763,8 +2762,8 @@ struct GenerateOrganizationsAccessReportRequestSerializer;
 impl GenerateOrganizationsAccessReportRequestSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &GenerateOrganizationsAccessReportRequest) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         params.put(&format!("{}{}", prefix, "EntityPath"), &obj.entity_path);
@@ -2821,8 +2820,8 @@ struct GenerateServiceLastAccessedDetailsRequestSerializer;
 impl GenerateServiceLastAccessedDetailsRequestSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &GenerateServiceLastAccessedDetailsRequest) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         params.put(&format!("{}{}", prefix, "Arn"), &obj.arn);
@@ -2874,8 +2873,8 @@ struct GetAccessKeyLastUsedRequestSerializer;
 impl GetAccessKeyLastUsedRequestSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &GetAccessKeyLastUsedRequest) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         params.put(&format!("{}{}", prefix, "AccessKeyId"), &obj.access_key_id);
@@ -2938,8 +2937,8 @@ struct GetAccountAuthorizationDetailsRequestSerializer;
 impl GetAccountAuthorizationDetailsRequestSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &GetAccountAuthorizationDetailsRequest) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         if let Some(ref field_value) = obj.filter {
@@ -3105,8 +3104,8 @@ struct GetContextKeysForCustomPolicyRequestSerializer;
 impl GetContextKeysForCustomPolicyRequestSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &GetContextKeysForCustomPolicyRequest) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         SimulationPolicyListTypeSerializer::serialize(
@@ -3167,8 +3166,8 @@ struct GetContextKeysForPrincipalPolicyRequestSerializer;
 impl GetContextKeysForPrincipalPolicyRequestSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &GetContextKeysForPrincipalPolicyRequest) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         if let Some(ref field_value) = obj.policy_input_list {
@@ -3246,8 +3245,8 @@ struct GetGroupPolicyRequestSerializer;
 impl GetGroupPolicyRequestSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &GetGroupPolicyRequest) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         params.put(&format!("{}{}", prefix, "GroupName"), &obj.group_name);
@@ -3309,8 +3308,8 @@ struct GetGroupRequestSerializer;
 impl GetGroupRequestSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &GetGroupRequest) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         params.put(&format!("{}{}", prefix, "GroupName"), &obj.group_name);
@@ -3381,8 +3380,8 @@ struct GetInstanceProfileRequestSerializer;
 impl GetInstanceProfileRequestSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &GetInstanceProfileRequest) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         params.put(
@@ -3436,8 +3435,8 @@ struct GetLoginProfileRequestSerializer;
 impl GetLoginProfileRequestSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &GetLoginProfileRequest) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         params.put(&format!("{}{}", prefix, "UserName"), &obj.user_name);
@@ -3488,8 +3487,8 @@ struct GetOpenIDConnectProviderRequestSerializer;
 impl GetOpenIDConnectProviderRequestSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &GetOpenIDConnectProviderRequest) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         params.put(
@@ -3570,8 +3569,8 @@ struct GetOrganizationsAccessReportRequestSerializer;
 impl GetOrganizationsAccessReportRequestSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &GetOrganizationsAccessReportRequest) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         params.put(&format!("{}{}", prefix, "JobId"), &obj.job_id);
@@ -3687,8 +3686,8 @@ struct GetPolicyRequestSerializer;
 impl GetPolicyRequestSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &GetPolicyRequest) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         params.put(&format!("{}{}", prefix, "PolicyArn"), &obj.policy_arn);
@@ -3736,8 +3735,8 @@ struct GetPolicyVersionRequestSerializer;
 impl GetPolicyVersionRequestSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &GetPolicyVersionRequest) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         params.put(&format!("{}{}", prefix, "PolicyArn"), &obj.policy_arn);
@@ -3793,8 +3792,8 @@ struct GetRolePolicyRequestSerializer;
 impl GetRolePolicyRequestSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &GetRolePolicyRequest) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         params.put(&format!("{}{}", prefix, "PolicyName"), &obj.policy_name);
@@ -3852,8 +3851,8 @@ struct GetRoleRequestSerializer;
 impl GetRoleRequestSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &GetRoleRequest) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         params.put(&format!("{}{}", prefix, "RoleName"), &obj.role_name);
@@ -3899,8 +3898,8 @@ struct GetSAMLProviderRequestSerializer;
 impl GetSAMLProviderRequestSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &GetSAMLProviderRequest) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         params.put(
@@ -3973,8 +3972,8 @@ struct GetSSHPublicKeyRequestSerializer;
 impl GetSSHPublicKeyRequestSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &GetSSHPublicKeyRequest) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         params.put(&format!("{}{}", prefix, "Encoding"), &obj.encoding);
@@ -4032,8 +4031,8 @@ struct GetServerCertificateRequestSerializer;
 impl GetServerCertificateRequestSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &GetServerCertificateRequest) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         params.put(
@@ -4091,8 +4090,8 @@ struct GetServiceLastAccessedDetailsRequestSerializer;
 impl GetServiceLastAccessedDetailsRequestSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &GetServiceLastAccessedDetailsRequest) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         params.put(&format!("{}{}", prefix, "JobId"), &obj.job_id);
@@ -4206,8 +4205,8 @@ impl GetServiceLastAccessedDetailsWithEntitiesRequestSerializer {
         obj: &GetServiceLastAccessedDetailsWithEntitiesRequest,
     ) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         params.put(&format!("{}{}", prefix, "JobId"), &obj.job_id);
@@ -4307,8 +4306,8 @@ struct GetServiceLinkedRoleDeletionStatusRequestSerializer;
 impl GetServiceLinkedRoleDeletionStatusRequestSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &GetServiceLinkedRoleDeletionStatusRequest) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         params.put(
@@ -4370,8 +4369,8 @@ struct GetUserPolicyRequestSerializer;
 impl GetUserPolicyRequestSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &GetUserPolicyRequest) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         params.put(&format!("{}{}", prefix, "PolicyName"), &obj.policy_name);
@@ -4430,8 +4429,8 @@ struct GetUserRequestSerializer;
 impl GetUserRequestSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &GetUserRequest) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         if let Some(ref field_value) = obj.user_name {
@@ -4776,8 +4775,8 @@ struct ListAccessKeysRequestSerializer;
 impl ListAccessKeysRequestSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &ListAccessKeysRequest) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         if let Some(ref field_value) = obj.marker {
@@ -4851,8 +4850,8 @@ struct ListAccountAliasesRequestSerializer;
 impl ListAccountAliasesRequestSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &ListAccountAliasesRequest) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         if let Some(ref field_value) = obj.marker {
@@ -4930,8 +4929,8 @@ struct ListAttachedGroupPoliciesRequestSerializer;
 impl ListAttachedGroupPoliciesRequestSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &ListAttachedGroupPoliciesRequest) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         params.put(&format!("{}{}", prefix, "GroupName"), &obj.group_name);
@@ -5014,8 +5013,8 @@ struct ListAttachedRolePoliciesRequestSerializer;
 impl ListAttachedRolePoliciesRequestSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &ListAttachedRolePoliciesRequest) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         if let Some(ref field_value) = obj.marker {
@@ -5098,8 +5097,8 @@ struct ListAttachedUserPoliciesRequestSerializer;
 impl ListAttachedUserPoliciesRequestSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &ListAttachedUserPoliciesRequest) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         if let Some(ref field_value) = obj.marker {
@@ -5186,8 +5185,8 @@ struct ListEntitiesForPolicyRequestSerializer;
 impl ListEntitiesForPolicyRequestSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &ListEntitiesForPolicyRequest) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         if let Some(ref field_value) = obj.entity_filter {
@@ -5285,8 +5284,8 @@ struct ListGroupPoliciesRequestSerializer;
 impl ListGroupPoliciesRequestSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &ListGroupPoliciesRequest) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         params.put(&format!("{}{}", prefix, "GroupName"), &obj.group_name);
@@ -5363,8 +5362,8 @@ struct ListGroupsForUserRequestSerializer;
 impl ListGroupsForUserRequestSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &ListGroupsForUserRequest) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         if let Some(ref field_value) = obj.marker {
@@ -5438,8 +5437,8 @@ struct ListGroupsRequestSerializer;
 impl ListGroupsRequestSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &ListGroupsRequest) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         if let Some(ref field_value) = obj.marker {
@@ -5511,8 +5510,8 @@ struct ListInstanceProfilesForRoleRequestSerializer;
 impl ListInstanceProfilesForRoleRequestSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &ListInstanceProfilesForRoleRequest) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         if let Some(ref field_value) = obj.marker {
@@ -5590,8 +5589,8 @@ struct ListInstanceProfilesRequestSerializer;
 impl ListInstanceProfilesRequestSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &ListInstanceProfilesRequest) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         if let Some(ref field_value) = obj.marker {
@@ -5671,8 +5670,8 @@ struct ListMFADevicesRequestSerializer;
 impl ListMFADevicesRequestSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &ListMFADevicesRequest) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         if let Some(ref field_value) = obj.marker {
@@ -5740,8 +5739,8 @@ struct ListOpenIDConnectProvidersRequestSerializer;
 impl ListOpenIDConnectProvidersRequestSerializer {
     fn serialize(_params: &mut Params, name: &str, _obj: &ListOpenIDConnectProvidersRequest) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
     }
 }
@@ -5842,8 +5841,8 @@ struct ListPoliciesGrantingServiceAccessRequestSerializer;
 impl ListPoliciesGrantingServiceAccessRequestSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &ListPoliciesGrantingServiceAccessRequest) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         params.put(&format!("{}{}", prefix, "Arn"), &obj.arn);
@@ -5923,8 +5922,8 @@ struct ListPoliciesRequestSerializer;
 impl ListPoliciesRequestSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &ListPoliciesRequest) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         if let Some(ref field_value) = obj.marker {
@@ -6028,8 +6027,8 @@ struct ListPolicyVersionsRequestSerializer;
 impl ListPolicyVersionsRequestSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &ListPolicyVersionsRequest) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         if let Some(ref field_value) = obj.marker {
@@ -6106,8 +6105,8 @@ struct ListRolePoliciesRequestSerializer;
 impl ListRolePoliciesRequestSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &ListRolePoliciesRequest) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         if let Some(ref field_value) = obj.marker {
@@ -6184,8 +6183,8 @@ struct ListRoleTagsRequestSerializer;
 impl ListRoleTagsRequestSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &ListRoleTagsRequest) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         if let Some(ref field_value) = obj.marker {
@@ -6254,8 +6253,8 @@ struct ListRolesRequestSerializer;
 impl ListRolesRequestSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &ListRolesRequest) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         if let Some(ref field_value) = obj.marker {
@@ -6320,8 +6319,8 @@ struct ListSAMLProvidersRequestSerializer;
 impl ListSAMLProvidersRequestSerializer {
     fn serialize(_params: &mut Params, name: &str, _obj: &ListSAMLProvidersRequest) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
     }
 }
@@ -6378,8 +6377,8 @@ struct ListSSHPublicKeysRequestSerializer;
 impl ListSSHPublicKeysRequestSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &ListSSHPublicKeysRequest) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         if let Some(ref field_value) = obj.marker {
@@ -6456,8 +6455,8 @@ struct ListServerCertificatesRequestSerializer;
 impl ListServerCertificatesRequestSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &ListServerCertificatesRequest) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         if let Some(ref field_value) = obj.marker {
@@ -6535,8 +6534,8 @@ struct ListServiceSpecificCredentialsRequestSerializer;
 impl ListServiceSpecificCredentialsRequestSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &ListServiceSpecificCredentialsRequest) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         if let Some(ref field_value) = obj.service_name {
@@ -6599,8 +6598,8 @@ struct ListSigningCertificatesRequestSerializer;
 impl ListSigningCertificatesRequestSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &ListSigningCertificatesRequest) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         if let Some(ref field_value) = obj.marker {
@@ -6679,8 +6678,8 @@ struct ListUserPoliciesRequestSerializer;
 impl ListUserPoliciesRequestSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &ListUserPoliciesRequest) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         if let Some(ref field_value) = obj.marker {
@@ -6757,8 +6756,8 @@ struct ListUserTagsRequestSerializer;
 impl ListUserTagsRequestSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &ListUserTagsRequest) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         if let Some(ref field_value) = obj.marker {
@@ -6827,8 +6826,8 @@ struct ListUsersRequestSerializer;
 impl ListUsersRequestSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &ListUsersRequest) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         if let Some(ref field_value) = obj.marker {
@@ -6900,8 +6899,8 @@ struct ListVirtualMFADevicesRequestSerializer;
 impl ListVirtualMFADevicesRequestSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &ListVirtualMFADevicesRequest) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         if let Some(ref field_value) = obj.assignment_status {
@@ -8103,8 +8102,8 @@ struct PutGroupPolicyRequestSerializer;
 impl PutGroupPolicyRequestSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &PutGroupPolicyRequest) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         params.put(&format!("{}{}", prefix, "GroupName"), &obj.group_name);
@@ -8130,8 +8129,8 @@ struct PutRolePermissionsBoundaryRequestSerializer;
 impl PutRolePermissionsBoundaryRequestSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &PutRolePermissionsBoundaryRequest) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         params.put(
@@ -8158,8 +8157,8 @@ struct PutRolePolicyRequestSerializer;
 impl PutRolePolicyRequestSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &PutRolePolicyRequest) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         params.put(
@@ -8185,8 +8184,8 @@ struct PutUserPermissionsBoundaryRequestSerializer;
 impl PutUserPermissionsBoundaryRequestSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &PutUserPermissionsBoundaryRequest) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         params.put(
@@ -8213,8 +8212,8 @@ struct PutUserPolicyRequestSerializer;
 impl PutUserPolicyRequestSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &PutUserPolicyRequest) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         params.put(
@@ -8260,8 +8259,8 @@ impl RemoveClientIDFromOpenIDConnectProviderRequestSerializer {
         obj: &RemoveClientIDFromOpenIDConnectProviderRequest,
     ) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         params.put(&format!("{}{}", prefix, "ClientID"), &obj.client_id);
@@ -8286,8 +8285,8 @@ struct RemoveRoleFromInstanceProfileRequestSerializer;
 impl RemoveRoleFromInstanceProfileRequestSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &RemoveRoleFromInstanceProfileRequest) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         params.put(
@@ -8312,8 +8311,8 @@ struct RemoveUserFromGroupRequestSerializer;
 impl RemoveUserFromGroupRequestSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &RemoveUserFromGroupRequest) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         params.put(&format!("{}{}", prefix, "GroupName"), &obj.group_name);
@@ -8370,8 +8369,8 @@ struct ResetServiceSpecificCredentialRequestSerializer;
 impl ResetServiceSpecificCredentialRequestSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &ResetServiceSpecificCredentialRequest) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         params.put(
@@ -8556,8 +8555,8 @@ struct ResyncMFADeviceRequestSerializer;
 impl ResyncMFADeviceRequestSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &ResyncMFADeviceRequest) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         params.put(
@@ -9565,8 +9564,8 @@ struct SetDefaultPolicyVersionRequestSerializer;
 impl SetDefaultPolicyVersionRequestSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &SetDefaultPolicyVersionRequest) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         params.put(&format!("{}{}", prefix, "PolicyArn"), &obj.policy_arn);
@@ -9586,8 +9585,8 @@ struct SetSecurityTokenServicePreferencesRequestSerializer;
 impl SetSecurityTokenServicePreferencesRequestSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &SetSecurityTokenServicePreferencesRequest) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         params.put(
@@ -9678,8 +9677,8 @@ struct SimulateCustomPolicyRequestSerializer;
 impl SimulateCustomPolicyRequestSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &SimulateCustomPolicyRequest) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         ActionNameListTypeSerializer::serialize(
@@ -9816,8 +9815,8 @@ struct SimulatePrincipalPolicyRequestSerializer;
 impl SimulatePrincipalPolicyRequestSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &SimulatePrincipalPolicyRequest) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         ActionNameListTypeSerializer::serialize(
@@ -10052,8 +10051,8 @@ struct TagSerializer;
 impl TagSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &Tag) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         params.put(&format!("{}{}", prefix, "Key"), &obj.key);
@@ -10124,8 +10123,8 @@ struct TagRoleRequestSerializer;
 impl TagRoleRequestSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &TagRoleRequest) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         params.put(&format!("{}{}", prefix, "RoleName"), &obj.role_name);
@@ -10147,8 +10146,8 @@ struct TagUserRequestSerializer;
 impl TagUserRequestSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &TagUserRequest) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         TagListTypeSerializer::serialize(params, &format!("{}{}", prefix, "Tags"), &obj.tags);
@@ -10291,8 +10290,8 @@ struct UntagRoleRequestSerializer;
 impl UntagRoleRequestSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &UntagRoleRequest) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         params.put(&format!("{}{}", prefix, "RoleName"), &obj.role_name);
@@ -10318,8 +10317,8 @@ struct UntagUserRequestSerializer;
 impl UntagUserRequestSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &UntagUserRequest) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         TagKeyListTypeSerializer::serialize(
@@ -10347,8 +10346,8 @@ struct UpdateAccessKeyRequestSerializer;
 impl UpdateAccessKeyRequestSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &UpdateAccessKeyRequest) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         params.put(&format!("{}{}", prefix, "AccessKeyId"), &obj.access_key_id);
@@ -10387,8 +10386,8 @@ struct UpdateAccountPasswordPolicyRequestSerializer;
 impl UpdateAccountPasswordPolicyRequestSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &UpdateAccountPasswordPolicyRequest) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         if let Some(ref field_value) = obj.allow_users_to_change_password {
@@ -10450,8 +10449,8 @@ struct UpdateAssumeRolePolicyRequestSerializer;
 impl UpdateAssumeRolePolicyRequestSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &UpdateAssumeRolePolicyRequest) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         params.put(
@@ -10478,8 +10477,8 @@ struct UpdateGroupRequestSerializer;
 impl UpdateGroupRequestSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &UpdateGroupRequest) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         params.put(&format!("{}{}", prefix, "GroupName"), &obj.group_name);
@@ -10508,8 +10507,8 @@ struct UpdateLoginProfileRequestSerializer;
 impl UpdateLoginProfileRequestSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &UpdateLoginProfileRequest) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         if let Some(ref field_value) = obj.password {
@@ -10543,8 +10542,8 @@ impl UpdateOpenIDConnectProviderThumbprintRequestSerializer {
         obj: &UpdateOpenIDConnectProviderThumbprintRequest,
     ) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         params.put(
@@ -10573,8 +10572,8 @@ struct UpdateRoleDescriptionRequestSerializer;
 impl UpdateRoleDescriptionRequestSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &UpdateRoleDescriptionRequest) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         params.put(&format!("{}{}", prefix, "Description"), &obj.description);
@@ -10628,8 +10627,8 @@ struct UpdateRoleRequestSerializer;
 impl UpdateRoleRequestSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &UpdateRoleRequest) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         if let Some(ref field_value) = obj.description {
@@ -10677,8 +10676,8 @@ struct UpdateSAMLProviderRequestSerializer;
 impl UpdateSAMLProviderRequestSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &UpdateSAMLProviderRequest) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         params.put(
@@ -10740,8 +10739,8 @@ struct UpdateSSHPublicKeyRequestSerializer;
 impl UpdateSSHPublicKeyRequestSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &UpdateSSHPublicKeyRequest) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         params.put(
@@ -10769,8 +10768,8 @@ struct UpdateServerCertificateRequestSerializer;
 impl UpdateServerCertificateRequestSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &UpdateServerCertificateRequest) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         if let Some(ref field_value) = obj.new_path {
@@ -10805,8 +10804,8 @@ struct UpdateServiceSpecificCredentialRequestSerializer;
 impl UpdateServiceSpecificCredentialRequestSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &UpdateServiceSpecificCredentialRequest) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         params.put(
@@ -10836,8 +10835,8 @@ struct UpdateSigningCertificateRequestSerializer;
 impl UpdateSigningCertificateRequestSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &UpdateSigningCertificateRequest) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         params.put(
@@ -10867,8 +10866,8 @@ struct UpdateUserRequestSerializer;
 impl UpdateUserRequestSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &UpdateUserRequest) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         if let Some(ref field_value) = obj.new_path {
@@ -10895,8 +10894,8 @@ struct UploadSSHPublicKeyRequestSerializer;
 impl UploadSSHPublicKeyRequestSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &UploadSSHPublicKeyRequest) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         params.put(
@@ -10961,8 +10960,8 @@ struct UploadServerCertificateRequestSerializer;
 impl UploadServerCertificateRequestSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &UploadServerCertificateRequest) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         params.put(
@@ -11032,8 +11031,8 @@ struct UploadSigningCertificateRequestSerializer;
 impl UploadSigningCertificateRequestSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &UploadSigningCertificateRequest) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         params.put(

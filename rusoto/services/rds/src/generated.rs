@@ -31,7 +31,6 @@ use rusoto_core::signature::SignedRequest;
 use serde::Deserialize;
 #[cfg(feature = "serialize_structs")]
 use serde::Serialize;
-use serde_urlencoded;
 use std::str::FromStr;
 use xml::EventReader;
 
@@ -184,8 +183,8 @@ struct AddRoleToDBClusterMessageSerializer;
 impl AddRoleToDBClusterMessageSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &AddRoleToDBClusterMessage) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         params.put(
@@ -215,8 +214,8 @@ struct AddRoleToDBInstanceMessageSerializer;
 impl AddRoleToDBInstanceMessageSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &AddRoleToDBInstanceMessage) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         params.put(
@@ -243,8 +242,8 @@ struct AddSourceIdentifierToSubscriptionMessageSerializer;
 impl AddSourceIdentifierToSubscriptionMessageSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &AddSourceIdentifierToSubscriptionMessage) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         params.put(
@@ -305,8 +304,8 @@ struct AddTagsToResourceMessageSerializer;
 impl AddTagsToResourceMessageSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &AddTagsToResourceMessage) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         params.put(&format!("{}{}", prefix, "ResourceName"), &obj.resource_name);
@@ -339,8 +338,8 @@ struct ApplyPendingMaintenanceActionMessageSerializer;
 impl ApplyPendingMaintenanceActionMessageSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &ApplyPendingMaintenanceActionMessage) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         params.put(&format!("{}{}", prefix, "ApplyAction"), &obj.apply_action);
@@ -444,8 +443,8 @@ struct AuthorizeDBSecurityGroupIngressMessageSerializer;
 impl AuthorizeDBSecurityGroupIngressMessageSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &AuthorizeDBSecurityGroupIngressMessage) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         if let Some(ref field_value) = obj.cidrip {
@@ -666,8 +665,8 @@ struct BacktrackDBClusterMessageSerializer;
 impl BacktrackDBClusterMessageSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &BacktrackDBClusterMessage) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         params.put(&format!("{}{}", prefix, "BacktrackTo"), &obj.backtrack_to);
@@ -715,8 +714,8 @@ struct CancelExportTaskMessageSerializer;
 impl CancelExportTaskMessageSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &CancelExportTaskMessage) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         params.put(
@@ -902,8 +901,8 @@ struct CloudwatchLogsExportConfigurationSerializer;
 impl CloudwatchLogsExportConfigurationSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &CloudwatchLogsExportConfiguration) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         if let Some(ref field_value) = obj.disable_log_types {
@@ -1009,8 +1008,8 @@ struct ConnectionPoolConfigurationSerializer;
 impl ConnectionPoolConfigurationSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &ConnectionPoolConfiguration) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         if let Some(ref field_value) = obj.connection_borrow_timeout {
@@ -1123,8 +1122,8 @@ struct CopyDBClusterParameterGroupMessageSerializer;
 impl CopyDBClusterParameterGroupMessageSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &CopyDBClusterParameterGroupMessage) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         params.put(
@@ -1200,8 +1199,8 @@ struct CopyDBClusterSnapshotMessageSerializer;
 impl CopyDBClusterSnapshotMessageSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &CopyDBClusterSnapshotMessage) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         if let Some(ref field_value) = obj.copy_tags {
@@ -1277,8 +1276,8 @@ struct CopyDBParameterGroupMessageSerializer;
 impl CopyDBParameterGroupMessageSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &CopyDBParameterGroupMessage) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         params.put(
@@ -1357,8 +1356,8 @@ struct CopyDBSnapshotMessageSerializer;
 impl CopyDBSnapshotMessageSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &CopyDBSnapshotMessage) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         if let Some(ref field_value) = obj.copy_tags {
@@ -1437,8 +1436,8 @@ struct CopyOptionGroupMessageSerializer;
 impl CopyOptionGroupMessageSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &CopyOptionGroupMessage) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         params.put(
@@ -1504,8 +1503,8 @@ struct CreateCustomAvailabilityZoneMessageSerializer;
 impl CreateCustomAvailabilityZoneMessageSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &CreateCustomAvailabilityZoneMessage) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         params.put(
@@ -1582,8 +1581,8 @@ struct CreateDBClusterEndpointMessageSerializer;
 impl CreateDBClusterEndpointMessageSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &CreateDBClusterEndpointMessage) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         params.put(
@@ -1692,8 +1691,8 @@ struct CreateDBClusterMessageSerializer;
 impl CreateDBClusterMessageSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &CreateDBClusterMessage) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         if let Some(ref field_value) = obj.availability_zones {
@@ -1856,8 +1855,8 @@ struct CreateDBClusterParameterGroupMessageSerializer;
 impl CreateDBClusterParameterGroupMessageSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &CreateDBClusterParameterGroupMessage) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         params.put(
@@ -1950,8 +1949,8 @@ struct CreateDBClusterSnapshotMessageSerializer;
 impl CreateDBClusterSnapshotMessageSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &CreateDBClusterSnapshotMessage) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         params.put(
@@ -2107,8 +2106,8 @@ struct CreateDBInstanceMessageSerializer;
 impl CreateDBInstanceMessageSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &CreateDBInstanceMessage) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         if let Some(ref field_value) = obj.allocated_storage {
@@ -2389,8 +2388,8 @@ struct CreateDBInstanceReadReplicaMessageSerializer;
 impl CreateDBInstanceReadReplicaMessageSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &CreateDBInstanceReadReplicaMessage) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         if let Some(ref field_value) = obj.auto_minor_version_upgrade {
@@ -2605,8 +2604,8 @@ struct CreateDBParameterGroupMessageSerializer;
 impl CreateDBParameterGroupMessageSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &CreateDBParameterGroupMessage) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         params.put(
@@ -2686,8 +2685,8 @@ struct CreateDBProxyRequestSerializer;
 impl CreateDBProxyRequestSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &CreateDBProxyRequest) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         UserAuthConfigListSerializer::serialize(
@@ -2768,8 +2767,8 @@ struct CreateDBSecurityGroupMessageSerializer;
 impl CreateDBSecurityGroupMessageSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &CreateDBSecurityGroupMessage) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         params.put(
@@ -2834,8 +2833,8 @@ struct CreateDBSnapshotMessageSerializer;
 impl CreateDBSnapshotMessageSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &CreateDBSnapshotMessage) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         params.put(
@@ -2897,8 +2896,8 @@ struct CreateDBSubnetGroupMessageSerializer;
 impl CreateDBSubnetGroupMessageSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &CreateDBSubnetGroupMessage) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         params.put(
@@ -2976,8 +2975,8 @@ struct CreateEventSubscriptionMessageSerializer;
 impl CreateEventSubscriptionMessageSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &CreateEventSubscriptionMessage) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         if let Some(ref field_value) = obj.enabled {
@@ -3067,8 +3066,8 @@ struct CreateGlobalClusterMessageSerializer;
 impl CreateGlobalClusterMessageSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &CreateGlobalClusterMessage) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         if let Some(ref field_value) = obj.database_name {
@@ -3154,8 +3153,8 @@ struct CreateOptionGroupMessageSerializer;
 impl CreateOptionGroupMessageSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &CreateOptionGroupMessage) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         params.put(&format!("{}{}", prefix, "EngineName"), &obj.engine_name);
@@ -7222,8 +7221,8 @@ struct DeleteCustomAvailabilityZoneMessageSerializer;
 impl DeleteCustomAvailabilityZoneMessageSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &DeleteCustomAvailabilityZoneMessage) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         params.put(
@@ -7278,8 +7277,8 @@ struct DeleteDBClusterEndpointMessageSerializer;
 impl DeleteDBClusterEndpointMessageSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &DeleteDBClusterEndpointMessage) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         params.put(
@@ -7306,8 +7305,8 @@ struct DeleteDBClusterMessageSerializer;
 impl DeleteDBClusterMessageSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &DeleteDBClusterMessage) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         params.put(
@@ -7339,8 +7338,8 @@ struct DeleteDBClusterParameterGroupMessageSerializer;
 impl DeleteDBClusterParameterGroupMessageSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &DeleteDBClusterParameterGroupMessage) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         params.put(
@@ -7388,8 +7387,8 @@ struct DeleteDBClusterSnapshotMessageSerializer;
 impl DeleteDBClusterSnapshotMessageSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &DeleteDBClusterSnapshotMessage) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         params.put(
@@ -7446,8 +7445,8 @@ struct DeleteDBInstanceAutomatedBackupMessageSerializer;
 impl DeleteDBInstanceAutomatedBackupMessageSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &DeleteDBInstanceAutomatedBackupMessage) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         if let Some(ref field_value) = obj.db_instance_automated_backups_arn {
@@ -7514,8 +7513,8 @@ struct DeleteDBInstanceMessageSerializer;
 impl DeleteDBInstanceMessageSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &DeleteDBInstanceMessage) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         params.put(
@@ -7579,8 +7578,8 @@ struct DeleteDBParameterGroupMessageSerializer;
 impl DeleteDBParameterGroupMessageSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &DeleteDBParameterGroupMessage) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         params.put(
@@ -7602,8 +7601,8 @@ struct DeleteDBProxyRequestSerializer;
 impl DeleteDBProxyRequestSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &DeleteDBProxyRequest) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         params.put(&format!("{}{}", prefix, "DBProxyName"), &obj.db_proxy_name);
@@ -7649,8 +7648,8 @@ struct DeleteDBSecurityGroupMessageSerializer;
 impl DeleteDBSecurityGroupMessageSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &DeleteDBSecurityGroupMessage) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         params.put(
@@ -7673,8 +7672,8 @@ struct DeleteDBSnapshotMessageSerializer;
 impl DeleteDBSnapshotMessageSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &DeleteDBSnapshotMessage) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         params.put(
@@ -7723,8 +7722,8 @@ struct DeleteDBSubnetGroupMessageSerializer;
 impl DeleteDBSubnetGroupMessageSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &DeleteDBSubnetGroupMessage) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         params.put(
@@ -7747,8 +7746,8 @@ struct DeleteEventSubscriptionMessageSerializer;
 impl DeleteEventSubscriptionMessageSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &DeleteEventSubscriptionMessage) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         params.put(
@@ -7802,8 +7801,8 @@ struct DeleteGlobalClusterMessageSerializer;
 impl DeleteGlobalClusterMessageSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &DeleteGlobalClusterMessage) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         params.put(
@@ -7857,8 +7856,8 @@ struct DeleteInstallationMediaMessageSerializer;
 impl DeleteInstallationMediaMessageSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &DeleteInstallationMediaMessage) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         params.put(
@@ -7881,8 +7880,8 @@ struct DeleteOptionGroupMessageSerializer;
 impl DeleteOptionGroupMessageSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &DeleteOptionGroupMessage) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         params.put(
@@ -7910,8 +7909,8 @@ struct DeregisterDBProxyTargetsRequestSerializer;
 impl DeregisterDBProxyTargetsRequestSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &DeregisterDBProxyTargetsRequest) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         if let Some(ref field_value) = obj.db_cluster_identifiers {
@@ -7966,8 +7965,8 @@ struct DescribeAccountAttributesMessageSerializer;
 impl DescribeAccountAttributesMessageSerializer {
     fn serialize(_params: &mut Params, name: &str, _obj: &DescribeAccountAttributesMessage) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
     }
 }
@@ -7991,8 +7990,8 @@ struct DescribeCertificatesMessageSerializer;
 impl DescribeCertificatesMessageSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &DescribeCertificatesMessage) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         if let Some(ref field_value) = obj.certificate_identifier {
@@ -8035,8 +8034,8 @@ struct DescribeCustomAvailabilityZonesMessageSerializer;
 impl DescribeCustomAvailabilityZonesMessageSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &DescribeCustomAvailabilityZonesMessage) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         if let Some(ref field_value) = obj.custom_availability_zone_id {
@@ -8082,8 +8081,8 @@ struct DescribeDBClusterBacktracksMessageSerializer;
 impl DescribeDBClusterBacktracksMessageSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &DescribeDBClusterBacktracksMessage) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         if let Some(ref field_value) = obj.backtrack_identifier {
@@ -8132,8 +8131,8 @@ struct DescribeDBClusterEndpointsMessageSerializer;
 impl DescribeDBClusterEndpointsMessageSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &DescribeDBClusterEndpointsMessage) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         if let Some(ref field_value) = obj.db_cluster_endpoint_identifier {
@@ -8183,8 +8182,8 @@ struct DescribeDBClusterParameterGroupsMessageSerializer;
 impl DescribeDBClusterParameterGroupsMessageSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &DescribeDBClusterParameterGroupsMessage) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         if let Some(ref field_value) = obj.db_cluster_parameter_group_name {
@@ -8230,8 +8229,8 @@ struct DescribeDBClusterParametersMessageSerializer;
 impl DescribeDBClusterParametersMessageSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &DescribeDBClusterParametersMessage) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         params.put(
@@ -8274,8 +8273,8 @@ impl DescribeDBClusterSnapshotAttributesMessageSerializer {
         obj: &DescribeDBClusterSnapshotAttributesMessage,
     ) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         params.put(
@@ -8345,8 +8344,8 @@ struct DescribeDBClusterSnapshotsMessageSerializer;
 impl DescribeDBClusterSnapshotsMessageSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &DescribeDBClusterSnapshotsMessage) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         if let Some(ref field_value) = obj.db_cluster_identifier {
@@ -8407,8 +8406,8 @@ struct DescribeDBClustersMessageSerializer;
 impl DescribeDBClustersMessageSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &DescribeDBClustersMessage) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         if let Some(ref field_value) = obj.db_cluster_identifier {
@@ -8466,8 +8465,8 @@ struct DescribeDBEngineVersionsMessageSerializer;
 impl DescribeDBEngineVersionsMessageSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &DescribeDBEngineVersionsMessage) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         if let Some(ref field_value) = obj.db_parameter_group_family {
@@ -8539,8 +8538,8 @@ struct DescribeDBInstanceAutomatedBackupsMessageSerializer;
 impl DescribeDBInstanceAutomatedBackupsMessageSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &DescribeDBInstanceAutomatedBackupsMessage) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         if let Some(ref field_value) = obj.db_instance_automated_backups_arn {
@@ -8593,8 +8592,8 @@ struct DescribeDBInstancesMessageSerializer;
 impl DescribeDBInstancesMessageSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &DescribeDBInstancesMessage) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         if let Some(ref field_value) = obj.db_instance_identifier {
@@ -8708,8 +8707,8 @@ struct DescribeDBLogFilesMessageSerializer;
 impl DescribeDBLogFilesMessageSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &DescribeDBLogFilesMessage) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         params.put(
@@ -8801,8 +8800,8 @@ struct DescribeDBParameterGroupsMessageSerializer;
 impl DescribeDBParameterGroupsMessageSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &DescribeDBParameterGroupsMessage) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         if let Some(ref field_value) = obj.db_parameter_group_name {
@@ -8847,8 +8846,8 @@ struct DescribeDBParametersMessageSerializer;
 impl DescribeDBParametersMessageSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &DescribeDBParametersMessage) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         params.put(
@@ -8892,8 +8891,8 @@ struct DescribeDBProxiesRequestSerializer;
 impl DescribeDBProxiesRequestSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &DescribeDBProxiesRequest) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         if let Some(ref field_value) = obj.db_proxy_name {
@@ -8972,8 +8971,8 @@ struct DescribeDBProxyTargetGroupsRequestSerializer;
 impl DescribeDBProxyTargetGroupsRequestSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &DescribeDBProxyTargetGroupsRequest) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         params.put(&format!("{}{}", prefix, "DBProxyName"), &obj.db_proxy_name);
@@ -9053,8 +9052,8 @@ struct DescribeDBProxyTargetsRequestSerializer;
 impl DescribeDBProxyTargetsRequestSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &DescribeDBProxyTargetsRequest) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         params.put(&format!("{}{}", prefix, "DBProxyName"), &obj.db_proxy_name);
@@ -9133,8 +9132,8 @@ struct DescribeDBSecurityGroupsMessageSerializer;
 impl DescribeDBSecurityGroupsMessageSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &DescribeDBSecurityGroupsMessage) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         if let Some(ref field_value) = obj.db_security_group_name {
@@ -9172,8 +9171,8 @@ struct DescribeDBSnapshotAttributesMessageSerializer;
 impl DescribeDBSnapshotAttributesMessageSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &DescribeDBSnapshotAttributesMessage) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         params.put(
@@ -9245,8 +9244,8 @@ struct DescribeDBSnapshotsMessageSerializer;
 impl DescribeDBSnapshotsMessageSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &DescribeDBSnapshotsMessage) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         if let Some(ref field_value) = obj.db_instance_identifier {
@@ -9308,8 +9307,8 @@ struct DescribeDBSubnetGroupsMessageSerializer;
 impl DescribeDBSubnetGroupsMessageSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &DescribeDBSubnetGroupsMessage) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         if let Some(ref field_value) = obj.db_subnet_group_name {
@@ -9354,8 +9353,8 @@ impl DescribeEngineDefaultClusterParametersMessageSerializer {
         obj: &DescribeEngineDefaultClusterParametersMessage,
     ) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         params.put(
@@ -9429,8 +9428,8 @@ struct DescribeEngineDefaultParametersMessageSerializer;
 impl DescribeEngineDefaultParametersMessageSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &DescribeEngineDefaultParametersMessage) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         params.put(
@@ -9500,8 +9499,8 @@ struct DescribeEventCategoriesMessageSerializer;
 impl DescribeEventCategoriesMessageSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &DescribeEventCategoriesMessage) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         if let Some(ref field_value) = obj.filters {
@@ -9536,8 +9535,8 @@ struct DescribeEventSubscriptionsMessageSerializer;
 impl DescribeEventSubscriptionsMessageSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &DescribeEventSubscriptionsMessage) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         if let Some(ref field_value) = obj.filters {
@@ -9588,8 +9587,8 @@ struct DescribeEventsMessageSerializer;
 impl DescribeEventsMessageSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &DescribeEventsMessage) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         if let Some(ref field_value) = obj.duration {
@@ -9650,8 +9649,8 @@ struct DescribeExportTasksMessageSerializer;
 impl DescribeExportTasksMessageSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &DescribeExportTasksMessage) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         if let Some(ref field_value) = obj.export_task_identifier {
@@ -9697,8 +9696,8 @@ struct DescribeGlobalClustersMessageSerializer;
 impl DescribeGlobalClustersMessageSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &DescribeGlobalClustersMessage) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         if let Some(ref field_value) = obj.filters {
@@ -9741,8 +9740,8 @@ struct DescribeInstallationMediaMessageSerializer;
 impl DescribeInstallationMediaMessageSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &DescribeInstallationMediaMessage) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         if let Some(ref field_value) = obj.filters {
@@ -9788,8 +9787,8 @@ struct DescribeOptionGroupOptionsMessageSerializer;
 impl DescribeOptionGroupOptionsMessageSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &DescribeOptionGroupOptionsMessage) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         params.put(&format!("{}{}", prefix, "EngineName"), &obj.engine_name);
@@ -9835,8 +9834,8 @@ struct DescribeOptionGroupsMessageSerializer;
 impl DescribeOptionGroupsMessageSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &DescribeOptionGroupsMessage) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         if let Some(ref field_value) = obj.engine_name {
@@ -9893,8 +9892,8 @@ struct DescribeOrderableDBInstanceOptionsMessageSerializer;
 impl DescribeOrderableDBInstanceOptionsMessageSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &DescribeOrderableDBInstanceOptionsMessage) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         if let Some(ref field_value) = obj.availability_zone_group {
@@ -9951,8 +9950,8 @@ struct DescribePendingMaintenanceActionsMessageSerializer;
 impl DescribePendingMaintenanceActionsMessageSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &DescribePendingMaintenanceActionsMessage) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         if let Some(ref field_value) = obj.filters {
@@ -10007,8 +10006,8 @@ struct DescribeReservedDBInstancesMessageSerializer;
 impl DescribeReservedDBInstancesMessageSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &DescribeReservedDBInstancesMessage) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         if let Some(ref field_value) = obj.db_instance_class {
@@ -10090,8 +10089,8 @@ impl DescribeReservedDBInstancesOfferingsMessageSerializer {
         obj: &DescribeReservedDBInstancesOfferingsMessage,
     ) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         if let Some(ref field_value) = obj.db_instance_class {
@@ -10150,8 +10149,8 @@ struct DescribeSourceRegionsMessageSerializer;
 impl DescribeSourceRegionsMessageSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &DescribeSourceRegionsMessage) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         if let Some(ref field_value) = obj.filters {
@@ -10190,8 +10189,8 @@ impl DescribeValidDBInstanceModificationsMessageSerializer {
         obj: &DescribeValidDBInstanceModificationsMessage,
     ) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         params.put(
@@ -10429,8 +10428,8 @@ struct DownloadDBLogFilePortionMessageSerializer;
 impl DownloadDBLogFilePortionMessageSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &DownloadDBLogFilePortionMessage) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         params.put(
@@ -11177,8 +11176,8 @@ struct FailoverDBClusterMessageSerializer;
 impl FailoverDBClusterMessageSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &FailoverDBClusterMessage) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         params.put(
@@ -11257,8 +11256,8 @@ struct FilterSerializer;
 impl FilterSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &Filter) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         params.put(&format!("{}{}", prefix, "Name"), &obj.name);
@@ -11586,8 +11585,8 @@ struct ImportInstallationMediaMessageSerializer;
 impl ImportInstallationMediaMessageSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &ImportInstallationMediaMessage) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         params.put(
@@ -11824,8 +11823,8 @@ struct ListTagsForResourceMessageSerializer;
 impl ListTagsForResourceMessageSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &ListTagsForResourceMessage) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         if let Some(ref field_value) = obj.filters {
@@ -11962,8 +11961,8 @@ struct ModifyCertificatesMessageSerializer;
 impl ModifyCertificatesMessageSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &ModifyCertificatesMessage) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         if let Some(ref field_value) = obj.certificate_identifier {
@@ -12029,8 +12028,8 @@ struct ModifyCurrentDBClusterCapacityMessageSerializer;
 impl ModifyCurrentDBClusterCapacityMessageSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &ModifyCurrentDBClusterCapacityMessage) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         if let Some(ref field_value) = obj.capacity {
@@ -12070,8 +12069,8 @@ struct ModifyDBClusterEndpointMessageSerializer;
 impl ModifyDBClusterEndpointMessageSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &ModifyDBClusterEndpointMessage) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         params.put(
@@ -12157,8 +12156,8 @@ struct ModifyDBClusterMessageSerializer;
 impl ModifyDBClusterMessageSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &ModifyDBClusterMessage) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         if let Some(ref field_value) = obj.allow_major_version_upgrade {
@@ -12291,8 +12290,8 @@ struct ModifyDBClusterParameterGroupMessageSerializer;
 impl ModifyDBClusterParameterGroupMessageSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &ModifyDBClusterParameterGroupMessage) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         params.put(
@@ -12351,8 +12350,8 @@ struct ModifyDBClusterSnapshotAttributeMessageSerializer;
 impl ModifyDBClusterSnapshotAttributeMessageSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &ModifyDBClusterSnapshotAttributeMessage) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         params.put(
@@ -12512,8 +12511,8 @@ struct ModifyDBInstanceMessageSerializer;
 impl ModifyDBInstanceMessageSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &ModifyDBInstanceMessage) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         if let Some(ref field_value) = obj.allocated_storage {
@@ -12760,8 +12759,8 @@ struct ModifyDBParameterGroupMessageSerializer;
 impl ModifyDBParameterGroupMessageSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &ModifyDBParameterGroupMessage) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         params.put(
@@ -12802,8 +12801,8 @@ struct ModifyDBProxyRequestSerializer;
 impl ModifyDBProxyRequestSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &ModifyDBProxyRequest) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         if let Some(ref field_value) = obj.auth {
@@ -12883,8 +12882,8 @@ struct ModifyDBProxyTargetGroupRequestSerializer;
 impl ModifyDBProxyTargetGroupRequestSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &ModifyDBProxyTargetGroupRequest) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         if let Some(ref field_value) = obj.connection_pool_config {
@@ -12958,8 +12957,8 @@ struct ModifyDBSnapshotAttributeMessageSerializer;
 impl ModifyDBSnapshotAttributeMessageSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &ModifyDBSnapshotAttributeMessage) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         params.put(
@@ -13036,8 +13035,8 @@ struct ModifyDBSnapshotMessageSerializer;
 impl ModifyDBSnapshotMessageSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &ModifyDBSnapshotMessage) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         params.put(
@@ -13096,8 +13095,8 @@ struct ModifyDBSubnetGroupMessageSerializer;
 impl ModifyDBSubnetGroupMessageSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &ModifyDBSubnetGroupMessage) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         if let Some(ref field_value) = obj.db_subnet_group_description {
@@ -13171,8 +13170,8 @@ struct ModifyEventSubscriptionMessageSerializer;
 impl ModifyEventSubscriptionMessageSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &ModifyEventSubscriptionMessage) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         if let Some(ref field_value) = obj.enabled {
@@ -13246,8 +13245,8 @@ struct ModifyGlobalClusterMessageSerializer;
 impl ModifyGlobalClusterMessageSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &ModifyGlobalClusterMessage) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         if let Some(ref field_value) = obj.deletion_protection {
@@ -13319,8 +13318,8 @@ struct ModifyOptionGroupMessageSerializer;
 impl ModifyOptionGroupMessageSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &ModifyOptionGroupMessage) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         if let Some(ref field_value) = obj.apply_immediately {
@@ -13484,8 +13483,8 @@ struct OptionConfigurationSerializer;
 impl OptionConfigurationSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &OptionConfiguration) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         if let Some(ref field_value) = obj.db_security_group_memberships {
@@ -14124,8 +14123,8 @@ struct OptionSettingSerializer;
 impl OptionSettingSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &OptionSetting) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         if let Some(ref field_value) = obj.allowed_values {
@@ -14693,8 +14692,8 @@ struct ParameterSerializer;
 impl ParameterSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &Parameter) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         if let Some(ref field_value) = obj.allowed_values {
@@ -15126,8 +15125,8 @@ struct ProcessorFeatureSerializer;
 impl ProcessorFeatureSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &ProcessorFeature) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         if let Some(ref field_value) = obj.name {
@@ -15185,8 +15184,8 @@ struct PromoteReadReplicaDBClusterMessageSerializer;
 impl PromoteReadReplicaDBClusterMessageSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &PromoteReadReplicaDBClusterMessage) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         params.put(
@@ -15243,8 +15242,8 @@ struct PromoteReadReplicaMessageSerializer;
 impl PromoteReadReplicaMessageSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &PromoteReadReplicaMessage) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         if let Some(ref field_value) = obj.backup_retention_period {
@@ -15318,8 +15317,8 @@ impl PurchaseReservedDBInstancesOfferingMessageSerializer {
         obj: &PurchaseReservedDBInstancesOfferingMessage,
     ) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         if let Some(ref field_value) = obj.db_instance_count {
@@ -15522,8 +15521,8 @@ struct RebootDBInstanceMessageSerializer;
 impl RebootDBInstanceMessageSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &RebootDBInstanceMessage) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         params.put(
@@ -15639,8 +15638,8 @@ struct RegisterDBProxyTargetsRequestSerializer;
 impl RegisterDBProxyTargetsRequestSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &RegisterDBProxyTargetsRequest) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         if let Some(ref field_value) = obj.db_cluster_identifiers {
@@ -15710,8 +15709,8 @@ struct RemoveFromGlobalClusterMessageSerializer;
 impl RemoveFromGlobalClusterMessageSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &RemoveFromGlobalClusterMessage) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         if let Some(ref field_value) = obj.db_cluster_identifier {
@@ -15777,8 +15776,8 @@ struct RemoveRoleFromDBClusterMessageSerializer;
 impl RemoveRoleFromDBClusterMessageSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &RemoveRoleFromDBClusterMessage) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         params.put(
@@ -15808,8 +15807,8 @@ struct RemoveRoleFromDBInstanceMessageSerializer;
 impl RemoveRoleFromDBInstanceMessageSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &RemoveRoleFromDBInstanceMessage) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         params.put(
@@ -15840,8 +15839,8 @@ impl RemoveSourceIdentifierFromSubscriptionMessageSerializer {
         obj: &RemoveSourceIdentifierFromSubscriptionMessage,
     ) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         params.put(
@@ -15902,8 +15901,8 @@ struct RemoveTagsFromResourceMessageSerializer;
 impl RemoveTagsFromResourceMessageSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &RemoveTagsFromResourceMessage) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         params.put(&format!("{}{}", prefix, "ResourceName"), &obj.resource_name);
@@ -16273,8 +16272,8 @@ struct ResetDBClusterParameterGroupMessageSerializer;
 impl ResetDBClusterParameterGroupMessageSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &ResetDBClusterParameterGroupMessage) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         params.put(
@@ -16311,8 +16310,8 @@ struct ResetDBParameterGroupMessageSerializer;
 impl ResetDBParameterGroupMessageSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &ResetDBParameterGroupMessage) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         params.put(
@@ -16447,8 +16446,8 @@ struct RestoreDBClusterFromS3MessageSerializer;
 impl RestoreDBClusterFromS3MessageSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &RestoreDBClusterFromS3Message) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         if let Some(ref field_value) = obj.availability_zones {
@@ -16661,8 +16660,8 @@ struct RestoreDBClusterFromSnapshotMessageSerializer;
 impl RestoreDBClusterFromSnapshotMessageSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &RestoreDBClusterFromSnapshotMessage) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         if let Some(ref field_value) = obj.availability_zones {
@@ -16834,8 +16833,8 @@ struct RestoreDBClusterToPointInTimeMessageSerializer;
 impl RestoreDBClusterToPointInTimeMessageSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &RestoreDBClusterToPointInTimeMessage) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         if let Some(ref field_value) = obj.backtrack_window {
@@ -17015,8 +17014,8 @@ struct RestoreDBInstanceFromDBSnapshotMessageSerializer;
 impl RestoreDBInstanceFromDBSnapshotMessageSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &RestoreDBInstanceFromDBSnapshotMessage) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         if let Some(ref field_value) = obj.auto_minor_version_upgrade {
@@ -17269,8 +17268,8 @@ struct RestoreDBInstanceFromS3MessageSerializer;
 impl RestoreDBInstanceFromS3MessageSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &RestoreDBInstanceFromS3Message) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         if let Some(ref field_value) = obj.allocated_storage {
@@ -17566,8 +17565,8 @@ struct RestoreDBInstanceToPointInTimeMessageSerializer;
 impl RestoreDBInstanceToPointInTimeMessageSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &RestoreDBInstanceToPointInTimeMessage) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         if let Some(ref field_value) = obj.auto_minor_version_upgrade {
@@ -17805,8 +17804,8 @@ struct RevokeDBSecurityGroupIngressMessageSerializer;
 impl RevokeDBSecurityGroupIngressMessageSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &RevokeDBSecurityGroupIngressMessage) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         if let Some(ref field_value) = obj.cidrip {
@@ -17887,8 +17886,8 @@ struct ScalingConfigurationSerializer;
 impl ScalingConfigurationSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &ScalingConfiguration) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         if let Some(ref field_value) = obj.auto_pause {
@@ -18134,8 +18133,8 @@ struct StartActivityStreamRequestSerializer;
 impl StartActivityStreamRequestSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &StartActivityStreamRequest) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         if let Some(ref field_value) = obj.apply_immediately {
@@ -18214,8 +18213,8 @@ struct StartDBClusterMessageSerializer;
 impl StartDBClusterMessageSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &StartDBClusterMessage) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         params.put(
@@ -18272,8 +18271,8 @@ impl StartDBInstanceAutomatedBackupsReplicationMessageSerializer {
         obj: &StartDBInstanceAutomatedBackupsReplicationMessage,
     ) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         if let Some(ref field_value) = obj.backup_retention_period {
@@ -18340,8 +18339,8 @@ struct StartDBInstanceMessageSerializer;
 impl StartDBInstanceMessageSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &StartDBInstanceMessage) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         params.put(
@@ -18401,8 +18400,8 @@ struct StartExportTaskMessageSerializer;
 impl StartExportTaskMessageSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &StartExportTaskMessage) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         if let Some(ref field_value) = obj.export_only {
@@ -18443,8 +18442,8 @@ struct StopActivityStreamRequestSerializer;
 impl StopActivityStreamRequestSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &StopActivityStreamRequest) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         if let Some(ref field_value) = obj.apply_immediately {
@@ -18509,8 +18508,8 @@ struct StopDBClusterMessageSerializer;
 impl StopDBClusterMessageSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &StopDBClusterMessage) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         params.put(
@@ -18561,8 +18560,8 @@ impl StopDBInstanceAutomatedBackupsReplicationMessageSerializer {
         obj: &StopDBInstanceAutomatedBackupsReplicationMessage,
     ) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         params.put(
@@ -18619,8 +18618,8 @@ struct StopDBInstanceMessageSerializer;
 impl StopDBInstanceMessageSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &StopDBInstanceMessage) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         params.put(
@@ -18865,8 +18864,8 @@ struct TagSerializer;
 impl TagSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &Tag) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         if let Some(ref field_value) = obj.key {
@@ -19139,8 +19138,8 @@ struct UserAuthConfigSerializer;
 impl UserAuthConfigSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &UserAuthConfig) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         if let Some(ref field_value) = obj.auth_scheme {

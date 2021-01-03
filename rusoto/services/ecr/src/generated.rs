@@ -50,7 +50,6 @@ impl EcrClient {
     }
 }
 
-use serde_json;
 /// <p>This data type is used in the <a>ImageScanFinding</a> data type.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]

@@ -31,7 +31,6 @@ use rusoto_core::signature::SignedRequest;
 use serde::Deserialize;
 #[cfg(feature = "serialize_structs")]
 use serde::Serialize;
-use serde_urlencoded;
 use std::str::FromStr;
 use xml::EventReader;
 
@@ -118,8 +117,8 @@ struct AccessLogSerializer;
 impl AccessLogSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &AccessLog) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         if let Some(ref field_value) = obj.emit_interval {
@@ -190,8 +189,8 @@ struct AddAvailabilityZonesInputSerializer;
 impl AddAvailabilityZonesInputSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &AddAvailabilityZonesInput) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         AvailabilityZonesSerializer::serialize(
@@ -254,8 +253,8 @@ struct AddTagsInputSerializer;
 impl AddTagsInputSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &AddTagsInput) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         LoadBalancerNamesSerializer::serialize(
@@ -332,8 +331,8 @@ struct AdditionalAttributeSerializer;
 impl AdditionalAttributeSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &AdditionalAttribute) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         if let Some(ref field_value) = obj.key {
@@ -466,8 +465,8 @@ struct ApplySecurityGroupsToLoadBalancerInputSerializer;
 impl ApplySecurityGroupsToLoadBalancerInputSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &ApplySecurityGroupsToLoadBalancerInput) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         params.put(
@@ -530,8 +529,8 @@ struct AttachLoadBalancerToSubnetsInputSerializer;
 impl AttachLoadBalancerToSubnetsInputSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &AttachLoadBalancerToSubnetsInput) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         params.put(
@@ -721,8 +720,8 @@ struct ConfigureHealthCheckInputSerializer;
 impl ConfigureHealthCheckInputSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &ConfigureHealthCheckInput) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         HealthCheckSerializer::serialize(
@@ -811,8 +810,8 @@ struct ConnectionDrainingSerializer;
 impl ConnectionDrainingSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &ConnectionDraining) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         params.put(&format!("{}{}", prefix, "Enabled"), &obj.enabled);
@@ -872,8 +871,8 @@ struct ConnectionSettingsSerializer;
 impl ConnectionSettingsSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &ConnectionSettings) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         params.put(&format!("{}{}", prefix, "IdleTimeout"), &obj.idle_timeout);
@@ -921,8 +920,8 @@ struct CreateAccessPointInputSerializer;
 impl CreateAccessPointInputSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &CreateAccessPointInput) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         if let Some(ref field_value) = obj.availability_zones {
@@ -1008,8 +1007,8 @@ struct CreateAppCookieStickinessPolicyInputSerializer;
 impl CreateAppCookieStickinessPolicyInputSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &CreateAppCookieStickinessPolicyInput) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         params.put(&format!("{}{}", prefix, "CookieName"), &obj.cookie_name);
@@ -1060,8 +1059,8 @@ struct CreateLBCookieStickinessPolicyInputSerializer;
 impl CreateLBCookieStickinessPolicyInputSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &CreateLBCookieStickinessPolicyInput) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         if let Some(ref field_value) = obj.cookie_expiration_period {
@@ -1115,8 +1114,8 @@ struct CreateLoadBalancerListenerInputSerializer;
 impl CreateLoadBalancerListenerInputSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &CreateLoadBalancerListenerInput) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         ListenersSerializer::serialize(
@@ -1172,8 +1171,8 @@ struct CreateLoadBalancerPolicyInputSerializer;
 impl CreateLoadBalancerPolicyInputSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &CreateLoadBalancerPolicyInput) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         params.put(
@@ -1260,8 +1259,8 @@ struct CrossZoneLoadBalancingSerializer;
 impl CrossZoneLoadBalancingSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &CrossZoneLoadBalancing) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         params.put(&format!("{}{}", prefix, "Enabled"), &obj.enabled);
@@ -1305,8 +1304,8 @@ struct DeleteAccessPointInputSerializer;
 impl DeleteAccessPointInputSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &DeleteAccessPointInput) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         params.put(
@@ -1353,8 +1352,8 @@ struct DeleteLoadBalancerListenerInputSerializer;
 impl DeleteLoadBalancerListenerInputSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &DeleteLoadBalancerListenerInput) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         params.put(
@@ -1406,8 +1405,8 @@ struct DeleteLoadBalancerPolicyInputSerializer;
 impl DeleteLoadBalancerPolicyInputSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &DeleteLoadBalancerPolicyInput) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         params.put(
@@ -1455,8 +1454,8 @@ struct DeregisterEndPointsInputSerializer;
 impl DeregisterEndPointsInputSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &DeregisterEndPointsInput) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         InstancesSerializer::serialize(
@@ -1521,8 +1520,8 @@ struct DescribeAccessPointsInputSerializer;
 impl DescribeAccessPointsInputSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &DescribeAccessPointsInput) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         if let Some(ref field_value) = obj.load_balancer_names {
@@ -1597,8 +1596,8 @@ struct DescribeAccountLimitsInputSerializer;
 impl DescribeAccountLimitsInputSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &DescribeAccountLimitsInput) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         if let Some(ref field_value) = obj.marker {
@@ -1663,8 +1662,8 @@ struct DescribeEndPointStateInputSerializer;
 impl DescribeEndPointStateInputSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &DescribeEndPointStateInput) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         if let Some(ref field_value) = obj.instances {
@@ -1727,8 +1726,8 @@ struct DescribeLoadBalancerAttributesInputSerializer;
 impl DescribeLoadBalancerAttributesInputSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &DescribeLoadBalancerAttributesInput) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         params.put(
@@ -1788,8 +1787,8 @@ struct DescribeLoadBalancerPoliciesInputSerializer;
 impl DescribeLoadBalancerPoliciesInputSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &DescribeLoadBalancerPoliciesInput) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         if let Some(ref field_value) = obj.load_balancer_name {
@@ -1854,8 +1853,8 @@ struct DescribeLoadBalancerPolicyTypesInputSerializer;
 impl DescribeLoadBalancerPolicyTypesInputSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &DescribeLoadBalancerPolicyTypesInput) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         if let Some(ref field_value) = obj.policy_type_names {
@@ -1917,8 +1916,8 @@ struct DescribeTagsInputSerializer;
 impl DescribeTagsInputSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &DescribeTagsInput) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         LoadBalancerNamesMax20Serializer::serialize(
@@ -1981,8 +1980,8 @@ struct DetachLoadBalancerFromSubnetsInputSerializer;
 impl DetachLoadBalancerFromSubnetsInputSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &DetachLoadBalancerFromSubnetsInput) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         params.put(
@@ -2082,8 +2081,8 @@ struct HealthCheckSerializer;
 impl HealthCheckSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &HealthCheck) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         params.put(
@@ -2175,8 +2174,8 @@ struct InstanceSerializer;
 impl InstanceSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &Instance) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         if let Some(ref field_value) = obj.instance_id {
@@ -2464,8 +2463,8 @@ struct ListenerSerializer;
 impl ListenerSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &Listener) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         params.put(&format!("{}{}", prefix, "InstancePort"), &obj.instance_port);
@@ -2618,8 +2617,8 @@ struct LoadBalancerAttributesSerializer;
 impl LoadBalancerAttributesSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &LoadBalancerAttributes) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         if let Some(ref field_value) = obj.access_log {
@@ -2883,8 +2882,8 @@ struct ModifyLoadBalancerAttributesInputSerializer;
 impl ModifyLoadBalancerAttributesInputSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &ModifyLoadBalancerAttributesInput) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         LoadBalancerAttributesSerializer::serialize(
@@ -3014,8 +3013,8 @@ struct PolicyAttributeSerializer;
 impl PolicyAttributeSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &PolicyAttribute) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         if let Some(ref field_value) = obj.attribute_name {
@@ -3413,8 +3412,8 @@ struct RegisterEndPointsInputSerializer;
 impl RegisterEndPointsInputSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &RegisterEndPointsInput) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         InstancesSerializer::serialize(
@@ -3477,8 +3476,8 @@ struct RemoveAvailabilityZonesInputSerializer;
 impl RemoveAvailabilityZonesInputSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &RemoveAvailabilityZonesInput) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         AvailabilityZonesSerializer::serialize(
@@ -3541,8 +3540,8 @@ struct RemoveTagsInputSerializer;
 impl RemoveTagsInputSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &RemoveTagsInput) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         LoadBalancerNamesSerializer::serialize(
@@ -3667,8 +3666,8 @@ impl SetLoadBalancerListenerSSLCertificateInputSerializer {
         obj: &SetLoadBalancerListenerSSLCertificateInput,
     ) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         params.put(
@@ -3729,8 +3728,8 @@ impl SetLoadBalancerPoliciesForBackendServerInputSerializer {
         obj: &SetLoadBalancerPoliciesForBackendServerInput,
     ) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         params.put(&format!("{}{}", prefix, "InstancePort"), &obj.instance_port);
@@ -3785,8 +3784,8 @@ struct SetLoadBalancerPoliciesOfListenerInputSerializer;
 impl SetLoadBalancerPoliciesOfListenerInputSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &SetLoadBalancerPoliciesOfListenerInput) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         params.put(
@@ -3947,8 +3946,8 @@ struct TagSerializer;
 impl TagSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &Tag) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         params.put(&format!("{}{}", prefix, "Key"), &obj.key);
@@ -4046,8 +4045,8 @@ struct TagKeyOnlySerializer;
 impl TagKeyOnlySerializer {
     fn serialize(params: &mut Params, name: &str, obj: &TagKeyOnly) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         if let Some(ref field_value) = obj.key {

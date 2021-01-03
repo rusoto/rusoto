@@ -31,7 +31,6 @@ use rusoto_core::signature::SignedRequest;
 use serde::Deserialize;
 #[cfg(feature = "serialize_structs")]
 use serde::Serialize;
-use serde_urlencoded;
 use std::str::FromStr;
 use xml::EventReader;
 
@@ -325,8 +324,8 @@ struct AnomalyDetectorConfigurationSerializer;
 impl AnomalyDetectorConfigurationSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &AnomalyDetectorConfiguration) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         if let Some(ref field_value) = obj.excluded_time_ranges {
@@ -906,8 +905,8 @@ struct DeleteAlarmsInputSerializer;
 impl DeleteAlarmsInputSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &DeleteAlarmsInput) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         AlarmNamesSerializer::serialize(
@@ -936,8 +935,8 @@ struct DeleteAnomalyDetectorInputSerializer;
 impl DeleteAnomalyDetectorInputSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &DeleteAnomalyDetectorInput) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         if let Some(ref field_value) = obj.dimensions {
@@ -986,8 +985,8 @@ struct DeleteDashboardsInputSerializer;
 impl DeleteDashboardsInputSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &DeleteDashboardsInput) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         DashboardNamesSerializer::serialize(
@@ -1031,8 +1030,8 @@ struct DeleteInsightRulesInputSerializer;
 impl DeleteInsightRulesInputSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &DeleteInsightRulesInput) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         InsightRuleNamesSerializer::serialize(
@@ -1101,8 +1100,8 @@ struct DescribeAlarmHistoryInputSerializer;
 impl DescribeAlarmHistoryInputSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &DescribeAlarmHistoryInput) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         if let Some(ref field_value) = obj.alarm_name {
@@ -1198,8 +1197,8 @@ struct DescribeAlarmsForMetricInputSerializer;
 impl DescribeAlarmsForMetricInputSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &DescribeAlarmsForMetricInput) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         if let Some(ref field_value) = obj.dimensions {
@@ -1286,8 +1285,8 @@ struct DescribeAlarmsInputSerializer;
 impl DescribeAlarmsInputSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &DescribeAlarmsInput) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         if let Some(ref field_value) = obj.action_prefix {
@@ -1391,8 +1390,8 @@ struct DescribeAnomalyDetectorsInputSerializer;
 impl DescribeAnomalyDetectorsInputSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &DescribeAnomalyDetectorsInput) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         if let Some(ref field_value) = obj.dimensions {
@@ -1469,8 +1468,8 @@ struct DescribeInsightRulesInputSerializer;
 impl DescribeInsightRulesInputSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &DescribeInsightRulesInput) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         if let Some(ref field_value) = obj.max_results {
@@ -1559,8 +1558,8 @@ struct DimensionSerializer;
 impl DimensionSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &Dimension) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         params.put(&format!("{}{}", prefix, "Name"), &obj.name);
@@ -1583,8 +1582,8 @@ struct DimensionFilterSerializer;
 impl DimensionFilterSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &DimensionFilter) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         params.put(&format!("{}{}", prefix, "Name"), &obj.name);
@@ -1663,8 +1662,8 @@ struct DisableAlarmActionsInputSerializer;
 impl DisableAlarmActionsInputSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &DisableAlarmActionsInput) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         AlarmNamesSerializer::serialize(
@@ -1687,8 +1686,8 @@ struct DisableInsightRulesInputSerializer;
 impl DisableInsightRulesInputSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &DisableInsightRulesInput) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         InsightRuleNamesSerializer::serialize(
@@ -1743,8 +1742,8 @@ struct EnableAlarmActionsInputSerializer;
 impl EnableAlarmActionsInputSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &EnableAlarmActionsInput) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         AlarmNamesSerializer::serialize(
@@ -1767,8 +1766,8 @@ struct EnableInsightRulesInputSerializer;
 impl EnableInsightRulesInputSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &EnableInsightRulesInput) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         InsightRuleNamesSerializer::serialize(
@@ -1891,8 +1890,8 @@ struct GetDashboardInputSerializer;
 impl GetDashboardInputSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &GetDashboardInput) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         params.put(
@@ -1971,8 +1970,8 @@ struct GetInsightRuleReportInputSerializer;
 impl GetInsightRuleReportInputSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &GetInsightRuleReportInput) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         params.put(&format!("{}{}", prefix, "EndTime"), &obj.end_time);
@@ -2102,8 +2101,8 @@ struct GetMetricDataInputSerializer;
 impl GetMetricDataInputSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &GetMetricDataInput) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         params.put(&format!("{}{}", prefix, "EndTime"), &obj.end_time);
@@ -2193,8 +2192,8 @@ struct GetMetricStatisticsInputSerializer;
 impl GetMetricStatisticsInputSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &GetMetricStatisticsInput) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         if let Some(ref field_value) = obj.dimensions {
@@ -2280,8 +2279,8 @@ struct GetMetricWidgetImageInputSerializer;
 impl GetMetricWidgetImageInputSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &GetMetricWidgetImageInput) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         params.put(&format!("{}{}", prefix, "MetricWidget"), &obj.metric_widget);
@@ -2800,8 +2799,8 @@ struct ListDashboardsInputSerializer;
 impl ListDashboardsInputSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &ListDashboardsInput) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         if let Some(ref field_value) = obj.dashboard_name_prefix {
@@ -2869,8 +2868,8 @@ struct ListMetricsInputSerializer;
 impl ListMetricsInputSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &ListMetricsInput) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         if let Some(ref field_value) = obj.dimensions {
@@ -2940,8 +2939,8 @@ struct ListTagsForResourceInputSerializer;
 impl ListTagsForResourceInputSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &ListTagsForResourceInput) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         params.put(&format!("{}{}", prefix, "ResourceARN"), &obj.resource_arn);
@@ -3080,8 +3079,8 @@ struct MetricSerializer;
 impl MetricSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &Metric) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         if let Some(ref field_value) = obj.dimensions {
@@ -3432,8 +3431,8 @@ struct MetricDataQuerySerializer;
 impl MetricDataQuerySerializer {
     fn serialize(params: &mut Params, name: &str, obj: &MetricDataQuery) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         if let Some(ref field_value) = obj.expression {
@@ -3583,8 +3582,8 @@ struct MetricDatumSerializer;
 impl MetricDatumSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &MetricDatum) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         if let Some(ref field_value) = obj.counts {
@@ -3704,8 +3703,8 @@ struct MetricStatSerializer;
 impl MetricStatSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &MetricStat) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         MetricSerializer::serialize(params, &format!("{}{}", prefix, "Metric"), &obj.metric);
@@ -3842,8 +3841,8 @@ struct PutAnomalyDetectorInputSerializer;
 impl PutAnomalyDetectorInputSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &PutAnomalyDetectorInput) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         if let Some(ref field_value) = obj.configuration {
@@ -3913,8 +3912,8 @@ struct PutCompositeAlarmInputSerializer;
 impl PutCompositeAlarmInputSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &PutCompositeAlarmInput) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         if let Some(ref field_value) = obj.actions_enabled {
@@ -3966,8 +3965,8 @@ struct PutDashboardInputSerializer;
 impl PutDashboardInputSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &PutDashboardInput) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         params.put(
@@ -4030,8 +4029,8 @@ struct PutInsightRuleInputSerializer;
 impl PutInsightRuleInputSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &PutInsightRuleInput) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         params.put(
@@ -4123,8 +4122,8 @@ struct PutMetricAlarmInputSerializer;
 impl PutMetricAlarmInputSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &PutMetricAlarmInput) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         if let Some(ref field_value) = obj.actions_enabled {
@@ -4233,8 +4232,8 @@ struct PutMetricDataInputSerializer;
 impl PutMetricDataInputSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &PutMetricDataInput) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         MetricDataSerializer::serialize(
@@ -4282,8 +4281,8 @@ struct RangeSerializer;
 impl RangeSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &Range) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         params.put(&format!("{}{}", prefix, "EndTime"), &obj.end_time);
@@ -4355,8 +4354,8 @@ struct SetAlarmStateInputSerializer;
 impl SetAlarmStateInputSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &SetAlarmStateInput) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         params.put(&format!("{}{}", prefix, "AlarmName"), &obj.alarm_name);
@@ -4443,8 +4442,8 @@ struct StatisticSetSerializer;
 impl StatisticSetSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &StatisticSet) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         params.put(&format!("{}{}", prefix, "Maximum"), &obj.maximum);
@@ -4509,8 +4508,8 @@ struct TagSerializer;
 impl TagSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &Tag) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         params.put(&format!("{}{}", prefix, "Key"), &obj.key);
@@ -4582,8 +4581,8 @@ struct TagResourceInputSerializer;
 impl TagResourceInputSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &TagResourceInput) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         params.put(&format!("{}{}", prefix, "ResourceARN"), &obj.resource_arn);
@@ -4676,8 +4675,8 @@ struct UntagResourceInputSerializer;
 impl UntagResourceInputSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &UntagResourceInput) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         params.put(&format!("{}{}", prefix, "ResourceARN"), &obj.resource_arn);

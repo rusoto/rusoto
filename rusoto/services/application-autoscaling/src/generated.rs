@@ -54,7 +54,6 @@ impl ApplicationAutoScalingClient {
     }
 }
 
-use serde_json;
 /// <p>Represents a CloudWatch alarm associated with a scaling policy.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]

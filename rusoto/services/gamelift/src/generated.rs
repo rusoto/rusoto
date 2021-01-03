@@ -49,7 +49,6 @@ impl GameLiftClient {
     }
 }
 
-use serde_json;
 /// <p>Represents the input for a request operation.</p>
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]

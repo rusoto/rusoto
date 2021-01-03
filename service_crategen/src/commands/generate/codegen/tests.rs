@@ -73,14 +73,9 @@ fn generate_response_tests(
     status_code: i32,
     is_ok: bool,
 ) -> Option<String> {
-    let our_responses: Vec<Response> = responses
+    let test_bodies: Vec<String> = responses
         .into_iter()
         .filter(|r| r.service.to_lowercase() == service.service_type_name().to_lowercase())
-        .map(|r| r.to_owned())
-        .collect();
-
-    let test_bodies: Vec<String> = our_responses
-        .into_iter()
         .flat_map(|response| generate_response_parse_test(service, &response, status_code, is_ok))
         .collect();
 

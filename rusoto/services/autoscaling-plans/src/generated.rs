@@ -50,7 +50,6 @@ impl AutoscalingPlansClient {
     }
 }
 
-use serde_json;
 /// <p>Represents an application source.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct ApplicationSource {

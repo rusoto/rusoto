@@ -49,7 +49,6 @@ impl AlexaForBusinessClient {
     }
 }
 
-use serde_json;
 /// <p>An address book with attributes.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]

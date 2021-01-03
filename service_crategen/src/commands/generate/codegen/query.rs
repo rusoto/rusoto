@@ -73,7 +73,6 @@ impl GenerateProtocol for QueryGenerator {
             use rusoto_core::proto::xml::util::{{Next, Peek, XmlParseError, XmlResponse}};
             use rusoto_core::proto::xml::util::{{self as xml_util, find_start_element, skip_tree, deserialize_elements}};
             use rusoto_core::proto::xml::error::*;
-            use serde_urlencoded;
             #[cfg(feature = \"serialize_structs\")]
             use serde::Serialize;
             #[cfg(feature = \"deserialize_structs\")]
@@ -207,10 +206,7 @@ fn generate_list_serializer(service: &Service<'_>, shape: &Shape) -> String {
         .shape_for_member(shape.member.as_ref().unwrap())
         .unwrap();
     let primitive = member_shape.is_primitive();
-    let is_shape_flattened = match shape.flattened {
-        None => false,
-        Some(shape_defined_flatness) => shape_defined_flatness,
-    };
+    let is_shape_flattened = shape.flattened.unwrap_or(false);
     let mut parts = Vec::new();
 
     let lmf = list_member_format(service, is_shape_flattened);
@@ -351,8 +347,8 @@ fn capitalize_if_ec2(service: &Service<'_>, name: &str) -> String {
 fn generate_struct_serializer(service: &Service<'_>, shape: &Shape) -> String {
     format!(
         "let mut prefix = name.to_string();
-        if prefix != \"\" {{
-            prefix.push_str(\".\");
+        if !prefix.is_empty() {{
+            prefix.push('.');
         }}
 
         {struct_field_serializers}

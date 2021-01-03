@@ -5,7 +5,6 @@ use std::path::Path;
 use std::process::Command;
 
 use rayon::prelude::*;
-use toml;
 
 mod codegen;
 
@@ -43,8 +42,11 @@ fn generate_examples(crate_dir_path: &Path) -> Option<String> {
                     output.push_str("//!\n//! ```rust,no_run\n");
                     inside_header_section = false;
                 }
-                output.push_str("//! ");
-                output.push_str(line);
+                output.push_str("//!");
+                if !line.is_empty() {
+                    output.push(' ');
+                    output.push_str(line);
+                }
                 output.push('\n');
             }
         }
@@ -103,7 +105,7 @@ pub fn generate_services(
         }
 
         features.insert("serialize_structs".into(), serialize_feature_dependencies.clone());
-        features.insert("deserialize_structs".into(), serialize_feature_dependencies.clone());
+        features.insert("deserialize_structs".into(), serialize_feature_dependencies);
 
         let mut cargo_manifest = BufWriter::new(
             OpenOptions::new()
@@ -114,7 +116,7 @@ pub fn generate_services(
                 .expect("Unable to write Cargo.toml")
         );
 
-        let mut name_for_keyword = name.clone().to_string();
+        let mut name_for_keyword = name.clone();
         if name_for_keyword.len() >= 20 {
             name_for_keyword = name_for_keyword[..20].to_string();
         }

@@ -10,23 +10,13 @@ use std::time::Duration;
 
 use time::Time;
 
-use rusoto::{AwsResult, ChainProvider, Region, ProvideAwsCredentials};
 use rusoto::dynamodb::{
-    AttributeDefinition,
-    AttributeValue,
-    CreateTableInput,
-    GetItemInput,
-    GetItemOutput,
-    Key,
-    KeySchemaElement,
-    PutItemInput,
-    PutItemInputAttributeMap,
+    AttributeDefinition, AttributeValue, CreateTableInput, GetItemInput, GetItemOutput, Key,
+    KeySchemaElement, PutItemInput, PutItemInputAttributeMap,
 };
+use rusoto::{AwsResult, ChainProvider, ProvideAwsCredentials, Region};
 use rusoto_helpers::dynamodb::{
-    CreateTableInputHelper,
-    DescribeTableOutputHelper,
-    DynamoDbHelper,
-    get_str_from_attribute,
+    get_str_from_attribute, CreateTableInputHelper, DescribeTableOutputHelper, DynamoDbHelper,
 };
 
 #[test]
@@ -74,11 +64,15 @@ fn main() {
                 None => println!("nothing received from Dynamo, item may not exist"),
                 Some(attributes_map) => {
                     for (column_name, value) in attributes_map {
-                        println!("found column name '{}' with value of '{}'", column_name, get_str_from_attribute(&value).unwrap());
+                        println!(
+                            "found column name '{}' with value of '{}'",
+                            column_name,
+                            get_str_from_attribute(&value).unwrap()
+                        );
                     }
-                },
+                }
             }
-        },
+        }
         Err(err) => {
             println!("Error retrieving object: {:?}", err);
         }
@@ -104,11 +98,15 @@ fn main() {
                 None => println!("nothing received from Dynamo, item may not exist"),
                 Some(attributes_map) => {
                     for (column_name, value) in attributes_map {
-                        println!("found column name '{}' with value of '{}'", column_name, get_str_from_attribute(&value).unwrap());
+                        println!(
+                            "found column name '{}' with value of '{}'",
+                            column_name,
+                            get_str_from_attribute(&value).unwrap()
+                        );
                     }
-                },
+                }
             }
-        },
+        }
         Err(err) => {
             println!("Error retrieving object: {:?}", err);
         }
@@ -122,32 +120,37 @@ fn main() {
             println!("Error deleting DynamoDB table {:#?}", err);
         }
     }
-
 }
 
-fn dynamo_list_tables_tests <P: ProvideAwsCredentials> (dynamodb: &mut DynamoDbHelper<P>) -> AwsResult<()> {
+fn dynamo_list_tables_tests<P: ProvideAwsCredentials>(
+    dynamodb: &mut DynamoDbHelper<P>,
+) -> AwsResult<()> {
     let response = dynamodb.list_tables()?;
     println!("{:#?}", response);
     Ok(())
 }
 
-fn dynamo_create_table_test <P: ProvideAwsCredentials> (dynamodb: &mut DynamoDbHelper<P>,
-                            table_name: &str)
-                            -> AwsResult<()> {
+fn dynamo_create_table_test<P: ProvideAwsCredentials>(
+    dynamodb: &mut DynamoDbHelper<P>,
+    table_name: &str,
+) -> AwsResult<()> {
     println!("Creating table {} ", table_name);
 
     let input = CreateTableInput::new()
-                        .with_name(table_name)
-                        .with_write_capacity(1)
-                        .with_read_capacity(1)
-                        .with_attributes(attributes!("string" => "S", "number" => "N"))
-                        .with_key_schema(key_schema!("string" => "HASH", "number" => "RANGE"));
+        .with_name(table_name)
+        .with_write_capacity(1)
+        .with_read_capacity(1)
+        .with_attributes(attributes!("string" => "S", "number" => "N"))
+        .with_key_schema(key_schema!("string" => "HASH", "number" => "RANGE"));
 
     let _result = dynamodb.create_table(&input)?;
     Ok(())
 }
 
-fn dynamo_put_item_test <P: ProvideAwsCredentials> (dynamodb: &mut DynamoDbHelper<P>, table_name: &str) -> AwsResult<()> {
+fn dynamo_put_item_test<P: ProvideAwsCredentials>(
+    dynamodb: &mut DynamoDbHelper<P>,
+    table_name: &str,
+) -> AwsResult<()> {
     let mut input = PutItemInput::default();
 
     let mut item = PutItemInputAttributeMap::default();
@@ -162,9 +165,11 @@ fn dynamo_put_item_test <P: ProvideAwsCredentials> (dynamodb: &mut DynamoDbHelpe
     Ok(())
 }
 
-fn dynamo_get_item_test <P: ProvideAwsCredentials> (dynamodb: &mut DynamoDbHelper<P>, table_name: &str, item_key: Key)
-    -> AwsResult<GetItemOutput> {
-
+fn dynamo_get_item_test<P: ProvideAwsCredentials>(
+    dynamodb: &mut DynamoDbHelper<P>,
+    table_name: &str,
+    item_key: Key,
+) -> AwsResult<GetItemOutput> {
     let mut item_request = GetItemInput::default();
     item_request.key = item_key;
     item_request.table_name = table_name.to_string();
@@ -175,10 +180,10 @@ fn dynamo_get_item_test <P: ProvideAwsCredentials> (dynamodb: &mut DynamoDbHelpe
     }
 }
 
-fn dynamo_describe_wait_test <P: ProvideAwsCredentials> (dynamodb: &mut DynamoDbHelper<P>,
-                             table_name: &str)
-                             -> AwsResult<()> {
-
+fn dynamo_describe_wait_test<P: ProvideAwsCredentials>(
+    dynamodb: &mut DynamoDbHelper<P>,
+    table_name: &str,
+) -> AwsResult<()> {
     loop {
         let result = dynamodb.describe_table(table_name)?;
 
@@ -190,14 +195,14 @@ fn dynamo_describe_wait_test <P: ProvideAwsCredentials> (dynamodb: &mut DynamoDb
                 thread::sleep(Duration::from_millis(1000));
             }
         }
-
     }
     Ok(())
 }
 
-fn dynamo_delete_table_test <P: ProvideAwsCredentials> (dynamodb: &mut DynamoDbHelper<P>,
-                            table_name: &str)
-                            -> AwsResult<()> {
+fn dynamo_delete_table_test<P: ProvideAwsCredentials>(
+    dynamodb: &mut DynamoDbHelper<P>,
+    table_name: &str,
+) -> AwsResult<()> {
     let _result = dynamodb.delete_table(table_name)?;
     Ok(())
 }

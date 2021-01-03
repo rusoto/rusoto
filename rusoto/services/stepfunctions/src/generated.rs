@@ -49,7 +49,6 @@ impl StepFunctionsClient {
     }
 }
 
-use serde_json;
 /// <p>Contains details about an activity that failed during an execution.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]

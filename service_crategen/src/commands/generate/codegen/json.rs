@@ -112,9 +112,6 @@ impl GenerateProtocol for JsonGenerator {
                 generate_endpoint_modification(service).unwrap_or_else(|| "".to_owned()),
             json_version = service.json_version().unwrap(),
         )?;
-        if service.needs_serde_json_crate() {
-            writeln!(writer, "use serde_json;")?;
-        }
         if service.has_event_streams() {
             writeln!(
                 writer,
@@ -169,7 +166,7 @@ impl GenerateProtocol for JsonGenerator {
             .chain(
                 std::iter::once(
                     format!(
-                        "_ => Err(RusotoError::ParseError({err_fmt}))?",
+                        "_ => return Err(RusotoError::ParseError({err_fmt}))",
                         err_fmt = "format!(\"Invalid event type: {}\", event_type)",
                     )
                 )

@@ -49,7 +49,6 @@ impl GlueClient {
     }
 }
 
-use serde_json;
 /// <p>Defines an action to be initiated by a trigger.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct Action {

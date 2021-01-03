@@ -49,7 +49,6 @@ impl EcsClient {
     }
 }
 
-use serde_json;
 /// <p>An object representing a container instance or task attachment.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]

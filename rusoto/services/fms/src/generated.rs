@@ -49,7 +49,6 @@ impl FmsClient {
     }
 }
 
-use serde_json;
 /// <p>An individual AWS Firewall Manager application.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct App {
