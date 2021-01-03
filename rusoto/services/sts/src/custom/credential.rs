@@ -2,7 +2,6 @@ use async_trait::async_trait;
 use chrono::prelude::*;
 use chrono::Duration;
 
-use rusoto_core;
 use rusoto_core::RusotoError;
 
 use crate::{
@@ -173,7 +172,7 @@ impl StsSessionCredentialsProvider {
         StsSessionCredentialsProvider {
             sts_client: Box::new(sts_client),
             session_duration: duration
-                .unwrap_or(Duration::seconds(DEFAULT_DURATION_SECONDS as i64)),
+                .unwrap_or_else(|| Duration::seconds(DEFAULT_DURATION_SECONDS as i64)),
             mfa_serial,
             mfa_code: None,
         }
@@ -201,7 +200,6 @@ impl StsSessionCredentialsProvider {
             serial_number: self.mfa_serial.clone(),
             token_code: self.mfa_code.clone(),
             duration_seconds: Some(self.session_duration.num_seconds() as i64),
-            ..Default::default()
         };
         self.sts_client.get_session_token(request).await
     }
@@ -263,7 +261,7 @@ impl StsAssumeRoleSessionCredentialsProvider {
             session_name,
             external_id,
             session_duration: session_duration
-                .unwrap_or(Duration::seconds(DEFAULT_ROLE_DURATION_SECONDS as i64)),
+                .unwrap_or_else(|| Duration::seconds(DEFAULT_ROLE_DURATION_SECONDS as i64)),
             scope_down_policy,
             mfa_serial,
             mfa_code: None,
@@ -300,7 +298,7 @@ impl StsAssumeRoleSessionCredentialsProvider {
 
         let creds = resp
             .credentials
-            .ok_or(CredentialsError::new("no credentials in response"))?;
+            .ok_or_else(|| CredentialsError::new("no credentials in response"))?;
 
         Ok(AwsCredentials::new_for_credentials(creds)?)
     }
@@ -354,7 +352,7 @@ impl StsWebIdentityFederationSessionCredentialsProvider {
             role_arn,
             session_name,
             session_duration: session_duration
-                .unwrap_or(Duration::seconds(DEFAULT_DURATION_SECONDS as i64)),
+                .unwrap_or_else(|| Duration::seconds(DEFAULT_DURATION_SECONDS as i64)),
             scope_down_policy,
         }
     }
@@ -380,7 +378,7 @@ impl StsWebIdentityFederationSessionCredentialsProvider {
 
         let creds = resp
             .credentials
-            .ok_or(CredentialsError::new("no credentials in response"))?;
+            .ok_or_else(|| CredentialsError::new("no credentials in response"))?;
 
         let mut aws_creds = AwsCredentials::new_for_credentials(creds)?;
 

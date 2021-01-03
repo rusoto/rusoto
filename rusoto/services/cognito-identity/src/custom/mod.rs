@@ -57,7 +57,7 @@ impl CognitoProviderBuilder {
     pub fn build(self) -> CognitoProvider {
         CognitoProvider {
             identity_id: self.identity_id.expect("no identity id provided"),
-            region: self.region.unwrap_or(Region::default()),
+            region: self.region.unwrap_or_default(),
             logins: self.logins,
             custom_role_arn: self.custom_role_arn,
         }
@@ -111,7 +111,6 @@ impl ProvideAwsCredentials for CognitoProvider {
             identity_id: self.identity_id.clone(),
             logins: self.logins.clone(),
             custom_role_arn: self.custom_role_arn.clone(),
-            ..Default::default()
         };
 
         let resp = client
@@ -119,16 +118,16 @@ impl ProvideAwsCredentials for CognitoProvider {
             .await
             .map_err(|e| CredentialsError::new(format!("{:?}", e)))?;
 
-        let creds = resp.credentials.ok_or(CredentialsError::new(
-            "no credentials were found in the response",
-        ))?;
+        let creds = resp
+            .credentials
+            .ok_or_else(|| CredentialsError::new("no credentials were found in the response"))?;
         Ok(AwsCredentials::new(
-            creds.access_key_id.ok_or(CredentialsError::new(
-                "no access key id was found in the response",
-            ))?,
-            creds.secret_key.ok_or(CredentialsError::new(
-                "no secret key was found in the response",
-            ))?,
+            creds.access_key_id.ok_or_else(|| {
+                CredentialsError::new("no access key id was found in the response")
+            })?,
+            creds
+                .secret_key
+                .ok_or_else(|| CredentialsError::new("no secret key was found in the response"))?,
             creds.session_token,
             creds
                 .expiration
