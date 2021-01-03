@@ -1096,10 +1096,12 @@ impl DeserializeEvent for SubscribeToShardEventStreamItem {
             "SubscribeToShardEvent" => SubscribeToShardEventStreamItem::SubscribeToShardEvent(
                 SubscribeToShardEvent::deserialize(deserializer)?,
             ),
-            _ => Err(RusotoError::ParseError(format!(
-                "Invalid event type: {}",
-                event_type
-            )))?,
+            _ => {
+                return Err(RusotoError::ParseError(format!(
+                    "Invalid event type: {}",
+                    event_type
+                )))
+            }
         };
         Ok(deserialized)
     }

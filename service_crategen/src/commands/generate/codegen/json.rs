@@ -166,7 +166,7 @@ impl GenerateProtocol for JsonGenerator {
             .chain(
                 std::iter::once(
                     format!(
-                        "_ => Err(RusotoError::ParseError({err_fmt}))?",
+                        "_ => return Err(RusotoError::ParseError({err_fmt}))",
                         err_fmt = "format!(\"Invalid event type: {}\", event_type)",
                     )
                 )
