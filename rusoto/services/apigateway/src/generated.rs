@@ -24,7 +24,6 @@ use rusoto_core::proto;
 use rusoto_core::signature::SignedRequest;
 #[allow(unused_imports)]
 use serde::{Deserialize, Serialize};
-use serde_json;
 /// <p>Access log settings, including the access log format and access log destination ARN.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
@@ -3717,6 +3716,7 @@ pub enum CreateApiKeyError {
 impl CreateApiKeyError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateApiKeyError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(CreateApiKeyError::BadRequest(err.msg))
@@ -3775,6 +3775,7 @@ pub enum CreateAuthorizerError {
 impl CreateAuthorizerError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateAuthorizerError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(CreateAuthorizerError::BadRequest(err.msg))
@@ -3829,6 +3830,7 @@ pub enum CreateBasePathMappingError {
 impl CreateBasePathMappingError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateBasePathMappingError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(CreateBasePathMappingError::BadRequest(err.msg))
@@ -3889,6 +3891,7 @@ pub enum CreateDeploymentError {
 impl CreateDeploymentError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateDeploymentError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(CreateDeploymentError::BadRequest(err.msg))
@@ -3953,6 +3956,7 @@ pub enum CreateDocumentationPartError {
 impl CreateDocumentationPartError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateDocumentationPartError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(CreateDocumentationPartError::BadRequest(err.msg))
@@ -4021,6 +4025,7 @@ impl CreateDocumentationVersionError {
         res: BufferedHttpResponse,
     ) -> RusotoError<CreateDocumentationVersionError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(CreateDocumentationVersionError::BadRequest(
@@ -4085,6 +4090,7 @@ pub enum CreateDomainNameError {
 impl CreateDomainNameError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateDomainNameError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(CreateDomainNameError::BadRequest(err.msg))
@@ -4137,6 +4143,7 @@ pub enum CreateModelError {
 impl CreateModelError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateModelError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(CreateModelError::BadRequest(err.msg))
@@ -4195,6 +4202,7 @@ pub enum CreateRequestValidatorError {
 impl CreateRequestValidatorError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateRequestValidatorError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(CreateRequestValidatorError::BadRequest(err.msg))
@@ -4255,6 +4263,7 @@ pub enum CreateResourceError {
 impl CreateResourceError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateResourceError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(CreateResourceError::BadRequest(err.msg))
@@ -4311,6 +4320,7 @@ pub enum CreateRestApiError {
 impl CreateRestApiError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateRestApiError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(CreateRestApiError::BadRequest(err.msg))
@@ -4363,6 +4373,7 @@ pub enum CreateStageError {
 impl CreateStageError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateStageError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(CreateStageError::BadRequest(err.msg))
@@ -4423,6 +4434,7 @@ pub enum CreateUsagePlanError {
 impl CreateUsagePlanError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateUsagePlanError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(CreateUsagePlanError::BadRequest(err.msg))
@@ -4481,6 +4493,7 @@ pub enum CreateUsagePlanKeyError {
 impl CreateUsagePlanKeyError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateUsagePlanKeyError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(CreateUsagePlanKeyError::BadRequest(err.msg))
@@ -4531,6 +4544,7 @@ pub enum CreateVpcLinkError {
 impl CreateVpcLinkError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateVpcLinkError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(CreateVpcLinkError::BadRequest(err.msg))
@@ -4573,6 +4587,7 @@ pub enum DeleteApiKeyError {
 impl DeleteApiKeyError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteApiKeyError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "NotFoundException" => {
                     return RusotoError::Service(DeleteApiKeyError::NotFound(err.msg))
@@ -4619,6 +4634,7 @@ pub enum DeleteAuthorizerError {
 impl DeleteAuthorizerError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteAuthorizerError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(DeleteAuthorizerError::BadRequest(err.msg))
@@ -4673,6 +4689,7 @@ pub enum DeleteBasePathMappingError {
 impl DeleteBasePathMappingError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteBasePathMappingError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(DeleteBasePathMappingError::BadRequest(err.msg))
@@ -4727,6 +4744,7 @@ pub enum DeleteClientCertificateError {
 impl DeleteClientCertificateError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteClientCertificateError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(DeleteClientCertificateError::BadRequest(err.msg))
@@ -4779,6 +4797,7 @@ pub enum DeleteDeploymentError {
 impl DeleteDeploymentError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteDeploymentError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(DeleteDeploymentError::BadRequest(err.msg))
@@ -4829,6 +4848,7 @@ pub enum DeleteDocumentationPartError {
 impl DeleteDocumentationPartError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteDocumentationPartError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(DeleteDocumentationPartError::BadRequest(err.msg))
@@ -4889,6 +4909,7 @@ impl DeleteDocumentationVersionError {
         res: BufferedHttpResponse,
     ) -> RusotoError<DeleteDocumentationVersionError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(DeleteDocumentationVersionError::BadRequest(
@@ -4947,6 +4968,7 @@ pub enum DeleteDomainNameError {
 impl DeleteDomainNameError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteDomainNameError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(DeleteDomainNameError::BadRequest(err.msg))
@@ -4997,6 +5019,7 @@ pub enum DeleteGatewayResponseError {
 impl DeleteGatewayResponseError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteGatewayResponseError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(DeleteGatewayResponseError::BadRequest(err.msg))
@@ -5051,6 +5074,7 @@ pub enum DeleteIntegrationError {
 impl DeleteIntegrationError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteIntegrationError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ConflictException" => {
                     return RusotoError::Service(DeleteIntegrationError::Conflict(err.msg))
@@ -5101,6 +5125,7 @@ pub enum DeleteIntegrationResponseError {
 impl DeleteIntegrationResponseError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteIntegrationResponseError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(DeleteIntegrationResponseError::BadRequest(
@@ -5159,6 +5184,7 @@ pub enum DeleteMethodError {
 impl DeleteMethodError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteMethodError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ConflictException" => {
                     return RusotoError::Service(DeleteMethodError::Conflict(err.msg))
@@ -5209,6 +5235,7 @@ pub enum DeleteMethodResponseError {
 impl DeleteMethodResponseError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteMethodResponseError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(DeleteMethodResponseError::BadRequest(err.msg))
@@ -5265,6 +5292,7 @@ pub enum DeleteModelError {
 impl DeleteModelError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteModelError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(DeleteModelError::BadRequest(err.msg))
@@ -5319,6 +5347,7 @@ pub enum DeleteRequestValidatorError {
 impl DeleteRequestValidatorError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteRequestValidatorError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(DeleteRequestValidatorError::BadRequest(err.msg))
@@ -5375,6 +5404,7 @@ pub enum DeleteResourceError {
 impl DeleteResourceError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteResourceError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(DeleteResourceError::BadRequest(err.msg))
@@ -5427,6 +5457,7 @@ pub enum DeleteRestApiError {
 impl DeleteRestApiError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteRestApiError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(DeleteRestApiError::BadRequest(err.msg))
@@ -5475,6 +5506,7 @@ pub enum DeleteStageError {
 impl DeleteStageError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteStageError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(DeleteStageError::BadRequest(err.msg))
@@ -5523,6 +5555,7 @@ pub enum DeleteUsagePlanError {
 impl DeleteUsagePlanError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteUsagePlanError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(DeleteUsagePlanError::BadRequest(err.msg))
@@ -5573,6 +5606,7 @@ pub enum DeleteUsagePlanKeyError {
 impl DeleteUsagePlanKeyError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteUsagePlanKeyError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(DeleteUsagePlanKeyError::BadRequest(err.msg))
@@ -5625,6 +5659,7 @@ pub enum DeleteVpcLinkError {
 impl DeleteVpcLinkError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteVpcLinkError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(DeleteVpcLinkError::BadRequest(err.msg))
@@ -5675,6 +5710,7 @@ impl FlushStageAuthorizersCacheError {
         res: BufferedHttpResponse,
     ) -> RusotoError<FlushStageAuthorizersCacheError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(FlushStageAuthorizersCacheError::BadRequest(
@@ -5729,6 +5765,7 @@ pub enum FlushStageCacheError {
 impl FlushStageCacheError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<FlushStageCacheError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(FlushStageCacheError::BadRequest(err.msg))
@@ -5775,6 +5812,7 @@ pub enum GenerateClientCertificateError {
 impl GenerateClientCertificateError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GenerateClientCertificateError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "LimitExceededException" => {
                     return RusotoError::Service(GenerateClientCertificateError::LimitExceeded(
@@ -5823,6 +5861,7 @@ pub enum GetAccountError {
 impl GetAccountError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetAccountError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "NotFoundException" => {
                     return RusotoError::Service(GetAccountError::NotFound(err.msg))
@@ -5865,6 +5904,7 @@ pub enum GetApiKeyError {
 impl GetApiKeyError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetApiKeyError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "NotFoundException" => {
                     return RusotoError::Service(GetApiKeyError::NotFound(err.msg))
@@ -5907,6 +5947,7 @@ pub enum GetApiKeysError {
 impl GetApiKeysError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetApiKeysError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(GetApiKeysError::BadRequest(err.msg))
@@ -5949,6 +5990,7 @@ pub enum GetAuthorizerError {
 impl GetAuthorizerError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetAuthorizerError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "NotFoundException" => {
                     return RusotoError::Service(GetAuthorizerError::NotFound(err.msg))
@@ -5993,6 +6035,7 @@ pub enum GetAuthorizersError {
 impl GetAuthorizersError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetAuthorizersError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(GetAuthorizersError::BadRequest(err.msg))
@@ -6039,6 +6082,7 @@ pub enum GetBasePathMappingError {
 impl GetBasePathMappingError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetBasePathMappingError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "NotFoundException" => {
                     return RusotoError::Service(GetBasePathMappingError::NotFound(err.msg))
@@ -6081,6 +6125,7 @@ pub enum GetBasePathMappingsError {
 impl GetBasePathMappingsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetBasePathMappingsError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "NotFoundException" => {
                     return RusotoError::Service(GetBasePathMappingsError::NotFound(err.msg))
@@ -6123,6 +6168,7 @@ pub enum GetClientCertificateError {
 impl GetClientCertificateError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetClientCertificateError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "NotFoundException" => {
                     return RusotoError::Service(GetClientCertificateError::NotFound(err.msg))
@@ -6167,6 +6213,7 @@ pub enum GetClientCertificatesError {
 impl GetClientCertificatesError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetClientCertificatesError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(GetClientCertificatesError::BadRequest(err.msg))
@@ -6213,6 +6260,7 @@ pub enum GetDeploymentError {
 impl GetDeploymentError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetDeploymentError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "NotFoundException" => {
                     return RusotoError::Service(GetDeploymentError::NotFound(err.msg))
@@ -6263,6 +6311,7 @@ pub enum GetDeploymentsError {
 impl GetDeploymentsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetDeploymentsError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(GetDeploymentsError::BadRequest(err.msg))
@@ -6313,6 +6362,7 @@ pub enum GetDocumentationPartError {
 impl GetDocumentationPartError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetDocumentationPartError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "NotFoundException" => {
                     return RusotoError::Service(GetDocumentationPartError::NotFound(err.msg))
@@ -6359,6 +6409,7 @@ pub enum GetDocumentationPartsError {
 impl GetDocumentationPartsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetDocumentationPartsError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(GetDocumentationPartsError::BadRequest(err.msg))
@@ -6407,6 +6458,7 @@ pub enum GetDocumentationVersionError {
 impl GetDocumentationVersionError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetDocumentationVersionError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "NotFoundException" => {
                     return RusotoError::Service(GetDocumentationVersionError::NotFound(err.msg))
@@ -6455,6 +6507,7 @@ pub enum GetDocumentationVersionsError {
 impl GetDocumentationVersionsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetDocumentationVersionsError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(GetDocumentationVersionsError::BadRequest(err.msg))
@@ -6507,6 +6560,7 @@ pub enum GetDomainNameError {
 impl GetDomainNameError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetDomainNameError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "NotFoundException" => {
                     return RusotoError::Service(GetDomainNameError::NotFound(err.msg))
@@ -6553,6 +6607,7 @@ pub enum GetDomainNamesError {
 impl GetDomainNamesError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetDomainNamesError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(GetDomainNamesError::BadRequest(err.msg))
@@ -6599,6 +6654,7 @@ pub enum GetExportError {
 impl GetExportError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetExportError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(GetExportError::BadRequest(err.msg))
@@ -6649,6 +6705,7 @@ pub enum GetGatewayResponseError {
 impl GetGatewayResponseError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetGatewayResponseError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "NotFoundException" => {
                     return RusotoError::Service(GetGatewayResponseError::NotFound(err.msg))
@@ -6693,6 +6750,7 @@ pub enum GetGatewayResponsesError {
 impl GetGatewayResponsesError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetGatewayResponsesError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(GetGatewayResponsesError::BadRequest(err.msg))
@@ -6739,6 +6797,7 @@ pub enum GetIntegrationError {
 impl GetIntegrationError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetIntegrationError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "NotFoundException" => {
                     return RusotoError::Service(GetIntegrationError::NotFound(err.msg))
@@ -6781,6 +6840,7 @@ pub enum GetIntegrationResponseError {
 impl GetIntegrationResponseError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetIntegrationResponseError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "NotFoundException" => {
                     return RusotoError::Service(GetIntegrationResponseError::NotFound(err.msg))
@@ -6825,6 +6885,7 @@ pub enum GetMethodError {
 impl GetMethodError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetMethodError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "NotFoundException" => {
                     return RusotoError::Service(GetMethodError::NotFound(err.msg))
@@ -6867,6 +6928,7 @@ pub enum GetMethodResponseError {
 impl GetMethodResponseError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetMethodResponseError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "NotFoundException" => {
                     return RusotoError::Service(GetMethodResponseError::NotFound(err.msg))
@@ -6909,6 +6971,7 @@ pub enum GetModelError {
 impl GetModelError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetModelError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "NotFoundException" => {
                     return RusotoError::Service(GetModelError::NotFound(err.msg))
@@ -6953,6 +7016,7 @@ pub enum GetModelTemplateError {
 impl GetModelTemplateError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetModelTemplateError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(GetModelTemplateError::BadRequest(err.msg))
@@ -7001,6 +7065,7 @@ pub enum GetModelsError {
 impl GetModelsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetModelsError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(GetModelsError::BadRequest(err.msg))
@@ -7047,6 +7112,7 @@ pub enum GetRequestValidatorError {
 impl GetRequestValidatorError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetRequestValidatorError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "NotFoundException" => {
                     return RusotoError::Service(GetRequestValidatorError::NotFound(err.msg))
@@ -7091,6 +7157,7 @@ pub enum GetRequestValidatorsError {
 impl GetRequestValidatorsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetRequestValidatorsError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(GetRequestValidatorsError::BadRequest(err.msg))
@@ -7139,6 +7206,7 @@ pub enum GetResourceError {
 impl GetResourceError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetResourceError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "NotFoundException" => {
                     return RusotoError::Service(GetResourceError::NotFound(err.msg))
@@ -7183,6 +7251,7 @@ pub enum GetResourcesError {
 impl GetResourcesError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetResourcesError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(GetResourcesError::BadRequest(err.msg))
@@ -7229,6 +7298,7 @@ pub enum GetRestApiError {
 impl GetRestApiError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetRestApiError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "NotFoundException" => {
                     return RusotoError::Service(GetRestApiError::NotFound(err.msg))
@@ -7271,6 +7341,7 @@ pub enum GetRestApisError {
 impl GetRestApisError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetRestApisError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(GetRestApisError::BadRequest(err.msg))
@@ -7317,6 +7388,7 @@ pub enum GetSdkError {
 impl GetSdkError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetSdkError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(GetSdkError::BadRequest(err.msg))
@@ -7363,6 +7435,7 @@ pub enum GetSdkTypeError {
 impl GetSdkTypeError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetSdkTypeError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "NotFoundException" => {
                     return RusotoError::Service(GetSdkTypeError::NotFound(err.msg))
@@ -7403,6 +7476,7 @@ pub enum GetSdkTypesError {
 impl GetSdkTypesError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetSdkTypesError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "TooManyRequestsException" => {
                     return RusotoError::Service(GetSdkTypesError::TooManyRequests(err.msg))
@@ -7441,6 +7515,7 @@ pub enum GetStageError {
 impl GetStageError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetStageError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "NotFoundException" => {
                     return RusotoError::Service(GetStageError::NotFound(err.msg))
@@ -7483,6 +7558,7 @@ pub enum GetStagesError {
 impl GetStagesError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetStagesError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "NotFoundException" => {
                     return RusotoError::Service(GetStagesError::NotFound(err.msg))
@@ -7529,6 +7605,7 @@ pub enum GetTagsError {
 impl GetTagsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetTagsError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(GetTagsError::BadRequest(err.msg))
@@ -7581,6 +7658,7 @@ pub enum GetUsageError {
 impl GetUsageError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetUsageError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(GetUsageError::BadRequest(err.msg))
@@ -7629,6 +7707,7 @@ pub enum GetUsagePlanError {
 impl GetUsagePlanError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetUsagePlanError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(GetUsagePlanError::BadRequest(err.msg))
@@ -7677,6 +7756,7 @@ pub enum GetUsagePlanKeyError {
 impl GetUsagePlanKeyError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetUsagePlanKeyError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(GetUsagePlanKeyError::BadRequest(err.msg))
@@ -7725,6 +7805,7 @@ pub enum GetUsagePlanKeysError {
 impl GetUsagePlanKeysError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetUsagePlanKeysError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(GetUsagePlanKeysError::BadRequest(err.msg))
@@ -7775,6 +7856,7 @@ pub enum GetUsagePlansError {
 impl GetUsagePlansError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetUsagePlansError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(GetUsagePlansError::BadRequest(err.msg))
@@ -7825,6 +7907,7 @@ pub enum GetVpcLinkError {
 impl GetVpcLinkError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetVpcLinkError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "NotFoundException" => {
                     return RusotoError::Service(GetVpcLinkError::NotFound(err.msg))
@@ -7867,6 +7950,7 @@ pub enum GetVpcLinksError {
 impl GetVpcLinksError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetVpcLinksError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(GetVpcLinksError::BadRequest(err.msg))
@@ -7915,6 +7999,7 @@ pub enum ImportApiKeysError {
 impl ImportApiKeysError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ImportApiKeysError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(ImportApiKeysError::BadRequest(err.msg))
@@ -7973,6 +8058,7 @@ pub enum ImportDocumentationPartsError {
 impl ImportDocumentationPartsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ImportDocumentationPartsError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(ImportDocumentationPartsError::BadRequest(err.msg))
@@ -8033,6 +8119,7 @@ pub enum ImportRestApiError {
 impl ImportRestApiError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ImportRestApiError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(ImportRestApiError::BadRequest(err.msg))
@@ -8087,6 +8174,7 @@ pub enum PutGatewayResponseError {
 impl PutGatewayResponseError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<PutGatewayResponseError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(PutGatewayResponseError::BadRequest(err.msg))
@@ -8141,6 +8229,7 @@ pub enum PutIntegrationError {
 impl PutIntegrationError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<PutIntegrationError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(PutIntegrationError::BadRequest(err.msg))
@@ -8197,6 +8286,7 @@ pub enum PutIntegrationResponseError {
 impl PutIntegrationResponseError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<PutIntegrationResponseError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(PutIntegrationResponseError::BadRequest(err.msg))
@@ -8261,6 +8351,7 @@ pub enum PutMethodError {
 impl PutMethodError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<PutMethodError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(PutMethodError::BadRequest(err.msg))
@@ -8321,6 +8412,7 @@ pub enum PutMethodResponseError {
 impl PutMethodResponseError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<PutMethodResponseError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(PutMethodResponseError::BadRequest(err.msg))
@@ -8381,6 +8473,7 @@ pub enum PutRestApiError {
 impl PutRestApiError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<PutRestApiError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(PutRestApiError::BadRequest(err.msg))
@@ -8441,6 +8534,7 @@ pub enum TagResourceError {
 impl TagResourceError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<TagResourceError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(TagResourceError::BadRequest(err.msg))
@@ -8497,6 +8591,7 @@ pub enum TestInvokeAuthorizerError {
 impl TestInvokeAuthorizerError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<TestInvokeAuthorizerError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(TestInvokeAuthorizerError::BadRequest(err.msg))
@@ -8547,6 +8642,7 @@ pub enum TestInvokeMethodError {
 impl TestInvokeMethodError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<TestInvokeMethodError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(TestInvokeMethodError::BadRequest(err.msg))
@@ -8597,6 +8693,7 @@ pub enum UntagResourceError {
 impl UntagResourceError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UntagResourceError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(UntagResourceError::BadRequest(err.msg))
@@ -8649,6 +8746,7 @@ pub enum UpdateAccountError {
 impl UpdateAccountError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateAccountError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(UpdateAccountError::BadRequest(err.msg))
@@ -8699,6 +8797,7 @@ pub enum UpdateApiKeyError {
 impl UpdateApiKeyError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateApiKeyError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(UpdateApiKeyError::BadRequest(err.msg))
@@ -8751,6 +8850,7 @@ pub enum UpdateAuthorizerError {
 impl UpdateAuthorizerError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateAuthorizerError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(UpdateAuthorizerError::BadRequest(err.msg))
@@ -8801,6 +8901,7 @@ pub enum UpdateBasePathMappingError {
 impl UpdateBasePathMappingError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateBasePathMappingError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(UpdateBasePathMappingError::BadRequest(err.msg))
@@ -8855,6 +8956,7 @@ pub enum UpdateClientCertificateError {
 impl UpdateClientCertificateError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateClientCertificateError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(UpdateClientCertificateError::BadRequest(err.msg))
@@ -8909,6 +9011,7 @@ pub enum UpdateDeploymentError {
 impl UpdateDeploymentError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateDeploymentError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(UpdateDeploymentError::BadRequest(err.msg))
@@ -8965,6 +9068,7 @@ pub enum UpdateDocumentationPartError {
 impl UpdateDocumentationPartError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateDocumentationPartError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(UpdateDocumentationPartError::BadRequest(err.msg))
@@ -9031,6 +9135,7 @@ impl UpdateDocumentationVersionError {
         res: BufferedHttpResponse,
     ) -> RusotoError<UpdateDocumentationVersionError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(UpdateDocumentationVersionError::BadRequest(
@@ -9091,6 +9196,7 @@ pub enum UpdateDomainNameError {
 impl UpdateDomainNameError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateDomainNameError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(UpdateDomainNameError::BadRequest(err.msg))
@@ -9143,6 +9249,7 @@ pub enum UpdateGatewayResponseError {
 impl UpdateGatewayResponseError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateGatewayResponseError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(UpdateGatewayResponseError::BadRequest(err.msg))
@@ -9195,6 +9302,7 @@ pub enum UpdateIntegrationError {
 impl UpdateIntegrationError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateIntegrationError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(UpdateIntegrationError::BadRequest(err.msg))
@@ -9249,6 +9357,7 @@ pub enum UpdateIntegrationResponseError {
 impl UpdateIntegrationResponseError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateIntegrationResponseError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(UpdateIntegrationResponseError::BadRequest(
@@ -9309,6 +9418,7 @@ pub enum UpdateMethodError {
 impl UpdateMethodError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateMethodError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(UpdateMethodError::BadRequest(err.msg))
@@ -9365,6 +9475,7 @@ pub enum UpdateMethodResponseError {
 impl UpdateMethodResponseError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateMethodResponseError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(UpdateMethodResponseError::BadRequest(err.msg))
@@ -9425,6 +9536,7 @@ pub enum UpdateModelError {
 impl UpdateModelError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateModelError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(UpdateModelError::BadRequest(err.msg))
@@ -9477,6 +9589,7 @@ pub enum UpdateRequestValidatorError {
 impl UpdateRequestValidatorError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateRequestValidatorError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(UpdateRequestValidatorError::BadRequest(err.msg))
@@ -9529,6 +9642,7 @@ pub enum UpdateResourceError {
 impl UpdateResourceError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateResourceError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(UpdateResourceError::BadRequest(err.msg))
@@ -9583,6 +9697,7 @@ pub enum UpdateRestApiError {
 impl UpdateRestApiError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateRestApiError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(UpdateRestApiError::BadRequest(err.msg))
@@ -9637,6 +9752,7 @@ pub enum UpdateStageError {
 impl UpdateStageError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateStageError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(UpdateStageError::BadRequest(err.msg))
@@ -9689,6 +9805,7 @@ pub enum UpdateUsageError {
 impl UpdateUsageError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateUsageError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(UpdateUsageError::BadRequest(err.msg))
@@ -9739,6 +9856,7 @@ pub enum UpdateUsagePlanError {
 impl UpdateUsagePlanError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateUsagePlanError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(UpdateUsagePlanError::BadRequest(err.msg))
@@ -9793,6 +9911,7 @@ pub enum UpdateVpcLinkError {
 impl UpdateVpcLinkError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateVpcLinkError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(UpdateVpcLinkError::BadRequest(err.msg))
@@ -10567,6 +10686,7 @@ impl ApiGateway for ApiGatewayClient {
         &self,
         input: CreateApiKeyRequest,
     ) -> Result<ApiKey, RusotoError<CreateApiKeyError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/apikeys";
 
         let mut request = SignedRequest::new("POST", "apigateway", &self.region, &request_uri);
@@ -10597,6 +10717,7 @@ impl ApiGateway for ApiGatewayClient {
         &self,
         input: CreateAuthorizerRequest,
     ) -> Result<Authorizer, RusotoError<CreateAuthorizerError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/restapis/{restapi_id}/authorizers",
             restapi_id = input.rest_api_id
@@ -10631,6 +10752,7 @@ impl ApiGateway for ApiGatewayClient {
         &self,
         input: CreateBasePathMappingRequest,
     ) -> Result<BasePathMapping, RusotoError<CreateBasePathMappingError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/domainnames/{domain_name}/basepathmappings",
             domain_name = input.domain_name
@@ -10665,6 +10787,7 @@ impl ApiGateway for ApiGatewayClient {
         &self,
         input: CreateDeploymentRequest,
     ) -> Result<Deployment, RusotoError<CreateDeploymentError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/restapis/{restapi_id}/deployments",
             restapi_id = input.rest_api_id
@@ -10698,6 +10821,7 @@ impl ApiGateway for ApiGatewayClient {
         &self,
         input: CreateDocumentationPartRequest,
     ) -> Result<DocumentationPart, RusotoError<CreateDocumentationPartError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/restapis/{restapi_id}/documentation/parts",
             restapi_id = input.rest_api_id
@@ -10731,6 +10855,7 @@ impl ApiGateway for ApiGatewayClient {
         &self,
         input: CreateDocumentationVersionRequest,
     ) -> Result<DocumentationVersion, RusotoError<CreateDocumentationVersionError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/restapis/{restapi_id}/documentation/versions",
             restapi_id = input.rest_api_id
@@ -10765,6 +10890,7 @@ impl ApiGateway for ApiGatewayClient {
         &self,
         input: CreateDomainNameRequest,
     ) -> Result<DomainName, RusotoError<CreateDomainNameError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/domainnames";
 
         let mut request = SignedRequest::new("POST", "apigateway", &self.region, &request_uri);
@@ -10796,6 +10922,7 @@ impl ApiGateway for ApiGatewayClient {
         &self,
         input: CreateModelRequest,
     ) -> Result<Model, RusotoError<CreateModelError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/restapis/{restapi_id}/models",
             restapi_id = input.rest_api_id
@@ -10829,6 +10956,7 @@ impl ApiGateway for ApiGatewayClient {
         &self,
         input: CreateRequestValidatorRequest,
     ) -> Result<RequestValidator, RusotoError<CreateRequestValidatorError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/restapis/{restapi_id}/requestvalidators",
             restapi_id = input.rest_api_id
@@ -10863,6 +10991,7 @@ impl ApiGateway for ApiGatewayClient {
         &self,
         input: CreateResourceRequest,
     ) -> Result<Resource, RusotoError<CreateResourceError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/restapis/{restapi_id}/resources/{parent_id}",
             parent_id = input.parent_id,
@@ -10898,6 +11027,7 @@ impl ApiGateway for ApiGatewayClient {
         &self,
         input: CreateRestApiRequest,
     ) -> Result<RestApi, RusotoError<CreateRestApiError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/restapis";
 
         let mut request = SignedRequest::new("POST", "apigateway", &self.region, &request_uri);
@@ -10929,6 +11059,7 @@ impl ApiGateway for ApiGatewayClient {
         &self,
         input: CreateStageRequest,
     ) -> Result<Stage, RusotoError<CreateStageError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/restapis/{restapi_id}/stages",
             restapi_id = input.rest_api_id
@@ -10962,6 +11093,7 @@ impl ApiGateway for ApiGatewayClient {
         &self,
         input: CreateUsagePlanRequest,
     ) -> Result<UsagePlan, RusotoError<CreateUsagePlanError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/usageplans";
 
         let mut request = SignedRequest::new("POST", "apigateway", &self.region, &request_uri);
@@ -10993,6 +11125,7 @@ impl ApiGateway for ApiGatewayClient {
         &self,
         input: CreateUsagePlanKeyRequest,
     ) -> Result<UsagePlanKey, RusotoError<CreateUsagePlanKeyError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/usageplans/{usageplan_id}/keys",
             usageplan_id = input.usage_plan_id
@@ -11027,6 +11160,7 @@ impl ApiGateway for ApiGatewayClient {
         &self,
         input: CreateVpcLinkRequest,
     ) -> Result<VpcLink, RusotoError<CreateVpcLinkError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/vpclinks";
 
         let mut request = SignedRequest::new("POST", "apigateway", &self.region, &request_uri);
@@ -11058,6 +11192,7 @@ impl ApiGateway for ApiGatewayClient {
         &self,
         input: DeleteApiKeyRequest,
     ) -> Result<(), RusotoError<DeleteApiKeyError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!("/apikeys/{api_key}", api_key = input.api_key);
 
         let mut request = SignedRequest::new("DELETE", "apigateway", &self.region, &request_uri);
@@ -11070,9 +11205,9 @@ impl ApiGateway for ApiGatewayClient {
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 202 {
             let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = ::std::mem::drop(response);
+            let _result = ::std::mem::drop(response);
 
-            Ok(result)
+            Ok(())
         } else {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             Err(DeleteApiKeyError::from_response(response))
@@ -11085,6 +11220,7 @@ impl ApiGateway for ApiGatewayClient {
         &self,
         input: DeleteAuthorizerRequest,
     ) -> Result<(), RusotoError<DeleteAuthorizerError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/restapis/{restapi_id}/authorizers/{authorizer_id}",
             authorizer_id = input.authorizer_id,
@@ -11101,9 +11237,9 @@ impl ApiGateway for ApiGatewayClient {
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 202 {
             let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = ::std::mem::drop(response);
+            let _result = ::std::mem::drop(response);
 
-            Ok(result)
+            Ok(())
         } else {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             Err(DeleteAuthorizerError::from_response(response))
@@ -11116,6 +11252,7 @@ impl ApiGateway for ApiGatewayClient {
         &self,
         input: DeleteBasePathMappingRequest,
     ) -> Result<(), RusotoError<DeleteBasePathMappingError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/domainnames/{domain_name}/basepathmappings/{base_path}",
             base_path = input.base_path,
@@ -11132,9 +11269,9 @@ impl ApiGateway for ApiGatewayClient {
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 202 {
             let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = ::std::mem::drop(response);
+            let _result = ::std::mem::drop(response);
 
-            Ok(result)
+            Ok(())
         } else {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             Err(DeleteBasePathMappingError::from_response(response))
@@ -11147,6 +11284,7 @@ impl ApiGateway for ApiGatewayClient {
         &self,
         input: DeleteClientCertificateRequest,
     ) -> Result<(), RusotoError<DeleteClientCertificateError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/clientcertificates/{clientcertificate_id}",
             clientcertificate_id = input.client_certificate_id
@@ -11162,9 +11300,9 @@ impl ApiGateway for ApiGatewayClient {
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 202 {
             let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = ::std::mem::drop(response);
+            let _result = ::std::mem::drop(response);
 
-            Ok(result)
+            Ok(())
         } else {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             Err(DeleteClientCertificateError::from_response(response))
@@ -11177,6 +11315,7 @@ impl ApiGateway for ApiGatewayClient {
         &self,
         input: DeleteDeploymentRequest,
     ) -> Result<(), RusotoError<DeleteDeploymentError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/restapis/{restapi_id}/deployments/{deployment_id}",
             deployment_id = input.deployment_id,
@@ -11193,9 +11332,9 @@ impl ApiGateway for ApiGatewayClient {
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 202 {
             let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = ::std::mem::drop(response);
+            let _result = ::std::mem::drop(response);
 
-            Ok(result)
+            Ok(())
         } else {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             Err(DeleteDeploymentError::from_response(response))
@@ -11207,6 +11346,7 @@ impl ApiGateway for ApiGatewayClient {
         &self,
         input: DeleteDocumentationPartRequest,
     ) -> Result<(), RusotoError<DeleteDocumentationPartError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/restapis/{restapi_id}/documentation/parts/{part_id}",
             part_id = input.documentation_part_id,
@@ -11223,9 +11363,9 @@ impl ApiGateway for ApiGatewayClient {
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 202 {
             let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = ::std::mem::drop(response);
+            let _result = ::std::mem::drop(response);
 
-            Ok(result)
+            Ok(())
         } else {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             Err(DeleteDocumentationPartError::from_response(response))
@@ -11237,6 +11377,7 @@ impl ApiGateway for ApiGatewayClient {
         &self,
         input: DeleteDocumentationVersionRequest,
     ) -> Result<(), RusotoError<DeleteDocumentationVersionError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/restapis/{restapi_id}/documentation/versions/{doc_version}",
             doc_version = input.documentation_version,
@@ -11253,9 +11394,9 @@ impl ApiGateway for ApiGatewayClient {
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 202 {
             let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = ::std::mem::drop(response);
+            let _result = ::std::mem::drop(response);
 
-            Ok(result)
+            Ok(())
         } else {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             Err(DeleteDocumentationVersionError::from_response(response))
@@ -11268,6 +11409,7 @@ impl ApiGateway for ApiGatewayClient {
         &self,
         input: DeleteDomainNameRequest,
     ) -> Result<(), RusotoError<DeleteDomainNameError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/domainnames/{domain_name}",
             domain_name = input.domain_name
@@ -11283,9 +11425,9 @@ impl ApiGateway for ApiGatewayClient {
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 202 {
             let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = ::std::mem::drop(response);
+            let _result = ::std::mem::drop(response);
 
-            Ok(result)
+            Ok(())
         } else {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             Err(DeleteDomainNameError::from_response(response))
@@ -11298,6 +11440,7 @@ impl ApiGateway for ApiGatewayClient {
         &self,
         input: DeleteGatewayResponseRequest,
     ) -> Result<(), RusotoError<DeleteGatewayResponseError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/restapis/{restapi_id}/gatewayresponses/{response_type}",
             response_type = input.response_type,
@@ -11314,9 +11457,9 @@ impl ApiGateway for ApiGatewayClient {
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 202 {
             let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = ::std::mem::drop(response);
+            let _result = ::std::mem::drop(response);
 
-            Ok(result)
+            Ok(())
         } else {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             Err(DeleteGatewayResponseError::from_response(response))
@@ -11329,6 +11472,7 @@ impl ApiGateway for ApiGatewayClient {
         &self,
         input: DeleteIntegrationRequest,
     ) -> Result<(), RusotoError<DeleteIntegrationError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/restapis/{restapi_id}/resources/{resource_id}/methods/{http_method}/integration",
             http_method = input.http_method,
@@ -11346,9 +11490,9 @@ impl ApiGateway for ApiGatewayClient {
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 204 {
             let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = ::std::mem::drop(response);
+            let _result = ::std::mem::drop(response);
 
-            Ok(result)
+            Ok(())
         } else {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             Err(DeleteIntegrationError::from_response(response))
@@ -11361,6 +11505,7 @@ impl ApiGateway for ApiGatewayClient {
         &self,
         input: DeleteIntegrationResponseRequest,
     ) -> Result<(), RusotoError<DeleteIntegrationResponseError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!("/restapis/{restapi_id}/resources/{resource_id}/methods/{http_method}/integration/responses/{status_code}", http_method = input.http_method, resource_id = input.resource_id, restapi_id = input.rest_api_id, status_code = input.status_code);
 
         let mut request = SignedRequest::new("DELETE", "apigateway", &self.region, &request_uri);
@@ -11373,9 +11518,9 @@ impl ApiGateway for ApiGatewayClient {
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 204 {
             let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = ::std::mem::drop(response);
+            let _result = ::std::mem::drop(response);
 
-            Ok(result)
+            Ok(())
         } else {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             Err(DeleteIntegrationResponseError::from_response(response))
@@ -11388,6 +11533,7 @@ impl ApiGateway for ApiGatewayClient {
         &self,
         input: DeleteMethodRequest,
     ) -> Result<(), RusotoError<DeleteMethodError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/restapis/{restapi_id}/resources/{resource_id}/methods/{http_method}",
             http_method = input.http_method,
@@ -11405,9 +11551,9 @@ impl ApiGateway for ApiGatewayClient {
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 204 {
             let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = ::std::mem::drop(response);
+            let _result = ::std::mem::drop(response);
 
-            Ok(result)
+            Ok(())
         } else {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             Err(DeleteMethodError::from_response(response))
@@ -11420,6 +11566,7 @@ impl ApiGateway for ApiGatewayClient {
         &self,
         input: DeleteMethodResponseRequest,
     ) -> Result<(), RusotoError<DeleteMethodResponseError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!("/restapis/{restapi_id}/resources/{resource_id}/methods/{http_method}/responses/{status_code}", http_method = input.http_method, resource_id = input.resource_id, restapi_id = input.rest_api_id, status_code = input.status_code);
 
         let mut request = SignedRequest::new("DELETE", "apigateway", &self.region, &request_uri);
@@ -11432,9 +11579,9 @@ impl ApiGateway for ApiGatewayClient {
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 204 {
             let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = ::std::mem::drop(response);
+            let _result = ::std::mem::drop(response);
 
-            Ok(result)
+            Ok(())
         } else {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             Err(DeleteMethodResponseError::from_response(response))
@@ -11447,6 +11594,7 @@ impl ApiGateway for ApiGatewayClient {
         &self,
         input: DeleteModelRequest,
     ) -> Result<(), RusotoError<DeleteModelError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/restapis/{restapi_id}/models/{model_name}",
             model_name = input.model_name,
@@ -11463,9 +11611,9 @@ impl ApiGateway for ApiGatewayClient {
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 202 {
             let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = ::std::mem::drop(response);
+            let _result = ::std::mem::drop(response);
 
-            Ok(result)
+            Ok(())
         } else {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             Err(DeleteModelError::from_response(response))
@@ -11478,6 +11626,7 @@ impl ApiGateway for ApiGatewayClient {
         &self,
         input: DeleteRequestValidatorRequest,
     ) -> Result<(), RusotoError<DeleteRequestValidatorError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/restapis/{restapi_id}/requestvalidators/{requestvalidator_id}",
             requestvalidator_id = input.request_validator_id,
@@ -11494,9 +11643,9 @@ impl ApiGateway for ApiGatewayClient {
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 202 {
             let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = ::std::mem::drop(response);
+            let _result = ::std::mem::drop(response);
 
-            Ok(result)
+            Ok(())
         } else {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             Err(DeleteRequestValidatorError::from_response(response))
@@ -11509,6 +11658,7 @@ impl ApiGateway for ApiGatewayClient {
         &self,
         input: DeleteResourceRequest,
     ) -> Result<(), RusotoError<DeleteResourceError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/restapis/{restapi_id}/resources/{resource_id}",
             resource_id = input.resource_id,
@@ -11525,9 +11675,9 @@ impl ApiGateway for ApiGatewayClient {
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 202 {
             let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = ::std::mem::drop(response);
+            let _result = ::std::mem::drop(response);
 
-            Ok(result)
+            Ok(())
         } else {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             Err(DeleteResourceError::from_response(response))
@@ -11540,6 +11690,7 @@ impl ApiGateway for ApiGatewayClient {
         &self,
         input: DeleteRestApiRequest,
     ) -> Result<(), RusotoError<DeleteRestApiError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!("/restapis/{restapi_id}", restapi_id = input.rest_api_id);
 
         let mut request = SignedRequest::new("DELETE", "apigateway", &self.region, &request_uri);
@@ -11552,9 +11703,9 @@ impl ApiGateway for ApiGatewayClient {
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 202 {
             let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = ::std::mem::drop(response);
+            let _result = ::std::mem::drop(response);
 
-            Ok(result)
+            Ok(())
         } else {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             Err(DeleteRestApiError::from_response(response))
@@ -11567,6 +11718,7 @@ impl ApiGateway for ApiGatewayClient {
         &self,
         input: DeleteStageRequest,
     ) -> Result<(), RusotoError<DeleteStageError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/restapis/{restapi_id}/stages/{stage_name}",
             restapi_id = input.rest_api_id,
@@ -11583,9 +11735,9 @@ impl ApiGateway for ApiGatewayClient {
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 202 {
             let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = ::std::mem::drop(response);
+            let _result = ::std::mem::drop(response);
 
-            Ok(result)
+            Ok(())
         } else {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             Err(DeleteStageError::from_response(response))
@@ -11598,6 +11750,7 @@ impl ApiGateway for ApiGatewayClient {
         &self,
         input: DeleteUsagePlanRequest,
     ) -> Result<(), RusotoError<DeleteUsagePlanError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/usageplans/{usageplan_id}",
             usageplan_id = input.usage_plan_id
@@ -11613,9 +11766,9 @@ impl ApiGateway for ApiGatewayClient {
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 202 {
             let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = ::std::mem::drop(response);
+            let _result = ::std::mem::drop(response);
 
-            Ok(result)
+            Ok(())
         } else {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             Err(DeleteUsagePlanError::from_response(response))
@@ -11628,6 +11781,7 @@ impl ApiGateway for ApiGatewayClient {
         &self,
         input: DeleteUsagePlanKeyRequest,
     ) -> Result<(), RusotoError<DeleteUsagePlanKeyError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/usageplans/{usageplan_id}/keys/{key_id}",
             key_id = input.key_id,
@@ -11644,9 +11798,9 @@ impl ApiGateway for ApiGatewayClient {
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 202 {
             let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = ::std::mem::drop(response);
+            let _result = ::std::mem::drop(response);
 
-            Ok(result)
+            Ok(())
         } else {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             Err(DeleteUsagePlanKeyError::from_response(response))
@@ -11659,6 +11813,7 @@ impl ApiGateway for ApiGatewayClient {
         &self,
         input: DeleteVpcLinkRequest,
     ) -> Result<(), RusotoError<DeleteVpcLinkError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!("/vpclinks/{vpclink_id}", vpclink_id = input.vpc_link_id);
 
         let mut request = SignedRequest::new("DELETE", "apigateway", &self.region, &request_uri);
@@ -11671,9 +11826,9 @@ impl ApiGateway for ApiGatewayClient {
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 202 {
             let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = ::std::mem::drop(response);
+            let _result = ::std::mem::drop(response);
 
-            Ok(result)
+            Ok(())
         } else {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             Err(DeleteVpcLinkError::from_response(response))
@@ -11686,6 +11841,7 @@ impl ApiGateway for ApiGatewayClient {
         &self,
         input: FlushStageAuthorizersCacheRequest,
     ) -> Result<(), RusotoError<FlushStageAuthorizersCacheError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/restapis/{restapi_id}/stages/{stage_name}/cache/authorizers",
             restapi_id = input.rest_api_id,
@@ -11702,9 +11858,9 @@ impl ApiGateway for ApiGatewayClient {
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 202 {
             let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = ::std::mem::drop(response);
+            let _result = ::std::mem::drop(response);
 
-            Ok(result)
+            Ok(())
         } else {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             Err(FlushStageAuthorizersCacheError::from_response(response))
@@ -11717,6 +11873,7 @@ impl ApiGateway for ApiGatewayClient {
         &self,
         input: FlushStageCacheRequest,
     ) -> Result<(), RusotoError<FlushStageCacheError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/restapis/{restapi_id}/stages/{stage_name}/cache/data",
             restapi_id = input.rest_api_id,
@@ -11733,9 +11890,9 @@ impl ApiGateway for ApiGatewayClient {
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 202 {
             let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = ::std::mem::drop(response);
+            let _result = ::std::mem::drop(response);
 
-            Ok(result)
+            Ok(())
         } else {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             Err(FlushStageCacheError::from_response(response))
@@ -11748,6 +11905,7 @@ impl ApiGateway for ApiGatewayClient {
         &self,
         input: GenerateClientCertificateRequest,
     ) -> Result<ClientCertificate, RusotoError<GenerateClientCertificateError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/clientcertificates";
 
         let mut request = SignedRequest::new("POST", "apigateway", &self.region, &request_uri);
@@ -11776,6 +11934,7 @@ impl ApiGateway for ApiGatewayClient {
     /// <p>Gets information about the current <a>Account</a> resource.</p>
     #[allow(unused_mut)]
     async fn get_account(&self) -> Result<Account, RusotoError<GetAccountError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/account";
 
         let mut request = SignedRequest::new("GET", "apigateway", &self.region, &request_uri);
@@ -11804,6 +11963,7 @@ impl ApiGateway for ApiGatewayClient {
         &self,
         input: GetApiKeyRequest,
     ) -> Result<ApiKey, RusotoError<GetApiKeyError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!("/apikeys/{api_key}", api_key = input.api_key);
 
         let mut request = SignedRequest::new("GET", "apigateway", &self.region, &request_uri);
@@ -11837,6 +11997,7 @@ impl ApiGateway for ApiGatewayClient {
         &self,
         input: GetApiKeysRequest,
     ) -> Result<ApiKeys, RusotoError<GetApiKeysError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/apikeys";
 
         let mut request = SignedRequest::new("GET", "apigateway", &self.region, &request_uri);
@@ -11883,6 +12044,7 @@ impl ApiGateway for ApiGatewayClient {
         &self,
         input: GetAuthorizerRequest,
     ) -> Result<Authorizer, RusotoError<GetAuthorizerError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/restapis/{restapi_id}/authorizers/{authorizer_id}",
             authorizer_id = input.authorizer_id,
@@ -11915,6 +12077,7 @@ impl ApiGateway for ApiGatewayClient {
         &self,
         input: GetAuthorizersRequest,
     ) -> Result<Authorizers, RusotoError<GetAuthorizersError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/restapis/{restapi_id}/authorizers",
             restapi_id = input.rest_api_id
@@ -11955,6 +12118,7 @@ impl ApiGateway for ApiGatewayClient {
         &self,
         input: GetBasePathMappingRequest,
     ) -> Result<BasePathMapping, RusotoError<GetBasePathMappingError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/domainnames/{domain_name}/basepathmappings/{base_path}",
             base_path = input.base_path,
@@ -11987,6 +12151,7 @@ impl ApiGateway for ApiGatewayClient {
         &self,
         input: GetBasePathMappingsRequest,
     ) -> Result<BasePathMappings, RusotoError<GetBasePathMappingsError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/domainnames/{domain_name}/basepathmappings",
             domain_name = input.domain_name
@@ -12027,6 +12192,7 @@ impl ApiGateway for ApiGatewayClient {
         &self,
         input: GetClientCertificateRequest,
     ) -> Result<ClientCertificate, RusotoError<GetClientCertificateError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/clientcertificates/{clientcertificate_id}",
             clientcertificate_id = input.client_certificate_id
@@ -12058,6 +12224,7 @@ impl ApiGateway for ApiGatewayClient {
         &self,
         input: GetClientCertificatesRequest,
     ) -> Result<ClientCertificates, RusotoError<GetClientCertificatesError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/clientcertificates";
 
         let mut request = SignedRequest::new("GET", "apigateway", &self.region, &request_uri);
@@ -12095,6 +12262,7 @@ impl ApiGateway for ApiGatewayClient {
         &self,
         input: GetDeploymentRequest,
     ) -> Result<Deployment, RusotoError<GetDeploymentError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/restapis/{restapi_id}/deployments/{deployment_id}",
             deployment_id = input.deployment_id,
@@ -12135,6 +12303,7 @@ impl ApiGateway for ApiGatewayClient {
         &self,
         input: GetDeploymentsRequest,
     ) -> Result<Deployments, RusotoError<GetDeploymentsError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/restapis/{restapi_id}/deployments",
             restapi_id = input.rest_api_id
@@ -12174,6 +12343,7 @@ impl ApiGateway for ApiGatewayClient {
         &self,
         input: GetDocumentationPartRequest,
     ) -> Result<DocumentationPart, RusotoError<GetDocumentationPartError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/restapis/{restapi_id}/documentation/parts/{part_id}",
             part_id = input.documentation_part_id,
@@ -12205,6 +12375,7 @@ impl ApiGateway for ApiGatewayClient {
         &self,
         input: GetDocumentationPartsRequest,
     ) -> Result<DocumentationParts, RusotoError<GetDocumentationPartsError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/restapis/{restapi_id}/documentation/parts",
             restapi_id = input.rest_api_id
@@ -12256,6 +12427,7 @@ impl ApiGateway for ApiGatewayClient {
         &self,
         input: GetDocumentationVersionRequest,
     ) -> Result<DocumentationVersion, RusotoError<GetDocumentationVersionError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/restapis/{restapi_id}/documentation/versions/{doc_version}",
             doc_version = input.documentation_version,
@@ -12287,6 +12459,7 @@ impl ApiGateway for ApiGatewayClient {
         &self,
         input: GetDocumentationVersionsRequest,
     ) -> Result<DocumentationVersions, RusotoError<GetDocumentationVersionsError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/restapis/{restapi_id}/documentation/versions",
             restapi_id = input.rest_api_id
@@ -12327,6 +12500,7 @@ impl ApiGateway for ApiGatewayClient {
         &self,
         input: GetDomainNameRequest,
     ) -> Result<DomainName, RusotoError<GetDomainNameError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/domainnames/{domain_name}",
             domain_name = input.domain_name
@@ -12358,6 +12532,7 @@ impl ApiGateway for ApiGatewayClient {
         &self,
         input: GetDomainNamesRequest,
     ) -> Result<DomainNames, RusotoError<GetDomainNamesError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/domainnames";
 
         let mut request = SignedRequest::new("GET", "apigateway", &self.region, &request_uri);
@@ -12395,6 +12570,7 @@ impl ApiGateway for ApiGatewayClient {
         &self,
         input: GetExportRequest,
     ) -> Result<ExportResponse, RusotoError<GetExportError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/restapis/{restapi_id}/stages/{stage_name}/exports/{export_type}",
             export_type = input.export_type,
@@ -12422,8 +12598,10 @@ impl ApiGateway for ApiGatewayClient {
         if response.status.as_u16() == 200 {
             let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
 
-            let mut result = ExportResponse::default();
-            result.body = Some(response.body);
+            let mut result = ExportResponse {
+                body: Some(response.body),
+                ..ExportResponse::default()
+            };
 
             result.content_disposition = response.headers.remove("Content-Disposition");
             result.content_type = response.headers.remove("Content-Type");
@@ -12441,6 +12619,7 @@ impl ApiGateway for ApiGatewayClient {
         &self,
         input: GetGatewayResponseRequest,
     ) -> Result<GatewayResponse, RusotoError<GetGatewayResponseError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/restapis/{restapi_id}/gatewayresponses/{response_type}",
             response_type = input.response_type,
@@ -12473,6 +12652,7 @@ impl ApiGateway for ApiGatewayClient {
         &self,
         input: GetGatewayResponsesRequest,
     ) -> Result<GatewayResponses, RusotoError<GetGatewayResponsesError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/restapis/{restapi_id}/gatewayresponses",
             restapi_id = input.rest_api_id
@@ -12513,6 +12693,7 @@ impl ApiGateway for ApiGatewayClient {
         &self,
         input: GetIntegrationRequest,
     ) -> Result<Integration, RusotoError<GetIntegrationError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/restapis/{restapi_id}/resources/{resource_id}/methods/{http_method}/integration",
             http_method = input.http_method,
@@ -12546,6 +12727,7 @@ impl ApiGateway for ApiGatewayClient {
         &self,
         input: GetIntegrationResponseRequest,
     ) -> Result<IntegrationResponse, RusotoError<GetIntegrationResponseError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!("/restapis/{restapi_id}/resources/{resource_id}/methods/{http_method}/integration/responses/{status_code}", http_method = input.http_method, resource_id = input.resource_id, restapi_id = input.rest_api_id, status_code = input.status_code);
 
         let mut request = SignedRequest::new("GET", "apigateway", &self.region, &request_uri);
@@ -12574,6 +12756,7 @@ impl ApiGateway for ApiGatewayClient {
         &self,
         input: GetMethodRequest,
     ) -> Result<Method, RusotoError<GetMethodError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/restapis/{restapi_id}/resources/{resource_id}/methods/{http_method}",
             http_method = input.http_method,
@@ -12606,6 +12789,7 @@ impl ApiGateway for ApiGatewayClient {
         &self,
         input: GetMethodResponseRequest,
     ) -> Result<MethodResponse, RusotoError<GetMethodResponseError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!("/restapis/{restapi_id}/resources/{resource_id}/methods/{http_method}/responses/{status_code}", http_method = input.http_method, resource_id = input.resource_id, restapi_id = input.rest_api_id, status_code = input.status_code);
 
         let mut request = SignedRequest::new("GET", "apigateway", &self.region, &request_uri);
@@ -12631,6 +12815,7 @@ impl ApiGateway for ApiGatewayClient {
     /// <p>Describes an existing model defined for a <a>RestApi</a> resource.</p>
     #[allow(unused_mut)]
     async fn get_model(&self, input: GetModelRequest) -> Result<Model, RusotoError<GetModelError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/restapis/{restapi_id}/models/{model_name}",
             model_name = input.model_name,
@@ -12668,6 +12853,7 @@ impl ApiGateway for ApiGatewayClient {
         &self,
         input: GetModelTemplateRequest,
     ) -> Result<Template, RusotoError<GetModelTemplateError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/restapis/{restapi_id}/models/{model_name}/default_template",
             model_name = input.model_name,
@@ -12700,6 +12886,7 @@ impl ApiGateway for ApiGatewayClient {
         &self,
         input: GetModelsRequest,
     ) -> Result<Models, RusotoError<GetModelsError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/restapis/{restapi_id}/models",
             restapi_id = input.rest_api_id
@@ -12739,6 +12926,7 @@ impl ApiGateway for ApiGatewayClient {
         &self,
         input: GetRequestValidatorRequest,
     ) -> Result<RequestValidator, RusotoError<GetRequestValidatorError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/restapis/{restapi_id}/requestvalidators/{requestvalidator_id}",
             requestvalidator_id = input.request_validator_id,
@@ -12771,6 +12959,7 @@ impl ApiGateway for ApiGatewayClient {
         &self,
         input: GetRequestValidatorsRequest,
     ) -> Result<RequestValidators, RusotoError<GetRequestValidatorsError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/restapis/{restapi_id}/requestvalidators",
             restapi_id = input.rest_api_id
@@ -12811,6 +13000,7 @@ impl ApiGateway for ApiGatewayClient {
         &self,
         input: GetResourceRequest,
     ) -> Result<Resource, RusotoError<GetResourceError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/restapis/{restapi_id}/resources/{resource_id}",
             resource_id = input.resource_id,
@@ -12851,6 +13041,7 @@ impl ApiGateway for ApiGatewayClient {
         &self,
         input: GetResourcesRequest,
     ) -> Result<Resources, RusotoError<GetResourcesError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/restapis/{restapi_id}/resources",
             restapi_id = input.rest_api_id
@@ -12896,6 +13087,7 @@ impl ApiGateway for ApiGatewayClient {
         &self,
         input: GetRestApiRequest,
     ) -> Result<RestApi, RusotoError<GetRestApiError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!("/restapis/{restapi_id}", restapi_id = input.rest_api_id);
 
         let mut request = SignedRequest::new("GET", "apigateway", &self.region, &request_uri);
@@ -12924,6 +13116,7 @@ impl ApiGateway for ApiGatewayClient {
         &self,
         input: GetRestApisRequest,
     ) -> Result<RestApis, RusotoError<GetRestApisError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/restapis";
 
         let mut request = SignedRequest::new("GET", "apigateway", &self.region, &request_uri);
@@ -12958,6 +13151,7 @@ impl ApiGateway for ApiGatewayClient {
     /// <p>Generates a client SDK for a <a>RestApi</a> and <a>Stage</a>.</p>
     #[allow(unused_mut)]
     async fn get_sdk(&self, input: GetSdkRequest) -> Result<SdkResponse, RusotoError<GetSdkError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/restapis/{restapi_id}/stages/{stage_name}/sdks/{sdk_type}",
             restapi_id = input.rest_api_id,
@@ -12984,8 +13178,10 @@ impl ApiGateway for ApiGatewayClient {
         if response.status.as_u16() == 200 {
             let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
 
-            let mut result = SdkResponse::default();
-            result.body = Some(response.body);
+            let mut result = SdkResponse {
+                body: Some(response.body),
+                ..SdkResponse::default()
+            };
 
             result.content_disposition = response.headers.remove("Content-Disposition");
             result.content_type = response.headers.remove("Content-Type");
@@ -13002,6 +13198,7 @@ impl ApiGateway for ApiGatewayClient {
         &self,
         input: GetSdkTypeRequest,
     ) -> Result<SdkType, RusotoError<GetSdkTypeError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!("/sdktypes/{sdktype_id}", sdktype_id = input.id);
 
         let mut request = SignedRequest::new("GET", "apigateway", &self.region, &request_uri);
@@ -13029,6 +13226,7 @@ impl ApiGateway for ApiGatewayClient {
         &self,
         input: GetSdkTypesRequest,
     ) -> Result<SdkTypes, RusotoError<GetSdkTypesError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/sdktypes";
 
         let mut request = SignedRequest::new("GET", "apigateway", &self.region, &request_uri);
@@ -13063,6 +13261,7 @@ impl ApiGateway for ApiGatewayClient {
     /// <p>Gets information about a <a>Stage</a> resource.</p>
     #[allow(unused_mut)]
     async fn get_stage(&self, input: GetStageRequest) -> Result<Stage, RusotoError<GetStageError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/restapis/{restapi_id}/stages/{stage_name}",
             restapi_id = input.rest_api_id,
@@ -13094,6 +13293,7 @@ impl ApiGateway for ApiGatewayClient {
         &self,
         input: GetStagesRequest,
     ) -> Result<Stages, RusotoError<GetStagesError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/restapis/{restapi_id}/stages",
             restapi_id = input.rest_api_id
@@ -13127,6 +13327,7 @@ impl ApiGateway for ApiGatewayClient {
     /// <p>Gets the <a>Tags</a> collection for a given resource.</p>
     #[allow(unused_mut)]
     async fn get_tags(&self, input: GetTagsRequest) -> Result<Tags, RusotoError<GetTagsError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!("/tags/{resource_arn}", resource_arn = input.resource_arn);
 
         let mut request = SignedRequest::new("GET", "apigateway", &self.region, &request_uri);
@@ -13160,6 +13361,7 @@ impl ApiGateway for ApiGatewayClient {
     /// <p>Gets the usage data of a usage plan in a specified time interval.</p>
     #[allow(unused_mut)]
     async fn get_usage(&self, input: GetUsageRequest) -> Result<Usage, RusotoError<GetUsageError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/usageplans/{usageplan_id}/usage",
             usageplan_id = input.usage_plan_id
@@ -13204,6 +13406,7 @@ impl ApiGateway for ApiGatewayClient {
         &self,
         input: GetUsagePlanRequest,
     ) -> Result<UsagePlan, RusotoError<GetUsagePlanError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/usageplans/{usageplan_id}",
             usageplan_id = input.usage_plan_id
@@ -13235,6 +13438,7 @@ impl ApiGateway for ApiGatewayClient {
         &self,
         input: GetUsagePlanKeyRequest,
     ) -> Result<UsagePlanKey, RusotoError<GetUsagePlanKeyError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/usageplans/{usageplan_id}/keys/{key_id}",
             key_id = input.key_id,
@@ -13267,6 +13471,7 @@ impl ApiGateway for ApiGatewayClient {
         &self,
         input: GetUsagePlanKeysRequest,
     ) -> Result<UsagePlanKeys, RusotoError<GetUsagePlanKeysError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/usageplans/{usageplan_id}/keys",
             usageplan_id = input.usage_plan_id
@@ -13310,6 +13515,7 @@ impl ApiGateway for ApiGatewayClient {
         &self,
         input: GetUsagePlansRequest,
     ) -> Result<UsagePlans, RusotoError<GetUsagePlansError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/usageplans";
 
         let mut request = SignedRequest::new("GET", "apigateway", &self.region, &request_uri);
@@ -13350,6 +13556,7 @@ impl ApiGateway for ApiGatewayClient {
         &self,
         input: GetVpcLinkRequest,
     ) -> Result<VpcLink, RusotoError<GetVpcLinkError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!("/vpclinks/{vpclink_id}", vpclink_id = input.vpc_link_id);
 
         let mut request = SignedRequest::new("GET", "apigateway", &self.region, &request_uri);
@@ -13378,6 +13585,7 @@ impl ApiGateway for ApiGatewayClient {
         &self,
         input: GetVpcLinksRequest,
     ) -> Result<VpcLinks, RusotoError<GetVpcLinksError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/vpclinks";
 
         let mut request = SignedRequest::new("GET", "apigateway", &self.region, &request_uri);
@@ -13415,6 +13623,7 @@ impl ApiGateway for ApiGatewayClient {
         &self,
         input: ImportApiKeysRequest,
     ) -> Result<ApiKeyIds, RusotoError<ImportApiKeysError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/apikeys";
 
         let mut request = SignedRequest::new("POST", "apigateway", &self.region, &request_uri);
@@ -13453,6 +13662,7 @@ impl ApiGateway for ApiGatewayClient {
         &self,
         input: ImportDocumentationPartsRequest,
     ) -> Result<DocumentationPartIds, RusotoError<ImportDocumentationPartsError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/restapis/{restapi_id}/documentation/parts",
             restapi_id = input.rest_api_id
@@ -13496,6 +13706,7 @@ impl ApiGateway for ApiGatewayClient {
         &self,
         input: ImportRestApiRequest,
     ) -> Result<RestApi, RusotoError<ImportRestApiError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/restapis";
 
         let mut request = SignedRequest::new("POST", "apigateway", &self.region, &request_uri);
@@ -13539,6 +13750,7 @@ impl ApiGateway for ApiGatewayClient {
         &self,
         input: PutGatewayResponseRequest,
     ) -> Result<GatewayResponse, RusotoError<PutGatewayResponseError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/restapis/{restapi_id}/gatewayresponses/{response_type}",
             response_type = input.response_type,
@@ -13574,6 +13786,7 @@ impl ApiGateway for ApiGatewayClient {
         &self,
         input: PutIntegrationRequest,
     ) -> Result<Integration, RusotoError<PutIntegrationError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/restapis/{restapi_id}/resources/{resource_id}/methods/{http_method}/integration",
             http_method = input.http_method,
@@ -13610,6 +13823,7 @@ impl ApiGateway for ApiGatewayClient {
         &self,
         input: PutIntegrationResponseRequest,
     ) -> Result<IntegrationResponse, RusotoError<PutIntegrationResponseError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!("/restapis/{restapi_id}/resources/{resource_id}/methods/{http_method}/integration/responses/{status_code}", http_method = input.http_method, resource_id = input.resource_id, restapi_id = input.rest_api_id, status_code = input.status_code);
 
         let mut request = SignedRequest::new("PUT", "apigateway", &self.region, &request_uri);
@@ -13641,6 +13855,7 @@ impl ApiGateway for ApiGatewayClient {
         &self,
         input: PutMethodRequest,
     ) -> Result<Method, RusotoError<PutMethodError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/restapis/{restapi_id}/resources/{resource_id}/methods/{http_method}",
             http_method = input.http_method,
@@ -13676,6 +13891,7 @@ impl ApiGateway for ApiGatewayClient {
         &self,
         input: PutMethodResponseRequest,
     ) -> Result<MethodResponse, RusotoError<PutMethodResponseError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!("/restapis/{restapi_id}/resources/{resource_id}/methods/{http_method}/responses/{status_code}", http_method = input.http_method, resource_id = input.resource_id, restapi_id = input.rest_api_id, status_code = input.status_code);
 
         let mut request = SignedRequest::new("PUT", "apigateway", &self.region, &request_uri);
@@ -13707,6 +13923,7 @@ impl ApiGateway for ApiGatewayClient {
         &self,
         input: PutRestApiRequest,
     ) -> Result<RestApi, RusotoError<PutRestApiError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!("/restapis/{restapi_id}", restapi_id = input.rest_api_id);
 
         let mut request = SignedRequest::new("PUT", "apigateway", &self.region, &request_uri);
@@ -13752,6 +13969,7 @@ impl ApiGateway for ApiGatewayClient {
         &self,
         input: TagResourceRequest,
     ) -> Result<(), RusotoError<TagResourceError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!("/tags/{resource_arn}", resource_arn = input.resource_arn);
 
         let mut request = SignedRequest::new("PUT", "apigateway", &self.region, &request_uri);
@@ -13767,9 +13985,9 @@ impl ApiGateway for ApiGatewayClient {
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 204 {
             let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = ::std::mem::drop(response);
+            let _result = ::std::mem::drop(response);
 
-            Ok(result)
+            Ok(())
         } else {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             Err(TagResourceError::from_response(response))
@@ -13782,6 +14000,7 @@ impl ApiGateway for ApiGatewayClient {
         &self,
         input: TestInvokeAuthorizerRequest,
     ) -> Result<TestInvokeAuthorizerResponse, RusotoError<TestInvokeAuthorizerError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/restapis/{restapi_id}/authorizers/{authorizer_id}",
             authorizer_id = input.authorizer_id,
@@ -13817,6 +14036,7 @@ impl ApiGateway for ApiGatewayClient {
         &self,
         input: TestInvokeMethodRequest,
     ) -> Result<TestInvokeMethodResponse, RusotoError<TestInvokeMethodError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/restapis/{restapi_id}/resources/{resource_id}/methods/{http_method}",
             http_method = input.http_method,
@@ -13853,6 +14073,7 @@ impl ApiGateway for ApiGatewayClient {
         &self,
         input: UntagResourceRequest,
     ) -> Result<(), RusotoError<UntagResourceError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!("/tags/{resource_arn}", resource_arn = input.resource_arn);
 
         let mut request = SignedRequest::new("DELETE", "apigateway", &self.region, &request_uri);
@@ -13871,9 +14092,9 @@ impl ApiGateway for ApiGatewayClient {
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 204 {
             let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = ::std::mem::drop(response);
+            let _result = ::std::mem::drop(response);
 
-            Ok(result)
+            Ok(())
         } else {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             Err(UntagResourceError::from_response(response))
@@ -13886,6 +14107,7 @@ impl ApiGateway for ApiGatewayClient {
         &self,
         input: UpdateAccountRequest,
     ) -> Result<Account, RusotoError<UpdateAccountError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/account";
 
         let mut request = SignedRequest::new("PATCH", "apigateway", &self.region, &request_uri);
@@ -13917,6 +14139,7 @@ impl ApiGateway for ApiGatewayClient {
         &self,
         input: UpdateApiKeyRequest,
     ) -> Result<ApiKey, RusotoError<UpdateApiKeyError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!("/apikeys/{api_key}", api_key = input.api_key);
 
         let mut request = SignedRequest::new("PATCH", "apigateway", &self.region, &request_uri);
@@ -13947,6 +14170,7 @@ impl ApiGateway for ApiGatewayClient {
         &self,
         input: UpdateAuthorizerRequest,
     ) -> Result<Authorizer, RusotoError<UpdateAuthorizerError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/restapis/{restapi_id}/authorizers/{authorizer_id}",
             authorizer_id = input.authorizer_id,
@@ -13982,6 +14206,7 @@ impl ApiGateway for ApiGatewayClient {
         &self,
         input: UpdateBasePathMappingRequest,
     ) -> Result<BasePathMapping, RusotoError<UpdateBasePathMappingError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/domainnames/{domain_name}/basepathmappings/{base_path}",
             base_path = input.base_path,
@@ -14017,6 +14242,7 @@ impl ApiGateway for ApiGatewayClient {
         &self,
         input: UpdateClientCertificateRequest,
     ) -> Result<ClientCertificate, RusotoError<UpdateClientCertificateError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/clientcertificates/{clientcertificate_id}",
             clientcertificate_id = input.client_certificate_id
@@ -14051,6 +14277,7 @@ impl ApiGateway for ApiGatewayClient {
         &self,
         input: UpdateDeploymentRequest,
     ) -> Result<Deployment, RusotoError<UpdateDeploymentError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/restapis/{restapi_id}/deployments/{deployment_id}",
             deployment_id = input.deployment_id,
@@ -14085,6 +14312,7 @@ impl ApiGateway for ApiGatewayClient {
         &self,
         input: UpdateDocumentationPartRequest,
     ) -> Result<DocumentationPart, RusotoError<UpdateDocumentationPartError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/restapis/{restapi_id}/documentation/parts/{part_id}",
             part_id = input.documentation_part_id,
@@ -14119,6 +14347,7 @@ impl ApiGateway for ApiGatewayClient {
         &self,
         input: UpdateDocumentationVersionRequest,
     ) -> Result<DocumentationVersion, RusotoError<UpdateDocumentationVersionError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/restapis/{restapi_id}/documentation/versions/{doc_version}",
             doc_version = input.documentation_version,
@@ -14154,6 +14383,7 @@ impl ApiGateway for ApiGatewayClient {
         &self,
         input: UpdateDomainNameRequest,
     ) -> Result<DomainName, RusotoError<UpdateDomainNameError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/domainnames/{domain_name}",
             domain_name = input.domain_name
@@ -14188,6 +14418,7 @@ impl ApiGateway for ApiGatewayClient {
         &self,
         input: UpdateGatewayResponseRequest,
     ) -> Result<GatewayResponse, RusotoError<UpdateGatewayResponseError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/restapis/{restapi_id}/gatewayresponses/{response_type}",
             response_type = input.response_type,
@@ -14223,6 +14454,7 @@ impl ApiGateway for ApiGatewayClient {
         &self,
         input: UpdateIntegrationRequest,
     ) -> Result<Integration, RusotoError<UpdateIntegrationError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/restapis/{restapi_id}/resources/{resource_id}/methods/{http_method}/integration",
             http_method = input.http_method,
@@ -14259,6 +14491,7 @@ impl ApiGateway for ApiGatewayClient {
         &self,
         input: UpdateIntegrationResponseRequest,
     ) -> Result<IntegrationResponse, RusotoError<UpdateIntegrationResponseError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!("/restapis/{restapi_id}/resources/{resource_id}/methods/{http_method}/integration/responses/{status_code}", http_method = input.http_method, resource_id = input.resource_id, restapi_id = input.rest_api_id, status_code = input.status_code);
 
         let mut request = SignedRequest::new("PATCH", "apigateway", &self.region, &request_uri);
@@ -14290,6 +14523,7 @@ impl ApiGateway for ApiGatewayClient {
         &self,
         input: UpdateMethodRequest,
     ) -> Result<Method, RusotoError<UpdateMethodError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/restapis/{restapi_id}/resources/{resource_id}/methods/{http_method}",
             http_method = input.http_method,
@@ -14325,6 +14559,7 @@ impl ApiGateway for ApiGatewayClient {
         &self,
         input: UpdateMethodResponseRequest,
     ) -> Result<MethodResponse, RusotoError<UpdateMethodResponseError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!("/restapis/{restapi_id}/resources/{resource_id}/methods/{http_method}/responses/{status_code}", http_method = input.http_method, resource_id = input.resource_id, restapi_id = input.rest_api_id, status_code = input.status_code);
 
         let mut request = SignedRequest::new("PATCH", "apigateway", &self.region, &request_uri);
@@ -14356,6 +14591,7 @@ impl ApiGateway for ApiGatewayClient {
         &self,
         input: UpdateModelRequest,
     ) -> Result<Model, RusotoError<UpdateModelError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/restapis/{restapi_id}/models/{model_name}",
             model_name = input.model_name,
@@ -14390,6 +14626,7 @@ impl ApiGateway for ApiGatewayClient {
         &self,
         input: UpdateRequestValidatorRequest,
     ) -> Result<RequestValidator, RusotoError<UpdateRequestValidatorError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/restapis/{restapi_id}/requestvalidators/{requestvalidator_id}",
             requestvalidator_id = input.request_validator_id,
@@ -14425,6 +14662,7 @@ impl ApiGateway for ApiGatewayClient {
         &self,
         input: UpdateResourceRequest,
     ) -> Result<Resource, RusotoError<UpdateResourceError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/restapis/{restapi_id}/resources/{resource_id}",
             resource_id = input.resource_id,
@@ -14460,6 +14698,7 @@ impl ApiGateway for ApiGatewayClient {
         &self,
         input: UpdateRestApiRequest,
     ) -> Result<RestApi, RusotoError<UpdateRestApiError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!("/restapis/{restapi_id}", restapi_id = input.rest_api_id);
 
         let mut request = SignedRequest::new("PATCH", "apigateway", &self.region, &request_uri);
@@ -14491,6 +14730,7 @@ impl ApiGateway for ApiGatewayClient {
         &self,
         input: UpdateStageRequest,
     ) -> Result<Stage, RusotoError<UpdateStageError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/restapis/{restapi_id}/stages/{stage_name}",
             restapi_id = input.rest_api_id,
@@ -14525,6 +14765,7 @@ impl ApiGateway for ApiGatewayClient {
         &self,
         input: UpdateUsageRequest,
     ) -> Result<Usage, RusotoError<UpdateUsageError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/usageplans/{usageplan_id}/keys/{key_id}/usage",
             key_id = input.key_id,
@@ -14559,6 +14800,7 @@ impl ApiGateway for ApiGatewayClient {
         &self,
         input: UpdateUsagePlanRequest,
     ) -> Result<UsagePlan, RusotoError<UpdateUsagePlanError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/usageplans/{usageplan_id}",
             usageplan_id = input.usage_plan_id
@@ -14593,6 +14835,7 @@ impl ApiGateway for ApiGatewayClient {
         &self,
         input: UpdateVpcLinkRequest,
     ) -> Result<VpcLink, RusotoError<UpdateVpcLinkError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!("/vpclinks/{vpclink_id}", vpclink_id = input.vpc_link_id);
 
         let mut request = SignedRequest::new("PATCH", "apigateway", &self.region, &request_uri);

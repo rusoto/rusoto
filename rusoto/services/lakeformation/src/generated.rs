@@ -50,7 +50,6 @@ impl LakeFormationClient {
     }
 }
 
-use serde_json;
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct BatchGrantPermissionsRequest {
@@ -636,6 +635,7 @@ pub enum BatchGrantPermissionsError {
 impl BatchGrantPermissionsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<BatchGrantPermissionsError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidInputException" => {
                     return RusotoError::Service(BatchGrantPermissionsError::InvalidInput(err.msg))
@@ -674,6 +674,7 @@ pub enum BatchRevokePermissionsError {
 impl BatchRevokePermissionsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<BatchRevokePermissionsError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidInputException" => {
                     return RusotoError::Service(BatchRevokePermissionsError::InvalidInput(err.msg))
@@ -716,6 +717,7 @@ pub enum DeregisterResourceError {
 impl DeregisterResourceError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeregisterResourceError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "EntityNotFoundException" => {
                     return RusotoError::Service(DeregisterResourceError::EntityNotFound(err.msg))
@@ -764,6 +766,7 @@ pub enum DescribeResourceError {
 impl DescribeResourceError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeResourceError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "EntityNotFoundException" => {
                     return RusotoError::Service(DescribeResourceError::EntityNotFound(err.msg))
@@ -810,6 +813,7 @@ pub enum GetDataLakeSettingsError {
 impl GetDataLakeSettingsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetDataLakeSettingsError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "EntityNotFoundException" => {
                     return RusotoError::Service(GetDataLakeSettingsError::EntityNotFound(err.msg))
@@ -856,6 +860,7 @@ impl GetEffectivePermissionsForPathError {
         res: BufferedHttpResponse,
     ) -> RusotoError<GetEffectivePermissionsForPathError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "EntityNotFoundException" => {
                     return RusotoError::Service(
@@ -916,6 +921,7 @@ pub enum GrantPermissionsError {
 impl GrantPermissionsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GrantPermissionsError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ConcurrentModificationException" => {
                     return RusotoError::Service(GrantPermissionsError::ConcurrentModification(
@@ -960,6 +966,7 @@ pub enum ListPermissionsError {
 impl ListPermissionsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListPermissionsError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalServiceException" => {
                     return RusotoError::Service(ListPermissionsError::InternalService(err.msg))
@@ -1002,6 +1009,7 @@ pub enum ListResourcesError {
 impl ListResourcesError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListResourcesError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalServiceException" => {
                     return RusotoError::Service(ListResourcesError::InternalService(err.msg))
@@ -1042,6 +1050,7 @@ pub enum PutDataLakeSettingsError {
 impl PutDataLakeSettingsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<PutDataLakeSettingsError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalServiceException" => {
                     return RusotoError::Service(PutDataLakeSettingsError::InternalService(err.msg))
@@ -1082,6 +1091,7 @@ pub enum RegisterResourceError {
 impl RegisterResourceError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<RegisterResourceError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AlreadyExistsException" => {
                     return RusotoError::Service(RegisterResourceError::AlreadyExists(err.msg))
@@ -1128,6 +1138,7 @@ pub enum RevokePermissionsError {
 impl RevokePermissionsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<RevokePermissionsError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ConcurrentModificationException" => {
                     return RusotoError::Service(RevokePermissionsError::ConcurrentModification(
@@ -1174,6 +1185,7 @@ pub enum UpdateResourceError {
 impl UpdateResourceError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateResourceError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "EntityNotFoundException" => {
                     return RusotoError::Service(UpdateResourceError::EntityNotFound(err.msg))

@@ -49,7 +49,6 @@ impl DynamodbAcceleratorClient {
     }
 }
 
-use serde_json;
 /// <p>Contains all of the attributes of a specific DAX cluster.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
@@ -1004,6 +1003,7 @@ pub enum CreateClusterError {
 impl CreateClusterError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateClusterError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ClusterAlreadyExistsFault" => {
                     return RusotoError::Service(CreateClusterError::ClusterAlreadyExistsFault(
@@ -1132,6 +1132,7 @@ pub enum CreateParameterGroupError {
 impl CreateParameterGroupError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateParameterGroupError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidParameterCombinationException" => {
                     return RusotoError::Service(
@@ -1212,6 +1213,7 @@ pub enum CreateSubnetGroupError {
 impl CreateSubnetGroupError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateSubnetGroupError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidSubnet" => {
                     return RusotoError::Service(CreateSubnetGroupError::InvalidSubnet(err.msg))
@@ -1282,6 +1284,7 @@ pub enum DecreaseReplicationFactorError {
 impl DecreaseReplicationFactorError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DecreaseReplicationFactorError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ClusterNotFoundFault" => {
                     return RusotoError::Service(
@@ -1362,6 +1365,7 @@ pub enum DeleteClusterError {
 impl DeleteClusterError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteClusterError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ClusterNotFoundFault" => {
                     return RusotoError::Service(DeleteClusterError::ClusterNotFoundFault(err.msg))
@@ -1422,6 +1426,7 @@ pub enum DeleteParameterGroupError {
 impl DeleteParameterGroupError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteParameterGroupError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidParameterCombinationException" => {
                     return RusotoError::Service(
@@ -1490,6 +1495,7 @@ pub enum DeleteSubnetGroupError {
 impl DeleteSubnetGroupError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteSubnetGroupError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ServiceLinkedRoleNotFoundFault" => {
                     return RusotoError::Service(
@@ -1542,6 +1548,7 @@ pub enum DescribeClustersError {
 impl DescribeClustersError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeClustersError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ClusterNotFoundFault" => {
                     return RusotoError::Service(DescribeClustersError::ClusterNotFoundFault(
@@ -1598,6 +1605,7 @@ pub enum DescribeDefaultParametersError {
 impl DescribeDefaultParametersError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeDefaultParametersError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidParameterCombinationException" => {
                     return RusotoError::Service(
@@ -1652,6 +1660,7 @@ pub enum DescribeEventsError {
 impl DescribeEventsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeEventsError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidParameterCombinationException" => {
                     return RusotoError::Service(DescribeEventsError::InvalidParameterCombination(
@@ -1704,6 +1713,7 @@ pub enum DescribeParameterGroupsError {
 impl DescribeParameterGroupsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeParameterGroupsError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidParameterCombinationException" => {
                     return RusotoError::Service(
@@ -1768,6 +1778,7 @@ pub enum DescribeParametersError {
 impl DescribeParametersError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeParametersError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidParameterCombinationException" => {
                     return RusotoError::Service(
@@ -1826,6 +1837,7 @@ pub enum DescribeSubnetGroupsError {
 impl DescribeSubnetGroupsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeSubnetGroupsError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ServiceLinkedRoleNotFoundFault" => {
                     return RusotoError::Service(
@@ -1884,6 +1896,7 @@ pub enum IncreaseReplicationFactorError {
 impl IncreaseReplicationFactorError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<IncreaseReplicationFactorError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ClusterNotFoundFault" => {
                     return RusotoError::Service(
@@ -1992,6 +2005,7 @@ pub enum ListTagsError {
 impl ListTagsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListTagsError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ClusterNotFoundFault" => {
                     return RusotoError::Service(ListTagsError::ClusterNotFoundFault(err.msg))
@@ -2056,6 +2070,7 @@ pub enum RebootNodeError {
 impl RebootNodeError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<RebootNodeError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ClusterNotFoundFault" => {
                     return RusotoError::Service(RebootNodeError::ClusterNotFoundFault(err.msg))
@@ -2122,6 +2137,7 @@ pub enum TagResourceError {
 impl TagResourceError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<TagResourceError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ClusterNotFoundFault" => {
                     return RusotoError::Service(TagResourceError::ClusterNotFoundFault(err.msg))
@@ -2196,6 +2212,7 @@ pub enum UntagResourceError {
 impl UntagResourceError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UntagResourceError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ClusterNotFoundFault" => {
                     return RusotoError::Service(UntagResourceError::ClusterNotFoundFault(err.msg))
@@ -2268,6 +2285,7 @@ pub enum UpdateClusterError {
 impl UpdateClusterError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateClusterError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ClusterNotFoundFault" => {
                     return RusotoError::Service(UpdateClusterError::ClusterNotFoundFault(err.msg))
@@ -2342,6 +2360,7 @@ pub enum UpdateParameterGroupError {
 impl UpdateParameterGroupError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateParameterGroupError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidParameterCombinationException" => {
                     return RusotoError::Service(
@@ -2414,6 +2433,7 @@ pub enum UpdateSubnetGroupError {
 impl UpdateSubnetGroupError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateSubnetGroupError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidSubnet" => {
                     return RusotoError::Service(UpdateSubnetGroupError::InvalidSubnet(err.msg))

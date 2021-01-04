@@ -54,7 +54,6 @@ impl Ec2InstanceConnectClient {
     }
 }
 
-use serde_json;
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct SendSSHPublicKeyRequest {
@@ -103,6 +102,7 @@ pub enum SendSSHPublicKeyError {
 impl SendSSHPublicKeyError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<SendSSHPublicKeyError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AuthException" => {
                     return RusotoError::Service(SendSSHPublicKeyError::Auth(err.msg))

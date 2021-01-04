@@ -24,7 +24,6 @@ use rusoto_core::proto;
 use rusoto_core::signature::SignedRequest;
 #[allow(unused_imports)]
 use serde::{Deserialize, Serialize};
-use serde_json;
 /// <p>The criteria that determine when and how a job abort takes place.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct AbortConfig {
@@ -9822,6 +9821,7 @@ pub enum AcceptCertificateTransferError {
 impl AcceptCertificateTransferError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<AcceptCertificateTransferError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalFailureException" => {
                     return RusotoError::Service(AcceptCertificateTransferError::InternalFailure(
@@ -9898,6 +9898,7 @@ pub enum AddThingToBillingGroupError {
 impl AddThingToBillingGroupError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<AddThingToBillingGroupError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalFailureException" => {
                     return RusotoError::Service(AddThingToBillingGroupError::InternalFailure(
@@ -9952,6 +9953,7 @@ pub enum AddThingToThingGroupError {
 impl AddThingToThingGroupError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<AddThingToThingGroupError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalFailureException" => {
                     return RusotoError::Service(AddThingToThingGroupError::InternalFailure(
@@ -10006,6 +10008,7 @@ pub enum AssociateTargetsWithJobError {
 impl AssociateTargetsWithJobError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<AssociateTargetsWithJobError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidRequestException" => {
                     return RusotoError::Service(AssociateTargetsWithJobError::InvalidRequest(
@@ -10072,6 +10075,7 @@ pub enum AttachPolicyError {
 impl AttachPolicyError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<AttachPolicyError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalFailureException" => {
                     return RusotoError::Service(AttachPolicyError::InternalFailure(err.msg))
@@ -10138,6 +10142,7 @@ pub enum AttachPrincipalPolicyError {
 impl AttachPrincipalPolicyError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<AttachPrincipalPolicyError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalFailureException" => {
                     return RusotoError::Service(AttachPrincipalPolicyError::InternalFailure(
@@ -10210,6 +10215,7 @@ pub enum AttachSecurityProfileError {
 impl AttachSecurityProfileError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<AttachSecurityProfileError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalFailureException" => {
                     return RusotoError::Service(AttachSecurityProfileError::InternalFailure(
@@ -10278,6 +10284,7 @@ pub enum AttachThingPrincipalError {
 impl AttachThingPrincipalError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<AttachThingPrincipalError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalFailureException" => {
                     return RusotoError::Service(AttachThingPrincipalError::InternalFailure(
@@ -10342,6 +10349,7 @@ impl CancelAuditMitigationActionsTaskError {
         res: BufferedHttpResponse,
     ) -> RusotoError<CancelAuditMitigationActionsTaskError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalFailureException" => {
                     return RusotoError::Service(
@@ -10404,6 +10412,7 @@ pub enum CancelAuditTaskError {
 impl CancelAuditTaskError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CancelAuditTaskError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalFailureException" => {
                     return RusotoError::Service(CancelAuditTaskError::InternalFailure(err.msg))
@@ -10458,6 +10467,7 @@ pub enum CancelCertificateTransferError {
 impl CancelCertificateTransferError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CancelCertificateTransferError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalFailureException" => {
                     return RusotoError::Service(CancelCertificateTransferError::InternalFailure(
@@ -10536,6 +10546,7 @@ impl CancelDetectMitigationActionsTaskError {
         res: BufferedHttpResponse,
     ) -> RusotoError<CancelDetectMitigationActionsTaskError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalFailureException" => {
                     return RusotoError::Service(
@@ -10598,6 +10609,7 @@ pub enum CancelJobError {
 impl CancelJobError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CancelJobError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidRequestException" => {
                     return RusotoError::Service(CancelJobError::InvalidRequest(err.msg))
@@ -10650,6 +10662,7 @@ pub enum CancelJobExecutionError {
 impl CancelJobExecutionError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CancelJobExecutionError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidRequestException" => {
                     return RusotoError::Service(CancelJobExecutionError::InvalidRequest(err.msg))
@@ -10714,6 +10727,7 @@ pub enum ClearDefaultAuthorizerError {
 impl ClearDefaultAuthorizerError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ClearDefaultAuthorizerError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalFailureException" => {
                     return RusotoError::Service(ClearDefaultAuthorizerError::InternalFailure(
@@ -10782,6 +10796,7 @@ impl ConfirmTopicRuleDestinationError {
         res: BufferedHttpResponse,
     ) -> RusotoError<ConfirmTopicRuleDestinationError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ConflictingResourceUpdateException" => {
                     return RusotoError::Service(
@@ -10850,6 +10865,7 @@ pub enum CreateAuditSuppressionError {
 impl CreateAuditSuppressionError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateAuditSuppressionError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalFailureException" => {
                     return RusotoError::Service(CreateAuditSuppressionError::InternalFailure(
@@ -10916,6 +10932,7 @@ pub enum CreateAuthorizerError {
 impl CreateAuthorizerError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateAuthorizerError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalFailureException" => {
                     return RusotoError::Service(CreateAuthorizerError::InternalFailure(err.msg))
@@ -10978,6 +10995,7 @@ pub enum CreateBillingGroupError {
 impl CreateBillingGroupError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateBillingGroupError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalFailureException" => {
                     return RusotoError::Service(CreateBillingGroupError::InternalFailure(err.msg))
@@ -11030,6 +11048,7 @@ pub enum CreateCertificateFromCsrError {
 impl CreateCertificateFromCsrError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateCertificateFromCsrError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalFailureException" => {
                     return RusotoError::Service(CreateCertificateFromCsrError::InternalFailure(
@@ -11092,6 +11111,7 @@ pub enum CreateCustomMetricError {
 impl CreateCustomMetricError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateCustomMetricError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalFailureException" => {
                     return RusotoError::Service(CreateCustomMetricError::InternalFailure(err.msg))
@@ -11148,6 +11168,7 @@ pub enum CreateDimensionError {
 impl CreateDimensionError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateDimensionError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalFailureException" => {
                     return RusotoError::Service(CreateDimensionError::InternalFailure(err.msg))
@@ -11210,6 +11231,7 @@ pub enum CreateDomainConfigurationError {
 impl CreateDomainConfigurationError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateDomainConfigurationError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "CertificateValidationException" => {
                     return RusotoError::Service(
@@ -11300,6 +11322,7 @@ pub enum CreateDynamicThingGroupError {
 impl CreateDynamicThingGroupError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateDynamicThingGroupError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalFailureException" => {
                     return RusotoError::Service(CreateDynamicThingGroupError::InternalFailure(
@@ -11378,6 +11401,7 @@ pub enum CreateJobError {
 impl CreateJobError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateJobError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidRequestException" => {
                     return RusotoError::Service(CreateJobError::InvalidRequest(err.msg))
@@ -11436,6 +11460,7 @@ pub enum CreateKeysAndCertificateError {
 impl CreateKeysAndCertificateError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateKeysAndCertificateError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalFailureException" => {
                     return RusotoError::Service(CreateKeysAndCertificateError::InternalFailure(
@@ -11498,6 +11523,7 @@ pub enum CreateMitigationActionError {
 impl CreateMitigationActionError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateMitigationActionError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalFailureException" => {
                     return RusotoError::Service(CreateMitigationActionError::InternalFailure(
@@ -11566,6 +11592,7 @@ pub enum CreateOTAUpdateError {
 impl CreateOTAUpdateError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateOTAUpdateError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalFailureException" => {
                     return RusotoError::Service(CreateOTAUpdateError::InternalFailure(err.msg))
@@ -11638,6 +11665,7 @@ pub enum CreatePolicyError {
 impl CreatePolicyError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreatePolicyError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalFailureException" => {
                     return RusotoError::Service(CreatePolicyError::InternalFailure(err.msg))
@@ -11706,6 +11734,7 @@ pub enum CreatePolicyVersionError {
 impl CreatePolicyVersionError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreatePolicyVersionError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalFailureException" => {
                     return RusotoError::Service(CreatePolicyVersionError::InternalFailure(err.msg))
@@ -11780,6 +11809,7 @@ pub enum CreateProvisioningClaimError {
 impl CreateProvisioningClaimError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateProvisioningClaimError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalFailureException" => {
                     return RusotoError::Service(CreateProvisioningClaimError::InternalFailure(
@@ -11852,6 +11882,7 @@ impl CreateProvisioningTemplateError {
         res: BufferedHttpResponse,
     ) -> RusotoError<CreateProvisioningTemplateError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalFailureException" => {
                     return RusotoError::Service(CreateProvisioningTemplateError::InternalFailure(
@@ -11930,6 +11961,7 @@ impl CreateProvisioningTemplateVersionError {
         res: BufferedHttpResponse,
     ) -> RusotoError<CreateProvisioningTemplateVersionError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ConflictingResourceUpdateException" => {
                     return RusotoError::Service(
@@ -12022,6 +12054,7 @@ pub enum CreateRoleAliasError {
 impl CreateRoleAliasError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateRoleAliasError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalFailureException" => {
                     return RusotoError::Service(CreateRoleAliasError::InternalFailure(err.msg))
@@ -12086,6 +12119,7 @@ pub enum CreateScheduledAuditError {
 impl CreateScheduledAuditError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateScheduledAuditError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalFailureException" => {
                     return RusotoError::Service(CreateScheduledAuditError::InternalFailure(
@@ -12142,6 +12176,7 @@ pub enum CreateSecurityProfileError {
 impl CreateSecurityProfileError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateSecurityProfileError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalFailureException" => {
                     return RusotoError::Service(CreateSecurityProfileError::InternalFailure(
@@ -12204,6 +12239,7 @@ pub enum CreateStreamError {
 impl CreateStreamError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateStreamError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalFailureException" => {
                     return RusotoError::Service(CreateStreamError::InternalFailure(err.msg))
@@ -12274,6 +12310,7 @@ pub enum CreateThingError {
 impl CreateThingError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateThingError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalFailureException" => {
                     return RusotoError::Service(CreateThingError::InternalFailure(err.msg))
@@ -12334,6 +12371,7 @@ pub enum CreateThingGroupError {
 impl CreateThingGroupError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateThingGroupError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalFailureException" => {
                     return RusotoError::Service(CreateThingGroupError::InternalFailure(err.msg))
@@ -12388,6 +12426,7 @@ pub enum CreateThingTypeError {
 impl CreateThingTypeError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateThingTypeError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalFailureException" => {
                     return RusotoError::Service(CreateThingTypeError::InternalFailure(err.msg))
@@ -12450,6 +12489,7 @@ pub enum CreateTopicRuleError {
 impl CreateTopicRuleError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateTopicRuleError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ConflictingResourceUpdateException" => {
                     return RusotoError::Service(CreateTopicRuleError::ConflictingResourceUpdate(
@@ -12514,6 +12554,7 @@ impl CreateTopicRuleDestinationError {
         res: BufferedHttpResponse,
     ) -> RusotoError<CreateTopicRuleDestinationError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ConflictingResourceUpdateException" => {
                     return RusotoError::Service(
@@ -12582,6 +12623,7 @@ impl DeleteAccountAuditConfigurationError {
         res: BufferedHttpResponse,
     ) -> RusotoError<DeleteAccountAuditConfigurationError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalFailureException" => {
                     return RusotoError::Service(
@@ -12642,6 +12684,7 @@ pub enum DeleteAuditSuppressionError {
 impl DeleteAuditSuppressionError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteAuditSuppressionError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalFailureException" => {
                     return RusotoError::Service(DeleteAuditSuppressionError::InternalFailure(
@@ -12696,6 +12739,7 @@ pub enum DeleteAuthorizerError {
 impl DeleteAuthorizerError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteAuthorizerError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "DeleteConflictException" => {
                     return RusotoError::Service(DeleteAuthorizerError::DeleteConflict(err.msg))
@@ -12756,6 +12800,7 @@ pub enum DeleteBillingGroupError {
 impl DeleteBillingGroupError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteBillingGroupError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalFailureException" => {
                     return RusotoError::Service(DeleteBillingGroupError::InternalFailure(err.msg))
@@ -12810,6 +12855,7 @@ pub enum DeleteCACertificateError {
 impl DeleteCACertificateError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteCACertificateError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "CertificateStateException" => {
                     return RusotoError::Service(DeleteCACertificateError::CertificateState(
@@ -12884,6 +12930,7 @@ pub enum DeleteCertificateError {
 impl DeleteCertificateError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteCertificateError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "CertificateStateException" => {
                     return RusotoError::Service(DeleteCertificateError::CertificateState(err.msg))
@@ -12948,6 +12995,7 @@ pub enum DeleteCustomMetricError {
 impl DeleteCustomMetricError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteCustomMetricError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalFailureException" => {
                     return RusotoError::Service(DeleteCustomMetricError::InternalFailure(err.msg))
@@ -12990,6 +13038,7 @@ pub enum DeleteDimensionError {
 impl DeleteDimensionError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteDimensionError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalFailureException" => {
                     return RusotoError::Service(DeleteDimensionError::InternalFailure(err.msg))
@@ -13038,6 +13087,7 @@ pub enum DeleteDomainConfigurationError {
 impl DeleteDomainConfigurationError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteDomainConfigurationError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalFailureException" => {
                     return RusotoError::Service(DeleteDomainConfigurationError::InternalFailure(
@@ -13106,6 +13156,7 @@ pub enum DeleteDynamicThingGroupError {
 impl DeleteDynamicThingGroupError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteDynamicThingGroupError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalFailureException" => {
                     return RusotoError::Service(DeleteDynamicThingGroupError::InternalFailure(
@@ -13164,6 +13215,7 @@ pub enum DeleteJobError {
 impl DeleteJobError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteJobError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidRequestException" => {
                     return RusotoError::Service(DeleteJobError::InvalidRequest(err.msg))
@@ -13222,6 +13274,7 @@ pub enum DeleteJobExecutionError {
 impl DeleteJobExecutionError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteJobExecutionError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidRequestException" => {
                     return RusotoError::Service(DeleteJobExecutionError::InvalidRequest(err.msg))
@@ -13276,6 +13329,7 @@ pub enum DeleteMitigationActionError {
 impl DeleteMitigationActionError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteMitigationActionError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalFailureException" => {
                     return RusotoError::Service(DeleteMitigationActionError::InternalFailure(
@@ -13330,6 +13384,7 @@ pub enum DeleteOTAUpdateError {
 impl DeleteOTAUpdateError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteOTAUpdateError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalFailureException" => {
                     return RusotoError::Service(DeleteOTAUpdateError::InternalFailure(err.msg))
@@ -13396,6 +13451,7 @@ pub enum DeletePolicyError {
 impl DeletePolicyError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeletePolicyError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "DeleteConflictException" => {
                     return RusotoError::Service(DeletePolicyError::DeleteConflict(err.msg))
@@ -13462,6 +13518,7 @@ pub enum DeletePolicyVersionError {
 impl DeletePolicyVersionError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeletePolicyVersionError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "DeleteConflictException" => {
                     return RusotoError::Service(DeletePolicyVersionError::DeleteConflict(err.msg))
@@ -13534,6 +13591,7 @@ impl DeleteProvisioningTemplateError {
         res: BufferedHttpResponse,
     ) -> RusotoError<DeleteProvisioningTemplateError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ConflictingResourceUpdateException" => {
                     return RusotoError::Service(
@@ -13618,6 +13676,7 @@ impl DeleteProvisioningTemplateVersionError {
         res: BufferedHttpResponse,
     ) -> RusotoError<DeleteProvisioningTemplateVersionError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ConflictingResourceUpdateException" => {
                     return RusotoError::Service(
@@ -13706,6 +13765,7 @@ pub enum DeleteRegistrationCodeError {
 impl DeleteRegistrationCodeError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteRegistrationCodeError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalFailureException" => {
                     return RusotoError::Service(DeleteRegistrationCodeError::InternalFailure(
@@ -13770,6 +13830,7 @@ pub enum DeleteRoleAliasError {
 impl DeleteRoleAliasError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteRoleAliasError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "DeleteConflictException" => {
                     return RusotoError::Service(DeleteRoleAliasError::DeleteConflict(err.msg))
@@ -13830,6 +13891,7 @@ pub enum DeleteScheduledAuditError {
 impl DeleteScheduledAuditError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteScheduledAuditError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalFailureException" => {
                     return RusotoError::Service(DeleteScheduledAuditError::InternalFailure(
@@ -13882,6 +13944,7 @@ pub enum DeleteSecurityProfileError {
 impl DeleteSecurityProfileError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteSecurityProfileError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalFailureException" => {
                     return RusotoError::Service(DeleteSecurityProfileError::InternalFailure(
@@ -13942,6 +14005,7 @@ pub enum DeleteStreamError {
 impl DeleteStreamError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteStreamError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "DeleteConflictException" => {
                     return RusotoError::Service(DeleteStreamError::DeleteConflict(err.msg))
@@ -14008,6 +14072,7 @@ pub enum DeleteThingError {
 impl DeleteThingError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteThingError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalFailureException" => {
                     return RusotoError::Service(DeleteThingError::InternalFailure(err.msg))
@@ -14068,6 +14133,7 @@ pub enum DeleteThingGroupError {
 impl DeleteThingGroupError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteThingGroupError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalFailureException" => {
                     return RusotoError::Service(DeleteThingGroupError::InternalFailure(err.msg))
@@ -14120,6 +14186,7 @@ pub enum DeleteThingTypeError {
 impl DeleteThingTypeError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteThingTypeError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalFailureException" => {
                     return RusotoError::Service(DeleteThingTypeError::InternalFailure(err.msg))
@@ -14178,6 +14245,7 @@ pub enum DeleteTopicRuleError {
 impl DeleteTopicRuleError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteTopicRuleError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ConflictingResourceUpdateException" => {
                     return RusotoError::Service(DeleteTopicRuleError::ConflictingResourceUpdate(
@@ -14236,6 +14304,7 @@ impl DeleteTopicRuleDestinationError {
         res: BufferedHttpResponse,
     ) -> RusotoError<DeleteTopicRuleDestinationError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ConflictingResourceUpdateException" => {
                     return RusotoError::Service(
@@ -14298,6 +14367,7 @@ pub enum DeleteV2LoggingLevelError {
 impl DeleteV2LoggingLevelError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteV2LoggingLevelError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalException" => {
                     return RusotoError::Service(DeleteV2LoggingLevelError::Internal(err.msg))
@@ -14348,6 +14418,7 @@ pub enum DeprecateThingTypeError {
 impl DeprecateThingTypeError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeprecateThingTypeError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalFailureException" => {
                     return RusotoError::Service(DeprecateThingTypeError::InternalFailure(err.msg))
@@ -14404,6 +14475,7 @@ impl DescribeAccountAuditConfigurationError {
         res: BufferedHttpResponse,
     ) -> RusotoError<DescribeAccountAuditConfigurationError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalFailureException" => {
                     return RusotoError::Service(
@@ -14450,6 +14522,7 @@ pub enum DescribeAuditFindingError {
 impl DescribeAuditFindingError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeAuditFindingError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalFailureException" => {
                     return RusotoError::Service(DescribeAuditFindingError::InternalFailure(
@@ -14504,6 +14577,7 @@ impl DescribeAuditMitigationActionsTaskError {
         res: BufferedHttpResponse,
     ) -> RusotoError<DescribeAuditMitigationActionsTaskError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalFailureException" => {
                     return RusotoError::Service(
@@ -14568,6 +14642,7 @@ pub enum DescribeAuditSuppressionError {
 impl DescribeAuditSuppressionError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeAuditSuppressionError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalFailureException" => {
                     return RusotoError::Service(DescribeAuditSuppressionError::InternalFailure(
@@ -14622,6 +14697,7 @@ pub enum DescribeAuditTaskError {
 impl DescribeAuditTaskError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeAuditTaskError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalFailureException" => {
                     return RusotoError::Service(DescribeAuditTaskError::InternalFailure(err.msg))
@@ -14674,6 +14750,7 @@ pub enum DescribeAuthorizerError {
 impl DescribeAuthorizerError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeAuthorizerError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalFailureException" => {
                     return RusotoError::Service(DescribeAuthorizerError::InternalFailure(err.msg))
@@ -14732,6 +14809,7 @@ pub enum DescribeBillingGroupError {
 impl DescribeBillingGroupError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeBillingGroupError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalFailureException" => {
                     return RusotoError::Service(DescribeBillingGroupError::InternalFailure(
@@ -14788,6 +14866,7 @@ pub enum DescribeCACertificateError {
 impl DescribeCACertificateError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeCACertificateError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalFailureException" => {
                     return RusotoError::Service(DescribeCACertificateError::InternalFailure(
@@ -14856,6 +14935,7 @@ pub enum DescribeCertificateError {
 impl DescribeCertificateError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeCertificateError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalFailureException" => {
                     return RusotoError::Service(DescribeCertificateError::InternalFailure(err.msg))
@@ -14916,6 +14996,7 @@ pub enum DescribeCustomMetricError {
 impl DescribeCustomMetricError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeCustomMetricError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalFailureException" => {
                     return RusotoError::Service(DescribeCustomMetricError::InternalFailure(
@@ -14972,6 +15053,7 @@ pub enum DescribeDefaultAuthorizerError {
 impl DescribeDefaultAuthorizerError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeDefaultAuthorizerError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalFailureException" => {
                     return RusotoError::Service(DescribeDefaultAuthorizerError::InternalFailure(
@@ -15042,6 +15124,7 @@ impl DescribeDetectMitigationActionsTaskError {
         res: BufferedHttpResponse,
     ) -> RusotoError<DescribeDetectMitigationActionsTaskError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalFailureException" => {
                     return RusotoError::Service(
@@ -15106,6 +15189,7 @@ pub enum DescribeDimensionError {
 impl DescribeDimensionError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeDimensionError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalFailureException" => {
                     return RusotoError::Service(DescribeDimensionError::InternalFailure(err.msg))
@@ -15160,6 +15244,7 @@ impl DescribeDomainConfigurationError {
         res: BufferedHttpResponse,
     ) -> RusotoError<DescribeDomainConfigurationError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalFailureException" => {
                     return RusotoError::Service(DescribeDomainConfigurationError::InternalFailure(
@@ -15230,6 +15315,7 @@ pub enum DescribeEndpointError {
 impl DescribeEndpointError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeEndpointError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalFailureException" => {
                     return RusotoError::Service(DescribeEndpointError::InternalFailure(err.msg))
@@ -15276,6 +15362,7 @@ impl DescribeEventConfigurationsError {
         res: BufferedHttpResponse,
     ) -> RusotoError<DescribeEventConfigurationsError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalFailureException" => {
                     return RusotoError::Service(DescribeEventConfigurationsError::InternalFailure(
@@ -15324,6 +15411,7 @@ pub enum DescribeIndexError {
 impl DescribeIndexError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeIndexError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalFailureException" => {
                     return RusotoError::Service(DescribeIndexError::InternalFailure(err.msg))
@@ -15380,6 +15468,7 @@ pub enum DescribeJobError {
 impl DescribeJobError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeJobError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidRequestException" => {
                     return RusotoError::Service(DescribeJobError::InvalidRequest(err.msg))
@@ -15428,6 +15517,7 @@ pub enum DescribeJobExecutionError {
 impl DescribeJobExecutionError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeJobExecutionError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidRequestException" => {
                     return RusotoError::Service(DescribeJobExecutionError::InvalidRequest(err.msg))
@@ -15480,6 +15570,7 @@ pub enum DescribeMitigationActionError {
 impl DescribeMitigationActionError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeMitigationActionError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalFailureException" => {
                     return RusotoError::Service(DescribeMitigationActionError::InternalFailure(
@@ -15538,6 +15629,7 @@ impl DescribeProvisioningTemplateError {
         res: BufferedHttpResponse,
     ) -> RusotoError<DescribeProvisioningTemplateError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalFailureException" => {
                     return RusotoError::Service(
@@ -15606,6 +15698,7 @@ impl DescribeProvisioningTemplateVersionError {
         res: BufferedHttpResponse,
     ) -> RusotoError<DescribeProvisioningTemplateVersionError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalFailureException" => {
                     return RusotoError::Service(
@@ -15682,6 +15775,7 @@ pub enum DescribeRoleAliasError {
 impl DescribeRoleAliasError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeRoleAliasError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalFailureException" => {
                     return RusotoError::Service(DescribeRoleAliasError::InternalFailure(err.msg))
@@ -15740,6 +15834,7 @@ pub enum DescribeScheduledAuditError {
 impl DescribeScheduledAuditError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeScheduledAuditError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalFailureException" => {
                     return RusotoError::Service(DescribeScheduledAuditError::InternalFailure(
@@ -15794,6 +15889,7 @@ pub enum DescribeSecurityProfileError {
 impl DescribeSecurityProfileError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeSecurityProfileError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalFailureException" => {
                     return RusotoError::Service(DescribeSecurityProfileError::InternalFailure(
@@ -15852,6 +15948,7 @@ pub enum DescribeStreamError {
 impl DescribeStreamError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeStreamError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalFailureException" => {
                     return RusotoError::Service(DescribeStreamError::InternalFailure(err.msg))
@@ -15912,6 +16009,7 @@ pub enum DescribeThingError {
 impl DescribeThingError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeThingError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalFailureException" => {
                     return RusotoError::Service(DescribeThingError::InternalFailure(err.msg))
@@ -15968,6 +16066,7 @@ pub enum DescribeThingGroupError {
 impl DescribeThingGroupError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeThingGroupError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalFailureException" => {
                     return RusotoError::Service(DescribeThingGroupError::InternalFailure(err.msg))
@@ -16020,6 +16119,7 @@ impl DescribeThingRegistrationTaskError {
         res: BufferedHttpResponse,
     ) -> RusotoError<DescribeThingRegistrationTaskError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalFailureException" => {
                     return RusotoError::Service(
@@ -16090,6 +16190,7 @@ pub enum DescribeThingTypeError {
 impl DescribeThingTypeError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeThingTypeError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalFailureException" => {
                     return RusotoError::Service(DescribeThingTypeError::InternalFailure(err.msg))
@@ -16152,6 +16253,7 @@ pub enum DetachPolicyError {
 impl DetachPolicyError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DetachPolicyError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalFailureException" => {
                     return RusotoError::Service(DetachPolicyError::InternalFailure(err.msg))
@@ -16212,6 +16314,7 @@ pub enum DetachPrincipalPolicyError {
 impl DetachPrincipalPolicyError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DetachPrincipalPolicyError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalFailureException" => {
                     return RusotoError::Service(DetachPrincipalPolicyError::InternalFailure(
@@ -16276,6 +16379,7 @@ pub enum DetachSecurityProfileError {
 impl DetachSecurityProfileError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DetachSecurityProfileError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalFailureException" => {
                     return RusotoError::Service(DetachSecurityProfileError::InternalFailure(
@@ -16334,6 +16438,7 @@ pub enum DetachThingPrincipalError {
 impl DetachThingPrincipalError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DetachThingPrincipalError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalFailureException" => {
                     return RusotoError::Service(DetachThingPrincipalError::InternalFailure(
@@ -16398,6 +16503,7 @@ pub enum DisableTopicRuleError {
 impl DisableTopicRuleError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DisableTopicRuleError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ConflictingResourceUpdateException" => {
                     return RusotoError::Service(DisableTopicRuleError::ConflictingResourceUpdate(
@@ -16454,6 +16560,7 @@ pub enum EnableTopicRuleError {
 impl EnableTopicRuleError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<EnableTopicRuleError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ConflictingResourceUpdateException" => {
                     return RusotoError::Service(EnableTopicRuleError::ConflictingResourceUpdate(
@@ -16510,6 +16617,7 @@ impl GetBehaviorModelTrainingSummariesError {
         res: BufferedHttpResponse,
     ) -> RusotoError<GetBehaviorModelTrainingSummariesError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalFailureException" => {
                     return RusotoError::Service(
@@ -16582,6 +16690,7 @@ pub enum GetCardinalityError {
 impl GetCardinalityError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetCardinalityError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "IndexNotReadyException" => {
                     return RusotoError::Service(GetCardinalityError::IndexNotReady(err.msg))
@@ -16656,6 +16765,7 @@ pub enum GetEffectivePoliciesError {
 impl GetEffectivePoliciesError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetEffectivePoliciesError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalFailureException" => {
                     return RusotoError::Service(GetEffectivePoliciesError::InternalFailure(
@@ -16724,6 +16834,7 @@ pub enum GetIndexingConfigurationError {
 impl GetIndexingConfigurationError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetIndexingConfigurationError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalFailureException" => {
                     return RusotoError::Service(GetIndexingConfigurationError::InternalFailure(
@@ -16784,6 +16895,7 @@ pub enum GetJobDocumentError {
 impl GetJobDocumentError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetJobDocumentError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidRequestException" => {
                     return RusotoError::Service(GetJobDocumentError::InvalidRequest(err.msg))
@@ -16830,6 +16942,7 @@ pub enum GetLoggingOptionsError {
 impl GetLoggingOptionsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetLoggingOptionsError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalException" => {
                     return RusotoError::Service(GetLoggingOptionsError::Internal(err.msg))
@@ -16880,6 +16993,7 @@ pub enum GetOTAUpdateError {
 impl GetOTAUpdateError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetOTAUpdateError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalFailureException" => {
                     return RusotoError::Service(GetOTAUpdateError::InternalFailure(err.msg))
@@ -16946,6 +17060,7 @@ pub enum GetPercentilesError {
 impl GetPercentilesError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetPercentilesError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "IndexNotReadyException" => {
                     return RusotoError::Service(GetPercentilesError::IndexNotReady(err.msg))
@@ -17018,6 +17133,7 @@ pub enum GetPolicyError {
 impl GetPolicyError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetPolicyError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalFailureException" => {
                     return RusotoError::Service(GetPolicyError::InternalFailure(err.msg))
@@ -17078,6 +17194,7 @@ pub enum GetPolicyVersionError {
 impl GetPolicyVersionError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetPolicyVersionError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalFailureException" => {
                     return RusotoError::Service(GetPolicyVersionError::InternalFailure(err.msg))
@@ -17136,6 +17253,7 @@ pub enum GetRegistrationCodeError {
 impl GetRegistrationCodeError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetRegistrationCodeError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalFailureException" => {
                     return RusotoError::Service(GetRegistrationCodeError::InternalFailure(err.msg))
@@ -17200,6 +17318,7 @@ pub enum GetStatisticsError {
 impl GetStatisticsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetStatisticsError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "IndexNotReadyException" => {
                     return RusotoError::Service(GetStatisticsError::IndexNotReady(err.msg))
@@ -17268,6 +17387,7 @@ pub enum GetTopicRuleError {
 impl GetTopicRuleError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetTopicRuleError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalException" => {
                     return RusotoError::Service(GetTopicRuleError::Internal(err.msg))
@@ -17316,6 +17436,7 @@ pub enum GetTopicRuleDestinationError {
 impl GetTopicRuleDestinationError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetTopicRuleDestinationError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalException" => {
                     return RusotoError::Service(GetTopicRuleDestinationError::Internal(err.msg))
@@ -17368,6 +17489,7 @@ pub enum GetV2LoggingOptionsError {
 impl GetV2LoggingOptionsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetV2LoggingOptionsError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalException" => {
                     return RusotoError::Service(GetV2LoggingOptionsError::Internal(err.msg))
@@ -17414,6 +17536,7 @@ pub enum ListActiveViolationsError {
 impl ListActiveViolationsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListActiveViolationsError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalFailureException" => {
                     return RusotoError::Service(ListActiveViolationsError::InternalFailure(
@@ -17472,6 +17595,7 @@ pub enum ListAttachedPoliciesError {
 impl ListAttachedPoliciesError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListAttachedPoliciesError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalFailureException" => {
                     return RusotoError::Service(ListAttachedPoliciesError::InternalFailure(
@@ -17536,6 +17660,7 @@ pub enum ListAuditFindingsError {
 impl ListAuditFindingsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListAuditFindingsError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalFailureException" => {
                     return RusotoError::Service(ListAuditFindingsError::InternalFailure(err.msg))
@@ -17580,6 +17705,7 @@ impl ListAuditMitigationActionsExecutionsError {
         res: BufferedHttpResponse,
     ) -> RusotoError<ListAuditMitigationActionsExecutionsError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalFailureException" => {
                     return RusotoError::Service(
@@ -17636,6 +17762,7 @@ impl ListAuditMitigationActionsTasksError {
         res: BufferedHttpResponse,
     ) -> RusotoError<ListAuditMitigationActionsTasksError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalFailureException" => {
                     return RusotoError::Service(
@@ -17688,6 +17815,7 @@ pub enum ListAuditSuppressionsError {
 impl ListAuditSuppressionsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListAuditSuppressionsError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalFailureException" => {
                     return RusotoError::Service(ListAuditSuppressionsError::InternalFailure(
@@ -17734,6 +17862,7 @@ pub enum ListAuditTasksError {
 impl ListAuditTasksError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListAuditTasksError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalFailureException" => {
                     return RusotoError::Service(ListAuditTasksError::InternalFailure(err.msg))
@@ -17780,6 +17909,7 @@ pub enum ListAuthorizersError {
 impl ListAuthorizersError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListAuthorizersError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalFailureException" => {
                     return RusotoError::Service(ListAuthorizersError::InternalFailure(err.msg))
@@ -17832,6 +17962,7 @@ pub enum ListBillingGroupsError {
 impl ListBillingGroupsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListBillingGroupsError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalFailureException" => {
                     return RusotoError::Service(ListBillingGroupsError::InternalFailure(err.msg))
@@ -17882,6 +18013,7 @@ pub enum ListCACertificatesError {
 impl ListCACertificatesError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListCACertificatesError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalFailureException" => {
                     return RusotoError::Service(ListCACertificatesError::InternalFailure(err.msg))
@@ -17938,6 +18070,7 @@ pub enum ListCertificatesError {
 impl ListCertificatesError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListCertificatesError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalFailureException" => {
                     return RusotoError::Service(ListCertificatesError::InternalFailure(err.msg))
@@ -17992,6 +18125,7 @@ pub enum ListCertificatesByCAError {
 impl ListCertificatesByCAError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListCertificatesByCAError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalFailureException" => {
                     return RusotoError::Service(ListCertificatesByCAError::InternalFailure(
@@ -18046,6 +18180,7 @@ pub enum ListCustomMetricsError {
 impl ListCustomMetricsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListCustomMetricsError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalFailureException" => {
                     return RusotoError::Service(ListCustomMetricsError::InternalFailure(err.msg))
@@ -18090,6 +18225,7 @@ impl ListDetectMitigationActionsExecutionsError {
         res: BufferedHttpResponse,
     ) -> RusotoError<ListDetectMitigationActionsExecutionsError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalFailureException" => {
                     return RusotoError::Service(
@@ -18146,6 +18282,7 @@ impl ListDetectMitigationActionsTasksError {
         res: BufferedHttpResponse,
     ) -> RusotoError<ListDetectMitigationActionsTasksError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalFailureException" => {
                     return RusotoError::Service(
@@ -18198,6 +18335,7 @@ pub enum ListDimensionsError {
 impl ListDimensionsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListDimensionsError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalFailureException" => {
                     return RusotoError::Service(ListDimensionsError::InternalFailure(err.msg))
@@ -18244,6 +18382,7 @@ pub enum ListDomainConfigurationsError {
 impl ListDomainConfigurationsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListDomainConfigurationsError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalFailureException" => {
                     return RusotoError::Service(ListDomainConfigurationsError::InternalFailure(
@@ -18306,6 +18445,7 @@ pub enum ListIndicesError {
 impl ListIndicesError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListIndicesError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalFailureException" => {
                     return RusotoError::Service(ListIndicesError::InternalFailure(err.msg))
@@ -18358,6 +18498,7 @@ pub enum ListJobExecutionsForJobError {
 impl ListJobExecutionsForJobError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListJobExecutionsForJobError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidRequestException" => {
                     return RusotoError::Service(ListJobExecutionsForJobError::InvalidRequest(
@@ -18412,6 +18553,7 @@ pub enum ListJobExecutionsForThingError {
 impl ListJobExecutionsForThingError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListJobExecutionsForThingError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidRequestException" => {
                     return RusotoError::Service(ListJobExecutionsForThingError::InvalidRequest(
@@ -18468,6 +18610,7 @@ pub enum ListJobsError {
 impl ListJobsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListJobsError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidRequestException" => {
                     return RusotoError::Service(ListJobsError::InvalidRequest(err.msg))
@@ -18514,6 +18657,7 @@ pub enum ListMitigationActionsError {
 impl ListMitigationActionsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListMitigationActionsError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalFailureException" => {
                     return RusotoError::Service(ListMitigationActionsError::InternalFailure(
@@ -18564,6 +18708,7 @@ pub enum ListOTAUpdatesError {
 impl ListOTAUpdatesError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListOTAUpdatesError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalFailureException" => {
                     return RusotoError::Service(ListOTAUpdatesError::InternalFailure(err.msg))
@@ -18618,6 +18763,7 @@ pub enum ListOutgoingCertificatesError {
 impl ListOutgoingCertificatesError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListOutgoingCertificatesError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalFailureException" => {
                     return RusotoError::Service(ListOutgoingCertificatesError::InternalFailure(
@@ -18680,6 +18826,7 @@ pub enum ListPoliciesError {
 impl ListPoliciesError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListPoliciesError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalFailureException" => {
                     return RusotoError::Service(ListPoliciesError::InternalFailure(err.msg))
@@ -18736,6 +18883,7 @@ pub enum ListPolicyPrincipalsError {
 impl ListPolicyPrincipalsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListPolicyPrincipalsError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalFailureException" => {
                     return RusotoError::Service(ListPolicyPrincipalsError::InternalFailure(
@@ -18802,6 +18950,7 @@ pub enum ListPolicyVersionsError {
 impl ListPolicyVersionsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListPolicyVersionsError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalFailureException" => {
                     return RusotoError::Service(ListPolicyVersionsError::InternalFailure(err.msg))
@@ -18864,6 +19013,7 @@ pub enum ListPrincipalPoliciesError {
 impl ListPrincipalPoliciesError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListPrincipalPoliciesError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalFailureException" => {
                     return RusotoError::Service(ListPrincipalPoliciesError::InternalFailure(
@@ -18932,6 +19082,7 @@ pub enum ListPrincipalThingsError {
 impl ListPrincipalThingsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListPrincipalThingsError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalFailureException" => {
                     return RusotoError::Service(ListPrincipalThingsError::InternalFailure(err.msg))
@@ -18996,6 +19147,7 @@ impl ListProvisioningTemplateVersionsError {
         res: BufferedHttpResponse,
     ) -> RusotoError<ListProvisioningTemplateVersionsError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalFailureException" => {
                     return RusotoError::Service(
@@ -19066,6 +19218,7 @@ pub enum ListProvisioningTemplatesError {
 impl ListProvisioningTemplatesError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListProvisioningTemplatesError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalFailureException" => {
                     return RusotoError::Service(ListProvisioningTemplatesError::InternalFailure(
@@ -19124,6 +19277,7 @@ pub enum ListRoleAliasesError {
 impl ListRoleAliasesError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListRoleAliasesError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalFailureException" => {
                     return RusotoError::Service(ListRoleAliasesError::InternalFailure(err.msg))
@@ -19174,6 +19328,7 @@ pub enum ListScheduledAuditsError {
 impl ListScheduledAuditsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListScheduledAuditsError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalFailureException" => {
                     return RusotoError::Service(ListScheduledAuditsError::InternalFailure(err.msg))
@@ -19218,6 +19373,7 @@ pub enum ListSecurityProfilesError {
 impl ListSecurityProfilesError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListSecurityProfilesError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalFailureException" => {
                     return RusotoError::Service(ListSecurityProfilesError::InternalFailure(
@@ -19272,6 +19428,7 @@ impl ListSecurityProfilesForTargetError {
         res: BufferedHttpResponse,
     ) -> RusotoError<ListSecurityProfilesForTargetError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalFailureException" => {
                     return RusotoError::Service(
@@ -19334,6 +19491,7 @@ pub enum ListStreamsError {
 impl ListStreamsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListStreamsError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalFailureException" => {
                     return RusotoError::Service(ListStreamsError::InternalFailure(err.msg))
@@ -19386,6 +19544,7 @@ pub enum ListTagsForResourceError {
 impl ListTagsForResourceError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListTagsForResourceError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalFailureException" => {
                     return RusotoError::Service(ListTagsForResourceError::InternalFailure(err.msg))
@@ -19442,6 +19601,7 @@ pub enum ListTargetsForPolicyError {
 impl ListTargetsForPolicyError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListTargetsForPolicyError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalFailureException" => {
                     return RusotoError::Service(ListTargetsForPolicyError::InternalFailure(
@@ -19510,6 +19670,7 @@ impl ListTargetsForSecurityProfileError {
         res: BufferedHttpResponse,
     ) -> RusotoError<ListTargetsForSecurityProfileError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalFailureException" => {
                     return RusotoError::Service(
@@ -19570,6 +19731,7 @@ pub enum ListThingGroupsError {
 impl ListThingGroupsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListThingGroupsError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalFailureException" => {
                     return RusotoError::Service(ListThingGroupsError::InternalFailure(err.msg))
@@ -19618,6 +19780,7 @@ pub enum ListThingGroupsForThingError {
 impl ListThingGroupsForThingError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListThingGroupsForThingError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalFailureException" => {
                     return RusotoError::Service(ListThingGroupsForThingError::InternalFailure(
@@ -19676,6 +19839,7 @@ pub enum ListThingPrincipalsError {
 impl ListThingPrincipalsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListThingPrincipalsError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalFailureException" => {
                     return RusotoError::Service(ListThingPrincipalsError::InternalFailure(err.msg))
@@ -19738,6 +19902,7 @@ impl ListThingRegistrationTaskReportsError {
         res: BufferedHttpResponse,
     ) -> RusotoError<ListThingRegistrationTaskReportsError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalFailureException" => {
                     return RusotoError::Service(
@@ -19802,6 +19967,7 @@ impl ListThingRegistrationTasksError {
         res: BufferedHttpResponse,
     ) -> RusotoError<ListThingRegistrationTasksError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalFailureException" => {
                     return RusotoError::Service(ListThingRegistrationTasksError::InternalFailure(
@@ -19860,6 +20026,7 @@ pub enum ListThingTypesError {
 impl ListThingTypesError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListThingTypesError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalFailureException" => {
                     return RusotoError::Service(ListThingTypesError::InternalFailure(err.msg))
@@ -19914,6 +20081,7 @@ pub enum ListThingsError {
 impl ListThingsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListThingsError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalFailureException" => {
                     return RusotoError::Service(ListThingsError::InternalFailure(err.msg))
@@ -19966,6 +20134,7 @@ pub enum ListThingsInBillingGroupError {
 impl ListThingsInBillingGroupError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListThingsInBillingGroupError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalFailureException" => {
                     return RusotoError::Service(ListThingsInBillingGroupError::InternalFailure(
@@ -20020,6 +20189,7 @@ pub enum ListThingsInThingGroupError {
 impl ListThingsInThingGroupError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListThingsInThingGroupError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalFailureException" => {
                     return RusotoError::Service(ListThingsInThingGroupError::InternalFailure(
@@ -20074,6 +20244,7 @@ pub enum ListTopicRuleDestinationsError {
 impl ListTopicRuleDestinationsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListTopicRuleDestinationsError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalException" => {
                     return RusotoError::Service(ListTopicRuleDestinationsError::Internal(err.msg))
@@ -20126,6 +20297,7 @@ pub enum ListTopicRulesError {
 impl ListTopicRulesError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListTopicRulesError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalException" => {
                     return RusotoError::Service(ListTopicRulesError::Internal(err.msg))
@@ -20170,6 +20342,7 @@ pub enum ListV2LoggingLevelsError {
 impl ListV2LoggingLevelsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListV2LoggingLevelsError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalException" => {
                     return RusotoError::Service(ListV2LoggingLevelsError::Internal(err.msg))
@@ -20218,6 +20391,7 @@ pub enum ListViolationEventsError {
 impl ListViolationEventsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListViolationEventsError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalFailureException" => {
                     return RusotoError::Service(ListViolationEventsError::InternalFailure(err.msg))
@@ -20272,6 +20446,7 @@ pub enum RegisterCACertificateError {
 impl RegisterCACertificateError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<RegisterCACertificateError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "CertificateValidationException" => {
                     return RusotoError::Service(RegisterCACertificateError::CertificateValidation(
@@ -20364,6 +20539,7 @@ pub enum RegisterCertificateError {
 impl RegisterCertificateError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<RegisterCertificateError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "CertificateConflictException" => {
                     return RusotoError::Service(RegisterCertificateError::CertificateConflict(
@@ -20452,6 +20628,7 @@ impl RegisterCertificateWithoutCAError {
         res: BufferedHttpResponse,
     ) -> RusotoError<RegisterCertificateWithoutCAError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "CertificateStateException" => {
                     return RusotoError::Service(
@@ -20546,6 +20723,7 @@ pub enum RegisterThingError {
 impl RegisterThingError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<RegisterThingError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ConflictingResourceUpdateException" => {
                     return RusotoError::Service(RegisterThingError::ConflictingResourceUpdate(
@@ -20616,6 +20794,7 @@ pub enum RejectCertificateTransferError {
 impl RejectCertificateTransferError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<RejectCertificateTransferError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalFailureException" => {
                     return RusotoError::Service(RejectCertificateTransferError::InternalFailure(
@@ -20694,6 +20873,7 @@ impl RemoveThingFromBillingGroupError {
         res: BufferedHttpResponse,
     ) -> RusotoError<RemoveThingFromBillingGroupError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalFailureException" => {
                     return RusotoError::Service(RemoveThingFromBillingGroupError::InternalFailure(
@@ -20750,6 +20930,7 @@ pub enum RemoveThingFromThingGroupError {
 impl RemoveThingFromThingGroupError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<RemoveThingFromThingGroupError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalFailureException" => {
                     return RusotoError::Service(RemoveThingFromThingGroupError::InternalFailure(
@@ -20810,6 +20991,7 @@ pub enum ReplaceTopicRuleError {
 impl ReplaceTopicRuleError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ReplaceTopicRuleError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ConflictingResourceUpdateException" => {
                     return RusotoError::Service(ReplaceTopicRuleError::ConflictingResourceUpdate(
@@ -20876,6 +21058,7 @@ pub enum SearchIndexError {
 impl SearchIndexError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<SearchIndexError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "IndexNotReadyException" => {
                     return RusotoError::Service(SearchIndexError::IndexNotReady(err.msg))
@@ -20946,6 +21129,7 @@ pub enum SetDefaultAuthorizerError {
 impl SetDefaultAuthorizerError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<SetDefaultAuthorizerError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalFailureException" => {
                     return RusotoError::Service(SetDefaultAuthorizerError::InternalFailure(
@@ -21018,6 +21202,7 @@ pub enum SetDefaultPolicyVersionError {
 impl SetDefaultPolicyVersionError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<SetDefaultPolicyVersionError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalFailureException" => {
                     return RusotoError::Service(SetDefaultPolicyVersionError::InternalFailure(
@@ -21082,6 +21267,7 @@ pub enum SetLoggingOptionsError {
 impl SetLoggingOptionsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<SetLoggingOptionsError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalException" => {
                     return RusotoError::Service(SetLoggingOptionsError::Internal(err.msg))
@@ -21130,6 +21316,7 @@ pub enum SetV2LoggingLevelError {
 impl SetV2LoggingLevelError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<SetV2LoggingLevelError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalException" => {
                     return RusotoError::Service(SetV2LoggingLevelError::Internal(err.msg))
@@ -21182,6 +21369,7 @@ pub enum SetV2LoggingOptionsError {
 impl SetV2LoggingOptionsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<SetV2LoggingOptionsError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalException" => {
                     return RusotoError::Service(SetV2LoggingOptionsError::Internal(err.msg))
@@ -21232,6 +21420,7 @@ impl StartAuditMitigationActionsTaskError {
         res: BufferedHttpResponse,
     ) -> RusotoError<StartAuditMitigationActionsTaskError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalFailureException" => {
                     return RusotoError::Service(
@@ -21306,6 +21495,7 @@ impl StartDetectMitigationActionsTaskError {
         res: BufferedHttpResponse,
     ) -> RusotoError<StartDetectMitigationActionsTaskError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalFailureException" => {
                     return RusotoError::Service(
@@ -21376,6 +21566,7 @@ pub enum StartOnDemandAuditTaskError {
 impl StartOnDemandAuditTaskError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<StartOnDemandAuditTaskError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalFailureException" => {
                     return RusotoError::Service(StartOnDemandAuditTaskError::InternalFailure(
@@ -21432,6 +21623,7 @@ impl StartThingRegistrationTaskError {
         res: BufferedHttpResponse,
     ) -> RusotoError<StartThingRegistrationTaskError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalFailureException" => {
                     return RusotoError::Service(StartThingRegistrationTaskError::InternalFailure(
@@ -21490,6 +21682,7 @@ pub enum StopThingRegistrationTaskError {
 impl StopThingRegistrationTaskError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<StopThingRegistrationTaskError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalFailureException" => {
                     return RusotoError::Service(StopThingRegistrationTaskError::InternalFailure(
@@ -21554,6 +21747,7 @@ pub enum TagResourceError {
 impl TagResourceError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<TagResourceError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalFailureException" => {
                     return RusotoError::Service(TagResourceError::InternalFailure(err.msg))
@@ -21612,6 +21806,7 @@ pub enum TestAuthorizationError {
 impl TestAuthorizationError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<TestAuthorizationError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalFailureException" => {
                     return RusotoError::Service(TestAuthorizationError::InternalFailure(err.msg))
@@ -21680,6 +21875,7 @@ pub enum TestInvokeAuthorizerError {
 impl TestInvokeAuthorizerError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<TestInvokeAuthorizerError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalFailureException" => {
                     return RusotoError::Service(TestInvokeAuthorizerError::InternalFailure(
@@ -21756,6 +21952,7 @@ pub enum TransferCertificateError {
 impl TransferCertificateError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<TransferCertificateError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "CertificateStateException" => {
                     return RusotoError::Service(TransferCertificateError::CertificateState(
@@ -21828,6 +22025,7 @@ pub enum UntagResourceError {
 impl UntagResourceError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UntagResourceError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalFailureException" => {
                     return RusotoError::Service(UntagResourceError::InternalFailure(err.msg))
@@ -21876,6 +22074,7 @@ impl UpdateAccountAuditConfigurationError {
         res: BufferedHttpResponse,
     ) -> RusotoError<UpdateAccountAuditConfigurationError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalFailureException" => {
                     return RusotoError::Service(
@@ -21930,6 +22129,7 @@ pub enum UpdateAuditSuppressionError {
 impl UpdateAuditSuppressionError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateAuditSuppressionError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalFailureException" => {
                     return RusotoError::Service(UpdateAuditSuppressionError::InternalFailure(
@@ -21990,6 +22190,7 @@ pub enum UpdateAuthorizerError {
 impl UpdateAuthorizerError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateAuthorizerError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalFailureException" => {
                     return RusotoError::Service(UpdateAuthorizerError::InternalFailure(err.msg))
@@ -22052,6 +22253,7 @@ pub enum UpdateBillingGroupError {
 impl UpdateBillingGroupError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateBillingGroupError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalFailureException" => {
                     return RusotoError::Service(UpdateBillingGroupError::InternalFailure(err.msg))
@@ -22108,6 +22310,7 @@ pub enum UpdateCACertificateError {
 impl UpdateCACertificateError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateCACertificateError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalFailureException" => {
                     return RusotoError::Service(UpdateCACertificateError::InternalFailure(err.msg))
@@ -22174,6 +22377,7 @@ pub enum UpdateCertificateError {
 impl UpdateCertificateError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateCertificateError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "CertificateStateException" => {
                     return RusotoError::Service(UpdateCertificateError::CertificateState(err.msg))
@@ -22236,6 +22440,7 @@ pub enum UpdateCustomMetricError {
 impl UpdateCustomMetricError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateCustomMetricError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalFailureException" => {
                     return RusotoError::Service(UpdateCustomMetricError::InternalFailure(err.msg))
@@ -22284,6 +22489,7 @@ pub enum UpdateDimensionError {
 impl UpdateDimensionError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateDimensionError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalFailureException" => {
                     return RusotoError::Service(UpdateDimensionError::InternalFailure(err.msg))
@@ -22338,6 +22544,7 @@ pub enum UpdateDomainConfigurationError {
 impl UpdateDomainConfigurationError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateDomainConfigurationError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "CertificateValidationException" => {
                     return RusotoError::Service(
@@ -22418,6 +22625,7 @@ pub enum UpdateDynamicThingGroupError {
 impl UpdateDynamicThingGroupError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateDynamicThingGroupError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalFailureException" => {
                     return RusotoError::Service(UpdateDynamicThingGroupError::InternalFailure(
@@ -22482,6 +22690,7 @@ pub enum UpdateEventConfigurationsError {
 impl UpdateEventConfigurationsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateEventConfigurationsError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalFailureException" => {
                     return RusotoError::Service(UpdateEventConfigurationsError::InternalFailure(
@@ -22536,6 +22745,7 @@ impl UpdateIndexingConfigurationError {
         res: BufferedHttpResponse,
     ) -> RusotoError<UpdateIndexingConfigurationError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalFailureException" => {
                     return RusotoError::Service(UpdateIndexingConfigurationError::InternalFailure(
@@ -22600,6 +22810,7 @@ pub enum UpdateJobError {
 impl UpdateJobError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateJobError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidRequestException" => {
                     return RusotoError::Service(UpdateJobError::InvalidRequest(err.msg))
@@ -22648,6 +22859,7 @@ pub enum UpdateMitigationActionError {
 impl UpdateMitigationActionError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateMitigationActionError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalFailureException" => {
                     return RusotoError::Service(UpdateMitigationActionError::InternalFailure(
@@ -22706,6 +22918,7 @@ impl UpdateProvisioningTemplateError {
         res: BufferedHttpResponse,
     ) -> RusotoError<UpdateProvisioningTemplateError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ConflictingResourceUpdateException" => {
                     return RusotoError::Service(
@@ -22774,6 +22987,7 @@ pub enum UpdateRoleAliasError {
 impl UpdateRoleAliasError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateRoleAliasError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalFailureException" => {
                     return RusotoError::Service(UpdateRoleAliasError::InternalFailure(err.msg))
@@ -22830,6 +23044,7 @@ pub enum UpdateScheduledAuditError {
 impl UpdateScheduledAuditError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateScheduledAuditError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalFailureException" => {
                     return RusotoError::Service(UpdateScheduledAuditError::InternalFailure(
@@ -22884,6 +23099,7 @@ pub enum UpdateSecurityProfileError {
 impl UpdateSecurityProfileError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateSecurityProfileError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalFailureException" => {
                     return RusotoError::Service(UpdateSecurityProfileError::InternalFailure(
@@ -22948,6 +23164,7 @@ pub enum UpdateStreamError {
 impl UpdateStreamError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateStreamError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalFailureException" => {
                     return RusotoError::Service(UpdateStreamError::InternalFailure(err.msg))
@@ -23010,6 +23227,7 @@ pub enum UpdateThingError {
 impl UpdateThingError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateThingError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalFailureException" => {
                     return RusotoError::Service(UpdateThingError::InternalFailure(err.msg))
@@ -23072,6 +23290,7 @@ pub enum UpdateThingGroupError {
 impl UpdateThingGroupError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateThingGroupError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalFailureException" => {
                     return RusotoError::Service(UpdateThingGroupError::InternalFailure(err.msg))
@@ -23124,6 +23343,7 @@ pub enum UpdateThingGroupsForThingError {
 impl UpdateThingGroupsForThingError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateThingGroupsForThingError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalFailureException" => {
                     return RusotoError::Service(UpdateThingGroupsForThingError::InternalFailure(
@@ -23184,6 +23404,7 @@ impl UpdateTopicRuleDestinationError {
         res: BufferedHttpResponse,
     ) -> RusotoError<UpdateTopicRuleDestinationError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ConflictingResourceUpdateException" => {
                     return RusotoError::Service(
@@ -23248,6 +23469,7 @@ impl ValidateSecurityProfileBehaviorsError {
         res: BufferedHttpResponse,
     ) -> RusotoError<ValidateSecurityProfileBehaviorsError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalFailureException" => {
                     return RusotoError::Service(
@@ -24727,6 +24949,7 @@ impl Iot for IotClient {
         &self,
         input: AcceptCertificateTransferRequest,
     ) -> Result<(), RusotoError<AcceptCertificateTransferError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/accept-certificate-transfer/{certificate_id}",
             certificate_id = input.certificate_id
@@ -24750,9 +24973,9 @@ impl Iot for IotClient {
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
             let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = ::std::mem::drop(response);
+            let _result = ::std::mem::drop(response);
 
-            Ok(result)
+            Ok(())
         } else {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             Err(AcceptCertificateTransferError::from_response(response))
@@ -24765,6 +24988,7 @@ impl Iot for IotClient {
         &self,
         input: AddThingToBillingGroupRequest,
     ) -> Result<AddThingToBillingGroupResponse, RusotoError<AddThingToBillingGroupError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/billing-groups/addThingToBillingGroup";
 
         let mut request = SignedRequest::new("PUT", "execute-api", &self.region, &request_uri);
@@ -24797,6 +25021,7 @@ impl Iot for IotClient {
         &self,
         input: AddThingToThingGroupRequest,
     ) -> Result<AddThingToThingGroupResponse, RusotoError<AddThingToThingGroupError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/thing-groups/addThingToThingGroup";
 
         let mut request = SignedRequest::new("PUT", "execute-api", &self.region, &request_uri);
@@ -24829,6 +25054,7 @@ impl Iot for IotClient {
         &self,
         input: AssociateTargetsWithJobRequest,
     ) -> Result<AssociateTargetsWithJobResponse, RusotoError<AssociateTargetsWithJobError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!("/jobs/{job_id}/targets", job_id = input.job_id);
 
         let mut request = SignedRequest::new("POST", "execute-api", &self.region, &request_uri);
@@ -24867,6 +25093,7 @@ impl Iot for IotClient {
         &self,
         input: AttachPolicyRequest,
     ) -> Result<(), RusotoError<AttachPolicyError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/target-policies/{policy_name}",
             policy_name = input.policy_name
@@ -24886,9 +25113,9 @@ impl Iot for IotClient {
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
             let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = ::std::mem::drop(response);
+            let _result = ::std::mem::drop(response);
 
-            Ok(result)
+            Ok(())
         } else {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             Err(AttachPolicyError::from_response(response))
@@ -24901,6 +25128,7 @@ impl Iot for IotClient {
         &self,
         input: AttachPrincipalPolicyRequest,
     ) -> Result<(), RusotoError<AttachPrincipalPolicyError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/principal-policies/{policy_name}",
             policy_name = input.policy_name
@@ -24920,9 +25148,9 @@ impl Iot for IotClient {
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
             let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = ::std::mem::drop(response);
+            let _result = ::std::mem::drop(response);
 
-            Ok(result)
+            Ok(())
         } else {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             Err(AttachPrincipalPolicyError::from_response(response))
@@ -24935,6 +25163,7 @@ impl Iot for IotClient {
         &self,
         input: AttachSecurityProfileRequest,
     ) -> Result<AttachSecurityProfileResponse, RusotoError<AttachSecurityProfileError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/security-profiles/{security_profile_name}/targets",
             security_profile_name = input.security_profile_name
@@ -24975,6 +25204,7 @@ impl Iot for IotClient {
         &self,
         input: AttachThingPrincipalRequest,
     ) -> Result<AttachThingPrincipalResponse, RusotoError<AttachThingPrincipalError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/things/{thing_name}/principals",
             thing_name = input.thing_name
@@ -25013,6 +25243,7 @@ impl Iot for IotClient {
         CancelAuditMitigationActionsTaskResponse,
         RusotoError<CancelAuditMitigationActionsTaskError>,
     > {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/audit/mitigationactions/tasks/{task_id}/cancel",
             task_id = input.task_id
@@ -25048,6 +25279,7 @@ impl Iot for IotClient {
         &self,
         input: CancelAuditTaskRequest,
     ) -> Result<CancelAuditTaskResponse, RusotoError<CancelAuditTaskError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!("/audit/tasks/{task_id}/cancel", task_id = input.task_id);
 
         let mut request = SignedRequest::new("PUT", "execute-api", &self.region, &request_uri);
@@ -25078,6 +25310,7 @@ impl Iot for IotClient {
         &self,
         input: CancelCertificateTransferRequest,
     ) -> Result<(), RusotoError<CancelCertificateTransferError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/cancel-certificate-transfer/{certificate_id}",
             certificate_id = input.certificate_id
@@ -25095,9 +25328,9 @@ impl Iot for IotClient {
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
             let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = ::std::mem::drop(response);
+            let _result = ::std::mem::drop(response);
 
-            Ok(result)
+            Ok(())
         } else {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             Err(CancelCertificateTransferError::from_response(response))
@@ -25113,6 +25346,7 @@ impl Iot for IotClient {
         CancelDetectMitigationActionsTaskResponse,
         RusotoError<CancelDetectMitigationActionsTaskError>,
     > {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/detect/mitigationactions/tasks/{task_id}/cancel",
             task_id = input.task_id
@@ -25148,6 +25382,7 @@ impl Iot for IotClient {
         &self,
         input: CancelJobRequest,
     ) -> Result<CancelJobResponse, RusotoError<CancelJobError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!("/jobs/{job_id}/cancel", job_id = input.job_id);
 
         let mut request = SignedRequest::new("PUT", "execute-api", &self.region, &request_uri);
@@ -25186,6 +25421,7 @@ impl Iot for IotClient {
         &self,
         input: CancelJobExecutionRequest,
     ) -> Result<(), RusotoError<CancelJobExecutionError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/things/{thing_name}/jobs/{job_id}/cancel",
             job_id = input.job_id,
@@ -25212,9 +25448,9 @@ impl Iot for IotClient {
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
             let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = ::std::mem::drop(response);
+            let _result = ::std::mem::drop(response);
 
-            Ok(result)
+            Ok(())
         } else {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             Err(CancelJobExecutionError::from_response(response))
@@ -25226,6 +25462,7 @@ impl Iot for IotClient {
     async fn clear_default_authorizer(
         &self,
     ) -> Result<ClearDefaultAuthorizerResponse, RusotoError<ClearDefaultAuthorizerError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/default-authorizer";
 
         let mut request = SignedRequest::new("DELETE", "execute-api", &self.region, &request_uri);
@@ -25257,6 +25494,7 @@ impl Iot for IotClient {
         input: ConfirmTopicRuleDestinationRequest,
     ) -> Result<ConfirmTopicRuleDestinationResponse, RusotoError<ConfirmTopicRuleDestinationError>>
     {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/confirmdestination/{confirmation_token}",
             confirmation_token = input.confirmation_token
@@ -25290,6 +25528,7 @@ impl Iot for IotClient {
         &self,
         input: CreateAuditSuppressionRequest,
     ) -> Result<CreateAuditSuppressionResponse, RusotoError<CreateAuditSuppressionError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/audit/suppressions/create";
 
         let mut request = SignedRequest::new("POST", "execute-api", &self.region, &request_uri);
@@ -25322,6 +25561,7 @@ impl Iot for IotClient {
         &self,
         input: CreateAuthorizerRequest,
     ) -> Result<CreateAuthorizerResponse, RusotoError<CreateAuthorizerError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/authorizer/{authorizer_name}",
             authorizer_name = input.authorizer_name
@@ -25357,6 +25597,7 @@ impl Iot for IotClient {
         &self,
         input: CreateBillingGroupRequest,
     ) -> Result<CreateBillingGroupResponse, RusotoError<CreateBillingGroupError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/billing-groups/{billing_group_name}",
             billing_group_name = input.billing_group_name
@@ -25392,6 +25633,7 @@ impl Iot for IotClient {
         &self,
         input: CreateCertificateFromCsrRequest,
     ) -> Result<CreateCertificateFromCsrResponse, RusotoError<CreateCertificateFromCsrError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/certificates";
 
         let mut request = SignedRequest::new("POST", "execute-api", &self.region, &request_uri);
@@ -25430,6 +25672,7 @@ impl Iot for IotClient {
         &self,
         input: CreateCustomMetricRequest,
     ) -> Result<CreateCustomMetricResponse, RusotoError<CreateCustomMetricError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/custom-metric/{metric_name}",
             metric_name = input.metric_name
@@ -25465,6 +25708,7 @@ impl Iot for IotClient {
         &self,
         input: CreateDimensionRequest,
     ) -> Result<CreateDimensionResponse, RusotoError<CreateDimensionError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!("/dimensions/{name}", name = input.name);
 
         let mut request = SignedRequest::new("POST", "execute-api", &self.region, &request_uri);
@@ -25498,6 +25742,7 @@ impl Iot for IotClient {
         input: CreateDomainConfigurationRequest,
     ) -> Result<CreateDomainConfigurationResponse, RusotoError<CreateDomainConfigurationError>>
     {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/domainConfigurations/{domain_configuration_name}",
             domain_configuration_name = input.domain_configuration_name
@@ -25533,6 +25778,7 @@ impl Iot for IotClient {
         &self,
         input: CreateDynamicThingGroupRequest,
     ) -> Result<CreateDynamicThingGroupResponse, RusotoError<CreateDynamicThingGroupError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/dynamic-thing-groups/{thing_group_name}",
             thing_group_name = input.thing_group_name
@@ -25568,6 +25814,7 @@ impl Iot for IotClient {
         &self,
         input: CreateJobRequest,
     ) -> Result<CreateJobResponse, RusotoError<CreateJobError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!("/jobs/{job_id}", job_id = input.job_id);
 
         let mut request = SignedRequest::new("PUT", "execute-api", &self.region, &request_uri);
@@ -25600,6 +25847,7 @@ impl Iot for IotClient {
         &self,
         input: CreateKeysAndCertificateRequest,
     ) -> Result<CreateKeysAndCertificateResponse, RusotoError<CreateKeysAndCertificateError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/keys-and-certificate";
 
         let mut request = SignedRequest::new("POST", "execute-api", &self.region, &request_uri);
@@ -25636,6 +25884,7 @@ impl Iot for IotClient {
         &self,
         input: CreateMitigationActionRequest,
     ) -> Result<CreateMitigationActionResponse, RusotoError<CreateMitigationActionError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/mitigationactions/actions/{action_name}",
             action_name = input.action_name
@@ -25671,6 +25920,7 @@ impl Iot for IotClient {
         &self,
         input: CreateOTAUpdateRequest,
     ) -> Result<CreateOTAUpdateResponse, RusotoError<CreateOTAUpdateError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/otaUpdates/{ota_update_id}",
             ota_update_id = input.ota_update_id
@@ -25706,6 +25956,7 @@ impl Iot for IotClient {
         &self,
         input: CreatePolicyRequest,
     ) -> Result<CreatePolicyResponse, RusotoError<CreatePolicyError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!("/policies/{policy_name}", policy_name = input.policy_name);
 
         let mut request = SignedRequest::new("POST", "execute-api", &self.region, &request_uri);
@@ -25738,6 +25989,7 @@ impl Iot for IotClient {
         &self,
         input: CreatePolicyVersionRequest,
     ) -> Result<CreatePolicyVersionResponse, RusotoError<CreatePolicyVersionError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/policies/{policy_name}/version",
             policy_name = input.policy_name
@@ -25779,6 +26031,7 @@ impl Iot for IotClient {
         &self,
         input: CreateProvisioningClaimRequest,
     ) -> Result<CreateProvisioningClaimResponse, RusotoError<CreateProvisioningClaimError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/provisioning-templates/{template_name}/provisioning-claim",
             template_name = input.template_name
@@ -25813,6 +26066,7 @@ impl Iot for IotClient {
         input: CreateProvisioningTemplateRequest,
     ) -> Result<CreateProvisioningTemplateResponse, RusotoError<CreateProvisioningTemplateError>>
     {
+        #![allow(clippy::needless_update)]
         let request_uri = "/provisioning-templates";
 
         let mut request = SignedRequest::new("POST", "execute-api", &self.region, &request_uri);
@@ -25848,6 +26102,7 @@ impl Iot for IotClient {
         CreateProvisioningTemplateVersionResponse,
         RusotoError<CreateProvisioningTemplateVersionError>,
     > {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/provisioning-templates/{template_name}/versions",
             template_name = input.template_name
@@ -25891,6 +26146,7 @@ impl Iot for IotClient {
         &self,
         input: CreateRoleAliasRequest,
     ) -> Result<CreateRoleAliasResponse, RusotoError<CreateRoleAliasError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!("/role-aliases/{role_alias}", role_alias = input.role_alias);
 
         let mut request = SignedRequest::new("POST", "execute-api", &self.region, &request_uri);
@@ -25923,6 +26179,7 @@ impl Iot for IotClient {
         &self,
         input: CreateScheduledAuditRequest,
     ) -> Result<CreateScheduledAuditResponse, RusotoError<CreateScheduledAuditError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/audit/scheduledaudits/{scheduled_audit_name}",
             scheduled_audit_name = input.scheduled_audit_name
@@ -25958,6 +26215,7 @@ impl Iot for IotClient {
         &self,
         input: CreateSecurityProfileRequest,
     ) -> Result<CreateSecurityProfileResponse, RusotoError<CreateSecurityProfileError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/security-profiles/{security_profile_name}",
             security_profile_name = input.security_profile_name
@@ -25993,6 +26251,7 @@ impl Iot for IotClient {
         &self,
         input: CreateStreamRequest,
     ) -> Result<CreateStreamResponse, RusotoError<CreateStreamError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!("/streams/{stream_id}", stream_id = input.stream_id);
 
         let mut request = SignedRequest::new("POST", "execute-api", &self.region, &request_uri);
@@ -26025,6 +26284,7 @@ impl Iot for IotClient {
         &self,
         input: CreateThingRequest,
     ) -> Result<CreateThingResponse, RusotoError<CreateThingError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!("/things/{thing_name}", thing_name = input.thing_name);
 
         let mut request = SignedRequest::new("POST", "execute-api", &self.region, &request_uri);
@@ -26057,6 +26317,7 @@ impl Iot for IotClient {
         &self,
         input: CreateThingGroupRequest,
     ) -> Result<CreateThingGroupResponse, RusotoError<CreateThingGroupError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/thing-groups/{thing_group_name}",
             thing_group_name = input.thing_group_name
@@ -26092,6 +26353,7 @@ impl Iot for IotClient {
         &self,
         input: CreateThingTypeRequest,
     ) -> Result<CreateThingTypeResponse, RusotoError<CreateThingTypeError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/thing-types/{thing_type_name}",
             thing_type_name = input.thing_type_name
@@ -26127,6 +26389,7 @@ impl Iot for IotClient {
         &self,
         input: CreateTopicRuleRequest,
     ) -> Result<(), RusotoError<CreateTopicRuleError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!("/rules/{rule_name}", rule_name = input.rule_name);
 
         let mut request = SignedRequest::new("POST", "execute-api", &self.region, &request_uri);
@@ -26144,9 +26407,9 @@ impl Iot for IotClient {
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
             let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = ::std::mem::drop(response);
+            let _result = ::std::mem::drop(response);
 
-            Ok(result)
+            Ok(())
         } else {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             Err(CreateTopicRuleError::from_response(response))
@@ -26160,6 +26423,7 @@ impl Iot for IotClient {
         input: CreateTopicRuleDestinationRequest,
     ) -> Result<CreateTopicRuleDestinationResponse, RusotoError<CreateTopicRuleDestinationError>>
     {
+        #![allow(clippy::needless_update)]
         let request_uri = "/destinations";
 
         let mut request = SignedRequest::new("POST", "execute-api", &self.region, &request_uri);
@@ -26195,6 +26459,7 @@ impl Iot for IotClient {
         DeleteAccountAuditConfigurationResponse,
         RusotoError<DeleteAccountAuditConfigurationError>,
     > {
+        #![allow(clippy::needless_update)]
         let request_uri = "/audit/configuration";
 
         let mut request = SignedRequest::new("DELETE", "execute-api", &self.region, &request_uri);
@@ -26233,6 +26498,7 @@ impl Iot for IotClient {
         &self,
         input: DeleteAuditSuppressionRequest,
     ) -> Result<DeleteAuditSuppressionResponse, RusotoError<DeleteAuditSuppressionError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/audit/suppressions/delete";
 
         let mut request = SignedRequest::new("POST", "execute-api", &self.region, &request_uri);
@@ -26265,6 +26531,7 @@ impl Iot for IotClient {
         &self,
         input: DeleteAuthorizerRequest,
     ) -> Result<DeleteAuthorizerResponse, RusotoError<DeleteAuthorizerError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/authorizer/{authorizer_name}",
             authorizer_name = input.authorizer_name
@@ -26298,6 +26565,7 @@ impl Iot for IotClient {
         &self,
         input: DeleteBillingGroupRequest,
     ) -> Result<DeleteBillingGroupResponse, RusotoError<DeleteBillingGroupError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/billing-groups/{billing_group_name}",
             billing_group_name = input.billing_group_name
@@ -26337,6 +26605,7 @@ impl Iot for IotClient {
         &self,
         input: DeleteCACertificateRequest,
     ) -> Result<DeleteCACertificateResponse, RusotoError<DeleteCACertificateError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/cacertificate/{ca_certificate_id}",
             ca_certificate_id = input.certificate_id
@@ -26370,6 +26639,7 @@ impl Iot for IotClient {
         &self,
         input: DeleteCertificateRequest,
     ) -> Result<(), RusotoError<DeleteCertificateError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/certificates/{certificate_id}",
             certificate_id = input.certificate_id
@@ -26393,9 +26663,9 @@ impl Iot for IotClient {
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
             let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = ::std::mem::drop(response);
+            let _result = ::std::mem::drop(response);
 
-            Ok(result)
+            Ok(())
         } else {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             Err(DeleteCertificateError::from_response(response))
@@ -26408,6 +26678,7 @@ impl Iot for IotClient {
         &self,
         input: DeleteCustomMetricRequest,
     ) -> Result<DeleteCustomMetricResponse, RusotoError<DeleteCustomMetricError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/custom-metric/{metric_name}",
             metric_name = input.metric_name
@@ -26441,6 +26712,7 @@ impl Iot for IotClient {
         &self,
         input: DeleteDimensionRequest,
     ) -> Result<DeleteDimensionResponse, RusotoError<DeleteDimensionError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!("/dimensions/{name}", name = input.name);
 
         let mut request = SignedRequest::new("DELETE", "execute-api", &self.region, &request_uri);
@@ -26472,6 +26744,7 @@ impl Iot for IotClient {
         input: DeleteDomainConfigurationRequest,
     ) -> Result<DeleteDomainConfigurationResponse, RusotoError<DeleteDomainConfigurationError>>
     {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/domainConfigurations/{domain_configuration_name}",
             domain_configuration_name = input.domain_configuration_name
@@ -26505,6 +26778,7 @@ impl Iot for IotClient {
         &self,
         input: DeleteDynamicThingGroupRequest,
     ) -> Result<DeleteDynamicThingGroupResponse, RusotoError<DeleteDynamicThingGroupError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/dynamic-thing-groups/{thing_group_name}",
             thing_group_name = input.thing_group_name
@@ -26541,6 +26815,7 @@ impl Iot for IotClient {
     /// <p>Deletes a job and its related job executions.</p> <p>Deleting a job may take time, depending on the number of job executions created for the job and various other factors. While the job is being deleted, the status of the job will be shown as "DELETION_IN_PROGRESS". Attempting to delete or cancel a job whose status is already "DELETION_IN_PROGRESS" will result in an error.</p> <p>Only 10 jobs may have status "DELETION_IN_PROGRESS" at the same time, or a LimitExceededException will occur.</p>
     #[allow(unused_mut)]
     async fn delete_job(&self, input: DeleteJobRequest) -> Result<(), RusotoError<DeleteJobError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!("/jobs/{job_id}", job_id = input.job_id);
 
         let mut request = SignedRequest::new("DELETE", "execute-api", &self.region, &request_uri);
@@ -26564,9 +26839,9 @@ impl Iot for IotClient {
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
             let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = ::std::mem::drop(response);
+            let _result = ::std::mem::drop(response);
 
-            Ok(result)
+            Ok(())
         } else {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             Err(DeleteJobError::from_response(response))
@@ -26579,6 +26854,7 @@ impl Iot for IotClient {
         &self,
         input: DeleteJobExecutionRequest,
     ) -> Result<(), RusotoError<DeleteJobExecutionError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/things/{thing_name}/jobs/{job_id}/executionNumber/{execution_number}",
             execution_number = input.execution_number,
@@ -26607,9 +26883,9 @@ impl Iot for IotClient {
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
             let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = ::std::mem::drop(response);
+            let _result = ::std::mem::drop(response);
 
-            Ok(result)
+            Ok(())
         } else {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             Err(DeleteJobExecutionError::from_response(response))
@@ -26622,6 +26898,7 @@ impl Iot for IotClient {
         &self,
         input: DeleteMitigationActionRequest,
     ) -> Result<DeleteMitigationActionResponse, RusotoError<DeleteMitigationActionError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/mitigationactions/actions/{action_name}",
             action_name = input.action_name
@@ -26655,6 +26932,7 @@ impl Iot for IotClient {
         &self,
         input: DeleteOTAUpdateRequest,
     ) -> Result<DeleteOTAUpdateResponse, RusotoError<DeleteOTAUpdateError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/otaUpdates/{ota_update_id}",
             ota_update_id = input.ota_update_id
@@ -26697,6 +26975,7 @@ impl Iot for IotClient {
         &self,
         input: DeletePolicyRequest,
     ) -> Result<(), RusotoError<DeletePolicyError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!("/policies/{policy_name}", policy_name = input.policy_name);
 
         let mut request = SignedRequest::new("DELETE", "execute-api", &self.region, &request_uri);
@@ -26711,9 +26990,9 @@ impl Iot for IotClient {
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
             let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = ::std::mem::drop(response);
+            let _result = ::std::mem::drop(response);
 
-            Ok(result)
+            Ok(())
         } else {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             Err(DeletePolicyError::from_response(response))
@@ -26726,6 +27005,7 @@ impl Iot for IotClient {
         &self,
         input: DeletePolicyVersionRequest,
     ) -> Result<(), RusotoError<DeletePolicyVersionError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/policies/{policy_name}/version/{policy_version_id}",
             policy_name = input.policy_name,
@@ -26744,9 +27024,9 @@ impl Iot for IotClient {
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
             let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = ::std::mem::drop(response);
+            let _result = ::std::mem::drop(response);
 
-            Ok(result)
+            Ok(())
         } else {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             Err(DeletePolicyVersionError::from_response(response))
@@ -26760,6 +27040,7 @@ impl Iot for IotClient {
         input: DeleteProvisioningTemplateRequest,
     ) -> Result<DeleteProvisioningTemplateResponse, RusotoError<DeleteProvisioningTemplateError>>
     {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/provisioning-templates/{template_name}",
             template_name = input.template_name
@@ -26796,6 +27077,7 @@ impl Iot for IotClient {
         DeleteProvisioningTemplateVersionResponse,
         RusotoError<DeleteProvisioningTemplateVersionError>,
     > {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/provisioning-templates/{template_name}/versions/{version_id}",
             template_name = input.template_name,
@@ -26831,6 +27113,7 @@ impl Iot for IotClient {
     async fn delete_registration_code(
         &self,
     ) -> Result<DeleteRegistrationCodeResponse, RusotoError<DeleteRegistrationCodeError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/registrationcode";
 
         let mut request = SignedRequest::new("DELETE", "execute-api", &self.region, &request_uri);
@@ -26861,6 +27144,7 @@ impl Iot for IotClient {
         &self,
         input: DeleteRoleAliasRequest,
     ) -> Result<DeleteRoleAliasResponse, RusotoError<DeleteRoleAliasError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!("/role-aliases/{role_alias}", role_alias = input.role_alias);
 
         let mut request = SignedRequest::new("DELETE", "execute-api", &self.region, &request_uri);
@@ -26891,6 +27175,7 @@ impl Iot for IotClient {
         &self,
         input: DeleteScheduledAuditRequest,
     ) -> Result<DeleteScheduledAuditResponse, RusotoError<DeleteScheduledAuditError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/audit/scheduledaudits/{scheduled_audit_name}",
             scheduled_audit_name = input.scheduled_audit_name
@@ -26924,6 +27209,7 @@ impl Iot for IotClient {
         &self,
         input: DeleteSecurityProfileRequest,
     ) -> Result<DeleteSecurityProfileResponse, RusotoError<DeleteSecurityProfileError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/security-profiles/{security_profile_name}",
             security_profile_name = input.security_profile_name
@@ -26963,6 +27249,7 @@ impl Iot for IotClient {
         &self,
         input: DeleteStreamRequest,
     ) -> Result<DeleteStreamResponse, RusotoError<DeleteStreamError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!("/streams/{stream_id}", stream_id = input.stream_id);
 
         let mut request = SignedRequest::new("DELETE", "execute-api", &self.region, &request_uri);
@@ -26993,6 +27280,7 @@ impl Iot for IotClient {
         &self,
         input: DeleteThingRequest,
     ) -> Result<DeleteThingResponse, RusotoError<DeleteThingError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!("/things/{thing_name}", thing_name = input.thing_name);
 
         let mut request = SignedRequest::new("DELETE", "execute-api", &self.region, &request_uri);
@@ -27029,6 +27317,7 @@ impl Iot for IotClient {
         &self,
         input: DeleteThingGroupRequest,
     ) -> Result<DeleteThingGroupResponse, RusotoError<DeleteThingGroupError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/thing-groups/{thing_group_name}",
             thing_group_name = input.thing_group_name
@@ -27068,6 +27357,7 @@ impl Iot for IotClient {
         &self,
         input: DeleteThingTypeRequest,
     ) -> Result<DeleteThingTypeResponse, RusotoError<DeleteThingTypeError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/thing-types/{thing_type_name}",
             thing_type_name = input.thing_type_name
@@ -27101,6 +27391,7 @@ impl Iot for IotClient {
         &self,
         input: DeleteTopicRuleRequest,
     ) -> Result<(), RusotoError<DeleteTopicRuleError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!("/rules/{rule_name}", rule_name = input.rule_name);
 
         let mut request = SignedRequest::new("DELETE", "execute-api", &self.region, &request_uri);
@@ -27115,9 +27406,9 @@ impl Iot for IotClient {
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
             let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = ::std::mem::drop(response);
+            let _result = ::std::mem::drop(response);
 
-            Ok(result)
+            Ok(())
         } else {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             Err(DeleteTopicRuleError::from_response(response))
@@ -27131,6 +27422,7 @@ impl Iot for IotClient {
         input: DeleteTopicRuleDestinationRequest,
     ) -> Result<DeleteTopicRuleDestinationResponse, RusotoError<DeleteTopicRuleDestinationError>>
     {
+        #![allow(clippy::needless_update)]
         let request_uri = format!("/destinations/{arn}", arn = input.arn);
 
         let mut request = SignedRequest::new("DELETE", "execute-api", &self.region, &request_uri);
@@ -27161,6 +27453,7 @@ impl Iot for IotClient {
         &self,
         input: DeleteV2LoggingLevelRequest,
     ) -> Result<(), RusotoError<DeleteV2LoggingLevelError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/v2LoggingLevel";
 
         let mut request = SignedRequest::new("DELETE", "execute-api", &self.region, &request_uri);
@@ -27180,9 +27473,9 @@ impl Iot for IotClient {
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
             let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = ::std::mem::drop(response);
+            let _result = ::std::mem::drop(response);
 
-            Ok(result)
+            Ok(())
         } else {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             Err(DeleteV2LoggingLevelError::from_response(response))
@@ -27195,6 +27488,7 @@ impl Iot for IotClient {
         &self,
         input: DeprecateThingTypeRequest,
     ) -> Result<DeprecateThingTypeResponse, RusotoError<DeprecateThingTypeError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/thing-types/{thing_type_name}/deprecate",
             thing_type_name = input.thing_type_name
@@ -27232,6 +27526,7 @@ impl Iot for IotClient {
         DescribeAccountAuditConfigurationResponse,
         RusotoError<DescribeAccountAuditConfigurationError>,
     > {
+        #![allow(clippy::needless_update)]
         let request_uri = "/audit/configuration";
 
         let mut request = SignedRequest::new("GET", "execute-api", &self.region, &request_uri);
@@ -27264,6 +27559,7 @@ impl Iot for IotClient {
         &self,
         input: DescribeAuditFindingRequest,
     ) -> Result<DescribeAuditFindingResponse, RusotoError<DescribeAuditFindingError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/audit/findings/{finding_id}",
             finding_id = input.finding_id
@@ -27300,6 +27596,7 @@ impl Iot for IotClient {
         DescribeAuditMitigationActionsTaskResponse,
         RusotoError<DescribeAuditMitigationActionsTaskError>,
     > {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/audit/mitigationactions/tasks/{task_id}",
             task_id = input.task_id
@@ -27335,6 +27632,7 @@ impl Iot for IotClient {
         &self,
         input: DescribeAuditSuppressionRequest,
     ) -> Result<DescribeAuditSuppressionResponse, RusotoError<DescribeAuditSuppressionError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/audit/suppressions/describe";
 
         let mut request = SignedRequest::new("POST", "execute-api", &self.region, &request_uri);
@@ -27367,6 +27665,7 @@ impl Iot for IotClient {
         &self,
         input: DescribeAuditTaskRequest,
     ) -> Result<DescribeAuditTaskResponse, RusotoError<DescribeAuditTaskError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!("/audit/tasks/{task_id}", task_id = input.task_id);
 
         let mut request = SignedRequest::new("GET", "execute-api", &self.region, &request_uri);
@@ -27397,6 +27696,7 @@ impl Iot for IotClient {
         &self,
         input: DescribeAuthorizerRequest,
     ) -> Result<DescribeAuthorizerResponse, RusotoError<DescribeAuthorizerError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/authorizer/{authorizer_name}",
             authorizer_name = input.authorizer_name
@@ -27430,6 +27730,7 @@ impl Iot for IotClient {
         &self,
         input: DescribeBillingGroupRequest,
     ) -> Result<DescribeBillingGroupResponse, RusotoError<DescribeBillingGroupError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/billing-groups/{billing_group_name}",
             billing_group_name = input.billing_group_name
@@ -27463,6 +27764,7 @@ impl Iot for IotClient {
         &self,
         input: DescribeCACertificateRequest,
     ) -> Result<DescribeCACertificateResponse, RusotoError<DescribeCACertificateError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/cacertificate/{ca_certificate_id}",
             ca_certificate_id = input.certificate_id
@@ -27496,6 +27798,7 @@ impl Iot for IotClient {
         &self,
         input: DescribeCertificateRequest,
     ) -> Result<DescribeCertificateResponse, RusotoError<DescribeCertificateError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/certificates/{certificate_id}",
             certificate_id = input.certificate_id
@@ -27529,6 +27832,7 @@ impl Iot for IotClient {
         &self,
         input: DescribeCustomMetricRequest,
     ) -> Result<DescribeCustomMetricResponse, RusotoError<DescribeCustomMetricError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/custom-metric/{metric_name}",
             metric_name = input.metric_name
@@ -27562,6 +27866,7 @@ impl Iot for IotClient {
         &self,
     ) -> Result<DescribeDefaultAuthorizerResponse, RusotoError<DescribeDefaultAuthorizerError>>
     {
+        #![allow(clippy::needless_update)]
         let request_uri = "/default-authorizer";
 
         let mut request = SignedRequest::new("GET", "execute-api", &self.region, &request_uri);
@@ -27595,6 +27900,7 @@ impl Iot for IotClient {
         DescribeDetectMitigationActionsTaskResponse,
         RusotoError<DescribeDetectMitigationActionsTaskError>,
     > {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/detect/mitigationactions/tasks/{task_id}",
             task_id = input.task_id
@@ -27630,6 +27936,7 @@ impl Iot for IotClient {
         &self,
         input: DescribeDimensionRequest,
     ) -> Result<DescribeDimensionResponse, RusotoError<DescribeDimensionError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!("/dimensions/{name}", name = input.name);
 
         let mut request = SignedRequest::new("GET", "execute-api", &self.region, &request_uri);
@@ -27661,6 +27968,7 @@ impl Iot for IotClient {
         input: DescribeDomainConfigurationRequest,
     ) -> Result<DescribeDomainConfigurationResponse, RusotoError<DescribeDomainConfigurationError>>
     {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/domainConfigurations/{domain_configuration_name}",
             domain_configuration_name = input.domain_configuration_name
@@ -27694,6 +28002,7 @@ impl Iot for IotClient {
         &self,
         input: DescribeEndpointRequest,
     ) -> Result<DescribeEndpointResponse, RusotoError<DescribeEndpointError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/endpoint";
 
         let mut request = SignedRequest::new("GET", "execute-api", &self.region, &request_uri);
@@ -27730,6 +28039,7 @@ impl Iot for IotClient {
         &self,
     ) -> Result<DescribeEventConfigurationsResponse, RusotoError<DescribeEventConfigurationsError>>
     {
+        #![allow(clippy::needless_update)]
         let request_uri = "/event-configurations";
 
         let mut request = SignedRequest::new("GET", "execute-api", &self.region, &request_uri);
@@ -27760,6 +28070,7 @@ impl Iot for IotClient {
         &self,
         input: DescribeIndexRequest,
     ) -> Result<DescribeIndexResponse, RusotoError<DescribeIndexError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!("/indices/{index_name}", index_name = input.index_name);
 
         let mut request = SignedRequest::new("GET", "execute-api", &self.region, &request_uri);
@@ -27790,6 +28101,7 @@ impl Iot for IotClient {
         &self,
         input: DescribeJobRequest,
     ) -> Result<DescribeJobResponse, RusotoError<DescribeJobError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!("/jobs/{job_id}", job_id = input.job_id);
 
         let mut request = SignedRequest::new("GET", "execute-api", &self.region, &request_uri);
@@ -27820,6 +28132,7 @@ impl Iot for IotClient {
         &self,
         input: DescribeJobExecutionRequest,
     ) -> Result<DescribeJobExecutionResponse, RusotoError<DescribeJobExecutionError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/things/{thing_name}/jobs/{job_id}",
             job_id = input.job_id,
@@ -27860,6 +28173,7 @@ impl Iot for IotClient {
         &self,
         input: DescribeMitigationActionRequest,
     ) -> Result<DescribeMitigationActionResponse, RusotoError<DescribeMitigationActionError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/mitigationactions/actions/{action_name}",
             action_name = input.action_name
@@ -27894,6 +28208,7 @@ impl Iot for IotClient {
         input: DescribeProvisioningTemplateRequest,
     ) -> Result<DescribeProvisioningTemplateResponse, RusotoError<DescribeProvisioningTemplateError>>
     {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/provisioning-templates/{template_name}",
             template_name = input.template_name
@@ -27930,6 +28245,7 @@ impl Iot for IotClient {
         DescribeProvisioningTemplateVersionResponse,
         RusotoError<DescribeProvisioningTemplateVersionError>,
     > {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/provisioning-templates/{template_name}/versions/{version_id}",
             template_name = input.template_name,
@@ -27966,6 +28282,7 @@ impl Iot for IotClient {
         &self,
         input: DescribeRoleAliasRequest,
     ) -> Result<DescribeRoleAliasResponse, RusotoError<DescribeRoleAliasError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!("/role-aliases/{role_alias}", role_alias = input.role_alias);
 
         let mut request = SignedRequest::new("GET", "execute-api", &self.region, &request_uri);
@@ -27996,6 +28313,7 @@ impl Iot for IotClient {
         &self,
         input: DescribeScheduledAuditRequest,
     ) -> Result<DescribeScheduledAuditResponse, RusotoError<DescribeScheduledAuditError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/audit/scheduledaudits/{scheduled_audit_name}",
             scheduled_audit_name = input.scheduled_audit_name
@@ -28029,6 +28347,7 @@ impl Iot for IotClient {
         &self,
         input: DescribeSecurityProfileRequest,
     ) -> Result<DescribeSecurityProfileResponse, RusotoError<DescribeSecurityProfileError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/security-profiles/{security_profile_name}",
             security_profile_name = input.security_profile_name
@@ -28062,6 +28381,7 @@ impl Iot for IotClient {
         &self,
         input: DescribeStreamRequest,
     ) -> Result<DescribeStreamResponse, RusotoError<DescribeStreamError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!("/streams/{stream_id}", stream_id = input.stream_id);
 
         let mut request = SignedRequest::new("GET", "execute-api", &self.region, &request_uri);
@@ -28092,6 +28412,7 @@ impl Iot for IotClient {
         &self,
         input: DescribeThingRequest,
     ) -> Result<DescribeThingResponse, RusotoError<DescribeThingError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!("/things/{thing_name}", thing_name = input.thing_name);
 
         let mut request = SignedRequest::new("GET", "execute-api", &self.region, &request_uri);
@@ -28122,6 +28443,7 @@ impl Iot for IotClient {
         &self,
         input: DescribeThingGroupRequest,
     ) -> Result<DescribeThingGroupResponse, RusotoError<DescribeThingGroupError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/thing-groups/{thing_group_name}",
             thing_group_name = input.thing_group_name
@@ -28158,6 +28480,7 @@ impl Iot for IotClient {
         DescribeThingRegistrationTaskResponse,
         RusotoError<DescribeThingRegistrationTaskError>,
     > {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/thing-registration-tasks/{task_id}",
             task_id = input.task_id
@@ -28191,6 +28514,7 @@ impl Iot for IotClient {
         &self,
         input: DescribeThingTypeRequest,
     ) -> Result<DescribeThingTypeResponse, RusotoError<DescribeThingTypeError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/thing-types/{thing_type_name}",
             thing_type_name = input.thing_type_name
@@ -28224,6 +28548,7 @@ impl Iot for IotClient {
         &self,
         input: DetachPolicyRequest,
     ) -> Result<(), RusotoError<DetachPolicyError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/target-policies/{policy_name}",
             policy_name = input.policy_name
@@ -28243,9 +28568,9 @@ impl Iot for IotClient {
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
             let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = ::std::mem::drop(response);
+            let _result = ::std::mem::drop(response);
 
-            Ok(result)
+            Ok(())
         } else {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             Err(DetachPolicyError::from_response(response))
@@ -28258,6 +28583,7 @@ impl Iot for IotClient {
         &self,
         input: DetachPrincipalPolicyRequest,
     ) -> Result<(), RusotoError<DetachPrincipalPolicyError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/principal-policies/{policy_name}",
             policy_name = input.policy_name
@@ -28277,9 +28603,9 @@ impl Iot for IotClient {
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
             let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = ::std::mem::drop(response);
+            let _result = ::std::mem::drop(response);
 
-            Ok(result)
+            Ok(())
         } else {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             Err(DetachPrincipalPolicyError::from_response(response))
@@ -28292,6 +28618,7 @@ impl Iot for IotClient {
         &self,
         input: DetachSecurityProfileRequest,
     ) -> Result<DetachSecurityProfileResponse, RusotoError<DetachSecurityProfileError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/security-profiles/{security_profile_name}/targets",
             security_profile_name = input.security_profile_name
@@ -28332,6 +28659,7 @@ impl Iot for IotClient {
         &self,
         input: DetachThingPrincipalRequest,
     ) -> Result<DetachThingPrincipalResponse, RusotoError<DetachThingPrincipalError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/things/{thing_name}/principals",
             thing_name = input.thing_name
@@ -28367,6 +28695,7 @@ impl Iot for IotClient {
         &self,
         input: DisableTopicRuleRequest,
     ) -> Result<(), RusotoError<DisableTopicRuleError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!("/rules/{rule_name}/disable", rule_name = input.rule_name);
 
         let mut request = SignedRequest::new("POST", "execute-api", &self.region, &request_uri);
@@ -28381,9 +28710,9 @@ impl Iot for IotClient {
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
             let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = ::std::mem::drop(response);
+            let _result = ::std::mem::drop(response);
 
-            Ok(result)
+            Ok(())
         } else {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             Err(DisableTopicRuleError::from_response(response))
@@ -28396,6 +28725,7 @@ impl Iot for IotClient {
         &self,
         input: EnableTopicRuleRequest,
     ) -> Result<(), RusotoError<EnableTopicRuleError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!("/rules/{rule_name}/enable", rule_name = input.rule_name);
 
         let mut request = SignedRequest::new("POST", "execute-api", &self.region, &request_uri);
@@ -28410,9 +28740,9 @@ impl Iot for IotClient {
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
             let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = ::std::mem::drop(response);
+            let _result = ::std::mem::drop(response);
 
-            Ok(result)
+            Ok(())
         } else {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             Err(EnableTopicRuleError::from_response(response))
@@ -28428,6 +28758,7 @@ impl Iot for IotClient {
         GetBehaviorModelTrainingSummariesResponse,
         RusotoError<GetBehaviorModelTrainingSummariesError>,
     > {
+        #![allow(clippy::needless_update)]
         let request_uri = "/behavior-model-training/summaries";
 
         let mut request = SignedRequest::new("GET", "execute-api", &self.region, &request_uri);
@@ -28472,6 +28803,7 @@ impl Iot for IotClient {
         &self,
         input: GetCardinalityRequest,
     ) -> Result<GetCardinalityResponse, RusotoError<GetCardinalityError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/indices/cardinality";
 
         let mut request = SignedRequest::new("POST", "execute-api", &self.region, &request_uri);
@@ -28504,6 +28836,7 @@ impl Iot for IotClient {
         &self,
         input: GetEffectivePoliciesRequest,
     ) -> Result<GetEffectivePoliciesResponse, RusotoError<GetEffectivePoliciesError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/effective-policies";
 
         let mut request = SignedRequest::new("POST", "execute-api", &self.region, &request_uri);
@@ -28541,6 +28874,7 @@ impl Iot for IotClient {
     async fn get_indexing_configuration(
         &self,
     ) -> Result<GetIndexingConfigurationResponse, RusotoError<GetIndexingConfigurationError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/indexing/config";
 
         let mut request = SignedRequest::new("GET", "execute-api", &self.region, &request_uri);
@@ -28571,6 +28905,7 @@ impl Iot for IotClient {
         &self,
         input: GetJobDocumentRequest,
     ) -> Result<GetJobDocumentResponse, RusotoError<GetJobDocumentError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!("/jobs/{job_id}/job-document", job_id = input.job_id);
 
         let mut request = SignedRequest::new("GET", "execute-api", &self.region, &request_uri);
@@ -28600,6 +28935,7 @@ impl Iot for IotClient {
     async fn get_logging_options(
         &self,
     ) -> Result<GetLoggingOptionsResponse, RusotoError<GetLoggingOptionsError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/loggingOptions";
 
         let mut request = SignedRequest::new("GET", "execute-api", &self.region, &request_uri);
@@ -28630,6 +28966,7 @@ impl Iot for IotClient {
         &self,
         input: GetOTAUpdateRequest,
     ) -> Result<GetOTAUpdateResponse, RusotoError<GetOTAUpdateError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/otaUpdates/{ota_update_id}",
             ota_update_id = input.ota_update_id
@@ -28663,6 +29000,7 @@ impl Iot for IotClient {
         &self,
         input: GetPercentilesRequest,
     ) -> Result<GetPercentilesResponse, RusotoError<GetPercentilesError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/indices/percentiles";
 
         let mut request = SignedRequest::new("POST", "execute-api", &self.region, &request_uri);
@@ -28695,6 +29033,7 @@ impl Iot for IotClient {
         &self,
         input: GetPolicyRequest,
     ) -> Result<GetPolicyResponse, RusotoError<GetPolicyError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!("/policies/{policy_name}", policy_name = input.policy_name);
 
         let mut request = SignedRequest::new("GET", "execute-api", &self.region, &request_uri);
@@ -28725,6 +29064,7 @@ impl Iot for IotClient {
         &self,
         input: GetPolicyVersionRequest,
     ) -> Result<GetPolicyVersionResponse, RusotoError<GetPolicyVersionError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/policies/{policy_name}/version/{policy_version_id}",
             policy_name = input.policy_name,
@@ -28758,6 +29098,7 @@ impl Iot for IotClient {
     async fn get_registration_code(
         &self,
     ) -> Result<GetRegistrationCodeResponse, RusotoError<GetRegistrationCodeError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/registrationcode";
 
         let mut request = SignedRequest::new("GET", "execute-api", &self.region, &request_uri);
@@ -28788,6 +29129,7 @@ impl Iot for IotClient {
         &self,
         input: GetStatisticsRequest,
     ) -> Result<GetStatisticsResponse, RusotoError<GetStatisticsError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/indices/statistics";
 
         let mut request = SignedRequest::new("POST", "execute-api", &self.region, &request_uri);
@@ -28820,6 +29162,7 @@ impl Iot for IotClient {
         &self,
         input: GetTopicRuleRequest,
     ) -> Result<GetTopicRuleResponse, RusotoError<GetTopicRuleError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!("/rules/{rule_name}", rule_name = input.rule_name);
 
         let mut request = SignedRequest::new("GET", "execute-api", &self.region, &request_uri);
@@ -28850,6 +29193,7 @@ impl Iot for IotClient {
         &self,
         input: GetTopicRuleDestinationRequest,
     ) -> Result<GetTopicRuleDestinationResponse, RusotoError<GetTopicRuleDestinationError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!("/destinations/{arn}", arn = input.arn);
 
         let mut request = SignedRequest::new("GET", "execute-api", &self.region, &request_uri);
@@ -28879,6 +29223,7 @@ impl Iot for IotClient {
     async fn get_v2_logging_options(
         &self,
     ) -> Result<GetV2LoggingOptionsResponse, RusotoError<GetV2LoggingOptionsError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/v2LoggingOptions";
 
         let mut request = SignedRequest::new("GET", "execute-api", &self.region, &request_uri);
@@ -28909,6 +29254,7 @@ impl Iot for IotClient {
         &self,
         input: ListActiveViolationsRequest,
     ) -> Result<ListActiveViolationsResponse, RusotoError<ListActiveViolationsError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/active-violations";
 
         let mut request = SignedRequest::new("GET", "execute-api", &self.region, &request_uri);
@@ -28960,6 +29306,7 @@ impl Iot for IotClient {
         &self,
         input: ListAttachedPoliciesRequest,
     ) -> Result<ListAttachedPoliciesResponse, RusotoError<ListAttachedPoliciesError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!("/attached-policies/{target}", target = input.target);
 
         let mut request = SignedRequest::new("POST", "execute-api", &self.region, &request_uri);
@@ -29002,6 +29349,7 @@ impl Iot for IotClient {
         &self,
         input: ListAuditFindingsRequest,
     ) -> Result<ListAuditFindingsResponse, RusotoError<ListAuditFindingsError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/audit/findings";
 
         let mut request = SignedRequest::new("POST", "execute-api", &self.region, &request_uri);
@@ -29037,6 +29385,7 @@ impl Iot for IotClient {
         ListAuditMitigationActionsExecutionsResponse,
         RusotoError<ListAuditMitigationActionsExecutionsError>,
     > {
+        #![allow(clippy::needless_update)]
         let request_uri = "/audit/mitigationactions/executions";
 
         let mut request = SignedRequest::new("GET", "execute-api", &self.region, &request_uri);
@@ -29086,6 +29435,7 @@ impl Iot for IotClient {
         ListAuditMitigationActionsTasksResponse,
         RusotoError<ListAuditMitigationActionsTasksError>,
     > {
+        #![allow(clippy::needless_update)]
         let request_uri = "/audit/mitigationactions/tasks";
 
         let mut request = SignedRequest::new("GET", "execute-api", &self.region, &request_uri);
@@ -29138,6 +29488,7 @@ impl Iot for IotClient {
         &self,
         input: ListAuditSuppressionsRequest,
     ) -> Result<ListAuditSuppressionsResponse, RusotoError<ListAuditSuppressionsError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/audit/suppressions/list";
 
         let mut request = SignedRequest::new("POST", "execute-api", &self.region, &request_uri);
@@ -29170,6 +29521,7 @@ impl Iot for IotClient {
         &self,
         input: ListAuditTasksRequest,
     ) -> Result<ListAuditTasksResponse, RusotoError<ListAuditTasksError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/audit/tasks";
 
         let mut request = SignedRequest::new("GET", "execute-api", &self.region, &request_uri);
@@ -29217,6 +29569,7 @@ impl Iot for IotClient {
         &self,
         input: ListAuthorizersRequest,
     ) -> Result<ListAuthorizersResponse, RusotoError<ListAuthorizersError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/authorizers/";
 
         let mut request = SignedRequest::new("GET", "execute-api", &self.region, &request_uri);
@@ -29262,6 +29615,7 @@ impl Iot for IotClient {
         &self,
         input: ListBillingGroupsRequest,
     ) -> Result<ListBillingGroupsResponse, RusotoError<ListBillingGroupsError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/billing-groups";
 
         let mut request = SignedRequest::new("GET", "execute-api", &self.region, &request_uri);
@@ -29304,6 +29658,7 @@ impl Iot for IotClient {
         &self,
         input: ListCACertificatesRequest,
     ) -> Result<ListCACertificatesResponse, RusotoError<ListCACertificatesError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/cacertificates";
 
         let mut request = SignedRequest::new("GET", "execute-api", &self.region, &request_uri);
@@ -29346,6 +29701,7 @@ impl Iot for IotClient {
         &self,
         input: ListCertificatesRequest,
     ) -> Result<ListCertificatesResponse, RusotoError<ListCertificatesError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/certificates";
 
         let mut request = SignedRequest::new("GET", "execute-api", &self.region, &request_uri);
@@ -29388,6 +29744,7 @@ impl Iot for IotClient {
         &self,
         input: ListCertificatesByCARequest,
     ) -> Result<ListCertificatesByCAResponse, RusotoError<ListCertificatesByCAError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/certificates-by-ca/{ca_certificate_id}",
             ca_certificate_id = input.ca_certificate_id
@@ -29433,6 +29790,7 @@ impl Iot for IotClient {
         &self,
         input: ListCustomMetricsRequest,
     ) -> Result<ListCustomMetricsResponse, RusotoError<ListCustomMetricsError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/custom-metrics";
 
         let mut request = SignedRequest::new("GET", "execute-api", &self.region, &request_uri);
@@ -29475,6 +29833,7 @@ impl Iot for IotClient {
         ListDetectMitigationActionsExecutionsResponse,
         RusotoError<ListDetectMitigationActionsExecutionsError>,
     > {
+        #![allow(clippy::needless_update)]
         let request_uri = "/detect/mitigationactions/executions";
 
         let mut request = SignedRequest::new("GET", "execute-api", &self.region, &request_uri);
@@ -29534,6 +29893,7 @@ impl Iot for IotClient {
         ListDetectMitigationActionsTasksResponse,
         RusotoError<ListDetectMitigationActionsTasksError>,
     > {
+        #![allow(clippy::needless_update)]
         let request_uri = "/detect/mitigationactions/tasks";
 
         let mut request = SignedRequest::new("GET", "execute-api", &self.region, &request_uri);
@@ -29577,6 +29937,7 @@ impl Iot for IotClient {
         &self,
         input: ListDimensionsRequest,
     ) -> Result<ListDimensionsResponse, RusotoError<ListDimensionsError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/dimensions";
 
         let mut request = SignedRequest::new("GET", "execute-api", &self.region, &request_uri);
@@ -29616,6 +29977,7 @@ impl Iot for IotClient {
         &self,
         input: ListDomainConfigurationsRequest,
     ) -> Result<ListDomainConfigurationsResponse, RusotoError<ListDomainConfigurationsError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/domainConfigurations";
 
         let mut request = SignedRequest::new("GET", "execute-api", &self.region, &request_uri);
@@ -29658,6 +30020,7 @@ impl Iot for IotClient {
         &self,
         input: ListIndicesRequest,
     ) -> Result<ListIndicesResponse, RusotoError<ListIndicesError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/indices";
 
         let mut request = SignedRequest::new("GET", "execute-api", &self.region, &request_uri);
@@ -29697,6 +30060,7 @@ impl Iot for IotClient {
         &self,
         input: ListJobExecutionsForJobRequest,
     ) -> Result<ListJobExecutionsForJobResponse, RusotoError<ListJobExecutionsForJobError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!("/jobs/{job_id}/things", job_id = input.job_id);
 
         let mut request = SignedRequest::new("GET", "execute-api", &self.region, &request_uri);
@@ -29740,6 +30104,7 @@ impl Iot for IotClient {
         input: ListJobExecutionsForThingRequest,
     ) -> Result<ListJobExecutionsForThingResponse, RusotoError<ListJobExecutionsForThingError>>
     {
+        #![allow(clippy::needless_update)]
         let request_uri = format!("/things/{thing_name}/jobs", thing_name = input.thing_name);
 
         let mut request = SignedRequest::new("GET", "execute-api", &self.region, &request_uri);
@@ -29785,6 +30150,7 @@ impl Iot for IotClient {
         &self,
         input: ListJobsRequest,
     ) -> Result<ListJobsResponse, RusotoError<ListJobsError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/jobs";
 
         let mut request = SignedRequest::new("GET", "execute-api", &self.region, &request_uri);
@@ -29839,6 +30205,7 @@ impl Iot for IotClient {
         &self,
         input: ListMitigationActionsRequest,
     ) -> Result<ListMitigationActionsResponse, RusotoError<ListMitigationActionsError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/mitigationactions/actions";
 
         let mut request = SignedRequest::new("GET", "execute-api", &self.region, &request_uri);
@@ -29881,6 +30248,7 @@ impl Iot for IotClient {
         &self,
         input: ListOTAUpdatesRequest,
     ) -> Result<ListOTAUpdatesResponse, RusotoError<ListOTAUpdatesError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/otaUpdates";
 
         let mut request = SignedRequest::new("GET", "execute-api", &self.region, &request_uri);
@@ -29923,6 +30291,7 @@ impl Iot for IotClient {
         &self,
         input: ListOutgoingCertificatesRequest,
     ) -> Result<ListOutgoingCertificatesResponse, RusotoError<ListOutgoingCertificatesError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/certificates-out-going";
 
         let mut request = SignedRequest::new("GET", "execute-api", &self.region, &request_uri);
@@ -29965,6 +30334,7 @@ impl Iot for IotClient {
         &self,
         input: ListPoliciesRequest,
     ) -> Result<ListPoliciesResponse, RusotoError<ListPoliciesError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/policies";
 
         let mut request = SignedRequest::new("GET", "execute-api", &self.region, &request_uri);
@@ -30007,6 +30377,7 @@ impl Iot for IotClient {
         &self,
         input: ListPolicyPrincipalsRequest,
     ) -> Result<ListPolicyPrincipalsResponse, RusotoError<ListPolicyPrincipalsError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/policy-principals";
 
         let mut request = SignedRequest::new("GET", "execute-api", &self.region, &request_uri);
@@ -30050,6 +30421,7 @@ impl Iot for IotClient {
         &self,
         input: ListPolicyVersionsRequest,
     ) -> Result<ListPolicyVersionsResponse, RusotoError<ListPolicyVersionsError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/policies/{policy_name}/version",
             policy_name = input.policy_name
@@ -30083,6 +30455,7 @@ impl Iot for IotClient {
         &self,
         input: ListPrincipalPoliciesRequest,
     ) -> Result<ListPrincipalPoliciesResponse, RusotoError<ListPrincipalPoliciesError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/principal-policies";
 
         let mut request = SignedRequest::new("GET", "execute-api", &self.region, &request_uri);
@@ -30126,6 +30499,7 @@ impl Iot for IotClient {
         &self,
         input: ListPrincipalThingsRequest,
     ) -> Result<ListPrincipalThingsResponse, RusotoError<ListPrincipalThingsError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/principals/things";
 
         let mut request = SignedRequest::new("GET", "execute-api", &self.region, &request_uri);
@@ -30169,6 +30543,7 @@ impl Iot for IotClient {
         ListProvisioningTemplateVersionsResponse,
         RusotoError<ListProvisioningTemplateVersionsError>,
     > {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/provisioning-templates/{template_name}/versions",
             template_name = input.template_name
@@ -30214,6 +30589,7 @@ impl Iot for IotClient {
         input: ListProvisioningTemplatesRequest,
     ) -> Result<ListProvisioningTemplatesResponse, RusotoError<ListProvisioningTemplatesError>>
     {
+        #![allow(clippy::needless_update)]
         let request_uri = "/provisioning-templates";
 
         let mut request = SignedRequest::new("GET", "execute-api", &self.region, &request_uri);
@@ -30253,6 +30629,7 @@ impl Iot for IotClient {
         &self,
         input: ListRoleAliasesRequest,
     ) -> Result<ListRoleAliasesResponse, RusotoError<ListRoleAliasesError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/role-aliases";
 
         let mut request = SignedRequest::new("GET", "execute-api", &self.region, &request_uri);
@@ -30295,6 +30672,7 @@ impl Iot for IotClient {
         &self,
         input: ListScheduledAuditsRequest,
     ) -> Result<ListScheduledAuditsResponse, RusotoError<ListScheduledAuditsError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/audit/scheduledaudits";
 
         let mut request = SignedRequest::new("GET", "execute-api", &self.region, &request_uri);
@@ -30334,6 +30712,7 @@ impl Iot for IotClient {
         &self,
         input: ListSecurityProfilesRequest,
     ) -> Result<ListSecurityProfilesResponse, RusotoError<ListSecurityProfilesError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/security-profiles";
 
         let mut request = SignedRequest::new("GET", "execute-api", &self.region, &request_uri);
@@ -30382,6 +30761,7 @@ impl Iot for IotClient {
         ListSecurityProfilesForTargetResponse,
         RusotoError<ListSecurityProfilesForTargetError>,
     > {
+        #![allow(clippy::needless_update)]
         let request_uri = "/security-profiles-for-target";
 
         let mut request = SignedRequest::new("GET", "execute-api", &self.region, &request_uri);
@@ -30428,6 +30808,7 @@ impl Iot for IotClient {
         &self,
         input: ListStreamsRequest,
     ) -> Result<ListStreamsResponse, RusotoError<ListStreamsError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/streams";
 
         let mut request = SignedRequest::new("GET", "execute-api", &self.region, &request_uri);
@@ -30470,6 +30851,7 @@ impl Iot for IotClient {
         &self,
         input: ListTagsForResourceRequest,
     ) -> Result<ListTagsForResourceResponse, RusotoError<ListTagsForResourceError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/tags";
 
         let mut request = SignedRequest::new("GET", "execute-api", &self.region, &request_uri);
@@ -30507,6 +30889,7 @@ impl Iot for IotClient {
         &self,
         input: ListTargetsForPolicyRequest,
     ) -> Result<ListTargetsForPolicyResponse, RusotoError<ListTargetsForPolicyError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/policy-targets/{policy_name}",
             policy_name = input.policy_name
@@ -30552,6 +30935,7 @@ impl Iot for IotClient {
         ListTargetsForSecurityProfileResponse,
         RusotoError<ListTargetsForSecurityProfileError>,
     > {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/security-profiles/{security_profile_name}/targets",
             security_profile_name = input.security_profile_name
@@ -30594,6 +30978,7 @@ impl Iot for IotClient {
         &self,
         input: ListThingGroupsRequest,
     ) -> Result<ListThingGroupsResponse, RusotoError<ListThingGroupsError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/thing-groups";
 
         let mut request = SignedRequest::new("GET", "execute-api", &self.region, &request_uri);
@@ -30642,6 +31027,7 @@ impl Iot for IotClient {
         &self,
         input: ListThingGroupsForThingRequest,
     ) -> Result<ListThingGroupsForThingResponse, RusotoError<ListThingGroupsForThingError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/things/{thing_name}/thing-groups",
             thing_name = input.thing_name
@@ -30684,6 +31070,7 @@ impl Iot for IotClient {
         &self,
         input: ListThingPrincipalsRequest,
     ) -> Result<ListThingPrincipalsResponse, RusotoError<ListThingPrincipalsError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/things/{thing_name}/principals",
             thing_name = input.thing_name
@@ -30729,6 +31116,7 @@ impl Iot for IotClient {
         ListThingRegistrationTaskReportsResponse,
         RusotoError<ListThingRegistrationTaskReportsError>,
     > {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/thing-registration-tasks/{task_id}/reports",
             task_id = input.task_id
@@ -30775,6 +31163,7 @@ impl Iot for IotClient {
         input: ListThingRegistrationTasksRequest,
     ) -> Result<ListThingRegistrationTasksResponse, RusotoError<ListThingRegistrationTasksError>>
     {
+        #![allow(clippy::needless_update)]
         let request_uri = "/thing-registration-tasks";
 
         let mut request = SignedRequest::new("GET", "execute-api", &self.region, &request_uri);
@@ -30817,6 +31206,7 @@ impl Iot for IotClient {
         &self,
         input: ListThingTypesRequest,
     ) -> Result<ListThingTypesResponse, RusotoError<ListThingTypesError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/thing-types";
 
         let mut request = SignedRequest::new("GET", "execute-api", &self.region, &request_uri);
@@ -30859,6 +31249,7 @@ impl Iot for IotClient {
         &self,
         input: ListThingsRequest,
     ) -> Result<ListThingsResponse, RusotoError<ListThingsError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/things";
 
         let mut request = SignedRequest::new("GET", "execute-api", &self.region, &request_uri);
@@ -30907,6 +31298,7 @@ impl Iot for IotClient {
         &self,
         input: ListThingsInBillingGroupRequest,
     ) -> Result<ListThingsInBillingGroupResponse, RusotoError<ListThingsInBillingGroupError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/billing-groups/{billing_group_name}/things",
             billing_group_name = input.billing_group_name
@@ -30949,6 +31341,7 @@ impl Iot for IotClient {
         &self,
         input: ListThingsInThingGroupRequest,
     ) -> Result<ListThingsInThingGroupResponse, RusotoError<ListThingsInThingGroupError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/thing-groups/{thing_group_name}/things",
             thing_group_name = input.thing_group_name
@@ -30995,6 +31388,7 @@ impl Iot for IotClient {
         input: ListTopicRuleDestinationsRequest,
     ) -> Result<ListTopicRuleDestinationsResponse, RusotoError<ListTopicRuleDestinationsError>>
     {
+        #![allow(clippy::needless_update)]
         let request_uri = "/destinations";
 
         let mut request = SignedRequest::new("GET", "execute-api", &self.region, &request_uri);
@@ -31034,6 +31428,7 @@ impl Iot for IotClient {
         &self,
         input: ListTopicRulesRequest,
     ) -> Result<ListTopicRulesResponse, RusotoError<ListTopicRulesError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/rules";
 
         let mut request = SignedRequest::new("GET", "execute-api", &self.region, &request_uri);
@@ -31079,6 +31474,7 @@ impl Iot for IotClient {
         &self,
         input: ListV2LoggingLevelsRequest,
     ) -> Result<ListV2LoggingLevelsResponse, RusotoError<ListV2LoggingLevelsError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/v2LoggingLevel";
 
         let mut request = SignedRequest::new("GET", "execute-api", &self.region, &request_uri);
@@ -31121,6 +31517,7 @@ impl Iot for IotClient {
         &self,
         input: ListViolationEventsRequest,
     ) -> Result<ListViolationEventsResponse, RusotoError<ListViolationEventsError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/violation-events";
 
         let mut request = SignedRequest::new("GET", "execute-api", &self.region, &request_uri);
@@ -31174,6 +31571,7 @@ impl Iot for IotClient {
         &self,
         input: RegisterCACertificateRequest,
     ) -> Result<RegisterCACertificateResponse, RusotoError<RegisterCACertificateError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/cacertificate";
 
         let mut request = SignedRequest::new("POST", "execute-api", &self.region, &request_uri);
@@ -31215,6 +31613,7 @@ impl Iot for IotClient {
         &self,
         input: RegisterCertificateRequest,
     ) -> Result<RegisterCertificateResponse, RusotoError<RegisterCertificateError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/certificate/register";
 
         let mut request = SignedRequest::new("POST", "execute-api", &self.region, &request_uri);
@@ -31248,6 +31647,7 @@ impl Iot for IotClient {
         input: RegisterCertificateWithoutCARequest,
     ) -> Result<RegisterCertificateWithoutCAResponse, RusotoError<RegisterCertificateWithoutCAError>>
     {
+        #![allow(clippy::needless_update)]
         let request_uri = "/certificate/register-no-ca";
 
         let mut request = SignedRequest::new("POST", "execute-api", &self.region, &request_uri);
@@ -31280,6 +31680,7 @@ impl Iot for IotClient {
         &self,
         input: RegisterThingRequest,
     ) -> Result<RegisterThingResponse, RusotoError<RegisterThingError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/things";
 
         let mut request = SignedRequest::new("POST", "execute-api", &self.region, &request_uri);
@@ -31312,6 +31713,7 @@ impl Iot for IotClient {
         &self,
         input: RejectCertificateTransferRequest,
     ) -> Result<(), RusotoError<RejectCertificateTransferError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/reject-certificate-transfer/{certificate_id}",
             certificate_id = input.certificate_id
@@ -31331,9 +31733,9 @@ impl Iot for IotClient {
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
             let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = ::std::mem::drop(response);
+            let _result = ::std::mem::drop(response);
 
-            Ok(result)
+            Ok(())
         } else {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             Err(RejectCertificateTransferError::from_response(response))
@@ -31347,6 +31749,7 @@ impl Iot for IotClient {
         input: RemoveThingFromBillingGroupRequest,
     ) -> Result<RemoveThingFromBillingGroupResponse, RusotoError<RemoveThingFromBillingGroupError>>
     {
+        #![allow(clippy::needless_update)]
         let request_uri = "/billing-groups/removeThingFromBillingGroup";
 
         let mut request = SignedRequest::new("PUT", "execute-api", &self.region, &request_uri);
@@ -31380,6 +31783,7 @@ impl Iot for IotClient {
         input: RemoveThingFromThingGroupRequest,
     ) -> Result<RemoveThingFromThingGroupResponse, RusotoError<RemoveThingFromThingGroupError>>
     {
+        #![allow(clippy::needless_update)]
         let request_uri = "/thing-groups/removeThingFromThingGroup";
 
         let mut request = SignedRequest::new("PUT", "execute-api", &self.region, &request_uri);
@@ -31412,6 +31816,7 @@ impl Iot for IotClient {
         &self,
         input: ReplaceTopicRuleRequest,
     ) -> Result<(), RusotoError<ReplaceTopicRuleError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!("/rules/{rule_name}", rule_name = input.rule_name);
 
         let mut request = SignedRequest::new("PATCH", "execute-api", &self.region, &request_uri);
@@ -31428,9 +31833,9 @@ impl Iot for IotClient {
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
             let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = ::std::mem::drop(response);
+            let _result = ::std::mem::drop(response);
 
-            Ok(result)
+            Ok(())
         } else {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             Err(ReplaceTopicRuleError::from_response(response))
@@ -31443,6 +31848,7 @@ impl Iot for IotClient {
         &self,
         input: SearchIndexRequest,
     ) -> Result<SearchIndexResponse, RusotoError<SearchIndexError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/indices/search";
 
         let mut request = SignedRequest::new("POST", "execute-api", &self.region, &request_uri);
@@ -31475,6 +31881,7 @@ impl Iot for IotClient {
         &self,
         input: SetDefaultAuthorizerRequest,
     ) -> Result<SetDefaultAuthorizerResponse, RusotoError<SetDefaultAuthorizerError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/default-authorizer";
 
         let mut request = SignedRequest::new("POST", "execute-api", &self.region, &request_uri);
@@ -31507,6 +31914,7 @@ impl Iot for IotClient {
         &self,
         input: SetDefaultPolicyVersionRequest,
     ) -> Result<(), RusotoError<SetDefaultPolicyVersionError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/policies/{policy_name}/version/{policy_version_id}",
             policy_name = input.policy_name,
@@ -31525,9 +31933,9 @@ impl Iot for IotClient {
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
             let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = ::std::mem::drop(response);
+            let _result = ::std::mem::drop(response);
 
-            Ok(result)
+            Ok(())
         } else {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             Err(SetDefaultPolicyVersionError::from_response(response))
@@ -31540,6 +31948,7 @@ impl Iot for IotClient {
         &self,
         input: SetLoggingOptionsRequest,
     ) -> Result<(), RusotoError<SetLoggingOptionsError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/loggingOptions";
 
         let mut request = SignedRequest::new("POST", "execute-api", &self.region, &request_uri);
@@ -31556,9 +31965,9 @@ impl Iot for IotClient {
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
             let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = ::std::mem::drop(response);
+            let _result = ::std::mem::drop(response);
 
-            Ok(result)
+            Ok(())
         } else {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             Err(SetLoggingOptionsError::from_response(response))
@@ -31571,6 +31980,7 @@ impl Iot for IotClient {
         &self,
         input: SetV2LoggingLevelRequest,
     ) -> Result<(), RusotoError<SetV2LoggingLevelError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/v2LoggingLevel";
 
         let mut request = SignedRequest::new("POST", "execute-api", &self.region, &request_uri);
@@ -31587,9 +31997,9 @@ impl Iot for IotClient {
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
             let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = ::std::mem::drop(response);
+            let _result = ::std::mem::drop(response);
 
-            Ok(result)
+            Ok(())
         } else {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             Err(SetV2LoggingLevelError::from_response(response))
@@ -31602,6 +32012,7 @@ impl Iot for IotClient {
         &self,
         input: SetV2LoggingOptionsRequest,
     ) -> Result<(), RusotoError<SetV2LoggingOptionsError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/v2LoggingOptions";
 
         let mut request = SignedRequest::new("POST", "execute-api", &self.region, &request_uri);
@@ -31618,9 +32029,9 @@ impl Iot for IotClient {
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
             let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = ::std::mem::drop(response);
+            let _result = ::std::mem::drop(response);
 
-            Ok(result)
+            Ok(())
         } else {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             Err(SetV2LoggingOptionsError::from_response(response))
@@ -31636,6 +32047,7 @@ impl Iot for IotClient {
         StartAuditMitigationActionsTaskResponse,
         RusotoError<StartAuditMitigationActionsTaskError>,
     > {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/audit/mitigationactions/tasks/{task_id}",
             task_id = input.task_id
@@ -31676,6 +32088,7 @@ impl Iot for IotClient {
         StartDetectMitigationActionsTaskResponse,
         RusotoError<StartDetectMitigationActionsTaskError>,
     > {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/detect/mitigationactions/tasks/{task_id}",
             task_id = input.task_id
@@ -31713,6 +32126,7 @@ impl Iot for IotClient {
         &self,
         input: StartOnDemandAuditTaskRequest,
     ) -> Result<StartOnDemandAuditTaskResponse, RusotoError<StartOnDemandAuditTaskError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/audit/tasks";
 
         let mut request = SignedRequest::new("POST", "execute-api", &self.region, &request_uri);
@@ -31746,6 +32160,7 @@ impl Iot for IotClient {
         input: StartThingRegistrationTaskRequest,
     ) -> Result<StartThingRegistrationTaskResponse, RusotoError<StartThingRegistrationTaskError>>
     {
+        #![allow(clippy::needless_update)]
         let request_uri = "/thing-registration-tasks";
 
         let mut request = SignedRequest::new("POST", "execute-api", &self.region, &request_uri);
@@ -31779,6 +32194,7 @@ impl Iot for IotClient {
         input: StopThingRegistrationTaskRequest,
     ) -> Result<StopThingRegistrationTaskResponse, RusotoError<StopThingRegistrationTaskError>>
     {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/thing-registration-tasks/{task_id}/cancel",
             task_id = input.task_id
@@ -31812,6 +32228,7 @@ impl Iot for IotClient {
         &self,
         input: TagResourceRequest,
     ) -> Result<TagResourceResponse, RusotoError<TagResourceError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/tags";
 
         let mut request = SignedRequest::new("POST", "execute-api", &self.region, &request_uri);
@@ -31844,6 +32261,7 @@ impl Iot for IotClient {
         &self,
         input: TestAuthorizationRequest,
     ) -> Result<TestAuthorizationResponse, RusotoError<TestAuthorizationError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/test-authorization";
 
         let mut request = SignedRequest::new("POST", "execute-api", &self.region, &request_uri);
@@ -31882,6 +32300,7 @@ impl Iot for IotClient {
         &self,
         input: TestInvokeAuthorizerRequest,
     ) -> Result<TestInvokeAuthorizerResponse, RusotoError<TestInvokeAuthorizerError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/authorizer/{authorizer_name}/test",
             authorizer_name = input.authorizer_name
@@ -31917,6 +32336,7 @@ impl Iot for IotClient {
         &self,
         input: TransferCertificateRequest,
     ) -> Result<TransferCertificateResponse, RusotoError<TransferCertificateError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/transfer-certificate/{certificate_id}",
             certificate_id = input.certificate_id
@@ -31956,6 +32376,7 @@ impl Iot for IotClient {
         &self,
         input: UntagResourceRequest,
     ) -> Result<UntagResourceResponse, RusotoError<UntagResourceError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/untag";
 
         let mut request = SignedRequest::new("POST", "execute-api", &self.region, &request_uri);
@@ -31991,6 +32412,7 @@ impl Iot for IotClient {
         UpdateAccountAuditConfigurationResponse,
         RusotoError<UpdateAccountAuditConfigurationError>,
     > {
+        #![allow(clippy::needless_update)]
         let request_uri = "/audit/configuration";
 
         let mut request = SignedRequest::new("PATCH", "execute-api", &self.region, &request_uri);
@@ -32025,6 +32447,7 @@ impl Iot for IotClient {
         &self,
         input: UpdateAuditSuppressionRequest,
     ) -> Result<UpdateAuditSuppressionResponse, RusotoError<UpdateAuditSuppressionError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/audit/suppressions/update";
 
         let mut request = SignedRequest::new("PATCH", "execute-api", &self.region, &request_uri);
@@ -32057,6 +32480,7 @@ impl Iot for IotClient {
         &self,
         input: UpdateAuthorizerRequest,
     ) -> Result<UpdateAuthorizerResponse, RusotoError<UpdateAuthorizerError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/authorizer/{authorizer_name}",
             authorizer_name = input.authorizer_name
@@ -32092,6 +32516,7 @@ impl Iot for IotClient {
         &self,
         input: UpdateBillingGroupRequest,
     ) -> Result<UpdateBillingGroupResponse, RusotoError<UpdateBillingGroupError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/billing-groups/{billing_group_name}",
             billing_group_name = input.billing_group_name
@@ -32127,6 +32552,7 @@ impl Iot for IotClient {
         &self,
         input: UpdateCACertificateRequest,
     ) -> Result<(), RusotoError<UpdateCACertificateError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/cacertificate/{ca_certificate_id}",
             ca_certificate_id = input.certificate_id
@@ -32155,9 +32581,9 @@ impl Iot for IotClient {
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
             let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = ::std::mem::drop(response);
+            let _result = ::std::mem::drop(response);
 
-            Ok(result)
+            Ok(())
         } else {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             Err(UpdateCACertificateError::from_response(response))
@@ -32170,6 +32596,7 @@ impl Iot for IotClient {
         &self,
         input: UpdateCertificateRequest,
     ) -> Result<(), RusotoError<UpdateCertificateError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/certificates/{certificate_id}",
             certificate_id = input.certificate_id
@@ -32191,9 +32618,9 @@ impl Iot for IotClient {
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
             let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = ::std::mem::drop(response);
+            let _result = ::std::mem::drop(response);
 
-            Ok(result)
+            Ok(())
         } else {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             Err(UpdateCertificateError::from_response(response))
@@ -32206,6 +32633,7 @@ impl Iot for IotClient {
         &self,
         input: UpdateCustomMetricRequest,
     ) -> Result<UpdateCustomMetricResponse, RusotoError<UpdateCustomMetricError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/custom-metric/{metric_name}",
             metric_name = input.metric_name
@@ -32241,6 +32669,7 @@ impl Iot for IotClient {
         &self,
         input: UpdateDimensionRequest,
     ) -> Result<UpdateDimensionResponse, RusotoError<UpdateDimensionError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!("/dimensions/{name}", name = input.name);
 
         let mut request = SignedRequest::new("PATCH", "execute-api", &self.region, &request_uri);
@@ -32274,6 +32703,7 @@ impl Iot for IotClient {
         input: UpdateDomainConfigurationRequest,
     ) -> Result<UpdateDomainConfigurationResponse, RusotoError<UpdateDomainConfigurationError>>
     {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/domainConfigurations/{domain_configuration_name}",
             domain_configuration_name = input.domain_configuration_name
@@ -32309,6 +32739,7 @@ impl Iot for IotClient {
         &self,
         input: UpdateDynamicThingGroupRequest,
     ) -> Result<UpdateDynamicThingGroupResponse, RusotoError<UpdateDynamicThingGroupError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/dynamic-thing-groups/{thing_group_name}",
             thing_group_name = input.thing_group_name
@@ -32345,6 +32776,7 @@ impl Iot for IotClient {
         input: UpdateEventConfigurationsRequest,
     ) -> Result<UpdateEventConfigurationsResponse, RusotoError<UpdateEventConfigurationsError>>
     {
+        #![allow(clippy::needless_update)]
         let request_uri = "/event-configurations";
 
         let mut request = SignedRequest::new("PATCH", "execute-api", &self.region, &request_uri);
@@ -32378,6 +32810,7 @@ impl Iot for IotClient {
         input: UpdateIndexingConfigurationRequest,
     ) -> Result<UpdateIndexingConfigurationResponse, RusotoError<UpdateIndexingConfigurationError>>
     {
+        #![allow(clippy::needless_update)]
         let request_uri = "/indexing/config";
 
         let mut request = SignedRequest::new("POST", "execute-api", &self.region, &request_uri);
@@ -32407,6 +32840,7 @@ impl Iot for IotClient {
     /// <p>Updates supported fields of the specified job.</p>
     #[allow(unused_mut)]
     async fn update_job(&self, input: UpdateJobRequest) -> Result<(), RusotoError<UpdateJobError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!("/jobs/{job_id}", job_id = input.job_id);
 
         let mut request = SignedRequest::new("PATCH", "execute-api", &self.region, &request_uri);
@@ -32429,9 +32863,9 @@ impl Iot for IotClient {
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
             let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = ::std::mem::drop(response);
+            let _result = ::std::mem::drop(response);
 
-            Ok(result)
+            Ok(())
         } else {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             Err(UpdateJobError::from_response(response))
@@ -32444,6 +32878,7 @@ impl Iot for IotClient {
         &self,
         input: UpdateMitigationActionRequest,
     ) -> Result<UpdateMitigationActionResponse, RusotoError<UpdateMitigationActionError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/mitigationactions/actions/{action_name}",
             action_name = input.action_name
@@ -32480,6 +32915,7 @@ impl Iot for IotClient {
         input: UpdateProvisioningTemplateRequest,
     ) -> Result<UpdateProvisioningTemplateResponse, RusotoError<UpdateProvisioningTemplateError>>
     {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/provisioning-templates/{template_name}",
             template_name = input.template_name
@@ -32515,6 +32951,7 @@ impl Iot for IotClient {
         &self,
         input: UpdateRoleAliasRequest,
     ) -> Result<UpdateRoleAliasResponse, RusotoError<UpdateRoleAliasError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!("/role-aliases/{role_alias}", role_alias = input.role_alias);
 
         let mut request = SignedRequest::new("PUT", "execute-api", &self.region, &request_uri);
@@ -32547,6 +32984,7 @@ impl Iot for IotClient {
         &self,
         input: UpdateScheduledAuditRequest,
     ) -> Result<UpdateScheduledAuditResponse, RusotoError<UpdateScheduledAuditError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/audit/scheduledaudits/{scheduled_audit_name}",
             scheduled_audit_name = input.scheduled_audit_name
@@ -32582,6 +33020,7 @@ impl Iot for IotClient {
         &self,
         input: UpdateSecurityProfileRequest,
     ) -> Result<UpdateSecurityProfileResponse, RusotoError<UpdateSecurityProfileError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/security-profiles/{security_profile_name}",
             security_profile_name = input.security_profile_name
@@ -32623,6 +33062,7 @@ impl Iot for IotClient {
         &self,
         input: UpdateStreamRequest,
     ) -> Result<UpdateStreamResponse, RusotoError<UpdateStreamError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!("/streams/{stream_id}", stream_id = input.stream_id);
 
         let mut request = SignedRequest::new("PUT", "execute-api", &self.region, &request_uri);
@@ -32655,6 +33095,7 @@ impl Iot for IotClient {
         &self,
         input: UpdateThingRequest,
     ) -> Result<UpdateThingResponse, RusotoError<UpdateThingError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!("/things/{thing_name}", thing_name = input.thing_name);
 
         let mut request = SignedRequest::new("PATCH", "execute-api", &self.region, &request_uri);
@@ -32687,6 +33128,7 @@ impl Iot for IotClient {
         &self,
         input: UpdateThingGroupRequest,
     ) -> Result<UpdateThingGroupResponse, RusotoError<UpdateThingGroupError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/thing-groups/{thing_group_name}",
             thing_group_name = input.thing_group_name
@@ -32723,6 +33165,7 @@ impl Iot for IotClient {
         input: UpdateThingGroupsForThingRequest,
     ) -> Result<UpdateThingGroupsForThingResponse, RusotoError<UpdateThingGroupsForThingError>>
     {
+        #![allow(clippy::needless_update)]
         let request_uri = "/thing-groups/updateThingGroupsForThing";
 
         let mut request = SignedRequest::new("PUT", "execute-api", &self.region, &request_uri);
@@ -32756,6 +33199,7 @@ impl Iot for IotClient {
         input: UpdateTopicRuleDestinationRequest,
     ) -> Result<UpdateTopicRuleDestinationResponse, RusotoError<UpdateTopicRuleDestinationError>>
     {
+        #![allow(clippy::needless_update)]
         let request_uri = "/destinations";
 
         let mut request = SignedRequest::new("PATCH", "execute-api", &self.region, &request_uri);
@@ -32791,6 +33235,7 @@ impl Iot for IotClient {
         ValidateSecurityProfileBehaviorsResponse,
         RusotoError<ValidateSecurityProfileBehaviorsError>,
     > {
+        #![allow(clippy::needless_update)]
         let request_uri = "/security-profile-behaviors/validate";
 
         let mut request = SignedRequest::new("POST", "execute-api", &self.region, &request_uri);

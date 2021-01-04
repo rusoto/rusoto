@@ -24,7 +24,6 @@ use rusoto_core::proto;
 use rusoto_core::signature::SignedRequest;
 #[allow(unused_imports)]
 use serde::{Deserialize, Serialize};
-use serde_json;
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct AssociateDomainRequest {
@@ -901,6 +900,7 @@ pub enum AssociateDomainError {
 impl AssociateDomainError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<AssociateDomainError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalServerErrorException" => {
                     return RusotoError::Service(AssociateDomainError::InternalServerError(err.msg))
@@ -965,6 +965,7 @@ impl AssociateWebsiteAuthorizationProviderError {
         res: BufferedHttpResponse,
     ) -> RusotoError<AssociateWebsiteAuthorizationProviderError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalServerErrorException" => {
                     return RusotoError::Service(
@@ -1051,6 +1052,7 @@ impl AssociateWebsiteCertificateAuthorityError {
         res: BufferedHttpResponse,
     ) -> RusotoError<AssociateWebsiteCertificateAuthorityError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalServerErrorException" => {
                     return RusotoError::Service(
@@ -1135,6 +1137,7 @@ pub enum CreateFleetError {
 impl CreateFleetError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateFleetError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalServerErrorException" => {
                     return RusotoError::Service(CreateFleetError::InternalServerError(err.msg))
@@ -1193,6 +1196,7 @@ pub enum DeleteFleetError {
 impl DeleteFleetError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteFleetError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalServerErrorException" => {
                     return RusotoError::Service(DeleteFleetError::InternalServerError(err.msg))
@@ -1249,6 +1253,7 @@ impl DescribeAuditStreamConfigurationError {
         res: BufferedHttpResponse,
     ) -> RusotoError<DescribeAuditStreamConfigurationError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalServerErrorException" => {
                     return RusotoError::Service(
@@ -1325,6 +1330,7 @@ impl DescribeCompanyNetworkConfigurationError {
         res: BufferedHttpResponse,
     ) -> RusotoError<DescribeCompanyNetworkConfigurationError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalServerErrorException" => {
                     return RusotoError::Service(
@@ -1399,6 +1405,7 @@ pub enum DescribeDeviceError {
 impl DescribeDeviceError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeDeviceError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalServerErrorException" => {
                     return RusotoError::Service(DescribeDeviceError::InternalServerError(err.msg))
@@ -1455,6 +1462,7 @@ impl DescribeDevicePolicyConfigurationError {
         res: BufferedHttpResponse,
     ) -> RusotoError<DescribeDevicePolicyConfigurationError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalServerErrorException" => {
                     return RusotoError::Service(
@@ -1529,6 +1537,7 @@ pub enum DescribeDomainError {
 impl DescribeDomainError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeDomainError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalServerErrorException" => {
                     return RusotoError::Service(DescribeDomainError::InternalServerError(err.msg))
@@ -1583,6 +1592,7 @@ pub enum DescribeFleetMetadataError {
 impl DescribeFleetMetadataError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeFleetMetadataError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalServerErrorException" => {
                     return RusotoError::Service(DescribeFleetMetadataError::InternalServerError(
@@ -1647,6 +1657,7 @@ impl DescribeIdentityProviderConfigurationError {
         res: BufferedHttpResponse,
     ) -> RusotoError<DescribeIdentityProviderConfigurationError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalServerErrorException" => {
                     return RusotoError::Service(
@@ -1723,6 +1734,7 @@ impl DescribeWebsiteCertificateAuthorityError {
         res: BufferedHttpResponse,
     ) -> RusotoError<DescribeWebsiteCertificateAuthorityError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalServerErrorException" => {
                     return RusotoError::Service(
@@ -1797,6 +1809,7 @@ pub enum DisassociateDomainError {
 impl DisassociateDomainError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DisassociateDomainError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalServerErrorException" => {
                     return RusotoError::Service(DisassociateDomainError::InternalServerError(
@@ -1857,6 +1870,7 @@ impl DisassociateWebsiteAuthorizationProviderError {
         res: BufferedHttpResponse,
     ) -> RusotoError<DisassociateWebsiteAuthorizationProviderError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalServerErrorException" => {
                     return RusotoError::Service(
@@ -1943,6 +1957,7 @@ impl DisassociateWebsiteCertificateAuthorityError {
         res: BufferedHttpResponse,
     ) -> RusotoError<DisassociateWebsiteCertificateAuthorityError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalServerErrorException" => {
                     return RusotoError::Service(
@@ -2017,6 +2032,7 @@ pub enum ListDevicesError {
 impl ListDevicesError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListDevicesError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalServerErrorException" => {
                     return RusotoError::Service(ListDevicesError::InternalServerError(err.msg))
@@ -2071,6 +2087,7 @@ pub enum ListDomainsError {
 impl ListDomainsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListDomainsError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalServerErrorException" => {
                     return RusotoError::Service(ListDomainsError::InternalServerError(err.msg))
@@ -2123,6 +2140,7 @@ pub enum ListFleetsError {
 impl ListFleetsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListFleetsError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalServerErrorException" => {
                     return RusotoError::Service(ListFleetsError::InternalServerError(err.msg))
@@ -2165,6 +2183,7 @@ pub enum ListTagsForResourceError {
 impl ListTagsForResourceError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListTagsForResourceError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidRequestException" => {
                     return RusotoError::Service(ListTagsForResourceError::InvalidRequest(err.msg))
@@ -2205,6 +2224,7 @@ impl ListWebsiteAuthorizationProvidersError {
         res: BufferedHttpResponse,
     ) -> RusotoError<ListWebsiteAuthorizationProvidersError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalServerErrorException" => {
                     return RusotoError::Service(
@@ -2279,6 +2299,7 @@ impl ListWebsiteCertificateAuthoritiesError {
         res: BufferedHttpResponse,
     ) -> RusotoError<ListWebsiteCertificateAuthoritiesError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalServerErrorException" => {
                     return RusotoError::Service(
@@ -2345,6 +2366,7 @@ pub enum RestoreDomainAccessError {
 impl RestoreDomainAccessError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<RestoreDomainAccessError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalServerErrorException" => {
                     return RusotoError::Service(RestoreDomainAccessError::InternalServerError(
@@ -2403,6 +2425,7 @@ pub enum RevokeDomainAccessError {
 impl RevokeDomainAccessError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<RevokeDomainAccessError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalServerErrorException" => {
                     return RusotoError::Service(RevokeDomainAccessError::InternalServerError(
@@ -2459,6 +2482,7 @@ pub enum SignOutUserError {
 impl SignOutUserError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<SignOutUserError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalServerErrorException" => {
                     return RusotoError::Service(SignOutUserError::InternalServerError(err.msg))
@@ -2505,6 +2529,7 @@ pub enum TagResourceError {
 impl TagResourceError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<TagResourceError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidRequestException" => {
                     return RusotoError::Service(TagResourceError::InvalidRequest(err.msg))
@@ -2535,6 +2560,7 @@ pub enum UntagResourceError {
 impl UntagResourceError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UntagResourceError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidRequestException" => {
                     return RusotoError::Service(UntagResourceError::InvalidRequest(err.msg))
@@ -2575,6 +2601,7 @@ impl UpdateAuditStreamConfigurationError {
         res: BufferedHttpResponse,
     ) -> RusotoError<UpdateAuditStreamConfigurationError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalServerErrorException" => {
                     return RusotoError::Service(
@@ -2649,6 +2676,7 @@ impl UpdateCompanyNetworkConfigurationError {
         res: BufferedHttpResponse,
     ) -> RusotoError<UpdateCompanyNetworkConfigurationError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalServerErrorException" => {
                     return RusotoError::Service(
@@ -2725,6 +2753,7 @@ impl UpdateDevicePolicyConfigurationError {
         res: BufferedHttpResponse,
     ) -> RusotoError<UpdateDevicePolicyConfigurationError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalServerErrorException" => {
                     return RusotoError::Service(
@@ -2797,6 +2826,7 @@ pub enum UpdateDomainMetadataError {
 impl UpdateDomainMetadataError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateDomainMetadataError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalServerErrorException" => {
                     return RusotoError::Service(UpdateDomainMetadataError::InternalServerError(
@@ -2857,6 +2887,7 @@ pub enum UpdateFleetMetadataError {
 impl UpdateFleetMetadataError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateFleetMetadataError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalServerErrorException" => {
                     return RusotoError::Service(UpdateFleetMetadataError::InternalServerError(
@@ -2917,6 +2948,7 @@ impl UpdateIdentityProviderConfigurationError {
         res: BufferedHttpResponse,
     ) -> RusotoError<UpdateIdentityProviderConfigurationError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalServerErrorException" => {
                     return RusotoError::Service(
@@ -3265,6 +3297,7 @@ impl Worklink for WorklinkClient {
         &self,
         input: AssociateDomainRequest,
     ) -> Result<AssociateDomainResponse, RusotoError<AssociateDomainError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/associateDomain";
 
         let mut request = SignedRequest::new("POST", "worklink", &self.region, &request_uri);
@@ -3299,6 +3332,7 @@ impl Worklink for WorklinkClient {
         AssociateWebsiteAuthorizationProviderResponse,
         RusotoError<AssociateWebsiteAuthorizationProviderError>,
     > {
+        #![allow(clippy::needless_update)]
         let request_uri = "/associateWebsiteAuthorizationProvider";
 
         let mut request = SignedRequest::new("POST", "worklink", &self.region, &request_uri);
@@ -3335,6 +3369,7 @@ impl Worklink for WorklinkClient {
         AssociateWebsiteCertificateAuthorityResponse,
         RusotoError<AssociateWebsiteCertificateAuthorityError>,
     > {
+        #![allow(clippy::needless_update)]
         let request_uri = "/associateWebsiteCertificateAuthority";
 
         let mut request = SignedRequest::new("POST", "worklink", &self.region, &request_uri);
@@ -3368,6 +3403,7 @@ impl Worklink for WorklinkClient {
         &self,
         input: CreateFleetRequest,
     ) -> Result<CreateFleetResponse, RusotoError<CreateFleetError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/createFleet";
 
         let mut request = SignedRequest::new("POST", "worklink", &self.region, &request_uri);
@@ -3399,6 +3435,7 @@ impl Worklink for WorklinkClient {
         &self,
         input: DeleteFleetRequest,
     ) -> Result<DeleteFleetResponse, RusotoError<DeleteFleetError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/deleteFleet";
 
         let mut request = SignedRequest::new("POST", "worklink", &self.region, &request_uri);
@@ -3433,6 +3470,7 @@ impl Worklink for WorklinkClient {
         DescribeAuditStreamConfigurationResponse,
         RusotoError<DescribeAuditStreamConfigurationError>,
     > {
+        #![allow(clippy::needless_update)]
         let request_uri = "/describeAuditStreamConfiguration";
 
         let mut request = SignedRequest::new("POST", "worklink", &self.region, &request_uri);
@@ -3469,6 +3507,7 @@ impl Worklink for WorklinkClient {
         DescribeCompanyNetworkConfigurationResponse,
         RusotoError<DescribeCompanyNetworkConfigurationError>,
     > {
+        #![allow(clippy::needless_update)]
         let request_uri = "/describeCompanyNetworkConfiguration";
 
         let mut request = SignedRequest::new("POST", "worklink", &self.region, &request_uri);
@@ -3502,6 +3541,7 @@ impl Worklink for WorklinkClient {
         &self,
         input: DescribeDeviceRequest,
     ) -> Result<DescribeDeviceResponse, RusotoError<DescribeDeviceError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/describeDevice";
 
         let mut request = SignedRequest::new("POST", "worklink", &self.region, &request_uri);
@@ -3536,6 +3576,7 @@ impl Worklink for WorklinkClient {
         DescribeDevicePolicyConfigurationResponse,
         RusotoError<DescribeDevicePolicyConfigurationError>,
     > {
+        #![allow(clippy::needless_update)]
         let request_uri = "/describeDevicePolicyConfiguration";
 
         let mut request = SignedRequest::new("POST", "worklink", &self.region, &request_uri);
@@ -3569,6 +3610,7 @@ impl Worklink for WorklinkClient {
         &self,
         input: DescribeDomainRequest,
     ) -> Result<DescribeDomainResponse, RusotoError<DescribeDomainError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/describeDomain";
 
         let mut request = SignedRequest::new("POST", "worklink", &self.region, &request_uri);
@@ -3600,6 +3642,7 @@ impl Worklink for WorklinkClient {
         &self,
         input: DescribeFleetMetadataRequest,
     ) -> Result<DescribeFleetMetadataResponse, RusotoError<DescribeFleetMetadataError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/describeFleetMetadata";
 
         let mut request = SignedRequest::new("POST", "worklink", &self.region, &request_uri);
@@ -3634,6 +3677,7 @@ impl Worklink for WorklinkClient {
         DescribeIdentityProviderConfigurationResponse,
         RusotoError<DescribeIdentityProviderConfigurationError>,
     > {
+        #![allow(clippy::needless_update)]
         let request_uri = "/describeIdentityProviderConfiguration";
 
         let mut request = SignedRequest::new("POST", "worklink", &self.region, &request_uri);
@@ -3670,6 +3714,7 @@ impl Worklink for WorklinkClient {
         DescribeWebsiteCertificateAuthorityResponse,
         RusotoError<DescribeWebsiteCertificateAuthorityError>,
     > {
+        #![allow(clippy::needless_update)]
         let request_uri = "/describeWebsiteCertificateAuthority";
 
         let mut request = SignedRequest::new("POST", "worklink", &self.region, &request_uri);
@@ -3703,6 +3748,7 @@ impl Worklink for WorklinkClient {
         &self,
         input: DisassociateDomainRequest,
     ) -> Result<DisassociateDomainResponse, RusotoError<DisassociateDomainError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/disassociateDomain";
 
         let mut request = SignedRequest::new("POST", "worklink", &self.region, &request_uri);
@@ -3737,6 +3783,7 @@ impl Worklink for WorklinkClient {
         DisassociateWebsiteAuthorizationProviderResponse,
         RusotoError<DisassociateWebsiteAuthorizationProviderError>,
     > {
+        #![allow(clippy::needless_update)]
         let request_uri = "/disassociateWebsiteAuthorizationProvider";
 
         let mut request = SignedRequest::new("POST", "worklink", &self.region, &request_uri);
@@ -3771,6 +3818,7 @@ impl Worklink for WorklinkClient {
         DisassociateWebsiteCertificateAuthorityResponse,
         RusotoError<DisassociateWebsiteCertificateAuthorityError>,
     > {
+        #![allow(clippy::needless_update)]
         let request_uri = "/disassociateWebsiteCertificateAuthority";
 
         let mut request = SignedRequest::new("POST", "worklink", &self.region, &request_uri);
@@ -3804,6 +3852,7 @@ impl Worklink for WorklinkClient {
         &self,
         input: ListDevicesRequest,
     ) -> Result<ListDevicesResponse, RusotoError<ListDevicesError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/listDevices";
 
         let mut request = SignedRequest::new("POST", "worklink", &self.region, &request_uri);
@@ -3835,6 +3884,7 @@ impl Worklink for WorklinkClient {
         &self,
         input: ListDomainsRequest,
     ) -> Result<ListDomainsResponse, RusotoError<ListDomainsError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/listDomains";
 
         let mut request = SignedRequest::new("POST", "worklink", &self.region, &request_uri);
@@ -3866,6 +3916,7 @@ impl Worklink for WorklinkClient {
         &self,
         input: ListFleetsRequest,
     ) -> Result<ListFleetsResponse, RusotoError<ListFleetsError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/listFleets";
 
         let mut request = SignedRequest::new("POST", "worklink", &self.region, &request_uri);
@@ -3897,6 +3948,7 @@ impl Worklink for WorklinkClient {
         &self,
         input: ListTagsForResourceRequest,
     ) -> Result<ListTagsForResourceResponse, RusotoError<ListTagsForResourceError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!("/tags/{resource_arn}", resource_arn = input.resource_arn);
 
         let mut request = SignedRequest::new("GET", "worklink", &self.region, &request_uri);
@@ -3928,6 +3980,7 @@ impl Worklink for WorklinkClient {
         ListWebsiteAuthorizationProvidersResponse,
         RusotoError<ListWebsiteAuthorizationProvidersError>,
     > {
+        #![allow(clippy::needless_update)]
         let request_uri = "/listWebsiteAuthorizationProviders";
 
         let mut request = SignedRequest::new("POST", "worklink", &self.region, &request_uri);
@@ -3964,6 +4017,7 @@ impl Worklink for WorklinkClient {
         ListWebsiteCertificateAuthoritiesResponse,
         RusotoError<ListWebsiteCertificateAuthoritiesError>,
     > {
+        #![allow(clippy::needless_update)]
         let request_uri = "/listWebsiteCertificateAuthorities";
 
         let mut request = SignedRequest::new("POST", "worklink", &self.region, &request_uri);
@@ -3997,6 +4051,7 @@ impl Worklink for WorklinkClient {
         &self,
         input: RestoreDomainAccessRequest,
     ) -> Result<RestoreDomainAccessResponse, RusotoError<RestoreDomainAccessError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/restoreDomainAccess";
 
         let mut request = SignedRequest::new("POST", "worklink", &self.region, &request_uri);
@@ -4028,6 +4083,7 @@ impl Worklink for WorklinkClient {
         &self,
         input: RevokeDomainAccessRequest,
     ) -> Result<RevokeDomainAccessResponse, RusotoError<RevokeDomainAccessError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/revokeDomainAccess";
 
         let mut request = SignedRequest::new("POST", "worklink", &self.region, &request_uri);
@@ -4059,6 +4115,7 @@ impl Worklink for WorklinkClient {
         &self,
         input: SignOutUserRequest,
     ) -> Result<SignOutUserResponse, RusotoError<SignOutUserError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/signOutUser";
 
         let mut request = SignedRequest::new("POST", "worklink", &self.region, &request_uri);
@@ -4090,6 +4147,7 @@ impl Worklink for WorklinkClient {
         &self,
         input: TagResourceRequest,
     ) -> Result<TagResourceResponse, RusotoError<TagResourceError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!("/tags/{resource_arn}", resource_arn = input.resource_arn);
 
         let mut request = SignedRequest::new("POST", "worklink", &self.region, &request_uri);
@@ -4121,6 +4179,7 @@ impl Worklink for WorklinkClient {
         &self,
         input: UntagResourceRequest,
     ) -> Result<UntagResourceResponse, RusotoError<UntagResourceError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!("/tags/{resource_arn}", resource_arn = input.resource_arn);
 
         let mut request = SignedRequest::new("DELETE", "worklink", &self.region, &request_uri);
@@ -4158,6 +4217,7 @@ impl Worklink for WorklinkClient {
         UpdateAuditStreamConfigurationResponse,
         RusotoError<UpdateAuditStreamConfigurationError>,
     > {
+        #![allow(clippy::needless_update)]
         let request_uri = "/updateAuditStreamConfiguration";
 
         let mut request = SignedRequest::new("POST", "worklink", &self.region, &request_uri);
@@ -4192,6 +4252,7 @@ impl Worklink for WorklinkClient {
         UpdateCompanyNetworkConfigurationResponse,
         RusotoError<UpdateCompanyNetworkConfigurationError>,
     > {
+        #![allow(clippy::needless_update)]
         let request_uri = "/updateCompanyNetworkConfiguration";
 
         let mut request = SignedRequest::new("POST", "worklink", &self.region, &request_uri);
@@ -4228,6 +4289,7 @@ impl Worklink for WorklinkClient {
         UpdateDevicePolicyConfigurationResponse,
         RusotoError<UpdateDevicePolicyConfigurationError>,
     > {
+        #![allow(clippy::needless_update)]
         let request_uri = "/updateDevicePolicyConfiguration";
 
         let mut request = SignedRequest::new("POST", "worklink", &self.region, &request_uri);
@@ -4261,6 +4323,7 @@ impl Worklink for WorklinkClient {
         &self,
         input: UpdateDomainMetadataRequest,
     ) -> Result<UpdateDomainMetadataResponse, RusotoError<UpdateDomainMetadataError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/updateDomainMetadata";
 
         let mut request = SignedRequest::new("POST", "worklink", &self.region, &request_uri);
@@ -4292,6 +4355,7 @@ impl Worklink for WorklinkClient {
         &self,
         input: UpdateFleetMetadataRequest,
     ) -> Result<UpdateFleetMetadataResponse, RusotoError<UpdateFleetMetadataError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/UpdateFleetMetadata";
 
         let mut request = SignedRequest::new("POST", "worklink", &self.region, &request_uri);
@@ -4326,6 +4390,7 @@ impl Worklink for WorklinkClient {
         UpdateIdentityProviderConfigurationResponse,
         RusotoError<UpdateIdentityProviderConfigurationError>,
     > {
+        #![allow(clippy::needless_update)]
         let request_uri = "/updateIdentityProviderConfiguration";
 
         let mut request = SignedRequest::new("POST", "worklink", &self.region, &request_uri);

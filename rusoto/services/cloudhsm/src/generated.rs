@@ -49,7 +49,6 @@ impl CloudHsmClient {
     }
 }
 
-use serde_json;
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct AddTagsToResourceRequest {
@@ -652,6 +651,7 @@ pub enum AddTagsToResourceError {
 impl AddTagsToResourceError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<AddTagsToResourceError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "CloudHsmInternalException" => {
                     return RusotoError::Service(AddTagsToResourceError::CloudHsmInternal(err.msg))
@@ -694,6 +694,7 @@ pub enum CreateHapgError {
 impl CreateHapgError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateHapgError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "CloudHsmInternalException" => {
                     return RusotoError::Service(CreateHapgError::CloudHsmInternal(err.msg))
@@ -736,6 +737,7 @@ pub enum CreateHsmError {
 impl CreateHsmError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateHsmError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "CloudHsmInternalException" => {
                     return RusotoError::Service(CreateHsmError::CloudHsmInternal(err.msg))
@@ -778,6 +780,7 @@ pub enum CreateLunaClientError {
 impl CreateLunaClientError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateLunaClientError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "CloudHsmInternalException" => {
                     return RusotoError::Service(CreateLunaClientError::CloudHsmInternal(err.msg))
@@ -820,6 +823,7 @@ pub enum DeleteHapgError {
 impl DeleteHapgError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteHapgError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "CloudHsmInternalException" => {
                     return RusotoError::Service(DeleteHapgError::CloudHsmInternal(err.msg))
@@ -862,6 +866,7 @@ pub enum DeleteHsmError {
 impl DeleteHsmError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteHsmError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "CloudHsmInternalException" => {
                     return RusotoError::Service(DeleteHsmError::CloudHsmInternal(err.msg))
@@ -904,6 +909,7 @@ pub enum DeleteLunaClientError {
 impl DeleteLunaClientError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteLunaClientError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "CloudHsmInternalException" => {
                     return RusotoError::Service(DeleteLunaClientError::CloudHsmInternal(err.msg))
@@ -946,6 +952,7 @@ pub enum DescribeHapgError {
 impl DescribeHapgError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeHapgError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "CloudHsmInternalException" => {
                     return RusotoError::Service(DescribeHapgError::CloudHsmInternal(err.msg))
@@ -988,6 +995,7 @@ pub enum DescribeHsmError {
 impl DescribeHsmError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeHsmError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "CloudHsmInternalException" => {
                     return RusotoError::Service(DescribeHsmError::CloudHsmInternal(err.msg))
@@ -1030,6 +1038,7 @@ pub enum DescribeLunaClientError {
 impl DescribeLunaClientError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeLunaClientError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "CloudHsmInternalException" => {
                     return RusotoError::Service(DescribeLunaClientError::CloudHsmInternal(err.msg))
@@ -1072,6 +1081,7 @@ pub enum GetConfigError {
 impl GetConfigError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetConfigError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "CloudHsmInternalException" => {
                     return RusotoError::Service(GetConfigError::CloudHsmInternal(err.msg))
@@ -1114,6 +1124,7 @@ pub enum ListAvailableZonesError {
 impl ListAvailableZonesError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListAvailableZonesError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "CloudHsmInternalException" => {
                     return RusotoError::Service(ListAvailableZonesError::CloudHsmInternal(err.msg))
@@ -1156,6 +1167,7 @@ pub enum ListHapgsError {
 impl ListHapgsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListHapgsError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "CloudHsmInternalException" => {
                     return RusotoError::Service(ListHapgsError::CloudHsmInternal(err.msg))
@@ -1198,6 +1210,7 @@ pub enum ListHsmsError {
 impl ListHsmsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListHsmsError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "CloudHsmInternalException" => {
                     return RusotoError::Service(ListHsmsError::CloudHsmInternal(err.msg))
@@ -1240,6 +1253,7 @@ pub enum ListLunaClientsError {
 impl ListLunaClientsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListLunaClientsError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "CloudHsmInternalException" => {
                     return RusotoError::Service(ListLunaClientsError::CloudHsmInternal(err.msg))
@@ -1282,6 +1296,7 @@ pub enum ListTagsForResourceError {
 impl ListTagsForResourceError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListTagsForResourceError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "CloudHsmInternalException" => {
                     return RusotoError::Service(ListTagsForResourceError::CloudHsmInternal(
@@ -1326,6 +1341,7 @@ pub enum ModifyHapgError {
 impl ModifyHapgError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ModifyHapgError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "CloudHsmInternalException" => {
                     return RusotoError::Service(ModifyHapgError::CloudHsmInternal(err.msg))
@@ -1368,6 +1384,7 @@ pub enum ModifyHsmError {
 impl ModifyHsmError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ModifyHsmError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "CloudHsmInternalException" => {
                     return RusotoError::Service(ModifyHsmError::CloudHsmInternal(err.msg))
@@ -1406,6 +1423,7 @@ pub enum ModifyLunaClientError {
 impl ModifyLunaClientError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ModifyLunaClientError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "CloudHsmServiceException" => {
                     return RusotoError::Service(ModifyLunaClientError::CloudHsmService(err.msg))
@@ -1440,6 +1458,7 @@ pub enum RemoveTagsFromResourceError {
 impl RemoveTagsFromResourceError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<RemoveTagsFromResourceError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "CloudHsmInternalException" => {
                     return RusotoError::Service(RemoveTagsFromResourceError::CloudHsmInternal(

@@ -49,7 +49,6 @@ impl AcmClient {
     }
 }
 
-use serde_json;
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct AddTagsToCertificateRequest {
@@ -609,6 +608,7 @@ pub enum AddTagsToCertificateError {
 impl AddTagsToCertificateError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<AddTagsToCertificateError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidArnException" => {
                     return RusotoError::Service(AddTagsToCertificateError::InvalidArn(err.msg))
@@ -667,6 +667,7 @@ pub enum DeleteCertificateError {
 impl DeleteCertificateError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteCertificateError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidArnException" => {
                     return RusotoError::Service(DeleteCertificateError::InvalidArn(err.msg))
@@ -707,6 +708,7 @@ pub enum DescribeCertificateError {
 impl DescribeCertificateError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeCertificateError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidArnException" => {
                     return RusotoError::Service(DescribeCertificateError::InvalidArn(err.msg))
@@ -747,6 +749,7 @@ pub enum ExportCertificateError {
 impl ExportCertificateError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ExportCertificateError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidArnException" => {
                     return RusotoError::Service(ExportCertificateError::InvalidArn(err.msg))
@@ -789,6 +792,7 @@ pub enum GetCertificateError {
 impl GetCertificateError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetCertificateError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidArnException" => {
                     return RusotoError::Service(GetCertificateError::InvalidArn(err.msg))
@@ -837,6 +841,7 @@ pub enum ImportCertificateError {
 impl ImportCertificateError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ImportCertificateError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidParameterException" => {
                     return RusotoError::Service(ImportCertificateError::InvalidParameter(err.msg))
@@ -887,6 +892,7 @@ pub enum ListCertificatesError {
 impl ListCertificatesError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListCertificatesError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidArgsException" => {
                     return RusotoError::Service(ListCertificatesError::InvalidArgs(err.msg))
@@ -919,6 +925,7 @@ pub enum ListTagsForCertificateError {
 impl ListTagsForCertificateError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListTagsForCertificateError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidArnException" => {
                     return RusotoError::Service(ListTagsForCertificateError::InvalidArn(err.msg))
@@ -963,6 +970,7 @@ pub enum RemoveTagsFromCertificateError {
 impl RemoveTagsFromCertificateError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<RemoveTagsFromCertificateError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidArnException" => {
                     return RusotoError::Service(RemoveTagsFromCertificateError::InvalidArn(
@@ -1019,6 +1027,7 @@ pub enum RenewCertificateError {
 impl RenewCertificateError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<RenewCertificateError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidArnException" => {
                     return RusotoError::Service(RenewCertificateError::InvalidArn(err.msg))
@@ -1065,6 +1074,7 @@ pub enum RequestCertificateError {
 impl RequestCertificateError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<RequestCertificateError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidArnException" => {
                     return RusotoError::Service(RequestCertificateError::InvalidArn(err.msg))
@@ -1129,6 +1139,7 @@ pub enum ResendValidationEmailError {
 impl ResendValidationEmailError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ResendValidationEmailError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidArnException" => {
                     return RusotoError::Service(ResendValidationEmailError::InvalidArn(err.msg))
@@ -1183,6 +1194,7 @@ pub enum UpdateCertificateOptionsError {
 impl UpdateCertificateOptionsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateCertificateOptionsError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidArnException" => {
                     return RusotoError::Service(UpdateCertificateOptionsError::InvalidArn(err.msg))

@@ -24,7 +24,6 @@ use rusoto_core::proto;
 use rusoto_core::signature::SignedRequest;
 #[allow(unused_imports)]
 use serde::{Deserialize, Serialize};
-use serde_json;
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct Attributes {}
@@ -395,6 +394,7 @@ pub enum ClaimDevicesByClaimCodeError {
 impl ClaimDevicesByClaimCodeError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ClaimDevicesByClaimCodeError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ForbiddenException" => {
                     return RusotoError::Service(ClaimDevicesByClaimCodeError::Forbidden(err.msg))
@@ -440,6 +440,7 @@ pub enum DescribeDeviceError {
 impl DescribeDeviceError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeDeviceError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalFailureException" => {
                     return RusotoError::Service(DescribeDeviceError::InternalFailure(err.msg))
@@ -485,6 +486,7 @@ pub enum FinalizeDeviceClaimError {
 impl FinalizeDeviceClaimError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<FinalizeDeviceClaimError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalFailureException" => {
                     return RusotoError::Service(FinalizeDeviceClaimError::InternalFailure(err.msg))
@@ -540,6 +542,7 @@ pub enum GetDeviceMethodsError {
 impl GetDeviceMethodsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetDeviceMethodsError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalFailureException" => {
                     return RusotoError::Service(GetDeviceMethodsError::InternalFailure(err.msg))
@@ -583,6 +586,7 @@ pub enum InitiateDeviceClaimError {
 impl InitiateDeviceClaimError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<InitiateDeviceClaimError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalFailureException" => {
                     return RusotoError::Service(InitiateDeviceClaimError::InternalFailure(err.msg))
@@ -638,6 +642,7 @@ pub enum InvokeDeviceMethodError {
 impl InvokeDeviceMethodError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<InvokeDeviceMethodError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalFailureException" => {
                     return RusotoError::Service(InvokeDeviceMethodError::InternalFailure(err.msg))
@@ -697,6 +702,7 @@ pub enum ListDeviceEventsError {
 impl ListDeviceEventsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListDeviceEventsError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalFailureException" => {
                     return RusotoError::Service(ListDeviceEventsError::InternalFailure(err.msg))
@@ -744,6 +750,7 @@ pub enum ListDevicesError {
 impl ListDevicesError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListDevicesError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalFailureException" => {
                     return RusotoError::Service(ListDevicesError::InternalFailure(err.msg))
@@ -783,6 +790,7 @@ pub enum ListTagsForResourceError {
 impl ListTagsForResourceError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListTagsForResourceError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalFailureException" => {
                     return RusotoError::Service(ListTagsForResourceError::InternalFailure(err.msg))
@@ -822,6 +830,7 @@ pub enum TagResourceError {
 impl TagResourceError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<TagResourceError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalFailureException" => {
                     return RusotoError::Service(TagResourceError::InternalFailure(err.msg))
@@ -863,6 +872,7 @@ pub enum UnclaimDeviceError {
 impl UnclaimDeviceError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UnclaimDeviceError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalFailureException" => {
                     return RusotoError::Service(UnclaimDeviceError::InternalFailure(err.msg))
@@ -904,6 +914,7 @@ pub enum UntagResourceError {
 impl UntagResourceError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UntagResourceError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalFailureException" => {
                     return RusotoError::Service(UntagResourceError::InternalFailure(err.msg))
@@ -945,6 +956,7 @@ pub enum UpdateDeviceStateError {
 impl UpdateDeviceStateError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateDeviceStateError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalFailureException" => {
                     return RusotoError::Service(UpdateDeviceStateError::InternalFailure(err.msg))
@@ -1118,6 +1130,7 @@ impl Iot1ClickDevices for Iot1ClickDevicesClient {
         &self,
         input: ClaimDevicesByClaimCodeRequest,
     ) -> Result<ClaimDevicesByClaimCodeResponse, RusotoError<ClaimDevicesByClaimCodeError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!("/claims/{claim_code}", claim_code = input.claim_code);
 
         let mut request = SignedRequest::new("PUT", "iot1click", &self.region, &request_uri);
@@ -1149,6 +1162,7 @@ impl Iot1ClickDevices for Iot1ClickDevicesClient {
         &self,
         input: DescribeDeviceRequest,
     ) -> Result<DescribeDeviceResponse, RusotoError<DescribeDeviceError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!("/devices/{device_id}", device_id = input.device_id);
 
         let mut request = SignedRequest::new("GET", "iot1click", &self.region, &request_uri);
@@ -1184,6 +1198,7 @@ impl Iot1ClickDevices for Iot1ClickDevicesClient {
         &self,
         input: FinalizeDeviceClaimRequest,
     ) -> Result<FinalizeDeviceClaimResponse, RusotoError<FinalizeDeviceClaimError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/devices/{device_id}/finalize-claim",
             device_id = input.device_id
@@ -1219,6 +1234,7 @@ impl Iot1ClickDevices for Iot1ClickDevicesClient {
         &self,
         input: GetDeviceMethodsRequest,
     ) -> Result<GetDeviceMethodsResponse, RusotoError<GetDeviceMethodsError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!("/devices/{device_id}/methods", device_id = input.device_id);
 
         let mut request = SignedRequest::new("GET", "iot1click", &self.region, &request_uri);
@@ -1254,6 +1270,7 @@ impl Iot1ClickDevices for Iot1ClickDevicesClient {
         &self,
         input: InitiateDeviceClaimRequest,
     ) -> Result<InitiateDeviceClaimResponse, RusotoError<InitiateDeviceClaimError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/devices/{device_id}/initiate-claim",
             device_id = input.device_id
@@ -1288,6 +1305,7 @@ impl Iot1ClickDevices for Iot1ClickDevicesClient {
         &self,
         input: InvokeDeviceMethodRequest,
     ) -> Result<InvokeDeviceMethodResponse, RusotoError<InvokeDeviceMethodError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!("/devices/{device_id}/methods", device_id = input.device_id);
 
         let mut request = SignedRequest::new("POST", "iot1click", &self.region, &request_uri);
@@ -1321,6 +1339,7 @@ impl Iot1ClickDevices for Iot1ClickDevicesClient {
         &self,
         input: ListDeviceEventsRequest,
     ) -> Result<ListDeviceEventsResponse, RusotoError<ListDeviceEventsError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!("/devices/{device_id}/events", device_id = input.device_id);
 
         let mut request = SignedRequest::new("GET", "iot1click", &self.region, &request_uri);
@@ -1362,6 +1381,7 @@ impl Iot1ClickDevices for Iot1ClickDevicesClient {
         &self,
         input: ListDevicesRequest,
     ) -> Result<ListDevicesResponse, RusotoError<ListDevicesError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/devices";
 
         let mut request = SignedRequest::new("GET", "iot1click", &self.region, &request_uri);
@@ -1404,6 +1424,7 @@ impl Iot1ClickDevices for Iot1ClickDevicesClient {
         &self,
         input: ListTagsForResourceRequest,
     ) -> Result<ListTagsForResourceResponse, RusotoError<ListTagsForResourceError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!("/tags/{resource_arn}", resource_arn = input.resource_arn);
 
         let mut request = SignedRequest::new("GET", "iot1click", &self.region, &request_uri);
@@ -1435,6 +1456,7 @@ impl Iot1ClickDevices for Iot1ClickDevicesClient {
         &self,
         input: TagResourceRequest,
     ) -> Result<(), RusotoError<TagResourceError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!("/tags/{resource_arn}", resource_arn = input.resource_arn);
 
         let mut request = SignedRequest::new("POST", "iot1click", &self.region, &request_uri);
@@ -1451,9 +1473,9 @@ impl Iot1ClickDevices for Iot1ClickDevicesClient {
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 204 {
             let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = ::std::mem::drop(response);
+            let _result = ::std::mem::drop(response);
 
-            Ok(result)
+            Ok(())
         } else {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             Err(TagResourceError::from_response(response))
@@ -1466,6 +1488,7 @@ impl Iot1ClickDevices for Iot1ClickDevicesClient {
         &self,
         input: UnclaimDeviceRequest,
     ) -> Result<UnclaimDeviceResponse, RusotoError<UnclaimDeviceError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!("/devices/{device_id}/unclaim", device_id = input.device_id);
 
         let mut request = SignedRequest::new("PUT", "iot1click", &self.region, &request_uri);
@@ -1497,6 +1520,7 @@ impl Iot1ClickDevices for Iot1ClickDevicesClient {
         &self,
         input: UntagResourceRequest,
     ) -> Result<(), RusotoError<UntagResourceError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!("/tags/{resource_arn}", resource_arn = input.resource_arn);
 
         let mut request = SignedRequest::new("DELETE", "iot1click", &self.region, &request_uri);
@@ -1517,9 +1541,9 @@ impl Iot1ClickDevices for Iot1ClickDevicesClient {
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 204 {
             let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = ::std::mem::drop(response);
+            let _result = ::std::mem::drop(response);
 
-            Ok(result)
+            Ok(())
         } else {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             Err(UntagResourceError::from_response(response))
@@ -1533,6 +1557,7 @@ impl Iot1ClickDevices for Iot1ClickDevicesClient {
         &self,
         input: UpdateDeviceStateRequest,
     ) -> Result<UpdateDeviceStateResponse, RusotoError<UpdateDeviceStateError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!("/devices/{device_id}/state", device_id = input.device_id);
 
         let mut request = SignedRequest::new("PUT", "iot1click", &self.region, &request_uri);

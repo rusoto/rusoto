@@ -50,7 +50,6 @@ impl MachineLearningClient {
     }
 }
 
-use serde_json;
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct AddTagsInput {
@@ -1689,6 +1688,7 @@ pub enum AddTagsError {
 impl AddTagsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<AddTagsError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalServerException" => {
                     return RusotoError::Service(AddTagsError::InternalServer(err.msg))
@@ -1739,6 +1739,7 @@ pub enum CreateBatchPredictionError {
 impl CreateBatchPredictionError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateBatchPredictionError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "IdempotentParameterMismatchException" => {
                     return RusotoError::Service(
@@ -1787,6 +1788,7 @@ pub enum CreateDataSourceFromRDSError {
 impl CreateDataSourceFromRDSError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateDataSourceFromRDSError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "IdempotentParameterMismatchException" => {
                     return RusotoError::Service(
@@ -1839,6 +1841,7 @@ impl CreateDataSourceFromRedshiftError {
         res: BufferedHttpResponse,
     ) -> RusotoError<CreateDataSourceFromRedshiftError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "IdempotentParameterMismatchException" => {
                     return RusotoError::Service(
@@ -1889,6 +1892,7 @@ pub enum CreateDataSourceFromS3Error {
 impl CreateDataSourceFromS3Error {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateDataSourceFromS3Error> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "IdempotentParameterMismatchException" => {
                     return RusotoError::Service(
@@ -1937,6 +1941,7 @@ pub enum CreateEvaluationError {
 impl CreateEvaluationError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateEvaluationError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "IdempotentParameterMismatchException" => {
                     return RusotoError::Service(
@@ -1981,6 +1986,7 @@ pub enum CreateMLModelError {
 impl CreateMLModelError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateMLModelError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "IdempotentParameterMismatchException" => {
                     return RusotoError::Service(CreateMLModelError::IdempotentParameterMismatch(
@@ -2025,6 +2031,7 @@ pub enum CreateRealtimeEndpointError {
 impl CreateRealtimeEndpointError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateRealtimeEndpointError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalServerException" => {
                     return RusotoError::Service(CreateRealtimeEndpointError::InternalServer(
@@ -2071,6 +2078,7 @@ pub enum DeleteBatchPredictionError {
 impl DeleteBatchPredictionError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteBatchPredictionError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalServerException" => {
                     return RusotoError::Service(DeleteBatchPredictionError::InternalServer(
@@ -2117,6 +2125,7 @@ pub enum DeleteDataSourceError {
 impl DeleteDataSourceError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteDataSourceError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalServerException" => {
                     return RusotoError::Service(DeleteDataSourceError::InternalServer(err.msg))
@@ -2159,6 +2168,7 @@ pub enum DeleteEvaluationError {
 impl DeleteEvaluationError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteEvaluationError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalServerException" => {
                     return RusotoError::Service(DeleteEvaluationError::InternalServer(err.msg))
@@ -2201,6 +2211,7 @@ pub enum DeleteMLModelError {
 impl DeleteMLModelError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteMLModelError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalServerException" => {
                     return RusotoError::Service(DeleteMLModelError::InternalServer(err.msg))
@@ -2243,6 +2254,7 @@ pub enum DeleteRealtimeEndpointError {
 impl DeleteRealtimeEndpointError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteRealtimeEndpointError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalServerException" => {
                     return RusotoError::Service(DeleteRealtimeEndpointError::InternalServer(
@@ -2291,6 +2303,7 @@ pub enum DeleteTagsError {
 impl DeleteTagsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteTagsError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalServerException" => {
                     return RusotoError::Service(DeleteTagsError::InternalServer(err.msg))
@@ -2335,6 +2348,7 @@ pub enum DescribeBatchPredictionsError {
 impl DescribeBatchPredictionsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeBatchPredictionsError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalServerException" => {
                     return RusotoError::Service(DescribeBatchPredictionsError::InternalServer(
@@ -2375,6 +2389,7 @@ pub enum DescribeDataSourcesError {
 impl DescribeDataSourcesError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeDataSourcesError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalServerException" => {
                     return RusotoError::Service(DescribeDataSourcesError::InternalServer(err.msg))
@@ -2411,6 +2426,7 @@ pub enum DescribeEvaluationsError {
 impl DescribeEvaluationsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeEvaluationsError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalServerException" => {
                     return RusotoError::Service(DescribeEvaluationsError::InternalServer(err.msg))
@@ -2447,6 +2463,7 @@ pub enum DescribeMLModelsError {
 impl DescribeMLModelsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeMLModelsError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalServerException" => {
                     return RusotoError::Service(DescribeMLModelsError::InternalServer(err.msg))
@@ -2485,6 +2502,7 @@ pub enum DescribeTagsError {
 impl DescribeTagsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeTagsError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalServerException" => {
                     return RusotoError::Service(DescribeTagsError::InternalServer(err.msg))
@@ -2527,6 +2545,7 @@ pub enum GetBatchPredictionError {
 impl GetBatchPredictionError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetBatchPredictionError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalServerException" => {
                     return RusotoError::Service(GetBatchPredictionError::InternalServer(err.msg))
@@ -2569,6 +2588,7 @@ pub enum GetDataSourceError {
 impl GetDataSourceError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetDataSourceError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalServerException" => {
                     return RusotoError::Service(GetDataSourceError::InternalServer(err.msg))
@@ -2611,6 +2631,7 @@ pub enum GetEvaluationError {
 impl GetEvaluationError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetEvaluationError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalServerException" => {
                     return RusotoError::Service(GetEvaluationError::InternalServer(err.msg))
@@ -2653,6 +2674,7 @@ pub enum GetMLModelError {
 impl GetMLModelError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetMLModelError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalServerException" => {
                     return RusotoError::Service(GetMLModelError::InternalServer(err.msg))
@@ -2699,6 +2721,7 @@ pub enum PredictError {
 impl PredictError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<PredictError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalServerException" => {
                     return RusotoError::Service(PredictError::InternalServer(err.msg))
@@ -2749,6 +2772,7 @@ pub enum UpdateBatchPredictionError {
 impl UpdateBatchPredictionError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateBatchPredictionError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalServerException" => {
                     return RusotoError::Service(UpdateBatchPredictionError::InternalServer(
@@ -2795,6 +2819,7 @@ pub enum UpdateDataSourceError {
 impl UpdateDataSourceError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateDataSourceError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalServerException" => {
                     return RusotoError::Service(UpdateDataSourceError::InternalServer(err.msg))
@@ -2837,6 +2862,7 @@ pub enum UpdateEvaluationError {
 impl UpdateEvaluationError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateEvaluationError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalServerException" => {
                     return RusotoError::Service(UpdateEvaluationError::InternalServer(err.msg))
@@ -2879,6 +2905,7 @@ pub enum UpdateMLModelError {
 impl UpdateMLModelError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateMLModelError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalServerException" => {
                     return RusotoError::Service(UpdateMLModelError::InternalServer(err.msg))

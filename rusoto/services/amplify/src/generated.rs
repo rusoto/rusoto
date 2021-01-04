@@ -24,7 +24,6 @@ use rusoto_core::proto;
 use rusoto_core::signature::SignedRequest;
 #[allow(unused_imports)]
 use serde::{Deserialize, Serialize};
-use serde_json;
 /// <p> Represents the different branches of a repository for building, deploying, and hosting an Amplify app. </p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
@@ -1716,6 +1715,7 @@ pub enum CreateAppError {
 impl CreateAppError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateAppError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(CreateAppError::BadRequest(err.msg))
@@ -1770,6 +1770,7 @@ pub enum CreateBackendEnvironmentError {
 impl CreateBackendEnvironmentError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateBackendEnvironmentError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(CreateBackendEnvironmentError::BadRequest(err.msg))
@@ -1832,6 +1833,7 @@ pub enum CreateBranchError {
 impl CreateBranchError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateBranchError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(CreateBranchError::BadRequest(err.msg))
@@ -1890,6 +1892,7 @@ pub enum CreateDeploymentError {
 impl CreateDeploymentError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateDeploymentError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(CreateDeploymentError::BadRequest(err.msg))
@@ -1942,6 +1945,7 @@ pub enum CreateDomainAssociationError {
 impl CreateDomainAssociationError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateDomainAssociationError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(CreateDomainAssociationError::BadRequest(err.msg))
@@ -2012,6 +2016,7 @@ pub enum CreateWebhookError {
 impl CreateWebhookError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateWebhookError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(CreateWebhookError::BadRequest(err.msg))
@@ -2072,6 +2077,7 @@ pub enum DeleteAppError {
 impl DeleteAppError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteAppError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(DeleteAppError::BadRequest(err.msg))
@@ -2126,6 +2132,7 @@ pub enum DeleteBackendEnvironmentError {
 impl DeleteBackendEnvironmentError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteBackendEnvironmentError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(DeleteBackendEnvironmentError::BadRequest(err.msg))
@@ -2188,6 +2195,7 @@ pub enum DeleteBranchError {
 impl DeleteBranchError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteBranchError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(DeleteBranchError::BadRequest(err.msg))
@@ -2244,6 +2252,7 @@ pub enum DeleteDomainAssociationError {
 impl DeleteDomainAssociationError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteDomainAssociationError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(DeleteDomainAssociationError::BadRequest(err.msg))
@@ -2306,6 +2315,7 @@ pub enum DeleteJobError {
 impl DeleteJobError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteJobError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(DeleteJobError::BadRequest(err.msg))
@@ -2360,6 +2370,7 @@ pub enum DeleteWebhookError {
 impl DeleteWebhookError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteWebhookError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(DeleteWebhookError::BadRequest(err.msg))
@@ -2412,6 +2423,7 @@ pub enum GenerateAccessLogsError {
 impl GenerateAccessLogsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GenerateAccessLogsError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(GenerateAccessLogsError::BadRequest(err.msg))
@@ -2460,6 +2472,7 @@ pub enum GetAppError {
 impl GetAppError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetAppError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(GetAppError::BadRequest(err.msg))
@@ -2508,6 +2521,7 @@ pub enum GetArtifactUrlError {
 impl GetArtifactUrlError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetArtifactUrlError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(GetArtifactUrlError::BadRequest(err.msg))
@@ -2560,6 +2574,7 @@ pub enum GetBackendEnvironmentError {
 impl GetBackendEnvironmentError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetBackendEnvironmentError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(GetBackendEnvironmentError::BadRequest(err.msg))
@@ -2610,6 +2625,7 @@ pub enum GetBranchError {
 impl GetBranchError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetBranchError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(GetBranchError::BadRequest(err.msg))
@@ -2658,6 +2674,7 @@ pub enum GetDomainAssociationError {
 impl GetDomainAssociationError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetDomainAssociationError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(GetDomainAssociationError::BadRequest(err.msg))
@@ -2710,6 +2727,7 @@ pub enum GetJobError {
 impl GetJobError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetJobError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(GetJobError::BadRequest(err.msg))
@@ -2762,6 +2780,7 @@ pub enum GetWebhookError {
 impl GetWebhookError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetWebhookError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(GetWebhookError::BadRequest(err.msg))
@@ -2812,6 +2831,7 @@ pub enum ListAppsError {
 impl ListAppsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListAppsError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(ListAppsError::BadRequest(err.msg))
@@ -2856,6 +2876,7 @@ pub enum ListArtifactsError {
 impl ListArtifactsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListArtifactsError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(ListArtifactsError::BadRequest(err.msg))
@@ -2902,6 +2923,7 @@ pub enum ListBackendEnvironmentsError {
 impl ListBackendEnvironmentsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListBackendEnvironmentsError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(ListBackendEnvironmentsError::BadRequest(err.msg))
@@ -2948,6 +2970,7 @@ pub enum ListBranchesError {
 impl ListBranchesError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListBranchesError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(ListBranchesError::BadRequest(err.msg))
@@ -2990,6 +3013,7 @@ pub enum ListDomainAssociationsError {
 impl ListDomainAssociationsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListDomainAssociationsError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(ListDomainAssociationsError::BadRequest(err.msg))
@@ -3036,6 +3060,7 @@ pub enum ListJobsError {
 impl ListJobsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListJobsError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(ListJobsError::BadRequest(err.msg))
@@ -3082,6 +3107,7 @@ pub enum ListTagsForResourceError {
 impl ListTagsForResourceError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListTagsForResourceError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(ListTagsForResourceError::BadRequest(err.msg))
@@ -3128,6 +3154,7 @@ pub enum ListWebhooksError {
 impl ListWebhooksError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListWebhooksError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(ListWebhooksError::BadRequest(err.msg))
@@ -3178,6 +3205,7 @@ pub enum StartDeploymentError {
 impl StartDeploymentError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<StartDeploymentError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(StartDeploymentError::BadRequest(err.msg))
@@ -3232,6 +3260,7 @@ pub enum StartJobError {
 impl StartJobError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<StartJobError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(StartJobError::BadRequest(err.msg))
@@ -3286,6 +3315,7 @@ pub enum StopJobError {
 impl StopJobError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<StopJobError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(StopJobError::BadRequest(err.msg))
@@ -3336,6 +3366,7 @@ pub enum TagResourceError {
 impl TagResourceError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<TagResourceError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(TagResourceError::BadRequest(err.msg))
@@ -3378,6 +3409,7 @@ pub enum UntagResourceError {
 impl UntagResourceError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UntagResourceError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(UntagResourceError::BadRequest(err.msg))
@@ -3422,6 +3454,7 @@ pub enum UpdateAppError {
 impl UpdateAppError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateAppError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(UpdateAppError::BadRequest(err.msg))
@@ -3472,6 +3505,7 @@ pub enum UpdateBranchError {
 impl UpdateBranchError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateBranchError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(UpdateBranchError::BadRequest(err.msg))
@@ -3528,6 +3562,7 @@ pub enum UpdateDomainAssociationError {
 impl UpdateDomainAssociationError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateDomainAssociationError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(UpdateDomainAssociationError::BadRequest(err.msg))
@@ -3590,6 +3625,7 @@ pub enum UpdateWebhookError {
 impl UpdateWebhookError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateWebhookError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(UpdateWebhookError::BadRequest(err.msg))
@@ -3895,6 +3931,7 @@ impl Amplify for AmplifyClient {
         &self,
         input: CreateAppRequest,
     ) -> Result<CreateAppResult, RusotoError<CreateAppError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/apps";
 
         let mut request = SignedRequest::new("POST", "amplify", &self.region, &request_uri);
@@ -3926,6 +3963,7 @@ impl Amplify for AmplifyClient {
         &self,
         input: CreateBackendEnvironmentRequest,
     ) -> Result<CreateBackendEnvironmentResult, RusotoError<CreateBackendEnvironmentError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!("/apps/{app_id}/backendenvironments", app_id = input.app_id);
 
         let mut request = SignedRequest::new("POST", "amplify", &self.region, &request_uri);
@@ -3957,6 +3995,7 @@ impl Amplify for AmplifyClient {
         &self,
         input: CreateBranchRequest,
     ) -> Result<CreateBranchResult, RusotoError<CreateBranchError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!("/apps/{app_id}/branches", app_id = input.app_id);
 
         let mut request = SignedRequest::new("POST", "amplify", &self.region, &request_uri);
@@ -3988,6 +4027,7 @@ impl Amplify for AmplifyClient {
         &self,
         input: CreateDeploymentRequest,
     ) -> Result<CreateDeploymentResult, RusotoError<CreateDeploymentError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/apps/{app_id}/branches/{branch_name}/deployments",
             app_id = input.app_id,
@@ -4023,6 +4063,7 @@ impl Amplify for AmplifyClient {
         &self,
         input: CreateDomainAssociationRequest,
     ) -> Result<CreateDomainAssociationResult, RusotoError<CreateDomainAssociationError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!("/apps/{app_id}/domains", app_id = input.app_id);
 
         let mut request = SignedRequest::new("POST", "amplify", &self.region, &request_uri);
@@ -4054,6 +4095,7 @@ impl Amplify for AmplifyClient {
         &self,
         input: CreateWebhookRequest,
     ) -> Result<CreateWebhookResult, RusotoError<CreateWebhookError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!("/apps/{app_id}/webhooks", app_id = input.app_id);
 
         let mut request = SignedRequest::new("POST", "amplify", &self.region, &request_uri);
@@ -4085,6 +4127,7 @@ impl Amplify for AmplifyClient {
         &self,
         input: DeleteAppRequest,
     ) -> Result<DeleteAppResult, RusotoError<DeleteAppError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!("/apps/{app_id}", app_id = input.app_id);
 
         let mut request = SignedRequest::new("DELETE", "amplify", &self.region, &request_uri);
@@ -4113,6 +4156,7 @@ impl Amplify for AmplifyClient {
         &self,
         input: DeleteBackendEnvironmentRequest,
     ) -> Result<DeleteBackendEnvironmentResult, RusotoError<DeleteBackendEnvironmentError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/apps/{app_id}/backendenvironments/{environment_name}",
             app_id = input.app_id,
@@ -4145,6 +4189,7 @@ impl Amplify for AmplifyClient {
         &self,
         input: DeleteBranchRequest,
     ) -> Result<DeleteBranchResult, RusotoError<DeleteBranchError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/apps/{app_id}/branches/{branch_name}",
             app_id = input.app_id,
@@ -4177,6 +4222,7 @@ impl Amplify for AmplifyClient {
         &self,
         input: DeleteDomainAssociationRequest,
     ) -> Result<DeleteDomainAssociationResult, RusotoError<DeleteDomainAssociationError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/apps/{app_id}/domains/{domain_name}",
             app_id = input.app_id,
@@ -4209,6 +4255,7 @@ impl Amplify for AmplifyClient {
         &self,
         input: DeleteJobRequest,
     ) -> Result<DeleteJobResult, RusotoError<DeleteJobError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/apps/{app_id}/branches/{branch_name}/jobs/{job_id}",
             app_id = input.app_id,
@@ -4242,6 +4289,7 @@ impl Amplify for AmplifyClient {
         &self,
         input: DeleteWebhookRequest,
     ) -> Result<DeleteWebhookResult, RusotoError<DeleteWebhookError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!("/webhooks/{webhook_id}", webhook_id = input.webhook_id);
 
         let mut request = SignedRequest::new("DELETE", "amplify", &self.region, &request_uri);
@@ -4270,6 +4318,7 @@ impl Amplify for AmplifyClient {
         &self,
         input: GenerateAccessLogsRequest,
     ) -> Result<GenerateAccessLogsResult, RusotoError<GenerateAccessLogsError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!("/apps/{app_id}/accesslogs", app_id = input.app_id);
 
         let mut request = SignedRequest::new("POST", "amplify", &self.region, &request_uri);
@@ -4301,6 +4350,7 @@ impl Amplify for AmplifyClient {
         &self,
         input: GetAppRequest,
     ) -> Result<GetAppResult, RusotoError<GetAppError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!("/apps/{app_id}", app_id = input.app_id);
 
         let mut request = SignedRequest::new("GET", "amplify", &self.region, &request_uri);
@@ -4329,6 +4379,7 @@ impl Amplify for AmplifyClient {
         &self,
         input: GetArtifactUrlRequest,
     ) -> Result<GetArtifactUrlResult, RusotoError<GetArtifactUrlError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!("/artifacts/{artifact_id}", artifact_id = input.artifact_id);
 
         let mut request = SignedRequest::new("GET", "amplify", &self.region, &request_uri);
@@ -4357,6 +4408,7 @@ impl Amplify for AmplifyClient {
         &self,
         input: GetBackendEnvironmentRequest,
     ) -> Result<GetBackendEnvironmentResult, RusotoError<GetBackendEnvironmentError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/apps/{app_id}/backendenvironments/{environment_name}",
             app_id = input.app_id,
@@ -4389,6 +4441,7 @@ impl Amplify for AmplifyClient {
         &self,
         input: GetBranchRequest,
     ) -> Result<GetBranchResult, RusotoError<GetBranchError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/apps/{app_id}/branches/{branch_name}",
             app_id = input.app_id,
@@ -4421,6 +4474,7 @@ impl Amplify for AmplifyClient {
         &self,
         input: GetDomainAssociationRequest,
     ) -> Result<GetDomainAssociationResult, RusotoError<GetDomainAssociationError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/apps/{app_id}/domains/{domain_name}",
             app_id = input.app_id,
@@ -4453,6 +4507,7 @@ impl Amplify for AmplifyClient {
         &self,
         input: GetJobRequest,
     ) -> Result<GetJobResult, RusotoError<GetJobError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/apps/{app_id}/branches/{branch_name}/jobs/{job_id}",
             app_id = input.app_id,
@@ -4486,6 +4541,7 @@ impl Amplify for AmplifyClient {
         &self,
         input: GetWebhookRequest,
     ) -> Result<GetWebhookResult, RusotoError<GetWebhookError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!("/webhooks/{webhook_id}", webhook_id = input.webhook_id);
 
         let mut request = SignedRequest::new("GET", "amplify", &self.region, &request_uri);
@@ -4514,6 +4570,7 @@ impl Amplify for AmplifyClient {
         &self,
         input: ListAppsRequest,
     ) -> Result<ListAppsResult, RusotoError<ListAppsError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/apps";
 
         let mut request = SignedRequest::new("GET", "amplify", &self.region, &request_uri);
@@ -4551,6 +4608,7 @@ impl Amplify for AmplifyClient {
         &self,
         input: ListArtifactsRequest,
     ) -> Result<ListArtifactsResult, RusotoError<ListArtifactsError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/apps/{app_id}/branches/{branch_name}/jobs/{job_id}/artifacts",
             app_id = input.app_id,
@@ -4593,6 +4651,7 @@ impl Amplify for AmplifyClient {
         &self,
         input: ListBackendEnvironmentsRequest,
     ) -> Result<ListBackendEnvironmentsResult, RusotoError<ListBackendEnvironmentsError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!("/apps/{app_id}/backendenvironments", app_id = input.app_id);
 
         let mut request = SignedRequest::new("GET", "amplify", &self.region, &request_uri);
@@ -4633,6 +4692,7 @@ impl Amplify for AmplifyClient {
         &self,
         input: ListBranchesRequest,
     ) -> Result<ListBranchesResult, RusotoError<ListBranchesError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!("/apps/{app_id}/branches", app_id = input.app_id);
 
         let mut request = SignedRequest::new("GET", "amplify", &self.region, &request_uri);
@@ -4670,6 +4730,7 @@ impl Amplify for AmplifyClient {
         &self,
         input: ListDomainAssociationsRequest,
     ) -> Result<ListDomainAssociationsResult, RusotoError<ListDomainAssociationsError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!("/apps/{app_id}/domains", app_id = input.app_id);
 
         let mut request = SignedRequest::new("GET", "amplify", &self.region, &request_uri);
@@ -4707,6 +4768,7 @@ impl Amplify for AmplifyClient {
         &self,
         input: ListJobsRequest,
     ) -> Result<ListJobsResult, RusotoError<ListJobsError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/apps/{app_id}/branches/{branch_name}/jobs",
             app_id = input.app_id,
@@ -4748,6 +4810,7 @@ impl Amplify for AmplifyClient {
         &self,
         input: ListTagsForResourceRequest,
     ) -> Result<ListTagsForResourceResponse, RusotoError<ListTagsForResourceError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!("/tags/{resource_arn}", resource_arn = input.resource_arn);
 
         let mut request = SignedRequest::new("GET", "amplify", &self.region, &request_uri);
@@ -4776,6 +4839,7 @@ impl Amplify for AmplifyClient {
         &self,
         input: ListWebhooksRequest,
     ) -> Result<ListWebhooksResult, RusotoError<ListWebhooksError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!("/apps/{app_id}/webhooks", app_id = input.app_id);
 
         let mut request = SignedRequest::new("GET", "amplify", &self.region, &request_uri);
@@ -4813,6 +4877,7 @@ impl Amplify for AmplifyClient {
         &self,
         input: StartDeploymentRequest,
     ) -> Result<StartDeploymentResult, RusotoError<StartDeploymentError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/apps/{app_id}/branches/{branch_name}/deployments/start",
             app_id = input.app_id,
@@ -4848,6 +4913,7 @@ impl Amplify for AmplifyClient {
         &self,
         input: StartJobRequest,
     ) -> Result<StartJobResult, RusotoError<StartJobError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/apps/{app_id}/branches/{branch_name}/jobs",
             app_id = input.app_id,
@@ -4883,6 +4949,7 @@ impl Amplify for AmplifyClient {
         &self,
         input: StopJobRequest,
     ) -> Result<StopJobResult, RusotoError<StopJobError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/apps/{app_id}/branches/{branch_name}/jobs/{job_id}/stop",
             app_id = input.app_id,
@@ -4916,6 +4983,7 @@ impl Amplify for AmplifyClient {
         &self,
         input: TagResourceRequest,
     ) -> Result<TagResourceResponse, RusotoError<TagResourceError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!("/tags/{resource_arn}", resource_arn = input.resource_arn);
 
         let mut request = SignedRequest::new("POST", "amplify", &self.region, &request_uri);
@@ -4947,6 +5015,7 @@ impl Amplify for AmplifyClient {
         &self,
         input: UntagResourceRequest,
     ) -> Result<UntagResourceResponse, RusotoError<UntagResourceError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!("/tags/{resource_arn}", resource_arn = input.resource_arn);
 
         let mut request = SignedRequest::new("DELETE", "amplify", &self.region, &request_uri);
@@ -4981,6 +5050,7 @@ impl Amplify for AmplifyClient {
         &self,
         input: UpdateAppRequest,
     ) -> Result<UpdateAppResult, RusotoError<UpdateAppError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!("/apps/{app_id}", app_id = input.app_id);
 
         let mut request = SignedRequest::new("POST", "amplify", &self.region, &request_uri);
@@ -5012,6 +5082,7 @@ impl Amplify for AmplifyClient {
         &self,
         input: UpdateBranchRequest,
     ) -> Result<UpdateBranchResult, RusotoError<UpdateBranchError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/apps/{app_id}/branches/{branch_name}",
             app_id = input.app_id,
@@ -5047,6 +5118,7 @@ impl Amplify for AmplifyClient {
         &self,
         input: UpdateDomainAssociationRequest,
     ) -> Result<UpdateDomainAssociationResult, RusotoError<UpdateDomainAssociationError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/apps/{app_id}/domains/{domain_name}",
             app_id = input.app_id,
@@ -5082,6 +5154,7 @@ impl Amplify for AmplifyClient {
         &self,
         input: UpdateWebhookRequest,
     ) -> Result<UpdateWebhookResult, RusotoError<UpdateWebhookError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!("/webhooks/{webhook_id}", webhook_id = input.webhook_id);
 
         let mut request = SignedRequest::new("POST", "amplify", &self.region, &request_uri);

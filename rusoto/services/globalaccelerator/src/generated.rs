@@ -50,7 +50,6 @@ impl GlobalAcceleratorClient {
     }
 }
 
-use serde_json;
 /// <p>An accelerator is a complex type that includes one or more listeners that process inbound connections and then direct traffic to one or more endpoint groups, each of which includes endpoints, such as load balancers.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
@@ -1629,6 +1628,7 @@ pub enum AddCustomRoutingEndpointsError {
 impl AddCustomRoutingEndpointsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<AddCustomRoutingEndpointsError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(AddCustomRoutingEndpointsError::AccessDenied(
@@ -1709,6 +1709,7 @@ pub enum AdvertiseByoipCidrError {
 impl AdvertiseByoipCidrError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<AdvertiseByoipCidrError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(AdvertiseByoipCidrError::AccessDenied(err.msg))
@@ -1763,6 +1764,7 @@ pub enum AllowCustomRoutingTrafficError {
 impl AllowCustomRoutingTrafficError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<AllowCustomRoutingTrafficError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalServiceErrorException" => {
                     return RusotoError::Service(
@@ -1807,6 +1809,7 @@ pub enum CreateAcceleratorError {
 impl CreateAcceleratorError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateAcceleratorError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalServiceErrorException" => {
                     return RusotoError::Service(CreateAcceleratorError::InternalServiceError(
@@ -1855,6 +1858,7 @@ impl CreateCustomRoutingAcceleratorError {
         res: BufferedHttpResponse,
     ) -> RusotoError<CreateCustomRoutingAcceleratorError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(CreateCustomRoutingAcceleratorError::AccessDenied(
@@ -1925,6 +1929,7 @@ impl CreateCustomRoutingEndpointGroupError {
         res: BufferedHttpResponse,
     ) -> RusotoError<CreateCustomRoutingEndpointGroupError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AcceleratorNotFoundException" => {
                     return RusotoError::Service(
@@ -2025,6 +2030,7 @@ impl CreateCustomRoutingListenerError {
         res: BufferedHttpResponse,
     ) -> RusotoError<CreateCustomRoutingListenerError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AcceleratorNotFoundException" => {
                     return RusotoError::Service(
@@ -2097,6 +2103,7 @@ pub enum CreateEndpointGroupError {
 impl CreateEndpointGroupError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateEndpointGroupError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AcceleratorNotFoundException" => {
                     return RusotoError::Service(CreateEndpointGroupError::AcceleratorNotFound(
@@ -2169,6 +2176,7 @@ pub enum CreateListenerError {
 impl CreateListenerError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateListenerError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AcceleratorNotFoundException" => {
                     return RusotoError::Service(CreateListenerError::AcceleratorNotFound(err.msg))
@@ -2223,6 +2231,7 @@ pub enum DeleteAcceleratorError {
 impl DeleteAcceleratorError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteAcceleratorError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AcceleratorNotDisabledException" => {
                     return RusotoError::Service(DeleteAcceleratorError::AcceleratorNotDisabled(
@@ -2287,6 +2296,7 @@ impl DeleteCustomRoutingAcceleratorError {
         res: BufferedHttpResponse,
     ) -> RusotoError<DeleteCustomRoutingAcceleratorError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AcceleratorNotDisabledException" => {
                     return RusotoError::Service(
@@ -2359,6 +2369,7 @@ impl DeleteCustomRoutingEndpointGroupError {
         res: BufferedHttpResponse,
     ) -> RusotoError<DeleteCustomRoutingEndpointGroupError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "EndpointGroupNotFoundException" => {
                     return RusotoError::Service(
@@ -2417,6 +2428,7 @@ impl DeleteCustomRoutingListenerError {
         res: BufferedHttpResponse,
     ) -> RusotoError<DeleteCustomRoutingListenerError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AssociatedEndpointGroupFoundException" => {
                     return RusotoError::Service(
@@ -2475,6 +2487,7 @@ pub enum DeleteEndpointGroupError {
 impl DeleteEndpointGroupError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteEndpointGroupError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "EndpointGroupNotFoundException" => {
                     return RusotoError::Service(DeleteEndpointGroupError::EndpointGroupNotFound(
@@ -2523,6 +2536,7 @@ pub enum DeleteListenerError {
 impl DeleteListenerError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteListenerError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AssociatedEndpointGroupFoundException" => {
                     return RusotoError::Service(DeleteListenerError::AssociatedEndpointGroupFound(
@@ -2569,6 +2583,7 @@ pub enum DenyCustomRoutingTrafficError {
 impl DenyCustomRoutingTrafficError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DenyCustomRoutingTrafficError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalServiceErrorException" => {
                     return RusotoError::Service(
@@ -2617,6 +2632,7 @@ pub enum DeprovisionByoipCidrError {
 impl DeprovisionByoipCidrError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeprovisionByoipCidrError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(DeprovisionByoipCidrError::AccessDenied(err.msg))
@@ -2675,6 +2691,7 @@ pub enum DescribeAcceleratorError {
 impl DescribeAcceleratorError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeAcceleratorError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AcceleratorNotFoundException" => {
                     return RusotoError::Service(DescribeAcceleratorError::AcceleratorNotFound(
@@ -2723,6 +2740,7 @@ impl DescribeAcceleratorAttributesError {
         res: BufferedHttpResponse,
     ) -> RusotoError<DescribeAcceleratorAttributesError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AcceleratorNotFoundException" => {
                     return RusotoError::Service(
@@ -2779,6 +2797,7 @@ impl DescribeCustomRoutingAcceleratorError {
         res: BufferedHttpResponse,
     ) -> RusotoError<DescribeCustomRoutingAcceleratorError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AcceleratorNotFoundException" => {
                     return RusotoError::Service(
@@ -2835,6 +2854,7 @@ impl DescribeCustomRoutingAcceleratorAttributesError {
         res: BufferedHttpResponse,
     ) -> RusotoError<DescribeCustomRoutingAcceleratorAttributesError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AcceleratorNotFoundException" => {
                     return RusotoError::Service(
@@ -2895,6 +2915,7 @@ impl DescribeCustomRoutingEndpointGroupError {
         res: BufferedHttpResponse,
     ) -> RusotoError<DescribeCustomRoutingEndpointGroupError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "EndpointGroupNotFoundException" => {
                     return RusotoError::Service(
@@ -2951,6 +2972,7 @@ impl DescribeCustomRoutingListenerError {
         res: BufferedHttpResponse,
     ) -> RusotoError<DescribeCustomRoutingListenerError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalServiceErrorException" => {
                     return RusotoError::Service(
@@ -3005,6 +3027,7 @@ pub enum DescribeEndpointGroupError {
 impl DescribeEndpointGroupError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeEndpointGroupError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "EndpointGroupNotFoundException" => {
                     return RusotoError::Service(DescribeEndpointGroupError::EndpointGroupNotFound(
@@ -3053,6 +3076,7 @@ pub enum DescribeListenerError {
 impl DescribeListenerError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeListenerError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalServiceErrorException" => {
                     return RusotoError::Service(DescribeListenerError::InternalServiceError(
@@ -3097,6 +3121,7 @@ pub enum ListAcceleratorsError {
 impl ListAcceleratorsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListAcceleratorsError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalServiceErrorException" => {
                     return RusotoError::Service(ListAcceleratorsError::InternalServiceError(
@@ -3143,6 +3168,7 @@ pub enum ListByoipCidrsError {
 impl ListByoipCidrsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListByoipCidrsError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(ListByoipCidrsError::AccessDenied(err.msg))
@@ -3191,6 +3217,7 @@ impl ListCustomRoutingAcceleratorsError {
         res: BufferedHttpResponse,
     ) -> RusotoError<ListCustomRoutingAcceleratorsError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalServiceErrorException" => {
                     return RusotoError::Service(
@@ -3249,6 +3276,7 @@ impl ListCustomRoutingEndpointGroupsError {
         res: BufferedHttpResponse,
     ) -> RusotoError<ListCustomRoutingEndpointGroupsError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalServiceErrorException" => {
                     return RusotoError::Service(
@@ -3315,6 +3343,7 @@ impl ListCustomRoutingListenersError {
         res: BufferedHttpResponse,
     ) -> RusotoError<ListCustomRoutingListenersError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AcceleratorNotFoundException" => {
                     return RusotoError::Service(
@@ -3379,6 +3408,7 @@ impl ListCustomRoutingPortMappingsError {
         res: BufferedHttpResponse,
     ) -> RusotoError<ListCustomRoutingPortMappingsError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AcceleratorNotFoundException" => {
                     return RusotoError::Service(
@@ -3453,6 +3483,7 @@ impl ListCustomRoutingPortMappingsByDestinationError {
         res: BufferedHttpResponse,
     ) -> RusotoError<ListCustomRoutingPortMappingsByDestinationError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "EndpointNotFoundException" => {
                     return RusotoError::Service(
@@ -3519,6 +3550,7 @@ pub enum ListEndpointGroupsError {
 impl ListEndpointGroupsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListEndpointGroupsError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalServiceErrorException" => {
                     return RusotoError::Service(ListEndpointGroupsError::InternalServiceError(
@@ -3569,6 +3601,7 @@ pub enum ListListenersError {
 impl ListListenersError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListListenersError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AcceleratorNotFoundException" => {
                     return RusotoError::Service(ListListenersError::AcceleratorNotFound(err.msg))
@@ -3615,6 +3648,7 @@ pub enum ListTagsForResourceError {
 impl ListTagsForResourceError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListTagsForResourceError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AcceleratorNotFoundException" => {
                     return RusotoError::Service(ListTagsForResourceError::AcceleratorNotFound(
@@ -3665,6 +3699,7 @@ pub enum ProvisionByoipCidrError {
 impl ProvisionByoipCidrError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ProvisionByoipCidrError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(ProvisionByoipCidrError::AccessDenied(err.msg))
@@ -3727,6 +3762,7 @@ impl RemoveCustomRoutingEndpointsError {
         res: BufferedHttpResponse,
     ) -> RusotoError<RemoveCustomRoutingEndpointsError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(RemoveCustomRoutingEndpointsError::AccessDenied(
@@ -3799,6 +3835,7 @@ pub enum TagResourceError {
 impl TagResourceError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<TagResourceError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AcceleratorNotFoundException" => {
                     return RusotoError::Service(TagResourceError::AcceleratorNotFound(err.msg))
@@ -3841,6 +3878,7 @@ pub enum UntagResourceError {
 impl UntagResourceError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UntagResourceError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AcceleratorNotFoundException" => {
                     return RusotoError::Service(UntagResourceError::AcceleratorNotFound(err.msg))
@@ -3883,6 +3921,7 @@ pub enum UpdateAcceleratorError {
 impl UpdateAcceleratorError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateAcceleratorError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AcceleratorNotFoundException" => {
                     return RusotoError::Service(UpdateAcceleratorError::AcceleratorNotFound(
@@ -3933,6 +3972,7 @@ impl UpdateAcceleratorAttributesError {
         res: BufferedHttpResponse,
     ) -> RusotoError<UpdateAcceleratorAttributesError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AcceleratorNotFoundException" => {
                     return RusotoError::Service(
@@ -3993,6 +4033,7 @@ impl UpdateCustomRoutingAcceleratorError {
         res: BufferedHttpResponse,
     ) -> RusotoError<UpdateCustomRoutingAcceleratorError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AcceleratorNotFoundException" => {
                     return RusotoError::Service(
@@ -4051,6 +4092,7 @@ impl UpdateCustomRoutingAcceleratorAttributesError {
         res: BufferedHttpResponse,
     ) -> RusotoError<UpdateCustomRoutingAcceleratorAttributesError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AcceleratorNotFoundException" => {
                     return RusotoError::Service(
@@ -4121,6 +4163,7 @@ impl UpdateCustomRoutingListenerError {
         res: BufferedHttpResponse,
     ) -> RusotoError<UpdateCustomRoutingListenerError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalServiceErrorException" => {
                     return RusotoError::Service(
@@ -4187,6 +4230,7 @@ pub enum UpdateEndpointGroupError {
 impl UpdateEndpointGroupError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateEndpointGroupError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(UpdateEndpointGroupError::AccessDenied(err.msg))
@@ -4245,6 +4289,7 @@ pub enum UpdateListenerError {
 impl UpdateListenerError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateListenerError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalServiceErrorException" => {
                     return RusotoError::Service(UpdateListenerError::InternalServiceError(err.msg))
@@ -4299,6 +4344,7 @@ pub enum WithdrawByoipCidrError {
 impl WithdrawByoipCidrError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<WithdrawByoipCidrError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(WithdrawByoipCidrError::AccessDenied(err.msg))

@@ -1,6 +1,5 @@
 use std::fmt::{Formatter, Result as FmtResult};
 
-use base64;
 use bytes::Bytes;
 use serde::de::{Error as SerdeError, SeqAccess, Visitor};
 use serde::ser::SerializeSeq;

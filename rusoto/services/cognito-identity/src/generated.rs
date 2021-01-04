@@ -50,7 +50,6 @@ impl CognitoIdentityClient {
     }
 }
 
-use serde_json;
 /// <p>A provider representing an Amazon Cognito user pool and its client ID.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct CognitoIdentityProvider {
@@ -707,6 +706,7 @@ pub enum CreateIdentityPoolError {
 impl CreateIdentityPoolError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateIdentityPoolError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalErrorException" => {
                     return RusotoError::Service(CreateIdentityPoolError::InternalError(err.msg))
@@ -761,6 +761,7 @@ pub enum DeleteIdentitiesError {
 impl DeleteIdentitiesError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteIdentitiesError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalErrorException" => {
                     return RusotoError::Service(DeleteIdentitiesError::InternalError(err.msg))
@@ -807,6 +808,7 @@ pub enum DeleteIdentityPoolError {
 impl DeleteIdentityPoolError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteIdentityPoolError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalErrorException" => {
                     return RusotoError::Service(DeleteIdentityPoolError::InternalError(err.msg))
@@ -861,6 +863,7 @@ pub enum DescribeIdentityError {
 impl DescribeIdentityError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeIdentityError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalErrorException" => {
                     return RusotoError::Service(DescribeIdentityError::InternalError(err.msg))
@@ -915,6 +918,7 @@ pub enum DescribeIdentityPoolError {
 impl DescribeIdentityPoolError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeIdentityPoolError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalErrorException" => {
                     return RusotoError::Service(DescribeIdentityPoolError::InternalError(err.msg))
@@ -981,6 +985,7 @@ pub enum GetCredentialsForIdentityError {
 impl GetCredentialsForIdentityError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetCredentialsForIdentityError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ExternalServiceException" => {
                     return RusotoError::Service(GetCredentialsForIdentityError::ExternalService(
@@ -1071,6 +1076,7 @@ pub enum GetIdError {
 impl GetIdError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetIdError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ExternalServiceException" => {
                     return RusotoError::Service(GetIdError::ExternalService(err.msg))
@@ -1139,6 +1145,7 @@ pub enum GetIdentityPoolRolesError {
 impl GetIdentityPoolRolesError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetIdentityPoolRolesError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalErrorException" => {
                     return RusotoError::Service(GetIdentityPoolRolesError::InternalError(err.msg))
@@ -1209,6 +1216,7 @@ pub enum GetOpenIdTokenError {
 impl GetOpenIdTokenError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetOpenIdTokenError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ExternalServiceException" => {
                     return RusotoError::Service(GetOpenIdTokenError::ExternalService(err.msg))
@@ -1277,6 +1285,7 @@ impl GetOpenIdTokenForDeveloperIdentityError {
         res: BufferedHttpResponse,
     ) -> RusotoError<GetOpenIdTokenForDeveloperIdentityError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "DeveloperUserAlreadyRegisteredException" => {
                     return RusotoError::Service(
@@ -1369,6 +1378,7 @@ pub enum ListIdentitiesError {
 impl ListIdentitiesError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListIdentitiesError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalErrorException" => {
                     return RusotoError::Service(ListIdentitiesError::InternalError(err.msg))
@@ -1423,6 +1433,7 @@ pub enum ListIdentityPoolsError {
 impl ListIdentityPoolsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListIdentityPoolsError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalErrorException" => {
                     return RusotoError::Service(ListIdentityPoolsError::InternalError(err.msg))
@@ -1477,6 +1488,7 @@ pub enum ListTagsForResourceError {
 impl ListTagsForResourceError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListTagsForResourceError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalErrorException" => {
                     return RusotoError::Service(ListTagsForResourceError::InternalError(err.msg))
@@ -1537,6 +1549,7 @@ pub enum LookupDeveloperIdentityError {
 impl LookupDeveloperIdentityError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<LookupDeveloperIdentityError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalErrorException" => {
                     return RusotoError::Service(LookupDeveloperIdentityError::InternalError(
@@ -1609,6 +1622,7 @@ pub enum MergeDeveloperIdentitiesError {
 impl MergeDeveloperIdentitiesError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<MergeDeveloperIdentitiesError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalErrorException" => {
                     return RusotoError::Service(MergeDeveloperIdentitiesError::InternalError(
@@ -1683,6 +1697,7 @@ pub enum SetIdentityPoolRolesError {
 impl SetIdentityPoolRolesError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<SetIdentityPoolRolesError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ConcurrentModificationException" => {
                     return RusotoError::Service(SetIdentityPoolRolesError::ConcurrentModification(
@@ -1755,6 +1770,7 @@ pub enum TagResourceError {
 impl TagResourceError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<TagResourceError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalErrorException" => {
                     return RusotoError::Service(TagResourceError::InternalError(err.msg))
@@ -1811,6 +1827,7 @@ pub enum UnlinkDeveloperIdentityError {
 impl UnlinkDeveloperIdentityError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UnlinkDeveloperIdentityError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalErrorException" => {
                     return RusotoError::Service(UnlinkDeveloperIdentityError::InternalError(
@@ -1885,6 +1902,7 @@ pub enum UnlinkIdentityError {
 impl UnlinkIdentityError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UnlinkIdentityError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ExternalServiceException" => {
                     return RusotoError::Service(UnlinkIdentityError::ExternalService(err.msg))
@@ -1947,6 +1965,7 @@ pub enum UntagResourceError {
 impl UntagResourceError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UntagResourceError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalErrorException" => {
                     return RusotoError::Service(UntagResourceError::InternalError(err.msg))
@@ -2007,6 +2026,7 @@ pub enum UpdateIdentityPoolError {
 impl UpdateIdentityPoolError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateIdentityPoolError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ConcurrentModificationException" => {
                     return RusotoError::Service(UpdateIdentityPoolError::ConcurrentModification(

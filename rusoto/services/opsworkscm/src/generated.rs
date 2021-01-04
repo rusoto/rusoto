@@ -49,7 +49,6 @@ impl OpsWorksCMClient {
     }
 }
 
-use serde_json;
 /// <p>Stores account attributes. </p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
@@ -827,6 +826,7 @@ pub enum AssociateNodeError {
 impl AssociateNodeError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<AssociateNodeError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidStateException" => {
                     return RusotoError::Service(AssociateNodeError::InvalidState(err.msg))
@@ -865,6 +865,7 @@ pub enum CreateBackupError {
 impl CreateBackupError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateBackupError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidStateException" => {
                     return RusotoError::Service(CreateBackupError::InvalidState(err.msg))
@@ -907,6 +908,7 @@ pub enum CreateServerError {
 impl CreateServerError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateServerError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "LimitExceededException" => {
                     return RusotoError::Service(CreateServerError::LimitExceeded(err.msg))
@@ -947,6 +949,7 @@ pub enum DeleteBackupError {
 impl DeleteBackupError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteBackupError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidStateException" => {
                     return RusotoError::Service(DeleteBackupError::InvalidState(err.msg))
@@ -983,6 +986,7 @@ pub enum DeleteServerError {
 impl DeleteServerError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteServerError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidStateException" => {
                     return RusotoError::Service(DeleteServerError::InvalidState(err.msg))
@@ -1014,6 +1018,7 @@ pub enum DescribeAccountAttributesError {}
 impl DescribeAccountAttributesError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeAccountAttributesError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
@@ -1041,6 +1046,7 @@ pub enum DescribeBackupsError {
 impl DescribeBackupsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeBackupsError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidNextTokenException" => {
                     return RusotoError::Service(DescribeBackupsError::InvalidNextToken(err.msg))
@@ -1077,6 +1083,7 @@ pub enum DescribeEventsError {
 impl DescribeEventsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeEventsError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidNextTokenException" => {
                     return RusotoError::Service(DescribeEventsError::InvalidNextToken(err.msg))
@@ -1113,6 +1120,7 @@ impl DescribeNodeAssociationStatusError {
         res: BufferedHttpResponse,
     ) -> RusotoError<DescribeNodeAssociationStatusError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(
@@ -1149,6 +1157,7 @@ pub enum DescribeServersError {
 impl DescribeServersError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeServersError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidNextTokenException" => {
                     return RusotoError::Service(DescribeServersError::InvalidNextToken(err.msg))
@@ -1185,6 +1194,7 @@ pub enum DisassociateNodeError {
 impl DisassociateNodeError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DisassociateNodeError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidStateException" => {
                     return RusotoError::Service(DisassociateNodeError::InvalidState(err.msg))
@@ -1223,6 +1233,7 @@ impl ExportServerEngineAttributeError {
         res: BufferedHttpResponse,
     ) -> RusotoError<ExportServerEngineAttributeError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidStateException" => {
                     return RusotoError::Service(ExportServerEngineAttributeError::InvalidState(
@@ -1261,6 +1272,7 @@ pub enum ListTagsForResourceError {
 impl ListTagsForResourceError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListTagsForResourceError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(ListTagsForResourceError::ResourceNotFound(
@@ -1295,6 +1307,7 @@ pub enum RestoreServerError {
 impl RestoreServerError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<RestoreServerError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidStateException" => {
                     return RusotoError::Service(RestoreServerError::InvalidState(err.msg))
@@ -1331,6 +1344,7 @@ pub enum StartMaintenanceError {
 impl StartMaintenanceError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<StartMaintenanceError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidStateException" => {
                     return RusotoError::Service(StartMaintenanceError::InvalidState(err.msg))
@@ -1367,6 +1381,7 @@ pub enum TagResourceError {
 impl TagResourceError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<TagResourceError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidStateException" => {
                     return RusotoError::Service(TagResourceError::InvalidState(err.msg))
@@ -1403,6 +1418,7 @@ pub enum UntagResourceError {
 impl UntagResourceError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UntagResourceError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidStateException" => {
                     return RusotoError::Service(UntagResourceError::InvalidState(err.msg))
@@ -1439,6 +1455,7 @@ pub enum UpdateServerError {
 impl UpdateServerError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateServerError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidStateException" => {
                     return RusotoError::Service(UpdateServerError::InvalidState(err.msg))
@@ -1477,6 +1494,7 @@ impl UpdateServerEngineAttributesError {
         res: BufferedHttpResponse,
     ) -> RusotoError<UpdateServerEngineAttributesError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidStateException" => {
                     return RusotoError::Service(UpdateServerEngineAttributesError::InvalidState(

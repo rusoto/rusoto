@@ -50,7 +50,6 @@ impl KinesisAnalyticsClient {
     }
 }
 
-use serde_json;
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct AddApplicationCloudWatchLoggingOptionRequest {
@@ -1351,6 +1350,7 @@ impl AddApplicationCloudWatchLoggingOptionError {
         res: BufferedHttpResponse,
     ) -> RusotoError<AddApplicationCloudWatchLoggingOptionError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ConcurrentModificationException" => {
                     return RusotoError::Service(
@@ -1427,6 +1427,7 @@ pub enum AddApplicationInputError {
 impl AddApplicationInputError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<AddApplicationInputError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "CodeValidationException" => {
                     return RusotoError::Service(AddApplicationInputError::CodeValidation(err.msg))
@@ -1493,6 +1494,7 @@ impl AddApplicationInputProcessingConfigurationError {
         res: BufferedHttpResponse,
     ) -> RusotoError<AddApplicationInputProcessingConfigurationError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ConcurrentModificationException" => {
                     return RusotoError::Service(
@@ -1571,6 +1573,7 @@ pub enum AddApplicationOutputError {
 impl AddApplicationOutputError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<AddApplicationOutputError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ConcurrentModificationException" => {
                     return RusotoError::Service(AddApplicationOutputError::ConcurrentModification(
@@ -1635,6 +1638,7 @@ impl AddApplicationReferenceDataSourceError {
         res: BufferedHttpResponse,
     ) -> RusotoError<AddApplicationReferenceDataSourceError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ConcurrentModificationException" => {
                     return RusotoError::Service(
@@ -1711,6 +1715,7 @@ pub enum CreateApplicationError {
 impl CreateApplicationError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateApplicationError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "CodeValidationException" => {
                     return RusotoError::Service(CreateApplicationError::CodeValidation(err.msg))
@@ -1769,6 +1774,7 @@ pub enum DeleteApplicationError {
 impl DeleteApplicationError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteApplicationError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ConcurrentModificationException" => {
                     return RusotoError::Service(DeleteApplicationError::ConcurrentModification(
@@ -1825,6 +1831,7 @@ impl DeleteApplicationCloudWatchLoggingOptionError {
         res: BufferedHttpResponse,
     ) -> RusotoError<DeleteApplicationCloudWatchLoggingOptionError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ConcurrentModificationException" => {
                     return RusotoError::Service(
@@ -1905,6 +1912,7 @@ impl DeleteApplicationInputProcessingConfigurationError {
         res: BufferedHttpResponse,
     ) -> RusotoError<DeleteApplicationInputProcessingConfigurationError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ConcurrentModificationException" => {
                     return RusotoError::Service(
@@ -1987,6 +1995,7 @@ pub enum DeleteApplicationOutputError {
 impl DeleteApplicationOutputError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteApplicationOutputError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ConcurrentModificationException" => {
                     return RusotoError::Service(
@@ -2055,6 +2064,7 @@ impl DeleteApplicationReferenceDataSourceError {
         res: BufferedHttpResponse,
     ) -> RusotoError<DeleteApplicationReferenceDataSourceError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ConcurrentModificationException" => {
                     return RusotoError::Service(
@@ -2123,6 +2133,7 @@ pub enum DescribeApplicationError {
 impl DescribeApplicationError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeApplicationError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(DescribeApplicationError::ResourceNotFound(
@@ -2167,6 +2178,7 @@ pub enum DiscoverInputSchemaError {
 impl DiscoverInputSchemaError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DiscoverInputSchemaError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidArgumentException" => {
                     return RusotoError::Service(DiscoverInputSchemaError::InvalidArgument(err.msg))
@@ -2214,6 +2226,7 @@ pub enum ListApplicationsError {}
 impl ListApplicationsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListApplicationsError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
@@ -2243,6 +2256,7 @@ pub enum ListTagsForResourceError {
 impl ListTagsForResourceError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListTagsForResourceError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ConcurrentModificationException" => {
                     return RusotoError::Service(ListTagsForResourceError::ConcurrentModification(
@@ -2293,6 +2307,7 @@ pub enum StartApplicationError {
 impl StartApplicationError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<StartApplicationError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidApplicationConfigurationException" => {
                     return RusotoError::Service(
@@ -2349,6 +2364,7 @@ pub enum StopApplicationError {
 impl StopApplicationError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<StopApplicationError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ResourceInUseException" => {
                     return RusotoError::Service(StopApplicationError::ResourceInUse(err.msg))
@@ -2397,6 +2413,7 @@ pub enum TagResourceError {
 impl TagResourceError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<TagResourceError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ConcurrentModificationException" => {
                     return RusotoError::Service(TagResourceError::ConcurrentModification(err.msg))
@@ -2451,6 +2468,7 @@ pub enum UntagResourceError {
 impl UntagResourceError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UntagResourceError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ConcurrentModificationException" => {
                     return RusotoError::Service(UntagResourceError::ConcurrentModification(
@@ -2509,6 +2527,7 @@ pub enum UpdateApplicationError {
 impl UpdateApplicationError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateApplicationError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "CodeValidationException" => {
                     return RusotoError::Service(UpdateApplicationError::CodeValidation(err.msg))

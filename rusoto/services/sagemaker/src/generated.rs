@@ -50,7 +50,6 @@ impl SageMakerClient {
     }
 }
 
-use serde_json;
 /// <p>A structure describing the source of an action.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct ActionSource {
@@ -14555,6 +14554,7 @@ pub enum AddAssociationError {
 impl AddAssociationError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<AddAssociationError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ResourceLimitExceeded" => {
                     return RusotoError::Service(AddAssociationError::ResourceLimitExceeded(
@@ -14588,6 +14588,7 @@ pub enum AddTagsError {}
 impl AddTagsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<AddTagsError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
@@ -14615,6 +14616,7 @@ pub enum AssociateTrialComponentError {
 impl AssociateTrialComponentError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<AssociateTrialComponentError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ResourceLimitExceeded" => {
                     return RusotoError::Service(
@@ -14655,6 +14657,7 @@ pub enum CreateActionError {
 impl CreateActionError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateActionError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ResourceLimitExceeded" => {
                     return RusotoError::Service(CreateActionError::ResourceLimitExceeded(err.msg))
@@ -14682,6 +14685,7 @@ pub enum CreateAlgorithmError {}
 impl CreateAlgorithmError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateAlgorithmError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
@@ -14709,6 +14713,7 @@ pub enum CreateAppError {
 impl CreateAppError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateAppError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ResourceInUse" => {
                     return RusotoError::Service(CreateAppError::ResourceInUse(err.msg))
@@ -14743,6 +14748,7 @@ pub enum CreateAppImageConfigError {
 impl CreateAppImageConfigError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateAppImageConfigError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ResourceInUse" => {
                     return RusotoError::Service(CreateAppImageConfigError::ResourceInUse(err.msg))
@@ -14773,6 +14779,7 @@ pub enum CreateArtifactError {
 impl CreateArtifactError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateArtifactError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ResourceLimitExceeded" => {
                     return RusotoError::Service(CreateArtifactError::ResourceLimitExceeded(
@@ -14807,6 +14814,7 @@ pub enum CreateAutoMLJobError {
 impl CreateAutoMLJobError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateAutoMLJobError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ResourceInUse" => {
                     return RusotoError::Service(CreateAutoMLJobError::ResourceInUse(err.msg))
@@ -14840,6 +14848,7 @@ pub enum CreateCodeRepositoryError {}
 impl CreateCodeRepositoryError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateCodeRepositoryError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
@@ -14867,6 +14876,7 @@ pub enum CreateCompilationJobError {
 impl CreateCompilationJobError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateCompilationJobError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ResourceInUse" => {
                     return RusotoError::Service(CreateCompilationJobError::ResourceInUse(err.msg))
@@ -14903,6 +14913,7 @@ pub enum CreateContextError {
 impl CreateContextError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateContextError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ResourceLimitExceeded" => {
                     return RusotoError::Service(CreateContextError::ResourceLimitExceeded(err.msg))
@@ -14937,6 +14948,7 @@ impl CreateDataQualityJobDefinitionError {
         res: BufferedHttpResponse,
     ) -> RusotoError<CreateDataQualityJobDefinitionError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ResourceInUse" => {
                     return RusotoError::Service(
@@ -14979,6 +14991,7 @@ pub enum CreateDeviceFleetError {
 impl CreateDeviceFleetError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateDeviceFleetError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ResourceInUse" => {
                     return RusotoError::Service(CreateDeviceFleetError::ResourceInUse(err.msg))
@@ -15017,6 +15030,7 @@ pub enum CreateDomainError {
 impl CreateDomainError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateDomainError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ResourceInUse" => {
                     return RusotoError::Service(CreateDomainError::ResourceInUse(err.msg))
@@ -15051,6 +15065,7 @@ pub enum CreateEdgePackagingJobError {
 impl CreateEdgePackagingJobError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateEdgePackagingJobError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ResourceLimitExceeded" => {
                     return RusotoError::Service(
@@ -15083,6 +15098,7 @@ pub enum CreateEndpointError {
 impl CreateEndpointError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateEndpointError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ResourceLimitExceeded" => {
                     return RusotoError::Service(CreateEndpointError::ResourceLimitExceeded(
@@ -15115,6 +15131,7 @@ pub enum CreateEndpointConfigError {
 impl CreateEndpointConfigError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateEndpointConfigError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ResourceLimitExceeded" => {
                     return RusotoError::Service(CreateEndpointConfigError::ResourceLimitExceeded(
@@ -15147,6 +15164,7 @@ pub enum CreateExperimentError {
 impl CreateExperimentError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateExperimentError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ResourceLimitExceeded" => {
                     return RusotoError::Service(CreateExperimentError::ResourceLimitExceeded(
@@ -15181,6 +15199,7 @@ pub enum CreateFeatureGroupError {
 impl CreateFeatureGroupError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateFeatureGroupError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ResourceInUse" => {
                     return RusotoError::Service(CreateFeatureGroupError::ResourceInUse(err.msg))
@@ -15219,6 +15238,7 @@ pub enum CreateFlowDefinitionError {
 impl CreateFlowDefinitionError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateFlowDefinitionError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ResourceInUse" => {
                     return RusotoError::Service(CreateFlowDefinitionError::ResourceInUse(err.msg))
@@ -15257,6 +15277,7 @@ pub enum CreateHumanTaskUiError {
 impl CreateHumanTaskUiError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateHumanTaskUiError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ResourceInUse" => {
                     return RusotoError::Service(CreateHumanTaskUiError::ResourceInUse(err.msg))
@@ -15297,6 +15318,7 @@ impl CreateHyperParameterTuningJobError {
         res: BufferedHttpResponse,
     ) -> RusotoError<CreateHyperParameterTuningJobError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ResourceInUse" => {
                     return RusotoError::Service(CreateHyperParameterTuningJobError::ResourceInUse(
@@ -15339,6 +15361,7 @@ pub enum CreateImageError {
 impl CreateImageError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateImageError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ResourceInUse" => {
                     return RusotoError::Service(CreateImageError::ResourceInUse(err.msg))
@@ -15377,6 +15400,7 @@ pub enum CreateImageVersionError {
 impl CreateImageVersionError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateImageVersionError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ResourceInUse" => {
                     return RusotoError::Service(CreateImageVersionError::ResourceInUse(err.msg))
@@ -15419,6 +15443,7 @@ pub enum CreateLabelingJobError {
 impl CreateLabelingJobError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateLabelingJobError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ResourceInUse" => {
                     return RusotoError::Service(CreateLabelingJobError::ResourceInUse(err.msg))
@@ -15455,6 +15480,7 @@ pub enum CreateModelError {
 impl CreateModelError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateModelError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ResourceLimitExceeded" => {
                     return RusotoError::Service(CreateModelError::ResourceLimitExceeded(err.msg))
@@ -15489,6 +15515,7 @@ impl CreateModelBiasJobDefinitionError {
         res: BufferedHttpResponse,
     ) -> RusotoError<CreateModelBiasJobDefinitionError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ResourceInUse" => {
                     return RusotoError::Service(CreateModelBiasJobDefinitionError::ResourceInUse(
@@ -15533,6 +15560,7 @@ impl CreateModelExplainabilityJobDefinitionError {
         res: BufferedHttpResponse,
     ) -> RusotoError<CreateModelExplainabilityJobDefinitionError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ResourceInUse" => {
                     return RusotoError::Service(
@@ -15577,6 +15605,7 @@ pub enum CreateModelPackageError {
 impl CreateModelPackageError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateModelPackageError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ConflictException" => {
                     return RusotoError::Service(CreateModelPackageError::Conflict(err.msg))
@@ -15613,6 +15642,7 @@ pub enum CreateModelPackageGroupError {
 impl CreateModelPackageGroupError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateModelPackageGroupError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ResourceLimitExceeded" => {
                     return RusotoError::Service(
@@ -15651,6 +15681,7 @@ impl CreateModelQualityJobDefinitionError {
         res: BufferedHttpResponse,
     ) -> RusotoError<CreateModelQualityJobDefinitionError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ResourceInUse" => {
                     return RusotoError::Service(
@@ -15695,6 +15726,7 @@ pub enum CreateMonitoringScheduleError {
 impl CreateMonitoringScheduleError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateMonitoringScheduleError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ResourceInUse" => {
                     return RusotoError::Service(CreateMonitoringScheduleError::ResourceInUse(
@@ -15735,6 +15767,7 @@ pub enum CreateNotebookInstanceError {
 impl CreateNotebookInstanceError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateNotebookInstanceError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ResourceLimitExceeded" => {
                     return RusotoError::Service(
@@ -15769,6 +15802,7 @@ impl CreateNotebookInstanceLifecycleConfigError {
         res: BufferedHttpResponse,
     ) -> RusotoError<CreateNotebookInstanceLifecycleConfigError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ResourceLimitExceeded" => {
                     return RusotoError::Service(
@@ -15805,6 +15839,7 @@ pub enum CreatePipelineError {
 impl CreatePipelineError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreatePipelineError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ResourceLimitExceeded" => {
                     return RusotoError::Service(CreatePipelineError::ResourceLimitExceeded(
@@ -15841,6 +15876,7 @@ pub enum CreatePresignedDomainUrlError {
 impl CreatePresignedDomainUrlError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreatePresignedDomainUrlError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ResourceNotFound" => {
                     return RusotoError::Service(CreatePresignedDomainUrlError::ResourceNotFound(
@@ -15872,6 +15908,7 @@ impl CreatePresignedNotebookInstanceUrlError {
         res: BufferedHttpResponse,
     ) -> RusotoError<CreatePresignedNotebookInstanceUrlError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
@@ -15901,6 +15938,7 @@ pub enum CreateProcessingJobError {
 impl CreateProcessingJobError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateProcessingJobError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ResourceInUse" => {
                     return RusotoError::Service(CreateProcessingJobError::ResourceInUse(err.msg))
@@ -15943,6 +15981,7 @@ pub enum CreateProjectError {
 impl CreateProjectError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateProjectError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ResourceLimitExceeded" => {
                     return RusotoError::Service(CreateProjectError::ResourceLimitExceeded(err.msg))
@@ -15977,6 +16016,7 @@ pub enum CreateTrainingJobError {
 impl CreateTrainingJobError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateTrainingJobError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ResourceInUse" => {
                     return RusotoError::Service(CreateTrainingJobError::ResourceInUse(err.msg))
@@ -16021,6 +16061,7 @@ pub enum CreateTransformJobError {
 impl CreateTransformJobError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateTransformJobError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ResourceInUse" => {
                     return RusotoError::Service(CreateTransformJobError::ResourceInUse(err.msg))
@@ -16063,6 +16104,7 @@ pub enum CreateTrialError {
 impl CreateTrialError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateTrialError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ResourceLimitExceeded" => {
                     return RusotoError::Service(CreateTrialError::ResourceLimitExceeded(err.msg))
@@ -16097,6 +16139,7 @@ pub enum CreateTrialComponentError {
 impl CreateTrialComponentError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateTrialComponentError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ResourceLimitExceeded" => {
                     return RusotoError::Service(CreateTrialComponentError::ResourceLimitExceeded(
@@ -16131,6 +16174,7 @@ pub enum CreateUserProfileError {
 impl CreateUserProfileError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateUserProfileError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ResourceInUse" => {
                     return RusotoError::Service(CreateUserProfileError::ResourceInUse(err.msg))
@@ -16164,6 +16208,7 @@ pub enum CreateWorkforceError {}
 impl CreateWorkforceError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateWorkforceError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
@@ -16191,6 +16236,7 @@ pub enum CreateWorkteamError {
 impl CreateWorkteamError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateWorkteamError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ResourceInUse" => {
                     return RusotoError::Service(CreateWorkteamError::ResourceInUse(err.msg))
@@ -16227,6 +16273,7 @@ pub enum DeleteActionError {
 impl DeleteActionError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteActionError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ResourceNotFound" => {
                     return RusotoError::Service(DeleteActionError::ResourceNotFound(err.msg))
@@ -16254,6 +16301,7 @@ pub enum DeleteAlgorithmError {}
 impl DeleteAlgorithmError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteAlgorithmError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
@@ -16281,6 +16329,7 @@ pub enum DeleteAppError {
 impl DeleteAppError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteAppError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ResourceInUse" => {
                     return RusotoError::Service(DeleteAppError::ResourceInUse(err.msg))
@@ -16315,6 +16364,7 @@ pub enum DeleteAppImageConfigError {
 impl DeleteAppImageConfigError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteAppImageConfigError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ResourceNotFound" => {
                     return RusotoError::Service(DeleteAppImageConfigError::ResourceNotFound(
@@ -16347,6 +16397,7 @@ pub enum DeleteArtifactError {
 impl DeleteArtifactError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteArtifactError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ResourceNotFound" => {
                     return RusotoError::Service(DeleteArtifactError::ResourceNotFound(err.msg))
@@ -16377,6 +16428,7 @@ pub enum DeleteAssociationError {
 impl DeleteAssociationError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteAssociationError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ResourceNotFound" => {
                     return RusotoError::Service(DeleteAssociationError::ResourceNotFound(err.msg))
@@ -16404,6 +16456,7 @@ pub enum DeleteCodeRepositoryError {}
 impl DeleteCodeRepositoryError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteCodeRepositoryError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
@@ -16429,6 +16482,7 @@ pub enum DeleteContextError {
 impl DeleteContextError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteContextError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ResourceNotFound" => {
                     return RusotoError::Service(DeleteContextError::ResourceNotFound(err.msg))
@@ -16461,6 +16515,7 @@ impl DeleteDataQualityJobDefinitionError {
         res: BufferedHttpResponse,
     ) -> RusotoError<DeleteDataQualityJobDefinitionError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ResourceNotFound" => {
                     return RusotoError::Service(
@@ -16495,6 +16550,7 @@ pub enum DeleteDeviceFleetError {
 impl DeleteDeviceFleetError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteDeviceFleetError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ResourceInUse" => {
                     return RusotoError::Service(DeleteDeviceFleetError::ResourceInUse(err.msg))
@@ -16527,6 +16583,7 @@ pub enum DeleteDomainError {
 impl DeleteDomainError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteDomainError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ResourceInUse" => {
                     return RusotoError::Service(DeleteDomainError::ResourceInUse(err.msg))
@@ -16558,6 +16615,7 @@ pub enum DeleteEndpointError {}
 impl DeleteEndpointError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteEndpointError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
@@ -16580,6 +16638,7 @@ pub enum DeleteEndpointConfigError {}
 impl DeleteEndpointConfigError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteEndpointConfigError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
@@ -16605,6 +16664,7 @@ pub enum DeleteExperimentError {
 impl DeleteExperimentError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteExperimentError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ResourceNotFound" => {
                     return RusotoError::Service(DeleteExperimentError::ResourceNotFound(err.msg))
@@ -16635,6 +16695,7 @@ pub enum DeleteFeatureGroupError {
 impl DeleteFeatureGroupError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteFeatureGroupError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ResourceNotFound" => {
                     return RusotoError::Service(DeleteFeatureGroupError::ResourceNotFound(err.msg))
@@ -16667,6 +16728,7 @@ pub enum DeleteFlowDefinitionError {
 impl DeleteFlowDefinitionError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteFlowDefinitionError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ResourceInUse" => {
                     return RusotoError::Service(DeleteFlowDefinitionError::ResourceInUse(err.msg))
@@ -16703,6 +16765,7 @@ pub enum DeleteHumanTaskUiError {
 impl DeleteHumanTaskUiError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteHumanTaskUiError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ResourceNotFound" => {
                     return RusotoError::Service(DeleteHumanTaskUiError::ResourceNotFound(err.msg))
@@ -16735,6 +16798,7 @@ pub enum DeleteImageError {
 impl DeleteImageError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteImageError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ResourceInUse" => {
                     return RusotoError::Service(DeleteImageError::ResourceInUse(err.msg))
@@ -16771,6 +16835,7 @@ pub enum DeleteImageVersionError {
 impl DeleteImageVersionError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteImageVersionError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ResourceInUse" => {
                     return RusotoError::Service(DeleteImageVersionError::ResourceInUse(err.msg))
@@ -16802,6 +16867,7 @@ pub enum DeleteModelError {}
 impl DeleteModelError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteModelError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
@@ -16829,6 +16895,7 @@ impl DeleteModelBiasJobDefinitionError {
         res: BufferedHttpResponse,
     ) -> RusotoError<DeleteModelBiasJobDefinitionError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ResourceNotFound" => {
                     return RusotoError::Service(
@@ -16865,6 +16932,7 @@ impl DeleteModelExplainabilityJobDefinitionError {
         res: BufferedHttpResponse,
     ) -> RusotoError<DeleteModelExplainabilityJobDefinitionError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ResourceNotFound" => {
                     return RusotoError::Service(
@@ -16899,6 +16967,7 @@ pub enum DeleteModelPackageError {
 impl DeleteModelPackageError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteModelPackageError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ConflictException" => {
                     return RusotoError::Service(DeleteModelPackageError::Conflict(err.msg))
@@ -16926,6 +16995,7 @@ pub enum DeleteModelPackageGroupError {}
 impl DeleteModelPackageGroupError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteModelPackageGroupError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
@@ -16950,6 +17020,7 @@ impl DeleteModelPackageGroupPolicyError {
         res: BufferedHttpResponse,
     ) -> RusotoError<DeleteModelPackageGroupPolicyError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
@@ -16977,6 +17048,7 @@ impl DeleteModelQualityJobDefinitionError {
         res: BufferedHttpResponse,
     ) -> RusotoError<DeleteModelQualityJobDefinitionError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ResourceNotFound" => {
                     return RusotoError::Service(
@@ -17011,6 +17083,7 @@ pub enum DeleteMonitoringScheduleError {
 impl DeleteMonitoringScheduleError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteMonitoringScheduleError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ResourceNotFound" => {
                     return RusotoError::Service(DeleteMonitoringScheduleError::ResourceNotFound(
@@ -17040,6 +17113,7 @@ pub enum DeleteNotebookInstanceError {}
 impl DeleteNotebookInstanceError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteNotebookInstanceError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
@@ -17064,6 +17138,7 @@ impl DeleteNotebookInstanceLifecycleConfigError {
         res: BufferedHttpResponse,
     ) -> RusotoError<DeleteNotebookInstanceLifecycleConfigError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
@@ -17089,6 +17164,7 @@ pub enum DeletePipelineError {
 impl DeletePipelineError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeletePipelineError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ResourceNotFound" => {
                     return RusotoError::Service(DeletePipelineError::ResourceNotFound(err.msg))
@@ -17116,6 +17192,7 @@ pub enum DeleteProjectError {}
 impl DeleteProjectError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteProjectError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
@@ -17138,6 +17215,7 @@ pub enum DeleteTagsError {}
 impl DeleteTagsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteTagsError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
@@ -17163,6 +17241,7 @@ pub enum DeleteTrialError {
 impl DeleteTrialError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteTrialError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ResourceNotFound" => {
                     return RusotoError::Service(DeleteTrialError::ResourceNotFound(err.msg))
@@ -17193,6 +17272,7 @@ pub enum DeleteTrialComponentError {
 impl DeleteTrialComponentError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteTrialComponentError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ResourceNotFound" => {
                     return RusotoError::Service(DeleteTrialComponentError::ResourceNotFound(
@@ -17227,6 +17307,7 @@ pub enum DeleteUserProfileError {
 impl DeleteUserProfileError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteUserProfileError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ResourceInUse" => {
                     return RusotoError::Service(DeleteUserProfileError::ResourceInUse(err.msg))
@@ -17258,6 +17339,7 @@ pub enum DeleteWorkforceError {}
 impl DeleteWorkforceError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteWorkforceError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
@@ -17283,6 +17365,7 @@ pub enum DeleteWorkteamError {
 impl DeleteWorkteamError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteWorkteamError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ResourceLimitExceeded" => {
                     return RusotoError::Service(DeleteWorkteamError::ResourceLimitExceeded(
@@ -17312,6 +17395,7 @@ pub enum DeregisterDevicesError {}
 impl DeregisterDevicesError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeregisterDevicesError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
@@ -17337,6 +17421,7 @@ pub enum DescribeActionError {
 impl DescribeActionError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeActionError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ResourceNotFound" => {
                     return RusotoError::Service(DescribeActionError::ResourceNotFound(err.msg))
@@ -17364,6 +17449,7 @@ pub enum DescribeAlgorithmError {}
 impl DescribeAlgorithmError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeAlgorithmError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
@@ -17389,6 +17475,7 @@ pub enum DescribeAppError {
 impl DescribeAppError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeAppError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ResourceNotFound" => {
                     return RusotoError::Service(DescribeAppError::ResourceNotFound(err.msg))
@@ -17419,6 +17506,7 @@ pub enum DescribeAppImageConfigError {
 impl DescribeAppImageConfigError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeAppImageConfigError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ResourceNotFound" => {
                     return RusotoError::Service(DescribeAppImageConfigError::ResourceNotFound(
@@ -17451,6 +17539,7 @@ pub enum DescribeArtifactError {
 impl DescribeArtifactError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeArtifactError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ResourceNotFound" => {
                     return RusotoError::Service(DescribeArtifactError::ResourceNotFound(err.msg))
@@ -17481,6 +17570,7 @@ pub enum DescribeAutoMLJobError {
 impl DescribeAutoMLJobError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeAutoMLJobError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ResourceNotFound" => {
                     return RusotoError::Service(DescribeAutoMLJobError::ResourceNotFound(err.msg))
@@ -17508,6 +17598,7 @@ pub enum DescribeCodeRepositoryError {}
 impl DescribeCodeRepositoryError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeCodeRepositoryError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
@@ -17533,6 +17624,7 @@ pub enum DescribeCompilationJobError {
 impl DescribeCompilationJobError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeCompilationJobError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ResourceNotFound" => {
                     return RusotoError::Service(DescribeCompilationJobError::ResourceNotFound(
@@ -17565,6 +17657,7 @@ pub enum DescribeContextError {
 impl DescribeContextError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeContextError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ResourceNotFound" => {
                     return RusotoError::Service(DescribeContextError::ResourceNotFound(err.msg))
@@ -17597,6 +17690,7 @@ impl DescribeDataQualityJobDefinitionError {
         res: BufferedHttpResponse,
     ) -> RusotoError<DescribeDataQualityJobDefinitionError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ResourceNotFound" => {
                     return RusotoError::Service(
@@ -17631,6 +17725,7 @@ pub enum DescribeDeviceError {
 impl DescribeDeviceError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeDeviceError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ResourceNotFound" => {
                     return RusotoError::Service(DescribeDeviceError::ResourceNotFound(err.msg))
@@ -17661,6 +17756,7 @@ pub enum DescribeDeviceFleetError {
 impl DescribeDeviceFleetError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeDeviceFleetError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ResourceNotFound" => {
                     return RusotoError::Service(DescribeDeviceFleetError::ResourceNotFound(
@@ -17693,6 +17789,7 @@ pub enum DescribeDomainError {
 impl DescribeDomainError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeDomainError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ResourceNotFound" => {
                     return RusotoError::Service(DescribeDomainError::ResourceNotFound(err.msg))
@@ -17723,6 +17820,7 @@ pub enum DescribeEdgePackagingJobError {
 impl DescribeEdgePackagingJobError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeEdgePackagingJobError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ResourceNotFound" => {
                     return RusotoError::Service(DescribeEdgePackagingJobError::ResourceNotFound(
@@ -17752,6 +17850,7 @@ pub enum DescribeEndpointError {}
 impl DescribeEndpointError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeEndpointError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
@@ -17774,6 +17873,7 @@ pub enum DescribeEndpointConfigError {}
 impl DescribeEndpointConfigError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeEndpointConfigError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
@@ -17799,6 +17899,7 @@ pub enum DescribeExperimentError {
 impl DescribeExperimentError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeExperimentError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ResourceNotFound" => {
                     return RusotoError::Service(DescribeExperimentError::ResourceNotFound(err.msg))
@@ -17829,6 +17930,7 @@ pub enum DescribeFeatureGroupError {
 impl DescribeFeatureGroupError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeFeatureGroupError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ResourceNotFound" => {
                     return RusotoError::Service(DescribeFeatureGroupError::ResourceNotFound(
@@ -17861,6 +17963,7 @@ pub enum DescribeFlowDefinitionError {
 impl DescribeFlowDefinitionError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeFlowDefinitionError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ResourceNotFound" => {
                     return RusotoError::Service(DescribeFlowDefinitionError::ResourceNotFound(
@@ -17893,6 +17996,7 @@ pub enum DescribeHumanTaskUiError {
 impl DescribeHumanTaskUiError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeHumanTaskUiError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ResourceNotFound" => {
                     return RusotoError::Service(DescribeHumanTaskUiError::ResourceNotFound(
@@ -17927,6 +18031,7 @@ impl DescribeHyperParameterTuningJobError {
         res: BufferedHttpResponse,
     ) -> RusotoError<DescribeHyperParameterTuningJobError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ResourceNotFound" => {
                     return RusotoError::Service(
@@ -17961,6 +18066,7 @@ pub enum DescribeImageError {
 impl DescribeImageError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeImageError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ResourceNotFound" => {
                     return RusotoError::Service(DescribeImageError::ResourceNotFound(err.msg))
@@ -17991,6 +18097,7 @@ pub enum DescribeImageVersionError {
 impl DescribeImageVersionError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeImageVersionError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ResourceNotFound" => {
                     return RusotoError::Service(DescribeImageVersionError::ResourceNotFound(
@@ -18023,6 +18130,7 @@ pub enum DescribeLabelingJobError {
 impl DescribeLabelingJobError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeLabelingJobError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ResourceNotFound" => {
                     return RusotoError::Service(DescribeLabelingJobError::ResourceNotFound(
@@ -18052,6 +18160,7 @@ pub enum DescribeModelError {}
 impl DescribeModelError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeModelError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
@@ -18079,6 +18188,7 @@ impl DescribeModelBiasJobDefinitionError {
         res: BufferedHttpResponse,
     ) -> RusotoError<DescribeModelBiasJobDefinitionError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ResourceNotFound" => {
                     return RusotoError::Service(
@@ -18115,6 +18225,7 @@ impl DescribeModelExplainabilityJobDefinitionError {
         res: BufferedHttpResponse,
     ) -> RusotoError<DescribeModelExplainabilityJobDefinitionError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ResourceNotFound" => {
                     return RusotoError::Service(
@@ -18146,6 +18257,7 @@ pub enum DescribeModelPackageError {}
 impl DescribeModelPackageError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeModelPackageError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
@@ -18168,6 +18280,7 @@ pub enum DescribeModelPackageGroupError {}
 impl DescribeModelPackageGroupError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeModelPackageGroupError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
@@ -18195,6 +18308,7 @@ impl DescribeModelQualityJobDefinitionError {
         res: BufferedHttpResponse,
     ) -> RusotoError<DescribeModelQualityJobDefinitionError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ResourceNotFound" => {
                     return RusotoError::Service(
@@ -18231,6 +18345,7 @@ impl DescribeMonitoringScheduleError {
         res: BufferedHttpResponse,
     ) -> RusotoError<DescribeMonitoringScheduleError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ResourceNotFound" => {
                     return RusotoError::Service(DescribeMonitoringScheduleError::ResourceNotFound(
@@ -18260,6 +18375,7 @@ pub enum DescribeNotebookInstanceError {}
 impl DescribeNotebookInstanceError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeNotebookInstanceError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
@@ -18284,6 +18400,7 @@ impl DescribeNotebookInstanceLifecycleConfigError {
         res: BufferedHttpResponse,
     ) -> RusotoError<DescribeNotebookInstanceLifecycleConfigError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
@@ -18309,6 +18426,7 @@ pub enum DescribePipelineError {
 impl DescribePipelineError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribePipelineError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ResourceNotFound" => {
                     return RusotoError::Service(DescribePipelineError::ResourceNotFound(err.msg))
@@ -18341,6 +18459,7 @@ impl DescribePipelineDefinitionForExecutionError {
         res: BufferedHttpResponse,
     ) -> RusotoError<DescribePipelineDefinitionForExecutionError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ResourceNotFound" => {
                     return RusotoError::Service(
@@ -18375,6 +18494,7 @@ pub enum DescribePipelineExecutionError {
 impl DescribePipelineExecutionError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribePipelineExecutionError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ResourceNotFound" => {
                     return RusotoError::Service(DescribePipelineExecutionError::ResourceNotFound(
@@ -18407,6 +18527,7 @@ pub enum DescribeProcessingJobError {
 impl DescribeProcessingJobError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeProcessingJobError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ResourceNotFound" => {
                     return RusotoError::Service(DescribeProcessingJobError::ResourceNotFound(
@@ -18436,6 +18557,7 @@ pub enum DescribeProjectError {}
 impl DescribeProjectError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeProjectError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
@@ -18460,6 +18582,7 @@ impl DescribeSubscribedWorkteamError {
         res: BufferedHttpResponse,
     ) -> RusotoError<DescribeSubscribedWorkteamError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
@@ -18485,6 +18608,7 @@ pub enum DescribeTrainingJobError {
 impl DescribeTrainingJobError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeTrainingJobError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ResourceNotFound" => {
                     return RusotoError::Service(DescribeTrainingJobError::ResourceNotFound(
@@ -18517,6 +18641,7 @@ pub enum DescribeTransformJobError {
 impl DescribeTransformJobError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeTransformJobError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ResourceNotFound" => {
                     return RusotoError::Service(DescribeTransformJobError::ResourceNotFound(
@@ -18549,6 +18674,7 @@ pub enum DescribeTrialError {
 impl DescribeTrialError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeTrialError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ResourceNotFound" => {
                     return RusotoError::Service(DescribeTrialError::ResourceNotFound(err.msg))
@@ -18579,6 +18705,7 @@ pub enum DescribeTrialComponentError {
 impl DescribeTrialComponentError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeTrialComponentError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ResourceNotFound" => {
                     return RusotoError::Service(DescribeTrialComponentError::ResourceNotFound(
@@ -18611,6 +18738,7 @@ pub enum DescribeUserProfileError {
 impl DescribeUserProfileError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeUserProfileError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ResourceNotFound" => {
                     return RusotoError::Service(DescribeUserProfileError::ResourceNotFound(
@@ -18640,6 +18768,7 @@ pub enum DescribeWorkforceError {}
 impl DescribeWorkforceError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeWorkforceError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
@@ -18662,6 +18791,7 @@ pub enum DescribeWorkteamError {}
 impl DescribeWorkteamError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeWorkteamError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
@@ -18686,6 +18816,7 @@ impl DisableSagemakerServicecatalogPortfolioError {
         res: BufferedHttpResponse,
     ) -> RusotoError<DisableSagemakerServicecatalogPortfolioError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
@@ -18713,6 +18844,7 @@ impl DisassociateTrialComponentError {
         res: BufferedHttpResponse,
     ) -> RusotoError<DisassociateTrialComponentError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ResourceNotFound" => {
                     return RusotoError::Service(DisassociateTrialComponentError::ResourceNotFound(
@@ -18744,6 +18876,7 @@ impl EnableSagemakerServicecatalogPortfolioError {
         res: BufferedHttpResponse,
     ) -> RusotoError<EnableSagemakerServicecatalogPortfolioError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
@@ -18766,6 +18899,7 @@ pub enum GetDeviceFleetReportError {}
 impl GetDeviceFleetReportError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetDeviceFleetReportError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
@@ -18790,6 +18924,7 @@ impl GetModelPackageGroupPolicyError {
         res: BufferedHttpResponse,
     ) -> RusotoError<GetModelPackageGroupPolicyError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
@@ -18814,6 +18949,7 @@ impl GetSagemakerServicecatalogPortfolioStatusError {
         res: BufferedHttpResponse,
     ) -> RusotoError<GetSagemakerServicecatalogPortfolioStatusError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
@@ -18836,6 +18972,7 @@ pub enum GetSearchSuggestionsError {}
 impl GetSearchSuggestionsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetSearchSuggestionsError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
@@ -18861,6 +18998,7 @@ pub enum ListActionsError {
 impl ListActionsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListActionsError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ResourceNotFound" => {
                     return RusotoError::Service(ListActionsError::ResourceNotFound(err.msg))
@@ -18888,6 +19026,7 @@ pub enum ListAlgorithmsError {}
 impl ListAlgorithmsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListAlgorithmsError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
@@ -18910,6 +19049,7 @@ pub enum ListAppImageConfigsError {}
 impl ListAppImageConfigsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListAppImageConfigsError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
@@ -18932,6 +19072,7 @@ pub enum ListAppsError {}
 impl ListAppsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListAppsError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
@@ -18957,6 +19098,7 @@ pub enum ListArtifactsError {
 impl ListArtifactsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListArtifactsError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ResourceNotFound" => {
                     return RusotoError::Service(ListArtifactsError::ResourceNotFound(err.msg))
@@ -18987,6 +19129,7 @@ pub enum ListAssociationsError {
 impl ListAssociationsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListAssociationsError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ResourceNotFound" => {
                     return RusotoError::Service(ListAssociationsError::ResourceNotFound(err.msg))
@@ -19014,6 +19157,7 @@ pub enum ListAutoMLJobsError {}
 impl ListAutoMLJobsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListAutoMLJobsError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
@@ -19041,6 +19185,7 @@ impl ListCandidatesForAutoMLJobError {
         res: BufferedHttpResponse,
     ) -> RusotoError<ListCandidatesForAutoMLJobError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ResourceNotFound" => {
                     return RusotoError::Service(ListCandidatesForAutoMLJobError::ResourceNotFound(
@@ -19070,6 +19215,7 @@ pub enum ListCodeRepositoriesError {}
 impl ListCodeRepositoriesError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListCodeRepositoriesError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
@@ -19092,6 +19238,7 @@ pub enum ListCompilationJobsError {}
 impl ListCompilationJobsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListCompilationJobsError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
@@ -19117,6 +19264,7 @@ pub enum ListContextsError {
 impl ListContextsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListContextsError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ResourceNotFound" => {
                     return RusotoError::Service(ListContextsError::ResourceNotFound(err.msg))
@@ -19146,6 +19294,7 @@ impl ListDataQualityJobDefinitionsError {
         res: BufferedHttpResponse,
     ) -> RusotoError<ListDataQualityJobDefinitionsError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
@@ -19168,6 +19317,7 @@ pub enum ListDeviceFleetsError {}
 impl ListDeviceFleetsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListDeviceFleetsError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
@@ -19190,6 +19340,7 @@ pub enum ListDevicesError {}
 impl ListDevicesError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListDevicesError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
@@ -19212,6 +19363,7 @@ pub enum ListDomainsError {}
 impl ListDomainsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListDomainsError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
@@ -19234,6 +19386,7 @@ pub enum ListEdgePackagingJobsError {}
 impl ListEdgePackagingJobsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListEdgePackagingJobsError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
@@ -19256,6 +19409,7 @@ pub enum ListEndpointConfigsError {}
 impl ListEndpointConfigsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListEndpointConfigsError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
@@ -19278,6 +19432,7 @@ pub enum ListEndpointsError {}
 impl ListEndpointsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListEndpointsError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
@@ -19300,6 +19455,7 @@ pub enum ListExperimentsError {}
 impl ListExperimentsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListExperimentsError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
@@ -19322,6 +19478,7 @@ pub enum ListFeatureGroupsError {}
 impl ListFeatureGroupsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListFeatureGroupsError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
@@ -19344,6 +19501,7 @@ pub enum ListFlowDefinitionsError {}
 impl ListFlowDefinitionsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListFlowDefinitionsError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
@@ -19366,6 +19524,7 @@ pub enum ListHumanTaskUisError {}
 impl ListHumanTaskUisError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListHumanTaskUisError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
@@ -19390,6 +19549,7 @@ impl ListHyperParameterTuningJobsError {
         res: BufferedHttpResponse,
     ) -> RusotoError<ListHyperParameterTuningJobsError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
@@ -19415,6 +19575,7 @@ pub enum ListImageVersionsError {
 impl ListImageVersionsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListImageVersionsError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ResourceNotFound" => {
                     return RusotoError::Service(ListImageVersionsError::ResourceNotFound(err.msg))
@@ -19442,6 +19603,7 @@ pub enum ListImagesError {}
 impl ListImagesError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListImagesError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
@@ -19464,6 +19626,7 @@ pub enum ListLabelingJobsError {}
 impl ListLabelingJobsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListLabelingJobsError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
@@ -19491,6 +19654,7 @@ impl ListLabelingJobsForWorkteamError {
         res: BufferedHttpResponse,
     ) -> RusotoError<ListLabelingJobsForWorkteamError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ResourceNotFound" => {
                     return RusotoError::Service(
@@ -19522,6 +19686,7 @@ impl ListModelBiasJobDefinitionsError {
         res: BufferedHttpResponse,
     ) -> RusotoError<ListModelBiasJobDefinitionsError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
@@ -19546,6 +19711,7 @@ impl ListModelExplainabilityJobDefinitionsError {
         res: BufferedHttpResponse,
     ) -> RusotoError<ListModelExplainabilityJobDefinitionsError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
@@ -19568,6 +19734,7 @@ pub enum ListModelPackageGroupsError {}
 impl ListModelPackageGroupsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListModelPackageGroupsError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
@@ -19590,6 +19757,7 @@ pub enum ListModelPackagesError {}
 impl ListModelPackagesError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListModelPackagesError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
@@ -19614,6 +19782,7 @@ impl ListModelQualityJobDefinitionsError {
         res: BufferedHttpResponse,
     ) -> RusotoError<ListModelQualityJobDefinitionsError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
@@ -19636,6 +19805,7 @@ pub enum ListModelsError {}
 impl ListModelsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListModelsError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
@@ -19658,6 +19828,7 @@ pub enum ListMonitoringExecutionsError {}
 impl ListMonitoringExecutionsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListMonitoringExecutionsError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
@@ -19680,6 +19851,7 @@ pub enum ListMonitoringSchedulesError {}
 impl ListMonitoringSchedulesError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListMonitoringSchedulesError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
@@ -19704,6 +19876,7 @@ impl ListNotebookInstanceLifecycleConfigsError {
         res: BufferedHttpResponse,
     ) -> RusotoError<ListNotebookInstanceLifecycleConfigsError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
@@ -19726,6 +19899,7 @@ pub enum ListNotebookInstancesError {}
 impl ListNotebookInstancesError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListNotebookInstancesError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
@@ -19753,6 +19927,7 @@ impl ListPipelineExecutionStepsError {
         res: BufferedHttpResponse,
     ) -> RusotoError<ListPipelineExecutionStepsError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ResourceNotFound" => {
                     return RusotoError::Service(ListPipelineExecutionStepsError::ResourceNotFound(
@@ -19785,6 +19960,7 @@ pub enum ListPipelineExecutionsError {
 impl ListPipelineExecutionsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListPipelineExecutionsError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ResourceNotFound" => {
                     return RusotoError::Service(ListPipelineExecutionsError::ResourceNotFound(
@@ -19819,6 +19995,7 @@ impl ListPipelineParametersForExecutionError {
         res: BufferedHttpResponse,
     ) -> RusotoError<ListPipelineParametersForExecutionError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ResourceNotFound" => {
                     return RusotoError::Service(
@@ -19850,6 +20027,7 @@ pub enum ListPipelinesError {}
 impl ListPipelinesError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListPipelinesError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
@@ -19872,6 +20050,7 @@ pub enum ListProcessingJobsError {}
 impl ListProcessingJobsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListProcessingJobsError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
@@ -19894,6 +20073,7 @@ pub enum ListProjectsError {}
 impl ListProjectsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListProjectsError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
@@ -19916,6 +20096,7 @@ pub enum ListSubscribedWorkteamsError {}
 impl ListSubscribedWorkteamsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListSubscribedWorkteamsError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
@@ -19938,6 +20119,7 @@ pub enum ListTagsError {}
 impl ListTagsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListTagsError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
@@ -19960,6 +20142,7 @@ pub enum ListTrainingJobsError {}
 impl ListTrainingJobsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListTrainingJobsError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
@@ -19987,6 +20170,7 @@ impl ListTrainingJobsForHyperParameterTuningJobError {
         res: BufferedHttpResponse,
     ) -> RusotoError<ListTrainingJobsForHyperParameterTuningJobError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ResourceNotFound" => {
                     return RusotoError::Service(
@@ -20018,6 +20202,7 @@ pub enum ListTransformJobsError {}
 impl ListTransformJobsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListTransformJobsError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
@@ -20043,6 +20228,7 @@ pub enum ListTrialComponentsError {
 impl ListTrialComponentsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListTrialComponentsError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ResourceNotFound" => {
                     return RusotoError::Service(ListTrialComponentsError::ResourceNotFound(
@@ -20075,6 +20261,7 @@ pub enum ListTrialsError {
 impl ListTrialsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListTrialsError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ResourceNotFound" => {
                     return RusotoError::Service(ListTrialsError::ResourceNotFound(err.msg))
@@ -20102,6 +20289,7 @@ pub enum ListUserProfilesError {}
 impl ListUserProfilesError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListUserProfilesError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
@@ -20124,6 +20312,7 @@ pub enum ListWorkforcesError {}
 impl ListWorkforcesError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListWorkforcesError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
@@ -20146,6 +20335,7 @@ pub enum ListWorkteamsError {}
 impl ListWorkteamsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListWorkteamsError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
@@ -20170,6 +20360,7 @@ impl PutModelPackageGroupPolicyError {
         res: BufferedHttpResponse,
     ) -> RusotoError<PutModelPackageGroupPolicyError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
@@ -20195,6 +20386,7 @@ pub enum RegisterDevicesError {
 impl RegisterDevicesError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<RegisterDevicesError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ResourceLimitExceeded" => {
                     return RusotoError::Service(RegisterDevicesError::ResourceLimitExceeded(
@@ -20227,6 +20419,7 @@ pub enum RenderUiTemplateError {
 impl RenderUiTemplateError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<RenderUiTemplateError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ResourceNotFound" => {
                     return RusotoError::Service(RenderUiTemplateError::ResourceNotFound(err.msg))
@@ -20254,6 +20447,7 @@ pub enum SearchError {}
 impl SearchError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<SearchError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
@@ -20279,6 +20473,7 @@ pub enum StartMonitoringScheduleError {
 impl StartMonitoringScheduleError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<StartMonitoringScheduleError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ResourceNotFound" => {
                     return RusotoError::Service(StartMonitoringScheduleError::ResourceNotFound(
@@ -20311,6 +20506,7 @@ pub enum StartNotebookInstanceError {
 impl StartNotebookInstanceError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<StartNotebookInstanceError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ResourceLimitExceeded" => {
                     return RusotoError::Service(StartNotebookInstanceError::ResourceLimitExceeded(
@@ -20345,6 +20541,7 @@ pub enum StartPipelineExecutionError {
 impl StartPipelineExecutionError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<StartPipelineExecutionError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ResourceLimitExceeded" => {
                     return RusotoError::Service(
@@ -20383,6 +20580,7 @@ pub enum StopAutoMLJobError {
 impl StopAutoMLJobError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<StopAutoMLJobError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ResourceNotFound" => {
                     return RusotoError::Service(StopAutoMLJobError::ResourceNotFound(err.msg))
@@ -20413,6 +20611,7 @@ pub enum StopCompilationJobError {
 impl StopCompilationJobError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<StopCompilationJobError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ResourceNotFound" => {
                     return RusotoError::Service(StopCompilationJobError::ResourceNotFound(err.msg))
@@ -20440,6 +20639,7 @@ pub enum StopEdgePackagingJobError {}
 impl StopEdgePackagingJobError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<StopEdgePackagingJobError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
@@ -20467,6 +20667,7 @@ impl StopHyperParameterTuningJobError {
         res: BufferedHttpResponse,
     ) -> RusotoError<StopHyperParameterTuningJobError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ResourceNotFound" => {
                     return RusotoError::Service(
@@ -20499,6 +20700,7 @@ pub enum StopLabelingJobError {
 impl StopLabelingJobError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<StopLabelingJobError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ResourceNotFound" => {
                     return RusotoError::Service(StopLabelingJobError::ResourceNotFound(err.msg))
@@ -20529,6 +20731,7 @@ pub enum StopMonitoringScheduleError {
 impl StopMonitoringScheduleError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<StopMonitoringScheduleError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ResourceNotFound" => {
                     return RusotoError::Service(StopMonitoringScheduleError::ResourceNotFound(
@@ -20558,6 +20761,7 @@ pub enum StopNotebookInstanceError {}
 impl StopNotebookInstanceError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<StopNotebookInstanceError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
@@ -20583,6 +20787,7 @@ pub enum StopPipelineExecutionError {
 impl StopPipelineExecutionError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<StopPipelineExecutionError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ResourceNotFound" => {
                     return RusotoError::Service(StopPipelineExecutionError::ResourceNotFound(
@@ -20615,6 +20820,7 @@ pub enum StopProcessingJobError {
 impl StopProcessingJobError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<StopProcessingJobError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ResourceNotFound" => {
                     return RusotoError::Service(StopProcessingJobError::ResourceNotFound(err.msg))
@@ -20645,6 +20851,7 @@ pub enum StopTrainingJobError {
 impl StopTrainingJobError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<StopTrainingJobError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ResourceNotFound" => {
                     return RusotoError::Service(StopTrainingJobError::ResourceNotFound(err.msg))
@@ -20675,6 +20882,7 @@ pub enum StopTransformJobError {
 impl StopTransformJobError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<StopTransformJobError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ResourceNotFound" => {
                     return RusotoError::Service(StopTransformJobError::ResourceNotFound(err.msg))
@@ -20707,6 +20915,7 @@ pub enum UpdateActionError {
 impl UpdateActionError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateActionError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ConflictException" => {
                     return RusotoError::Service(UpdateActionError::Conflict(err.msg))
@@ -20741,6 +20950,7 @@ pub enum UpdateAppImageConfigError {
 impl UpdateAppImageConfigError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateAppImageConfigError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ResourceNotFound" => {
                     return RusotoError::Service(UpdateAppImageConfigError::ResourceNotFound(
@@ -20775,6 +20985,7 @@ pub enum UpdateArtifactError {
 impl UpdateArtifactError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateArtifactError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ConflictException" => {
                     return RusotoError::Service(UpdateArtifactError::Conflict(err.msg))
@@ -20806,6 +21017,7 @@ pub enum UpdateCodeRepositoryError {}
 impl UpdateCodeRepositoryError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateCodeRepositoryError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
@@ -20833,6 +21045,7 @@ pub enum UpdateContextError {
 impl UpdateContextError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateContextError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ConflictException" => {
                     return RusotoError::Service(UpdateContextError::Conflict(err.msg))
@@ -20867,6 +21080,7 @@ pub enum UpdateDeviceFleetError {
 impl UpdateDeviceFleetError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateDeviceFleetError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ResourceInUse" => {
                     return RusotoError::Service(UpdateDeviceFleetError::ResourceInUse(err.msg))
@@ -20894,6 +21108,7 @@ pub enum UpdateDevicesError {}
 impl UpdateDevicesError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateDevicesError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
@@ -20923,6 +21138,7 @@ pub enum UpdateDomainError {
 impl UpdateDomainError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateDomainError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ResourceInUse" => {
                     return RusotoError::Service(UpdateDomainError::ResourceInUse(err.msg))
@@ -20961,6 +21177,7 @@ pub enum UpdateEndpointError {
 impl UpdateEndpointError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateEndpointError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ResourceLimitExceeded" => {
                     return RusotoError::Service(UpdateEndpointError::ResourceLimitExceeded(
@@ -20995,6 +21212,7 @@ impl UpdateEndpointWeightsAndCapacitiesError {
         res: BufferedHttpResponse,
     ) -> RusotoError<UpdateEndpointWeightsAndCapacitiesError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ResourceLimitExceeded" => {
                     return RusotoError::Service(
@@ -21031,6 +21249,7 @@ pub enum UpdateExperimentError {
 impl UpdateExperimentError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateExperimentError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ConflictException" => {
                     return RusotoError::Service(UpdateExperimentError::Conflict(err.msg))
@@ -21067,6 +21286,7 @@ pub enum UpdateImageError {
 impl UpdateImageError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateImageError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ResourceInUse" => {
                     return RusotoError::Service(UpdateImageError::ResourceInUse(err.msg))
@@ -21098,6 +21318,7 @@ pub enum UpdateModelPackageError {}
 impl UpdateModelPackageError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateModelPackageError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
@@ -21125,6 +21346,7 @@ pub enum UpdateMonitoringScheduleError {
 impl UpdateMonitoringScheduleError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateMonitoringScheduleError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ResourceLimitExceeded" => {
                     return RusotoError::Service(
@@ -21165,6 +21387,7 @@ pub enum UpdateNotebookInstanceError {
 impl UpdateNotebookInstanceError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateNotebookInstanceError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ResourceLimitExceeded" => {
                     return RusotoError::Service(
@@ -21199,6 +21422,7 @@ impl UpdateNotebookInstanceLifecycleConfigError {
         res: BufferedHttpResponse,
     ) -> RusotoError<UpdateNotebookInstanceLifecycleConfigError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ResourceLimitExceeded" => {
                     return RusotoError::Service(
@@ -21233,6 +21457,7 @@ pub enum UpdatePipelineError {
 impl UpdatePipelineError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdatePipelineError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ResourceNotFound" => {
                     return RusotoError::Service(UpdatePipelineError::ResourceNotFound(err.msg))
@@ -21263,6 +21488,7 @@ pub enum UpdatePipelineExecutionError {
 impl UpdatePipelineExecutionError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdatePipelineExecutionError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ResourceNotFound" => {
                     return RusotoError::Service(UpdatePipelineExecutionError::ResourceNotFound(
@@ -21295,6 +21521,7 @@ pub enum UpdateTrainingJobError {
 impl UpdateTrainingJobError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateTrainingJobError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ResourceNotFound" => {
                     return RusotoError::Service(UpdateTrainingJobError::ResourceNotFound(err.msg))
@@ -21327,6 +21554,7 @@ pub enum UpdateTrialError {
 impl UpdateTrialError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateTrialError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ConflictException" => {
                     return RusotoError::Service(UpdateTrialError::Conflict(err.msg))
@@ -21363,6 +21591,7 @@ pub enum UpdateTrialComponentError {
 impl UpdateTrialComponentError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateTrialComponentError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ConflictException" => {
                     return RusotoError::Service(UpdateTrialComponentError::Conflict(err.msg))
@@ -21403,6 +21632,7 @@ pub enum UpdateUserProfileError {
 impl UpdateUserProfileError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateUserProfileError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ResourceInUse" => {
                     return RusotoError::Service(UpdateUserProfileError::ResourceInUse(err.msg))
@@ -21440,6 +21670,7 @@ pub enum UpdateWorkforceError {}
 impl UpdateWorkforceError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateWorkforceError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
@@ -21465,6 +21696,7 @@ pub enum UpdateWorkteamError {
 impl UpdateWorkteamError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateWorkteamError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ResourceLimitExceeded" => {
                     return RusotoError::Service(UpdateWorkteamError::ResourceLimitExceeded(

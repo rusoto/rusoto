@@ -24,7 +24,6 @@ use rusoto_core::proto;
 use rusoto_core::signature::SignedRequest;
 #[allow(unused_imports)]
 use serde::{Deserialize, Serialize};
-use serde_json;
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct BatchDeleteWorldsRequest {
@@ -3236,6 +3235,7 @@ pub enum BatchDeleteWorldsError {
 impl BatchDeleteWorldsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<BatchDeleteWorldsError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalServerException" => {
                     return RusotoError::Service(BatchDeleteWorldsError::InternalServer(err.msg))
@@ -3282,6 +3282,7 @@ impl BatchDescribeSimulationJobError {
         res: BufferedHttpResponse,
     ) -> RusotoError<BatchDescribeSimulationJobError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalServerException" => {
                     return RusotoError::Service(BatchDescribeSimulationJobError::InternalServer(
@@ -3338,6 +3339,7 @@ pub enum CancelDeploymentJobError {
 impl CancelDeploymentJobError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CancelDeploymentJobError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalServerException" => {
                     return RusotoError::Service(CancelDeploymentJobError::InternalServer(err.msg))
@@ -3390,6 +3392,7 @@ pub enum CancelSimulationJobError {
 impl CancelSimulationJobError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CancelSimulationJobError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalServerException" => {
                     return RusotoError::Service(CancelSimulationJobError::InternalServer(err.msg))
@@ -3442,6 +3445,7 @@ pub enum CancelSimulationJobBatchError {
 impl CancelSimulationJobBatchError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CancelSimulationJobBatchError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalServerException" => {
                     return RusotoError::Service(CancelSimulationJobBatchError::InternalServer(
@@ -3496,6 +3500,7 @@ pub enum CancelWorldExportJobError {
 impl CancelWorldExportJobError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CancelWorldExportJobError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalServerException" => {
                     return RusotoError::Service(CancelWorldExportJobError::InternalServer(err.msg))
@@ -3548,6 +3553,7 @@ pub enum CancelWorldGenerationJobError {
 impl CancelWorldGenerationJobError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CancelWorldGenerationJobError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalServerException" => {
                     return RusotoError::Service(CancelWorldGenerationJobError::InternalServer(
@@ -3608,6 +3614,7 @@ pub enum CreateDeploymentJobError {
 impl CreateDeploymentJobError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateDeploymentJobError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ConcurrentDeploymentException" => {
                     return RusotoError::Service(CreateDeploymentJobError::ConcurrentDeployment(
@@ -3678,6 +3685,7 @@ pub enum CreateFleetError {
 impl CreateFleetError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateFleetError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalServerException" => {
                     return RusotoError::Service(CreateFleetError::InternalServer(err.msg))
@@ -3728,6 +3736,7 @@ pub enum CreateRobotError {
 impl CreateRobotError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateRobotError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalServerException" => {
                     return RusotoError::Service(CreateRobotError::InternalServer(err.msg))
@@ -3784,6 +3793,7 @@ pub enum CreateRobotApplicationError {
 impl CreateRobotApplicationError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateRobotApplicationError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "IdempotentParameterMismatchException" => {
                     return RusotoError::Service(
@@ -3856,6 +3866,7 @@ impl CreateRobotApplicationVersionError {
         res: BufferedHttpResponse,
     ) -> RusotoError<CreateRobotApplicationVersionError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "IdempotentParameterMismatchException" => {
                     return RusotoError::Service(
@@ -3928,6 +3939,7 @@ impl CreateSimulationApplicationError {
         res: BufferedHttpResponse,
     ) -> RusotoError<CreateSimulationApplicationError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "IdempotentParameterMismatchException" => {
                     return RusotoError::Service(
@@ -4004,6 +4016,7 @@ impl CreateSimulationApplicationVersionError {
         res: BufferedHttpResponse,
     ) -> RusotoError<CreateSimulationApplicationVersionError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "IdempotentParameterMismatchException" => {
                     return RusotoError::Service(
@@ -4084,6 +4097,7 @@ pub enum CreateSimulationJobError {
 impl CreateSimulationJobError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateSimulationJobError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "IdempotentParameterMismatchException" => {
                     return RusotoError::Service(
@@ -4158,6 +4172,7 @@ pub enum CreateWorldExportJobError {
 impl CreateWorldExportJobError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateWorldExportJobError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "IdempotentParameterMismatchException" => {
                     return RusotoError::Service(
@@ -4230,6 +4245,7 @@ pub enum CreateWorldGenerationJobError {
 impl CreateWorldGenerationJobError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateWorldGenerationJobError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "IdempotentParameterMismatchException" => {
                     return RusotoError::Service(
@@ -4308,6 +4324,7 @@ pub enum CreateWorldTemplateError {
 impl CreateWorldTemplateError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateWorldTemplateError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalServerException" => {
                     return RusotoError::Service(CreateWorldTemplateError::InternalServer(err.msg))
@@ -4368,6 +4385,7 @@ pub enum DeleteFleetError {
 impl DeleteFleetError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteFleetError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalServerException" => {
                     return RusotoError::Service(DeleteFleetError::InternalServer(err.msg))
@@ -4410,6 +4428,7 @@ pub enum DeleteRobotError {
 impl DeleteRobotError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteRobotError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalServerException" => {
                     return RusotoError::Service(DeleteRobotError::InternalServer(err.msg))
@@ -4452,6 +4471,7 @@ pub enum DeleteRobotApplicationError {
 impl DeleteRobotApplicationError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteRobotApplicationError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalServerException" => {
                     return RusotoError::Service(DeleteRobotApplicationError::InternalServer(
@@ -4500,6 +4520,7 @@ impl DeleteSimulationApplicationError {
         res: BufferedHttpResponse,
     ) -> RusotoError<DeleteSimulationApplicationError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalServerException" => {
                     return RusotoError::Service(DeleteSimulationApplicationError::InternalServer(
@@ -4550,6 +4571,7 @@ pub enum DeleteWorldTemplateError {
 impl DeleteWorldTemplateError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteWorldTemplateError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalServerException" => {
                     return RusotoError::Service(DeleteWorldTemplateError::InternalServer(err.msg))
@@ -4602,6 +4624,7 @@ pub enum DeregisterRobotError {
 impl DeregisterRobotError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeregisterRobotError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalServerException" => {
                     return RusotoError::Service(DeregisterRobotError::InternalServer(err.msg))
@@ -4650,6 +4673,7 @@ pub enum DescribeDeploymentJobError {
 impl DescribeDeploymentJobError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeDeploymentJobError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalServerException" => {
                     return RusotoError::Service(DescribeDeploymentJobError::InternalServer(
@@ -4704,6 +4728,7 @@ pub enum DescribeFleetError {
 impl DescribeFleetError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeFleetError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalServerException" => {
                     return RusotoError::Service(DescribeFleetError::InternalServer(err.msg))
@@ -4752,6 +4777,7 @@ pub enum DescribeRobotError {
 impl DescribeRobotError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeRobotError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalServerException" => {
                     return RusotoError::Service(DescribeRobotError::InternalServer(err.msg))
@@ -4800,6 +4826,7 @@ pub enum DescribeRobotApplicationError {
 impl DescribeRobotApplicationError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeRobotApplicationError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalServerException" => {
                     return RusotoError::Service(DescribeRobotApplicationError::InternalServer(
@@ -4856,6 +4883,7 @@ impl DescribeSimulationApplicationError {
         res: BufferedHttpResponse,
     ) -> RusotoError<DescribeSimulationApplicationError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalServerException" => {
                     return RusotoError::Service(
@@ -4916,6 +4944,7 @@ pub enum DescribeSimulationJobError {
 impl DescribeSimulationJobError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeSimulationJobError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalServerException" => {
                     return RusotoError::Service(DescribeSimulationJobError::InternalServer(
@@ -4970,6 +4999,7 @@ impl DescribeSimulationJobBatchError {
         res: BufferedHttpResponse,
     ) -> RusotoError<DescribeSimulationJobBatchError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalServerException" => {
                     return RusotoError::Service(DescribeSimulationJobBatchError::InternalServer(
@@ -5020,6 +5050,7 @@ pub enum DescribeWorldError {
 impl DescribeWorldError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeWorldError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalServerException" => {
                     return RusotoError::Service(DescribeWorldError::InternalServer(err.msg))
@@ -5068,6 +5099,7 @@ pub enum DescribeWorldExportJobError {
 impl DescribeWorldExportJobError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeWorldExportJobError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalServerException" => {
                     return RusotoError::Service(DescribeWorldExportJobError::InternalServer(
@@ -5124,6 +5156,7 @@ impl DescribeWorldGenerationJobError {
         res: BufferedHttpResponse,
     ) -> RusotoError<DescribeWorldGenerationJobError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalServerException" => {
                     return RusotoError::Service(DescribeWorldGenerationJobError::InternalServer(
@@ -5180,6 +5213,7 @@ pub enum DescribeWorldTemplateError {
 impl DescribeWorldTemplateError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeWorldTemplateError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalServerException" => {
                     return RusotoError::Service(DescribeWorldTemplateError::InternalServer(
@@ -5234,6 +5268,7 @@ pub enum GetWorldTemplateBodyError {
 impl GetWorldTemplateBodyError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetWorldTemplateBodyError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalServerException" => {
                     return RusotoError::Service(GetWorldTemplateBodyError::InternalServer(err.msg))
@@ -5286,6 +5321,7 @@ pub enum ListDeploymentJobsError {
 impl ListDeploymentJobsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListDeploymentJobsError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalServerException" => {
                     return RusotoError::Service(ListDeploymentJobsError::InternalServer(err.msg))
@@ -5334,6 +5370,7 @@ pub enum ListFleetsError {
 impl ListFleetsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListFleetsError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalServerException" => {
                     return RusotoError::Service(ListFleetsError::InternalServer(err.msg))
@@ -5380,6 +5417,7 @@ pub enum ListRobotApplicationsError {
 impl ListRobotApplicationsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListRobotApplicationsError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalServerException" => {
                     return RusotoError::Service(ListRobotApplicationsError::InternalServer(
@@ -5428,6 +5466,7 @@ pub enum ListRobotsError {
 impl ListRobotsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListRobotsError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalServerException" => {
                     return RusotoError::Service(ListRobotsError::InternalServer(err.msg))
@@ -5476,6 +5515,7 @@ impl ListSimulationApplicationsError {
         res: BufferedHttpResponse,
     ) -> RusotoError<ListSimulationApplicationsError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalServerException" => {
                     return RusotoError::Service(ListSimulationApplicationsError::InternalServer(
@@ -5522,6 +5562,7 @@ pub enum ListSimulationJobBatchesError {
 impl ListSimulationJobBatchesError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListSimulationJobBatchesError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalServerException" => {
                     return RusotoError::Service(ListSimulationJobBatchesError::InternalServer(
@@ -5564,6 +5605,7 @@ pub enum ListSimulationJobsError {
 impl ListSimulationJobsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListSimulationJobsError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalServerException" => {
                     return RusotoError::Service(ListSimulationJobsError::InternalServer(err.msg))
@@ -5608,6 +5650,7 @@ pub enum ListTagsForResourceError {
 impl ListTagsForResourceError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListTagsForResourceError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalServerException" => {
                     return RusotoError::Service(ListTagsForResourceError::InternalServer(err.msg))
@@ -5658,6 +5701,7 @@ pub enum ListWorldExportJobsError {
 impl ListWorldExportJobsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListWorldExportJobsError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalServerException" => {
                     return RusotoError::Service(ListWorldExportJobsError::InternalServer(err.msg))
@@ -5702,6 +5746,7 @@ pub enum ListWorldGenerationJobsError {
 impl ListWorldGenerationJobsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListWorldGenerationJobsError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalServerException" => {
                     return RusotoError::Service(ListWorldGenerationJobsError::InternalServer(
@@ -5748,6 +5793,7 @@ pub enum ListWorldTemplatesError {
 impl ListWorldTemplatesError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListWorldTemplatesError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalServerException" => {
                     return RusotoError::Service(ListWorldTemplatesError::InternalServer(err.msg))
@@ -5790,6 +5836,7 @@ pub enum ListWorldsError {
 impl ListWorldsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListWorldsError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalServerException" => {
                     return RusotoError::Service(ListWorldsError::InternalServer(err.msg))
@@ -5836,6 +5883,7 @@ pub enum RegisterRobotError {
 impl RegisterRobotError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<RegisterRobotError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalServerException" => {
                     return RusotoError::Service(RegisterRobotError::InternalServer(err.msg))
@@ -5890,6 +5938,7 @@ pub enum RestartSimulationJobError {
 impl RestartSimulationJobError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<RestartSimulationJobError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalServerException" => {
                     return RusotoError::Service(RestartSimulationJobError::InternalServer(err.msg))
@@ -5948,6 +5997,7 @@ pub enum StartSimulationJobBatchError {
 impl StartSimulationJobBatchError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<StartSimulationJobBatchError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "IdempotentParameterMismatchException" => {
                     return RusotoError::Service(
@@ -6016,6 +6066,7 @@ pub enum SyncDeploymentJobError {
 impl SyncDeploymentJobError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<SyncDeploymentJobError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ConcurrentDeploymentException" => {
                     return RusotoError::Service(SyncDeploymentJobError::ConcurrentDeployment(
@@ -6082,6 +6133,7 @@ pub enum TagResourceError {
 impl TagResourceError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<TagResourceError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalServerException" => {
                     return RusotoError::Service(TagResourceError::InternalServer(err.msg))
@@ -6130,6 +6182,7 @@ pub enum UntagResourceError {
 impl UntagResourceError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UntagResourceError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalServerException" => {
                     return RusotoError::Service(UntagResourceError::InternalServer(err.msg))
@@ -6180,6 +6233,7 @@ pub enum UpdateRobotApplicationError {
 impl UpdateRobotApplicationError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateRobotApplicationError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalServerException" => {
                     return RusotoError::Service(UpdateRobotApplicationError::InternalServer(
@@ -6244,6 +6298,7 @@ impl UpdateSimulationApplicationError {
         res: BufferedHttpResponse,
     ) -> RusotoError<UpdateSimulationApplicationError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalServerException" => {
                     return RusotoError::Service(UpdateSimulationApplicationError::InternalServer(
@@ -6306,6 +6361,7 @@ pub enum UpdateWorldTemplateError {
 impl UpdateWorldTemplateError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateWorldTemplateError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalServerException" => {
                     return RusotoError::Service(UpdateWorldTemplateError::InternalServer(err.msg))
@@ -6742,6 +6798,7 @@ impl Robomaker for RobomakerClient {
         &self,
         input: BatchDeleteWorldsRequest,
     ) -> Result<BatchDeleteWorldsResponse, RusotoError<BatchDeleteWorldsError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/batchDeleteWorlds";
 
         let mut request = SignedRequest::new("POST", "robomaker", &self.region, &request_uri);
@@ -6774,6 +6831,7 @@ impl Robomaker for RobomakerClient {
         input: BatchDescribeSimulationJobRequest,
     ) -> Result<BatchDescribeSimulationJobResponse, RusotoError<BatchDescribeSimulationJobError>>
     {
+        #![allow(clippy::needless_update)]
         let request_uri = "/batchDescribeSimulationJob";
 
         let mut request = SignedRequest::new("POST", "robomaker", &self.region, &request_uri);
@@ -6805,6 +6863,7 @@ impl Robomaker for RobomakerClient {
         &self,
         input: CancelDeploymentJobRequest,
     ) -> Result<CancelDeploymentJobResponse, RusotoError<CancelDeploymentJobError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/cancelDeploymentJob";
 
         let mut request = SignedRequest::new("POST", "robomaker", &self.region, &request_uri);
@@ -6836,6 +6895,7 @@ impl Robomaker for RobomakerClient {
         &self,
         input: CancelSimulationJobRequest,
     ) -> Result<CancelSimulationJobResponse, RusotoError<CancelSimulationJobError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/cancelSimulationJob";
 
         let mut request = SignedRequest::new("POST", "robomaker", &self.region, &request_uri);
@@ -6867,6 +6927,7 @@ impl Robomaker for RobomakerClient {
         &self,
         input: CancelSimulationJobBatchRequest,
     ) -> Result<CancelSimulationJobBatchResponse, RusotoError<CancelSimulationJobBatchError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/cancelSimulationJobBatch";
 
         let mut request = SignedRequest::new("POST", "robomaker", &self.region, &request_uri);
@@ -6898,6 +6959,7 @@ impl Robomaker for RobomakerClient {
         &self,
         input: CancelWorldExportJobRequest,
     ) -> Result<CancelWorldExportJobResponse, RusotoError<CancelWorldExportJobError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/cancelWorldExportJob";
 
         let mut request = SignedRequest::new("POST", "robomaker", &self.region, &request_uri);
@@ -6929,6 +6991,7 @@ impl Robomaker for RobomakerClient {
         &self,
         input: CancelWorldGenerationJobRequest,
     ) -> Result<CancelWorldGenerationJobResponse, RusotoError<CancelWorldGenerationJobError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/cancelWorldGenerationJob";
 
         let mut request = SignedRequest::new("POST", "robomaker", &self.region, &request_uri);
@@ -6960,6 +7023,7 @@ impl Robomaker for RobomakerClient {
         &self,
         input: CreateDeploymentJobRequest,
     ) -> Result<CreateDeploymentJobResponse, RusotoError<CreateDeploymentJobError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/createDeploymentJob";
 
         let mut request = SignedRequest::new("POST", "robomaker", &self.region, &request_uri);
@@ -6991,6 +7055,7 @@ impl Robomaker for RobomakerClient {
         &self,
         input: CreateFleetRequest,
     ) -> Result<CreateFleetResponse, RusotoError<CreateFleetError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/createFleet";
 
         let mut request = SignedRequest::new("POST", "robomaker", &self.region, &request_uri);
@@ -7022,6 +7087,7 @@ impl Robomaker for RobomakerClient {
         &self,
         input: CreateRobotRequest,
     ) -> Result<CreateRobotResponse, RusotoError<CreateRobotError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/createRobot";
 
         let mut request = SignedRequest::new("POST", "robomaker", &self.region, &request_uri);
@@ -7053,6 +7119,7 @@ impl Robomaker for RobomakerClient {
         &self,
         input: CreateRobotApplicationRequest,
     ) -> Result<CreateRobotApplicationResponse, RusotoError<CreateRobotApplicationError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/createRobotApplication";
 
         let mut request = SignedRequest::new("POST", "robomaker", &self.region, &request_uri);
@@ -7087,6 +7154,7 @@ impl Robomaker for RobomakerClient {
         CreateRobotApplicationVersionResponse,
         RusotoError<CreateRobotApplicationVersionError>,
     > {
+        #![allow(clippy::needless_update)]
         let request_uri = "/createRobotApplicationVersion";
 
         let mut request = SignedRequest::new("POST", "robomaker", &self.region, &request_uri);
@@ -7119,6 +7187,7 @@ impl Robomaker for RobomakerClient {
         input: CreateSimulationApplicationRequest,
     ) -> Result<CreateSimulationApplicationResponse, RusotoError<CreateSimulationApplicationError>>
     {
+        #![allow(clippy::needless_update)]
         let request_uri = "/createSimulationApplication";
 
         let mut request = SignedRequest::new("POST", "robomaker", &self.region, &request_uri);
@@ -7153,6 +7222,7 @@ impl Robomaker for RobomakerClient {
         CreateSimulationApplicationVersionResponse,
         RusotoError<CreateSimulationApplicationVersionError>,
     > {
+        #![allow(clippy::needless_update)]
         let request_uri = "/createSimulationApplicationVersion";
 
         let mut request = SignedRequest::new("POST", "robomaker", &self.region, &request_uri);
@@ -7186,6 +7256,7 @@ impl Robomaker for RobomakerClient {
         &self,
         input: CreateSimulationJobRequest,
     ) -> Result<CreateSimulationJobResponse, RusotoError<CreateSimulationJobError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/createSimulationJob";
 
         let mut request = SignedRequest::new("POST", "robomaker", &self.region, &request_uri);
@@ -7217,6 +7288,7 @@ impl Robomaker for RobomakerClient {
         &self,
         input: CreateWorldExportJobRequest,
     ) -> Result<CreateWorldExportJobResponse, RusotoError<CreateWorldExportJobError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/createWorldExportJob";
 
         let mut request = SignedRequest::new("POST", "robomaker", &self.region, &request_uri);
@@ -7248,6 +7320,7 @@ impl Robomaker for RobomakerClient {
         &self,
         input: CreateWorldGenerationJobRequest,
     ) -> Result<CreateWorldGenerationJobResponse, RusotoError<CreateWorldGenerationJobError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/createWorldGenerationJob";
 
         let mut request = SignedRequest::new("POST", "robomaker", &self.region, &request_uri);
@@ -7279,6 +7352,7 @@ impl Robomaker for RobomakerClient {
         &self,
         input: CreateWorldTemplateRequest,
     ) -> Result<CreateWorldTemplateResponse, RusotoError<CreateWorldTemplateError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/createWorldTemplate";
 
         let mut request = SignedRequest::new("POST", "robomaker", &self.region, &request_uri);
@@ -7310,6 +7384,7 @@ impl Robomaker for RobomakerClient {
         &self,
         input: DeleteFleetRequest,
     ) -> Result<DeleteFleetResponse, RusotoError<DeleteFleetError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/deleteFleet";
 
         let mut request = SignedRequest::new("POST", "robomaker", &self.region, &request_uri);
@@ -7341,6 +7416,7 @@ impl Robomaker for RobomakerClient {
         &self,
         input: DeleteRobotRequest,
     ) -> Result<DeleteRobotResponse, RusotoError<DeleteRobotError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/deleteRobot";
 
         let mut request = SignedRequest::new("POST", "robomaker", &self.region, &request_uri);
@@ -7372,6 +7448,7 @@ impl Robomaker for RobomakerClient {
         &self,
         input: DeleteRobotApplicationRequest,
     ) -> Result<DeleteRobotApplicationResponse, RusotoError<DeleteRobotApplicationError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/deleteRobotApplication";
 
         let mut request = SignedRequest::new("POST", "robomaker", &self.region, &request_uri);
@@ -7404,6 +7481,7 @@ impl Robomaker for RobomakerClient {
         input: DeleteSimulationApplicationRequest,
     ) -> Result<DeleteSimulationApplicationResponse, RusotoError<DeleteSimulationApplicationError>>
     {
+        #![allow(clippy::needless_update)]
         let request_uri = "/deleteSimulationApplication";
 
         let mut request = SignedRequest::new("POST", "robomaker", &self.region, &request_uri);
@@ -7435,6 +7513,7 @@ impl Robomaker for RobomakerClient {
         &self,
         input: DeleteWorldTemplateRequest,
     ) -> Result<DeleteWorldTemplateResponse, RusotoError<DeleteWorldTemplateError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/deleteWorldTemplate";
 
         let mut request = SignedRequest::new("POST", "robomaker", &self.region, &request_uri);
@@ -7466,6 +7545,7 @@ impl Robomaker for RobomakerClient {
         &self,
         input: DeregisterRobotRequest,
     ) -> Result<DeregisterRobotResponse, RusotoError<DeregisterRobotError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/deregisterRobot";
 
         let mut request = SignedRequest::new("POST", "robomaker", &self.region, &request_uri);
@@ -7497,6 +7577,7 @@ impl Robomaker for RobomakerClient {
         &self,
         input: DescribeDeploymentJobRequest,
     ) -> Result<DescribeDeploymentJobResponse, RusotoError<DescribeDeploymentJobError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/describeDeploymentJob";
 
         let mut request = SignedRequest::new("POST", "robomaker", &self.region, &request_uri);
@@ -7528,6 +7609,7 @@ impl Robomaker for RobomakerClient {
         &self,
         input: DescribeFleetRequest,
     ) -> Result<DescribeFleetResponse, RusotoError<DescribeFleetError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/describeFleet";
 
         let mut request = SignedRequest::new("POST", "robomaker", &self.region, &request_uri);
@@ -7559,6 +7641,7 @@ impl Robomaker for RobomakerClient {
         &self,
         input: DescribeRobotRequest,
     ) -> Result<DescribeRobotResponse, RusotoError<DescribeRobotError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/describeRobot";
 
         let mut request = SignedRequest::new("POST", "robomaker", &self.region, &request_uri);
@@ -7590,6 +7673,7 @@ impl Robomaker for RobomakerClient {
         &self,
         input: DescribeRobotApplicationRequest,
     ) -> Result<DescribeRobotApplicationResponse, RusotoError<DescribeRobotApplicationError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/describeRobotApplication";
 
         let mut request = SignedRequest::new("POST", "robomaker", &self.region, &request_uri);
@@ -7624,6 +7708,7 @@ impl Robomaker for RobomakerClient {
         DescribeSimulationApplicationResponse,
         RusotoError<DescribeSimulationApplicationError>,
     > {
+        #![allow(clippy::needless_update)]
         let request_uri = "/describeSimulationApplication";
 
         let mut request = SignedRequest::new("POST", "robomaker", &self.region, &request_uri);
@@ -7655,6 +7740,7 @@ impl Robomaker for RobomakerClient {
         &self,
         input: DescribeSimulationJobRequest,
     ) -> Result<DescribeSimulationJobResponse, RusotoError<DescribeSimulationJobError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/describeSimulationJob";
 
         let mut request = SignedRequest::new("POST", "robomaker", &self.region, &request_uri);
@@ -7687,6 +7773,7 @@ impl Robomaker for RobomakerClient {
         input: DescribeSimulationJobBatchRequest,
     ) -> Result<DescribeSimulationJobBatchResponse, RusotoError<DescribeSimulationJobBatchError>>
     {
+        #![allow(clippy::needless_update)]
         let request_uri = "/describeSimulationJobBatch";
 
         let mut request = SignedRequest::new("POST", "robomaker", &self.region, &request_uri);
@@ -7718,6 +7805,7 @@ impl Robomaker for RobomakerClient {
         &self,
         input: DescribeWorldRequest,
     ) -> Result<DescribeWorldResponse, RusotoError<DescribeWorldError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/describeWorld";
 
         let mut request = SignedRequest::new("POST", "robomaker", &self.region, &request_uri);
@@ -7749,6 +7837,7 @@ impl Robomaker for RobomakerClient {
         &self,
         input: DescribeWorldExportJobRequest,
     ) -> Result<DescribeWorldExportJobResponse, RusotoError<DescribeWorldExportJobError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/describeWorldExportJob";
 
         let mut request = SignedRequest::new("POST", "robomaker", &self.region, &request_uri);
@@ -7781,6 +7870,7 @@ impl Robomaker for RobomakerClient {
         input: DescribeWorldGenerationJobRequest,
     ) -> Result<DescribeWorldGenerationJobResponse, RusotoError<DescribeWorldGenerationJobError>>
     {
+        #![allow(clippy::needless_update)]
         let request_uri = "/describeWorldGenerationJob";
 
         let mut request = SignedRequest::new("POST", "robomaker", &self.region, &request_uri);
@@ -7812,6 +7902,7 @@ impl Robomaker for RobomakerClient {
         &self,
         input: DescribeWorldTemplateRequest,
     ) -> Result<DescribeWorldTemplateResponse, RusotoError<DescribeWorldTemplateError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/describeWorldTemplate";
 
         let mut request = SignedRequest::new("POST", "robomaker", &self.region, &request_uri);
@@ -7843,6 +7934,7 @@ impl Robomaker for RobomakerClient {
         &self,
         input: GetWorldTemplateBodyRequest,
     ) -> Result<GetWorldTemplateBodyResponse, RusotoError<GetWorldTemplateBodyError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/getWorldTemplateBody";
 
         let mut request = SignedRequest::new("POST", "robomaker", &self.region, &request_uri);
@@ -7874,6 +7966,7 @@ impl Robomaker for RobomakerClient {
         &self,
         input: ListDeploymentJobsRequest,
     ) -> Result<ListDeploymentJobsResponse, RusotoError<ListDeploymentJobsError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/listDeploymentJobs";
 
         let mut request = SignedRequest::new("POST", "robomaker", &self.region, &request_uri);
@@ -7905,6 +7998,7 @@ impl Robomaker for RobomakerClient {
         &self,
         input: ListFleetsRequest,
     ) -> Result<ListFleetsResponse, RusotoError<ListFleetsError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/listFleets";
 
         let mut request = SignedRequest::new("POST", "robomaker", &self.region, &request_uri);
@@ -7936,6 +8030,7 @@ impl Robomaker for RobomakerClient {
         &self,
         input: ListRobotApplicationsRequest,
     ) -> Result<ListRobotApplicationsResponse, RusotoError<ListRobotApplicationsError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/listRobotApplications";
 
         let mut request = SignedRequest::new("POST", "robomaker", &self.region, &request_uri);
@@ -7967,6 +8062,7 @@ impl Robomaker for RobomakerClient {
         &self,
         input: ListRobotsRequest,
     ) -> Result<ListRobotsResponse, RusotoError<ListRobotsError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/listRobots";
 
         let mut request = SignedRequest::new("POST", "robomaker", &self.region, &request_uri);
@@ -7999,6 +8095,7 @@ impl Robomaker for RobomakerClient {
         input: ListSimulationApplicationsRequest,
     ) -> Result<ListSimulationApplicationsResponse, RusotoError<ListSimulationApplicationsError>>
     {
+        #![allow(clippy::needless_update)]
         let request_uri = "/listSimulationApplications";
 
         let mut request = SignedRequest::new("POST", "robomaker", &self.region, &request_uri);
@@ -8030,6 +8127,7 @@ impl Robomaker for RobomakerClient {
         &self,
         input: ListSimulationJobBatchesRequest,
     ) -> Result<ListSimulationJobBatchesResponse, RusotoError<ListSimulationJobBatchesError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/listSimulationJobBatches";
 
         let mut request = SignedRequest::new("POST", "robomaker", &self.region, &request_uri);
@@ -8061,6 +8159,7 @@ impl Robomaker for RobomakerClient {
         &self,
         input: ListSimulationJobsRequest,
     ) -> Result<ListSimulationJobsResponse, RusotoError<ListSimulationJobsError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/listSimulationJobs";
 
         let mut request = SignedRequest::new("POST", "robomaker", &self.region, &request_uri);
@@ -8092,6 +8191,7 @@ impl Robomaker for RobomakerClient {
         &self,
         input: ListTagsForResourceRequest,
     ) -> Result<ListTagsForResourceResponse, RusotoError<ListTagsForResourceError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!("/tags/{resource_arn}", resource_arn = input.resource_arn);
 
         let mut request = SignedRequest::new("GET", "robomaker", &self.region, &request_uri);
@@ -8120,6 +8220,7 @@ impl Robomaker for RobomakerClient {
         &self,
         input: ListWorldExportJobsRequest,
     ) -> Result<ListWorldExportJobsResponse, RusotoError<ListWorldExportJobsError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/listWorldExportJobs";
 
         let mut request = SignedRequest::new("POST", "robomaker", &self.region, &request_uri);
@@ -8151,6 +8252,7 @@ impl Robomaker for RobomakerClient {
         &self,
         input: ListWorldGenerationJobsRequest,
     ) -> Result<ListWorldGenerationJobsResponse, RusotoError<ListWorldGenerationJobsError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/listWorldGenerationJobs";
 
         let mut request = SignedRequest::new("POST", "robomaker", &self.region, &request_uri);
@@ -8182,6 +8284,7 @@ impl Robomaker for RobomakerClient {
         &self,
         input: ListWorldTemplatesRequest,
     ) -> Result<ListWorldTemplatesResponse, RusotoError<ListWorldTemplatesError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/listWorldTemplates";
 
         let mut request = SignedRequest::new("POST", "robomaker", &self.region, &request_uri);
@@ -8213,6 +8316,7 @@ impl Robomaker for RobomakerClient {
         &self,
         input: ListWorldsRequest,
     ) -> Result<ListWorldsResponse, RusotoError<ListWorldsError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/listWorlds";
 
         let mut request = SignedRequest::new("POST", "robomaker", &self.region, &request_uri);
@@ -8244,6 +8348,7 @@ impl Robomaker for RobomakerClient {
         &self,
         input: RegisterRobotRequest,
     ) -> Result<RegisterRobotResponse, RusotoError<RegisterRobotError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/registerRobot";
 
         let mut request = SignedRequest::new("POST", "robomaker", &self.region, &request_uri);
@@ -8275,6 +8380,7 @@ impl Robomaker for RobomakerClient {
         &self,
         input: RestartSimulationJobRequest,
     ) -> Result<RestartSimulationJobResponse, RusotoError<RestartSimulationJobError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/restartSimulationJob";
 
         let mut request = SignedRequest::new("POST", "robomaker", &self.region, &request_uri);
@@ -8306,6 +8412,7 @@ impl Robomaker for RobomakerClient {
         &self,
         input: StartSimulationJobBatchRequest,
     ) -> Result<StartSimulationJobBatchResponse, RusotoError<StartSimulationJobBatchError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/startSimulationJobBatch";
 
         let mut request = SignedRequest::new("POST", "robomaker", &self.region, &request_uri);
@@ -8337,6 +8444,7 @@ impl Robomaker for RobomakerClient {
         &self,
         input: SyncDeploymentJobRequest,
     ) -> Result<SyncDeploymentJobResponse, RusotoError<SyncDeploymentJobError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/syncDeploymentJob";
 
         let mut request = SignedRequest::new("POST", "robomaker", &self.region, &request_uri);
@@ -8368,6 +8476,7 @@ impl Robomaker for RobomakerClient {
         &self,
         input: TagResourceRequest,
     ) -> Result<TagResourceResponse, RusotoError<TagResourceError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!("/tags/{resource_arn}", resource_arn = input.resource_arn);
 
         let mut request = SignedRequest::new("POST", "robomaker", &self.region, &request_uri);
@@ -8399,6 +8508,7 @@ impl Robomaker for RobomakerClient {
         &self,
         input: UntagResourceRequest,
     ) -> Result<UntagResourceResponse, RusotoError<UntagResourceError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!("/tags/{resource_arn}", resource_arn = input.resource_arn);
 
         let mut request = SignedRequest::new("DELETE", "robomaker", &self.region, &request_uri);
@@ -8433,6 +8543,7 @@ impl Robomaker for RobomakerClient {
         &self,
         input: UpdateRobotApplicationRequest,
     ) -> Result<UpdateRobotApplicationResponse, RusotoError<UpdateRobotApplicationError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/updateRobotApplication";
 
         let mut request = SignedRequest::new("POST", "robomaker", &self.region, &request_uri);
@@ -8465,6 +8576,7 @@ impl Robomaker for RobomakerClient {
         input: UpdateSimulationApplicationRequest,
     ) -> Result<UpdateSimulationApplicationResponse, RusotoError<UpdateSimulationApplicationError>>
     {
+        #![allow(clippy::needless_update)]
         let request_uri = "/updateSimulationApplication";
 
         let mut request = SignedRequest::new("POST", "robomaker", &self.region, &request_uri);
@@ -8496,6 +8608,7 @@ impl Robomaker for RobomakerClient {
         &self,
         input: UpdateWorldTemplateRequest,
     ) -> Result<UpdateWorldTemplateResponse, RusotoError<UpdateWorldTemplateError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/updateWorldTemplate";
 
         let mut request = SignedRequest::new("POST", "robomaker", &self.region, &request_uri);

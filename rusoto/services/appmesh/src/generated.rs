@@ -24,7 +24,6 @@ use rusoto_core::proto;
 use rusoto_core::signature::SignedRequest;
 #[allow(unused_imports)]
 use serde::{Deserialize, Serialize};
-use serde_json;
 /// <p>An object that represents the access logging information for a virtual node.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct AccessLog {
@@ -2761,6 +2760,7 @@ pub enum CreateGatewayRouteError {
 impl CreateGatewayRouteError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateGatewayRouteError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(CreateGatewayRouteError::BadRequest(err.msg))
@@ -2837,6 +2837,7 @@ pub enum CreateMeshError {
 impl CreateMeshError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateMeshError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(CreateMeshError::BadRequest(err.msg))
@@ -2909,6 +2910,7 @@ pub enum CreateRouteError {
 impl CreateRouteError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateRouteError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(CreateRouteError::BadRequest(err.msg))
@@ -2981,6 +2983,7 @@ pub enum CreateVirtualGatewayError {
 impl CreateVirtualGatewayError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateVirtualGatewayError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(CreateVirtualGatewayError::BadRequest(err.msg))
@@ -3059,6 +3062,7 @@ pub enum CreateVirtualNodeError {
 impl CreateVirtualNodeError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateVirtualNodeError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(CreateVirtualNodeError::BadRequest(err.msg))
@@ -3135,6 +3139,7 @@ pub enum CreateVirtualRouterError {
 impl CreateVirtualRouterError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateVirtualRouterError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(CreateVirtualRouterError::BadRequest(err.msg))
@@ -3211,6 +3216,7 @@ pub enum CreateVirtualServiceError {
 impl CreateVirtualServiceError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateVirtualServiceError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(CreateVirtualServiceError::BadRequest(err.msg))
@@ -3287,6 +3293,7 @@ pub enum DeleteGatewayRouteError {
 impl DeleteGatewayRouteError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteGatewayRouteError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(DeleteGatewayRouteError::BadRequest(err.msg))
@@ -3357,6 +3364,7 @@ pub enum DeleteMeshError {
 impl DeleteMeshError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteMeshError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(DeleteMeshError::BadRequest(err.msg))
@@ -3423,6 +3431,7 @@ pub enum DeleteRouteError {
 impl DeleteRouteError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteRouteError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(DeleteRouteError::BadRequest(err.msg))
@@ -3489,6 +3498,7 @@ pub enum DeleteVirtualGatewayError {
 impl DeleteVirtualGatewayError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteVirtualGatewayError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(DeleteVirtualGatewayError::BadRequest(err.msg))
@@ -3561,6 +3571,7 @@ pub enum DeleteVirtualNodeError {
 impl DeleteVirtualNodeError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteVirtualNodeError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(DeleteVirtualNodeError::BadRequest(err.msg))
@@ -3631,6 +3642,7 @@ pub enum DeleteVirtualRouterError {
 impl DeleteVirtualRouterError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteVirtualRouterError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(DeleteVirtualRouterError::BadRequest(err.msg))
@@ -3701,6 +3713,7 @@ pub enum DeleteVirtualServiceError {
 impl DeleteVirtualServiceError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteVirtualServiceError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(DeleteVirtualServiceError::BadRequest(err.msg))
@@ -3771,6 +3784,7 @@ pub enum DescribeGatewayRouteError {
 impl DescribeGatewayRouteError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeGatewayRouteError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(DescribeGatewayRouteError::BadRequest(err.msg))
@@ -3837,6 +3851,7 @@ pub enum DescribeMeshError {
 impl DescribeMeshError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeMeshError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(DescribeMeshError::BadRequest(err.msg))
@@ -3897,6 +3912,7 @@ pub enum DescribeRouteError {
 impl DescribeRouteError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeRouteError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(DescribeRouteError::BadRequest(err.msg))
@@ -3957,6 +3973,7 @@ pub enum DescribeVirtualGatewayError {
 impl DescribeVirtualGatewayError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeVirtualGatewayError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(DescribeVirtualGatewayError::BadRequest(err.msg))
@@ -4023,6 +4040,7 @@ pub enum DescribeVirtualNodeError {
 impl DescribeVirtualNodeError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeVirtualNodeError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(DescribeVirtualNodeError::BadRequest(err.msg))
@@ -4087,6 +4105,7 @@ pub enum DescribeVirtualRouterError {
 impl DescribeVirtualRouterError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeVirtualRouterError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(DescribeVirtualRouterError::BadRequest(err.msg))
@@ -4153,6 +4172,7 @@ pub enum DescribeVirtualServiceError {
 impl DescribeVirtualServiceError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeVirtualServiceError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(DescribeVirtualServiceError::BadRequest(err.msg))
@@ -4219,6 +4239,7 @@ pub enum ListGatewayRoutesError {
 impl ListGatewayRoutesError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListGatewayRoutesError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(ListGatewayRoutesError::BadRequest(err.msg))
@@ -4283,6 +4304,7 @@ pub enum ListMeshesError {
 impl ListMeshesError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListMeshesError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(ListMeshesError::BadRequest(err.msg))
@@ -4343,6 +4365,7 @@ pub enum ListRoutesError {
 impl ListRoutesError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListRoutesError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(ListRoutesError::BadRequest(err.msg))
@@ -4403,6 +4426,7 @@ pub enum ListTagsForResourceError {
 impl ListTagsForResourceError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListTagsForResourceError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(ListTagsForResourceError::BadRequest(err.msg))
@@ -4467,6 +4491,7 @@ pub enum ListVirtualGatewaysError {
 impl ListVirtualGatewaysError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListVirtualGatewaysError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(ListVirtualGatewaysError::BadRequest(err.msg))
@@ -4531,6 +4556,7 @@ pub enum ListVirtualNodesError {
 impl ListVirtualNodesError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListVirtualNodesError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(ListVirtualNodesError::BadRequest(err.msg))
@@ -4593,6 +4619,7 @@ pub enum ListVirtualRoutersError {
 impl ListVirtualRoutersError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListVirtualRoutersError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(ListVirtualRoutersError::BadRequest(err.msg))
@@ -4657,6 +4684,7 @@ pub enum ListVirtualServicesError {
 impl ListVirtualServicesError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListVirtualServicesError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(ListVirtualServicesError::BadRequest(err.msg))
@@ -4723,6 +4751,7 @@ pub enum TagResourceError {
 impl TagResourceError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<TagResourceError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(TagResourceError::BadRequest(err.msg))
@@ -4787,6 +4816,7 @@ pub enum UntagResourceError {
 impl UntagResourceError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UntagResourceError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(UntagResourceError::BadRequest(err.msg))
@@ -4851,6 +4881,7 @@ pub enum UpdateGatewayRouteError {
 impl UpdateGatewayRouteError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateGatewayRouteError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(UpdateGatewayRouteError::BadRequest(err.msg))
@@ -4925,6 +4956,7 @@ pub enum UpdateMeshError {
 impl UpdateMeshError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateMeshError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(UpdateMeshError::BadRequest(err.msg))
@@ -4993,6 +5025,7 @@ pub enum UpdateRouteError {
 impl UpdateRouteError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateRouteError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(UpdateRouteError::BadRequest(err.msg))
@@ -5065,6 +5098,7 @@ pub enum UpdateVirtualGatewayError {
 impl UpdateVirtualGatewayError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateVirtualGatewayError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(UpdateVirtualGatewayError::BadRequest(err.msg))
@@ -5143,6 +5177,7 @@ pub enum UpdateVirtualNodeError {
 impl UpdateVirtualNodeError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateVirtualNodeError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(UpdateVirtualNodeError::BadRequest(err.msg))
@@ -5219,6 +5254,7 @@ pub enum UpdateVirtualRouterError {
 impl UpdateVirtualRouterError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateVirtualRouterError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(UpdateVirtualRouterError::BadRequest(err.msg))
@@ -5295,6 +5331,7 @@ pub enum UpdateVirtualServiceError {
 impl UpdateVirtualServiceError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateVirtualServiceError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(UpdateVirtualServiceError::BadRequest(err.msg))
@@ -5626,6 +5663,7 @@ impl AppMesh for AppMeshClient {
         &self,
         input: CreateGatewayRouteInput,
     ) -> Result<CreateGatewayRouteOutput, RusotoError<CreateGatewayRouteError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/v20190125/meshes/{mesh_name}/virtualGateway/{virtual_gateway_name}/gatewayRoutes",
             mesh_name = input.mesh_name,
@@ -5667,6 +5705,7 @@ impl AppMesh for AppMeshClient {
         &self,
         input: CreateMeshInput,
     ) -> Result<CreateMeshOutput, RusotoError<CreateMeshError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/v20190125/meshes";
 
         let mut request = SignedRequest::new("PUT", "appmesh", &self.region, &request_uri);
@@ -5698,6 +5737,7 @@ impl AppMesh for AppMeshClient {
         &self,
         input: CreateRouteInput,
     ) -> Result<CreateRouteOutput, RusotoError<CreateRouteError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/v20190125/meshes/{mesh_name}/virtualRouter/{virtual_router_name}/routes",
             mesh_name = input.mesh_name,
@@ -5739,6 +5779,7 @@ impl AppMesh for AppMeshClient {
         &self,
         input: CreateVirtualGatewayInput,
     ) -> Result<CreateVirtualGatewayOutput, RusotoError<CreateVirtualGatewayError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/v20190125/meshes/{mesh_name}/virtualGateways",
             mesh_name = input.mesh_name
@@ -5779,6 +5820,7 @@ impl AppMesh for AppMeshClient {
         &self,
         input: CreateVirtualNodeInput,
     ) -> Result<CreateVirtualNodeOutput, RusotoError<CreateVirtualNodeError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/v20190125/meshes/{mesh_name}/virtualNodes",
             mesh_name = input.mesh_name
@@ -5819,6 +5861,7 @@ impl AppMesh for AppMeshClient {
         &self,
         input: CreateVirtualRouterInput,
     ) -> Result<CreateVirtualRouterOutput, RusotoError<CreateVirtualRouterError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/v20190125/meshes/{mesh_name}/virtualRouters",
             mesh_name = input.mesh_name
@@ -5859,6 +5902,7 @@ impl AppMesh for AppMeshClient {
         &self,
         input: CreateVirtualServiceInput,
     ) -> Result<CreateVirtualServiceOutput, RusotoError<CreateVirtualServiceError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/v20190125/meshes/{mesh_name}/virtualServices",
             mesh_name = input.mesh_name
@@ -5899,6 +5943,7 @@ impl AppMesh for AppMeshClient {
         &self,
         input: DeleteGatewayRouteInput,
     ) -> Result<DeleteGatewayRouteOutput, RusotoError<DeleteGatewayRouteError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!("/v20190125/meshes/{mesh_name}/virtualGateway/{virtual_gateway_name}/gatewayRoutes/{gateway_route_name}", gateway_route_name = input.gateway_route_name, mesh_name = input.mesh_name, virtual_gateway_name = input.virtual_gateway_name);
 
         let mut request = SignedRequest::new("DELETE", "appmesh", &self.region, &request_uri);
@@ -5933,6 +5978,7 @@ impl AppMesh for AppMeshClient {
         &self,
         input: DeleteMeshInput,
     ) -> Result<DeleteMeshOutput, RusotoError<DeleteMeshError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!("/v20190125/meshes/{mesh_name}", mesh_name = input.mesh_name);
 
         let mut request = SignedRequest::new("DELETE", "appmesh", &self.region, &request_uri);
@@ -5961,6 +6007,7 @@ impl AppMesh for AppMeshClient {
         &self,
         input: DeleteRouteInput,
     ) -> Result<DeleteRouteOutput, RusotoError<DeleteRouteError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/v20190125/meshes/{mesh_name}/virtualRouter/{virtual_router_name}/routes/{route_name}",
             mesh_name = input.mesh_name,
@@ -6000,6 +6047,7 @@ impl AppMesh for AppMeshClient {
         &self,
         input: DeleteVirtualGatewayInput,
     ) -> Result<DeleteVirtualGatewayOutput, RusotoError<DeleteVirtualGatewayError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/v20190125/meshes/{mesh_name}/virtualGateways/{virtual_gateway_name}",
             mesh_name = input.mesh_name,
@@ -6038,6 +6086,7 @@ impl AppMesh for AppMeshClient {
         &self,
         input: DeleteVirtualNodeInput,
     ) -> Result<DeleteVirtualNodeOutput, RusotoError<DeleteVirtualNodeError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/v20190125/meshes/{mesh_name}/virtualNodes/{virtual_node_name}",
             mesh_name = input.mesh_name,
@@ -6076,6 +6125,7 @@ impl AppMesh for AppMeshClient {
         &self,
         input: DeleteVirtualRouterInput,
     ) -> Result<DeleteVirtualRouterOutput, RusotoError<DeleteVirtualRouterError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/v20190125/meshes/{mesh_name}/virtualRouters/{virtual_router_name}",
             mesh_name = input.mesh_name,
@@ -6114,6 +6164,7 @@ impl AppMesh for AppMeshClient {
         &self,
         input: DeleteVirtualServiceInput,
     ) -> Result<DeleteVirtualServiceOutput, RusotoError<DeleteVirtualServiceError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/v20190125/meshes/{mesh_name}/virtualServices/{virtual_service_name}",
             mesh_name = input.mesh_name,
@@ -6152,6 +6203,7 @@ impl AppMesh for AppMeshClient {
         &self,
         input: DescribeGatewayRouteInput,
     ) -> Result<DescribeGatewayRouteOutput, RusotoError<DescribeGatewayRouteError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!("/v20190125/meshes/{mesh_name}/virtualGateway/{virtual_gateway_name}/gatewayRoutes/{gateway_route_name}", gateway_route_name = input.gateway_route_name, mesh_name = input.mesh_name, virtual_gateway_name = input.virtual_gateway_name);
 
         let mut request = SignedRequest::new("GET", "appmesh", &self.region, &request_uri);
@@ -6186,6 +6238,7 @@ impl AppMesh for AppMeshClient {
         &self,
         input: DescribeMeshInput,
     ) -> Result<DescribeMeshOutput, RusotoError<DescribeMeshError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!("/v20190125/meshes/{mesh_name}", mesh_name = input.mesh_name);
 
         let mut request = SignedRequest::new("GET", "appmesh", &self.region, &request_uri);
@@ -6220,6 +6273,7 @@ impl AppMesh for AppMeshClient {
         &self,
         input: DescribeRouteInput,
     ) -> Result<DescribeRouteOutput, RusotoError<DescribeRouteError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/v20190125/meshes/{mesh_name}/virtualRouter/{virtual_router_name}/routes/{route_name}",
             mesh_name = input.mesh_name,
@@ -6259,6 +6313,7 @@ impl AppMesh for AppMeshClient {
         &self,
         input: DescribeVirtualGatewayInput,
     ) -> Result<DescribeVirtualGatewayOutput, RusotoError<DescribeVirtualGatewayError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/v20190125/meshes/{mesh_name}/virtualGateways/{virtual_gateway_name}",
             mesh_name = input.mesh_name,
@@ -6297,6 +6352,7 @@ impl AppMesh for AppMeshClient {
         &self,
         input: DescribeVirtualNodeInput,
     ) -> Result<DescribeVirtualNodeOutput, RusotoError<DescribeVirtualNodeError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/v20190125/meshes/{mesh_name}/virtualNodes/{virtual_node_name}",
             mesh_name = input.mesh_name,
@@ -6335,6 +6391,7 @@ impl AppMesh for AppMeshClient {
         &self,
         input: DescribeVirtualRouterInput,
     ) -> Result<DescribeVirtualRouterOutput, RusotoError<DescribeVirtualRouterError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/v20190125/meshes/{mesh_name}/virtualRouters/{virtual_router_name}",
             mesh_name = input.mesh_name,
@@ -6373,6 +6430,7 @@ impl AppMesh for AppMeshClient {
         &self,
         input: DescribeVirtualServiceInput,
     ) -> Result<DescribeVirtualServiceOutput, RusotoError<DescribeVirtualServiceError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/v20190125/meshes/{mesh_name}/virtualServices/{virtual_service_name}",
             mesh_name = input.mesh_name,
@@ -6411,6 +6469,7 @@ impl AppMesh for AppMeshClient {
         &self,
         input: ListGatewayRoutesInput,
     ) -> Result<ListGatewayRoutesOutput, RusotoError<ListGatewayRoutesError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/v20190125/meshes/{mesh_name}/virtualGateway/{virtual_gateway_name}/gatewayRoutes",
             mesh_name = input.mesh_name,
@@ -6455,6 +6514,7 @@ impl AppMesh for AppMeshClient {
         &self,
         input: ListMeshesInput,
     ) -> Result<ListMeshesOutput, RusotoError<ListMeshesError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/v20190125/meshes";
 
         let mut request = SignedRequest::new("GET", "appmesh", &self.region, &request_uri);
@@ -6492,6 +6552,7 @@ impl AppMesh for AppMeshClient {
         &self,
         input: ListRoutesInput,
     ) -> Result<ListRoutesOutput, RusotoError<ListRoutesError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/v20190125/meshes/{mesh_name}/virtualRouter/{virtual_router_name}/routes",
             mesh_name = input.mesh_name,
@@ -6536,6 +6597,7 @@ impl AppMesh for AppMeshClient {
         &self,
         input: ListTagsForResourceInput,
     ) -> Result<ListTagsForResourceOutput, RusotoError<ListTagsForResourceError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/v20190125/tags";
 
         let mut request = SignedRequest::new("GET", "appmesh", &self.region, &request_uri);
@@ -6574,6 +6636,7 @@ impl AppMesh for AppMeshClient {
         &self,
         input: ListVirtualGatewaysInput,
     ) -> Result<ListVirtualGatewaysOutput, RusotoError<ListVirtualGatewaysError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/v20190125/meshes/{mesh_name}/virtualGateways",
             mesh_name = input.mesh_name
@@ -6617,6 +6680,7 @@ impl AppMesh for AppMeshClient {
         &self,
         input: ListVirtualNodesInput,
     ) -> Result<ListVirtualNodesOutput, RusotoError<ListVirtualNodesError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/v20190125/meshes/{mesh_name}/virtualNodes",
             mesh_name = input.mesh_name
@@ -6660,6 +6724,7 @@ impl AppMesh for AppMeshClient {
         &self,
         input: ListVirtualRoutersInput,
     ) -> Result<ListVirtualRoutersOutput, RusotoError<ListVirtualRoutersError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/v20190125/meshes/{mesh_name}/virtualRouters",
             mesh_name = input.mesh_name
@@ -6703,6 +6768,7 @@ impl AppMesh for AppMeshClient {
         &self,
         input: ListVirtualServicesInput,
     ) -> Result<ListVirtualServicesOutput, RusotoError<ListVirtualServicesError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/v20190125/meshes/{mesh_name}/virtualServices",
             mesh_name = input.mesh_name
@@ -6746,6 +6812,7 @@ impl AppMesh for AppMeshClient {
         &self,
         input: TagResourceInput,
     ) -> Result<TagResourceOutput, RusotoError<TagResourceError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/v20190125/tag";
 
         let mut request = SignedRequest::new("PUT", "appmesh", &self.region, &request_uri);
@@ -6781,6 +6848,7 @@ impl AppMesh for AppMeshClient {
         &self,
         input: UntagResourceInput,
     ) -> Result<UntagResourceOutput, RusotoError<UntagResourceError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/v20190125/untag";
 
         let mut request = SignedRequest::new("PUT", "appmesh", &self.region, &request_uri);
@@ -6816,6 +6884,7 @@ impl AppMesh for AppMeshClient {
         &self,
         input: UpdateGatewayRouteInput,
     ) -> Result<UpdateGatewayRouteOutput, RusotoError<UpdateGatewayRouteError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!("/v20190125/meshes/{mesh_name}/virtualGateway/{virtual_gateway_name}/gatewayRoutes/{gateway_route_name}", gateway_route_name = input.gateway_route_name, mesh_name = input.mesh_name, virtual_gateway_name = input.virtual_gateway_name);
 
         let mut request = SignedRequest::new("PUT", "appmesh", &self.region, &request_uri);
@@ -6853,6 +6922,7 @@ impl AppMesh for AppMeshClient {
         &self,
         input: UpdateMeshInput,
     ) -> Result<UpdateMeshOutput, RusotoError<UpdateMeshError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!("/v20190125/meshes/{mesh_name}", mesh_name = input.mesh_name);
 
         let mut request = SignedRequest::new("PUT", "appmesh", &self.region, &request_uri);
@@ -6884,6 +6954,7 @@ impl AppMesh for AppMeshClient {
         &self,
         input: UpdateRouteInput,
     ) -> Result<UpdateRouteOutput, RusotoError<UpdateRouteError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/v20190125/meshes/{mesh_name}/virtualRouter/{virtual_router_name}/routes/{route_name}",
             mesh_name = input.mesh_name,
@@ -6926,6 +6997,7 @@ impl AppMesh for AppMeshClient {
         &self,
         input: UpdateVirtualGatewayInput,
     ) -> Result<UpdateVirtualGatewayOutput, RusotoError<UpdateVirtualGatewayError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/v20190125/meshes/{mesh_name}/virtualGateways/{virtual_gateway_name}",
             mesh_name = input.mesh_name,
@@ -6967,6 +7039,7 @@ impl AppMesh for AppMeshClient {
         &self,
         input: UpdateVirtualNodeInput,
     ) -> Result<UpdateVirtualNodeOutput, RusotoError<UpdateVirtualNodeError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/v20190125/meshes/{mesh_name}/virtualNodes/{virtual_node_name}",
             mesh_name = input.mesh_name,
@@ -7008,6 +7081,7 @@ impl AppMesh for AppMeshClient {
         &self,
         input: UpdateVirtualRouterInput,
     ) -> Result<UpdateVirtualRouterOutput, RusotoError<UpdateVirtualRouterError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/v20190125/meshes/{mesh_name}/virtualRouters/{virtual_router_name}",
             mesh_name = input.mesh_name,
@@ -7049,6 +7123,7 @@ impl AppMesh for AppMeshClient {
         &self,
         input: UpdateVirtualServiceInput,
     ) -> Result<UpdateVirtualServiceOutput, RusotoError<UpdateVirtualServiceError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/v20190125/meshes/{mesh_name}/virtualServices/{virtual_service_name}",
             mesh_name = input.mesh_name,

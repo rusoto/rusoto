@@ -50,7 +50,6 @@ impl FraudDetectorClient {
     }
 }
 
-use serde_json;
 /// <p>Provides the error of the batch create variable API.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
@@ -2153,6 +2152,7 @@ pub enum BatchCreateVariableError {
 impl BatchCreateVariableError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<BatchCreateVariableError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(BatchCreateVariableError::AccessDenied(err.msg))
@@ -2195,6 +2195,7 @@ pub enum BatchGetVariableError {
 impl BatchGetVariableError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<BatchGetVariableError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(BatchGetVariableError::AccessDenied(err.msg))
@@ -2239,6 +2240,7 @@ pub enum CreateDetectorVersionError {
 impl CreateDetectorVersionError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateDetectorVersionError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(CreateDetectorVersionError::AccessDenied(err.msg))
@@ -2287,6 +2289,7 @@ pub enum CreateModelError {
 impl CreateModelError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateModelError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(CreateModelError::AccessDenied(err.msg))
@@ -2325,6 +2328,7 @@ pub enum CreateModelVersionError {
 impl CreateModelVersionError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateModelVersionError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(CreateModelVersionError::AccessDenied(err.msg))
@@ -2367,6 +2371,7 @@ pub enum CreateRuleError {
 impl CreateRuleError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateRuleError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(CreateRuleError::AccessDenied(err.msg))
@@ -2409,6 +2414,7 @@ pub enum CreateVariableError {
 impl CreateVariableError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateVariableError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(CreateVariableError::AccessDenied(err.msg))
@@ -2453,6 +2459,7 @@ pub enum DeleteDetectorError {
 impl DeleteDetectorError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteDetectorError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(DeleteDetectorError::AccessDenied(err.msg))
@@ -2503,6 +2510,7 @@ pub enum DeleteDetectorVersionError {
 impl DeleteDetectorVersionError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteDetectorVersionError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(DeleteDetectorVersionError::AccessDenied(err.msg))
@@ -2557,6 +2565,7 @@ pub enum DeleteEntityTypeError {
 impl DeleteEntityTypeError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteEntityTypeError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(DeleteEntityTypeError::AccessDenied(err.msg))
@@ -2599,6 +2608,7 @@ pub enum DeleteEventError {
 impl DeleteEventError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteEventError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(DeleteEventError::AccessDenied(err.msg))
@@ -2641,6 +2651,7 @@ pub enum DeleteEventTypeError {
 impl DeleteEventTypeError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteEventTypeError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(DeleteEventTypeError::AccessDenied(err.msg))
@@ -2685,6 +2696,7 @@ pub enum DeleteExternalModelError {
 impl DeleteExternalModelError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteExternalModelError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(DeleteExternalModelError::AccessDenied(err.msg))
@@ -2729,6 +2741,7 @@ pub enum DeleteLabelError {
 impl DeleteLabelError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteLabelError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ConflictException" => {
                     return RusotoError::Service(DeleteLabelError::Conflict(err.msg))
@@ -2767,6 +2780,7 @@ pub enum DeleteModelError {
 impl DeleteModelError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteModelError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(DeleteModelError::AccessDenied(err.msg))
@@ -2809,6 +2823,7 @@ pub enum DeleteModelVersionError {
 impl DeleteModelVersionError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteModelVersionError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(DeleteModelVersionError::AccessDenied(err.msg))
@@ -2853,6 +2868,7 @@ pub enum DeleteOutcomeError {
 impl DeleteOutcomeError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteOutcomeError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(DeleteOutcomeError::AccessDenied(err.msg))
@@ -2901,6 +2917,7 @@ pub enum DeleteRuleError {
 impl DeleteRuleError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteRuleError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(DeleteRuleError::AccessDenied(err.msg))
@@ -2949,6 +2966,7 @@ pub enum DeleteVariableError {
 impl DeleteVariableError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteVariableError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(DeleteVariableError::AccessDenied(err.msg))
@@ -2997,6 +3015,7 @@ pub enum DescribeDetectorError {
 impl DescribeDetectorError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeDetectorError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(DescribeDetectorError::AccessDenied(err.msg))
@@ -3043,6 +3062,7 @@ pub enum DescribeModelVersionsError {
 impl DescribeModelVersionsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeModelVersionsError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(DescribeModelVersionsError::AccessDenied(err.msg))
@@ -3091,6 +3111,7 @@ pub enum GetDetectorVersionError {
 impl GetDetectorVersionError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetDetectorVersionError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(GetDetectorVersionError::AccessDenied(err.msg))
@@ -3139,6 +3160,7 @@ pub enum GetDetectorsError {
 impl GetDetectorsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetDetectorsError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(GetDetectorsError::AccessDenied(err.msg))
@@ -3185,6 +3207,7 @@ pub enum GetEntityTypesError {
 impl GetEntityTypesError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetEntityTypesError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(GetEntityTypesError::AccessDenied(err.msg))
@@ -3231,6 +3254,7 @@ pub enum GetEventPredictionError {
 impl GetEventPredictionError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetEventPredictionError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(GetEventPredictionError::AccessDenied(err.msg))
@@ -3281,6 +3305,7 @@ pub enum GetEventTypesError {
 impl GetEventTypesError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetEventTypesError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(GetEventTypesError::AccessDenied(err.msg))
@@ -3325,6 +3350,7 @@ pub enum GetExternalModelsError {
 impl GetExternalModelsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetExternalModelsError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(GetExternalModelsError::AccessDenied(err.msg))
@@ -3371,6 +3397,7 @@ pub enum GetKMSEncryptionKeyError {
 impl GetKMSEncryptionKeyError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetKMSEncryptionKeyError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(GetKMSEncryptionKeyError::AccessDenied(err.msg))
@@ -3415,6 +3442,7 @@ pub enum GetLabelsError {
 impl GetLabelsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetLabelsError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(GetLabelsError::AccessDenied(err.msg))
@@ -3457,6 +3485,7 @@ pub enum GetModelVersionError {
 impl GetModelVersionError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetModelVersionError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(GetModelVersionError::AccessDenied(err.msg))
@@ -3499,6 +3528,7 @@ pub enum GetModelsError {
 impl GetModelsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetModelsError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(GetModelsError::AccessDenied(err.msg))
@@ -3543,6 +3573,7 @@ pub enum GetOutcomesError {
 impl GetOutcomesError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetOutcomesError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(GetOutcomesError::AccessDenied(err.msg))
@@ -3591,6 +3622,7 @@ pub enum GetRulesError {
 impl GetRulesError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetRulesError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(GetRulesError::AccessDenied(err.msg))
@@ -3639,6 +3671,7 @@ pub enum GetVariablesError {
 impl GetVariablesError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetVariablesError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(GetVariablesError::AccessDenied(err.msg))
@@ -3683,6 +3716,7 @@ pub enum ListTagsForResourceError {
 impl ListTagsForResourceError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListTagsForResourceError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(ListTagsForResourceError::AccessDenied(err.msg))
@@ -3723,6 +3757,7 @@ pub enum PutDetectorError {
 impl PutDetectorError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<PutDetectorError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(PutDetectorError::AccessDenied(err.msg))
@@ -3763,6 +3798,7 @@ pub enum PutEntityTypeError {
 impl PutEntityTypeError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<PutEntityTypeError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(PutEntityTypeError::AccessDenied(err.msg))
@@ -3799,6 +3835,7 @@ pub enum PutEventTypeError {
 impl PutEventTypeError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<PutEventTypeError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(PutEventTypeError::AccessDenied(err.msg))
@@ -3837,6 +3874,7 @@ pub enum PutExternalModelError {
 impl PutExternalModelError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<PutExternalModelError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(PutExternalModelError::AccessDenied(err.msg))
@@ -3879,6 +3917,7 @@ pub enum PutKMSEncryptionKeyError {
 impl PutKMSEncryptionKeyError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<PutKMSEncryptionKeyError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(PutKMSEncryptionKeyError::AccessDenied(err.msg))
@@ -3921,6 +3960,7 @@ pub enum PutLabelError {
 impl PutLabelError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<PutLabelError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(PutLabelError::AccessDenied(err.msg))
@@ -3959,6 +3999,7 @@ pub enum PutOutcomeError {
 impl PutOutcomeError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<PutOutcomeError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(PutOutcomeError::AccessDenied(err.msg))
@@ -3999,6 +4040,7 @@ pub enum TagResourceError {
 impl TagResourceError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<TagResourceError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(TagResourceError::AccessDenied(err.msg))
@@ -4035,6 +4077,7 @@ pub enum UntagResourceError {
 impl UntagResourceError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UntagResourceError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(UntagResourceError::AccessDenied(err.msg))
@@ -4075,6 +4118,7 @@ pub enum UpdateDetectorVersionError {
 impl UpdateDetectorVersionError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateDetectorVersionError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(UpdateDetectorVersionError::AccessDenied(err.msg))
@@ -4127,6 +4171,7 @@ impl UpdateDetectorVersionMetadataError {
         res: BufferedHttpResponse,
     ) -> RusotoError<UpdateDetectorVersionMetadataError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(UpdateDetectorVersionMetadataError::AccessDenied(
@@ -4179,6 +4224,7 @@ impl UpdateDetectorVersionStatusError {
         res: BufferedHttpResponse,
     ) -> RusotoError<UpdateDetectorVersionStatusError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(UpdateDetectorVersionStatusError::AccessDenied(
@@ -4233,6 +4279,7 @@ pub enum UpdateModelError {
 impl UpdateModelError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateModelError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(UpdateModelError::AccessDenied(err.msg))
@@ -4275,6 +4322,7 @@ pub enum UpdateModelVersionError {
 impl UpdateModelVersionError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateModelVersionError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(UpdateModelVersionError::AccessDenied(err.msg))
@@ -4317,6 +4365,7 @@ pub enum UpdateModelVersionStatusError {
 impl UpdateModelVersionStatusError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateModelVersionStatusError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(UpdateModelVersionStatusError::AccessDenied(
@@ -4367,6 +4416,7 @@ pub enum UpdateRuleMetadataError {
 impl UpdateRuleMetadataError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateRuleMetadataError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(UpdateRuleMetadataError::AccessDenied(err.msg))
@@ -4415,6 +4465,7 @@ pub enum UpdateRuleVersionError {
 impl UpdateRuleVersionError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateRuleVersionError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(UpdateRuleVersionError::AccessDenied(err.msg))
@@ -4463,6 +4514,7 @@ pub enum UpdateVariableError {
 impl UpdateVariableError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateVariableError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(UpdateVariableError::AccessDenied(err.msg))

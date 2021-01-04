@@ -24,7 +24,6 @@ use rusoto_core::proto;
 use rusoto_core::signature::SignedRequest;
 #[allow(unused_imports)]
 use serde::{Deserialize, Serialize};
-use serde_json;
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct AssociateDeviceWithPlacementRequest {
@@ -464,6 +463,7 @@ impl AssociateDeviceWithPlacementError {
         res: BufferedHttpResponse,
     ) -> RusotoError<AssociateDeviceWithPlacementError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalFailureException" => {
                     return RusotoError::Service(
@@ -524,6 +524,7 @@ pub enum CreatePlacementError {
 impl CreatePlacementError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreatePlacementError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalFailureException" => {
                     return RusotoError::Service(CreatePlacementError::InternalFailure(err.msg))
@@ -570,6 +571,7 @@ pub enum CreateProjectError {
 impl CreateProjectError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateProjectError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalFailureException" => {
                     return RusotoError::Service(CreateProjectError::InternalFailure(err.msg))
@@ -614,6 +616,7 @@ pub enum DeletePlacementError {
 impl DeletePlacementError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeletePlacementError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalFailureException" => {
                     return RusotoError::Service(DeletePlacementError::InternalFailure(err.msg))
@@ -662,6 +665,7 @@ pub enum DeleteProjectError {
 impl DeleteProjectError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteProjectError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalFailureException" => {
                     return RusotoError::Service(DeleteProjectError::InternalFailure(err.msg))
@@ -708,6 +712,7 @@ pub enum DescribePlacementError {
 impl DescribePlacementError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribePlacementError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalFailureException" => {
                     return RusotoError::Service(DescribePlacementError::InternalFailure(err.msg))
@@ -750,6 +755,7 @@ pub enum DescribeProjectError {
 impl DescribeProjectError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeProjectError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalFailureException" => {
                     return RusotoError::Service(DescribeProjectError::InternalFailure(err.msg))
@@ -796,6 +802,7 @@ impl DisassociateDeviceFromPlacementError {
         res: BufferedHttpResponse,
     ) -> RusotoError<DisassociateDeviceFromPlacementError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalFailureException" => {
                     return RusotoError::Service(
@@ -858,6 +865,7 @@ pub enum GetDevicesInPlacementError {
 impl GetDevicesInPlacementError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetDevicesInPlacementError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalFailureException" => {
                     return RusotoError::Service(GetDevicesInPlacementError::InternalFailure(
@@ -906,6 +914,7 @@ pub enum ListPlacementsError {
 impl ListPlacementsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListPlacementsError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalFailureException" => {
                     return RusotoError::Service(ListPlacementsError::InternalFailure(err.msg))
@@ -946,6 +955,7 @@ pub enum ListProjectsError {
 impl ListProjectsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListProjectsError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalFailureException" => {
                     return RusotoError::Service(ListProjectsError::InternalFailure(err.msg))
@@ -984,6 +994,7 @@ pub enum ListTagsForResourceError {
 impl ListTagsForResourceError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListTagsForResourceError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalFailureException" => {
                     return RusotoError::Service(ListTagsForResourceError::InternalFailure(err.msg))
@@ -1028,6 +1039,7 @@ pub enum TagResourceError {
 impl TagResourceError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<TagResourceError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalFailureException" => {
                     return RusotoError::Service(TagResourceError::InternalFailure(err.msg))
@@ -1070,6 +1082,7 @@ pub enum UntagResourceError {
 impl UntagResourceError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UntagResourceError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalFailureException" => {
                     return RusotoError::Service(UntagResourceError::InternalFailure(err.msg))
@@ -1114,6 +1127,7 @@ pub enum UpdatePlacementError {
 impl UpdatePlacementError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdatePlacementError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalFailureException" => {
                     return RusotoError::Service(UpdatePlacementError::InternalFailure(err.msg))
@@ -1162,6 +1176,7 @@ pub enum UpdateProjectError {
 impl UpdateProjectError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateProjectError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalFailureException" => {
                     return RusotoError::Service(UpdateProjectError::InternalFailure(err.msg))
@@ -1343,6 +1358,7 @@ impl Iot1ClickProjects for Iot1ClickProjectsClient {
         input: AssociateDeviceWithPlacementRequest,
     ) -> Result<AssociateDeviceWithPlacementResponse, RusotoError<AssociateDeviceWithPlacementError>>
     {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/projects/{project_name}/placements/{placement_name}/devices/{device_template_name}",
             device_template_name = input.device_template_name,
@@ -1380,6 +1396,7 @@ impl Iot1ClickProjects for Iot1ClickProjectsClient {
         &self,
         input: CreatePlacementRequest,
     ) -> Result<CreatePlacementResponse, RusotoError<CreatePlacementError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/projects/{project_name}/placements",
             project_name = input.project_name
@@ -1415,6 +1432,7 @@ impl Iot1ClickProjects for Iot1ClickProjectsClient {
         &self,
         input: CreateProjectRequest,
     ) -> Result<CreateProjectResponse, RusotoError<CreateProjectError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/projects";
 
         let mut request = SignedRequest::new("POST", "iot1click", &self.region, &request_uri);
@@ -1447,6 +1465,7 @@ impl Iot1ClickProjects for Iot1ClickProjectsClient {
         &self,
         input: DeletePlacementRequest,
     ) -> Result<DeletePlacementResponse, RusotoError<DeletePlacementError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/projects/{project_name}/placements/{placement_name}",
             placement_name = input.placement_name,
@@ -1481,6 +1500,7 @@ impl Iot1ClickProjects for Iot1ClickProjectsClient {
         &self,
         input: DeleteProjectRequest,
     ) -> Result<DeleteProjectResponse, RusotoError<DeleteProjectError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/projects/{project_name}",
             project_name = input.project_name
@@ -1514,6 +1534,7 @@ impl Iot1ClickProjects for Iot1ClickProjectsClient {
         &self,
         input: DescribePlacementRequest,
     ) -> Result<DescribePlacementResponse, RusotoError<DescribePlacementError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/projects/{project_name}/placements/{placement_name}",
             placement_name = input.placement_name,
@@ -1548,6 +1569,7 @@ impl Iot1ClickProjects for Iot1ClickProjectsClient {
         &self,
         input: DescribeProjectRequest,
     ) -> Result<DescribeProjectResponse, RusotoError<DescribeProjectError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/projects/{project_name}",
             project_name = input.project_name
@@ -1584,6 +1606,7 @@ impl Iot1ClickProjects for Iot1ClickProjectsClient {
         DisassociateDeviceFromPlacementResponse,
         RusotoError<DisassociateDeviceFromPlacementError>,
     > {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/projects/{project_name}/placements/{placement_name}/devices/{device_template_name}",
             device_template_name = input.device_template_name,
@@ -1621,6 +1644,7 @@ impl Iot1ClickProjects for Iot1ClickProjectsClient {
         &self,
         input: GetDevicesInPlacementRequest,
     ) -> Result<GetDevicesInPlacementResponse, RusotoError<GetDevicesInPlacementError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/projects/{project_name}/placements/{placement_name}/devices",
             placement_name = input.placement_name,
@@ -1655,6 +1679,7 @@ impl Iot1ClickProjects for Iot1ClickProjectsClient {
         &self,
         input: ListPlacementsRequest,
     ) -> Result<ListPlacementsResponse, RusotoError<ListPlacementsError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/projects/{project_name}/placements",
             project_name = input.project_name
@@ -1697,6 +1722,7 @@ impl Iot1ClickProjects for Iot1ClickProjectsClient {
         &self,
         input: ListProjectsRequest,
     ) -> Result<ListProjectsResponse, RusotoError<ListProjectsError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/projects";
 
         let mut request = SignedRequest::new("GET", "iot1click", &self.region, &request_uri);
@@ -1736,6 +1762,7 @@ impl Iot1ClickProjects for Iot1ClickProjectsClient {
         &self,
         input: ListTagsForResourceRequest,
     ) -> Result<ListTagsForResourceResponse, RusotoError<ListTagsForResourceError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!("/tags/{resource_arn}", resource_arn = input.resource_arn);
 
         let mut request = SignedRequest::new("GET", "iot1click", &self.region, &request_uri);
@@ -1766,6 +1793,7 @@ impl Iot1ClickProjects for Iot1ClickProjectsClient {
         &self,
         input: TagResourceRequest,
     ) -> Result<TagResourceResponse, RusotoError<TagResourceError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!("/tags/{resource_arn}", resource_arn = input.resource_arn);
 
         let mut request = SignedRequest::new("POST", "iot1click", &self.region, &request_uri);
@@ -1798,6 +1826,7 @@ impl Iot1ClickProjects for Iot1ClickProjectsClient {
         &self,
         input: UntagResourceRequest,
     ) -> Result<UntagResourceResponse, RusotoError<UntagResourceError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!("/tags/{resource_arn}", resource_arn = input.resource_arn);
 
         let mut request = SignedRequest::new("DELETE", "iot1click", &self.region, &request_uri);
@@ -1834,6 +1863,7 @@ impl Iot1ClickProjects for Iot1ClickProjectsClient {
         &self,
         input: UpdatePlacementRequest,
     ) -> Result<UpdatePlacementResponse, RusotoError<UpdatePlacementError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/projects/{project_name}/placements/{placement_name}",
             placement_name = input.placement_name,
@@ -1870,6 +1900,7 @@ impl Iot1ClickProjects for Iot1ClickProjectsClient {
         &self,
         input: UpdateProjectRequest,
     ) -> Result<UpdateProjectResponse, RusotoError<UpdateProjectError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/projects/{project_name}",
             project_name = input.project_name

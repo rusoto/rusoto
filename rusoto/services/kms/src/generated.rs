@@ -49,7 +49,6 @@ impl KmsClient {
     }
 }
 
-use serde_json;
 /// <p>Contains information about an alias.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
@@ -1554,6 +1553,7 @@ pub enum CancelKeyDeletionError {
 impl CancelKeyDeletionError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CancelKeyDeletionError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "DependencyTimeoutException" => {
                     return RusotoError::Service(CancelKeyDeletionError::DependencyTimeout(err.msg))
@@ -1608,6 +1608,7 @@ pub enum ConnectCustomKeyStoreError {
 impl ConnectCustomKeyStoreError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ConnectCustomKeyStoreError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "CloudHsmClusterInvalidConfigurationException" => {
                     return RusotoError::Service(
@@ -1680,6 +1681,7 @@ pub enum CreateAliasError {
 impl CreateAliasError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateAliasError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AlreadyExistsException" => {
                     return RusotoError::Service(CreateAliasError::AlreadyExists(err.msg))
@@ -1746,6 +1748,7 @@ pub enum CreateCustomKeyStoreError {
 impl CreateCustomKeyStoreError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateCustomKeyStoreError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "CloudHsmClusterInUseException" => {
                     return RusotoError::Service(CreateCustomKeyStoreError::CloudHsmClusterInUse(
@@ -1830,6 +1833,7 @@ pub enum CreateGrantError {
 impl CreateGrantError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateGrantError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "DependencyTimeoutException" => {
                     return RusotoError::Service(CreateGrantError::DependencyTimeout(err.msg))
@@ -1906,6 +1910,7 @@ pub enum CreateKeyError {
 impl CreateKeyError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateKeyError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "CloudHsmClusterInvalidConfigurationException" => {
                     return RusotoError::Service(
@@ -1994,6 +1999,7 @@ pub enum DecryptError {
 impl DecryptError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DecryptError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "DependencyTimeoutException" => {
                     return RusotoError::Service(DecryptError::DependencyTimeout(err.msg))
@@ -2066,6 +2072,7 @@ pub enum DeleteAliasError {
 impl DeleteAliasError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteAliasError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "DependencyTimeoutException" => {
                     return RusotoError::Service(DeleteAliasError::DependencyTimeout(err.msg))
@@ -2114,6 +2121,7 @@ pub enum DeleteCustomKeyStoreError {
 impl DeleteCustomKeyStoreError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteCustomKeyStoreError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "CustomKeyStoreHasCMKsException" => {
                     return RusotoError::Service(DeleteCustomKeyStoreError::CustomKeyStoreHasCMKs(
@@ -2174,6 +2182,7 @@ pub enum DeleteImportedKeyMaterialError {
 impl DeleteImportedKeyMaterialError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteImportedKeyMaterialError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "DependencyTimeoutException" => {
                     return RusotoError::Service(DeleteImportedKeyMaterialError::DependencyTimeout(
@@ -2238,6 +2247,7 @@ pub enum DescribeCustomKeyStoresError {
 impl DescribeCustomKeyStoresError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeCustomKeyStoresError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "CustomKeyStoreNotFoundException" => {
                     return RusotoError::Service(
@@ -2282,6 +2292,7 @@ pub enum DescribeKeyError {
 impl DescribeKeyError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeKeyError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "DependencyTimeoutException" => {
                     return RusotoError::Service(DescribeKeyError::DependencyTimeout(err.msg))
@@ -2332,6 +2343,7 @@ pub enum DisableKeyError {
 impl DisableKeyError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DisableKeyError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "DependencyTimeoutException" => {
                     return RusotoError::Service(DisableKeyError::DependencyTimeout(err.msg))
@@ -2390,6 +2402,7 @@ pub enum DisableKeyRotationError {
 impl DisableKeyRotationError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DisableKeyRotationError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "DependencyTimeoutException" => {
                     return RusotoError::Service(DisableKeyRotationError::DependencyTimeout(
@@ -2452,6 +2465,7 @@ pub enum DisconnectCustomKeyStoreError {
 impl DisconnectCustomKeyStoreError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DisconnectCustomKeyStoreError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "CustomKeyStoreInvalidStateException" => {
                     return RusotoError::Service(
@@ -2510,6 +2524,7 @@ pub enum EnableKeyError {
 impl EnableKeyError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<EnableKeyError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "DependencyTimeoutException" => {
                     return RusotoError::Service(EnableKeyError::DependencyTimeout(err.msg))
@@ -2572,6 +2587,7 @@ pub enum EnableKeyRotationError {
 impl EnableKeyRotationError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<EnableKeyRotationError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "DependencyTimeoutException" => {
                     return RusotoError::Service(EnableKeyRotationError::DependencyTimeout(err.msg))
@@ -2642,6 +2658,7 @@ pub enum EncryptError {
 impl EncryptError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<EncryptError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "DependencyTimeoutException" => {
                     return RusotoError::Service(EncryptError::DependencyTimeout(err.msg))
@@ -2714,6 +2731,7 @@ pub enum GenerateDataKeyError {
 impl GenerateDataKeyError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GenerateDataKeyError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "DependencyTimeoutException" => {
                     return RusotoError::Service(GenerateDataKeyError::DependencyTimeout(err.msg))
@@ -2788,6 +2806,7 @@ pub enum GenerateDataKeyPairError {
 impl GenerateDataKeyPairError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GenerateDataKeyPairError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "DependencyTimeoutException" => {
                     return RusotoError::Service(GenerateDataKeyPairError::DependencyTimeout(
@@ -2874,6 +2893,7 @@ impl GenerateDataKeyPairWithoutPlaintextError {
         res: BufferedHttpResponse,
     ) -> RusotoError<GenerateDataKeyPairWithoutPlaintextError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "DependencyTimeoutException" => {
                     return RusotoError::Service(
@@ -2984,6 +3004,7 @@ impl GenerateDataKeyWithoutPlaintextError {
         res: BufferedHttpResponse,
     ) -> RusotoError<GenerateDataKeyWithoutPlaintextError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "DependencyTimeoutException" => {
                     return RusotoError::Service(
@@ -3074,6 +3095,7 @@ pub enum GenerateRandomError {
 impl GenerateRandomError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GenerateRandomError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "CustomKeyStoreInvalidStateException" => {
                     return RusotoError::Service(GenerateRandomError::CustomKeyStoreInvalidState(
@@ -3128,6 +3150,7 @@ pub enum GetKeyPolicyError {
 impl GetKeyPolicyError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetKeyPolicyError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "DependencyTimeoutException" => {
                     return RusotoError::Service(GetKeyPolicyError::DependencyTimeout(err.msg))
@@ -3184,6 +3207,7 @@ pub enum GetKeyRotationStatusError {
 impl GetKeyRotationStatusError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetKeyRotationStatusError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "DependencyTimeoutException" => {
                     return RusotoError::Service(GetKeyRotationStatusError::DependencyTimeout(
@@ -3250,6 +3274,7 @@ pub enum GetParametersForImportError {
 impl GetParametersForImportError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetParametersForImportError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "DependencyTimeoutException" => {
                     return RusotoError::Service(GetParametersForImportError::DependencyTimeout(
@@ -3324,6 +3349,7 @@ pub enum GetPublicKeyError {
 impl GetPublicKeyError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetPublicKeyError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "DependencyTimeoutException" => {
                     return RusotoError::Service(GetPublicKeyError::DependencyTimeout(err.msg))
@@ -3408,6 +3434,7 @@ pub enum ImportKeyMaterialError {
 impl ImportKeyMaterialError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ImportKeyMaterialError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "DependencyTimeoutException" => {
                     return RusotoError::Service(ImportKeyMaterialError::DependencyTimeout(err.msg))
@@ -3490,6 +3517,7 @@ pub enum ListAliasesError {
 impl ListAliasesError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListAliasesError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "DependencyTimeoutException" => {
                     return RusotoError::Service(ListAliasesError::DependencyTimeout(err.msg))
@@ -3546,6 +3574,7 @@ pub enum ListGrantsError {
 impl ListGrantsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListGrantsError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "DependencyTimeoutException" => {
                     return RusotoError::Service(ListGrantsError::DependencyTimeout(err.msg))
@@ -3604,6 +3633,7 @@ pub enum ListKeyPoliciesError {
 impl ListKeyPoliciesError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListKeyPoliciesError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "DependencyTimeoutException" => {
                     return RusotoError::Service(ListKeyPoliciesError::DependencyTimeout(err.msg))
@@ -3654,6 +3684,7 @@ pub enum ListKeysError {
 impl ListKeysError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListKeysError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "DependencyTimeoutException" => {
                     return RusotoError::Service(ListKeysError::DependencyTimeout(err.msg))
@@ -3698,6 +3729,7 @@ pub enum ListResourceTagsError {
 impl ListResourceTagsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListResourceTagsError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidArnException" => {
                     return RusotoError::Service(ListResourceTagsError::InvalidArn(err.msg))
@@ -3748,6 +3780,7 @@ pub enum ListRetirableGrantsError {
 impl ListRetirableGrantsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListRetirableGrantsError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "DependencyTimeoutException" => {
                     return RusotoError::Service(ListRetirableGrantsError::DependencyTimeout(
@@ -3810,6 +3843,7 @@ pub enum PutKeyPolicyError {
 impl PutKeyPolicyError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<PutKeyPolicyError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "DependencyTimeoutException" => {
                     return RusotoError::Service(PutKeyPolicyError::DependencyTimeout(err.msg))
@@ -3888,6 +3922,7 @@ pub enum ReEncryptError {
 impl ReEncryptError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ReEncryptError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "DependencyTimeoutException" => {
                     return RusotoError::Service(ReEncryptError::DependencyTimeout(err.msg))
@@ -3966,6 +4001,7 @@ pub enum RetireGrantError {
 impl RetireGrantError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<RetireGrantError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "DependencyTimeoutException" => {
                     return RusotoError::Service(RetireGrantError::DependencyTimeout(err.msg))
@@ -4030,6 +4066,7 @@ pub enum RevokeGrantError {
 impl RevokeGrantError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<RevokeGrantError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "DependencyTimeoutException" => {
                     return RusotoError::Service(RevokeGrantError::DependencyTimeout(err.msg))
@@ -4088,6 +4125,7 @@ pub enum ScheduleKeyDeletionError {
 impl ScheduleKeyDeletionError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ScheduleKeyDeletionError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "DependencyTimeoutException" => {
                     return RusotoError::Service(ScheduleKeyDeletionError::DependencyTimeout(
@@ -4150,6 +4188,7 @@ pub enum SignError {
 impl SignError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<SignError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "DependencyTimeoutException" => {
                     return RusotoError::Service(SignError::DependencyTimeout(err.msg))
@@ -4214,6 +4253,7 @@ pub enum TagResourceError {
 impl TagResourceError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<TagResourceError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidArnException" => {
                     return RusotoError::Service(TagResourceError::InvalidArn(err.msg))
@@ -4270,6 +4310,7 @@ pub enum UntagResourceError {
 impl UntagResourceError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UntagResourceError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidArnException" => {
                     return RusotoError::Service(UntagResourceError::InvalidArn(err.msg))
@@ -4322,6 +4363,7 @@ pub enum UpdateAliasError {
 impl UpdateAliasError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateAliasError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "DependencyTimeoutException" => {
                     return RusotoError::Service(UpdateAliasError::DependencyTimeout(err.msg))
@@ -4382,6 +4424,7 @@ pub enum UpdateCustomKeyStoreError {
 impl UpdateCustomKeyStoreError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateCustomKeyStoreError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "CloudHsmClusterInvalidConfigurationException" => {
                     return RusotoError::Service(
@@ -4470,6 +4513,7 @@ pub enum UpdateKeyDescriptionError {
 impl UpdateKeyDescriptionError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateKeyDescriptionError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "DependencyTimeoutException" => {
                     return RusotoError::Service(UpdateKeyDescriptionError::DependencyTimeout(
@@ -4536,6 +4580,7 @@ pub enum VerifyError {
 impl VerifyError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<VerifyError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "DependencyTimeoutException" => {
                     return RusotoError::Service(VerifyError::DependencyTimeout(err.msg))

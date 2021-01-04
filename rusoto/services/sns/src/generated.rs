@@ -31,7 +31,6 @@ use rusoto_core::signature::SignedRequest;
 use serde::Deserialize;
 #[cfg(feature = "serialize_structs")]
 use serde::Serialize;
-use serde_urlencoded;
 use std::str::FromStr;
 use xml::EventReader;
 
@@ -63,8 +62,9 @@ impl SnsClient {
 #[allow(dead_code)]
 struct AccountDeserializer;
 impl AccountDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
@@ -72,6 +72,7 @@ impl AccountDeserializer {
 /// Serialize `ActionsList` contents to a `SignedRequest`.
 struct ActionsListSerializer;
 impl ActionsListSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &Vec<String>) {
         for (index, obj) in obj.iter().enumerate() {
             let key = format!("{}.member.{}", name, index + 1);
@@ -96,10 +97,11 @@ pub struct AddPermissionInput {
 /// Serialize `AddPermissionInput` contents to a `SignedRequest`.
 struct AddPermissionInputSerializer;
 impl AddPermissionInputSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &AddPermissionInput) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         DelegatesListSerializer::serialize(
@@ -120,24 +122,27 @@ impl AddPermissionInputSerializer {
 #[allow(dead_code)]
 struct AttributeNameDeserializer;
 impl AttributeNameDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 #[allow(dead_code)]
 struct AttributeValueDeserializer;
 impl AttributeValueDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 #[allow(dead_code)]
 struct BooleanDeserializer;
 impl BooleanDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<bool, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::deserialize_primitive(tag_name, stack, |s| Ok(bool::from_str(&s).unwrap()))
     }
 }
@@ -152,10 +157,11 @@ pub struct CheckIfPhoneNumberIsOptedOutInput {
 /// Serialize `CheckIfPhoneNumberIsOptedOutInput` contents to a `SignedRequest`.
 struct CheckIfPhoneNumberIsOptedOutInputSerializer;
 impl CheckIfPhoneNumberIsOptedOutInputSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &CheckIfPhoneNumberIsOptedOutInput) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         params.put(&format!("{}{}", prefix, "phoneNumber"), &obj.phone_number);
@@ -173,11 +179,12 @@ pub struct CheckIfPhoneNumberIsOptedOutResponse {
 #[allow(dead_code)]
 struct CheckIfPhoneNumberIsOptedOutResponseDeserializer;
 impl CheckIfPhoneNumberIsOptedOutResponseDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<CheckIfPhoneNumberIsOptedOutResponse, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, CheckIfPhoneNumberIsOptedOutResponse, _>(
             tag_name,
             stack,
@@ -209,10 +216,11 @@ pub struct ConfirmSubscriptionInput {
 /// Serialize `ConfirmSubscriptionInput` contents to a `SignedRequest`.
 struct ConfirmSubscriptionInputSerializer;
 impl ConfirmSubscriptionInputSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &ConfirmSubscriptionInput) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         if let Some(ref field_value) = obj.authenticate_on_unsubscribe {
@@ -237,11 +245,12 @@ pub struct ConfirmSubscriptionResponse {
 #[allow(dead_code)]
 struct ConfirmSubscriptionResponseDeserializer;
 impl ConfirmSubscriptionResponseDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<ConfirmSubscriptionResponse, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, ConfirmSubscriptionResponse, _>(
             tag_name,
             stack,
@@ -271,11 +280,12 @@ pub struct CreateEndpointResponse {
 #[allow(dead_code)]
 struct CreateEndpointResponseDeserializer;
 impl CreateEndpointResponseDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<CreateEndpointResponse, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, CreateEndpointResponse, _>(tag_name, stack, |name, stack, obj| {
             match name {
                 "EndpointArn" => {
@@ -302,10 +312,11 @@ pub struct CreatePlatformApplicationInput {
 /// Serialize `CreatePlatformApplicationInput` contents to a `SignedRequest`.
 struct CreatePlatformApplicationInputSerializer;
 impl CreatePlatformApplicationInputSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &CreatePlatformApplicationInput) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         MapStringToStringSerializer::serialize(
@@ -329,11 +340,12 @@ pub struct CreatePlatformApplicationResponse {
 #[allow(dead_code)]
 struct CreatePlatformApplicationResponseDeserializer;
 impl CreatePlatformApplicationResponseDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<CreatePlatformApplicationResponse, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, CreatePlatformApplicationResponse, _>(
             tag_name,
             stack,
@@ -369,10 +381,11 @@ pub struct CreatePlatformEndpointInput {
 /// Serialize `CreatePlatformEndpointInput` contents to a `SignedRequest`.
 struct CreatePlatformEndpointInputSerializer;
 impl CreatePlatformEndpointInputSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &CreatePlatformEndpointInput) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         if let Some(ref field_value) = obj.attributes {
@@ -408,10 +421,11 @@ pub struct CreateTopicInput {
 /// Serialize `CreateTopicInput` contents to a `SignedRequest`.
 struct CreateTopicInputSerializer;
 impl CreateTopicInputSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &CreateTopicInput) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         if let Some(ref field_value) = obj.attributes {
@@ -439,11 +453,12 @@ pub struct CreateTopicResponse {
 #[allow(dead_code)]
 struct CreateTopicResponseDeserializer;
 impl CreateTopicResponseDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<CreateTopicResponse, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, CreateTopicResponse, _>(tag_name, stack, |name, stack, obj| {
             match name {
                 "TopicArn" => {
@@ -459,6 +474,7 @@ impl CreateTopicResponseDeserializer {
 /// Serialize `DelegatesList` contents to a `SignedRequest`.
 struct DelegatesListSerializer;
 impl DelegatesListSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &Vec<String>) {
         for (index, obj) in obj.iter().enumerate() {
             let key = format!("{}.member.{}", name, index + 1);
@@ -478,10 +494,11 @@ pub struct DeleteEndpointInput {
 /// Serialize `DeleteEndpointInput` contents to a `SignedRequest`.
 struct DeleteEndpointInputSerializer;
 impl DeleteEndpointInputSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &DeleteEndpointInput) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         params.put(&format!("{}{}", prefix, "EndpointArn"), &obj.endpoint_arn);
@@ -499,10 +516,11 @@ pub struct DeletePlatformApplicationInput {
 /// Serialize `DeletePlatformApplicationInput` contents to a `SignedRequest`.
 struct DeletePlatformApplicationInputSerializer;
 impl DeletePlatformApplicationInputSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &DeletePlatformApplicationInput) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         params.put(
@@ -522,10 +540,11 @@ pub struct DeleteTopicInput {
 /// Serialize `DeleteTopicInput` contents to a `SignedRequest`.
 struct DeleteTopicInputSerializer;
 impl DeleteTopicInputSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &DeleteTopicInput) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         params.put(&format!("{}{}", prefix, "TopicArn"), &obj.topic_arn);
@@ -535,8 +554,9 @@ impl DeleteTopicInputSerializer {
 #[allow(dead_code)]
 struct EndpointDeserializer;
 impl EndpointDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
@@ -551,10 +571,11 @@ pub struct GetEndpointAttributesInput {
 /// Serialize `GetEndpointAttributesInput` contents to a `SignedRequest`.
 struct GetEndpointAttributesInputSerializer;
 impl GetEndpointAttributesInputSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &GetEndpointAttributesInput) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         params.put(&format!("{}{}", prefix, "EndpointArn"), &obj.endpoint_arn);
@@ -572,11 +593,12 @@ pub struct GetEndpointAttributesResponse {
 #[allow(dead_code)]
 struct GetEndpointAttributesResponseDeserializer;
 impl GetEndpointAttributesResponseDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<GetEndpointAttributesResponse, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, GetEndpointAttributesResponse, _>(
             tag_name,
             stack,
@@ -606,10 +628,11 @@ pub struct GetPlatformApplicationAttributesInput {
 /// Serialize `GetPlatformApplicationAttributesInput` contents to a `SignedRequest`.
 struct GetPlatformApplicationAttributesInputSerializer;
 impl GetPlatformApplicationAttributesInputSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &GetPlatformApplicationAttributesInput) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         params.put(
@@ -630,11 +653,12 @@ pub struct GetPlatformApplicationAttributesResponse {
 #[allow(dead_code)]
 struct GetPlatformApplicationAttributesResponseDeserializer;
 impl GetPlatformApplicationAttributesResponseDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<GetPlatformApplicationAttributesResponse, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, GetPlatformApplicationAttributesResponse, _>(
             tag_name,
             stack,
@@ -664,10 +688,11 @@ pub struct GetSMSAttributesInput {
 /// Serialize `GetSMSAttributesInput` contents to a `SignedRequest`.
 struct GetSMSAttributesInputSerializer;
 impl GetSMSAttributesInputSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &GetSMSAttributesInput) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         if let Some(ref field_value) = obj.attributes {
@@ -691,11 +716,12 @@ pub struct GetSMSAttributesResponse {
 #[allow(dead_code)]
 struct GetSMSAttributesResponseDeserializer;
 impl GetSMSAttributesResponseDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<GetSMSAttributesResponse, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, GetSMSAttributesResponse, _>(
             tag_name,
             stack,
@@ -725,10 +751,11 @@ pub struct GetSubscriptionAttributesInput {
 /// Serialize `GetSubscriptionAttributesInput` contents to a `SignedRequest`.
 struct GetSubscriptionAttributesInputSerializer;
 impl GetSubscriptionAttributesInputSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &GetSubscriptionAttributesInput) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         params.put(
@@ -749,11 +776,12 @@ pub struct GetSubscriptionAttributesResponse {
 #[allow(dead_code)]
 struct GetSubscriptionAttributesResponseDeserializer;
 impl GetSubscriptionAttributesResponseDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<GetSubscriptionAttributesResponse, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, GetSubscriptionAttributesResponse, _>(
             tag_name,
             stack,
@@ -783,10 +811,11 @@ pub struct GetTopicAttributesInput {
 /// Serialize `GetTopicAttributesInput` contents to a `SignedRequest`.
 struct GetTopicAttributesInputSerializer;
 impl GetTopicAttributesInputSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &GetTopicAttributesInput) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         params.put(&format!("{}{}", prefix, "TopicArn"), &obj.topic_arn);
@@ -804,11 +833,12 @@ pub struct GetTopicAttributesResponse {
 #[allow(dead_code)]
 struct GetTopicAttributesResponseDeserializer;
 impl GetTopicAttributesResponseDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<GetTopicAttributesResponse, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, GetTopicAttributesResponse, _>(
             tag_name,
             stack,
@@ -840,10 +870,11 @@ pub struct ListEndpointsByPlatformApplicationInput {
 /// Serialize `ListEndpointsByPlatformApplicationInput` contents to a `SignedRequest`.
 struct ListEndpointsByPlatformApplicationInputSerializer;
 impl ListEndpointsByPlatformApplicationInputSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &ListEndpointsByPlatformApplicationInput) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         if let Some(ref field_value) = obj.next_token {
@@ -869,11 +900,12 @@ pub struct ListEndpointsByPlatformApplicationResponse {
 #[allow(dead_code)]
 struct ListEndpointsByPlatformApplicationResponseDeserializer;
 impl ListEndpointsByPlatformApplicationResponseDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<ListEndpointsByPlatformApplicationResponse, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, ListEndpointsByPlatformApplicationResponse, _>(
             tag_name,
             stack,
@@ -897,11 +929,13 @@ impl ListEndpointsByPlatformApplicationResponseDeserializer {
 #[allow(dead_code)]
 struct ListOfEndpointsDeserializer;
 impl ListOfEndpointsDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<String>, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
+
         deserialize_elements::<_, Vec<_>, _>(tag_name, stack, |name, stack, obj| {
             if name == "member" {
                 obj.push(EndpointDeserializer::deserialize("member", stack)?);
@@ -915,11 +949,13 @@ impl ListOfEndpointsDeserializer {
 #[allow(dead_code)]
 struct ListOfPlatformApplicationsDeserializer;
 impl ListOfPlatformApplicationsDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<PlatformApplication>, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
+
         deserialize_elements::<_, Vec<_>, _>(tag_name, stack, |name, stack, obj| {
             if name == "member" {
                 obj.push(PlatformApplicationDeserializer::deserialize(
@@ -943,10 +979,11 @@ pub struct ListPhoneNumbersOptedOutInput {
 /// Serialize `ListPhoneNumbersOptedOutInput` contents to a `SignedRequest`.
 struct ListPhoneNumbersOptedOutInputSerializer;
 impl ListPhoneNumbersOptedOutInputSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &ListPhoneNumbersOptedOutInput) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         if let Some(ref field_value) = obj.next_token {
@@ -968,11 +1005,12 @@ pub struct ListPhoneNumbersOptedOutResponse {
 #[allow(dead_code)]
 struct ListPhoneNumbersOptedOutResponseDeserializer;
 impl ListPhoneNumbersOptedOutResponseDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<ListPhoneNumbersOptedOutResponse, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, ListPhoneNumbersOptedOutResponse, _>(
             tag_name,
             stack,
@@ -1004,10 +1042,11 @@ pub struct ListPlatformApplicationsInput {
 /// Serialize `ListPlatformApplicationsInput` contents to a `SignedRequest`.
 struct ListPlatformApplicationsInputSerializer;
 impl ListPlatformApplicationsInputSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &ListPlatformApplicationsInput) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         if let Some(ref field_value) = obj.next_token {
@@ -1029,11 +1068,12 @@ pub struct ListPlatformApplicationsResponse {
 #[allow(dead_code)]
 struct ListPlatformApplicationsResponseDeserializer;
 impl ListPlatformApplicationsResponseDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<ListPlatformApplicationsResponse, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, ListPlatformApplicationsResponse, _>(
             tag_name,
             stack,
@@ -1061,6 +1101,7 @@ impl ListPlatformApplicationsResponseDeserializer {
 /// Serialize `ListString` contents to a `SignedRequest`.
 struct ListStringSerializer;
 impl ListStringSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &Vec<String>) {
         for (index, obj) in obj.iter().enumerate() {
             let key = format!("{}.member.{}", name, index + 1);
@@ -1082,10 +1123,11 @@ pub struct ListSubscriptionsByTopicInput {
 /// Serialize `ListSubscriptionsByTopicInput` contents to a `SignedRequest`.
 struct ListSubscriptionsByTopicInputSerializer;
 impl ListSubscriptionsByTopicInputSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &ListSubscriptionsByTopicInput) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         if let Some(ref field_value) = obj.next_token {
@@ -1108,11 +1150,12 @@ pub struct ListSubscriptionsByTopicResponse {
 #[allow(dead_code)]
 struct ListSubscriptionsByTopicResponseDeserializer;
 impl ListSubscriptionsByTopicResponseDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<ListSubscriptionsByTopicResponse, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, ListSubscriptionsByTopicResponse, _>(
             tag_name,
             stack,
@@ -1145,10 +1188,11 @@ pub struct ListSubscriptionsInput {
 /// Serialize `ListSubscriptionsInput` contents to a `SignedRequest`.
 struct ListSubscriptionsInputSerializer;
 impl ListSubscriptionsInputSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &ListSubscriptionsInput) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         if let Some(ref field_value) = obj.next_token {
@@ -1170,11 +1214,12 @@ pub struct ListSubscriptionsResponse {
 #[allow(dead_code)]
 struct ListSubscriptionsResponseDeserializer;
 impl ListSubscriptionsResponseDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<ListSubscriptionsResponse, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, ListSubscriptionsResponse, _>(
             tag_name,
             stack,
@@ -1206,10 +1251,11 @@ pub struct ListTagsForResourceRequest {
 /// Serialize `ListTagsForResourceRequest` contents to a `SignedRequest`.
 struct ListTagsForResourceRequestSerializer;
 impl ListTagsForResourceRequestSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &ListTagsForResourceRequest) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         params.put(&format!("{}{}", prefix, "ResourceArn"), &obj.resource_arn);
@@ -1226,11 +1272,12 @@ pub struct ListTagsForResourceResponse {
 #[allow(dead_code)]
 struct ListTagsForResourceResponseDeserializer;
 impl ListTagsForResourceResponseDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<ListTagsForResourceResponse, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, ListTagsForResourceResponse, _>(
             tag_name,
             stack,
@@ -1258,10 +1305,11 @@ pub struct ListTopicsInput {
 /// Serialize `ListTopicsInput` contents to a `SignedRequest`.
 struct ListTopicsInputSerializer;
 impl ListTopicsInputSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &ListTopicsInput) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         if let Some(ref field_value) = obj.next_token {
@@ -1283,11 +1331,12 @@ pub struct ListTopicsResponse {
 #[allow(dead_code)]
 struct ListTopicsResponseDeserializer;
 impl ListTopicsResponseDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<ListTopicsResponse, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, ListTopicsResponse, _>(tag_name, stack, |name, stack, obj| {
             match name {
                 "NextToken" => {
@@ -1307,11 +1356,12 @@ impl ListTopicsResponseDeserializer {
 #[allow(dead_code)]
 struct MapStringToStringDeserializer;
 impl MapStringToStringDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<::std::collections::HashMap<String, String>, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::start_element(tag_name, stack)?;
 
         let mut obj = ::std::collections::HashMap::new();
@@ -1332,6 +1382,7 @@ impl MapStringToStringDeserializer {
 /// Serialize `MapStringToString` contents to a `SignedRequest`.
 struct MapStringToStringSerializer;
 impl MapStringToStringSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(
         params: &mut Params,
         name: &str,
@@ -1348,6 +1399,7 @@ impl MapStringToStringSerializer {
 /// Serialize `MessageAttributeMap` contents to a `SignedRequest`.
 struct MessageAttributeMapSerializer;
 impl MessageAttributeMapSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(
         params: &mut Params,
         name: &str,
@@ -1380,10 +1432,11 @@ pub struct MessageAttributeValue {
 /// Serialize `MessageAttributeValue` contents to a `SignedRequest`.
 struct MessageAttributeValueSerializer;
 impl MessageAttributeValueSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &MessageAttributeValue) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         if let Some(ref field_value) = obj.binary_value {
@@ -1402,16 +1455,18 @@ impl MessageAttributeValueSerializer {
 #[allow(dead_code)]
 struct MessageIdDeserializer;
 impl MessageIdDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 #[allow(dead_code)]
 struct NextTokenDeserializer;
 impl NextTokenDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
@@ -1426,10 +1481,11 @@ pub struct OptInPhoneNumberInput {
 /// Serialize `OptInPhoneNumberInput` contents to a `SignedRequest`.
 struct OptInPhoneNumberInputSerializer;
 impl OptInPhoneNumberInputSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &OptInPhoneNumberInput) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         params.put(&format!("{}{}", prefix, "phoneNumber"), &obj.phone_number);
@@ -1444,11 +1500,12 @@ pub struct OptInPhoneNumberResponse {}
 #[allow(dead_code)]
 struct OptInPhoneNumberResponseDeserializer;
 impl OptInPhoneNumberResponseDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<OptInPhoneNumberResponse, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::start_element(tag_name, stack)?;
 
         let obj = OptInPhoneNumberResponse::default();
@@ -1461,19 +1518,22 @@ impl OptInPhoneNumberResponseDeserializer {
 #[allow(dead_code)]
 struct PhoneNumberDeserializer;
 impl PhoneNumberDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 #[allow(dead_code)]
 struct PhoneNumberListDeserializer;
 impl PhoneNumberListDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<String>, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
+
         deserialize_elements::<_, Vec<_>, _>(tag_name, stack, |name, stack, obj| {
             if name == "member" {
                 obj.push(PhoneNumberDeserializer::deserialize("member", stack)?);
@@ -1497,11 +1557,12 @@ pub struct PlatformApplication {
 #[allow(dead_code)]
 struct PlatformApplicationDeserializer;
 impl PlatformApplicationDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<PlatformApplication, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, PlatformApplication, _>(tag_name, stack, |name, stack, obj| {
             match name {
                 "Attributes" => {
@@ -1525,8 +1586,9 @@ impl PlatformApplicationDeserializer {
 #[allow(dead_code)]
 struct ProtocolDeserializer;
 impl ProtocolDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
@@ -1557,10 +1619,11 @@ pub struct PublishInput {
 /// Serialize `PublishInput` contents to a `SignedRequest`.
 struct PublishInputSerializer;
 impl PublishInputSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &PublishInput) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         params.put(&format!("{}{}", prefix, "Message"), &obj.message);
@@ -1611,11 +1674,12 @@ pub struct PublishResponse {
 #[allow(dead_code)]
 struct PublishResponseDeserializer;
 impl PublishResponseDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<PublishResponse, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, PublishResponse, _>(tag_name, stack, |name, stack, obj| {
             match name {
                 "MessageId" => {
@@ -1644,10 +1708,11 @@ pub struct RemovePermissionInput {
 /// Serialize `RemovePermissionInput` contents to a `SignedRequest`.
 struct RemovePermissionInputSerializer;
 impl RemovePermissionInputSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &RemovePermissionInput) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         params.put(&format!("{}{}", prefix, "Label"), &obj.label);
@@ -1668,10 +1733,11 @@ pub struct SetEndpointAttributesInput {
 /// Serialize `SetEndpointAttributesInput` contents to a `SignedRequest`.
 struct SetEndpointAttributesInputSerializer;
 impl SetEndpointAttributesInputSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &SetEndpointAttributesInput) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         MapStringToStringSerializer::serialize(
@@ -1696,10 +1762,11 @@ pub struct SetPlatformApplicationAttributesInput {
 /// Serialize `SetPlatformApplicationAttributesInput` contents to a `SignedRequest`.
 struct SetPlatformApplicationAttributesInputSerializer;
 impl SetPlatformApplicationAttributesInputSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &SetPlatformApplicationAttributesInput) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         MapStringToStringSerializer::serialize(
@@ -1725,10 +1792,11 @@ pub struct SetSMSAttributesInput {
 /// Serialize `SetSMSAttributesInput` contents to a `SignedRequest`.
 struct SetSMSAttributesInputSerializer;
 impl SetSMSAttributesInputSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &SetSMSAttributesInput) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         MapStringToStringSerializer::serialize(
@@ -1747,11 +1815,12 @@ pub struct SetSMSAttributesResponse {}
 #[allow(dead_code)]
 struct SetSMSAttributesResponseDeserializer;
 impl SetSMSAttributesResponseDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<SetSMSAttributesResponse, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::start_element(tag_name, stack)?;
 
         let obj = SetSMSAttributesResponse::default();
@@ -1776,10 +1845,11 @@ pub struct SetSubscriptionAttributesInput {
 /// Serialize `SetSubscriptionAttributesInput` contents to a `SignedRequest`.
 struct SetSubscriptionAttributesInputSerializer;
 impl SetSubscriptionAttributesInputSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &SetSubscriptionAttributesInput) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         params.put(
@@ -1811,10 +1881,11 @@ pub struct SetTopicAttributesInput {
 /// Serialize `SetTopicAttributesInput` contents to a `SignedRequest`.
 struct SetTopicAttributesInputSerializer;
 impl SetTopicAttributesInputSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &SetTopicAttributesInput) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         params.put(
@@ -1831,8 +1902,9 @@ impl SetTopicAttributesInputSerializer {
 #[allow(dead_code)]
 struct StringDeserializer;
 impl StringDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
@@ -1855,10 +1927,11 @@ pub struct SubscribeInput {
 /// Serialize `SubscribeInput` contents to a `SignedRequest`.
 struct SubscribeInputSerializer;
 impl SubscribeInputSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &SubscribeInput) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         if let Some(ref field_value) = obj.attributes {
@@ -1893,11 +1966,12 @@ pub struct SubscribeResponse {
 #[allow(dead_code)]
 struct SubscribeResponseDeserializer;
 impl SubscribeResponseDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<SubscribeResponse, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, SubscribeResponse, _>(tag_name, stack, |name, stack, obj| {
             match name {
                 "SubscriptionArn" => {
@@ -1931,11 +2005,12 @@ pub struct Subscription {
 #[allow(dead_code)]
 struct SubscriptionDeserializer;
 impl SubscriptionDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Subscription, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, Subscription, _>(tag_name, stack, |name, stack, obj| {
             match name {
                 "Endpoint" => {
@@ -1965,19 +2040,21 @@ impl SubscriptionDeserializer {
 #[allow(dead_code)]
 struct SubscriptionARNDeserializer;
 impl SubscriptionARNDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 #[allow(dead_code)]
 struct SubscriptionAttributesMapDeserializer;
 impl SubscriptionAttributesMapDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<::std::collections::HashMap<String, String>, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::start_element(tag_name, stack)?;
 
         let mut obj = ::std::collections::HashMap::new();
@@ -1998,6 +2075,7 @@ impl SubscriptionAttributesMapDeserializer {
 /// Serialize `SubscriptionAttributesMap` contents to a `SignedRequest`.
 struct SubscriptionAttributesMapSerializer;
 impl SubscriptionAttributesMapSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(
         params: &mut Params,
         name: &str,
@@ -2014,11 +2092,13 @@ impl SubscriptionAttributesMapSerializer {
 #[allow(dead_code)]
 struct SubscriptionsListDeserializer;
 impl SubscriptionsListDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<Subscription>, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
+
         deserialize_elements::<_, Vec<_>, _>(tag_name, stack, |name, stack, obj| {
             if name == "member" {
                 obj.push(SubscriptionDeserializer::deserialize("member", stack)?);
@@ -2043,8 +2123,9 @@ pub struct Tag {
 #[allow(dead_code)]
 struct TagDeserializer;
 impl TagDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<Tag, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, Tag, _>(tag_name, stack, |name, stack, obj| {
             match name {
                 "Key" => {
@@ -2063,10 +2144,11 @@ impl TagDeserializer {
 /// Serialize `Tag` contents to a `SignedRequest`.
 struct TagSerializer;
 impl TagSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &Tag) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         params.put(&format!("{}{}", prefix, "Key"), &obj.key);
@@ -2077,8 +2159,9 @@ impl TagSerializer {
 #[allow(dead_code)]
 struct TagKeyDeserializer;
 impl TagKeyDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
@@ -2086,6 +2169,7 @@ impl TagKeyDeserializer {
 /// Serialize `TagKeyList` contents to a `SignedRequest`.
 struct TagKeyListSerializer;
 impl TagKeyListSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &Vec<String>) {
         for (index, obj) in obj.iter().enumerate() {
             let key = format!("{}.member.{}", name, index + 1);
@@ -2097,11 +2181,13 @@ impl TagKeyListSerializer {
 #[allow(dead_code)]
 struct TagListDeserializer;
 impl TagListDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<Tag>, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
+
         deserialize_elements::<_, Vec<_>, _>(tag_name, stack, |name, stack, obj| {
             if name == "member" {
                 obj.push(TagDeserializer::deserialize("member", stack)?);
@@ -2116,6 +2202,7 @@ impl TagListDeserializer {
 /// Serialize `TagList` contents to a `SignedRequest`.
 struct TagListSerializer;
 impl TagListSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &Vec<Tag>) {
         for (index, obj) in obj.iter().enumerate() {
             let key = format!("{}.member.{}", name, index + 1);
@@ -2136,10 +2223,11 @@ pub struct TagResourceRequest {
 /// Serialize `TagResourceRequest` contents to a `SignedRequest`.
 struct TagResourceRequestSerializer;
 impl TagResourceRequestSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &TagResourceRequest) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         params.put(&format!("{}{}", prefix, "ResourceArn"), &obj.resource_arn);
@@ -2154,11 +2242,12 @@ pub struct TagResourceResponse {}
 #[allow(dead_code)]
 struct TagResourceResponseDeserializer;
 impl TagResourceResponseDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<TagResourceResponse, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::start_element(tag_name, stack)?;
 
         let obj = TagResourceResponse::default();
@@ -2171,8 +2260,9 @@ impl TagResourceResponseDeserializer {
 #[allow(dead_code)]
 struct TagValueDeserializer;
 impl TagValueDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
@@ -2187,8 +2277,9 @@ pub struct Topic {
 #[allow(dead_code)]
 struct TopicDeserializer;
 impl TopicDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<Topic, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, Topic, _>(tag_name, stack, |name, stack, obj| {
             match name {
                 "TopicArn" => {
@@ -2203,19 +2294,21 @@ impl TopicDeserializer {
 #[allow(dead_code)]
 struct TopicARNDeserializer;
 impl TopicARNDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 #[allow(dead_code)]
 struct TopicAttributesMapDeserializer;
 impl TopicAttributesMapDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<::std::collections::HashMap<String, String>, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::start_element(tag_name, stack)?;
 
         let mut obj = ::std::collections::HashMap::new();
@@ -2236,6 +2329,7 @@ impl TopicAttributesMapDeserializer {
 /// Serialize `TopicAttributesMap` contents to a `SignedRequest`.
 struct TopicAttributesMapSerializer;
 impl TopicAttributesMapSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(
         params: &mut Params,
         name: &str,
@@ -2252,11 +2346,13 @@ impl TopicAttributesMapSerializer {
 #[allow(dead_code)]
 struct TopicsListDeserializer;
 impl TopicsListDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<Topic>, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
+
         deserialize_elements::<_, Vec<_>, _>(tag_name, stack, |name, stack, obj| {
             if name == "member" {
                 obj.push(TopicDeserializer::deserialize("member", stack)?);
@@ -2278,10 +2374,11 @@ pub struct UnsubscribeInput {
 /// Serialize `UnsubscribeInput` contents to a `SignedRequest`.
 struct UnsubscribeInputSerializer;
 impl UnsubscribeInputSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &UnsubscribeInput) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         params.put(
@@ -2303,10 +2400,11 @@ pub struct UntagResourceRequest {
 /// Serialize `UntagResourceRequest` contents to a `SignedRequest`.
 struct UntagResourceRequestSerializer;
 impl UntagResourceRequestSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &UntagResourceRequest) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         params.put(&format!("{}{}", prefix, "ResourceArn"), &obj.resource_arn);
@@ -2321,11 +2419,12 @@ pub struct UntagResourceResponse {}
 #[allow(dead_code)]
 struct UntagResourceResponseDeserializer;
 impl UntagResourceResponseDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<UntagResourceResponse, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::start_element(tag_name, stack)?;
 
         let obj = UntagResourceResponse::default();
@@ -2354,29 +2453,32 @@ impl AddPermissionError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    "AuthorizationError" => {
-                        return RusotoError::Service(AddPermissionError::AuthorizationError(
-                            parsed_error.message,
-                        ))
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {
+                        "AuthorizationError" => {
+                            return RusotoError::Service(AddPermissionError::AuthorizationError(
+                                parsed_error.message,
+                            ))
+                        }
+                        "InternalError" => {
+                            return RusotoError::Service(AddPermissionError::InternalError(
+                                parsed_error.message,
+                            ))
+                        }
+                        "InvalidParameter" => {
+                            return RusotoError::Service(AddPermissionError::InvalidParameter(
+                                parsed_error.message,
+                            ))
+                        }
+                        "NotFound" => {
+                            return RusotoError::Service(AddPermissionError::NotFound(
+                                parsed_error.message,
+                            ))
+                        }
+                        _ => {}
                     }
-                    "InternalError" => {
-                        return RusotoError::Service(AddPermissionError::InternalError(
-                            parsed_error.message,
-                        ))
-                    }
-                    "InvalidParameter" => {
-                        return RusotoError::Service(AddPermissionError::InvalidParameter(
-                            parsed_error.message,
-                        ))
-                    }
-                    "NotFound" => {
-                        return RusotoError::Service(AddPermissionError::NotFound(
-                            parsed_error.message,
-                        ))
-                    }
-                    _ => {}
                 }
             }
         }
@@ -2424,33 +2526,38 @@ impl CheckIfPhoneNumberIsOptedOutError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    "AuthorizationError" => {
-                        return RusotoError::Service(
-                            CheckIfPhoneNumberIsOptedOutError::AuthorizationError(
-                                parsed_error.message,
-                            ),
-                        )
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {
+                        "AuthorizationError" => {
+                            return RusotoError::Service(
+                                CheckIfPhoneNumberIsOptedOutError::AuthorizationError(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "InternalError" => {
+                            return RusotoError::Service(
+                                CheckIfPhoneNumberIsOptedOutError::InternalError(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "InvalidParameter" => {
+                            return RusotoError::Service(
+                                CheckIfPhoneNumberIsOptedOutError::InvalidParameter(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "Throttled" => {
+                            return RusotoError::Service(
+                                CheckIfPhoneNumberIsOptedOutError::Throttled(parsed_error.message),
+                            )
+                        }
+                        _ => {}
                     }
-                    "InternalError" => {
-                        return RusotoError::Service(
-                            CheckIfPhoneNumberIsOptedOutError::InternalError(parsed_error.message),
-                        )
-                    }
-                    "InvalidParameter" => {
-                        return RusotoError::Service(
-                            CheckIfPhoneNumberIsOptedOutError::InvalidParameter(
-                                parsed_error.message,
-                            ),
-                        )
-                    }
-                    "Throttled" => {
-                        return RusotoError::Service(CheckIfPhoneNumberIsOptedOutError::Throttled(
-                            parsed_error.message,
-                        ))
-                    }
-                    _ => {}
                 }
             }
         }
@@ -2504,43 +2611,46 @@ impl ConfirmSubscriptionError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    "AuthorizationError" => {
-                        return RusotoError::Service(ConfirmSubscriptionError::AuthorizationError(
-                            parsed_error.message,
-                        ))
-                    }
-                    "FilterPolicyLimitExceeded" => {
-                        return RusotoError::Service(
-                            ConfirmSubscriptionError::FilterPolicyLimitExceeded(
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {
+                        "AuthorizationError" => {
+                            return RusotoError::Service(
+                                ConfirmSubscriptionError::AuthorizationError(parsed_error.message),
+                            )
+                        }
+                        "FilterPolicyLimitExceeded" => {
+                            return RusotoError::Service(
+                                ConfirmSubscriptionError::FilterPolicyLimitExceeded(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "InternalError" => {
+                            return RusotoError::Service(ConfirmSubscriptionError::InternalError(
                                 parsed_error.message,
-                            ),
-                        )
-                    }
-                    "InternalError" => {
-                        return RusotoError::Service(ConfirmSubscriptionError::InternalError(
-                            parsed_error.message,
-                        ))
-                    }
-                    "InvalidParameter" => {
-                        return RusotoError::Service(ConfirmSubscriptionError::InvalidParameter(
-                            parsed_error.message,
-                        ))
-                    }
-                    "NotFound" => {
-                        return RusotoError::Service(ConfirmSubscriptionError::NotFound(
-                            parsed_error.message,
-                        ))
-                    }
-                    "SubscriptionLimitExceeded" => {
-                        return RusotoError::Service(
-                            ConfirmSubscriptionError::SubscriptionLimitExceeded(
+                            ))
+                        }
+                        "InvalidParameter" => {
+                            return RusotoError::Service(
+                                ConfirmSubscriptionError::InvalidParameter(parsed_error.message),
+                            )
+                        }
+                        "NotFound" => {
+                            return RusotoError::Service(ConfirmSubscriptionError::NotFound(
                                 parsed_error.message,
-                            ),
-                        )
+                            ))
+                        }
+                        "SubscriptionLimitExceeded" => {
+                            return RusotoError::Service(
+                                ConfirmSubscriptionError::SubscriptionLimitExceeded(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        _ => {}
                     }
-                    _ => {}
                 }
             }
         }
@@ -2590,26 +2700,31 @@ impl CreatePlatformApplicationError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    "AuthorizationError" => {
-                        return RusotoError::Service(
-                            CreatePlatformApplicationError::AuthorizationError(
-                                parsed_error.message,
-                            ),
-                        )
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {
+                        "AuthorizationError" => {
+                            return RusotoError::Service(
+                                CreatePlatformApplicationError::AuthorizationError(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "InternalError" => {
+                            return RusotoError::Service(
+                                CreatePlatformApplicationError::InternalError(parsed_error.message),
+                            )
+                        }
+                        "InvalidParameter" => {
+                            return RusotoError::Service(
+                                CreatePlatformApplicationError::InvalidParameter(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        _ => {}
                     }
-                    "InternalError" => {
-                        return RusotoError::Service(CreatePlatformApplicationError::InternalError(
-                            parsed_error.message,
-                        ))
-                    }
-                    "InvalidParameter" => {
-                        return RusotoError::Service(
-                            CreatePlatformApplicationError::InvalidParameter(parsed_error.message),
-                        )
-                    }
-                    _ => {}
                 }
             }
         }
@@ -2654,29 +2769,34 @@ impl CreatePlatformEndpointError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    "AuthorizationError" => {
-                        return RusotoError::Service(
-                            CreatePlatformEndpointError::AuthorizationError(parsed_error.message),
-                        )
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {
+                        "AuthorizationError" => {
+                            return RusotoError::Service(
+                                CreatePlatformEndpointError::AuthorizationError(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "InternalError" => {
+                            return RusotoError::Service(
+                                CreatePlatformEndpointError::InternalError(parsed_error.message),
+                            )
+                        }
+                        "InvalidParameter" => {
+                            return RusotoError::Service(
+                                CreatePlatformEndpointError::InvalidParameter(parsed_error.message),
+                            )
+                        }
+                        "NotFound" => {
+                            return RusotoError::Service(CreatePlatformEndpointError::NotFound(
+                                parsed_error.message,
+                            ))
+                        }
+                        _ => {}
                     }
-                    "InternalError" => {
-                        return RusotoError::Service(CreatePlatformEndpointError::InternalError(
-                            parsed_error.message,
-                        ))
-                    }
-                    "InvalidParameter" => {
-                        return RusotoError::Service(CreatePlatformEndpointError::InvalidParameter(
-                            parsed_error.message,
-                        ))
-                    }
-                    "NotFound" => {
-                        return RusotoError::Service(CreatePlatformEndpointError::NotFound(
-                            parsed_error.message,
-                        ))
-                    }
-                    _ => {}
                 }
             }
         }
@@ -2732,54 +2852,57 @@ impl CreateTopicError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    "AuthorizationError" => {
-                        return RusotoError::Service(CreateTopicError::AuthorizationError(
-                            parsed_error.message,
-                        ))
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {
+                        "AuthorizationError" => {
+                            return RusotoError::Service(CreateTopicError::AuthorizationError(
+                                parsed_error.message,
+                            ))
+                        }
+                        "ConcurrentAccess" => {
+                            return RusotoError::Service(CreateTopicError::ConcurrentAccess(
+                                parsed_error.message,
+                            ))
+                        }
+                        "InternalError" => {
+                            return RusotoError::Service(CreateTopicError::InternalError(
+                                parsed_error.message,
+                            ))
+                        }
+                        "InvalidParameter" => {
+                            return RusotoError::Service(CreateTopicError::InvalidParameter(
+                                parsed_error.message,
+                            ))
+                        }
+                        "InvalidSecurity" => {
+                            return RusotoError::Service(CreateTopicError::InvalidSecurity(
+                                parsed_error.message,
+                            ))
+                        }
+                        "StaleTag" => {
+                            return RusotoError::Service(CreateTopicError::StaleTag(
+                                parsed_error.message,
+                            ))
+                        }
+                        "TagLimitExceeded" => {
+                            return RusotoError::Service(CreateTopicError::TagLimitExceeded(
+                                parsed_error.message,
+                            ))
+                        }
+                        "TagPolicy" => {
+                            return RusotoError::Service(CreateTopicError::TagPolicy(
+                                parsed_error.message,
+                            ))
+                        }
+                        "TopicLimitExceeded" => {
+                            return RusotoError::Service(CreateTopicError::TopicLimitExceeded(
+                                parsed_error.message,
+                            ))
+                        }
+                        _ => {}
                     }
-                    "ConcurrentAccess" => {
-                        return RusotoError::Service(CreateTopicError::ConcurrentAccess(
-                            parsed_error.message,
-                        ))
-                    }
-                    "InternalError" => {
-                        return RusotoError::Service(CreateTopicError::InternalError(
-                            parsed_error.message,
-                        ))
-                    }
-                    "InvalidParameter" => {
-                        return RusotoError::Service(CreateTopicError::InvalidParameter(
-                            parsed_error.message,
-                        ))
-                    }
-                    "InvalidSecurity" => {
-                        return RusotoError::Service(CreateTopicError::InvalidSecurity(
-                            parsed_error.message,
-                        ))
-                    }
-                    "StaleTag" => {
-                        return RusotoError::Service(CreateTopicError::StaleTag(
-                            parsed_error.message,
-                        ))
-                    }
-                    "TagLimitExceeded" => {
-                        return RusotoError::Service(CreateTopicError::TagLimitExceeded(
-                            parsed_error.message,
-                        ))
-                    }
-                    "TagPolicy" => {
-                        return RusotoError::Service(CreateTopicError::TagPolicy(
-                            parsed_error.message,
-                        ))
-                    }
-                    "TopicLimitExceeded" => {
-                        return RusotoError::Service(CreateTopicError::TopicLimitExceeded(
-                            parsed_error.message,
-                        ))
-                    }
-                    _ => {}
                 }
             }
         }
@@ -2828,24 +2951,27 @@ impl DeleteEndpointError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    "AuthorizationError" => {
-                        return RusotoError::Service(DeleteEndpointError::AuthorizationError(
-                            parsed_error.message,
-                        ))
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {
+                        "AuthorizationError" => {
+                            return RusotoError::Service(DeleteEndpointError::AuthorizationError(
+                                parsed_error.message,
+                            ))
+                        }
+                        "InternalError" => {
+                            return RusotoError::Service(DeleteEndpointError::InternalError(
+                                parsed_error.message,
+                            ))
+                        }
+                        "InvalidParameter" => {
+                            return RusotoError::Service(DeleteEndpointError::InvalidParameter(
+                                parsed_error.message,
+                            ))
+                        }
+                        _ => {}
                     }
-                    "InternalError" => {
-                        return RusotoError::Service(DeleteEndpointError::InternalError(
-                            parsed_error.message,
-                        ))
-                    }
-                    "InvalidParameter" => {
-                        return RusotoError::Service(DeleteEndpointError::InvalidParameter(
-                            parsed_error.message,
-                        ))
-                    }
-                    _ => {}
                 }
             }
         }
@@ -2888,26 +3014,31 @@ impl DeletePlatformApplicationError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    "AuthorizationError" => {
-                        return RusotoError::Service(
-                            DeletePlatformApplicationError::AuthorizationError(
-                                parsed_error.message,
-                            ),
-                        )
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {
+                        "AuthorizationError" => {
+                            return RusotoError::Service(
+                                DeletePlatformApplicationError::AuthorizationError(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "InternalError" => {
+                            return RusotoError::Service(
+                                DeletePlatformApplicationError::InternalError(parsed_error.message),
+                            )
+                        }
+                        "InvalidParameter" => {
+                            return RusotoError::Service(
+                                DeletePlatformApplicationError::InvalidParameter(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        _ => {}
                     }
-                    "InternalError" => {
-                        return RusotoError::Service(DeletePlatformApplicationError::InternalError(
-                            parsed_error.message,
-                        ))
-                    }
-                    "InvalidParameter" => {
-                        return RusotoError::Service(
-                            DeletePlatformApplicationError::InvalidParameter(parsed_error.message),
-                        )
-                    }
-                    _ => {}
                 }
             }
         }
@@ -2958,44 +3089,47 @@ impl DeleteTopicError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    "AuthorizationError" => {
-                        return RusotoError::Service(DeleteTopicError::AuthorizationError(
-                            parsed_error.message,
-                        ))
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {
+                        "AuthorizationError" => {
+                            return RusotoError::Service(DeleteTopicError::AuthorizationError(
+                                parsed_error.message,
+                            ))
+                        }
+                        "ConcurrentAccess" => {
+                            return RusotoError::Service(DeleteTopicError::ConcurrentAccess(
+                                parsed_error.message,
+                            ))
+                        }
+                        "InternalError" => {
+                            return RusotoError::Service(DeleteTopicError::InternalError(
+                                parsed_error.message,
+                            ))
+                        }
+                        "InvalidParameter" => {
+                            return RusotoError::Service(DeleteTopicError::InvalidParameter(
+                                parsed_error.message,
+                            ))
+                        }
+                        "NotFound" => {
+                            return RusotoError::Service(DeleteTopicError::NotFound(
+                                parsed_error.message,
+                            ))
+                        }
+                        "StaleTag" => {
+                            return RusotoError::Service(DeleteTopicError::StaleTag(
+                                parsed_error.message,
+                            ))
+                        }
+                        "TagPolicy" => {
+                            return RusotoError::Service(DeleteTopicError::TagPolicy(
+                                parsed_error.message,
+                            ))
+                        }
+                        _ => {}
                     }
-                    "ConcurrentAccess" => {
-                        return RusotoError::Service(DeleteTopicError::ConcurrentAccess(
-                            parsed_error.message,
-                        ))
-                    }
-                    "InternalError" => {
-                        return RusotoError::Service(DeleteTopicError::InternalError(
-                            parsed_error.message,
-                        ))
-                    }
-                    "InvalidParameter" => {
-                        return RusotoError::Service(DeleteTopicError::InvalidParameter(
-                            parsed_error.message,
-                        ))
-                    }
-                    "NotFound" => {
-                        return RusotoError::Service(DeleteTopicError::NotFound(
-                            parsed_error.message,
-                        ))
-                    }
-                    "StaleTag" => {
-                        return RusotoError::Service(DeleteTopicError::StaleTag(
-                            parsed_error.message,
-                        ))
-                    }
-                    "TagPolicy" => {
-                        return RusotoError::Service(DeleteTopicError::TagPolicy(
-                            parsed_error.message,
-                        ))
-                    }
-                    _ => {}
                 }
             }
         }
@@ -3044,29 +3178,34 @@ impl GetEndpointAttributesError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    "AuthorizationError" => {
-                        return RusotoError::Service(
-                            GetEndpointAttributesError::AuthorizationError(parsed_error.message),
-                        )
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {
+                        "AuthorizationError" => {
+                            return RusotoError::Service(
+                                GetEndpointAttributesError::AuthorizationError(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "InternalError" => {
+                            return RusotoError::Service(GetEndpointAttributesError::InternalError(
+                                parsed_error.message,
+                            ))
+                        }
+                        "InvalidParameter" => {
+                            return RusotoError::Service(
+                                GetEndpointAttributesError::InvalidParameter(parsed_error.message),
+                            )
+                        }
+                        "NotFound" => {
+                            return RusotoError::Service(GetEndpointAttributesError::NotFound(
+                                parsed_error.message,
+                            ))
+                        }
+                        _ => {}
                     }
-                    "InternalError" => {
-                        return RusotoError::Service(GetEndpointAttributesError::InternalError(
-                            parsed_error.message,
-                        ))
-                    }
-                    "InvalidParameter" => {
-                        return RusotoError::Service(GetEndpointAttributesError::InvalidParameter(
-                            parsed_error.message,
-                        ))
-                    }
-                    "NotFound" => {
-                        return RusotoError::Service(GetEndpointAttributesError::NotFound(
-                            parsed_error.message,
-                        ))
-                    }
-                    _ => {}
                 }
             }
         }
@@ -3114,35 +3253,40 @@ impl GetPlatformApplicationAttributesError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    "AuthorizationError" => {
-                        return RusotoError::Service(
-                            GetPlatformApplicationAttributesError::AuthorizationError(
-                                parsed_error.message,
-                            ),
-                        )
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {
+                        "AuthorizationError" => {
+                            return RusotoError::Service(
+                                GetPlatformApplicationAttributesError::AuthorizationError(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "InternalError" => {
+                            return RusotoError::Service(
+                                GetPlatformApplicationAttributesError::InternalError(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "InvalidParameter" => {
+                            return RusotoError::Service(
+                                GetPlatformApplicationAttributesError::InvalidParameter(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "NotFound" => {
+                            return RusotoError::Service(
+                                GetPlatformApplicationAttributesError::NotFound(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        _ => {}
                     }
-                    "InternalError" => {
-                        return RusotoError::Service(
-                            GetPlatformApplicationAttributesError::InternalError(
-                                parsed_error.message,
-                            ),
-                        )
-                    }
-                    "InvalidParameter" => {
-                        return RusotoError::Service(
-                            GetPlatformApplicationAttributesError::InvalidParameter(
-                                parsed_error.message,
-                            ),
-                        )
-                    }
-                    "NotFound" => {
-                        return RusotoError::Service(
-                            GetPlatformApplicationAttributesError::NotFound(parsed_error.message),
-                        )
-                    }
-                    _ => {}
                 }
             }
         }
@@ -3194,29 +3338,32 @@ impl GetSMSAttributesError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    "AuthorizationError" => {
-                        return RusotoError::Service(GetSMSAttributesError::AuthorizationError(
-                            parsed_error.message,
-                        ))
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {
+                        "AuthorizationError" => {
+                            return RusotoError::Service(GetSMSAttributesError::AuthorizationError(
+                                parsed_error.message,
+                            ))
+                        }
+                        "InternalError" => {
+                            return RusotoError::Service(GetSMSAttributesError::InternalError(
+                                parsed_error.message,
+                            ))
+                        }
+                        "InvalidParameter" => {
+                            return RusotoError::Service(GetSMSAttributesError::InvalidParameter(
+                                parsed_error.message,
+                            ))
+                        }
+                        "Throttled" => {
+                            return RusotoError::Service(GetSMSAttributesError::Throttled(
+                                parsed_error.message,
+                            ))
+                        }
+                        _ => {}
                     }
-                    "InternalError" => {
-                        return RusotoError::Service(GetSMSAttributesError::InternalError(
-                            parsed_error.message,
-                        ))
-                    }
-                    "InvalidParameter" => {
-                        return RusotoError::Service(GetSMSAttributesError::InvalidParameter(
-                            parsed_error.message,
-                        ))
-                    }
-                    "Throttled" => {
-                        return RusotoError::Service(GetSMSAttributesError::Throttled(
-                            parsed_error.message,
-                        ))
-                    }
-                    _ => {}
                 }
             }
         }
@@ -3262,31 +3409,36 @@ impl GetSubscriptionAttributesError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    "AuthorizationError" => {
-                        return RusotoError::Service(
-                            GetSubscriptionAttributesError::AuthorizationError(
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {
+                        "AuthorizationError" => {
+                            return RusotoError::Service(
+                                GetSubscriptionAttributesError::AuthorizationError(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "InternalError" => {
+                            return RusotoError::Service(
+                                GetSubscriptionAttributesError::InternalError(parsed_error.message),
+                            )
+                        }
+                        "InvalidParameter" => {
+                            return RusotoError::Service(
+                                GetSubscriptionAttributesError::InvalidParameter(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "NotFound" => {
+                            return RusotoError::Service(GetSubscriptionAttributesError::NotFound(
                                 parsed_error.message,
-                            ),
-                        )
+                            ))
+                        }
+                        _ => {}
                     }
-                    "InternalError" => {
-                        return RusotoError::Service(GetSubscriptionAttributesError::InternalError(
-                            parsed_error.message,
-                        ))
-                    }
-                    "InvalidParameter" => {
-                        return RusotoError::Service(
-                            GetSubscriptionAttributesError::InvalidParameter(parsed_error.message),
-                        )
-                    }
-                    "NotFound" => {
-                        return RusotoError::Service(GetSubscriptionAttributesError::NotFound(
-                            parsed_error.message,
-                        ))
-                    }
-                    _ => {}
                 }
             }
         }
@@ -3334,34 +3486,37 @@ impl GetTopicAttributesError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    "AuthorizationError" => {
-                        return RusotoError::Service(GetTopicAttributesError::AuthorizationError(
-                            parsed_error.message,
-                        ))
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {
+                        "AuthorizationError" => {
+                            return RusotoError::Service(
+                                GetTopicAttributesError::AuthorizationError(parsed_error.message),
+                            )
+                        }
+                        "InternalError" => {
+                            return RusotoError::Service(GetTopicAttributesError::InternalError(
+                                parsed_error.message,
+                            ))
+                        }
+                        "InvalidParameter" => {
+                            return RusotoError::Service(GetTopicAttributesError::InvalidParameter(
+                                parsed_error.message,
+                            ))
+                        }
+                        "InvalidSecurity" => {
+                            return RusotoError::Service(GetTopicAttributesError::InvalidSecurity(
+                                parsed_error.message,
+                            ))
+                        }
+                        "NotFound" => {
+                            return RusotoError::Service(GetTopicAttributesError::NotFound(
+                                parsed_error.message,
+                            ))
+                        }
+                        _ => {}
                     }
-                    "InternalError" => {
-                        return RusotoError::Service(GetTopicAttributesError::InternalError(
-                            parsed_error.message,
-                        ))
-                    }
-                    "InvalidParameter" => {
-                        return RusotoError::Service(GetTopicAttributesError::InvalidParameter(
-                            parsed_error.message,
-                        ))
-                    }
-                    "InvalidSecurity" => {
-                        return RusotoError::Service(GetTopicAttributesError::InvalidSecurity(
-                            parsed_error.message,
-                        ))
-                    }
-                    "NotFound" => {
-                        return RusotoError::Service(GetTopicAttributesError::NotFound(
-                            parsed_error.message,
-                        ))
-                    }
-                    _ => {}
                 }
             }
         }
@@ -3410,35 +3565,40 @@ impl ListEndpointsByPlatformApplicationError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    "AuthorizationError" => {
-                        return RusotoError::Service(
-                            ListEndpointsByPlatformApplicationError::AuthorizationError(
-                                parsed_error.message,
-                            ),
-                        )
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {
+                        "AuthorizationError" => {
+                            return RusotoError::Service(
+                                ListEndpointsByPlatformApplicationError::AuthorizationError(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "InternalError" => {
+                            return RusotoError::Service(
+                                ListEndpointsByPlatformApplicationError::InternalError(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "InvalidParameter" => {
+                            return RusotoError::Service(
+                                ListEndpointsByPlatformApplicationError::InvalidParameter(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "NotFound" => {
+                            return RusotoError::Service(
+                                ListEndpointsByPlatformApplicationError::NotFound(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        _ => {}
                     }
-                    "InternalError" => {
-                        return RusotoError::Service(
-                            ListEndpointsByPlatformApplicationError::InternalError(
-                                parsed_error.message,
-                            ),
-                        )
-                    }
-                    "InvalidParameter" => {
-                        return RusotoError::Service(
-                            ListEndpointsByPlatformApplicationError::InvalidParameter(
-                                parsed_error.message,
-                            ),
-                        )
-                    }
-                    "NotFound" => {
-                        return RusotoError::Service(
-                            ListEndpointsByPlatformApplicationError::NotFound(parsed_error.message),
-                        )
-                    }
-                    _ => {}
                 }
             }
         }
@@ -3490,29 +3650,36 @@ impl ListPhoneNumbersOptedOutError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    "AuthorizationError" => {
-                        return RusotoError::Service(
-                            ListPhoneNumbersOptedOutError::AuthorizationError(parsed_error.message),
-                        )
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {
+                        "AuthorizationError" => {
+                            return RusotoError::Service(
+                                ListPhoneNumbersOptedOutError::AuthorizationError(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "InternalError" => {
+                            return RusotoError::Service(
+                                ListPhoneNumbersOptedOutError::InternalError(parsed_error.message),
+                            )
+                        }
+                        "InvalidParameter" => {
+                            return RusotoError::Service(
+                                ListPhoneNumbersOptedOutError::InvalidParameter(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "Throttled" => {
+                            return RusotoError::Service(ListPhoneNumbersOptedOutError::Throttled(
+                                parsed_error.message,
+                            ))
+                        }
+                        _ => {}
                     }
-                    "InternalError" => {
-                        return RusotoError::Service(ListPhoneNumbersOptedOutError::InternalError(
-                            parsed_error.message,
-                        ))
-                    }
-                    "InvalidParameter" => {
-                        return RusotoError::Service(
-                            ListPhoneNumbersOptedOutError::InvalidParameter(parsed_error.message),
-                        )
-                    }
-                    "Throttled" => {
-                        return RusotoError::Service(ListPhoneNumbersOptedOutError::Throttled(
-                            parsed_error.message,
-                        ))
-                    }
-                    _ => {}
                 }
             }
         }
@@ -3556,24 +3723,31 @@ impl ListPlatformApplicationsError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    "AuthorizationError" => {
-                        return RusotoError::Service(
-                            ListPlatformApplicationsError::AuthorizationError(parsed_error.message),
-                        )
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {
+                        "AuthorizationError" => {
+                            return RusotoError::Service(
+                                ListPlatformApplicationsError::AuthorizationError(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "InternalError" => {
+                            return RusotoError::Service(
+                                ListPlatformApplicationsError::InternalError(parsed_error.message),
+                            )
+                        }
+                        "InvalidParameter" => {
+                            return RusotoError::Service(
+                                ListPlatformApplicationsError::InvalidParameter(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        _ => {}
                     }
-                    "InternalError" => {
-                        return RusotoError::Service(ListPlatformApplicationsError::InternalError(
-                            parsed_error.message,
-                        ))
-                    }
-                    "InvalidParameter" => {
-                        return RusotoError::Service(
-                            ListPlatformApplicationsError::InvalidParameter(parsed_error.message),
-                        )
-                    }
-                    _ => {}
                 }
             }
         }
@@ -3616,24 +3790,27 @@ impl ListSubscriptionsError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    "AuthorizationError" => {
-                        return RusotoError::Service(ListSubscriptionsError::AuthorizationError(
-                            parsed_error.message,
-                        ))
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {
+                        "AuthorizationError" => {
+                            return RusotoError::Service(
+                                ListSubscriptionsError::AuthorizationError(parsed_error.message),
+                            )
+                        }
+                        "InternalError" => {
+                            return RusotoError::Service(ListSubscriptionsError::InternalError(
+                                parsed_error.message,
+                            ))
+                        }
+                        "InvalidParameter" => {
+                            return RusotoError::Service(ListSubscriptionsError::InvalidParameter(
+                                parsed_error.message,
+                            ))
+                        }
+                        _ => {}
                     }
-                    "InternalError" => {
-                        return RusotoError::Service(ListSubscriptionsError::InternalError(
-                            parsed_error.message,
-                        ))
-                    }
-                    "InvalidParameter" => {
-                        return RusotoError::Service(ListSubscriptionsError::InvalidParameter(
-                            parsed_error.message,
-                        ))
-                    }
-                    _ => {}
                 }
             }
         }
@@ -3678,29 +3855,36 @@ impl ListSubscriptionsByTopicError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    "AuthorizationError" => {
-                        return RusotoError::Service(
-                            ListSubscriptionsByTopicError::AuthorizationError(parsed_error.message),
-                        )
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {
+                        "AuthorizationError" => {
+                            return RusotoError::Service(
+                                ListSubscriptionsByTopicError::AuthorizationError(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "InternalError" => {
+                            return RusotoError::Service(
+                                ListSubscriptionsByTopicError::InternalError(parsed_error.message),
+                            )
+                        }
+                        "InvalidParameter" => {
+                            return RusotoError::Service(
+                                ListSubscriptionsByTopicError::InvalidParameter(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "NotFound" => {
+                            return RusotoError::Service(ListSubscriptionsByTopicError::NotFound(
+                                parsed_error.message,
+                            ))
+                        }
+                        _ => {}
                     }
-                    "InternalError" => {
-                        return RusotoError::Service(ListSubscriptionsByTopicError::InternalError(
-                            parsed_error.message,
-                        ))
-                    }
-                    "InvalidParameter" => {
-                        return RusotoError::Service(
-                            ListSubscriptionsByTopicError::InvalidParameter(parsed_error.message),
-                        )
-                    }
-                    "NotFound" => {
-                        return RusotoError::Service(ListSubscriptionsByTopicError::NotFound(
-                            parsed_error.message,
-                        ))
-                    }
-                    _ => {}
                 }
             }
         }
@@ -3748,34 +3932,37 @@ impl ListTagsForResourceError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    "AuthorizationError" => {
-                        return RusotoError::Service(ListTagsForResourceError::AuthorizationError(
-                            parsed_error.message,
-                        ))
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {
+                        "AuthorizationError" => {
+                            return RusotoError::Service(
+                                ListTagsForResourceError::AuthorizationError(parsed_error.message),
+                            )
+                        }
+                        "ConcurrentAccess" => {
+                            return RusotoError::Service(
+                                ListTagsForResourceError::ConcurrentAccess(parsed_error.message),
+                            )
+                        }
+                        "InvalidParameter" => {
+                            return RusotoError::Service(
+                                ListTagsForResourceError::InvalidParameter(parsed_error.message),
+                            )
+                        }
+                        "ResourceNotFound" => {
+                            return RusotoError::Service(
+                                ListTagsForResourceError::ResourceNotFound(parsed_error.message),
+                            )
+                        }
+                        "TagPolicy" => {
+                            return RusotoError::Service(ListTagsForResourceError::TagPolicy(
+                                parsed_error.message,
+                            ))
+                        }
+                        _ => {}
                     }
-                    "ConcurrentAccess" => {
-                        return RusotoError::Service(ListTagsForResourceError::ConcurrentAccess(
-                            parsed_error.message,
-                        ))
-                    }
-                    "InvalidParameter" => {
-                        return RusotoError::Service(ListTagsForResourceError::InvalidParameter(
-                            parsed_error.message,
-                        ))
-                    }
-                    "ResourceNotFound" => {
-                        return RusotoError::Service(ListTagsForResourceError::ResourceNotFound(
-                            parsed_error.message,
-                        ))
-                    }
-                    "TagPolicy" => {
-                        return RusotoError::Service(ListTagsForResourceError::TagPolicy(
-                            parsed_error.message,
-                        ))
-                    }
-                    _ => {}
                 }
             }
         }
@@ -3820,24 +4007,27 @@ impl ListTopicsError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    "AuthorizationError" => {
-                        return RusotoError::Service(ListTopicsError::AuthorizationError(
-                            parsed_error.message,
-                        ))
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {
+                        "AuthorizationError" => {
+                            return RusotoError::Service(ListTopicsError::AuthorizationError(
+                                parsed_error.message,
+                            ))
+                        }
+                        "InternalError" => {
+                            return RusotoError::Service(ListTopicsError::InternalError(
+                                parsed_error.message,
+                            ))
+                        }
+                        "InvalidParameter" => {
+                            return RusotoError::Service(ListTopicsError::InvalidParameter(
+                                parsed_error.message,
+                            ))
+                        }
+                        _ => {}
                     }
-                    "InternalError" => {
-                        return RusotoError::Service(ListTopicsError::InternalError(
-                            parsed_error.message,
-                        ))
-                    }
-                    "InvalidParameter" => {
-                        return RusotoError::Service(ListTopicsError::InvalidParameter(
-                            parsed_error.message,
-                        ))
-                    }
-                    _ => {}
                 }
             }
         }
@@ -3882,29 +4072,32 @@ impl OptInPhoneNumberError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    "AuthorizationError" => {
-                        return RusotoError::Service(OptInPhoneNumberError::AuthorizationError(
-                            parsed_error.message,
-                        ))
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {
+                        "AuthorizationError" => {
+                            return RusotoError::Service(OptInPhoneNumberError::AuthorizationError(
+                                parsed_error.message,
+                            ))
+                        }
+                        "InternalError" => {
+                            return RusotoError::Service(OptInPhoneNumberError::InternalError(
+                                parsed_error.message,
+                            ))
+                        }
+                        "InvalidParameter" => {
+                            return RusotoError::Service(OptInPhoneNumberError::InvalidParameter(
+                                parsed_error.message,
+                            ))
+                        }
+                        "Throttled" => {
+                            return RusotoError::Service(OptInPhoneNumberError::Throttled(
+                                parsed_error.message,
+                            ))
+                        }
+                        _ => {}
                     }
-                    "InternalError" => {
-                        return RusotoError::Service(OptInPhoneNumberError::InternalError(
-                            parsed_error.message,
-                        ))
-                    }
-                    "InvalidParameter" => {
-                        return RusotoError::Service(OptInPhoneNumberError::InvalidParameter(
-                            parsed_error.message,
-                        ))
-                    }
-                    "Throttled" => {
-                        return RusotoError::Service(OptInPhoneNumberError::Throttled(
-                            parsed_error.message,
-                        ))
-                    }
-                    _ => {}
                 }
             }
         }
@@ -3970,77 +4163,82 @@ impl PublishError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    "AuthorizationError" => {
-                        return RusotoError::Service(PublishError::AuthorizationError(
-                            parsed_error.message,
-                        ))
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {
+                        "AuthorizationError" => {
+                            return RusotoError::Service(PublishError::AuthorizationError(
+                                parsed_error.message,
+                            ))
+                        }
+                        "EndpointDisabled" => {
+                            return RusotoError::Service(PublishError::EndpointDisabled(
+                                parsed_error.message,
+                            ))
+                        }
+                        "InternalError" => {
+                            return RusotoError::Service(PublishError::InternalError(
+                                parsed_error.message,
+                            ))
+                        }
+                        "InvalidParameter" => {
+                            return RusotoError::Service(PublishError::InvalidParameter(
+                                parsed_error.message,
+                            ))
+                        }
+                        "ParameterValueInvalid" => {
+                            return RusotoError::Service(PublishError::InvalidParameterValue(
+                                parsed_error.message,
+                            ))
+                        }
+                        "InvalidSecurity" => {
+                            return RusotoError::Service(PublishError::InvalidSecurity(
+                                parsed_error.message,
+                            ))
+                        }
+                        "KMSAccessDenied" => {
+                            return RusotoError::Service(PublishError::KMSAccessDenied(
+                                parsed_error.message,
+                            ))
+                        }
+                        "KMSDisabled" => {
+                            return RusotoError::Service(PublishError::KMSDisabled(
+                                parsed_error.message,
+                            ))
+                        }
+                        "KMSInvalidState" => {
+                            return RusotoError::Service(PublishError::KMSInvalidState(
+                                parsed_error.message,
+                            ))
+                        }
+                        "KMSNotFound" => {
+                            return RusotoError::Service(PublishError::KMSNotFound(
+                                parsed_error.message,
+                            ))
+                        }
+                        "KMSOptInRequired" => {
+                            return RusotoError::Service(PublishError::KMSOptInRequired(
+                                parsed_error.message,
+                            ))
+                        }
+                        "KMSThrottling" => {
+                            return RusotoError::Service(PublishError::KMSThrottling(
+                                parsed_error.message,
+                            ))
+                        }
+                        "NotFound" => {
+                            return RusotoError::Service(PublishError::NotFound(
+                                parsed_error.message,
+                            ))
+                        }
+                        "PlatformApplicationDisabled" => {
+                            return RusotoError::Service(PublishError::PlatformApplicationDisabled(
+                                parsed_error.message,
+                            ))
+                        }
+                        _ => {}
                     }
-                    "EndpointDisabled" => {
-                        return RusotoError::Service(PublishError::EndpointDisabled(
-                            parsed_error.message,
-                        ))
-                    }
-                    "InternalError" => {
-                        return RusotoError::Service(PublishError::InternalError(
-                            parsed_error.message,
-                        ))
-                    }
-                    "InvalidParameter" => {
-                        return RusotoError::Service(PublishError::InvalidParameter(
-                            parsed_error.message,
-                        ))
-                    }
-                    "ParameterValueInvalid" => {
-                        return RusotoError::Service(PublishError::InvalidParameterValue(
-                            parsed_error.message,
-                        ))
-                    }
-                    "InvalidSecurity" => {
-                        return RusotoError::Service(PublishError::InvalidSecurity(
-                            parsed_error.message,
-                        ))
-                    }
-                    "KMSAccessDenied" => {
-                        return RusotoError::Service(PublishError::KMSAccessDenied(
-                            parsed_error.message,
-                        ))
-                    }
-                    "KMSDisabled" => {
-                        return RusotoError::Service(PublishError::KMSDisabled(
-                            parsed_error.message,
-                        ))
-                    }
-                    "KMSInvalidState" => {
-                        return RusotoError::Service(PublishError::KMSInvalidState(
-                            parsed_error.message,
-                        ))
-                    }
-                    "KMSNotFound" => {
-                        return RusotoError::Service(PublishError::KMSNotFound(
-                            parsed_error.message,
-                        ))
-                    }
-                    "KMSOptInRequired" => {
-                        return RusotoError::Service(PublishError::KMSOptInRequired(
-                            parsed_error.message,
-                        ))
-                    }
-                    "KMSThrottling" => {
-                        return RusotoError::Service(PublishError::KMSThrottling(
-                            parsed_error.message,
-                        ))
-                    }
-                    "NotFound" => {
-                        return RusotoError::Service(PublishError::NotFound(parsed_error.message))
-                    }
-                    "PlatformApplicationDisabled" => {
-                        return RusotoError::Service(PublishError::PlatformApplicationDisabled(
-                            parsed_error.message,
-                        ))
-                    }
-                    _ => {}
                 }
             }
         }
@@ -4096,29 +4294,32 @@ impl RemovePermissionError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    "AuthorizationError" => {
-                        return RusotoError::Service(RemovePermissionError::AuthorizationError(
-                            parsed_error.message,
-                        ))
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {
+                        "AuthorizationError" => {
+                            return RusotoError::Service(RemovePermissionError::AuthorizationError(
+                                parsed_error.message,
+                            ))
+                        }
+                        "InternalError" => {
+                            return RusotoError::Service(RemovePermissionError::InternalError(
+                                parsed_error.message,
+                            ))
+                        }
+                        "InvalidParameter" => {
+                            return RusotoError::Service(RemovePermissionError::InvalidParameter(
+                                parsed_error.message,
+                            ))
+                        }
+                        "NotFound" => {
+                            return RusotoError::Service(RemovePermissionError::NotFound(
+                                parsed_error.message,
+                            ))
+                        }
+                        _ => {}
                     }
-                    "InternalError" => {
-                        return RusotoError::Service(RemovePermissionError::InternalError(
-                            parsed_error.message,
-                        ))
-                    }
-                    "InvalidParameter" => {
-                        return RusotoError::Service(RemovePermissionError::InvalidParameter(
-                            parsed_error.message,
-                        ))
-                    }
-                    "NotFound" => {
-                        return RusotoError::Service(RemovePermissionError::NotFound(
-                            parsed_error.message,
-                        ))
-                    }
-                    _ => {}
                 }
             }
         }
@@ -4164,29 +4365,34 @@ impl SetEndpointAttributesError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    "AuthorizationError" => {
-                        return RusotoError::Service(
-                            SetEndpointAttributesError::AuthorizationError(parsed_error.message),
-                        )
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {
+                        "AuthorizationError" => {
+                            return RusotoError::Service(
+                                SetEndpointAttributesError::AuthorizationError(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "InternalError" => {
+                            return RusotoError::Service(SetEndpointAttributesError::InternalError(
+                                parsed_error.message,
+                            ))
+                        }
+                        "InvalidParameter" => {
+                            return RusotoError::Service(
+                                SetEndpointAttributesError::InvalidParameter(parsed_error.message),
+                            )
+                        }
+                        "NotFound" => {
+                            return RusotoError::Service(SetEndpointAttributesError::NotFound(
+                                parsed_error.message,
+                            ))
+                        }
+                        _ => {}
                     }
-                    "InternalError" => {
-                        return RusotoError::Service(SetEndpointAttributesError::InternalError(
-                            parsed_error.message,
-                        ))
-                    }
-                    "InvalidParameter" => {
-                        return RusotoError::Service(SetEndpointAttributesError::InvalidParameter(
-                            parsed_error.message,
-                        ))
-                    }
-                    "NotFound" => {
-                        return RusotoError::Service(SetEndpointAttributesError::NotFound(
-                            parsed_error.message,
-                        ))
-                    }
-                    _ => {}
                 }
             }
         }
@@ -4234,35 +4440,40 @@ impl SetPlatformApplicationAttributesError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    "AuthorizationError" => {
-                        return RusotoError::Service(
-                            SetPlatformApplicationAttributesError::AuthorizationError(
-                                parsed_error.message,
-                            ),
-                        )
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {
+                        "AuthorizationError" => {
+                            return RusotoError::Service(
+                                SetPlatformApplicationAttributesError::AuthorizationError(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "InternalError" => {
+                            return RusotoError::Service(
+                                SetPlatformApplicationAttributesError::InternalError(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "InvalidParameter" => {
+                            return RusotoError::Service(
+                                SetPlatformApplicationAttributesError::InvalidParameter(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "NotFound" => {
+                            return RusotoError::Service(
+                                SetPlatformApplicationAttributesError::NotFound(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        _ => {}
                     }
-                    "InternalError" => {
-                        return RusotoError::Service(
-                            SetPlatformApplicationAttributesError::InternalError(
-                                parsed_error.message,
-                            ),
-                        )
-                    }
-                    "InvalidParameter" => {
-                        return RusotoError::Service(
-                            SetPlatformApplicationAttributesError::InvalidParameter(
-                                parsed_error.message,
-                            ),
-                        )
-                    }
-                    "NotFound" => {
-                        return RusotoError::Service(
-                            SetPlatformApplicationAttributesError::NotFound(parsed_error.message),
-                        )
-                    }
-                    _ => {}
                 }
             }
         }
@@ -4314,29 +4525,32 @@ impl SetSMSAttributesError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    "AuthorizationError" => {
-                        return RusotoError::Service(SetSMSAttributesError::AuthorizationError(
-                            parsed_error.message,
-                        ))
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {
+                        "AuthorizationError" => {
+                            return RusotoError::Service(SetSMSAttributesError::AuthorizationError(
+                                parsed_error.message,
+                            ))
+                        }
+                        "InternalError" => {
+                            return RusotoError::Service(SetSMSAttributesError::InternalError(
+                                parsed_error.message,
+                            ))
+                        }
+                        "InvalidParameter" => {
+                            return RusotoError::Service(SetSMSAttributesError::InvalidParameter(
+                                parsed_error.message,
+                            ))
+                        }
+                        "Throttled" => {
+                            return RusotoError::Service(SetSMSAttributesError::Throttled(
+                                parsed_error.message,
+                            ))
+                        }
+                        _ => {}
                     }
-                    "InternalError" => {
-                        return RusotoError::Service(SetSMSAttributesError::InternalError(
-                            parsed_error.message,
-                        ))
-                    }
-                    "InvalidParameter" => {
-                        return RusotoError::Service(SetSMSAttributesError::InvalidParameter(
-                            parsed_error.message,
-                        ))
-                    }
-                    "Throttled" => {
-                        return RusotoError::Service(SetSMSAttributesError::Throttled(
-                            parsed_error.message,
-                        ))
-                    }
-                    _ => {}
                 }
             }
         }
@@ -4384,38 +4598,43 @@ impl SetSubscriptionAttributesError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    "AuthorizationError" => {
-                        return RusotoError::Service(
-                            SetSubscriptionAttributesError::AuthorizationError(
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {
+                        "AuthorizationError" => {
+                            return RusotoError::Service(
+                                SetSubscriptionAttributesError::AuthorizationError(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "FilterPolicyLimitExceeded" => {
+                            return RusotoError::Service(
+                                SetSubscriptionAttributesError::FilterPolicyLimitExceeded(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "InternalError" => {
+                            return RusotoError::Service(
+                                SetSubscriptionAttributesError::InternalError(parsed_error.message),
+                            )
+                        }
+                        "InvalidParameter" => {
+                            return RusotoError::Service(
+                                SetSubscriptionAttributesError::InvalidParameter(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "NotFound" => {
+                            return RusotoError::Service(SetSubscriptionAttributesError::NotFound(
                                 parsed_error.message,
-                            ),
-                        )
+                            ))
+                        }
+                        _ => {}
                     }
-                    "FilterPolicyLimitExceeded" => {
-                        return RusotoError::Service(
-                            SetSubscriptionAttributesError::FilterPolicyLimitExceeded(
-                                parsed_error.message,
-                            ),
-                        )
-                    }
-                    "InternalError" => {
-                        return RusotoError::Service(SetSubscriptionAttributesError::InternalError(
-                            parsed_error.message,
-                        ))
-                    }
-                    "InvalidParameter" => {
-                        return RusotoError::Service(
-                            SetSubscriptionAttributesError::InvalidParameter(parsed_error.message),
-                        )
-                    }
-                    "NotFound" => {
-                        return RusotoError::Service(SetSubscriptionAttributesError::NotFound(
-                            parsed_error.message,
-                        ))
-                    }
-                    _ => {}
                 }
             }
         }
@@ -4466,34 +4685,37 @@ impl SetTopicAttributesError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    "AuthorizationError" => {
-                        return RusotoError::Service(SetTopicAttributesError::AuthorizationError(
-                            parsed_error.message,
-                        ))
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {
+                        "AuthorizationError" => {
+                            return RusotoError::Service(
+                                SetTopicAttributesError::AuthorizationError(parsed_error.message),
+                            )
+                        }
+                        "InternalError" => {
+                            return RusotoError::Service(SetTopicAttributesError::InternalError(
+                                parsed_error.message,
+                            ))
+                        }
+                        "InvalidParameter" => {
+                            return RusotoError::Service(SetTopicAttributesError::InvalidParameter(
+                                parsed_error.message,
+                            ))
+                        }
+                        "InvalidSecurity" => {
+                            return RusotoError::Service(SetTopicAttributesError::InvalidSecurity(
+                                parsed_error.message,
+                            ))
+                        }
+                        "NotFound" => {
+                            return RusotoError::Service(SetTopicAttributesError::NotFound(
+                                parsed_error.message,
+                            ))
+                        }
+                        _ => {}
                     }
-                    "InternalError" => {
-                        return RusotoError::Service(SetTopicAttributesError::InternalError(
-                            parsed_error.message,
-                        ))
-                    }
-                    "InvalidParameter" => {
-                        return RusotoError::Service(SetTopicAttributesError::InvalidParameter(
-                            parsed_error.message,
-                        ))
-                    }
-                    "InvalidSecurity" => {
-                        return RusotoError::Service(SetTopicAttributesError::InvalidSecurity(
-                            parsed_error.message,
-                        ))
-                    }
-                    "NotFound" => {
-                        return RusotoError::Service(SetTopicAttributesError::NotFound(
-                            parsed_error.message,
-                        ))
-                    }
-                    _ => {}
                 }
             }
         }
@@ -4546,42 +4768,47 @@ impl SubscribeError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    "AuthorizationError" => {
-                        return RusotoError::Service(SubscribeError::AuthorizationError(
-                            parsed_error.message,
-                        ))
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {
+                        "AuthorizationError" => {
+                            return RusotoError::Service(SubscribeError::AuthorizationError(
+                                parsed_error.message,
+                            ))
+                        }
+                        "FilterPolicyLimitExceeded" => {
+                            return RusotoError::Service(SubscribeError::FilterPolicyLimitExceeded(
+                                parsed_error.message,
+                            ))
+                        }
+                        "InternalError" => {
+                            return RusotoError::Service(SubscribeError::InternalError(
+                                parsed_error.message,
+                            ))
+                        }
+                        "InvalidParameter" => {
+                            return RusotoError::Service(SubscribeError::InvalidParameter(
+                                parsed_error.message,
+                            ))
+                        }
+                        "InvalidSecurity" => {
+                            return RusotoError::Service(SubscribeError::InvalidSecurity(
+                                parsed_error.message,
+                            ))
+                        }
+                        "NotFound" => {
+                            return RusotoError::Service(SubscribeError::NotFound(
+                                parsed_error.message,
+                            ))
+                        }
+                        "SubscriptionLimitExceeded" => {
+                            return RusotoError::Service(SubscribeError::SubscriptionLimitExceeded(
+                                parsed_error.message,
+                            ))
+                        }
+                        _ => {}
                     }
-                    "FilterPolicyLimitExceeded" => {
-                        return RusotoError::Service(SubscribeError::FilterPolicyLimitExceeded(
-                            parsed_error.message,
-                        ))
-                    }
-                    "InternalError" => {
-                        return RusotoError::Service(SubscribeError::InternalError(
-                            parsed_error.message,
-                        ))
-                    }
-                    "InvalidParameter" => {
-                        return RusotoError::Service(SubscribeError::InvalidParameter(
-                            parsed_error.message,
-                        ))
-                    }
-                    "InvalidSecurity" => {
-                        return RusotoError::Service(SubscribeError::InvalidSecurity(
-                            parsed_error.message,
-                        ))
-                    }
-                    "NotFound" => {
-                        return RusotoError::Service(SubscribeError::NotFound(parsed_error.message))
-                    }
-                    "SubscriptionLimitExceeded" => {
-                        return RusotoError::Service(SubscribeError::SubscriptionLimitExceeded(
-                            parsed_error.message,
-                        ))
-                    }
-                    _ => {}
                 }
             }
         }
@@ -4636,44 +4863,47 @@ impl TagResourceError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    "AuthorizationError" => {
-                        return RusotoError::Service(TagResourceError::AuthorizationError(
-                            parsed_error.message,
-                        ))
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {
+                        "AuthorizationError" => {
+                            return RusotoError::Service(TagResourceError::AuthorizationError(
+                                parsed_error.message,
+                            ))
+                        }
+                        "ConcurrentAccess" => {
+                            return RusotoError::Service(TagResourceError::ConcurrentAccess(
+                                parsed_error.message,
+                            ))
+                        }
+                        "InvalidParameter" => {
+                            return RusotoError::Service(TagResourceError::InvalidParameter(
+                                parsed_error.message,
+                            ))
+                        }
+                        "ResourceNotFound" => {
+                            return RusotoError::Service(TagResourceError::ResourceNotFound(
+                                parsed_error.message,
+                            ))
+                        }
+                        "StaleTag" => {
+                            return RusotoError::Service(TagResourceError::StaleTag(
+                                parsed_error.message,
+                            ))
+                        }
+                        "TagLimitExceeded" => {
+                            return RusotoError::Service(TagResourceError::TagLimitExceeded(
+                                parsed_error.message,
+                            ))
+                        }
+                        "TagPolicy" => {
+                            return RusotoError::Service(TagResourceError::TagPolicy(
+                                parsed_error.message,
+                            ))
+                        }
+                        _ => {}
                     }
-                    "ConcurrentAccess" => {
-                        return RusotoError::Service(TagResourceError::ConcurrentAccess(
-                            parsed_error.message,
-                        ))
-                    }
-                    "InvalidParameter" => {
-                        return RusotoError::Service(TagResourceError::InvalidParameter(
-                            parsed_error.message,
-                        ))
-                    }
-                    "ResourceNotFound" => {
-                        return RusotoError::Service(TagResourceError::ResourceNotFound(
-                            parsed_error.message,
-                        ))
-                    }
-                    "StaleTag" => {
-                        return RusotoError::Service(TagResourceError::StaleTag(
-                            parsed_error.message,
-                        ))
-                    }
-                    "TagLimitExceeded" => {
-                        return RusotoError::Service(TagResourceError::TagLimitExceeded(
-                            parsed_error.message,
-                        ))
-                    }
-                    "TagPolicy" => {
-                        return RusotoError::Service(TagResourceError::TagPolicy(
-                            parsed_error.message,
-                        ))
-                    }
-                    _ => {}
                 }
             }
         }
@@ -4724,34 +4954,37 @@ impl UnsubscribeError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    "AuthorizationError" => {
-                        return RusotoError::Service(UnsubscribeError::AuthorizationError(
-                            parsed_error.message,
-                        ))
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {
+                        "AuthorizationError" => {
+                            return RusotoError::Service(UnsubscribeError::AuthorizationError(
+                                parsed_error.message,
+                            ))
+                        }
+                        "InternalError" => {
+                            return RusotoError::Service(UnsubscribeError::InternalError(
+                                parsed_error.message,
+                            ))
+                        }
+                        "InvalidParameter" => {
+                            return RusotoError::Service(UnsubscribeError::InvalidParameter(
+                                parsed_error.message,
+                            ))
+                        }
+                        "InvalidSecurity" => {
+                            return RusotoError::Service(UnsubscribeError::InvalidSecurity(
+                                parsed_error.message,
+                            ))
+                        }
+                        "NotFound" => {
+                            return RusotoError::Service(UnsubscribeError::NotFound(
+                                parsed_error.message,
+                            ))
+                        }
+                        _ => {}
                     }
-                    "InternalError" => {
-                        return RusotoError::Service(UnsubscribeError::InternalError(
-                            parsed_error.message,
-                        ))
-                    }
-                    "InvalidParameter" => {
-                        return RusotoError::Service(UnsubscribeError::InvalidParameter(
-                            parsed_error.message,
-                        ))
-                    }
-                    "InvalidSecurity" => {
-                        return RusotoError::Service(UnsubscribeError::InvalidSecurity(
-                            parsed_error.message,
-                        ))
-                    }
-                    "NotFound" => {
-                        return RusotoError::Service(UnsubscribeError::NotFound(
-                            parsed_error.message,
-                        ))
-                    }
-                    _ => {}
                 }
             }
         }
@@ -4804,44 +5037,47 @@ impl UntagResourceError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    "AuthorizationError" => {
-                        return RusotoError::Service(UntagResourceError::AuthorizationError(
-                            parsed_error.message,
-                        ))
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {
+                        "AuthorizationError" => {
+                            return RusotoError::Service(UntagResourceError::AuthorizationError(
+                                parsed_error.message,
+                            ))
+                        }
+                        "ConcurrentAccess" => {
+                            return RusotoError::Service(UntagResourceError::ConcurrentAccess(
+                                parsed_error.message,
+                            ))
+                        }
+                        "InvalidParameter" => {
+                            return RusotoError::Service(UntagResourceError::InvalidParameter(
+                                parsed_error.message,
+                            ))
+                        }
+                        "ResourceNotFound" => {
+                            return RusotoError::Service(UntagResourceError::ResourceNotFound(
+                                parsed_error.message,
+                            ))
+                        }
+                        "StaleTag" => {
+                            return RusotoError::Service(UntagResourceError::StaleTag(
+                                parsed_error.message,
+                            ))
+                        }
+                        "TagLimitExceeded" => {
+                            return RusotoError::Service(UntagResourceError::TagLimitExceeded(
+                                parsed_error.message,
+                            ))
+                        }
+                        "TagPolicy" => {
+                            return RusotoError::Service(UntagResourceError::TagPolicy(
+                                parsed_error.message,
+                            ))
+                        }
+                        _ => {}
                     }
-                    "ConcurrentAccess" => {
-                        return RusotoError::Service(UntagResourceError::ConcurrentAccess(
-                            parsed_error.message,
-                        ))
-                    }
-                    "InvalidParameter" => {
-                        return RusotoError::Service(UntagResourceError::InvalidParameter(
-                            parsed_error.message,
-                        ))
-                    }
-                    "ResourceNotFound" => {
-                        return RusotoError::Service(UntagResourceError::ResourceNotFound(
-                            parsed_error.message,
-                        ))
-                    }
-                    "StaleTag" => {
-                        return RusotoError::Service(UntagResourceError::StaleTag(
-                            parsed_error.message,
-                        ))
-                    }
-                    "TagLimitExceeded" => {
-                        return RusotoError::Service(UntagResourceError::TagLimitExceeded(
-                            parsed_error.message,
-                        ))
-                    }
-                    "TagPolicy" => {
-                        return RusotoError::Service(UntagResourceError::TagPolicy(
-                            parsed_error.message,
-                        ))
-                    }
-                    _ => {}
                 }
             }
         }

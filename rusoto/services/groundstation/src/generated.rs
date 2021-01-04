@@ -24,7 +24,6 @@ use rusoto_core::proto;
 use rusoto_core::signature::SignedRequest;
 #[allow(unused_imports)]
 use serde::{Deserialize, Serialize};
-use serde_json;
 /// <p>Details about an antenna demod decode <code>Config</code> used in a contact.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
@@ -1254,6 +1253,7 @@ pub enum CancelContactError {
 impl CancelContactError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CancelContactError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "DependencyException" => {
                     return RusotoError::Service(CancelContactError::Dependency(err.msg))
@@ -1298,6 +1298,7 @@ pub enum CreateConfigError {
 impl CreateConfigError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateConfigError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "DependencyException" => {
                     return RusotoError::Service(CreateConfigError::Dependency(err.msg))
@@ -1346,6 +1347,7 @@ impl CreateDataflowEndpointGroupError {
         res: BufferedHttpResponse,
     ) -> RusotoError<CreateDataflowEndpointGroupError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "DependencyException" => {
                     return RusotoError::Service(CreateDataflowEndpointGroupError::Dependency(
@@ -1394,6 +1396,7 @@ pub enum CreateMissionProfileError {
 impl CreateMissionProfileError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateMissionProfileError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "DependencyException" => {
                     return RusotoError::Service(CreateMissionProfileError::Dependency(err.msg))
@@ -1440,6 +1443,7 @@ pub enum DeleteConfigError {
 impl DeleteConfigError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteConfigError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "DependencyException" => {
                     return RusotoError::Service(DeleteConfigError::Dependency(err.msg))
@@ -1484,6 +1488,7 @@ impl DeleteDataflowEndpointGroupError {
         res: BufferedHttpResponse,
     ) -> RusotoError<DeleteDataflowEndpointGroupError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "DependencyException" => {
                     return RusotoError::Service(DeleteDataflowEndpointGroupError::Dependency(
@@ -1532,6 +1537,7 @@ pub enum DeleteMissionProfileError {
 impl DeleteMissionProfileError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteMissionProfileError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "DependencyException" => {
                     return RusotoError::Service(DeleteMissionProfileError::Dependency(err.msg))
@@ -1578,6 +1584,7 @@ pub enum DescribeContactError {
 impl DescribeContactError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeContactError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "DependencyException" => {
                     return RusotoError::Service(DescribeContactError::Dependency(err.msg))
@@ -1620,6 +1627,7 @@ pub enum GetConfigError {
 impl GetConfigError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetConfigError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "DependencyException" => {
                     return RusotoError::Service(GetConfigError::Dependency(err.msg))
@@ -1662,6 +1670,7 @@ pub enum GetDataflowEndpointGroupError {
 impl GetDataflowEndpointGroupError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetDataflowEndpointGroupError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "DependencyException" => {
                     return RusotoError::Service(GetDataflowEndpointGroupError::Dependency(err.msg))
@@ -1708,6 +1717,7 @@ pub enum GetMinuteUsageError {
 impl GetMinuteUsageError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetMinuteUsageError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "DependencyException" => {
                     return RusotoError::Service(GetMinuteUsageError::Dependency(err.msg))
@@ -1750,6 +1760,7 @@ pub enum GetMissionProfileError {
 impl GetMissionProfileError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetMissionProfileError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "DependencyException" => {
                     return RusotoError::Service(GetMissionProfileError::Dependency(err.msg))
@@ -1792,6 +1803,7 @@ pub enum GetSatelliteError {
 impl GetSatelliteError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetSatelliteError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "DependencyException" => {
                     return RusotoError::Service(GetSatelliteError::Dependency(err.msg))
@@ -1834,6 +1846,7 @@ pub enum ListConfigsError {
 impl ListConfigsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListConfigsError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "DependencyException" => {
                     return RusotoError::Service(ListConfigsError::Dependency(err.msg))
@@ -1876,6 +1889,7 @@ pub enum ListContactsError {
 impl ListContactsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListContactsError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "DependencyException" => {
                     return RusotoError::Service(ListContactsError::Dependency(err.msg))
@@ -1920,6 +1934,7 @@ impl ListDataflowEndpointGroupsError {
         res: BufferedHttpResponse,
     ) -> RusotoError<ListDataflowEndpointGroupsError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "DependencyException" => {
                     return RusotoError::Service(ListDataflowEndpointGroupsError::Dependency(
@@ -1968,6 +1983,7 @@ pub enum ListGroundStationsError {
 impl ListGroundStationsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListGroundStationsError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "DependencyException" => {
                     return RusotoError::Service(ListGroundStationsError::Dependency(err.msg))
@@ -2010,6 +2026,7 @@ pub enum ListMissionProfilesError {
 impl ListMissionProfilesError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListMissionProfilesError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "DependencyException" => {
                     return RusotoError::Service(ListMissionProfilesError::Dependency(err.msg))
@@ -2056,6 +2073,7 @@ pub enum ListSatellitesError {
 impl ListSatellitesError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListSatellitesError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "DependencyException" => {
                     return RusotoError::Service(ListSatellitesError::Dependency(err.msg))
@@ -2098,6 +2116,7 @@ pub enum ListTagsForResourceError {
 impl ListTagsForResourceError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListTagsForResourceError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "DependencyException" => {
                     return RusotoError::Service(ListTagsForResourceError::Dependency(err.msg))
@@ -2144,6 +2163,7 @@ pub enum ReserveContactError {
 impl ReserveContactError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ReserveContactError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "DependencyException" => {
                     return RusotoError::Service(ReserveContactError::Dependency(err.msg))
@@ -2186,6 +2206,7 @@ pub enum TagResourceError {
 impl TagResourceError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<TagResourceError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "DependencyException" => {
                     return RusotoError::Service(TagResourceError::Dependency(err.msg))
@@ -2228,6 +2249,7 @@ pub enum UntagResourceError {
 impl UntagResourceError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UntagResourceError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "DependencyException" => {
                     return RusotoError::Service(UntagResourceError::Dependency(err.msg))
@@ -2270,6 +2292,7 @@ pub enum UpdateConfigError {
 impl UpdateConfigError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateConfigError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "DependencyException" => {
                     return RusotoError::Service(UpdateConfigError::Dependency(err.msg))
@@ -2312,6 +2335,7 @@ pub enum UpdateMissionProfileError {
 impl UpdateMissionProfileError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateMissionProfileError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "DependencyException" => {
                     return RusotoError::Service(UpdateMissionProfileError::Dependency(err.msg))
@@ -2543,6 +2567,7 @@ impl GroundStation for GroundStationClient {
         &self,
         input: CancelContactRequest,
     ) -> Result<ContactIdResponse, RusotoError<CancelContactError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!("/contact/{contact_id}", contact_id = input.contact_id);
 
         let mut request = SignedRequest::new("DELETE", "groundstation", &self.region, &request_uri);
@@ -2571,6 +2596,7 @@ impl GroundStation for GroundStationClient {
         &self,
         input: CreateConfigRequest,
     ) -> Result<ConfigIdResponse, RusotoError<CreateConfigError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/config";
 
         let mut request = SignedRequest::new("POST", "groundstation", &self.region, &request_uri);
@@ -2603,6 +2629,7 @@ impl GroundStation for GroundStationClient {
         input: CreateDataflowEndpointGroupRequest,
     ) -> Result<DataflowEndpointGroupIdResponse, RusotoError<CreateDataflowEndpointGroupError>>
     {
+        #![allow(clippy::needless_update)]
         let request_uri = "/dataflowEndpointGroup";
 
         let mut request = SignedRequest::new("POST", "groundstation", &self.region, &request_uri);
@@ -2634,6 +2661,7 @@ impl GroundStation for GroundStationClient {
         &self,
         input: CreateMissionProfileRequest,
     ) -> Result<MissionProfileIdResponse, RusotoError<CreateMissionProfileError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/missionprofile";
 
         let mut request = SignedRequest::new("POST", "groundstation", &self.region, &request_uri);
@@ -2665,6 +2693,7 @@ impl GroundStation for GroundStationClient {
         &self,
         input: DeleteConfigRequest,
     ) -> Result<ConfigIdResponse, RusotoError<DeleteConfigError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/config/{config_type}/{config_id}",
             config_id = input.config_id,
@@ -2698,6 +2727,7 @@ impl GroundStation for GroundStationClient {
         input: DeleteDataflowEndpointGroupRequest,
     ) -> Result<DataflowEndpointGroupIdResponse, RusotoError<DeleteDataflowEndpointGroupError>>
     {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/dataflowEndpointGroup/{dataflow_endpoint_group_id}",
             dataflow_endpoint_group_id = input.dataflow_endpoint_group_id
@@ -2729,6 +2759,7 @@ impl GroundStation for GroundStationClient {
         &self,
         input: DeleteMissionProfileRequest,
     ) -> Result<MissionProfileIdResponse, RusotoError<DeleteMissionProfileError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/missionprofile/{mission_profile_id}",
             mission_profile_id = input.mission_profile_id
@@ -2760,6 +2791,7 @@ impl GroundStation for GroundStationClient {
         &self,
         input: DescribeContactRequest,
     ) -> Result<DescribeContactResponse, RusotoError<DescribeContactError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!("/contact/{contact_id}", contact_id = input.contact_id);
 
         let mut request = SignedRequest::new("GET", "groundstation", &self.region, &request_uri);
@@ -2788,6 +2820,7 @@ impl GroundStation for GroundStationClient {
         &self,
         input: GetConfigRequest,
     ) -> Result<GetConfigResponse, RusotoError<GetConfigError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/config/{config_type}/{config_id}",
             config_id = input.config_id,
@@ -2820,6 +2853,7 @@ impl GroundStation for GroundStationClient {
         &self,
         input: GetDataflowEndpointGroupRequest,
     ) -> Result<GetDataflowEndpointGroupResponse, RusotoError<GetDataflowEndpointGroupError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/dataflowEndpointGroup/{dataflow_endpoint_group_id}",
             dataflow_endpoint_group_id = input.dataflow_endpoint_group_id
@@ -2851,6 +2885,7 @@ impl GroundStation for GroundStationClient {
         &self,
         input: GetMinuteUsageRequest,
     ) -> Result<GetMinuteUsageResponse, RusotoError<GetMinuteUsageError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/minute-usage";
 
         let mut request = SignedRequest::new("POST", "groundstation", &self.region, &request_uri);
@@ -2882,6 +2917,7 @@ impl GroundStation for GroundStationClient {
         &self,
         input: GetMissionProfileRequest,
     ) -> Result<GetMissionProfileResponse, RusotoError<GetMissionProfileError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/missionprofile/{mission_profile_id}",
             mission_profile_id = input.mission_profile_id
@@ -2913,6 +2949,7 @@ impl GroundStation for GroundStationClient {
         &self,
         input: GetSatelliteRequest,
     ) -> Result<GetSatelliteResponse, RusotoError<GetSatelliteError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/satellite/{satellite_id}",
             satellite_id = input.satellite_id
@@ -2944,6 +2981,7 @@ impl GroundStation for GroundStationClient {
         &self,
         input: ListConfigsRequest,
     ) -> Result<ListConfigsResponse, RusotoError<ListConfigsError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/config";
 
         let mut request = SignedRequest::new("GET", "groundstation", &self.region, &request_uri);
@@ -2981,6 +3019,7 @@ impl GroundStation for GroundStationClient {
         &self,
         input: ListContactsRequest,
     ) -> Result<ListContactsResponse, RusotoError<ListContactsError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/contacts";
 
         let mut request = SignedRequest::new("POST", "groundstation", &self.region, &request_uri);
@@ -3013,6 +3052,7 @@ impl GroundStation for GroundStationClient {
         input: ListDataflowEndpointGroupsRequest,
     ) -> Result<ListDataflowEndpointGroupsResponse, RusotoError<ListDataflowEndpointGroupsError>>
     {
+        #![allow(clippy::needless_update)]
         let request_uri = "/dataflowEndpointGroup";
 
         let mut request = SignedRequest::new("GET", "groundstation", &self.region, &request_uri);
@@ -3050,6 +3090,7 @@ impl GroundStation for GroundStationClient {
         &self,
         input: ListGroundStationsRequest,
     ) -> Result<ListGroundStationsResponse, RusotoError<ListGroundStationsError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/groundstation";
 
         let mut request = SignedRequest::new("GET", "groundstation", &self.region, &request_uri);
@@ -3090,6 +3131,7 @@ impl GroundStation for GroundStationClient {
         &self,
         input: ListMissionProfilesRequest,
     ) -> Result<ListMissionProfilesResponse, RusotoError<ListMissionProfilesError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/missionprofile";
 
         let mut request = SignedRequest::new("GET", "groundstation", &self.region, &request_uri);
@@ -3127,6 +3169,7 @@ impl GroundStation for GroundStationClient {
         &self,
         input: ListSatellitesRequest,
     ) -> Result<ListSatellitesResponse, RusotoError<ListSatellitesError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/satellite";
 
         let mut request = SignedRequest::new("GET", "groundstation", &self.region, &request_uri);
@@ -3164,6 +3207,7 @@ impl GroundStation for GroundStationClient {
         &self,
         input: ListTagsForResourceRequest,
     ) -> Result<ListTagsForResourceResponse, RusotoError<ListTagsForResourceError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!("/tags/{resource_arn}", resource_arn = input.resource_arn);
 
         let mut request = SignedRequest::new("GET", "groundstation", &self.region, &request_uri);
@@ -3192,6 +3236,7 @@ impl GroundStation for GroundStationClient {
         &self,
         input: ReserveContactRequest,
     ) -> Result<ContactIdResponse, RusotoError<ReserveContactError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/contact";
 
         let mut request = SignedRequest::new("POST", "groundstation", &self.region, &request_uri);
@@ -3223,6 +3268,7 @@ impl GroundStation for GroundStationClient {
         &self,
         input: TagResourceRequest,
     ) -> Result<TagResourceResponse, RusotoError<TagResourceError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!("/tags/{resource_arn}", resource_arn = input.resource_arn);
 
         let mut request = SignedRequest::new("POST", "groundstation", &self.region, &request_uri);
@@ -3254,6 +3300,7 @@ impl GroundStation for GroundStationClient {
         &self,
         input: UntagResourceRequest,
     ) -> Result<UntagResourceResponse, RusotoError<UntagResourceError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!("/tags/{resource_arn}", resource_arn = input.resource_arn);
 
         let mut request = SignedRequest::new("DELETE", "groundstation", &self.region, &request_uri);
@@ -3288,6 +3335,7 @@ impl GroundStation for GroundStationClient {
         &self,
         input: UpdateConfigRequest,
     ) -> Result<ConfigIdResponse, RusotoError<UpdateConfigError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/config/{config_type}/{config_id}",
             config_id = input.config_id,
@@ -3323,6 +3371,7 @@ impl GroundStation for GroundStationClient {
         &self,
         input: UpdateMissionProfileRequest,
     ) -> Result<MissionProfileIdResponse, RusotoError<UpdateMissionProfileError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/missionprofile/{mission_profile_id}",
             mission_profile_id = input.mission_profile_id

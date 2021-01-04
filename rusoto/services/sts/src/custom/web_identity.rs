@@ -114,19 +114,20 @@ impl ProvideAwsCredentials for WebIdentityProvider {
         };
         let client = Client::new_not_signing(http_client);
         let sts = StsClient::new_with_client(client, Region::default());
-        let mut req = AssumeRoleWithWebIdentityRequest::default();
-
-        req.role_arn = self.role_arn.resolve()?;
-        req.web_identity_token = self.web_identity_token.resolve()?.as_ref().to_string();
-        req.policy = self.policy.to_owned();
-        req.duration_seconds = self.duration_seconds.to_owned();
-        req.policy_arns = self.policy_arns.to_owned();
-        req.role_session_name = match self.role_session_name {
-            Some(ref role_session_name) => match role_session_name.resolve()? {
-                Some(session_name) => session_name,
+        let req = AssumeRoleWithWebIdentityRequest {
+            role_arn: self.role_arn.resolve()?,
+            web_identity_token: self.web_identity_token.resolve()?.as_ref().to_string(),
+            policy: self.policy.to_owned(),
+            duration_seconds: self.duration_seconds.to_owned(),
+            policy_arns: self.policy_arns.to_owned(),
+            role_session_name: match self.role_session_name {
+                Some(ref role_session_name) => match role_session_name.resolve()? {
+                    Some(session_name) => session_name,
+                    None => Self::create_session_name(),
+                },
                 None => Self::create_session_name(),
             },
-            None => Self::create_session_name(),
+            .. AssumeRoleWithWebIdentityRequest::default()
         };
 
         let assume_role = sts.assume_role_with_web_identity(req).await;

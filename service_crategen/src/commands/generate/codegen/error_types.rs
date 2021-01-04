@@ -164,11 +164,9 @@ impl GenerateErrorTypes for XmlErrorTypes {
                             let reader = EventReader::new(res.body.as_ref());
                             let mut stack = XmlResponse::new(reader.into_iter().peekable());
                             find_start_element(&mut stack);
-                            if let Ok(parsed_error) = Self::deserialize(&mut stack) {{
-                                match &parsed_error.code[..] {{
-                                    {type_matchers}
-                                }}
-                           }}
+                            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {{
+                                {type_matchers}
+                            }}
                        }}
                        RusotoError::Unknown(res)
                     }}
@@ -229,10 +227,20 @@ impl XmlErrorTypes {
                     error_type = error_type,
                     error_name = error.idiomatic_error_name()))
             }
-        }
 
-        type_matchers.push("_ => {}".to_string());
-        type_matchers.join(",")
+            type_matchers.push("_ => {}".to_string());
+
+            format!(
+                "
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {{
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {{
+                        {type_matchers}
+                    }}
+                }}", type_matchers = type_matchers.join(","))
+        } else {
+            "".to_string()
+        }
     }
 }
 
@@ -248,9 +256,7 @@ impl GenerateErrorTypes for JsonErrorTypes {
                 impl {type_name} {{
                     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<{type_name}> {{
                         if let Some(err) = proto::json::Error::parse(&res) {{
-                            match err.typ.as_str() {{
-                                {type_matchers}
-                            }}
+                            {type_matchers}
                         }}
                         RusotoError::Unknown(res)
                     }}
@@ -286,7 +292,13 @@ impl JsonErrorTypes {
         type_matchers
             .push("\"ValidationException\" => return RusotoError::Validation(err.msg)".to_string());
         type_matchers.push("_ => {}".to_string());
-        type_matchers.join(",\n")
+
+        format!(
+        "
+                #[allow(clippy::single_match)]
+                match err.typ.as_str() {{
+                    {type_matchers}
+                }}", type_matchers = type_matchers.join(",\n"))
     }
 }
 
@@ -302,9 +314,7 @@ impl GenerateErrorTypes for RestJsonErrorTypes {
                 impl {type_name} {{
                     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<{type_name}> {{
                         if let Some(err) = proto::json::Error::parse_rest(&res) {{
-                            match err.typ.as_str() {{
-                                {type_matchers}
-                            }}
+                            {type_matchers}
                         }}
                         RusotoError::Unknown(res)
                     }}

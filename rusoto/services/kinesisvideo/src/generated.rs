@@ -23,7 +23,6 @@ use rusoto_core::proto;
 use rusoto_core::signature::SignedRequest;
 #[allow(unused_imports)]
 use serde::{Deserialize, Serialize};
-use serde_json;
 /// <p>A structure that encapsulates a signaling channel's metadata and properties.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
@@ -644,6 +643,7 @@ pub enum CreateSignalingChannelError {
 impl CreateSignalingChannelError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateSignalingChannelError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(CreateSignalingChannelError::AccessDenied(err.msg))
@@ -720,6 +720,7 @@ pub enum CreateStreamError {
 impl CreateStreamError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateStreamError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AccountStreamLimitExceededException" => {
                     return RusotoError::Service(CreateStreamError::AccountStreamLimitExceeded(
@@ -790,6 +791,7 @@ pub enum DeleteSignalingChannelError {
 impl DeleteSignalingChannelError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteSignalingChannelError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(DeleteSignalingChannelError::AccessDenied(err.msg))
@@ -860,6 +862,7 @@ pub enum DeleteStreamError {
 impl DeleteStreamError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteStreamError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ClientLimitExceededException" => {
                     return RusotoError::Service(DeleteStreamError::ClientLimitExceeded(err.msg))
@@ -916,6 +919,7 @@ pub enum DescribeSignalingChannelError {
 impl DescribeSignalingChannelError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeSignalingChannelError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(DescribeSignalingChannelError::AccessDenied(
@@ -972,6 +976,7 @@ pub enum DescribeStreamError {
 impl DescribeStreamError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeStreamError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ClientLimitExceededException" => {
                     return RusotoError::Service(DescribeStreamError::ClientLimitExceeded(err.msg))
@@ -1020,6 +1025,7 @@ pub enum GetDataEndpointError {
 impl GetDataEndpointError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetDataEndpointError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ClientLimitExceededException" => {
                     return RusotoError::Service(GetDataEndpointError::ClientLimitExceeded(err.msg))
@@ -1072,6 +1078,7 @@ impl GetSignalingChannelEndpointError {
         res: BufferedHttpResponse,
     ) -> RusotoError<GetSignalingChannelEndpointError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(GetSignalingChannelEndpointError::AccessDenied(
@@ -1134,6 +1141,7 @@ pub enum ListSignalingChannelsError {
 impl ListSignalingChannelsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListSignalingChannelsError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(ListSignalingChannelsError::AccessDenied(err.msg))
@@ -1178,6 +1186,7 @@ pub enum ListStreamsError {
 impl ListStreamsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListStreamsError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ClientLimitExceededException" => {
                     return RusotoError::Service(ListStreamsError::ClientLimitExceeded(err.msg))
@@ -1218,6 +1227,7 @@ pub enum ListTagsForResourceError {
 impl ListTagsForResourceError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListTagsForResourceError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(ListTagsForResourceError::AccessDenied(err.msg))
@@ -1272,6 +1282,7 @@ pub enum ListTagsForStreamError {
 impl ListTagsForStreamError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListTagsForStreamError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ClientLimitExceededException" => {
                     return RusotoError::Service(ListTagsForStreamError::ClientLimitExceeded(
@@ -1330,6 +1341,7 @@ pub enum TagResourceError {
 impl TagResourceError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<TagResourceError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(TagResourceError::AccessDenied(err.msg))
@@ -1388,6 +1400,7 @@ pub enum TagStreamError {
 impl TagStreamError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<TagStreamError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ClientLimitExceededException" => {
                     return RusotoError::Service(TagStreamError::ClientLimitExceeded(err.msg))
@@ -1446,6 +1459,7 @@ pub enum UntagResourceError {
 impl UntagResourceError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UntagResourceError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(UntagResourceError::AccessDenied(err.msg))
@@ -1496,6 +1510,7 @@ pub enum UntagStreamError {
 impl UntagStreamError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UntagStreamError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ClientLimitExceededException" => {
                     return RusotoError::Service(UntagStreamError::ClientLimitExceeded(err.msg))
@@ -1552,6 +1567,7 @@ pub enum UpdateDataRetentionError {
 impl UpdateDataRetentionError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateDataRetentionError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ClientLimitExceededException" => {
                     return RusotoError::Service(UpdateDataRetentionError::ClientLimitExceeded(
@@ -1616,6 +1632,7 @@ pub enum UpdateSignalingChannelError {
 impl UpdateSignalingChannelError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateSignalingChannelError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(UpdateSignalingChannelError::AccessDenied(err.msg))
@@ -1686,6 +1703,7 @@ pub enum UpdateStreamError {
 impl UpdateStreamError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateStreamError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ClientLimitExceededException" => {
                     return RusotoError::Service(UpdateStreamError::ClientLimitExceeded(err.msg))
@@ -1889,6 +1907,7 @@ impl KinesisVideo for KinesisVideoClient {
         &self,
         input: CreateSignalingChannelInput,
     ) -> Result<CreateSignalingChannelOutput, RusotoError<CreateSignalingChannelError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/createSignalingChannel";
 
         let mut request = SignedRequest::new("POST", "kinesisvideo", &self.region, &request_uri);
@@ -1920,6 +1939,7 @@ impl KinesisVideo for KinesisVideoClient {
         &self,
         input: CreateStreamInput,
     ) -> Result<CreateStreamOutput, RusotoError<CreateStreamError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/createStream";
 
         let mut request = SignedRequest::new("POST", "kinesisvideo", &self.region, &request_uri);
@@ -1951,6 +1971,7 @@ impl KinesisVideo for KinesisVideoClient {
         &self,
         input: DeleteSignalingChannelInput,
     ) -> Result<DeleteSignalingChannelOutput, RusotoError<DeleteSignalingChannelError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/deleteSignalingChannel";
 
         let mut request = SignedRequest::new("POST", "kinesisvideo", &self.region, &request_uri);
@@ -1982,6 +2003,7 @@ impl KinesisVideo for KinesisVideoClient {
         &self,
         input: DeleteStreamInput,
     ) -> Result<DeleteStreamOutput, RusotoError<DeleteStreamError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/deleteStream";
 
         let mut request = SignedRequest::new("POST", "kinesisvideo", &self.region, &request_uri);
@@ -2013,6 +2035,7 @@ impl KinesisVideo for KinesisVideoClient {
         &self,
         input: DescribeSignalingChannelInput,
     ) -> Result<DescribeSignalingChannelOutput, RusotoError<DescribeSignalingChannelError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/describeSignalingChannel";
 
         let mut request = SignedRequest::new("POST", "kinesisvideo", &self.region, &request_uri);
@@ -2044,6 +2067,7 @@ impl KinesisVideo for KinesisVideoClient {
         &self,
         input: DescribeStreamInput,
     ) -> Result<DescribeStreamOutput, RusotoError<DescribeStreamError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/describeStream";
 
         let mut request = SignedRequest::new("POST", "kinesisvideo", &self.region, &request_uri);
@@ -2075,6 +2099,7 @@ impl KinesisVideo for KinesisVideoClient {
         &self,
         input: GetDataEndpointInput,
     ) -> Result<GetDataEndpointOutput, RusotoError<GetDataEndpointError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/getDataEndpoint";
 
         let mut request = SignedRequest::new("POST", "kinesisvideo", &self.region, &request_uri);
@@ -2107,6 +2132,7 @@ impl KinesisVideo for KinesisVideoClient {
         input: GetSignalingChannelEndpointInput,
     ) -> Result<GetSignalingChannelEndpointOutput, RusotoError<GetSignalingChannelEndpointError>>
     {
+        #![allow(clippy::needless_update)]
         let request_uri = "/getSignalingChannelEndpoint";
 
         let mut request = SignedRequest::new("POST", "kinesisvideo", &self.region, &request_uri);
@@ -2138,6 +2164,7 @@ impl KinesisVideo for KinesisVideoClient {
         &self,
         input: ListSignalingChannelsInput,
     ) -> Result<ListSignalingChannelsOutput, RusotoError<ListSignalingChannelsError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/listSignalingChannels";
 
         let mut request = SignedRequest::new("POST", "kinesisvideo", &self.region, &request_uri);
@@ -2169,6 +2196,7 @@ impl KinesisVideo for KinesisVideoClient {
         &self,
         input: ListStreamsInput,
     ) -> Result<ListStreamsOutput, RusotoError<ListStreamsError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/listStreams";
 
         let mut request = SignedRequest::new("POST", "kinesisvideo", &self.region, &request_uri);
@@ -2200,6 +2228,7 @@ impl KinesisVideo for KinesisVideoClient {
         &self,
         input: ListTagsForResourceInput,
     ) -> Result<ListTagsForResourceOutput, RusotoError<ListTagsForResourceError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/ListTagsForResource";
 
         let mut request = SignedRequest::new("POST", "kinesisvideo", &self.region, &request_uri);
@@ -2231,6 +2260,7 @@ impl KinesisVideo for KinesisVideoClient {
         &self,
         input: ListTagsForStreamInput,
     ) -> Result<ListTagsForStreamOutput, RusotoError<ListTagsForStreamError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/listTagsForStream";
 
         let mut request = SignedRequest::new("POST", "kinesisvideo", &self.region, &request_uri);
@@ -2262,6 +2292,7 @@ impl KinesisVideo for KinesisVideoClient {
         &self,
         input: TagResourceInput,
     ) -> Result<TagResourceOutput, RusotoError<TagResourceError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/TagResource";
 
         let mut request = SignedRequest::new("POST", "kinesisvideo", &self.region, &request_uri);
@@ -2293,6 +2324,7 @@ impl KinesisVideo for KinesisVideoClient {
         &self,
         input: TagStreamInput,
     ) -> Result<TagStreamOutput, RusotoError<TagStreamError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/tagStream";
 
         let mut request = SignedRequest::new("POST", "kinesisvideo", &self.region, &request_uri);
@@ -2324,6 +2356,7 @@ impl KinesisVideo for KinesisVideoClient {
         &self,
         input: UntagResourceInput,
     ) -> Result<UntagResourceOutput, RusotoError<UntagResourceError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/UntagResource";
 
         let mut request = SignedRequest::new("POST", "kinesisvideo", &self.region, &request_uri);
@@ -2355,6 +2388,7 @@ impl KinesisVideo for KinesisVideoClient {
         &self,
         input: UntagStreamInput,
     ) -> Result<UntagStreamOutput, RusotoError<UntagStreamError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/untagStream";
 
         let mut request = SignedRequest::new("POST", "kinesisvideo", &self.region, &request_uri);
@@ -2386,6 +2420,7 @@ impl KinesisVideo for KinesisVideoClient {
         &self,
         input: UpdateDataRetentionInput,
     ) -> Result<UpdateDataRetentionOutput, RusotoError<UpdateDataRetentionError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/updateDataRetention";
 
         let mut request = SignedRequest::new("POST", "kinesisvideo", &self.region, &request_uri);
@@ -2417,6 +2452,7 @@ impl KinesisVideo for KinesisVideoClient {
         &self,
         input: UpdateSignalingChannelInput,
     ) -> Result<UpdateSignalingChannelOutput, RusotoError<UpdateSignalingChannelError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/updateSignalingChannel";
 
         let mut request = SignedRequest::new("POST", "kinesisvideo", &self.region, &request_uri);
@@ -2448,6 +2484,7 @@ impl KinesisVideo for KinesisVideoClient {
         &self,
         input: UpdateStreamInput,
     ) -> Result<UpdateStreamOutput, RusotoError<UpdateStreamError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/updateStream";
 
         let mut request = SignedRequest::new("POST", "kinesisvideo", &self.region, &request_uri);

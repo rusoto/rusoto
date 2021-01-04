@@ -31,7 +31,6 @@ use rusoto_core::signature::SignedRequest;
 use serde::Deserialize;
 #[cfg(feature = "serialize_structs")]
 use serde::Serialize;
-use serde_urlencoded;
 use std::str::FromStr;
 use xml::EventReader;
 
@@ -71,11 +70,12 @@ pub struct AccountAttributesMessage {
 #[allow(dead_code)]
 struct AccountAttributesMessageDeserializer;
 impl AccountAttributesMessageDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<AccountAttributesMessage, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, AccountAttributesMessage, _>(
             tag_name,
             stack,
@@ -108,11 +108,12 @@ pub struct AccountQuota {
 #[allow(dead_code)]
 struct AccountQuotaDeserializer;
 impl AccountQuotaDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<AccountQuota, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, AccountQuota, _>(tag_name, stack, |name, stack, obj| {
             match name {
                 "AccountQuotaName" => {
@@ -134,11 +135,13 @@ impl AccountQuotaDeserializer {
 #[allow(dead_code)]
 struct AccountQuotaListDeserializer;
 impl AccountQuotaListDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<AccountQuota>, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
+
         deserialize_elements::<_, Vec<_>, _>(tag_name, stack, |name, stack, obj| {
             if name == "AccountQuota" {
                 obj.push(AccountQuotaDeserializer::deserialize(
@@ -155,16 +158,18 @@ impl AccountQuotaListDeserializer {
 #[allow(dead_code)]
 struct ActivityStreamModeDeserializer;
 impl ActivityStreamModeDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 #[allow(dead_code)]
 struct ActivityStreamStatusDeserializer;
 impl ActivityStreamStatusDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
@@ -182,10 +187,11 @@ pub struct AddRoleToDBClusterMessage {
 /// Serialize `AddRoleToDBClusterMessage` contents to a `SignedRequest`.
 struct AddRoleToDBClusterMessageSerializer;
 impl AddRoleToDBClusterMessageSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &AddRoleToDBClusterMessage) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         params.put(
@@ -213,10 +219,11 @@ pub struct AddRoleToDBInstanceMessage {
 /// Serialize `AddRoleToDBInstanceMessage` contents to a `SignedRequest`.
 struct AddRoleToDBInstanceMessageSerializer;
 impl AddRoleToDBInstanceMessageSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &AddRoleToDBInstanceMessage) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         params.put(
@@ -241,10 +248,11 @@ pub struct AddSourceIdentifierToSubscriptionMessage {
 /// Serialize `AddSourceIdentifierToSubscriptionMessage` contents to a `SignedRequest`.
 struct AddSourceIdentifierToSubscriptionMessageSerializer;
 impl AddSourceIdentifierToSubscriptionMessageSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &AddSourceIdentifierToSubscriptionMessage) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         params.put(
@@ -267,11 +275,12 @@ pub struct AddSourceIdentifierToSubscriptionResult {
 #[allow(dead_code)]
 struct AddSourceIdentifierToSubscriptionResultDeserializer;
 impl AddSourceIdentifierToSubscriptionResultDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<AddSourceIdentifierToSubscriptionResult, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, AddSourceIdentifierToSubscriptionResult, _>(
             tag_name,
             stack,
@@ -303,10 +312,11 @@ pub struct AddTagsToResourceMessage {
 /// Serialize `AddTagsToResourceMessage` contents to a `SignedRequest`.
 struct AddTagsToResourceMessageSerializer;
 impl AddTagsToResourceMessageSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &AddTagsToResourceMessage) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         params.put(&format!("{}{}", prefix, "ResourceName"), &obj.resource_name);
@@ -317,8 +327,9 @@ impl AddTagsToResourceMessageSerializer {
 #[allow(dead_code)]
 struct ApplyMethodDeserializer;
 impl ApplyMethodDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
@@ -337,10 +348,11 @@ pub struct ApplyPendingMaintenanceActionMessage {
 /// Serialize `ApplyPendingMaintenanceActionMessage` contents to a `SignedRequest`.
 struct ApplyPendingMaintenanceActionMessageSerializer;
 impl ApplyPendingMaintenanceActionMessageSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &ApplyPendingMaintenanceActionMessage) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         params.put(&format!("{}{}", prefix, "ApplyAction"), &obj.apply_action);
@@ -361,11 +373,12 @@ pub struct ApplyPendingMaintenanceActionResult {
 #[allow(dead_code)]
 struct ApplyPendingMaintenanceActionResultDeserializer;
 impl ApplyPendingMaintenanceActionResultDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<ApplyPendingMaintenanceActionResult, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, ApplyPendingMaintenanceActionResult, _>(
             tag_name,
             stack,
@@ -388,11 +401,13 @@ impl ApplyPendingMaintenanceActionResultDeserializer {
 #[allow(dead_code)]
 struct AttributeValueListDeserializer;
 impl AttributeValueListDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<String>, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
+
         deserialize_elements::<_, Vec<_>, _>(tag_name, stack, |name, stack, obj| {
             if name == "AttributeValue" {
                 obj.push(StringDeserializer::deserialize("AttributeValue", stack)?);
@@ -407,6 +422,7 @@ impl AttributeValueListDeserializer {
 /// Serialize `AttributeValueList` contents to a `SignedRequest`.
 struct AttributeValueListSerializer;
 impl AttributeValueListSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &Vec<String>) {
         for (index, obj) in obj.iter().enumerate() {
             let key = format!("{}.member.{}", name, index + 1);
@@ -418,8 +434,9 @@ impl AttributeValueListSerializer {
 #[allow(dead_code)]
 struct AuthSchemeDeserializer;
 impl AuthSchemeDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
@@ -442,10 +459,11 @@ pub struct AuthorizeDBSecurityGroupIngressMessage {
 /// Serialize `AuthorizeDBSecurityGroupIngressMessage` contents to a `SignedRequest`.
 struct AuthorizeDBSecurityGroupIngressMessageSerializer;
 impl AuthorizeDBSecurityGroupIngressMessageSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &AuthorizeDBSecurityGroupIngressMessage) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         if let Some(ref field_value) = obj.cidrip {
@@ -482,11 +500,12 @@ pub struct AuthorizeDBSecurityGroupIngressResult {
 #[allow(dead_code)]
 struct AuthorizeDBSecurityGroupIngressResultDeserializer;
 impl AuthorizeDBSecurityGroupIngressResultDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<AuthorizeDBSecurityGroupIngressResult, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, AuthorizeDBSecurityGroupIngressResult, _>(
             tag_name,
             stack,
@@ -516,11 +535,12 @@ pub struct AvailabilityZone {
 #[allow(dead_code)]
 struct AvailabilityZoneDeserializer;
 impl AvailabilityZoneDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<AvailabilityZone, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, AvailabilityZone, _>(tag_name, stack, |name, stack, obj| {
             match name {
                 "Name" => {
@@ -535,11 +555,13 @@ impl AvailabilityZoneDeserializer {
 #[allow(dead_code)]
 struct AvailabilityZoneListDeserializer;
 impl AvailabilityZoneListDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<AvailabilityZone>, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
+
         deserialize_elements::<_, Vec<_>, _>(tag_name, stack, |name, stack, obj| {
             if name == "AvailabilityZone" {
                 obj.push(AvailabilityZoneDeserializer::deserialize(
@@ -556,11 +578,13 @@ impl AvailabilityZoneListDeserializer {
 #[allow(dead_code)]
 struct AvailabilityZonesDeserializer;
 impl AvailabilityZonesDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<String>, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
+
         deserialize_elements::<_, Vec<_>, _>(tag_name, stack, |name, stack, obj| {
             if name == "AvailabilityZone" {
                 obj.push(StringDeserializer::deserialize("AvailabilityZone", stack)?);
@@ -575,6 +599,7 @@ impl AvailabilityZonesDeserializer {
 /// Serialize `AvailabilityZones` contents to a `SignedRequest`.
 struct AvailabilityZonesSerializer;
 impl AvailabilityZonesSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &Vec<String>) {
         for (index, obj) in obj.iter().enumerate() {
             let key = format!("{}.member.{}", name, index + 1);
@@ -598,11 +623,12 @@ pub struct AvailableProcessorFeature {
 #[allow(dead_code)]
 struct AvailableProcessorFeatureDeserializer;
 impl AvailableProcessorFeatureDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<AvailableProcessorFeature, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, AvailableProcessorFeature, _>(
             tag_name,
             stack,
@@ -629,11 +655,13 @@ impl AvailableProcessorFeatureDeserializer {
 #[allow(dead_code)]
 struct AvailableProcessorFeatureListDeserializer;
 impl AvailableProcessorFeatureListDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<AvailableProcessorFeature>, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
+
         deserialize_elements::<_, Vec<_>, _>(tag_name, stack, |name, stack, obj| {
             if name == "AvailableProcessorFeature" {
                 obj.push(AvailableProcessorFeatureDeserializer::deserialize(
@@ -664,10 +692,11 @@ pub struct BacktrackDBClusterMessage {
 /// Serialize `BacktrackDBClusterMessage` contents to a `SignedRequest`.
 struct BacktrackDBClusterMessageSerializer;
 impl BacktrackDBClusterMessageSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &BacktrackDBClusterMessage) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         params.put(&format!("{}{}", prefix, "BacktrackTo"), &obj.backtrack_to);
@@ -690,16 +719,18 @@ impl BacktrackDBClusterMessageSerializer {
 #[allow(dead_code)]
 struct BooleanDeserializer;
 impl BooleanDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<bool, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::deserialize_primitive(tag_name, stack, |s| Ok(bool::from_str(&s).unwrap()))
     }
 }
 #[allow(dead_code)]
 struct BooleanOptionalDeserializer;
 impl BooleanOptionalDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<bool, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::deserialize_primitive(tag_name, stack, |s| Ok(bool::from_str(&s).unwrap()))
     }
 }
@@ -713,10 +744,11 @@ pub struct CancelExportTaskMessage {
 /// Serialize `CancelExportTaskMessage` contents to a `SignedRequest`.
 struct CancelExportTaskMessageSerializer;
 impl CancelExportTaskMessageSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &CancelExportTaskMessage) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         params.put(
@@ -751,11 +783,12 @@ pub struct Certificate {
 #[allow(dead_code)]
 struct CertificateDeserializer;
 impl CertificateDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Certificate, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, Certificate, _>(tag_name, stack, |name, stack, obj| {
             match name {
                 "CertificateArn" => {
@@ -802,11 +835,13 @@ impl CertificateDeserializer {
 #[allow(dead_code)]
 struct CertificateListDeserializer;
 impl CertificateListDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<Certificate>, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
+
         deserialize_elements::<_, Vec<_>, _>(tag_name, stack, |name, stack, obj| {
             if name == "Certificate" {
                 obj.push(CertificateDeserializer::deserialize("Certificate", stack)?);
@@ -830,11 +865,12 @@ pub struct CertificateMessage {
 #[allow(dead_code)]
 struct CertificateMessageDeserializer;
 impl CertificateMessageDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<CertificateMessage, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, CertificateMessage, _>(tag_name, stack, |name, stack, obj| {
             match name {
                 "Certificates" => {
@@ -864,11 +900,12 @@ pub struct CharacterSet {
 #[allow(dead_code)]
 struct CharacterSetDeserializer;
 impl CharacterSetDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<CharacterSet, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, CharacterSet, _>(tag_name, stack, |name, stack, obj| {
             match name {
                 "CharacterSetDescription" => {
@@ -900,10 +937,11 @@ pub struct CloudwatchLogsExportConfiguration {
 /// Serialize `CloudwatchLogsExportConfiguration` contents to a `SignedRequest`.
 struct CloudwatchLogsExportConfigurationSerializer;
 impl CloudwatchLogsExportConfigurationSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &CloudwatchLogsExportConfiguration) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         if let Some(ref field_value) = obj.disable_log_types {
@@ -941,11 +979,12 @@ pub struct ClusterPendingModifiedValues {
 #[allow(dead_code)]
 struct ClusterPendingModifiedValuesDeserializer;
 impl ClusterPendingModifiedValuesDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<ClusterPendingModifiedValues, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, ClusterPendingModifiedValues, _>(
             tag_name,
             stack,
@@ -1007,10 +1046,11 @@ pub struct ConnectionPoolConfiguration {
 /// Serialize `ConnectionPoolConfiguration` contents to a `SignedRequest`.
 struct ConnectionPoolConfigurationSerializer;
 impl ConnectionPoolConfigurationSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &ConnectionPoolConfiguration) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         if let Some(ref field_value) = obj.connection_borrow_timeout {
@@ -1063,11 +1103,12 @@ pub struct ConnectionPoolConfigurationInfo {
 #[allow(dead_code)]
 struct ConnectionPoolConfigurationInfoDeserializer;
 impl ConnectionPoolConfigurationInfoDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<ConnectionPoolConfigurationInfo, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, ConnectionPoolConfigurationInfo, _>(
             tag_name,
             stack,
@@ -1121,10 +1162,11 @@ pub struct CopyDBClusterParameterGroupMessage {
 /// Serialize `CopyDBClusterParameterGroupMessage` contents to a `SignedRequest`.
 struct CopyDBClusterParameterGroupMessageSerializer;
 impl CopyDBClusterParameterGroupMessageSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &CopyDBClusterParameterGroupMessage) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         params.put(
@@ -1154,11 +1196,12 @@ pub struct CopyDBClusterParameterGroupResult {
 #[allow(dead_code)]
 struct CopyDBClusterParameterGroupResultDeserializer;
 impl CopyDBClusterParameterGroupResultDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<CopyDBClusterParameterGroupResult, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, CopyDBClusterParameterGroupResult, _>(
             tag_name,
             stack,
@@ -1198,10 +1241,11 @@ pub struct CopyDBClusterSnapshotMessage {
 /// Serialize `CopyDBClusterSnapshotMessage` contents to a `SignedRequest`.
 struct CopyDBClusterSnapshotMessageSerializer;
 impl CopyDBClusterSnapshotMessageSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &CopyDBClusterSnapshotMessage) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         if let Some(ref field_value) = obj.copy_tags {
@@ -1236,11 +1280,12 @@ pub struct CopyDBClusterSnapshotResult {
 #[allow(dead_code)]
 struct CopyDBClusterSnapshotResultDeserializer;
 impl CopyDBClusterSnapshotResultDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<CopyDBClusterSnapshotResult, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, CopyDBClusterSnapshotResult, _>(
             tag_name,
             stack,
@@ -1275,10 +1320,11 @@ pub struct CopyDBParameterGroupMessage {
 /// Serialize `CopyDBParameterGroupMessage` contents to a `SignedRequest`.
 struct CopyDBParameterGroupMessageSerializer;
 impl CopyDBParameterGroupMessageSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &CopyDBParameterGroupMessage) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         params.put(
@@ -1308,11 +1354,12 @@ pub struct CopyDBParameterGroupResult {
 #[allow(dead_code)]
 struct CopyDBParameterGroupResultDeserializer;
 impl CopyDBParameterGroupResultDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<CopyDBParameterGroupResult, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, CopyDBParameterGroupResult, _>(
             tag_name,
             stack,
@@ -1355,10 +1402,11 @@ pub struct CopyDBSnapshotMessage {
 /// Serialize `CopyDBSnapshotMessage` contents to a `SignedRequest`.
 struct CopyDBSnapshotMessageSerializer;
 impl CopyDBSnapshotMessageSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &CopyDBSnapshotMessage) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         if let Some(ref field_value) = obj.copy_tags {
@@ -1402,11 +1450,12 @@ pub struct CopyDBSnapshotResult {
 #[allow(dead_code)]
 struct CopyDBSnapshotResultDeserializer;
 impl CopyDBSnapshotResultDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<CopyDBSnapshotResult, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, CopyDBSnapshotResult, _>(tag_name, stack, |name, stack, obj| {
             match name {
                 "DBSnapshot" => {
@@ -1435,10 +1484,11 @@ pub struct CopyOptionGroupMessage {
 /// Serialize `CopyOptionGroupMessage` contents to a `SignedRequest`.
 struct CopyOptionGroupMessageSerializer;
 impl CopyOptionGroupMessageSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &CopyOptionGroupMessage) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         params.put(
@@ -1468,11 +1518,12 @@ pub struct CopyOptionGroupResult {
 #[allow(dead_code)]
 struct CopyOptionGroupResultDeserializer;
 impl CopyOptionGroupResultDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<CopyOptionGroupResult, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, CopyOptionGroupResult, _>(tag_name, stack, |name, stack, obj| {
             match name {
                 "OptionGroup" => {
@@ -1502,10 +1553,11 @@ pub struct CreateCustomAvailabilityZoneMessage {
 /// Serialize `CreateCustomAvailabilityZoneMessage` contents to a `SignedRequest`.
 struct CreateCustomAvailabilityZoneMessageSerializer;
 impl CreateCustomAvailabilityZoneMessageSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &CreateCustomAvailabilityZoneMessage) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         params.put(
@@ -1536,11 +1588,12 @@ pub struct CreateCustomAvailabilityZoneResult {
 #[allow(dead_code)]
 struct CreateCustomAvailabilityZoneResultDeserializer;
 impl CreateCustomAvailabilityZoneResultDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<CreateCustomAvailabilityZoneResult, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, CreateCustomAvailabilityZoneResult, _>(
             tag_name,
             stack,
@@ -1580,10 +1633,11 @@ pub struct CreateDBClusterEndpointMessage {
 /// Serialize `CreateDBClusterEndpointMessage` contents to a `SignedRequest`.
 struct CreateDBClusterEndpointMessageSerializer;
 impl CreateDBClusterEndpointMessageSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &CreateDBClusterEndpointMessage) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         params.put(
@@ -1690,10 +1744,11 @@ pub struct CreateDBClusterMessage {
 /// Serialize `CreateDBClusterMessage` contents to a `SignedRequest`.
 struct CreateDBClusterMessageSerializer;
 impl CreateDBClusterMessageSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &CreateDBClusterMessage) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         if let Some(ref field_value) = obj.availability_zones {
@@ -1854,10 +1909,11 @@ pub struct CreateDBClusterParameterGroupMessage {
 /// Serialize `CreateDBClusterParameterGroupMessage` contents to a `SignedRequest`.
 struct CreateDBClusterParameterGroupMessageSerializer;
 impl CreateDBClusterParameterGroupMessageSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &CreateDBClusterParameterGroupMessage) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         params.put(
@@ -1884,11 +1940,12 @@ pub struct CreateDBClusterParameterGroupResult {
 #[allow(dead_code)]
 struct CreateDBClusterParameterGroupResultDeserializer;
 impl CreateDBClusterParameterGroupResultDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<CreateDBClusterParameterGroupResult, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, CreateDBClusterParameterGroupResult, _>(
             tag_name,
             stack,
@@ -1917,11 +1974,12 @@ pub struct CreateDBClusterResult {
 #[allow(dead_code)]
 struct CreateDBClusterResultDeserializer;
 impl CreateDBClusterResultDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<CreateDBClusterResult, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, CreateDBClusterResult, _>(tag_name, stack, |name, stack, obj| {
             match name {
                 "DBCluster" => {
@@ -1948,10 +2006,11 @@ pub struct CreateDBClusterSnapshotMessage {
 /// Serialize `CreateDBClusterSnapshotMessage` contents to a `SignedRequest`.
 struct CreateDBClusterSnapshotMessageSerializer;
 impl CreateDBClusterSnapshotMessageSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &CreateDBClusterSnapshotMessage) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         params.put(
@@ -1977,11 +2036,12 @@ pub struct CreateDBClusterSnapshotResult {
 #[allow(dead_code)]
 struct CreateDBClusterSnapshotResultDeserializer;
 impl CreateDBClusterSnapshotResultDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<CreateDBClusterSnapshotResult, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, CreateDBClusterSnapshotResult, _>(
             tag_name,
             stack,
@@ -2105,10 +2165,11 @@ pub struct CreateDBInstanceMessage {
 /// Serialize `CreateDBInstanceMessage` contents to a `SignedRequest`.
 struct CreateDBInstanceMessageSerializer;
 impl CreateDBInstanceMessageSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &CreateDBInstanceMessage) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         if let Some(ref field_value) = obj.allocated_storage {
@@ -2387,10 +2448,11 @@ pub struct CreateDBInstanceReadReplicaMessage {
 /// Serialize `CreateDBInstanceReadReplicaMessage` contents to a `SignedRequest`.
 struct CreateDBInstanceReadReplicaMessageSerializer;
 impl CreateDBInstanceReadReplicaMessageSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &CreateDBInstanceReadReplicaMessage) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         if let Some(ref field_value) = obj.auto_minor_version_upgrade {
@@ -2539,11 +2601,12 @@ pub struct CreateDBInstanceReadReplicaResult {
 #[allow(dead_code)]
 struct CreateDBInstanceReadReplicaResultDeserializer;
 impl CreateDBInstanceReadReplicaResultDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<CreateDBInstanceReadReplicaResult, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, CreateDBInstanceReadReplicaResult, _>(
             tag_name,
             stack,
@@ -2569,11 +2632,12 @@ pub struct CreateDBInstanceResult {
 #[allow(dead_code)]
 struct CreateDBInstanceResultDeserializer;
 impl CreateDBInstanceResultDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<CreateDBInstanceResult, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, CreateDBInstanceResult, _>(tag_name, stack, |name, stack, obj| {
             match name {
                 "DBInstance" => {
@@ -2603,10 +2667,11 @@ pub struct CreateDBParameterGroupMessage {
 /// Serialize `CreateDBParameterGroupMessage` contents to a `SignedRequest`.
 struct CreateDBParameterGroupMessageSerializer;
 impl CreateDBParameterGroupMessageSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &CreateDBParameterGroupMessage) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         params.put(
@@ -2633,11 +2698,12 @@ pub struct CreateDBParameterGroupResult {
 #[allow(dead_code)]
 struct CreateDBParameterGroupResultDeserializer;
 impl CreateDBParameterGroupResultDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<CreateDBParameterGroupResult, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, CreateDBParameterGroupResult, _>(
             tag_name,
             stack,
@@ -2684,10 +2750,11 @@ pub struct CreateDBProxyRequest {
 /// Serialize `CreateDBProxyRequest` contents to a `SignedRequest`.
 struct CreateDBProxyRequestSerializer;
 impl CreateDBProxyRequestSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &CreateDBProxyRequest) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         UserAuthConfigListSerializer::serialize(
@@ -2735,11 +2802,12 @@ pub struct CreateDBProxyResponse {
 #[allow(dead_code)]
 struct CreateDBProxyResponseDeserializer;
 impl CreateDBProxyResponseDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<CreateDBProxyResponse, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, CreateDBProxyResponse, _>(tag_name, stack, |name, stack, obj| {
             match name {
                 "DBProxy" => {
@@ -2766,10 +2834,11 @@ pub struct CreateDBSecurityGroupMessage {
 /// Serialize `CreateDBSecurityGroupMessage` contents to a `SignedRequest`.
 struct CreateDBSecurityGroupMessageSerializer;
 impl CreateDBSecurityGroupMessageSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &CreateDBSecurityGroupMessage) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         params.put(
@@ -2795,11 +2864,12 @@ pub struct CreateDBSecurityGroupResult {
 #[allow(dead_code)]
 struct CreateDBSecurityGroupResultDeserializer;
 impl CreateDBSecurityGroupResultDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<CreateDBSecurityGroupResult, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, CreateDBSecurityGroupResult, _>(
             tag_name,
             stack,
@@ -2832,10 +2902,11 @@ pub struct CreateDBSnapshotMessage {
 /// Serialize `CreateDBSnapshotMessage` contents to a `SignedRequest`.
 struct CreateDBSnapshotMessageSerializer;
 impl CreateDBSnapshotMessageSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &CreateDBSnapshotMessage) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         params.put(
@@ -2861,11 +2932,12 @@ pub struct CreateDBSnapshotResult {
 #[allow(dead_code)]
 struct CreateDBSnapshotResultDeserializer;
 impl CreateDBSnapshotResultDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<CreateDBSnapshotResult, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, CreateDBSnapshotResult, _>(tag_name, stack, |name, stack, obj| {
             match name {
                 "DBSnapshot" => {
@@ -2895,10 +2967,11 @@ pub struct CreateDBSubnetGroupMessage {
 /// Serialize `CreateDBSubnetGroupMessage` contents to a `SignedRequest`.
 struct CreateDBSubnetGroupMessageSerializer;
 impl CreateDBSubnetGroupMessageSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &CreateDBSubnetGroupMessage) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         params.put(
@@ -2929,11 +3002,12 @@ pub struct CreateDBSubnetGroupResult {
 #[allow(dead_code)]
 struct CreateDBSubnetGroupResultDeserializer;
 impl CreateDBSubnetGroupResultDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<CreateDBSubnetGroupResult, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, CreateDBSubnetGroupResult, _>(
             tag_name,
             stack,
@@ -2974,10 +3048,11 @@ pub struct CreateEventSubscriptionMessage {
 /// Serialize `CreateEventSubscriptionMessage` contents to a `SignedRequest`.
 struct CreateEventSubscriptionMessageSerializer;
 impl CreateEventSubscriptionMessageSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &CreateEventSubscriptionMessage) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         if let Some(ref field_value) = obj.enabled {
@@ -3020,11 +3095,12 @@ pub struct CreateEventSubscriptionResult {
 #[allow(dead_code)]
 struct CreateEventSubscriptionResultDeserializer;
 impl CreateEventSubscriptionResultDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<CreateEventSubscriptionResult, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, CreateEventSubscriptionResult, _>(
             tag_name,
             stack,
@@ -3065,10 +3141,11 @@ pub struct CreateGlobalClusterMessage {
 /// Serialize `CreateGlobalClusterMessage` contents to a `SignedRequest`.
 struct CreateGlobalClusterMessageSerializer;
 impl CreateGlobalClusterMessageSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &CreateGlobalClusterMessage) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         if let Some(ref field_value) = obj.database_name {
@@ -3110,11 +3187,12 @@ pub struct CreateGlobalClusterResult {
 #[allow(dead_code)]
 struct CreateGlobalClusterResultDeserializer;
 impl CreateGlobalClusterResultDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<CreateGlobalClusterResult, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, CreateGlobalClusterResult, _>(
             tag_name,
             stack,
@@ -3152,10 +3230,11 @@ pub struct CreateOptionGroupMessage {
 /// Serialize `CreateOptionGroupMessage` contents to a `SignedRequest`.
 struct CreateOptionGroupMessageSerializer;
 impl CreateOptionGroupMessageSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &CreateOptionGroupMessage) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         params.put(&format!("{}{}", prefix, "EngineName"), &obj.engine_name);
@@ -3186,11 +3265,12 @@ pub struct CreateOptionGroupResult {
 #[allow(dead_code)]
 struct CreateOptionGroupResultDeserializer;
 impl CreateOptionGroupResultDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<CreateOptionGroupResult, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, CreateOptionGroupResult, _>(
             tag_name,
             stack,
@@ -3224,11 +3304,12 @@ pub struct CustomAvailabilityZone {
 #[allow(dead_code)]
 struct CustomAvailabilityZoneDeserializer;
 impl CustomAvailabilityZoneDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<CustomAvailabilityZone, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, CustomAvailabilityZone, _>(tag_name, stack, |name, stack, obj| {
             match name {
                 "CustomAvailabilityZoneId" => {
@@ -3262,11 +3343,13 @@ impl CustomAvailabilityZoneDeserializer {
 #[allow(dead_code)]
 struct CustomAvailabilityZoneListDeserializer;
 impl CustomAvailabilityZoneListDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<CustomAvailabilityZone>, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
+
         deserialize_elements::<_, Vec<_>, _>(tag_name, stack, |name, stack, obj| {
             if name == "CustomAvailabilityZone" {
                 obj.push(CustomAvailabilityZoneDeserializer::deserialize(
@@ -3292,11 +3375,12 @@ pub struct CustomAvailabilityZoneMessage {
 #[allow(dead_code)]
 struct CustomAvailabilityZoneMessageDeserializer;
 impl CustomAvailabilityZoneMessageDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<CustomAvailabilityZoneMessage, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, CustomAvailabilityZoneMessage, _>(
             tag_name,
             stack,
@@ -3439,11 +3523,12 @@ pub struct DBCluster {
 #[allow(dead_code)]
 struct DBClusterDeserializer;
 impl DBClusterDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<DBCluster, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, DBCluster, _>(tag_name, stack, |name, stack, obj| {
             match name {
                 "ActivityStreamKinesisStreamName" => {
@@ -3771,11 +3856,12 @@ pub struct DBClusterBacktrack {
 #[allow(dead_code)]
 struct DBClusterBacktrackDeserializer;
 impl DBClusterBacktrackDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<DBClusterBacktrack, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, DBClusterBacktrack, _>(tag_name, stack, |name, stack, obj| {
             match name {
                 "BacktrackIdentifier" => {
@@ -3815,11 +3901,13 @@ impl DBClusterBacktrackDeserializer {
 #[allow(dead_code)]
 struct DBClusterBacktrackListDeserializer;
 impl DBClusterBacktrackListDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<DBClusterBacktrack>, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
+
         deserialize_elements::<_, Vec<_>, _>(tag_name, stack, |name, stack, obj| {
             if name == "DBClusterBacktrack" {
                 obj.push(DBClusterBacktrackDeserializer::deserialize(
@@ -3846,11 +3934,12 @@ pub struct DBClusterBacktrackMessage {
 #[allow(dead_code)]
 struct DBClusterBacktrackMessageDeserializer;
 impl DBClusterBacktrackMessageDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<DBClusterBacktrackMessage, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, DBClusterBacktrackMessage, _>(
             tag_name,
             stack,
@@ -3892,11 +3981,12 @@ pub struct DBClusterCapacityInfo {
 #[allow(dead_code)]
 struct DBClusterCapacityInfoDeserializer;
 impl DBClusterCapacityInfoDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<DBClusterCapacityInfo, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, DBClusterCapacityInfo, _>(tag_name, stack, |name, stack, obj| {
             match name {
                 "CurrentCapacity" => {
@@ -3962,11 +4052,12 @@ pub struct DBClusterEndpoint {
 #[allow(dead_code)]
 struct DBClusterEndpointDeserializer;
 impl DBClusterEndpointDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<DBClusterEndpoint, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, DBClusterEndpoint, _>(tag_name, stack, |name, stack, obj| {
             match name {
                 "CustomEndpointType" => {
@@ -4029,11 +4120,13 @@ impl DBClusterEndpointDeserializer {
 #[allow(dead_code)]
 struct DBClusterEndpointListDeserializer;
 impl DBClusterEndpointListDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<DBClusterEndpoint>, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
+
         deserialize_elements::<_, Vec<_>, _>(tag_name, stack, |name, stack, obj| {
             if name == "DBClusterEndpointList" {
                 obj.push(DBClusterEndpointDeserializer::deserialize(
@@ -4059,11 +4152,12 @@ pub struct DBClusterEndpointMessage {
 #[allow(dead_code)]
 struct DBClusterEndpointMessageDeserializer;
 impl DBClusterEndpointMessageDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<DBClusterEndpointMessage, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, DBClusterEndpointMessage, _>(
             tag_name,
             stack,
@@ -4090,11 +4184,13 @@ impl DBClusterEndpointMessageDeserializer {
 #[allow(dead_code)]
 struct DBClusterListDeserializer;
 impl DBClusterListDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<DBCluster>, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
+
         deserialize_elements::<_, Vec<_>, _>(tag_name, stack, |name, stack, obj| {
             if name == "DBCluster" {
                 obj.push(DBClusterDeserializer::deserialize("DBCluster", stack)?);
@@ -4122,11 +4218,12 @@ pub struct DBClusterMember {
 #[allow(dead_code)]
 struct DBClusterMemberDeserializer;
 impl DBClusterMemberDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<DBClusterMember, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, DBClusterMember, _>(tag_name, stack, |name, stack, obj| {
             match name {
                 "DBClusterParameterGroupStatus" => {
@@ -4160,11 +4257,13 @@ impl DBClusterMemberDeserializer {
 #[allow(dead_code)]
 struct DBClusterMemberListDeserializer;
 impl DBClusterMemberListDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<DBClusterMember>, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
+
         deserialize_elements::<_, Vec<_>, _>(tag_name, stack, |name, stack, obj| {
             if name == "DBClusterMember" {
                 obj.push(DBClusterMemberDeserializer::deserialize(
@@ -4191,11 +4290,12 @@ pub struct DBClusterMessage {
 #[allow(dead_code)]
 struct DBClusterMessageDeserializer;
 impl DBClusterMessageDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<DBClusterMessage, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, DBClusterMessage, _>(tag_name, stack, |name, stack, obj| {
             match name {
                 "DBClusters" => {
@@ -4215,11 +4315,13 @@ impl DBClusterMessageDeserializer {
 #[allow(dead_code)]
 struct DBClusterOptionGroupMembershipsDeserializer;
 impl DBClusterOptionGroupMembershipsDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<DBClusterOptionGroupStatus>, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
+
         deserialize_elements::<_, Vec<_>, _>(tag_name, stack, |name, stack, obj| {
             if name == "DBClusterOptionGroup" {
                 obj.push(DBClusterOptionGroupStatusDeserializer::deserialize(
@@ -4246,11 +4348,12 @@ pub struct DBClusterOptionGroupStatus {
 #[allow(dead_code)]
 struct DBClusterOptionGroupStatusDeserializer;
 impl DBClusterOptionGroupStatusDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<DBClusterOptionGroupStatus, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, DBClusterOptionGroupStatus, _>(
             tag_name,
             stack,
@@ -4289,11 +4392,12 @@ pub struct DBClusterParameterGroup {
 #[allow(dead_code)]
 struct DBClusterParameterGroupDeserializer;
 impl DBClusterParameterGroupDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<DBClusterParameterGroup, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, DBClusterParameterGroup, _>(
             tag_name,
             stack,
@@ -4340,11 +4444,12 @@ pub struct DBClusterParameterGroupDetails {
 #[allow(dead_code)]
 struct DBClusterParameterGroupDetailsDeserializer;
 impl DBClusterParameterGroupDetailsDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<DBClusterParameterGroupDetails, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, DBClusterParameterGroupDetails, _>(
             tag_name,
             stack,
@@ -4368,11 +4473,13 @@ impl DBClusterParameterGroupDetailsDeserializer {
 #[allow(dead_code)]
 struct DBClusterParameterGroupListDeserializer;
 impl DBClusterParameterGroupListDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<DBClusterParameterGroup>, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
+
         deserialize_elements::<_, Vec<_>, _>(tag_name, stack, |name, stack, obj| {
             if name == "DBClusterParameterGroup" {
                 obj.push(DBClusterParameterGroupDeserializer::deserialize(
@@ -4397,11 +4504,12 @@ pub struct DBClusterParameterGroupNameMessage {
 #[allow(dead_code)]
 struct DBClusterParameterGroupNameMessageDeserializer;
 impl DBClusterParameterGroupNameMessageDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<DBClusterParameterGroupNameMessage, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, DBClusterParameterGroupNameMessage, _>(
             tag_name,
             stack,
@@ -4432,11 +4540,12 @@ pub struct DBClusterParameterGroupsMessage {
 #[allow(dead_code)]
 struct DBClusterParameterGroupsMessageDeserializer;
 impl DBClusterParameterGroupsMessageDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<DBClusterParameterGroupsMessage, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, DBClusterParameterGroupsMessage, _>(
             tag_name,
             stack,
@@ -4475,11 +4584,12 @@ pub struct DBClusterRole {
 #[allow(dead_code)]
 struct DBClusterRoleDeserializer;
 impl DBClusterRoleDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<DBClusterRole, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, DBClusterRole, _>(tag_name, stack, |name, stack, obj| {
             match name {
                 "FeatureName" => {
@@ -4500,11 +4610,13 @@ impl DBClusterRoleDeserializer {
 #[allow(dead_code)]
 struct DBClusterRolesDeserializer;
 impl DBClusterRolesDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<DBClusterRole>, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
+
         deserialize_elements::<_, Vec<_>, _>(tag_name, stack, |name, stack, obj| {
             if name == "DBClusterRole" {
                 obj.push(DBClusterRoleDeserializer::deserialize(
@@ -4568,11 +4680,12 @@ pub struct DBClusterSnapshot {
 #[allow(dead_code)]
 struct DBClusterSnapshotDeserializer;
 impl DBClusterSnapshotDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<DBClusterSnapshot, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, DBClusterSnapshot, _>(tag_name, stack, |name, stack, obj| {
             match name {
                 "AllocatedStorage" => {
@@ -4688,11 +4801,12 @@ pub struct DBClusterSnapshotAttribute {
 #[allow(dead_code)]
 struct DBClusterSnapshotAttributeDeserializer;
 impl DBClusterSnapshotAttributeDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<DBClusterSnapshotAttribute, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, DBClusterSnapshotAttribute, _>(
             tag_name,
             stack,
@@ -4717,11 +4831,13 @@ impl DBClusterSnapshotAttributeDeserializer {
 #[allow(dead_code)]
 struct DBClusterSnapshotAttributeListDeserializer;
 impl DBClusterSnapshotAttributeListDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<DBClusterSnapshotAttribute>, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
+
         deserialize_elements::<_, Vec<_>, _>(tag_name, stack, |name, stack, obj| {
             if name == "DBClusterSnapshotAttribute" {
                 obj.push(DBClusterSnapshotAttributeDeserializer::deserialize(
@@ -4748,11 +4864,12 @@ pub struct DBClusterSnapshotAttributesResult {
 #[allow(dead_code)]
 struct DBClusterSnapshotAttributesResultDeserializer;
 impl DBClusterSnapshotAttributesResultDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<DBClusterSnapshotAttributesResult, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, DBClusterSnapshotAttributesResult, _>(
             tag_name,
             stack,
@@ -4782,11 +4899,13 @@ impl DBClusterSnapshotAttributesResultDeserializer {
 #[allow(dead_code)]
 struct DBClusterSnapshotListDeserializer;
 impl DBClusterSnapshotListDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<DBClusterSnapshot>, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
+
         deserialize_elements::<_, Vec<_>, _>(tag_name, stack, |name, stack, obj| {
             if name == "DBClusterSnapshot" {
                 obj.push(DBClusterSnapshotDeserializer::deserialize(
@@ -4813,11 +4932,12 @@ pub struct DBClusterSnapshotMessage {
 #[allow(dead_code)]
 struct DBClusterSnapshotMessageDeserializer;
 impl DBClusterSnapshotMessageDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<DBClusterSnapshotMessage, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, DBClusterSnapshotMessage, _>(
             tag_name,
             stack,
@@ -4886,11 +5006,12 @@ pub struct DBEngineVersion {
 #[allow(dead_code)]
 struct DBEngineVersionDeserializer;
 impl DBEngineVersionDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<DBEngineVersion, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, DBEngineVersion, _>(tag_name, stack, |name, stack, obj| {
             match name {
                 "DBEngineDescription" => {
@@ -5008,11 +5129,13 @@ impl DBEngineVersionDeserializer {
 #[allow(dead_code)]
 struct DBEngineVersionListDeserializer;
 impl DBEngineVersionListDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<DBEngineVersion>, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
+
         deserialize_elements::<_, Vec<_>, _>(tag_name, stack, |name, stack, obj| {
             if name == "DBEngineVersion" {
                 obj.push(DBEngineVersionDeserializer::deserialize(
@@ -5039,11 +5162,12 @@ pub struct DBEngineVersionMessage {
 #[allow(dead_code)]
 struct DBEngineVersionMessageDeserializer;
 impl DBEngineVersionMessageDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<DBEngineVersionMessage, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, DBEngineVersionMessage, _>(tag_name, stack, |name, stack, obj| {
             match name {
                 "DBEngineVersions" => {
@@ -5195,11 +5319,12 @@ pub struct DBInstance {
 #[allow(dead_code)]
 struct DBInstanceDeserializer;
 impl DBInstanceDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<DBInstance, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, DBInstance, _>(tag_name, stack, |name, stack, obj| {
             match name {
                 "AllocatedStorage" => {
@@ -5614,11 +5739,12 @@ pub struct DBInstanceAutomatedBackup {
 #[allow(dead_code)]
 struct DBInstanceAutomatedBackupDeserializer;
 impl DBInstanceAutomatedBackupDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<DBInstanceAutomatedBackup, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, DBInstanceAutomatedBackup, _>(
             tag_name,
             stack,
@@ -5750,11 +5876,13 @@ impl DBInstanceAutomatedBackupDeserializer {
 #[allow(dead_code)]
 struct DBInstanceAutomatedBackupListDeserializer;
 impl DBInstanceAutomatedBackupListDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<DBInstanceAutomatedBackup>, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
+
         deserialize_elements::<_, Vec<_>, _>(tag_name, stack, |name, stack, obj| {
             if name == "DBInstanceAutomatedBackup" {
                 obj.push(DBInstanceAutomatedBackupDeserializer::deserialize(
@@ -5781,11 +5909,12 @@ pub struct DBInstanceAutomatedBackupMessage {
 #[allow(dead_code)]
 struct DBInstanceAutomatedBackupMessageDeserializer;
 impl DBInstanceAutomatedBackupMessageDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<DBInstanceAutomatedBackupMessage, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, DBInstanceAutomatedBackupMessage, _>(
             tag_name,
             stack,
@@ -5820,11 +5949,12 @@ pub struct DBInstanceAutomatedBackupsReplication {
 #[allow(dead_code)]
 struct DBInstanceAutomatedBackupsReplicationDeserializer;
 impl DBInstanceAutomatedBackupsReplicationDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<DBInstanceAutomatedBackupsReplication, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, DBInstanceAutomatedBackupsReplication, _>(
             tag_name,
             stack,
@@ -5847,11 +5977,13 @@ impl DBInstanceAutomatedBackupsReplicationDeserializer {
 #[allow(dead_code)]
 struct DBInstanceAutomatedBackupsReplicationListDeserializer;
 impl DBInstanceAutomatedBackupsReplicationListDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<DBInstanceAutomatedBackupsReplication>, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
+
         deserialize_elements::<_, Vec<_>, _>(tag_name, stack, |name, stack, obj| {
             if name == "DBInstanceAutomatedBackupsReplication" {
                 obj.push(
@@ -5870,11 +6002,13 @@ impl DBInstanceAutomatedBackupsReplicationListDeserializer {
 #[allow(dead_code)]
 struct DBInstanceListDeserializer;
 impl DBInstanceListDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<DBInstance>, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
+
         deserialize_elements::<_, Vec<_>, _>(tag_name, stack, |name, stack, obj| {
             if name == "DBInstance" {
                 obj.push(DBInstanceDeserializer::deserialize("DBInstance", stack)?);
@@ -5898,11 +6032,12 @@ pub struct DBInstanceMessage {
 #[allow(dead_code)]
 struct DBInstanceMessageDeserializer;
 impl DBInstanceMessageDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<DBInstanceMessage, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, DBInstanceMessage, _>(tag_name, stack, |name, stack, obj| {
             match name {
                 "DBInstances" => {
@@ -5934,11 +6069,12 @@ pub struct DBInstanceRole {
 #[allow(dead_code)]
 struct DBInstanceRoleDeserializer;
 impl DBInstanceRoleDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<DBInstanceRole, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, DBInstanceRole, _>(tag_name, stack, |name, stack, obj| {
             match name {
                 "FeatureName" => {
@@ -5959,11 +6095,13 @@ impl DBInstanceRoleDeserializer {
 #[allow(dead_code)]
 struct DBInstanceRolesDeserializer;
 impl DBInstanceRolesDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<DBInstanceRole>, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
+
         deserialize_elements::<_, Vec<_>, _>(tag_name, stack, |name, stack, obj| {
             if name == "DBInstanceRole" {
                 obj.push(DBInstanceRoleDeserializer::deserialize(
@@ -5994,11 +6132,12 @@ pub struct DBInstanceStatusInfo {
 #[allow(dead_code)]
 struct DBInstanceStatusInfoDeserializer;
 impl DBInstanceStatusInfoDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<DBInstanceStatusInfo, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, DBInstanceStatusInfo, _>(tag_name, stack, |name, stack, obj| {
             match name {
                 "Message" => {
@@ -6022,11 +6161,13 @@ impl DBInstanceStatusInfoDeserializer {
 #[allow(dead_code)]
 struct DBInstanceStatusInfoListDeserializer;
 impl DBInstanceStatusInfoListDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<DBInstanceStatusInfo>, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
+
         deserialize_elements::<_, Vec<_>, _>(tag_name, stack, |name, stack, obj| {
             if name == "DBInstanceStatusInfo" {
                 obj.push(DBInstanceStatusInfoDeserializer::deserialize(
@@ -6057,11 +6198,12 @@ pub struct DBParameterGroup {
 #[allow(dead_code)]
 struct DBParameterGroupDeserializer;
 impl DBParameterGroupDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<DBParameterGroup, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, DBParameterGroup, _>(tag_name, stack, |name, stack, obj| {
             match name {
                 "DBParameterGroupArn" => {
@@ -6104,11 +6246,12 @@ pub struct DBParameterGroupDetails {
 #[allow(dead_code)]
 struct DBParameterGroupDetailsDeserializer;
 impl DBParameterGroupDetailsDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<DBParameterGroupDetails, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, DBParameterGroupDetails, _>(
             tag_name,
             stack,
@@ -6132,11 +6275,13 @@ impl DBParameterGroupDetailsDeserializer {
 #[allow(dead_code)]
 struct DBParameterGroupListDeserializer;
 impl DBParameterGroupListDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<DBParameterGroup>, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
+
         deserialize_elements::<_, Vec<_>, _>(tag_name, stack, |name, stack, obj| {
             if name == "DBParameterGroup" {
                 obj.push(DBParameterGroupDeserializer::deserialize(
@@ -6161,11 +6306,12 @@ pub struct DBParameterGroupNameMessage {
 #[allow(dead_code)]
 struct DBParameterGroupNameMessageDeserializer;
 impl DBParameterGroupNameMessageDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<DBParameterGroupNameMessage, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, DBParameterGroupNameMessage, _>(
             tag_name,
             stack,
@@ -6197,11 +6343,12 @@ pub struct DBParameterGroupStatus {
 #[allow(dead_code)]
 struct DBParameterGroupStatusDeserializer;
 impl DBParameterGroupStatusDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<DBParameterGroupStatus, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, DBParameterGroupStatus, _>(tag_name, stack, |name, stack, obj| {
             match name {
                 "DBParameterGroupName" => {
@@ -6225,11 +6372,13 @@ impl DBParameterGroupStatusDeserializer {
 #[allow(dead_code)]
 struct DBParameterGroupStatusListDeserializer;
 impl DBParameterGroupStatusListDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<DBParameterGroupStatus>, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
+
         deserialize_elements::<_, Vec<_>, _>(tag_name, stack, |name, stack, obj| {
             if name == "DBParameterGroup" {
                 obj.push(DBParameterGroupStatusDeserializer::deserialize(
@@ -6256,11 +6405,12 @@ pub struct DBParameterGroupsMessage {
 #[allow(dead_code)]
 struct DBParameterGroupsMessageDeserializer;
 impl DBParameterGroupsMessageDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<DBParameterGroupsMessage, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, DBParameterGroupsMessage, _>(
             tag_name,
             stack,
@@ -6321,11 +6471,12 @@ pub struct DBProxy {
 #[allow(dead_code)]
 struct DBProxyDeserializer;
 impl DBProxyDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<DBProxy, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, DBProxy, _>(tag_name, stack, |name, stack, obj| {
             match name {
                 "Auth" => {
@@ -6391,11 +6542,13 @@ impl DBProxyDeserializer {
 #[allow(dead_code)]
 struct DBProxyListDeserializer;
 impl DBProxyListDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<DBProxy>, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
+
         deserialize_elements::<_, Vec<_>, _>(tag_name, stack, |name, stack, obj| {
             if name == "member" {
                 obj.push(DBProxyDeserializer::deserialize("member", stack)?);
@@ -6409,8 +6562,9 @@ impl DBProxyListDeserializer {
 #[allow(dead_code)]
 struct DBProxyStatusDeserializer;
 impl DBProxyStatusDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
@@ -6437,11 +6591,12 @@ pub struct DBProxyTarget {
 #[allow(dead_code)]
 struct DBProxyTargetDeserializer;
 impl DBProxyTargetDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<DBProxyTarget, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, DBProxyTarget, _>(tag_name, stack, |name, stack, obj| {
             match name {
                 "Endpoint" => {
@@ -6501,11 +6656,12 @@ pub struct DBProxyTargetGroup {
 #[allow(dead_code)]
 struct DBProxyTargetGroupDeserializer;
 impl DBProxyTargetGroupDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<DBProxyTargetGroup, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, DBProxyTargetGroup, _>(tag_name, stack, |name, stack, obj| {
             match name {
                 "ConnectionPoolConfig" => {
@@ -6568,11 +6724,12 @@ pub struct DBSecurityGroup {
 #[allow(dead_code)]
 struct DBSecurityGroupDeserializer;
 impl DBSecurityGroupDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<DBSecurityGroup, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, DBSecurityGroup, _>(tag_name, stack, |name, stack, obj| {
             match name {
                 "DBSecurityGroupArn" => {
@@ -6628,11 +6785,12 @@ pub struct DBSecurityGroupMembership {
 #[allow(dead_code)]
 struct DBSecurityGroupMembershipDeserializer;
 impl DBSecurityGroupMembershipDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<DBSecurityGroupMembership, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, DBSecurityGroupMembership, _>(
             tag_name,
             stack,
@@ -6657,11 +6815,13 @@ impl DBSecurityGroupMembershipDeserializer {
 #[allow(dead_code)]
 struct DBSecurityGroupMembershipListDeserializer;
 impl DBSecurityGroupMembershipListDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<DBSecurityGroupMembership>, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
+
         deserialize_elements::<_, Vec<_>, _>(tag_name, stack, |name, stack, obj| {
             if name == "DBSecurityGroup" {
                 obj.push(DBSecurityGroupMembershipDeserializer::deserialize(
@@ -6688,11 +6848,12 @@ pub struct DBSecurityGroupMessage {
 #[allow(dead_code)]
 struct DBSecurityGroupMessageDeserializer;
 impl DBSecurityGroupMessageDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<DBSecurityGroupMessage, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, DBSecurityGroupMessage, _>(tag_name, stack, |name, stack, obj| {
             match name {
                 "DBSecurityGroups" => {
@@ -6713,6 +6874,7 @@ impl DBSecurityGroupMessageDeserializer {
 /// Serialize `DBSecurityGroupNameList` contents to a `SignedRequest`.
 struct DBSecurityGroupNameListSerializer;
 impl DBSecurityGroupNameListSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &Vec<String>) {
         for (index, obj) in obj.iter().enumerate() {
             let key = format!("{}.member.{}", name, index + 1);
@@ -6724,11 +6886,13 @@ impl DBSecurityGroupNameListSerializer {
 #[allow(dead_code)]
 struct DBSecurityGroupsDeserializer;
 impl DBSecurityGroupsDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<DBSecurityGroup>, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
+
         deserialize_elements::<_, Vec<_>, _>(tag_name, stack, |name, stack, obj| {
             if name == "DBSecurityGroup" {
                 obj.push(DBSecurityGroupDeserializer::deserialize(
@@ -6808,11 +6972,12 @@ pub struct DBSnapshot {
 #[allow(dead_code)]
 struct DBSnapshotDeserializer;
 impl DBSnapshotDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<DBSnapshot, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, DBSnapshot, _>(tag_name, stack, |name, stack, obj| {
             match name {
                 "AllocatedStorage" => {
@@ -6956,11 +7121,12 @@ pub struct DBSnapshotAttribute {
 #[allow(dead_code)]
 struct DBSnapshotAttributeDeserializer;
 impl DBSnapshotAttributeDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<DBSnapshotAttribute, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, DBSnapshotAttribute, _>(tag_name, stack, |name, stack, obj| {
             match name {
                 "AttributeName" => {
@@ -6981,11 +7147,13 @@ impl DBSnapshotAttributeDeserializer {
 #[allow(dead_code)]
 struct DBSnapshotAttributeListDeserializer;
 impl DBSnapshotAttributeListDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<DBSnapshotAttribute>, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
+
         deserialize_elements::<_, Vec<_>, _>(tag_name, stack, |name, stack, obj| {
             if name == "DBSnapshotAttribute" {
                 obj.push(DBSnapshotAttributeDeserializer::deserialize(
@@ -7012,11 +7180,12 @@ pub struct DBSnapshotAttributesResult {
 #[allow(dead_code)]
 struct DBSnapshotAttributesResultDeserializer;
 impl DBSnapshotAttributesResultDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<DBSnapshotAttributesResult, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, DBSnapshotAttributesResult, _>(
             tag_name,
             stack,
@@ -7046,11 +7215,13 @@ impl DBSnapshotAttributesResultDeserializer {
 #[allow(dead_code)]
 struct DBSnapshotListDeserializer;
 impl DBSnapshotListDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<DBSnapshot>, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
+
         deserialize_elements::<_, Vec<_>, _>(tag_name, stack, |name, stack, obj| {
             if name == "DBSnapshot" {
                 obj.push(DBSnapshotDeserializer::deserialize("DBSnapshot", stack)?);
@@ -7074,11 +7245,12 @@ pub struct DBSnapshotMessage {
 #[allow(dead_code)]
 struct DBSnapshotMessageDeserializer;
 impl DBSnapshotMessageDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<DBSnapshotMessage, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, DBSnapshotMessage, _>(tag_name, stack, |name, stack, obj| {
             match name {
                 "DBSnapshots" => {
@@ -7116,11 +7288,12 @@ pub struct DBSubnetGroup {
 #[allow(dead_code)]
 struct DBSubnetGroupDeserializer;
 impl DBSubnetGroupDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<DBSubnetGroup, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, DBSubnetGroup, _>(tag_name, stack, |name, stack, obj| {
             match name {
                 "DBSubnetGroupArn" => {
@@ -7168,11 +7341,12 @@ pub struct DBSubnetGroupMessage {
 #[allow(dead_code)]
 struct DBSubnetGroupMessageDeserializer;
 impl DBSubnetGroupMessageDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<DBSubnetGroupMessage, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, DBSubnetGroupMessage, _>(tag_name, stack, |name, stack, obj| {
             match name {
                 "DBSubnetGroups" => {
@@ -7192,11 +7366,13 @@ impl DBSubnetGroupMessageDeserializer {
 #[allow(dead_code)]
 struct DBSubnetGroupsDeserializer;
 impl DBSubnetGroupsDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<DBSubnetGroup>, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
+
         deserialize_elements::<_, Vec<_>, _>(tag_name, stack, |name, stack, obj| {
             if name == "DBSubnetGroup" {
                 obj.push(DBSubnetGroupDeserializer::deserialize(
@@ -7220,10 +7396,11 @@ pub struct DeleteCustomAvailabilityZoneMessage {
 /// Serialize `DeleteCustomAvailabilityZoneMessage` contents to a `SignedRequest`.
 struct DeleteCustomAvailabilityZoneMessageSerializer;
 impl DeleteCustomAvailabilityZoneMessageSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &DeleteCustomAvailabilityZoneMessage) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         params.put(
@@ -7242,11 +7419,12 @@ pub struct DeleteCustomAvailabilityZoneResult {
 #[allow(dead_code)]
 struct DeleteCustomAvailabilityZoneResultDeserializer;
 impl DeleteCustomAvailabilityZoneResultDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<DeleteCustomAvailabilityZoneResult, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, DeleteCustomAvailabilityZoneResult, _>(
             tag_name,
             stack,
@@ -7276,10 +7454,11 @@ pub struct DeleteDBClusterEndpointMessage {
 /// Serialize `DeleteDBClusterEndpointMessage` contents to a `SignedRequest`.
 struct DeleteDBClusterEndpointMessageSerializer;
 impl DeleteDBClusterEndpointMessageSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &DeleteDBClusterEndpointMessage) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         params.put(
@@ -7304,10 +7483,11 @@ pub struct DeleteDBClusterMessage {
 /// Serialize `DeleteDBClusterMessage` contents to a `SignedRequest`.
 struct DeleteDBClusterMessageSerializer;
 impl DeleteDBClusterMessageSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &DeleteDBClusterMessage) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         params.put(
@@ -7337,10 +7517,11 @@ pub struct DeleteDBClusterParameterGroupMessage {
 /// Serialize `DeleteDBClusterParameterGroupMessage` contents to a `SignedRequest`.
 struct DeleteDBClusterParameterGroupMessageSerializer;
 impl DeleteDBClusterParameterGroupMessageSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &DeleteDBClusterParameterGroupMessage) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         params.put(
@@ -7359,11 +7540,12 @@ pub struct DeleteDBClusterResult {
 #[allow(dead_code)]
 struct DeleteDBClusterResultDeserializer;
 impl DeleteDBClusterResultDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<DeleteDBClusterResult, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, DeleteDBClusterResult, _>(tag_name, stack, |name, stack, obj| {
             match name {
                 "DBCluster" => {
@@ -7386,10 +7568,11 @@ pub struct DeleteDBClusterSnapshotMessage {
 /// Serialize `DeleteDBClusterSnapshotMessage` contents to a `SignedRequest`.
 struct DeleteDBClusterSnapshotMessageSerializer;
 impl DeleteDBClusterSnapshotMessageSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &DeleteDBClusterSnapshotMessage) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         params.put(
@@ -7408,11 +7591,12 @@ pub struct DeleteDBClusterSnapshotResult {
 #[allow(dead_code)]
 struct DeleteDBClusterSnapshotResultDeserializer;
 impl DeleteDBClusterSnapshotResultDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<DeleteDBClusterSnapshotResult, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, DeleteDBClusterSnapshotResult, _>(
             tag_name,
             stack,
@@ -7444,10 +7628,11 @@ pub struct DeleteDBInstanceAutomatedBackupMessage {
 /// Serialize `DeleteDBInstanceAutomatedBackupMessage` contents to a `SignedRequest`.
 struct DeleteDBInstanceAutomatedBackupMessageSerializer;
 impl DeleteDBInstanceAutomatedBackupMessageSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &DeleteDBInstanceAutomatedBackupMessage) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         if let Some(ref field_value) = obj.db_instance_automated_backups_arn {
@@ -7471,11 +7656,12 @@ pub struct DeleteDBInstanceAutomatedBackupResult {
 #[allow(dead_code)]
 struct DeleteDBInstanceAutomatedBackupResultDeserializer;
 impl DeleteDBInstanceAutomatedBackupResultDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<DeleteDBInstanceAutomatedBackupResult, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, DeleteDBInstanceAutomatedBackupResult, _>(
             tag_name,
             stack,
@@ -7512,10 +7698,11 @@ pub struct DeleteDBInstanceMessage {
 /// Serialize `DeleteDBInstanceMessage` contents to a `SignedRequest`.
 struct DeleteDBInstanceMessageSerializer;
 impl DeleteDBInstanceMessageSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &DeleteDBInstanceMessage) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         params.put(
@@ -7549,11 +7736,12 @@ pub struct DeleteDBInstanceResult {
 #[allow(dead_code)]
 struct DeleteDBInstanceResultDeserializer;
 impl DeleteDBInstanceResultDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<DeleteDBInstanceResult, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, DeleteDBInstanceResult, _>(tag_name, stack, |name, stack, obj| {
             match name {
                 "DBInstance" => {
@@ -7577,10 +7765,11 @@ pub struct DeleteDBParameterGroupMessage {
 /// Serialize `DeleteDBParameterGroupMessage` contents to a `SignedRequest`.
 struct DeleteDBParameterGroupMessageSerializer;
 impl DeleteDBParameterGroupMessageSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &DeleteDBParameterGroupMessage) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         params.put(
@@ -7600,10 +7789,11 @@ pub struct DeleteDBProxyRequest {
 /// Serialize `DeleteDBProxyRequest` contents to a `SignedRequest`.
 struct DeleteDBProxyRequestSerializer;
 impl DeleteDBProxyRequestSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &DeleteDBProxyRequest) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         params.put(&format!("{}{}", prefix, "DBProxyName"), &obj.db_proxy_name);
@@ -7620,11 +7810,12 @@ pub struct DeleteDBProxyResponse {
 #[allow(dead_code)]
 struct DeleteDBProxyResponseDeserializer;
 impl DeleteDBProxyResponseDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<DeleteDBProxyResponse, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, DeleteDBProxyResponse, _>(tag_name, stack, |name, stack, obj| {
             match name {
                 "DBProxy" => {
@@ -7647,10 +7838,11 @@ pub struct DeleteDBSecurityGroupMessage {
 /// Serialize `DeleteDBSecurityGroupMessage` contents to a `SignedRequest`.
 struct DeleteDBSecurityGroupMessageSerializer;
 impl DeleteDBSecurityGroupMessageSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &DeleteDBSecurityGroupMessage) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         params.put(
@@ -7671,10 +7863,11 @@ pub struct DeleteDBSnapshotMessage {
 /// Serialize `DeleteDBSnapshotMessage` contents to a `SignedRequest`.
 struct DeleteDBSnapshotMessageSerializer;
 impl DeleteDBSnapshotMessageSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &DeleteDBSnapshotMessage) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         params.put(
@@ -7693,11 +7886,12 @@ pub struct DeleteDBSnapshotResult {
 #[allow(dead_code)]
 struct DeleteDBSnapshotResultDeserializer;
 impl DeleteDBSnapshotResultDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<DeleteDBSnapshotResult, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, DeleteDBSnapshotResult, _>(tag_name, stack, |name, stack, obj| {
             match name {
                 "DBSnapshot" => {
@@ -7721,10 +7915,11 @@ pub struct DeleteDBSubnetGroupMessage {
 /// Serialize `DeleteDBSubnetGroupMessage` contents to a `SignedRequest`.
 struct DeleteDBSubnetGroupMessageSerializer;
 impl DeleteDBSubnetGroupMessageSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &DeleteDBSubnetGroupMessage) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         params.put(
@@ -7745,10 +7940,11 @@ pub struct DeleteEventSubscriptionMessage {
 /// Serialize `DeleteEventSubscriptionMessage` contents to a `SignedRequest`.
 struct DeleteEventSubscriptionMessageSerializer;
 impl DeleteEventSubscriptionMessageSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &DeleteEventSubscriptionMessage) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         params.put(
@@ -7767,11 +7963,12 @@ pub struct DeleteEventSubscriptionResult {
 #[allow(dead_code)]
 struct DeleteEventSubscriptionResultDeserializer;
 impl DeleteEventSubscriptionResultDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<DeleteEventSubscriptionResult, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, DeleteEventSubscriptionResult, _>(
             tag_name,
             stack,
@@ -7800,10 +7997,11 @@ pub struct DeleteGlobalClusterMessage {
 /// Serialize `DeleteGlobalClusterMessage` contents to a `SignedRequest`.
 struct DeleteGlobalClusterMessageSerializer;
 impl DeleteGlobalClusterMessageSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &DeleteGlobalClusterMessage) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         params.put(
@@ -7822,11 +8020,12 @@ pub struct DeleteGlobalClusterResult {
 #[allow(dead_code)]
 struct DeleteGlobalClusterResultDeserializer;
 impl DeleteGlobalClusterResultDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<DeleteGlobalClusterResult, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, DeleteGlobalClusterResult, _>(
             tag_name,
             stack,
@@ -7855,10 +8054,11 @@ pub struct DeleteInstallationMediaMessage {
 /// Serialize `DeleteInstallationMediaMessage` contents to a `SignedRequest`.
 struct DeleteInstallationMediaMessageSerializer;
 impl DeleteInstallationMediaMessageSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &DeleteInstallationMediaMessage) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         params.put(
@@ -7879,10 +8079,11 @@ pub struct DeleteOptionGroupMessage {
 /// Serialize `DeleteOptionGroupMessage` contents to a `SignedRequest`.
 struct DeleteOptionGroupMessageSerializer;
 impl DeleteOptionGroupMessageSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &DeleteOptionGroupMessage) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         params.put(
@@ -7908,10 +8109,11 @@ pub struct DeregisterDBProxyTargetsRequest {
 /// Serialize `DeregisterDBProxyTargetsRequest` contents to a `SignedRequest`.
 struct DeregisterDBProxyTargetsRequestSerializer;
 impl DeregisterDBProxyTargetsRequestSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &DeregisterDBProxyTargetsRequest) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         if let Some(ref field_value) = obj.db_cluster_identifiers {
@@ -7942,11 +8144,12 @@ pub struct DeregisterDBProxyTargetsResponse {}
 #[allow(dead_code)]
 struct DeregisterDBProxyTargetsResponseDeserializer;
 impl DeregisterDBProxyTargetsResponseDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<DeregisterDBProxyTargetsResponse, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::start_element(tag_name, stack)?;
 
         let obj = DeregisterDBProxyTargetsResponse::default();
@@ -7966,8 +8169,8 @@ struct DescribeAccountAttributesMessageSerializer;
 impl DescribeAccountAttributesMessageSerializer {
     fn serialize(_params: &mut Params, name: &str, _obj: &DescribeAccountAttributesMessage) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
     }
 }
@@ -7989,10 +8192,11 @@ pub struct DescribeCertificatesMessage {
 /// Serialize `DescribeCertificatesMessage` contents to a `SignedRequest`.
 struct DescribeCertificatesMessageSerializer;
 impl DescribeCertificatesMessageSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &DescribeCertificatesMessage) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         if let Some(ref field_value) = obj.certificate_identifier {
@@ -8033,10 +8237,11 @@ pub struct DescribeCustomAvailabilityZonesMessage {
 /// Serialize `DescribeCustomAvailabilityZonesMessage` contents to a `SignedRequest`.
 struct DescribeCustomAvailabilityZonesMessageSerializer;
 impl DescribeCustomAvailabilityZonesMessageSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &DescribeCustomAvailabilityZonesMessage) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         if let Some(ref field_value) = obj.custom_availability_zone_id {
@@ -8080,10 +8285,11 @@ pub struct DescribeDBClusterBacktracksMessage {
 /// Serialize `DescribeDBClusterBacktracksMessage` contents to a `SignedRequest`.
 struct DescribeDBClusterBacktracksMessageSerializer;
 impl DescribeDBClusterBacktracksMessageSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &DescribeDBClusterBacktracksMessage) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         if let Some(ref field_value) = obj.backtrack_identifier {
@@ -8130,10 +8336,11 @@ pub struct DescribeDBClusterEndpointsMessage {
 /// Serialize `DescribeDBClusterEndpointsMessage` contents to a `SignedRequest`.
 struct DescribeDBClusterEndpointsMessageSerializer;
 impl DescribeDBClusterEndpointsMessageSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &DescribeDBClusterEndpointsMessage) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         if let Some(ref field_value) = obj.db_cluster_endpoint_identifier {
@@ -8181,10 +8388,11 @@ pub struct DescribeDBClusterParameterGroupsMessage {
 /// Serialize `DescribeDBClusterParameterGroupsMessage` contents to a `SignedRequest`.
 struct DescribeDBClusterParameterGroupsMessageSerializer;
 impl DescribeDBClusterParameterGroupsMessageSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &DescribeDBClusterParameterGroupsMessage) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         if let Some(ref field_value) = obj.db_cluster_parameter_group_name {
@@ -8228,10 +8436,11 @@ pub struct DescribeDBClusterParametersMessage {
 /// Serialize `DescribeDBClusterParametersMessage` contents to a `SignedRequest`.
 struct DescribeDBClusterParametersMessageSerializer;
 impl DescribeDBClusterParametersMessageSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &DescribeDBClusterParametersMessage) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         params.put(
@@ -8268,14 +8477,15 @@ pub struct DescribeDBClusterSnapshotAttributesMessage {
 /// Serialize `DescribeDBClusterSnapshotAttributesMessage` contents to a `SignedRequest`.
 struct DescribeDBClusterSnapshotAttributesMessageSerializer;
 impl DescribeDBClusterSnapshotAttributesMessageSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(
         params: &mut Params,
         name: &str,
         obj: &DescribeDBClusterSnapshotAttributesMessage,
     ) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         params.put(
@@ -8294,11 +8504,12 @@ pub struct DescribeDBClusterSnapshotAttributesResult {
 #[allow(dead_code)]
 struct DescribeDBClusterSnapshotAttributesResultDeserializer;
 impl DescribeDBClusterSnapshotAttributesResultDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<DescribeDBClusterSnapshotAttributesResult, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, DescribeDBClusterSnapshotAttributesResult, _>(
             tag_name,
             stack,
@@ -8343,10 +8554,11 @@ pub struct DescribeDBClusterSnapshotsMessage {
 /// Serialize `DescribeDBClusterSnapshotsMessage` contents to a `SignedRequest`.
 struct DescribeDBClusterSnapshotsMessageSerializer;
 impl DescribeDBClusterSnapshotsMessageSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &DescribeDBClusterSnapshotsMessage) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         if let Some(ref field_value) = obj.db_cluster_identifier {
@@ -8405,10 +8617,11 @@ pub struct DescribeDBClustersMessage {
 /// Serialize `DescribeDBClustersMessage` contents to a `SignedRequest`.
 struct DescribeDBClustersMessageSerializer;
 impl DescribeDBClustersMessageSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &DescribeDBClustersMessage) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         if let Some(ref field_value) = obj.db_cluster_identifier {
@@ -8464,10 +8677,11 @@ pub struct DescribeDBEngineVersionsMessage {
 /// Serialize `DescribeDBEngineVersionsMessage` contents to a `SignedRequest`.
 struct DescribeDBEngineVersionsMessageSerializer;
 impl DescribeDBEngineVersionsMessageSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &DescribeDBEngineVersionsMessage) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         if let Some(ref field_value) = obj.db_parameter_group_family {
@@ -8537,10 +8751,11 @@ pub struct DescribeDBInstanceAutomatedBackupsMessage {
 /// Serialize `DescribeDBInstanceAutomatedBackupsMessage` contents to a `SignedRequest`.
 struct DescribeDBInstanceAutomatedBackupsMessageSerializer;
 impl DescribeDBInstanceAutomatedBackupsMessageSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &DescribeDBInstanceAutomatedBackupsMessage) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         if let Some(ref field_value) = obj.db_instance_automated_backups_arn {
@@ -8591,10 +8806,11 @@ pub struct DescribeDBInstancesMessage {
 /// Serialize `DescribeDBInstancesMessage` contents to a `SignedRequest`.
 struct DescribeDBInstancesMessageSerializer;
 impl DescribeDBInstancesMessageSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &DescribeDBInstancesMessage) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         if let Some(ref field_value) = obj.db_instance_identifier {
@@ -8634,11 +8850,12 @@ pub struct DescribeDBLogFilesDetails {
 #[allow(dead_code)]
 struct DescribeDBLogFilesDetailsDeserializer;
 impl DescribeDBLogFilesDetailsDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<DescribeDBLogFilesDetails, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, DescribeDBLogFilesDetails, _>(
             tag_name,
             stack,
@@ -8665,11 +8882,13 @@ impl DescribeDBLogFilesDetailsDeserializer {
 #[allow(dead_code)]
 struct DescribeDBLogFilesListDeserializer;
 impl DescribeDBLogFilesListDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<DescribeDBLogFilesDetails>, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
+
         deserialize_elements::<_, Vec<_>, _>(tag_name, stack, |name, stack, obj| {
             if name == "DescribeDBLogFilesDetails" {
                 obj.push(DescribeDBLogFilesDetailsDeserializer::deserialize(
@@ -8706,10 +8925,11 @@ pub struct DescribeDBLogFilesMessage {
 /// Serialize `DescribeDBLogFilesMessage` contents to a `SignedRequest`.
 struct DescribeDBLogFilesMessageSerializer;
 impl DescribeDBLogFilesMessageSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &DescribeDBLogFilesMessage) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         params.put(
@@ -8754,11 +8974,12 @@ pub struct DescribeDBLogFilesResponse {
 #[allow(dead_code)]
 struct DescribeDBLogFilesResponseDeserializer;
 impl DescribeDBLogFilesResponseDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<DescribeDBLogFilesResponse, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, DescribeDBLogFilesResponse, _>(
             tag_name,
             stack,
@@ -8799,10 +9020,11 @@ pub struct DescribeDBParameterGroupsMessage {
 /// Serialize `DescribeDBParameterGroupsMessage` contents to a `SignedRequest`.
 struct DescribeDBParameterGroupsMessageSerializer;
 impl DescribeDBParameterGroupsMessageSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &DescribeDBParameterGroupsMessage) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         if let Some(ref field_value) = obj.db_parameter_group_name {
@@ -8845,10 +9067,11 @@ pub struct DescribeDBParametersMessage {
 /// Serialize `DescribeDBParametersMessage` contents to a `SignedRequest`.
 struct DescribeDBParametersMessageSerializer;
 impl DescribeDBParametersMessageSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &DescribeDBParametersMessage) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         params.put(
@@ -8890,10 +9113,11 @@ pub struct DescribeDBProxiesRequest {
 /// Serialize `DescribeDBProxiesRequest` contents to a `SignedRequest`.
 struct DescribeDBProxiesRequestSerializer;
 impl DescribeDBProxiesRequestSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &DescribeDBProxiesRequest) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         if let Some(ref field_value) = obj.db_proxy_name {
@@ -8927,11 +9151,12 @@ pub struct DescribeDBProxiesResponse {
 #[allow(dead_code)]
 struct DescribeDBProxiesResponseDeserializer;
 impl DescribeDBProxiesResponseDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<DescribeDBProxiesResponse, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, DescribeDBProxiesResponse, _>(
             tag_name,
             stack,
@@ -8970,10 +9195,11 @@ pub struct DescribeDBProxyTargetGroupsRequest {
 /// Serialize `DescribeDBProxyTargetGroupsRequest` contents to a `SignedRequest`.
 struct DescribeDBProxyTargetGroupsRequestSerializer;
 impl DescribeDBProxyTargetGroupsRequestSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &DescribeDBProxyTargetGroupsRequest) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         params.put(&format!("{}{}", prefix, "DBProxyName"), &obj.db_proxy_name);
@@ -9008,11 +9234,12 @@ pub struct DescribeDBProxyTargetGroupsResponse {
 #[allow(dead_code)]
 struct DescribeDBProxyTargetGroupsResponseDeserializer;
 impl DescribeDBProxyTargetGroupsResponseDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<DescribeDBProxyTargetGroupsResponse, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, DescribeDBProxyTargetGroupsResponse, _>(
             tag_name,
             stack,
@@ -9051,10 +9278,11 @@ pub struct DescribeDBProxyTargetsRequest {
 /// Serialize `DescribeDBProxyTargetsRequest` contents to a `SignedRequest`.
 struct DescribeDBProxyTargetsRequestSerializer;
 impl DescribeDBProxyTargetsRequestSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &DescribeDBProxyTargetsRequest) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         params.put(&format!("{}{}", prefix, "DBProxyName"), &obj.db_proxy_name);
@@ -9089,11 +9317,12 @@ pub struct DescribeDBProxyTargetsResponse {
 #[allow(dead_code)]
 struct DescribeDBProxyTargetsResponseDeserializer;
 impl DescribeDBProxyTargetsResponseDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<DescribeDBProxyTargetsResponse, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, DescribeDBProxyTargetsResponse, _>(
             tag_name,
             stack,
@@ -9131,10 +9360,11 @@ pub struct DescribeDBSecurityGroupsMessage {
 /// Serialize `DescribeDBSecurityGroupsMessage` contents to a `SignedRequest`.
 struct DescribeDBSecurityGroupsMessageSerializer;
 impl DescribeDBSecurityGroupsMessageSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &DescribeDBSecurityGroupsMessage) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         if let Some(ref field_value) = obj.db_security_group_name {
@@ -9170,10 +9400,11 @@ pub struct DescribeDBSnapshotAttributesMessage {
 /// Serialize `DescribeDBSnapshotAttributesMessage` contents to a `SignedRequest`.
 struct DescribeDBSnapshotAttributesMessageSerializer;
 impl DescribeDBSnapshotAttributesMessageSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &DescribeDBSnapshotAttributesMessage) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         params.put(
@@ -9192,11 +9423,12 @@ pub struct DescribeDBSnapshotAttributesResult {
 #[allow(dead_code)]
 struct DescribeDBSnapshotAttributesResultDeserializer;
 impl DescribeDBSnapshotAttributesResultDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<DescribeDBSnapshotAttributesResult, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, DescribeDBSnapshotAttributesResult, _>(
             tag_name,
             stack,
@@ -9243,10 +9475,11 @@ pub struct DescribeDBSnapshotsMessage {
 /// Serialize `DescribeDBSnapshotsMessage` contents to a `SignedRequest`.
 struct DescribeDBSnapshotsMessageSerializer;
 impl DescribeDBSnapshotsMessageSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &DescribeDBSnapshotsMessage) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         if let Some(ref field_value) = obj.db_instance_identifier {
@@ -9306,10 +9539,11 @@ pub struct DescribeDBSubnetGroupsMessage {
 /// Serialize `DescribeDBSubnetGroupsMessage` contents to a `SignedRequest`.
 struct DescribeDBSubnetGroupsMessageSerializer;
 impl DescribeDBSubnetGroupsMessageSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &DescribeDBSubnetGroupsMessage) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         if let Some(ref field_value) = obj.db_subnet_group_name {
@@ -9348,14 +9582,15 @@ pub struct DescribeEngineDefaultClusterParametersMessage {
 /// Serialize `DescribeEngineDefaultClusterParametersMessage` contents to a `SignedRequest`.
 struct DescribeEngineDefaultClusterParametersMessageSerializer;
 impl DescribeEngineDefaultClusterParametersMessageSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(
         params: &mut Params,
         name: &str,
         obj: &DescribeEngineDefaultClusterParametersMessage,
     ) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         params.put(
@@ -9387,11 +9622,12 @@ pub struct DescribeEngineDefaultClusterParametersResult {
 #[allow(dead_code)]
 struct DescribeEngineDefaultClusterParametersResultDeserializer;
 impl DescribeEngineDefaultClusterParametersResultDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<DescribeEngineDefaultClusterParametersResult, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, DescribeEngineDefaultClusterParametersResult, _>(
             tag_name,
             stack,
@@ -9427,10 +9663,11 @@ pub struct DescribeEngineDefaultParametersMessage {
 /// Serialize `DescribeEngineDefaultParametersMessage` contents to a `SignedRequest`.
 struct DescribeEngineDefaultParametersMessageSerializer;
 impl DescribeEngineDefaultParametersMessageSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &DescribeEngineDefaultParametersMessage) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         params.put(
@@ -9462,11 +9699,12 @@ pub struct DescribeEngineDefaultParametersResult {
 #[allow(dead_code)]
 struct DescribeEngineDefaultParametersResultDeserializer;
 impl DescribeEngineDefaultParametersResultDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<DescribeEngineDefaultParametersResult, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, DescribeEngineDefaultParametersResult, _>(
             tag_name,
             stack,
@@ -9498,10 +9736,11 @@ pub struct DescribeEventCategoriesMessage {
 /// Serialize `DescribeEventCategoriesMessage` contents to a `SignedRequest`.
 struct DescribeEventCategoriesMessageSerializer;
 impl DescribeEventCategoriesMessageSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &DescribeEventCategoriesMessage) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         if let Some(ref field_value) = obj.filters {
@@ -9534,10 +9773,11 @@ pub struct DescribeEventSubscriptionsMessage {
 /// Serialize `DescribeEventSubscriptionsMessage` contents to a `SignedRequest`.
 struct DescribeEventSubscriptionsMessageSerializer;
 impl DescribeEventSubscriptionsMessageSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &DescribeEventSubscriptionsMessage) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         if let Some(ref field_value) = obj.filters {
@@ -9586,10 +9826,11 @@ pub struct DescribeEventsMessage {
 /// Serialize `DescribeEventsMessage` contents to a `SignedRequest`.
 struct DescribeEventsMessageSerializer;
 impl DescribeEventsMessageSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &DescribeEventsMessage) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         if let Some(ref field_value) = obj.duration {
@@ -9648,10 +9889,11 @@ pub struct DescribeExportTasksMessage {
 /// Serialize `DescribeExportTasksMessage` contents to a `SignedRequest`.
 struct DescribeExportTasksMessageSerializer;
 impl DescribeExportTasksMessageSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &DescribeExportTasksMessage) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         if let Some(ref field_value) = obj.export_task_identifier {
@@ -9695,10 +9937,11 @@ pub struct DescribeGlobalClustersMessage {
 /// Serialize `DescribeGlobalClustersMessage` contents to a `SignedRequest`.
 struct DescribeGlobalClustersMessageSerializer;
 impl DescribeGlobalClustersMessageSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &DescribeGlobalClustersMessage) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         if let Some(ref field_value) = obj.filters {
@@ -9739,10 +9982,11 @@ pub struct DescribeInstallationMediaMessage {
 /// Serialize `DescribeInstallationMediaMessage` contents to a `SignedRequest`.
 struct DescribeInstallationMediaMessageSerializer;
 impl DescribeInstallationMediaMessageSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &DescribeInstallationMediaMessage) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         if let Some(ref field_value) = obj.filters {
@@ -9786,10 +10030,11 @@ pub struct DescribeOptionGroupOptionsMessage {
 /// Serialize `DescribeOptionGroupOptionsMessage` contents to a `SignedRequest`.
 struct DescribeOptionGroupOptionsMessageSerializer;
 impl DescribeOptionGroupOptionsMessageSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &DescribeOptionGroupOptionsMessage) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         params.put(&format!("{}{}", prefix, "EngineName"), &obj.engine_name);
@@ -9833,10 +10078,11 @@ pub struct DescribeOptionGroupsMessage {
 /// Serialize `DescribeOptionGroupsMessage` contents to a `SignedRequest`.
 struct DescribeOptionGroupsMessageSerializer;
 impl DescribeOptionGroupsMessageSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &DescribeOptionGroupsMessage) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         if let Some(ref field_value) = obj.engine_name {
@@ -9891,10 +10137,11 @@ pub struct DescribeOrderableDBInstanceOptionsMessage {
 /// Serialize `DescribeOrderableDBInstanceOptionsMessage` contents to a `SignedRequest`.
 struct DescribeOrderableDBInstanceOptionsMessageSerializer;
 impl DescribeOrderableDBInstanceOptionsMessageSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &DescribeOrderableDBInstanceOptionsMessage) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         if let Some(ref field_value) = obj.availability_zone_group {
@@ -9949,10 +10196,11 @@ pub struct DescribePendingMaintenanceActionsMessage {
 /// Serialize `DescribePendingMaintenanceActionsMessage` contents to a `SignedRequest`.
 struct DescribePendingMaintenanceActionsMessageSerializer;
 impl DescribePendingMaintenanceActionsMessageSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &DescribePendingMaintenanceActionsMessage) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         if let Some(ref field_value) = obj.filters {
@@ -10005,10 +10253,11 @@ pub struct DescribeReservedDBInstancesMessage {
 /// Serialize `DescribeReservedDBInstancesMessage` contents to a `SignedRequest`.
 struct DescribeReservedDBInstancesMessageSerializer;
 impl DescribeReservedDBInstancesMessageSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &DescribeReservedDBInstancesMessage) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         if let Some(ref field_value) = obj.db_instance_class {
@@ -10084,14 +10333,15 @@ pub struct DescribeReservedDBInstancesOfferingsMessage {
 /// Serialize `DescribeReservedDBInstancesOfferingsMessage` contents to a `SignedRequest`.
 struct DescribeReservedDBInstancesOfferingsMessageSerializer;
 impl DescribeReservedDBInstancesOfferingsMessageSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(
         params: &mut Params,
         name: &str,
         obj: &DescribeReservedDBInstancesOfferingsMessage,
     ) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         if let Some(ref field_value) = obj.db_instance_class {
@@ -10148,10 +10398,11 @@ pub struct DescribeSourceRegionsMessage {
 /// Serialize `DescribeSourceRegionsMessage` contents to a `SignedRequest`.
 struct DescribeSourceRegionsMessageSerializer;
 impl DescribeSourceRegionsMessageSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &DescribeSourceRegionsMessage) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         if let Some(ref field_value) = obj.filters {
@@ -10184,14 +10435,15 @@ pub struct DescribeValidDBInstanceModificationsMessage {
 /// Serialize `DescribeValidDBInstanceModificationsMessage` contents to a `SignedRequest`.
 struct DescribeValidDBInstanceModificationsMessageSerializer;
 impl DescribeValidDBInstanceModificationsMessageSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(
         params: &mut Params,
         name: &str,
         obj: &DescribeValidDBInstanceModificationsMessage,
     ) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         params.put(
@@ -10210,11 +10462,12 @@ pub struct DescribeValidDBInstanceModificationsResult {
 #[allow(dead_code)]
 struct DescribeValidDBInstanceModificationsResultDeserializer;
 impl DescribeValidDBInstanceModificationsResultDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<DescribeValidDBInstanceModificationsResult, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, DescribeValidDBInstanceModificationsResult, _>(
             tag_name,
             stack,
@@ -10252,11 +10505,12 @@ pub struct DomainMembership {
 #[allow(dead_code)]
 struct DomainMembershipDeserializer;
 impl DomainMembershipDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<DomainMembership, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, DomainMembership, _>(tag_name, stack, |name, stack, obj| {
             match name {
                 "Domain" => {
@@ -10281,11 +10535,13 @@ impl DomainMembershipDeserializer {
 #[allow(dead_code)]
 struct DomainMembershipListDeserializer;
 impl DomainMembershipListDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<DomainMembership>, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
+
         deserialize_elements::<_, Vec<_>, _>(tag_name, stack, |name, stack, obj| {
             if name == "DomainMembership" {
                 obj.push(DomainMembershipDeserializer::deserialize(
@@ -10302,16 +10558,18 @@ impl DomainMembershipListDeserializer {
 #[allow(dead_code)]
 struct DoubleDeserializer;
 impl DoubleDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<f64, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::deserialize_primitive(tag_name, stack, |s| Ok(f64::from_str(&s).unwrap()))
     }
 }
 #[allow(dead_code)]
 struct DoubleOptionalDeserializer;
 impl DoubleOptionalDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<f64, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::deserialize_primitive(tag_name, stack, |s| Ok(f64::from_str(&s).unwrap()))
     }
 }
@@ -10328,11 +10586,12 @@ pub struct DoubleRange {
 #[allow(dead_code)]
 struct DoubleRangeDeserializer;
 impl DoubleRangeDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<DoubleRange, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, DoubleRange, _>(tag_name, stack, |name, stack, obj| {
             match name {
                 "From" => {
@@ -10350,11 +10609,13 @@ impl DoubleRangeDeserializer {
 #[allow(dead_code)]
 struct DoubleRangeListDeserializer;
 impl DoubleRangeListDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<DoubleRange>, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
+
         deserialize_elements::<_, Vec<_>, _>(tag_name, stack, |name, stack, obj| {
             if name == "DoubleRange" {
                 obj.push(DoubleRangeDeserializer::deserialize("DoubleRange", stack)?);
@@ -10380,11 +10641,12 @@ pub struct DownloadDBLogFilePortionDetails {
 #[allow(dead_code)]
 struct DownloadDBLogFilePortionDetailsDeserializer;
 impl DownloadDBLogFilePortionDetailsDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<DownloadDBLogFilePortionDetails, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, DownloadDBLogFilePortionDetails, _>(
             tag_name,
             stack,
@@ -10427,10 +10689,11 @@ pub struct DownloadDBLogFilePortionMessage {
 /// Serialize `DownloadDBLogFilePortionMessage` contents to a `SignedRequest`.
 struct DownloadDBLogFilePortionMessageSerializer;
 impl DownloadDBLogFilePortionMessageSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &DownloadDBLogFilePortionMessage) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         params.put(
@@ -10464,11 +10727,12 @@ pub struct EC2SecurityGroup {
 #[allow(dead_code)]
 struct EC2SecurityGroupDeserializer;
 impl EC2SecurityGroupDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<EC2SecurityGroup, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, EC2SecurityGroup, _>(tag_name, stack, |name, stack, obj| {
             match name {
                 "EC2SecurityGroupId" => {
@@ -10501,11 +10765,13 @@ impl EC2SecurityGroupDeserializer {
 #[allow(dead_code)]
 struct EC2SecurityGroupListDeserializer;
 impl EC2SecurityGroupListDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<EC2SecurityGroup>, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
+
         deserialize_elements::<_, Vec<_>, _>(tag_name, stack, |name, stack, obj| {
             if name == "EC2SecurityGroup" {
                 obj.push(EC2SecurityGroupDeserializer::deserialize(
@@ -10534,11 +10800,12 @@ pub struct Endpoint {
 #[allow(dead_code)]
 struct EndpointDeserializer;
 impl EndpointDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Endpoint, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, Endpoint, _>(tag_name, stack, |name, stack, obj| {
             match name {
                 "Address" => {
@@ -10572,11 +10839,12 @@ pub struct EngineDefaults {
 #[allow(dead_code)]
 struct EngineDefaultsDeserializer;
 impl EngineDefaultsDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<EngineDefaults, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, EngineDefaults, _>(tag_name, stack, |name, stack, obj| {
             match name {
                 "DBParameterGroupFamily" => {
@@ -10602,11 +10870,13 @@ impl EngineDefaultsDeserializer {
 #[allow(dead_code)]
 struct EngineModeListDeserializer;
 impl EngineModeListDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<String>, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
+
         deserialize_elements::<_, Vec<_>, _>(tag_name, stack, |name, stack, obj| {
             if name == "member" {
                 obj.push(StringDeserializer::deserialize("member", stack)?);
@@ -10621,6 +10891,7 @@ impl EngineModeListDeserializer {
 /// Serialize `EngineModeList` contents to a `SignedRequest`.
 struct EngineModeListSerializer;
 impl EngineModeListSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &Vec<String>) {
         for (index, obj) in obj.iter().enumerate() {
             let key = format!("{}.member.{}", name, index + 1);
@@ -10650,8 +10921,9 @@ pub struct Event {
 #[allow(dead_code)]
 struct EventDeserializer;
 impl EventDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<Event, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, Event, _>(tag_name, stack, |name, stack, obj| {
             match name {
                 "Date" => {
@@ -10685,11 +10957,13 @@ impl EventDeserializer {
 #[allow(dead_code)]
 struct EventCategoriesListDeserializer;
 impl EventCategoriesListDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<String>, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
+
         deserialize_elements::<_, Vec<_>, _>(tag_name, stack, |name, stack, obj| {
             if name == "EventCategory" {
                 obj.push(StringDeserializer::deserialize("EventCategory", stack)?);
@@ -10704,6 +10978,7 @@ impl EventCategoriesListDeserializer {
 /// Serialize `EventCategoriesList` contents to a `SignedRequest`.
 struct EventCategoriesListSerializer;
 impl EventCategoriesListSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &Vec<String>) {
         for (index, obj) in obj.iter().enumerate() {
             let key = format!("{}.member.{}", name, index + 1);
@@ -10725,11 +11000,12 @@ pub struct EventCategoriesMap {
 #[allow(dead_code)]
 struct EventCategoriesMapDeserializer;
 impl EventCategoriesMapDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<EventCategoriesMap, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, EventCategoriesMap, _>(tag_name, stack, |name, stack, obj| {
             match name {
                 "EventCategories" => {
@@ -10749,11 +11025,13 @@ impl EventCategoriesMapDeserializer {
 #[allow(dead_code)]
 struct EventCategoriesMapListDeserializer;
 impl EventCategoriesMapListDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<EventCategoriesMap>, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
+
         deserialize_elements::<_, Vec<_>, _>(tag_name, stack, |name, stack, obj| {
             if name == "EventCategoriesMap" {
                 obj.push(EventCategoriesMapDeserializer::deserialize(
@@ -10778,11 +11056,12 @@ pub struct EventCategoriesMessage {
 #[allow(dead_code)]
 struct EventCategoriesMessageDeserializer;
 impl EventCategoriesMessageDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<EventCategoriesMessage, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, EventCategoriesMessage, _>(tag_name, stack, |name, stack, obj| {
             match name {
                 "EventCategoriesMapList" => {
@@ -10802,11 +11081,13 @@ impl EventCategoriesMessageDeserializer {
 #[allow(dead_code)]
 struct EventListDeserializer;
 impl EventListDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<Event>, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
+
         deserialize_elements::<_, Vec<_>, _>(tag_name, stack, |name, stack, obj| {
             if name == "Event" {
                 obj.push(EventDeserializer::deserialize("Event", stack)?);
@@ -10846,11 +11127,12 @@ pub struct EventSubscription {
 #[allow(dead_code)]
 struct EventSubscriptionDeserializer;
 impl EventSubscriptionDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<EventSubscription, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, EventSubscription, _>(tag_name, stack, |name, stack, obj| {
             match name {
                 "CustSubscriptionId" => {
@@ -10907,11 +11189,13 @@ impl EventSubscriptionDeserializer {
 #[allow(dead_code)]
 struct EventSubscriptionsListDeserializer;
 impl EventSubscriptionsListDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<EventSubscription>, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
+
         deserialize_elements::<_, Vec<_>, _>(tag_name, stack, |name, stack, obj| {
             if name == "EventSubscription" {
                 obj.push(EventSubscriptionDeserializer::deserialize(
@@ -10938,11 +11222,12 @@ pub struct EventSubscriptionsMessage {
 #[allow(dead_code)]
 struct EventSubscriptionsMessageDeserializer;
 impl EventSubscriptionsMessageDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<EventSubscriptionsMessage, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, EventSubscriptionsMessage, _>(
             tag_name,
             stack,
@@ -10979,11 +11264,12 @@ pub struct EventsMessage {
 #[allow(dead_code)]
 struct EventsMessageDeserializer;
 impl EventsMessageDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<EventsMessage, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, EventsMessage, _>(tag_name, stack, |name, stack, obj| {
             match name {
                 "Events" => {
@@ -11039,11 +11325,12 @@ pub struct ExportTask {
 #[allow(dead_code)]
 struct ExportTaskDeserializer;
 impl ExportTaskDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<ExportTask, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, ExportTask, _>(tag_name, stack, |name, stack, obj| {
             match name {
                 "ExportOnly" => {
@@ -11114,11 +11401,13 @@ impl ExportTaskDeserializer {
 #[allow(dead_code)]
 struct ExportTasksListDeserializer;
 impl ExportTasksListDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<ExportTask>, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
+
         deserialize_elements::<_, Vec<_>, _>(tag_name, stack, |name, stack, obj| {
             if name == "ExportTask" {
                 obj.push(ExportTaskDeserializer::deserialize("ExportTask", stack)?);
@@ -11141,11 +11430,12 @@ pub struct ExportTasksMessage {
 #[allow(dead_code)]
 struct ExportTasksMessageDeserializer;
 impl ExportTasksMessageDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<ExportTasksMessage, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, ExportTasksMessage, _>(tag_name, stack, |name, stack, obj| {
             match name {
                 "ExportTasks" => {
@@ -11175,10 +11465,11 @@ pub struct FailoverDBClusterMessage {
 /// Serialize `FailoverDBClusterMessage` contents to a `SignedRequest`.
 struct FailoverDBClusterMessageSerializer;
 impl FailoverDBClusterMessageSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &FailoverDBClusterMessage) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         params.put(
@@ -11203,11 +11494,12 @@ pub struct FailoverDBClusterResult {
 #[allow(dead_code)]
 struct FailoverDBClusterResultDeserializer;
 impl FailoverDBClusterResultDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<FailoverDBClusterResult, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, FailoverDBClusterResult, _>(
             tag_name,
             stack,
@@ -11227,11 +11519,13 @@ impl FailoverDBClusterResultDeserializer {
 #[allow(dead_code)]
 struct FeatureNameListDeserializer;
 impl FeatureNameListDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<String>, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
+
         deserialize_elements::<_, Vec<_>, _>(tag_name, stack, |name, stack, obj| {
             if name == "member" {
                 obj.push(StringDeserializer::deserialize("member", stack)?);
@@ -11255,10 +11549,11 @@ pub struct Filter {
 /// Serialize `Filter` contents to a `SignedRequest`.
 struct FilterSerializer;
 impl FilterSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &Filter) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         params.put(&format!("{}{}", prefix, "Name"), &obj.name);
@@ -11273,6 +11568,7 @@ impl FilterSerializer {
 /// Serialize `FilterList` contents to a `SignedRequest`.
 struct FilterListSerializer;
 impl FilterListSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &Vec<Filter>) {
         for (index, obj) in obj.iter().enumerate() {
             let key = format!("{}.member.{}", name, index + 1);
@@ -11284,6 +11580,7 @@ impl FilterListSerializer {
 /// Serialize `FilterValueList` contents to a `SignedRequest`.
 struct FilterValueListSerializer;
 impl FilterValueListSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &Vec<String>) {
         for (index, obj) in obj.iter().enumerate() {
             let key = format!("{}.member.{}", name, index + 1);
@@ -11321,11 +11618,12 @@ pub struct GlobalCluster {
 #[allow(dead_code)]
 struct GlobalClusterDeserializer;
 impl GlobalClusterDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<GlobalCluster, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, GlobalCluster, _>(tag_name, stack, |name, stack, obj| {
             match name {
                 "DatabaseName" => {
@@ -11387,11 +11685,13 @@ impl GlobalClusterDeserializer {
 #[allow(dead_code)]
 struct GlobalClusterListDeserializer;
 impl GlobalClusterListDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<GlobalCluster>, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
+
         deserialize_elements::<_, Vec<_>, _>(tag_name, stack, |name, stack, obj| {
             if name == "GlobalClusterMember" {
                 obj.push(GlobalClusterDeserializer::deserialize(
@@ -11422,11 +11722,12 @@ pub struct GlobalClusterMember {
 #[allow(dead_code)]
 struct GlobalClusterMemberDeserializer;
 impl GlobalClusterMemberDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<GlobalClusterMember, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, GlobalClusterMember, _>(tag_name, stack, |name, stack, obj| {
             match name {
                 "DBClusterArn" => {
@@ -11457,11 +11758,13 @@ impl GlobalClusterMemberDeserializer {
 #[allow(dead_code)]
 struct GlobalClusterMemberListDeserializer;
 impl GlobalClusterMemberListDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<GlobalClusterMember>, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
+
         deserialize_elements::<_, Vec<_>, _>(tag_name, stack, |name, stack, obj| {
             if name == "GlobalClusterMember" {
                 obj.push(GlobalClusterMemberDeserializer::deserialize(
@@ -11487,11 +11790,12 @@ pub struct GlobalClustersMessage {
 #[allow(dead_code)]
 struct GlobalClustersMessageDeserializer;
 impl GlobalClustersMessageDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<GlobalClustersMessage, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, GlobalClustersMessage, _>(tag_name, stack, |name, stack, obj| {
             match name {
                 "GlobalClusters" => {
@@ -11511,8 +11815,9 @@ impl GlobalClustersMessageDeserializer {
 #[allow(dead_code)]
 struct IAMAuthModeDeserializer;
 impl IAMAuthModeDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
@@ -11529,11 +11834,12 @@ pub struct IPRange {
 #[allow(dead_code)]
 struct IPRangeDeserializer;
 impl IPRangeDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<IPRange, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, IPRange, _>(tag_name, stack, |name, stack, obj| {
             match name {
                 "CIDRIP" => {
@@ -11551,11 +11857,13 @@ impl IPRangeDeserializer {
 #[allow(dead_code)]
 struct IPRangeListDeserializer;
 impl IPRangeListDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<IPRange>, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
+
         deserialize_elements::<_, Vec<_>, _>(tag_name, stack, |name, stack, obj| {
             if name == "IPRange" {
                 obj.push(IPRangeDeserializer::deserialize("IPRange", stack)?);
@@ -11584,10 +11892,11 @@ pub struct ImportInstallationMediaMessage {
 /// Serialize `ImportInstallationMediaMessage` contents to a `SignedRequest`.
 struct ImportInstallationMediaMessageSerializer;
 impl ImportInstallationMediaMessageSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &ImportInstallationMediaMessage) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         params.put(
@@ -11635,11 +11944,12 @@ pub struct InstallationMedia {
 #[allow(dead_code)]
 struct InstallationMediaDeserializer;
 impl InstallationMediaDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<InstallationMedia, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, InstallationMedia, _>(tag_name, stack, |name, stack, obj| {
             match name {
                 "CustomAvailabilityZoneId" => {
@@ -11700,11 +12010,12 @@ pub struct InstallationMediaFailureCause {
 #[allow(dead_code)]
 struct InstallationMediaFailureCauseDeserializer;
 impl InstallationMediaFailureCauseDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<InstallationMediaFailureCause, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, InstallationMediaFailureCause, _>(
             tag_name,
             stack,
@@ -11723,11 +12034,13 @@ impl InstallationMediaFailureCauseDeserializer {
 #[allow(dead_code)]
 struct InstallationMediaListDeserializer;
 impl InstallationMediaListDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<InstallationMedia>, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
+
         deserialize_elements::<_, Vec<_>, _>(tag_name, stack, |name, stack, obj| {
             if name == "InstallationMedia" {
                 obj.push(InstallationMediaDeserializer::deserialize(
@@ -11753,11 +12066,12 @@ pub struct InstallationMediaMessage {
 #[allow(dead_code)]
 struct InstallationMediaMessageDeserializer;
 impl InstallationMediaMessageDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<InstallationMediaMessage, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, InstallationMediaMessage, _>(
             tag_name,
             stack,
@@ -11784,16 +12098,18 @@ impl InstallationMediaMessageDeserializer {
 #[allow(dead_code)]
 struct IntegerDeserializer;
 impl IntegerDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<i64, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::deserialize_primitive(tag_name, stack, |s| Ok(i64::from_str(&s).unwrap()))
     }
 }
 #[allow(dead_code)]
 struct IntegerOptionalDeserializer;
 impl IntegerOptionalDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<i64, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::deserialize_primitive(tag_name, stack, |s| Ok(i64::from_str(&s).unwrap()))
     }
 }
@@ -11801,6 +12117,7 @@ impl IntegerOptionalDeserializer {
 /// Serialize `KeyList` contents to a `SignedRequest`.
 struct KeyListSerializer;
 impl KeyListSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &Vec<String>) {
         for (index, obj) in obj.iter().enumerate() {
             let key = format!("{}.member.{}", name, index + 1);
@@ -11822,10 +12139,11 @@ pub struct ListTagsForResourceMessage {
 /// Serialize `ListTagsForResourceMessage` contents to a `SignedRequest`.
 struct ListTagsForResourceMessageSerializer;
 impl ListTagsForResourceMessageSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &ListTagsForResourceMessage) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         if let Some(ref field_value) = obj.filters {
@@ -11842,11 +12160,13 @@ impl ListTagsForResourceMessageSerializer {
 #[allow(dead_code)]
 struct LogTypeListDeserializer;
 impl LogTypeListDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<String>, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
+
         deserialize_elements::<_, Vec<_>, _>(tag_name, stack, |name, stack, obj| {
             if name == "member" {
                 obj.push(StringDeserializer::deserialize("member", stack)?);
@@ -11861,6 +12181,7 @@ impl LogTypeListDeserializer {
 /// Serialize `LogTypeList` contents to a `SignedRequest`.
 struct LogTypeListSerializer;
 impl LogTypeListSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &Vec<String>) {
         for (index, obj) in obj.iter().enumerate() {
             let key = format!("{}.member.{}", name, index + 1);
@@ -11872,16 +12193,18 @@ impl LogTypeListSerializer {
 #[allow(dead_code)]
 struct LongDeserializer;
 impl LongDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<i64, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::deserialize_primitive(tag_name, stack, |s| Ok(i64::from_str(&s).unwrap()))
     }
 }
 #[allow(dead_code)]
 struct LongOptionalDeserializer;
 impl LongOptionalDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<i64, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::deserialize_primitive(tag_name, stack, |s| Ok(i64::from_str(&s).unwrap()))
     }
 }
@@ -11898,11 +12221,12 @@ pub struct MinimumEngineVersionPerAllowedValue {
 #[allow(dead_code)]
 struct MinimumEngineVersionPerAllowedValueDeserializer;
 impl MinimumEngineVersionPerAllowedValueDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<MinimumEngineVersionPerAllowedValue, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, MinimumEngineVersionPerAllowedValue, _>(
             tag_name,
             stack,
@@ -11928,11 +12252,13 @@ impl MinimumEngineVersionPerAllowedValueDeserializer {
 #[allow(dead_code)]
 struct MinimumEngineVersionPerAllowedValueListDeserializer;
 impl MinimumEngineVersionPerAllowedValueListDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<MinimumEngineVersionPerAllowedValue>, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
+
         deserialize_elements::<_, Vec<_>, _>(tag_name, stack, |name, stack, obj| {
             if name == "MinimumEngineVersionPerAllowedValue" {
                 obj.push(
@@ -11960,10 +12286,11 @@ pub struct ModifyCertificatesMessage {
 /// Serialize `ModifyCertificatesMessage` contents to a `SignedRequest`.
 struct ModifyCertificatesMessageSerializer;
 impl ModifyCertificatesMessageSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &ModifyCertificatesMessage) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         if let Some(ref field_value) = obj.certificate_identifier {
@@ -11990,11 +12317,12 @@ pub struct ModifyCertificatesResult {
 #[allow(dead_code)]
 struct ModifyCertificatesResultDeserializer;
 impl ModifyCertificatesResultDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<ModifyCertificatesResult, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, ModifyCertificatesResult, _>(
             tag_name,
             stack,
@@ -12027,10 +12355,11 @@ pub struct ModifyCurrentDBClusterCapacityMessage {
 /// Serialize `ModifyCurrentDBClusterCapacityMessage` contents to a `SignedRequest`.
 struct ModifyCurrentDBClusterCapacityMessageSerializer;
 impl ModifyCurrentDBClusterCapacityMessageSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &ModifyCurrentDBClusterCapacityMessage) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         if let Some(ref field_value) = obj.capacity {
@@ -12068,10 +12397,11 @@ pub struct ModifyDBClusterEndpointMessage {
 /// Serialize `ModifyDBClusterEndpointMessage` contents to a `SignedRequest`.
 struct ModifyDBClusterEndpointMessageSerializer;
 impl ModifyDBClusterEndpointMessageSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &ModifyDBClusterEndpointMessage) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         params.put(
@@ -12155,10 +12485,11 @@ pub struct ModifyDBClusterMessage {
 /// Serialize `ModifyDBClusterMessage` contents to a `SignedRequest`.
 struct ModifyDBClusterMessageSerializer;
 impl ModifyDBClusterMessageSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &ModifyDBClusterMessage) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         if let Some(ref field_value) = obj.allow_major_version_upgrade {
@@ -12289,10 +12620,11 @@ pub struct ModifyDBClusterParameterGroupMessage {
 /// Serialize `ModifyDBClusterParameterGroupMessage` contents to a `SignedRequest`.
 struct ModifyDBClusterParameterGroupMessageSerializer;
 impl ModifyDBClusterParameterGroupMessageSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &ModifyDBClusterParameterGroupMessage) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         params.put(
@@ -12316,11 +12648,12 @@ pub struct ModifyDBClusterResult {
 #[allow(dead_code)]
 struct ModifyDBClusterResultDeserializer;
 impl ModifyDBClusterResultDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<ModifyDBClusterResult, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, ModifyDBClusterResult, _>(tag_name, stack, |name, stack, obj| {
             match name {
                 "DBCluster" => {
@@ -12349,10 +12682,11 @@ pub struct ModifyDBClusterSnapshotAttributeMessage {
 /// Serialize `ModifyDBClusterSnapshotAttributeMessage` contents to a `SignedRequest`.
 struct ModifyDBClusterSnapshotAttributeMessageSerializer;
 impl ModifyDBClusterSnapshotAttributeMessageSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &ModifyDBClusterSnapshotAttributeMessage) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         params.put(
@@ -12389,11 +12723,12 @@ pub struct ModifyDBClusterSnapshotAttributeResult {
 #[allow(dead_code)]
 struct ModifyDBClusterSnapshotAttributeResultDeserializer;
 impl ModifyDBClusterSnapshotAttributeResultDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<ModifyDBClusterSnapshotAttributeResult, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, ModifyDBClusterSnapshotAttributeResult, _>(
             tag_name,
             stack,
@@ -12510,10 +12845,11 @@ pub struct ModifyDBInstanceMessage {
 /// Serialize `ModifyDBInstanceMessage` contents to a `SignedRequest`.
 struct ModifyDBInstanceMessageSerializer;
 impl ModifyDBInstanceMessageSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &ModifyDBInstanceMessage) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         if let Some(ref field_value) = obj.allocated_storage {
@@ -12728,11 +13064,12 @@ pub struct ModifyDBInstanceResult {
 #[allow(dead_code)]
 struct ModifyDBInstanceResultDeserializer;
 impl ModifyDBInstanceResultDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<ModifyDBInstanceResult, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, ModifyDBInstanceResult, _>(tag_name, stack, |name, stack, obj| {
             match name {
                 "DBInstance" => {
@@ -12758,10 +13095,11 @@ pub struct ModifyDBParameterGroupMessage {
 /// Serialize `ModifyDBParameterGroupMessage` contents to a `SignedRequest`.
 struct ModifyDBParameterGroupMessageSerializer;
 impl ModifyDBParameterGroupMessageSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &ModifyDBParameterGroupMessage) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         params.put(
@@ -12800,10 +13138,11 @@ pub struct ModifyDBProxyRequest {
 /// Serialize `ModifyDBProxyRequest` contents to a `SignedRequest`.
 struct ModifyDBProxyRequestSerializer;
 impl ModifyDBProxyRequestSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &ModifyDBProxyRequest) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         if let Some(ref field_value) = obj.auth {
@@ -12849,11 +13188,12 @@ pub struct ModifyDBProxyResponse {
 #[allow(dead_code)]
 struct ModifyDBProxyResponseDeserializer;
 impl ModifyDBProxyResponseDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<ModifyDBProxyResponse, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, ModifyDBProxyResponse, _>(tag_name, stack, |name, stack, obj| {
             match name {
                 "DBProxy" => {
@@ -12881,10 +13221,11 @@ pub struct ModifyDBProxyTargetGroupRequest {
 /// Serialize `ModifyDBProxyTargetGroupRequest` contents to a `SignedRequest`.
 struct ModifyDBProxyTargetGroupRequestSerializer;
 impl ModifyDBProxyTargetGroupRequestSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &ModifyDBProxyTargetGroupRequest) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         if let Some(ref field_value) = obj.connection_pool_config {
@@ -12915,11 +13256,12 @@ pub struct ModifyDBProxyTargetGroupResponse {
 #[allow(dead_code)]
 struct ModifyDBProxyTargetGroupResponseDeserializer;
 impl ModifyDBProxyTargetGroupResponseDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<ModifyDBProxyTargetGroupResponse, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, ModifyDBProxyTargetGroupResponse, _>(
             tag_name,
             stack,
@@ -12956,10 +13298,11 @@ pub struct ModifyDBSnapshotAttributeMessage {
 /// Serialize `ModifyDBSnapshotAttributeMessage` contents to a `SignedRequest`.
 struct ModifyDBSnapshotAttributeMessageSerializer;
 impl ModifyDBSnapshotAttributeMessageSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &ModifyDBSnapshotAttributeMessage) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         params.put(
@@ -12996,11 +13339,12 @@ pub struct ModifyDBSnapshotAttributeResult {
 #[allow(dead_code)]
 struct ModifyDBSnapshotAttributeResultDeserializer;
 impl ModifyDBSnapshotAttributeResultDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<ModifyDBSnapshotAttributeResult, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, ModifyDBSnapshotAttributeResult, _>(
             tag_name,
             stack,
@@ -13034,10 +13378,11 @@ pub struct ModifyDBSnapshotMessage {
 /// Serialize `ModifyDBSnapshotMessage` contents to a `SignedRequest`.
 struct ModifyDBSnapshotMessageSerializer;
 impl ModifyDBSnapshotMessageSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &ModifyDBSnapshotMessage) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         params.put(
@@ -13062,11 +13407,12 @@ pub struct ModifyDBSnapshotResult {
 #[allow(dead_code)]
 struct ModifyDBSnapshotResultDeserializer;
 impl ModifyDBSnapshotResultDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<ModifyDBSnapshotResult, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, ModifyDBSnapshotResult, _>(tag_name, stack, |name, stack, obj| {
             match name {
                 "DBSnapshot" => {
@@ -13094,10 +13440,11 @@ pub struct ModifyDBSubnetGroupMessage {
 /// Serialize `ModifyDBSubnetGroupMessage` contents to a `SignedRequest`.
 struct ModifyDBSubnetGroupMessageSerializer;
 impl ModifyDBSubnetGroupMessageSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &ModifyDBSubnetGroupMessage) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         if let Some(ref field_value) = obj.db_subnet_group_description {
@@ -13127,11 +13474,12 @@ pub struct ModifyDBSubnetGroupResult {
 #[allow(dead_code)]
 struct ModifyDBSubnetGroupResultDeserializer;
 impl ModifyDBSubnetGroupResultDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<ModifyDBSubnetGroupResult, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, ModifyDBSubnetGroupResult, _>(
             tag_name,
             stack,
@@ -13169,10 +13517,11 @@ pub struct ModifyEventSubscriptionMessage {
 /// Serialize `ModifyEventSubscriptionMessage` contents to a `SignedRequest`.
 struct ModifyEventSubscriptionMessageSerializer;
 impl ModifyEventSubscriptionMessageSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &ModifyEventSubscriptionMessage) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         if let Some(ref field_value) = obj.enabled {
@@ -13207,11 +13556,12 @@ pub struct ModifyEventSubscriptionResult {
 #[allow(dead_code)]
 struct ModifyEventSubscriptionResultDeserializer;
 impl ModifyEventSubscriptionResultDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<ModifyEventSubscriptionResult, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, ModifyEventSubscriptionResult, _>(
             tag_name,
             stack,
@@ -13244,10 +13594,11 @@ pub struct ModifyGlobalClusterMessage {
 /// Serialize `ModifyGlobalClusterMessage` contents to a `SignedRequest`.
 struct ModifyGlobalClusterMessageSerializer;
 impl ModifyGlobalClusterMessageSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &ModifyGlobalClusterMessage) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         if let Some(ref field_value) = obj.deletion_protection {
@@ -13277,11 +13628,12 @@ pub struct ModifyGlobalClusterResult {
 #[allow(dead_code)]
 struct ModifyGlobalClusterResultDeserializer;
 impl ModifyGlobalClusterResultDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<ModifyGlobalClusterResult, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, ModifyGlobalClusterResult, _>(
             tag_name,
             stack,
@@ -13317,10 +13669,11 @@ pub struct ModifyOptionGroupMessage {
 /// Serialize `ModifyOptionGroupMessage` contents to a `SignedRequest`.
 struct ModifyOptionGroupMessageSerializer;
 impl ModifyOptionGroupMessageSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &ModifyOptionGroupMessage) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         if let Some(ref field_value) = obj.apply_immediately {
@@ -13356,11 +13709,12 @@ pub struct ModifyOptionGroupResult {
 #[allow(dead_code)]
 struct ModifyOptionGroupResultDeserializer;
 impl ModifyOptionGroupResultDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<ModifyOptionGroupResult, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, ModifyOptionGroupResult, _>(
             tag_name,
             stack,
@@ -13404,11 +13758,12 @@ pub struct RDSOption {
 #[allow(dead_code)]
 struct RDSOptionDeserializer;
 impl RDSOptionDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<RDSOption, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, RDSOption, _>(tag_name, stack, |name, stack, obj| {
             match name {
                 "DBSecurityGroupMemberships" => {
@@ -13482,10 +13837,11 @@ pub struct OptionConfiguration {
 /// Serialize `OptionConfiguration` contents to a `SignedRequest`.
 struct OptionConfigurationSerializer;
 impl OptionConfigurationSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &OptionConfiguration) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         if let Some(ref field_value) = obj.db_security_group_memberships {
@@ -13522,6 +13878,7 @@ impl OptionConfigurationSerializer {
 /// Serialize `OptionConfigurationList` contents to a `SignedRequest`.
 struct OptionConfigurationListSerializer;
 impl OptionConfigurationListSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &Vec<OptionConfiguration>) {
         for (index, obj) in obj.iter().enumerate() {
             let key = format!("{}.member.{}", name, index + 1);
@@ -13555,11 +13912,12 @@ pub struct OptionGroup {
 #[allow(dead_code)]
 struct OptionGroupDeserializer;
 impl OptionGroupDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<OptionGroup, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, OptionGroup, _>(tag_name, stack, |name, stack, obj| {
             match name {
                 "AllowsVpcAndNonVpcInstanceMemberships" => {
@@ -13619,11 +13977,12 @@ pub struct OptionGroupMembership {
 #[allow(dead_code)]
 struct OptionGroupMembershipDeserializer;
 impl OptionGroupMembershipDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<OptionGroupMembership, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, OptionGroupMembership, _>(tag_name, stack, |name, stack, obj| {
             match name {
                 "OptionGroupName" => {
@@ -13642,11 +14001,13 @@ impl OptionGroupMembershipDeserializer {
 #[allow(dead_code)]
 struct OptionGroupMembershipListDeserializer;
 impl OptionGroupMembershipListDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<OptionGroupMembership>, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
+
         deserialize_elements::<_, Vec<_>, _>(tag_name, stack, |name, stack, obj| {
             if name == "OptionGroupMembership" {
                 obj.push(OptionGroupMembershipDeserializer::deserialize(
@@ -13701,11 +14062,12 @@ pub struct OptionGroupOption {
 #[allow(dead_code)]
 struct OptionGroupOptionDeserializer;
 impl OptionGroupOptionDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<OptionGroupOption, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, OptionGroupOption, _>(tag_name, stack, |name, stack, obj| {
             match name {
                 "DefaultPort" => {
@@ -13823,11 +14185,12 @@ pub struct OptionGroupOptionSetting {
 #[allow(dead_code)]
 struct OptionGroupOptionSettingDeserializer;
 impl OptionGroupOptionSettingDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<OptionGroupOptionSetting, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, OptionGroupOptionSetting, _>(
             tag_name,
             stack,
@@ -13882,11 +14245,13 @@ impl OptionGroupOptionSettingDeserializer {
 #[allow(dead_code)]
 struct OptionGroupOptionSettingsListDeserializer;
 impl OptionGroupOptionSettingsListDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<OptionGroupOptionSetting>, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
+
         deserialize_elements::<_, Vec<_>, _>(tag_name, stack, |name, stack, obj| {
             if name == "OptionGroupOptionSetting" {
                 obj.push(OptionGroupOptionSettingDeserializer::deserialize(
@@ -13903,11 +14268,13 @@ impl OptionGroupOptionSettingsListDeserializer {
 #[allow(dead_code)]
 struct OptionGroupOptionVersionsListDeserializer;
 impl OptionGroupOptionVersionsListDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<OptionVersion>, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
+
         deserialize_elements::<_, Vec<_>, _>(tag_name, stack, |name, stack, obj| {
             if name == "OptionVersion" {
                 obj.push(OptionVersionDeserializer::deserialize(
@@ -13924,11 +14291,13 @@ impl OptionGroupOptionVersionsListDeserializer {
 #[allow(dead_code)]
 struct OptionGroupOptionsListDeserializer;
 impl OptionGroupOptionsListDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<OptionGroupOption>, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
+
         deserialize_elements::<_, Vec<_>, _>(tag_name, stack, |name, stack, obj| {
             if name == "OptionGroupOption" {
                 obj.push(OptionGroupOptionDeserializer::deserialize(
@@ -13954,11 +14323,12 @@ pub struct OptionGroupOptionsMessage {
 #[allow(dead_code)]
 struct OptionGroupOptionsMessageDeserializer;
 impl OptionGroupOptionsMessageDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<OptionGroupOptionsMessage, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, OptionGroupOptionsMessage, _>(
             tag_name,
             stack,
@@ -13995,11 +14365,12 @@ pub struct OptionGroups {
 #[allow(dead_code)]
 struct OptionGroupsDeserializer;
 impl OptionGroupsDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<OptionGroups, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, OptionGroups, _>(tag_name, stack, |name, stack, obj| {
             match name {
                 "Marker" => {
@@ -14019,11 +14390,13 @@ impl OptionGroupsDeserializer {
 #[allow(dead_code)]
 struct OptionGroupsListDeserializer;
 impl OptionGroupsListDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<OptionGroup>, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
+
         deserialize_elements::<_, Vec<_>, _>(tag_name, stack, |name, stack, obj| {
             if name == "OptionGroup" {
                 obj.push(OptionGroupDeserializer::deserialize("OptionGroup", stack)?);
@@ -14038,6 +14411,7 @@ impl OptionGroupsListDeserializer {
 /// Serialize `OptionNamesList` contents to a `SignedRequest`.
 struct OptionNamesListSerializer;
 impl OptionNamesListSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &Vec<String>) {
         for (index, obj) in obj.iter().enumerate() {
             let key = format!("{}.member.{}", name, index + 1);
@@ -14074,11 +14448,12 @@ pub struct OptionSetting {
 #[allow(dead_code)]
 struct OptionSettingDeserializer;
 impl OptionSettingDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<OptionSetting, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, OptionSetting, _>(tag_name, stack, |name, stack, obj| {
             match name {
                 "AllowedValues" => {
@@ -14122,10 +14497,11 @@ impl OptionSettingDeserializer {
 /// Serialize `OptionSetting` contents to a `SignedRequest`.
 struct OptionSettingSerializer;
 impl OptionSettingSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &OptionSetting) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         if let Some(ref field_value) = obj.allowed_values {
@@ -14161,11 +14537,13 @@ impl OptionSettingSerializer {
 #[allow(dead_code)]
 struct OptionSettingConfigurationListDeserializer;
 impl OptionSettingConfigurationListDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<OptionSetting>, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
+
         deserialize_elements::<_, Vec<_>, _>(tag_name, stack, |name, stack, obj| {
             if name == "OptionSetting" {
                 obj.push(OptionSettingDeserializer::deserialize(
@@ -14183,6 +14561,7 @@ impl OptionSettingConfigurationListDeserializer {
 /// Serialize `OptionSettingsList` contents to a `SignedRequest`.
 struct OptionSettingsListSerializer;
 impl OptionSettingsListSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &Vec<OptionSetting>) {
         for (index, obj) in obj.iter().enumerate() {
             let key = format!("{}.member.{}", name, index + 1);
@@ -14204,11 +14583,12 @@ pub struct OptionVersion {
 #[allow(dead_code)]
 struct OptionVersionDeserializer;
 impl OptionVersionDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<OptionVersion, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, OptionVersion, _>(tag_name, stack, |name, stack, obj| {
             match name {
                 "IsDefault" => {
@@ -14226,11 +14606,13 @@ impl OptionVersionDeserializer {
 #[allow(dead_code)]
 struct OptionsConflictsWithDeserializer;
 impl OptionsConflictsWithDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<String>, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
+
         deserialize_elements::<_, Vec<_>, _>(tag_name, stack, |name, stack, obj| {
             if name == "OptionConflictName" {
                 obj.push(StringDeserializer::deserialize(
@@ -14247,11 +14629,13 @@ impl OptionsConflictsWithDeserializer {
 #[allow(dead_code)]
 struct OptionsDependedOnDeserializer;
 impl OptionsDependedOnDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<String>, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
+
         deserialize_elements::<_, Vec<_>, _>(tag_name, stack, |name, stack, obj| {
             if name == "OptionName" {
                 obj.push(StringDeserializer::deserialize("OptionName", stack)?);
@@ -14265,11 +14649,13 @@ impl OptionsDependedOnDeserializer {
 #[allow(dead_code)]
 struct OptionsListDeserializer;
 impl OptionsListDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<RDSOption>, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
+
         deserialize_elements::<_, Vec<_>, _>(tag_name, stack, |name, stack, obj| {
             if name == "Option" {
                 obj.push(RDSOptionDeserializer::deserialize("Option", stack)?);
@@ -14343,11 +14729,12 @@ pub struct OrderableDBInstanceOption {
 #[allow(dead_code)]
 struct OrderableDBInstanceOptionDeserializer;
 impl OrderableDBInstanceOptionDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<OrderableDBInstanceOption, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, OrderableDBInstanceOption, _>(
             tag_name,
             stack,
@@ -14513,11 +14900,13 @@ impl OrderableDBInstanceOptionDeserializer {
 #[allow(dead_code)]
 struct OrderableDBInstanceOptionsListDeserializer;
 impl OrderableDBInstanceOptionsListDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<OrderableDBInstanceOption>, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
+
         deserialize_elements::<_, Vec<_>, _>(tag_name, stack, |name, stack, obj| {
             if name == "OrderableDBInstanceOption" {
                 obj.push(OrderableDBInstanceOptionDeserializer::deserialize(
@@ -14544,11 +14933,12 @@ pub struct OrderableDBInstanceOptionsMessage {
 #[allow(dead_code)]
 struct OrderableDBInstanceOptionsMessageDeserializer;
 impl OrderableDBInstanceOptionsMessageDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<OrderableDBInstanceOptionsMessage, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, OrderableDBInstanceOptionsMessage, _>(
             tag_name,
             stack,
@@ -14583,11 +14973,12 @@ pub struct Outpost {
 #[allow(dead_code)]
 struct OutpostDeserializer;
 impl OutpostDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Outpost, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, Outpost, _>(tag_name, stack, |name, stack, obj| {
             match name {
                 "Arn" => {
@@ -14631,11 +15022,12 @@ pub struct Parameter {
 #[allow(dead_code)]
 struct ParameterDeserializer;
 impl ParameterDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Parameter, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, Parameter, _>(tag_name, stack, |name, stack, obj| {
             match name {
                 "AllowedValues" => {
@@ -14691,10 +15083,11 @@ impl ParameterDeserializer {
 /// Serialize `Parameter` contents to a `SignedRequest`.
 struct ParameterSerializer;
 impl ParameterSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &Parameter) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         if let Some(ref field_value) = obj.allowed_values {
@@ -14743,11 +15136,13 @@ impl ParameterSerializer {
 #[allow(dead_code)]
 struct ParametersListDeserializer;
 impl ParametersListDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<Parameter>, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
+
         deserialize_elements::<_, Vec<_>, _>(tag_name, stack, |name, stack, obj| {
             if name == "Parameter" {
                 obj.push(ParameterDeserializer::deserialize("Parameter", stack)?);
@@ -14762,6 +15157,7 @@ impl ParametersListDeserializer {
 /// Serialize `ParametersList` contents to a `SignedRequest`.
 struct ParametersListSerializer;
 impl ParametersListSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &Vec<Parameter>) {
         for (index, obj) in obj.iter().enumerate() {
             let key = format!("{}.member.{}", name, index + 1);
@@ -14783,11 +15179,12 @@ pub struct PendingCloudwatchLogsExports {
 #[allow(dead_code)]
 struct PendingCloudwatchLogsExportsDeserializer;
 impl PendingCloudwatchLogsExportsDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<PendingCloudwatchLogsExports, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, PendingCloudwatchLogsExports, _>(
             tag_name,
             stack,
@@ -14831,11 +15228,12 @@ pub struct PendingMaintenanceAction {
 #[allow(dead_code)]
 struct PendingMaintenanceActionDeserializer;
 impl PendingMaintenanceActionDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<PendingMaintenanceAction, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, PendingMaintenanceAction, _>(
             tag_name,
             stack,
@@ -14876,11 +15274,13 @@ impl PendingMaintenanceActionDeserializer {
 #[allow(dead_code)]
 struct PendingMaintenanceActionDetailsDeserializer;
 impl PendingMaintenanceActionDetailsDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<PendingMaintenanceAction>, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
+
         deserialize_elements::<_, Vec<_>, _>(tag_name, stack, |name, stack, obj| {
             if name == "PendingMaintenanceAction" {
                 obj.push(PendingMaintenanceActionDeserializer::deserialize(
@@ -14897,11 +15297,13 @@ impl PendingMaintenanceActionDetailsDeserializer {
 #[allow(dead_code)]
 struct PendingMaintenanceActionsDeserializer;
 impl PendingMaintenanceActionsDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<ResourcePendingMaintenanceActions>, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
+
         deserialize_elements::<_, Vec<_>, _>(tag_name, stack, |name, stack, obj| {
             if name == "ResourcePendingMaintenanceActions" {
                 obj.push(ResourcePendingMaintenanceActionsDeserializer::deserialize(
@@ -14928,11 +15330,12 @@ pub struct PendingMaintenanceActionsMessage {
 #[allow(dead_code)]
 struct PendingMaintenanceActionsMessageDeserializer;
 impl PendingMaintenanceActionsMessageDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<PendingMaintenanceActionsMessage, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, PendingMaintenanceActionsMessage, _>(
             tag_name,
             stack,
@@ -14996,11 +15399,12 @@ pub struct PendingModifiedValues {
 #[allow(dead_code)]
 struct PendingModifiedValuesDeserializer;
 impl PendingModifiedValuesDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<PendingModifiedValues, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, PendingModifiedValues, _>(tag_name, stack, |name, stack, obj| {
             match name {
                 "AllocatedStorage" => {
@@ -15101,11 +15505,12 @@ pub struct ProcessorFeature {
 #[allow(dead_code)]
 struct ProcessorFeatureDeserializer;
 impl ProcessorFeatureDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<ProcessorFeature, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, ProcessorFeature, _>(tag_name, stack, |name, stack, obj| {
             match name {
                 "Name" => {
@@ -15124,10 +15529,11 @@ impl ProcessorFeatureDeserializer {
 /// Serialize `ProcessorFeature` contents to a `SignedRequest`.
 struct ProcessorFeatureSerializer;
 impl ProcessorFeatureSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &ProcessorFeature) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         if let Some(ref field_value) = obj.name {
@@ -15142,11 +15548,13 @@ impl ProcessorFeatureSerializer {
 #[allow(dead_code)]
 struct ProcessorFeatureListDeserializer;
 impl ProcessorFeatureListDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<ProcessorFeature>, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
+
         deserialize_elements::<_, Vec<_>, _>(tag_name, stack, |name, stack, obj| {
             if name == "ProcessorFeature" {
                 obj.push(ProcessorFeatureDeserializer::deserialize(
@@ -15164,6 +15572,7 @@ impl ProcessorFeatureListDeserializer {
 /// Serialize `ProcessorFeatureList` contents to a `SignedRequest`.
 struct ProcessorFeatureListSerializer;
 impl ProcessorFeatureListSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &Vec<ProcessorFeature>) {
         for (index, obj) in obj.iter().enumerate() {
             let key = format!("{}.member.{}", name, index + 1);
@@ -15183,10 +15592,11 @@ pub struct PromoteReadReplicaDBClusterMessage {
 /// Serialize `PromoteReadReplicaDBClusterMessage` contents to a `SignedRequest`.
 struct PromoteReadReplicaDBClusterMessageSerializer;
 impl PromoteReadReplicaDBClusterMessageSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &PromoteReadReplicaDBClusterMessage) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         params.put(
@@ -15205,11 +15615,12 @@ pub struct PromoteReadReplicaDBClusterResult {
 #[allow(dead_code)]
 struct PromoteReadReplicaDBClusterResultDeserializer;
 impl PromoteReadReplicaDBClusterResultDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<PromoteReadReplicaDBClusterResult, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, PromoteReadReplicaDBClusterResult, _>(
             tag_name,
             stack,
@@ -15241,10 +15652,11 @@ pub struct PromoteReadReplicaMessage {
 /// Serialize `PromoteReadReplicaMessage` contents to a `SignedRequest`.
 struct PromoteReadReplicaMessageSerializer;
 impl PromoteReadReplicaMessageSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &PromoteReadReplicaMessage) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         if let Some(ref field_value) = obj.backup_retention_period {
@@ -15275,11 +15687,12 @@ pub struct PromoteReadReplicaResult {
 #[allow(dead_code)]
 struct PromoteReadReplicaResultDeserializer;
 impl PromoteReadReplicaResultDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<PromoteReadReplicaResult, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, PromoteReadReplicaResult, _>(
             tag_name,
             stack,
@@ -15312,14 +15725,15 @@ pub struct PurchaseReservedDBInstancesOfferingMessage {
 /// Serialize `PurchaseReservedDBInstancesOfferingMessage` contents to a `SignedRequest`.
 struct PurchaseReservedDBInstancesOfferingMessageSerializer;
 impl PurchaseReservedDBInstancesOfferingMessageSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(
         params: &mut Params,
         name: &str,
         obj: &PurchaseReservedDBInstancesOfferingMessage,
     ) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         if let Some(ref field_value) = obj.db_instance_count {
@@ -15350,11 +15764,12 @@ pub struct PurchaseReservedDBInstancesOfferingResult {
 #[allow(dead_code)]
 struct PurchaseReservedDBInstancesOfferingResultDeserializer;
 impl PurchaseReservedDBInstancesOfferingResultDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<PurchaseReservedDBInstancesOfferingResult, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, PurchaseReservedDBInstancesOfferingResult, _>(
             tag_name,
             stack,
@@ -15389,8 +15804,9 @@ pub struct Range {
 #[allow(dead_code)]
 struct RangeDeserializer;
 impl RangeDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<Range, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, Range, _>(tag_name, stack, |name, stack, obj| {
             match name {
                 "From" => {
@@ -15411,11 +15827,13 @@ impl RangeDeserializer {
 #[allow(dead_code)]
 struct RangeListDeserializer;
 impl RangeListDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<Range>, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
+
         deserialize_elements::<_, Vec<_>, _>(tag_name, stack, |name, stack, obj| {
             if name == "Range" {
                 obj.push(RangeDeserializer::deserialize("Range", stack)?);
@@ -15429,11 +15847,13 @@ impl RangeListDeserializer {
 #[allow(dead_code)]
 struct ReadReplicaDBClusterIdentifierListDeserializer;
 impl ReadReplicaDBClusterIdentifierListDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<String>, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
+
         deserialize_elements::<_, Vec<_>, _>(tag_name, stack, |name, stack, obj| {
             if name == "ReadReplicaDBClusterIdentifier" {
                 obj.push(StringDeserializer::deserialize(
@@ -15450,11 +15870,13 @@ impl ReadReplicaDBClusterIdentifierListDeserializer {
 #[allow(dead_code)]
 struct ReadReplicaDBInstanceIdentifierListDeserializer;
 impl ReadReplicaDBInstanceIdentifierListDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<String>, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
+
         deserialize_elements::<_, Vec<_>, _>(tag_name, stack, |name, stack, obj| {
             if name == "ReadReplicaDBInstanceIdentifier" {
                 obj.push(StringDeserializer::deserialize(
@@ -15471,11 +15893,13 @@ impl ReadReplicaDBInstanceIdentifierListDeserializer {
 #[allow(dead_code)]
 struct ReadReplicaIdentifierListDeserializer;
 impl ReadReplicaIdentifierListDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<String>, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
+
         deserialize_elements::<_, Vec<_>, _>(tag_name, stack, |name, stack, obj| {
             if name == "ReadReplicaIdentifier" {
                 obj.push(StringDeserializer::deserialize(
@@ -15492,11 +15916,13 @@ impl ReadReplicaIdentifierListDeserializer {
 #[allow(dead_code)]
 struct ReadersArnListDeserializer;
 impl ReadersArnListDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<String>, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
+
         deserialize_elements::<_, Vec<_>, _>(tag_name, stack, |name, stack, obj| {
             if name == "member" {
                 obj.push(StringDeserializer::deserialize("member", stack)?);
@@ -15520,10 +15946,11 @@ pub struct RebootDBInstanceMessage {
 /// Serialize `RebootDBInstanceMessage` contents to a `SignedRequest`.
 struct RebootDBInstanceMessageSerializer;
 impl RebootDBInstanceMessageSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &RebootDBInstanceMessage) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         params.put(
@@ -15545,11 +15972,12 @@ pub struct RebootDBInstanceResult {
 #[allow(dead_code)]
 struct RebootDBInstanceResultDeserializer;
 impl RebootDBInstanceResultDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<RebootDBInstanceResult, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, RebootDBInstanceResult, _>(tag_name, stack, |name, stack, obj| {
             match name {
                 "DBInstance" => {
@@ -15575,11 +16003,12 @@ pub struct RecurringCharge {
 #[allow(dead_code)]
 struct RecurringChargeDeserializer;
 impl RecurringChargeDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<RecurringCharge, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, RecurringCharge, _>(tag_name, stack, |name, stack, obj| {
             match name {
                 "RecurringChargeAmount" => {
@@ -15603,11 +16032,13 @@ impl RecurringChargeDeserializer {
 #[allow(dead_code)]
 struct RecurringChargeListDeserializer;
 impl RecurringChargeListDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<RecurringCharge>, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
+
         deserialize_elements::<_, Vec<_>, _>(tag_name, stack, |name, stack, obj| {
             if name == "RecurringCharge" {
                 obj.push(RecurringChargeDeserializer::deserialize(
@@ -15637,10 +16068,11 @@ pub struct RegisterDBProxyTargetsRequest {
 /// Serialize `RegisterDBProxyTargetsRequest` contents to a `SignedRequest`.
 struct RegisterDBProxyTargetsRequestSerializer;
 impl RegisterDBProxyTargetsRequestSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &RegisterDBProxyTargetsRequest) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         if let Some(ref field_value) = obj.db_cluster_identifiers {
@@ -15674,11 +16106,12 @@ pub struct RegisterDBProxyTargetsResponse {
 #[allow(dead_code)]
 struct RegisterDBProxyTargetsResponseDeserializer;
 impl RegisterDBProxyTargetsResponseDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<RegisterDBProxyTargetsResponse, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, RegisterDBProxyTargetsResponse, _>(
             tag_name,
             stack,
@@ -15708,10 +16141,11 @@ pub struct RemoveFromGlobalClusterMessage {
 /// Serialize `RemoveFromGlobalClusterMessage` contents to a `SignedRequest`.
 struct RemoveFromGlobalClusterMessageSerializer;
 impl RemoveFromGlobalClusterMessageSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &RemoveFromGlobalClusterMessage) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         if let Some(ref field_value) = obj.db_cluster_identifier {
@@ -15738,11 +16172,12 @@ pub struct RemoveFromGlobalClusterResult {
 #[allow(dead_code)]
 struct RemoveFromGlobalClusterResultDeserializer;
 impl RemoveFromGlobalClusterResultDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<RemoveFromGlobalClusterResult, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, RemoveFromGlobalClusterResult, _>(
             tag_name,
             stack,
@@ -15775,10 +16210,11 @@ pub struct RemoveRoleFromDBClusterMessage {
 /// Serialize `RemoveRoleFromDBClusterMessage` contents to a `SignedRequest`.
 struct RemoveRoleFromDBClusterMessageSerializer;
 impl RemoveRoleFromDBClusterMessageSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &RemoveRoleFromDBClusterMessage) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         params.put(
@@ -15806,10 +16242,11 @@ pub struct RemoveRoleFromDBInstanceMessage {
 /// Serialize `RemoveRoleFromDBInstanceMessage` contents to a `SignedRequest`.
 struct RemoveRoleFromDBInstanceMessageSerializer;
 impl RemoveRoleFromDBInstanceMessageSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &RemoveRoleFromDBInstanceMessage) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         params.put(
@@ -15834,14 +16271,15 @@ pub struct RemoveSourceIdentifierFromSubscriptionMessage {
 /// Serialize `RemoveSourceIdentifierFromSubscriptionMessage` contents to a `SignedRequest`.
 struct RemoveSourceIdentifierFromSubscriptionMessageSerializer;
 impl RemoveSourceIdentifierFromSubscriptionMessageSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(
         params: &mut Params,
         name: &str,
         obj: &RemoveSourceIdentifierFromSubscriptionMessage,
     ) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         params.put(
@@ -15864,11 +16302,12 @@ pub struct RemoveSourceIdentifierFromSubscriptionResult {
 #[allow(dead_code)]
 struct RemoveSourceIdentifierFromSubscriptionResultDeserializer;
 impl RemoveSourceIdentifierFromSubscriptionResultDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<RemoveSourceIdentifierFromSubscriptionResult, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, RemoveSourceIdentifierFromSubscriptionResult, _>(
             tag_name,
             stack,
@@ -15900,10 +16339,11 @@ pub struct RemoveTagsFromResourceMessage {
 /// Serialize `RemoveTagsFromResourceMessage` contents to a `SignedRequest`.
 struct RemoveTagsFromResourceMessageSerializer;
 impl RemoveTagsFromResourceMessageSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &RemoveTagsFromResourceMessage) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         params.put(&format!("{}{}", prefix, "ResourceName"), &obj.resource_name);
@@ -15914,8 +16354,9 @@ impl RemoveTagsFromResourceMessageSerializer {
 #[allow(dead_code)]
 struct ReplicaModeDeserializer;
 impl ReplicaModeDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
@@ -15960,11 +16401,12 @@ pub struct ReservedDBInstance {
 #[allow(dead_code)]
 struct ReservedDBInstanceDeserializer;
 impl ReservedDBInstanceDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<ReservedDBInstance, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, ReservedDBInstance, _>(tag_name, stack, |name, stack, obj| {
             match name {
                 "CurrencyCode" => {
@@ -16042,11 +16484,13 @@ impl ReservedDBInstanceDeserializer {
 #[allow(dead_code)]
 struct ReservedDBInstanceListDeserializer;
 impl ReservedDBInstanceListDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<ReservedDBInstance>, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
+
         deserialize_elements::<_, Vec<_>, _>(tag_name, stack, |name, stack, obj| {
             if name == "ReservedDBInstance" {
                 obj.push(ReservedDBInstanceDeserializer::deserialize(
@@ -16073,11 +16517,12 @@ pub struct ReservedDBInstanceMessage {
 #[allow(dead_code)]
 struct ReservedDBInstanceMessageDeserializer;
 impl ReservedDBInstanceMessageDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<ReservedDBInstanceMessage, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, ReservedDBInstanceMessage, _>(
             tag_name,
             stack,
@@ -16130,11 +16575,12 @@ pub struct ReservedDBInstancesOffering {
 #[allow(dead_code)]
 struct ReservedDBInstancesOfferingDeserializer;
 impl ReservedDBInstancesOfferingDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<ReservedDBInstancesOffering, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, ReservedDBInstancesOffering, _>(
             tag_name,
             stack,
@@ -16197,11 +16643,13 @@ impl ReservedDBInstancesOfferingDeserializer {
 #[allow(dead_code)]
 struct ReservedDBInstancesOfferingListDeserializer;
 impl ReservedDBInstancesOfferingListDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<ReservedDBInstancesOffering>, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
+
         deserialize_elements::<_, Vec<_>, _>(tag_name, stack, |name, stack, obj| {
             if name == "ReservedDBInstancesOffering" {
                 obj.push(ReservedDBInstancesOfferingDeserializer::deserialize(
@@ -16228,11 +16676,12 @@ pub struct ReservedDBInstancesOfferingMessage {
 #[allow(dead_code)]
 struct ReservedDBInstancesOfferingMessageDeserializer;
 impl ReservedDBInstancesOfferingMessageDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<ReservedDBInstancesOfferingMessage, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, ReservedDBInstancesOfferingMessage, _>(
             tag_name,
             stack,
@@ -16271,10 +16720,11 @@ pub struct ResetDBClusterParameterGroupMessage {
 /// Serialize `ResetDBClusterParameterGroupMessage` contents to a `SignedRequest`.
 struct ResetDBClusterParameterGroupMessageSerializer;
 impl ResetDBClusterParameterGroupMessageSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &ResetDBClusterParameterGroupMessage) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         params.put(
@@ -16309,10 +16759,11 @@ pub struct ResetDBParameterGroupMessage {
 /// Serialize `ResetDBParameterGroupMessage` contents to a `SignedRequest`.
 struct ResetDBParameterGroupMessageSerializer;
 impl ResetDBParameterGroupMessageSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &ResetDBParameterGroupMessage) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         params.put(
@@ -16345,11 +16796,12 @@ pub struct ResourcePendingMaintenanceActions {
 #[allow(dead_code)]
 struct ResourcePendingMaintenanceActionsDeserializer;
 impl ResourcePendingMaintenanceActionsDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<ResourcePendingMaintenanceActions, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, ResourcePendingMaintenanceActions, _>(
             tag_name,
             stack,
@@ -16445,10 +16897,11 @@ pub struct RestoreDBClusterFromS3Message {
 /// Serialize `RestoreDBClusterFromS3Message` contents to a `SignedRequest`.
 struct RestoreDBClusterFromS3MessageSerializer;
 impl RestoreDBClusterFromS3MessageSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &RestoreDBClusterFromS3Message) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         if let Some(ref field_value) = obj.availability_zones {
@@ -16585,11 +17038,12 @@ pub struct RestoreDBClusterFromS3Result {
 #[allow(dead_code)]
 struct RestoreDBClusterFromS3ResultDeserializer;
 impl RestoreDBClusterFromS3ResultDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<RestoreDBClusterFromS3Result, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, RestoreDBClusterFromS3Result, _>(
             tag_name,
             stack,
@@ -16659,10 +17113,11 @@ pub struct RestoreDBClusterFromSnapshotMessage {
 /// Serialize `RestoreDBClusterFromSnapshotMessage` contents to a `SignedRequest`.
 struct RestoreDBClusterFromSnapshotMessageSerializer;
 impl RestoreDBClusterFromSnapshotMessageSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &RestoreDBClusterFromSnapshotMessage) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         if let Some(ref field_value) = obj.availability_zones {
@@ -16765,11 +17220,12 @@ pub struct RestoreDBClusterFromSnapshotResult {
 #[allow(dead_code)]
 struct RestoreDBClusterFromSnapshotResultDeserializer;
 impl RestoreDBClusterFromSnapshotResultDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<RestoreDBClusterFromSnapshotResult, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, RestoreDBClusterFromSnapshotResult, _>(
             tag_name,
             stack,
@@ -16832,10 +17288,11 @@ pub struct RestoreDBClusterToPointInTimeMessage {
 /// Serialize `RestoreDBClusterToPointInTimeMessage` contents to a `SignedRequest`.
 struct RestoreDBClusterToPointInTimeMessageSerializer;
 impl RestoreDBClusterToPointInTimeMessageSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &RestoreDBClusterToPointInTimeMessage) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         if let Some(ref field_value) = obj.backtrack_window {
@@ -16926,11 +17383,12 @@ pub struct RestoreDBClusterToPointInTimeResult {
 #[allow(dead_code)]
 struct RestoreDBClusterToPointInTimeResultDeserializer;
 impl RestoreDBClusterToPointInTimeResultDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<RestoreDBClusterToPointInTimeResult, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, RestoreDBClusterToPointInTimeResult, _>(
             tag_name,
             stack,
@@ -17013,10 +17471,11 @@ pub struct RestoreDBInstanceFromDBSnapshotMessage {
 /// Serialize `RestoreDBInstanceFromDBSnapshotMessage` contents to a `SignedRequest`.
 struct RestoreDBInstanceFromDBSnapshotMessageSerializer;
 impl RestoreDBInstanceFromDBSnapshotMessageSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &RestoreDBInstanceFromDBSnapshotMessage) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         if let Some(ref field_value) = obj.auto_minor_version_upgrade {
@@ -17150,11 +17609,12 @@ pub struct RestoreDBInstanceFromDBSnapshotResult {
 #[allow(dead_code)]
 struct RestoreDBInstanceFromDBSnapshotResultDeserializer;
 impl RestoreDBInstanceFromDBSnapshotResultDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<RestoreDBInstanceFromDBSnapshotResult, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, RestoreDBInstanceFromDBSnapshotResult, _>(
             tag_name,
             stack,
@@ -17267,10 +17727,11 @@ pub struct RestoreDBInstanceFromS3Message {
 /// Serialize `RestoreDBInstanceFromS3Message` contents to a `SignedRequest`.
 struct RestoreDBInstanceFromS3MessageSerializer;
 impl RestoreDBInstanceFromS3MessageSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &RestoreDBInstanceFromS3Message) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         if let Some(ref field_value) = obj.allocated_storage {
@@ -17467,11 +17928,12 @@ pub struct RestoreDBInstanceFromS3Result {
 #[allow(dead_code)]
 struct RestoreDBInstanceFromS3ResultDeserializer;
 impl RestoreDBInstanceFromS3ResultDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<RestoreDBInstanceFromS3Result, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, RestoreDBInstanceFromS3Result, _>(
             tag_name,
             stack,
@@ -17564,10 +18026,11 @@ pub struct RestoreDBInstanceToPointInTimeMessage {
 /// Serialize `RestoreDBInstanceToPointInTimeMessage` contents to a `SignedRequest`.
 struct RestoreDBInstanceToPointInTimeMessageSerializer;
 impl RestoreDBInstanceToPointInTimeMessageSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &RestoreDBInstanceToPointInTimeMessage) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         if let Some(ref field_value) = obj.auto_minor_version_upgrade {
@@ -17730,11 +18193,12 @@ pub struct RestoreDBInstanceToPointInTimeResult {
 #[allow(dead_code)]
 struct RestoreDBInstanceToPointInTimeResultDeserializer;
 impl RestoreDBInstanceToPointInTimeResultDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<RestoreDBInstanceToPointInTimeResult, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, RestoreDBInstanceToPointInTimeResult, _>(
             tag_name,
             stack,
@@ -17764,11 +18228,12 @@ pub struct RestoreWindow {
 #[allow(dead_code)]
 struct RestoreWindowDeserializer;
 impl RestoreWindowDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<RestoreWindow, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, RestoreWindow, _>(tag_name, stack, |name, stack, obj| {
             match name {
                 "EarliestTime" => {
@@ -17803,10 +18268,11 @@ pub struct RevokeDBSecurityGroupIngressMessage {
 /// Serialize `RevokeDBSecurityGroupIngressMessage` contents to a `SignedRequest`.
 struct RevokeDBSecurityGroupIngressMessageSerializer;
 impl RevokeDBSecurityGroupIngressMessageSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &RevokeDBSecurityGroupIngressMessage) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         if let Some(ref field_value) = obj.cidrip {
@@ -17843,11 +18309,12 @@ pub struct RevokeDBSecurityGroupIngressResult {
 #[allow(dead_code)]
 struct RevokeDBSecurityGroupIngressResultDeserializer;
 impl RevokeDBSecurityGroupIngressResultDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<RevokeDBSecurityGroupIngressResult, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, RevokeDBSecurityGroupIngressResult, _>(
             tag_name,
             stack,
@@ -17885,10 +18352,11 @@ pub struct ScalingConfiguration {
 /// Serialize `ScalingConfiguration` contents to a `SignedRequest`.
 struct ScalingConfigurationSerializer;
 impl ScalingConfigurationSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &ScalingConfiguration) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         if let Some(ref field_value) = obj.auto_pause {
@@ -17931,11 +18399,12 @@ pub struct ScalingConfigurationInfo {
 #[allow(dead_code)]
 struct ScalingConfigurationInfoDeserializer;
 impl ScalingConfigurationInfoDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<ScalingConfigurationInfo, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, ScalingConfigurationInfo, _>(
             tag_name,
             stack,
@@ -17980,11 +18449,13 @@ impl ScalingConfigurationInfoDeserializer {
 #[allow(dead_code)]
 struct SourceIdsListDeserializer;
 impl SourceIdsListDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<String>, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
+
         deserialize_elements::<_, Vec<_>, _>(tag_name, stack, |name, stack, obj| {
             if name == "SourceId" {
                 obj.push(StringDeserializer::deserialize("SourceId", stack)?);
@@ -17999,6 +18470,7 @@ impl SourceIdsListDeserializer {
 /// Serialize `SourceIdsList` contents to a `SignedRequest`.
 struct SourceIdsListSerializer;
 impl SourceIdsListSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &Vec<String>) {
         for (index, obj) in obj.iter().enumerate() {
             let key = format!("{}.member.{}", name, index + 1);
@@ -18024,11 +18496,12 @@ pub struct SourceRegion {
 #[allow(dead_code)]
 struct SourceRegionDeserializer;
 impl SourceRegionDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<SourceRegion, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, SourceRegion, _>(tag_name, stack, |name, stack, obj| {
             match name {
                 "Endpoint" => {
@@ -18056,11 +18529,13 @@ impl SourceRegionDeserializer {
 #[allow(dead_code)]
 struct SourceRegionListDeserializer;
 impl SourceRegionListDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<SourceRegion>, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
+
         deserialize_elements::<_, Vec<_>, _>(tag_name, stack, |name, stack, obj| {
             if name == "SourceRegion" {
                 obj.push(SourceRegionDeserializer::deserialize(
@@ -18087,11 +18562,12 @@ pub struct SourceRegionMessage {
 #[allow(dead_code)]
 struct SourceRegionMessageDeserializer;
 impl SourceRegionMessageDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<SourceRegionMessage, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, SourceRegionMessage, _>(tag_name, stack, |name, stack, obj| {
             match name {
                 "Marker" => {
@@ -18111,8 +18587,9 @@ impl SourceRegionMessageDeserializer {
 #[allow(dead_code)]
 struct SourceTypeDeserializer;
 impl SourceTypeDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
@@ -18132,10 +18609,11 @@ pub struct StartActivityStreamRequest {
 /// Serialize `StartActivityStreamRequest` contents to a `SignedRequest`.
 struct StartActivityStreamRequestSerializer;
 impl StartActivityStreamRequestSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &StartActivityStreamRequest) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         if let Some(ref field_value) = obj.apply_immediately {
@@ -18165,11 +18643,12 @@ pub struct StartActivityStreamResponse {
 #[allow(dead_code)]
 struct StartActivityStreamResponseDeserializer;
 impl StartActivityStreamResponseDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<StartActivityStreamResponse, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, StartActivityStreamResponse, _>(
             tag_name,
             stack,
@@ -18212,10 +18691,11 @@ pub struct StartDBClusterMessage {
 /// Serialize `StartDBClusterMessage` contents to a `SignedRequest`.
 struct StartDBClusterMessageSerializer;
 impl StartDBClusterMessageSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &StartDBClusterMessage) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         params.put(
@@ -18234,11 +18714,12 @@ pub struct StartDBClusterResult {
 #[allow(dead_code)]
 struct StartDBClusterResultDeserializer;
 impl StartDBClusterResultDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<StartDBClusterResult, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, StartDBClusterResult, _>(tag_name, stack, |name, stack, obj| {
             match name {
                 "DBCluster" => {
@@ -18266,14 +18747,15 @@ pub struct StartDBInstanceAutomatedBackupsReplicationMessage {
 /// Serialize `StartDBInstanceAutomatedBackupsReplicationMessage` contents to a `SignedRequest`.
 struct StartDBInstanceAutomatedBackupsReplicationMessageSerializer;
 impl StartDBInstanceAutomatedBackupsReplicationMessageSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(
         params: &mut Params,
         name: &str,
         obj: &StartDBInstanceAutomatedBackupsReplicationMessage,
     ) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         if let Some(ref field_value) = obj.backup_retention_period {
@@ -18304,11 +18786,12 @@ pub struct StartDBInstanceAutomatedBackupsReplicationResult {
 #[allow(dead_code)]
 struct StartDBInstanceAutomatedBackupsReplicationResultDeserializer;
 impl StartDBInstanceAutomatedBackupsReplicationResultDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<StartDBInstanceAutomatedBackupsReplicationResult, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, StartDBInstanceAutomatedBackupsReplicationResult, _>(
             tag_name,
             stack,
@@ -18338,10 +18821,11 @@ pub struct StartDBInstanceMessage {
 /// Serialize `StartDBInstanceMessage` contents to a `SignedRequest`.
 struct StartDBInstanceMessageSerializer;
 impl StartDBInstanceMessageSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &StartDBInstanceMessage) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         params.put(
@@ -18360,11 +18844,12 @@ pub struct StartDBInstanceResult {
 #[allow(dead_code)]
 struct StartDBInstanceResultDeserializer;
 impl StartDBInstanceResultDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<StartDBInstanceResult, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, StartDBInstanceResult, _>(tag_name, stack, |name, stack, obj| {
             match name {
                 "DBInstance" => {
@@ -18399,10 +18884,11 @@ pub struct StartExportTaskMessage {
 /// Serialize `StartExportTaskMessage` contents to a `SignedRequest`.
 struct StartExportTaskMessageSerializer;
 impl StartExportTaskMessageSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &StartExportTaskMessage) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         if let Some(ref field_value) = obj.export_only {
@@ -18441,10 +18927,11 @@ pub struct StopActivityStreamRequest {
 /// Serialize `StopActivityStreamRequest` contents to a `SignedRequest`.
 struct StopActivityStreamRequestSerializer;
 impl StopActivityStreamRequestSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &StopActivityStreamRequest) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         if let Some(ref field_value) = obj.apply_immediately {
@@ -18468,11 +18955,12 @@ pub struct StopActivityStreamResponse {
 #[allow(dead_code)]
 struct StopActivityStreamResponseDeserializer;
 impl StopActivityStreamResponseDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<StopActivityStreamResponse, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, StopActivityStreamResponse, _>(
             tag_name,
             stack,
@@ -18507,10 +18995,11 @@ pub struct StopDBClusterMessage {
 /// Serialize `StopDBClusterMessage` contents to a `SignedRequest`.
 struct StopDBClusterMessageSerializer;
 impl StopDBClusterMessageSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &StopDBClusterMessage) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         params.put(
@@ -18529,11 +19018,12 @@ pub struct StopDBClusterResult {
 #[allow(dead_code)]
 struct StopDBClusterResultDeserializer;
 impl StopDBClusterResultDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<StopDBClusterResult, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, StopDBClusterResult, _>(tag_name, stack, |name, stack, obj| {
             match name {
                 "DBCluster" => {
@@ -18555,14 +19045,15 @@ pub struct StopDBInstanceAutomatedBackupsReplicationMessage {
 /// Serialize `StopDBInstanceAutomatedBackupsReplicationMessage` contents to a `SignedRequest`.
 struct StopDBInstanceAutomatedBackupsReplicationMessageSerializer;
 impl StopDBInstanceAutomatedBackupsReplicationMessageSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(
         params: &mut Params,
         name: &str,
         obj: &StopDBInstanceAutomatedBackupsReplicationMessage,
     ) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         params.put(
@@ -18581,11 +19072,12 @@ pub struct StopDBInstanceAutomatedBackupsReplicationResult {
 #[allow(dead_code)]
 struct StopDBInstanceAutomatedBackupsReplicationResultDeserializer;
 impl StopDBInstanceAutomatedBackupsReplicationResultDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<StopDBInstanceAutomatedBackupsReplicationResult, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, StopDBInstanceAutomatedBackupsReplicationResult, _>(
             tag_name,
             stack,
@@ -18617,10 +19109,11 @@ pub struct StopDBInstanceMessage {
 /// Serialize `StopDBInstanceMessage` contents to a `SignedRequest`.
 struct StopDBInstanceMessageSerializer;
 impl StopDBInstanceMessageSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &StopDBInstanceMessage) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         params.put(
@@ -18645,11 +19138,12 @@ pub struct StopDBInstanceResult {
 #[allow(dead_code)]
 struct StopDBInstanceResultDeserializer;
 impl StopDBInstanceResultDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<StopDBInstanceResult, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, StopDBInstanceResult, _>(tag_name, stack, |name, stack, obj| {
             match name {
                 "DBInstance" => {
@@ -18665,19 +19159,22 @@ impl StopDBInstanceResultDeserializer {
 #[allow(dead_code)]
 struct StringDeserializer;
 impl StringDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 #[allow(dead_code)]
 struct StringListDeserializer;
 impl StringListDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<String>, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
+
         deserialize_elements::<_, Vec<_>, _>(tag_name, stack, |name, stack, obj| {
             if name == "member" {
                 obj.push(StringDeserializer::deserialize("member", stack)?);
@@ -18692,6 +19189,7 @@ impl StringListDeserializer {
 /// Serialize `StringList` contents to a `SignedRequest`.
 struct StringListSerializer;
 impl StringListSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &Vec<String>) {
         for (index, obj) in obj.iter().enumerate() {
             let key = format!("{}.member.{}", name, index + 1);
@@ -18703,8 +19201,9 @@ impl StringListSerializer {
 #[allow(dead_code)]
 struct StringSensitiveDeserializer;
 impl StringSensitiveDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
@@ -18724,8 +19223,9 @@ pub struct Subnet {
 #[allow(dead_code)]
 struct SubnetDeserializer;
 impl SubnetDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<Subnet, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, Subnet, _>(tag_name, stack, |name, stack, obj| {
             match name {
                 "SubnetAvailabilityZone" => {
@@ -18756,6 +19256,7 @@ impl SubnetDeserializer {
 /// Serialize `SubnetIdentifierList` contents to a `SignedRequest`.
 struct SubnetIdentifierListSerializer;
 impl SubnetIdentifierListSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &Vec<String>) {
         for (index, obj) in obj.iter().enumerate() {
             let key = format!("{}.member.{}", name, index + 1);
@@ -18767,11 +19268,13 @@ impl SubnetIdentifierListSerializer {
 #[allow(dead_code)]
 struct SubnetListDeserializer;
 impl SubnetListDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<Subnet>, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
+
         deserialize_elements::<_, Vec<_>, _>(tag_name, stack, |name, stack, obj| {
             if name == "Subnet" {
                 obj.push(SubnetDeserializer::deserialize("Subnet", stack)?);
@@ -18785,11 +19288,13 @@ impl SubnetListDeserializer {
 #[allow(dead_code)]
 struct SupportedCharacterSetsListDeserializer;
 impl SupportedCharacterSetsListDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<CharacterSet>, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
+
         deserialize_elements::<_, Vec<_>, _>(tag_name, stack, |name, stack, obj| {
             if name == "CharacterSet" {
                 obj.push(CharacterSetDeserializer::deserialize(
@@ -18806,11 +19311,13 @@ impl SupportedCharacterSetsListDeserializer {
 #[allow(dead_code)]
 struct SupportedTimezonesListDeserializer;
 impl SupportedTimezonesListDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<Timezone>, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
+
         deserialize_elements::<_, Vec<_>, _>(tag_name, stack, |name, stack, obj| {
             if name == "Timezone" {
                 obj.push(TimezoneDeserializer::deserialize("Timezone", stack)?);
@@ -18824,8 +19331,9 @@ impl SupportedTimezonesListDeserializer {
 #[allow(dead_code)]
 struct TStampDeserializer;
 impl TStampDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
@@ -18843,8 +19351,9 @@ pub struct Tag {
 #[allow(dead_code)]
 struct TagDeserializer;
 impl TagDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<Tag, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, Tag, _>(tag_name, stack, |name, stack, obj| {
             match name {
                 "Key" => {
@@ -18863,10 +19372,11 @@ impl TagDeserializer {
 /// Serialize `Tag` contents to a `SignedRequest`.
 struct TagSerializer;
 impl TagSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &Tag) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         if let Some(ref field_value) = obj.key {
@@ -18881,11 +19391,13 @@ impl TagSerializer {
 #[allow(dead_code)]
 struct TagListDeserializer;
 impl TagListDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<Tag>, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
+
         deserialize_elements::<_, Vec<_>, _>(tag_name, stack, |name, stack, obj| {
             if name == "Tag" {
                 obj.push(TagDeserializer::deserialize("Tag", stack)?);
@@ -18900,6 +19412,7 @@ impl TagListDeserializer {
 /// Serialize `TagList` contents to a `SignedRequest`.
 struct TagListSerializer;
 impl TagListSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &Vec<Tag>) {
         for (index, obj) in obj.iter().enumerate() {
             let key = format!("{}.member.{}", name, index + 1);
@@ -18919,11 +19432,12 @@ pub struct TagListMessage {
 #[allow(dead_code)]
 struct TagListMessageDeserializer;
 impl TagListMessageDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<TagListMessage, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, TagListMessage, _>(tag_name, stack, |name, stack, obj| {
             match name {
                 "TagList" => {
@@ -18940,11 +19454,13 @@ impl TagListMessageDeserializer {
 #[allow(dead_code)]
 struct TargetGroupListDeserializer;
 impl TargetGroupListDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<DBProxyTargetGroup>, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
+
         deserialize_elements::<_, Vec<_>, _>(tag_name, stack, |name, stack, obj| {
             if name == "member" {
                 obj.push(DBProxyTargetGroupDeserializer::deserialize(
@@ -18972,11 +19488,12 @@ pub struct TargetHealth {
 #[allow(dead_code)]
 struct TargetHealthDeserializer;
 impl TargetHealthDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<TargetHealth, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, TargetHealth, _>(tag_name, stack, |name, stack, obj| {
             match name {
                 "Description" => {
@@ -18999,19 +19516,22 @@ impl TargetHealthDeserializer {
 #[allow(dead_code)]
 struct TargetHealthReasonDeserializer;
 impl TargetHealthReasonDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 #[allow(dead_code)]
 struct TargetListDeserializer;
 impl TargetListDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<DBProxyTarget>, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
+
         deserialize_elements::<_, Vec<_>, _>(tag_name, stack, |name, stack, obj| {
             if name == "member" {
                 obj.push(DBProxyTargetDeserializer::deserialize("member", stack)?);
@@ -19025,16 +19545,18 @@ impl TargetListDeserializer {
 #[allow(dead_code)]
 struct TargetStateDeserializer;
 impl TargetStateDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 #[allow(dead_code)]
 struct TargetTypeDeserializer;
 impl TargetTypeDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
@@ -19049,11 +19571,12 @@ pub struct Timezone {
 #[allow(dead_code)]
 struct TimezoneDeserializer;
 impl TimezoneDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Timezone, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, Timezone, _>(tag_name, stack, |name, stack, obj| {
             match name {
                 "TimezoneName" => {
@@ -19085,11 +19608,12 @@ pub struct UpgradeTarget {
 #[allow(dead_code)]
 struct UpgradeTargetDeserializer;
 impl UpgradeTargetDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<UpgradeTarget, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, UpgradeTarget, _>(tag_name, stack, |name, stack, obj| {
             match name {
                 "AutoUpgrade" => {
@@ -19137,10 +19661,11 @@ pub struct UserAuthConfig {
 /// Serialize `UserAuthConfig` contents to a `SignedRequest`.
 struct UserAuthConfigSerializer;
 impl UserAuthConfigSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &UserAuthConfig) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         if let Some(ref field_value) = obj.auth_scheme {
@@ -19180,11 +19705,12 @@ pub struct UserAuthConfigInfo {
 #[allow(dead_code)]
 struct UserAuthConfigInfoDeserializer;
 impl UserAuthConfigInfoDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<UserAuthConfigInfo, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, UserAuthConfigInfo, _>(tag_name, stack, |name, stack, obj| {
             match name {
                 "AuthScheme" => {
@@ -19212,11 +19738,13 @@ impl UserAuthConfigInfoDeserializer {
 #[allow(dead_code)]
 struct UserAuthConfigInfoListDeserializer;
 impl UserAuthConfigInfoListDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<UserAuthConfigInfo>, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
+
         deserialize_elements::<_, Vec<_>, _>(tag_name, stack, |name, stack, obj| {
             if name == "member" {
                 obj.push(UserAuthConfigInfoDeserializer::deserialize(
@@ -19233,6 +19761,7 @@ impl UserAuthConfigInfoListDeserializer {
 /// Serialize `UserAuthConfigList` contents to a `SignedRequest`.
 struct UserAuthConfigListSerializer;
 impl UserAuthConfigListSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &Vec<UserAuthConfig>) {
         for (index, obj) in obj.iter().enumerate() {
             let key = format!("{}.member.{}", name, index + 1);
@@ -19254,11 +19783,12 @@ pub struct ValidDBInstanceModificationsMessage {
 #[allow(dead_code)]
 struct ValidDBInstanceModificationsMessageDeserializer;
 impl ValidDBInstanceModificationsMessageDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<ValidDBInstanceModificationsMessage, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, ValidDBInstanceModificationsMessage, _>(
             tag_name,
             stack,
@@ -19303,11 +19833,12 @@ pub struct ValidStorageOptions {
 #[allow(dead_code)]
 struct ValidStorageOptionsDeserializer;
 impl ValidStorageOptionsDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<ValidStorageOptions, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, ValidStorageOptions, _>(tag_name, stack, |name, stack, obj| {
             match name {
                 "IopsToStorageRatio" => {
@@ -19343,11 +19874,13 @@ impl ValidStorageOptionsDeserializer {
 #[allow(dead_code)]
 struct ValidStorageOptionsListDeserializer;
 impl ValidStorageOptionsListDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<ValidStorageOptions>, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
+
         deserialize_elements::<_, Vec<_>, _>(tag_name, stack, |name, stack, obj| {
             if name == "ValidStorageOptions" {
                 obj.push(ValidStorageOptionsDeserializer::deserialize(
@@ -19364,11 +19897,13 @@ impl ValidStorageOptionsListDeserializer {
 #[allow(dead_code)]
 struct ValidUpgradeTargetListDeserializer;
 impl ValidUpgradeTargetListDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<UpgradeTarget>, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
+
         deserialize_elements::<_, Vec<_>, _>(tag_name, stack, |name, stack, obj| {
             if name == "UpgradeTarget" {
                 obj.push(UpgradeTargetDeserializer::deserialize(
@@ -19386,6 +19921,7 @@ impl ValidUpgradeTargetListDeserializer {
 /// Serialize `VpcSecurityGroupIdList` contents to a `SignedRequest`.
 struct VpcSecurityGroupIdListSerializer;
 impl VpcSecurityGroupIdListSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &Vec<String>) {
         for (index, obj) in obj.iter().enumerate() {
             let key = format!("{}.member.{}", name, index + 1);
@@ -19407,11 +19943,12 @@ pub struct VpcSecurityGroupMembership {
 #[allow(dead_code)]
 struct VpcSecurityGroupMembershipDeserializer;
 impl VpcSecurityGroupMembershipDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<VpcSecurityGroupMembership, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, VpcSecurityGroupMembership, _>(
             tag_name,
             stack,
@@ -19436,11 +19973,13 @@ impl VpcSecurityGroupMembershipDeserializer {
 #[allow(dead_code)]
 struct VpcSecurityGroupMembershipListDeserializer;
 impl VpcSecurityGroupMembershipListDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<VpcSecurityGroupMembership>, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
+
         deserialize_elements::<_, Vec<_>, _>(tag_name, stack, |name, stack, obj| {
             if name == "VpcSecurityGroupMembership" {
                 obj.push(VpcSecurityGroupMembershipDeserializer::deserialize(
@@ -19475,11 +20014,12 @@ pub struct VpnDetails {
 #[allow(dead_code)]
 struct VpnDetailsDeserializer;
 impl VpnDetailsDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<VpnDetails, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, VpnDetails, _>(tag_name, stack, |name, stack, obj| {
             match name {
                 "VpnGatewayIp" => {
@@ -19513,8 +20053,9 @@ impl VpnDetailsDeserializer {
 #[allow(dead_code)]
 struct WriteForwardingStatusDeserializer;
 impl WriteForwardingStatusDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
@@ -19537,35 +20078,40 @@ impl AddRoleToDBClusterError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    "DBClusterNotFoundFault" => {
-                        return RusotoError::Service(
-                            AddRoleToDBClusterError::DBClusterNotFoundFault(parsed_error.message),
-                        )
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {
+                        "DBClusterNotFoundFault" => {
+                            return RusotoError::Service(
+                                AddRoleToDBClusterError::DBClusterNotFoundFault(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "DBClusterRoleAlreadyExists" => {
+                            return RusotoError::Service(
+                                AddRoleToDBClusterError::DBClusterRoleAlreadyExistsFault(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "DBClusterRoleQuotaExceeded" => {
+                            return RusotoError::Service(
+                                AddRoleToDBClusterError::DBClusterRoleQuotaExceededFault(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "InvalidDBClusterStateFault" => {
+                            return RusotoError::Service(
+                                AddRoleToDBClusterError::InvalidDBClusterStateFault(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        _ => {}
                     }
-                    "DBClusterRoleAlreadyExists" => {
-                        return RusotoError::Service(
-                            AddRoleToDBClusterError::DBClusterRoleAlreadyExistsFault(
-                                parsed_error.message,
-                            ),
-                        )
-                    }
-                    "DBClusterRoleQuotaExceeded" => {
-                        return RusotoError::Service(
-                            AddRoleToDBClusterError::DBClusterRoleQuotaExceededFault(
-                                parsed_error.message,
-                            ),
-                        )
-                    }
-                    "InvalidDBClusterStateFault" => {
-                        return RusotoError::Service(
-                            AddRoleToDBClusterError::InvalidDBClusterStateFault(
-                                parsed_error.message,
-                            ),
-                        )
-                    }
-                    _ => {}
                 }
             }
         }
@@ -19617,35 +20163,40 @@ impl AddRoleToDBInstanceError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    "DBInstanceNotFound" => {
-                        return RusotoError::Service(
-                            AddRoleToDBInstanceError::DBInstanceNotFoundFault(parsed_error.message),
-                        )
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {
+                        "DBInstanceNotFound" => {
+                            return RusotoError::Service(
+                                AddRoleToDBInstanceError::DBInstanceNotFoundFault(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "DBInstanceRoleAlreadyExists" => {
+                            return RusotoError::Service(
+                                AddRoleToDBInstanceError::DBInstanceRoleAlreadyExistsFault(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "DBInstanceRoleQuotaExceeded" => {
+                            return RusotoError::Service(
+                                AddRoleToDBInstanceError::DBInstanceRoleQuotaExceededFault(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "InvalidDBInstanceState" => {
+                            return RusotoError::Service(
+                                AddRoleToDBInstanceError::InvalidDBInstanceStateFault(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        _ => {}
                     }
-                    "DBInstanceRoleAlreadyExists" => {
-                        return RusotoError::Service(
-                            AddRoleToDBInstanceError::DBInstanceRoleAlreadyExistsFault(
-                                parsed_error.message,
-                            ),
-                        )
-                    }
-                    "DBInstanceRoleQuotaExceeded" => {
-                        return RusotoError::Service(
-                            AddRoleToDBInstanceError::DBInstanceRoleQuotaExceededFault(
-                                parsed_error.message,
-                            ),
-                        )
-                    }
-                    "InvalidDBInstanceState" => {
-                        return RusotoError::Service(
-                            AddRoleToDBInstanceError::InvalidDBInstanceStateFault(
-                                parsed_error.message,
-                            ),
-                        )
-                    }
-                    _ => {}
                 }
             }
         }
@@ -19695,23 +20246,26 @@ impl AddSourceIdentifierToSubscriptionError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    "SourceNotFound" => {
-                        return RusotoError::Service(
-                            AddSourceIdentifierToSubscriptionError::SourceNotFoundFault(
-                                parsed_error.message,
-                            ),
-                        )
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {
+                        "SourceNotFound" => {
+                            return RusotoError::Service(
+                                AddSourceIdentifierToSubscriptionError::SourceNotFoundFault(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "SubscriptionNotFound" => {
+                            return RusotoError::Service(
+                                AddSourceIdentifierToSubscriptionError::SubscriptionNotFoundFault(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        _ => {}
                     }
-                    "SubscriptionNotFound" => {
-                        return RusotoError::Service(
-                            AddSourceIdentifierToSubscriptionError::SubscriptionNotFoundFault(
-                                parsed_error.message,
-                            ),
-                        )
-                    }
-                    _ => {}
                 }
             }
         }
@@ -19761,36 +20315,45 @@ impl AddTagsToResourceError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    "DBClusterNotFoundFault" => {
-                        return RusotoError::Service(
-                            AddTagsToResourceError::DBClusterNotFoundFault(parsed_error.message),
-                        )
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {
+                        "DBClusterNotFoundFault" => {
+                            return RusotoError::Service(
+                                AddTagsToResourceError::DBClusterNotFoundFault(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "DBInstanceNotFound" => {
+                            return RusotoError::Service(
+                                AddTagsToResourceError::DBInstanceNotFoundFault(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "DBProxyNotFoundFault" => {
+                            return RusotoError::Service(
+                                AddTagsToResourceError::DBProxyNotFoundFault(parsed_error.message),
+                            )
+                        }
+                        "DBProxyTargetGroupNotFoundFault" => {
+                            return RusotoError::Service(
+                                AddTagsToResourceError::DBProxyTargetGroupNotFoundFault(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "DBSnapshotNotFound" => {
+                            return RusotoError::Service(
+                                AddTagsToResourceError::DBSnapshotNotFoundFault(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        _ => {}
                     }
-                    "DBInstanceNotFound" => {
-                        return RusotoError::Service(
-                            AddTagsToResourceError::DBInstanceNotFoundFault(parsed_error.message),
-                        )
-                    }
-                    "DBProxyNotFoundFault" => {
-                        return RusotoError::Service(AddTagsToResourceError::DBProxyNotFoundFault(
-                            parsed_error.message,
-                        ))
-                    }
-                    "DBProxyTargetGroupNotFoundFault" => {
-                        return RusotoError::Service(
-                            AddTagsToResourceError::DBProxyTargetGroupNotFoundFault(
-                                parsed_error.message,
-                            ),
-                        )
-                    }
-                    "DBSnapshotNotFound" => {
-                        return RusotoError::Service(
-                            AddTagsToResourceError::DBSnapshotNotFoundFault(parsed_error.message),
-                        )
-                    }
-                    _ => {}
                 }
             }
         }
@@ -19839,30 +20402,33 @@ impl ApplyPendingMaintenanceActionError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    "InvalidDBClusterStateFault" => {
-                        return RusotoError::Service(
-                            ApplyPendingMaintenanceActionError::InvalidDBClusterStateFault(
-                                parsed_error.message,
-                            ),
-                        )
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {
+                        "InvalidDBClusterStateFault" => {
+                            return RusotoError::Service(
+                                ApplyPendingMaintenanceActionError::InvalidDBClusterStateFault(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "InvalidDBInstanceState" => {
+                            return RusotoError::Service(
+                                ApplyPendingMaintenanceActionError::InvalidDBInstanceStateFault(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "ResourceNotFoundFault" => {
+                            return RusotoError::Service(
+                                ApplyPendingMaintenanceActionError::ResourceNotFoundFault(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        _ => {}
                     }
-                    "InvalidDBInstanceState" => {
-                        return RusotoError::Service(
-                            ApplyPendingMaintenanceActionError::InvalidDBInstanceStateFault(
-                                parsed_error.message,
-                            ),
-                        )
-                    }
-                    "ResourceNotFoundFault" => {
-                        return RusotoError::Service(
-                            ApplyPendingMaintenanceActionError::ResourceNotFoundFault(
-                                parsed_error.message,
-                            ),
-                        )
-                    }
-                    _ => {}
                 }
             }
         }
@@ -19915,37 +20481,34 @@ impl AuthorizeDBSecurityGroupIngressError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    "AuthorizationAlreadyExists" => {
-                        return RusotoError::Service(
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {
+                        "AuthorizationAlreadyExists" => return RusotoError::Service(
                             AuthorizeDBSecurityGroupIngressError::AuthorizationAlreadyExistsFault(
                                 parsed_error.message,
                             ),
-                        )
-                    }
-                    "AuthorizationQuotaExceeded" => {
-                        return RusotoError::Service(
+                        ),
+                        "AuthorizationQuotaExceeded" => return RusotoError::Service(
                             AuthorizeDBSecurityGroupIngressError::AuthorizationQuotaExceededFault(
                                 parsed_error.message,
                             ),
-                        )
-                    }
-                    "DBSecurityGroupNotFound" => {
-                        return RusotoError::Service(
-                            AuthorizeDBSecurityGroupIngressError::DBSecurityGroupNotFoundFault(
-                                parsed_error.message,
-                            ),
-                        )
-                    }
-                    "InvalidDBSecurityGroupState" => {
-                        return RusotoError::Service(
+                        ),
+                        "DBSecurityGroupNotFound" => {
+                            return RusotoError::Service(
+                                AuthorizeDBSecurityGroupIngressError::DBSecurityGroupNotFoundFault(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "InvalidDBSecurityGroupState" => return RusotoError::Service(
                             AuthorizeDBSecurityGroupIngressError::InvalidDBSecurityGroupStateFault(
                                 parsed_error.message,
                             ),
-                        )
+                        ),
+                        _ => {}
                     }
-                    _ => {}
                 }
             }
         }
@@ -19995,21 +20558,26 @@ impl BacktrackDBClusterError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    "DBClusterNotFoundFault" => {
-                        return RusotoError::Service(
-                            BacktrackDBClusterError::DBClusterNotFoundFault(parsed_error.message),
-                        )
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {
+                        "DBClusterNotFoundFault" => {
+                            return RusotoError::Service(
+                                BacktrackDBClusterError::DBClusterNotFoundFault(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "InvalidDBClusterStateFault" => {
+                            return RusotoError::Service(
+                                BacktrackDBClusterError::InvalidDBClusterStateFault(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        _ => {}
                     }
-                    "InvalidDBClusterStateFault" => {
-                        return RusotoError::Service(
-                            BacktrackDBClusterError::InvalidDBClusterStateFault(
-                                parsed_error.message,
-                            ),
-                        )
-                    }
-                    _ => {}
                 }
             }
         }
@@ -20051,21 +20619,26 @@ impl CancelExportTaskError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    "ExportTaskNotFound" => {
-                        return RusotoError::Service(
-                            CancelExportTaskError::ExportTaskNotFoundFault(parsed_error.message),
-                        )
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {
+                        "ExportTaskNotFound" => {
+                            return RusotoError::Service(
+                                CancelExportTaskError::ExportTaskNotFoundFault(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "InvalidExportTaskStateFault" => {
+                            return RusotoError::Service(
+                                CancelExportTaskError::InvalidExportTaskStateFault(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        _ => {}
                     }
-                    "InvalidExportTaskStateFault" => {
-                        return RusotoError::Service(
-                            CancelExportTaskError::InvalidExportTaskStateFault(
-                                parsed_error.message,
-                            ),
-                        )
-                    }
-                    _ => {}
                 }
             }
         }
@@ -20109,30 +20682,29 @@ impl CopyDBClusterParameterGroupError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    "DBParameterGroupAlreadyExists" => {
-                        return RusotoError::Service(
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {
+                        "DBParameterGroupAlreadyExists" => return RusotoError::Service(
                             CopyDBClusterParameterGroupError::DBParameterGroupAlreadyExistsFault(
                                 parsed_error.message,
                             ),
-                        )
-                    }
-                    "DBParameterGroupNotFound" => {
-                        return RusotoError::Service(
-                            CopyDBClusterParameterGroupError::DBParameterGroupNotFoundFault(
-                                parsed_error.message,
-                            ),
-                        )
-                    }
-                    "DBParameterGroupQuotaExceeded" => {
-                        return RusotoError::Service(
+                        ),
+                        "DBParameterGroupNotFound" => {
+                            return RusotoError::Service(
+                                CopyDBClusterParameterGroupError::DBParameterGroupNotFoundFault(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "DBParameterGroupQuotaExceeded" => return RusotoError::Service(
                             CopyDBClusterParameterGroupError::DBParameterGroupQuotaExceededFault(
                                 parsed_error.message,
                             ),
-                        )
+                        ),
+                        _ => {}
                     }
-                    _ => {}
                 }
             }
         }
@@ -20187,51 +20759,54 @@ impl CopyDBClusterSnapshotError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    "DBClusterSnapshotAlreadyExistsFault" => {
-                        return RusotoError::Service(
-                            CopyDBClusterSnapshotError::DBClusterSnapshotAlreadyExistsFault(
-                                parsed_error.message,
-                            ),
-                        )
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {
+                        "DBClusterSnapshotAlreadyExistsFault" => {
+                            return RusotoError::Service(
+                                CopyDBClusterSnapshotError::DBClusterSnapshotAlreadyExistsFault(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "DBClusterSnapshotNotFoundFault" => {
+                            return RusotoError::Service(
+                                CopyDBClusterSnapshotError::DBClusterSnapshotNotFoundFault(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "InvalidDBClusterSnapshotStateFault" => {
+                            return RusotoError::Service(
+                                CopyDBClusterSnapshotError::InvalidDBClusterSnapshotStateFault(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "InvalidDBClusterStateFault" => {
+                            return RusotoError::Service(
+                                CopyDBClusterSnapshotError::InvalidDBClusterStateFault(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "KMSKeyNotAccessibleFault" => {
+                            return RusotoError::Service(
+                                CopyDBClusterSnapshotError::KMSKeyNotAccessibleFault(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "SnapshotQuotaExceeded" => {
+                            return RusotoError::Service(
+                                CopyDBClusterSnapshotError::SnapshotQuotaExceededFault(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        _ => {}
                     }
-                    "DBClusterSnapshotNotFoundFault" => {
-                        return RusotoError::Service(
-                            CopyDBClusterSnapshotError::DBClusterSnapshotNotFoundFault(
-                                parsed_error.message,
-                            ),
-                        )
-                    }
-                    "InvalidDBClusterSnapshotStateFault" => {
-                        return RusotoError::Service(
-                            CopyDBClusterSnapshotError::InvalidDBClusterSnapshotStateFault(
-                                parsed_error.message,
-                            ),
-                        )
-                    }
-                    "InvalidDBClusterStateFault" => {
-                        return RusotoError::Service(
-                            CopyDBClusterSnapshotError::InvalidDBClusterStateFault(
-                                parsed_error.message,
-                            ),
-                        )
-                    }
-                    "KMSKeyNotAccessibleFault" => {
-                        return RusotoError::Service(
-                            CopyDBClusterSnapshotError::KMSKeyNotAccessibleFault(
-                                parsed_error.message,
-                            ),
-                        )
-                    }
-                    "SnapshotQuotaExceeded" => {
-                        return RusotoError::Service(
-                            CopyDBClusterSnapshotError::SnapshotQuotaExceededFault(
-                                parsed_error.message,
-                            ),
-                        )
-                    }
-                    _ => {}
                 }
             }
         }
@@ -20289,30 +20864,33 @@ impl CopyDBParameterGroupError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    "DBParameterGroupAlreadyExists" => {
-                        return RusotoError::Service(
-                            CopyDBParameterGroupError::DBParameterGroupAlreadyExistsFault(
-                                parsed_error.message,
-                            ),
-                        )
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {
+                        "DBParameterGroupAlreadyExists" => {
+                            return RusotoError::Service(
+                                CopyDBParameterGroupError::DBParameterGroupAlreadyExistsFault(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "DBParameterGroupNotFound" => {
+                            return RusotoError::Service(
+                                CopyDBParameterGroupError::DBParameterGroupNotFoundFault(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "DBParameterGroupQuotaExceeded" => {
+                            return RusotoError::Service(
+                                CopyDBParameterGroupError::DBParameterGroupQuotaExceededFault(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        _ => {}
                     }
-                    "DBParameterGroupNotFound" => {
-                        return RusotoError::Service(
-                            CopyDBParameterGroupError::DBParameterGroupNotFoundFault(
-                                parsed_error.message,
-                            ),
-                        )
-                    }
-                    "DBParameterGroupQuotaExceeded" => {
-                        return RusotoError::Service(
-                            CopyDBParameterGroupError::DBParameterGroupQuotaExceededFault(
-                                parsed_error.message,
-                            ),
-                        )
-                    }
-                    _ => {}
                 }
             }
         }
@@ -20367,41 +20945,50 @@ impl CopyDBSnapshotError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    "CustomAvailabilityZoneNotFound" => {
-                        return RusotoError::Service(
-                            CopyDBSnapshotError::CustomAvailabilityZoneNotFoundFault(
-                                parsed_error.message,
-                            ),
-                        )
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {
+                        "CustomAvailabilityZoneNotFound" => {
+                            return RusotoError::Service(
+                                CopyDBSnapshotError::CustomAvailabilityZoneNotFoundFault(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "DBSnapshotAlreadyExists" => {
+                            return RusotoError::Service(
+                                CopyDBSnapshotError::DBSnapshotAlreadyExistsFault(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "DBSnapshotNotFound" => {
+                            return RusotoError::Service(
+                                CopyDBSnapshotError::DBSnapshotNotFoundFault(parsed_error.message),
+                            )
+                        }
+                        "InvalidDBSnapshotState" => {
+                            return RusotoError::Service(
+                                CopyDBSnapshotError::InvalidDBSnapshotStateFault(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "KMSKeyNotAccessibleFault" => {
+                            return RusotoError::Service(
+                                CopyDBSnapshotError::KMSKeyNotAccessibleFault(parsed_error.message),
+                            )
+                        }
+                        "SnapshotQuotaExceeded" => {
+                            return RusotoError::Service(
+                                CopyDBSnapshotError::SnapshotQuotaExceededFault(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        _ => {}
                     }
-                    "DBSnapshotAlreadyExists" => {
-                        return RusotoError::Service(
-                            CopyDBSnapshotError::DBSnapshotAlreadyExistsFault(parsed_error.message),
-                        )
-                    }
-                    "DBSnapshotNotFound" => {
-                        return RusotoError::Service(CopyDBSnapshotError::DBSnapshotNotFoundFault(
-                            parsed_error.message,
-                        ))
-                    }
-                    "InvalidDBSnapshotState" => {
-                        return RusotoError::Service(
-                            CopyDBSnapshotError::InvalidDBSnapshotStateFault(parsed_error.message),
-                        )
-                    }
-                    "KMSKeyNotAccessibleFault" => {
-                        return RusotoError::Service(CopyDBSnapshotError::KMSKeyNotAccessibleFault(
-                            parsed_error.message,
-                        ))
-                    }
-                    "SnapshotQuotaExceeded" => {
-                        return RusotoError::Service(
-                            CopyDBSnapshotError::SnapshotQuotaExceededFault(parsed_error.message),
-                        )
-                    }
-                    _ => {}
                 }
             }
         }
@@ -20449,28 +21036,33 @@ impl CopyOptionGroupError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    "OptionGroupAlreadyExistsFault" => {
-                        return RusotoError::Service(
-                            CopyOptionGroupError::OptionGroupAlreadyExistsFault(
-                                parsed_error.message,
-                            ),
-                        )
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {
+                        "OptionGroupAlreadyExistsFault" => {
+                            return RusotoError::Service(
+                                CopyOptionGroupError::OptionGroupAlreadyExistsFault(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "OptionGroupNotFoundFault" => {
+                            return RusotoError::Service(
+                                CopyOptionGroupError::OptionGroupNotFoundFault(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "OptionGroupQuotaExceededFault" => {
+                            return RusotoError::Service(
+                                CopyOptionGroupError::OptionGroupQuotaExceededFault(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        _ => {}
                     }
-                    "OptionGroupNotFoundFault" => {
-                        return RusotoError::Service(
-                            CopyOptionGroupError::OptionGroupNotFoundFault(parsed_error.message),
-                        )
-                    }
-                    "OptionGroupQuotaExceededFault" => {
-                        return RusotoError::Service(
-                            CopyOptionGroupError::OptionGroupQuotaExceededFault(
-                                parsed_error.message,
-                            ),
-                        )
-                    }
-                    _ => {}
                 }
             }
         }
@@ -20519,26 +21111,12 @@ impl CreateCustomAvailabilityZoneError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    "CustomAvailabilityZoneAlreadyExists" => return RusotoError::Service(
-                        CreateCustomAvailabilityZoneError::CustomAvailabilityZoneAlreadyExistsFault(
-                            parsed_error.message,
-                        ),
-                    ),
-                    "CustomAvailabilityZoneQuotaExceeded" => return RusotoError::Service(
-                        CreateCustomAvailabilityZoneError::CustomAvailabilityZoneQuotaExceededFault(
-                            parsed_error.message,
-                        ),
-                    ),
-                    "KMSKeyNotAccessibleFault" => {
-                        return RusotoError::Service(
-                            CreateCustomAvailabilityZoneError::KMSKeyNotAccessibleFault(
-                                parsed_error.message,
-                            ),
-                        )
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {
+                        "CustomAvailabilityZoneAlreadyExists" => return RusotoError::Service(CreateCustomAvailabilityZoneError::CustomAvailabilityZoneAlreadyExistsFault(parsed_error.message)),"CustomAvailabilityZoneQuotaExceeded" => return RusotoError::Service(CreateCustomAvailabilityZoneError::CustomAvailabilityZoneQuotaExceededFault(parsed_error.message)),"KMSKeyNotAccessibleFault" => return RusotoError::Service(CreateCustomAvailabilityZoneError::KMSKeyNotAccessibleFault(parsed_error.message)),_ => {}
                     }
-                    _ => {}
                 }
             }
         }
@@ -20617,109 +21195,130 @@ impl CreateDBClusterError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    "DBClusterAlreadyExistsFault" => {
-                        return RusotoError::Service(
-                            CreateDBClusterError::DBClusterAlreadyExistsFault(parsed_error.message),
-                        )
-                    }
-                    "DBClusterNotFoundFault" => {
-                        return RusotoError::Service(CreateDBClusterError::DBClusterNotFoundFault(
-                            parsed_error.message,
-                        ))
-                    }
-                    "DBClusterParameterGroupNotFound" => {
-                        return RusotoError::Service(
-                            CreateDBClusterError::DBClusterParameterGroupNotFoundFault(
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {
+                        "DBClusterAlreadyExistsFault" => {
+                            return RusotoError::Service(
+                                CreateDBClusterError::DBClusterAlreadyExistsFault(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "DBClusterNotFoundFault" => {
+                            return RusotoError::Service(
+                                CreateDBClusterError::DBClusterNotFoundFault(parsed_error.message),
+                            )
+                        }
+                        "DBClusterParameterGroupNotFound" => {
+                            return RusotoError::Service(
+                                CreateDBClusterError::DBClusterParameterGroupNotFoundFault(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "DBClusterQuotaExceededFault" => {
+                            return RusotoError::Service(
+                                CreateDBClusterError::DBClusterQuotaExceededFault(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "DBInstanceNotFound" => {
+                            return RusotoError::Service(
+                                CreateDBClusterError::DBInstanceNotFoundFault(parsed_error.message),
+                            )
+                        }
+                        "DBSubnetGroupDoesNotCoverEnoughAZs" => {
+                            return RusotoError::Service(
+                                CreateDBClusterError::DBSubnetGroupDoesNotCoverEnoughAZs(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "DBSubnetGroupNotFoundFault" => {
+                            return RusotoError::Service(
+                                CreateDBClusterError::DBSubnetGroupNotFoundFault(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "DomainNotFoundFault" => {
+                            return RusotoError::Service(CreateDBClusterError::DomainNotFoundFault(
                                 parsed_error.message,
-                            ),
-                        )
-                    }
-                    "DBClusterQuotaExceededFault" => {
-                        return RusotoError::Service(
-                            CreateDBClusterError::DBClusterQuotaExceededFault(parsed_error.message),
-                        )
-                    }
-                    "DBInstanceNotFound" => {
-                        return RusotoError::Service(CreateDBClusterError::DBInstanceNotFoundFault(
-                            parsed_error.message,
-                        ))
-                    }
-                    "DBSubnetGroupDoesNotCoverEnoughAZs" => {
-                        return RusotoError::Service(
-                            CreateDBClusterError::DBSubnetGroupDoesNotCoverEnoughAZs(
+                            ))
+                        }
+                        "GlobalClusterNotFoundFault" => {
+                            return RusotoError::Service(
+                                CreateDBClusterError::GlobalClusterNotFoundFault(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "InsufficientStorageClusterCapacity" => {
+                            return RusotoError::Service(
+                                CreateDBClusterError::InsufficientStorageClusterCapacityFault(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "InvalidDBClusterStateFault" => {
+                            return RusotoError::Service(
+                                CreateDBClusterError::InvalidDBClusterStateFault(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "InvalidDBInstanceState" => {
+                            return RusotoError::Service(
+                                CreateDBClusterError::InvalidDBInstanceStateFault(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "InvalidDBSubnetGroupStateFault" => {
+                            return RusotoError::Service(
+                                CreateDBClusterError::InvalidDBSubnetGroupStateFault(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "InvalidGlobalClusterStateFault" => {
+                            return RusotoError::Service(
+                                CreateDBClusterError::InvalidGlobalClusterStateFault(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "InvalidSubnet" => {
+                            return RusotoError::Service(CreateDBClusterError::InvalidSubnet(
                                 parsed_error.message,
-                            ),
-                        )
+                            ))
+                        }
+                        "InvalidVPCNetworkStateFault" => {
+                            return RusotoError::Service(
+                                CreateDBClusterError::InvalidVPCNetworkStateFault(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "KMSKeyNotAccessibleFault" => {
+                            return RusotoError::Service(
+                                CreateDBClusterError::KMSKeyNotAccessibleFault(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "StorageQuotaExceeded" => {
+                            return RusotoError::Service(
+                                CreateDBClusterError::StorageQuotaExceededFault(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        _ => {}
                     }
-                    "DBSubnetGroupNotFoundFault" => {
-                        return RusotoError::Service(
-                            CreateDBClusterError::DBSubnetGroupNotFoundFault(parsed_error.message),
-                        )
-                    }
-                    "DomainNotFoundFault" => {
-                        return RusotoError::Service(CreateDBClusterError::DomainNotFoundFault(
-                            parsed_error.message,
-                        ))
-                    }
-                    "GlobalClusterNotFoundFault" => {
-                        return RusotoError::Service(
-                            CreateDBClusterError::GlobalClusterNotFoundFault(parsed_error.message),
-                        )
-                    }
-                    "InsufficientStorageClusterCapacity" => {
-                        return RusotoError::Service(
-                            CreateDBClusterError::InsufficientStorageClusterCapacityFault(
-                                parsed_error.message,
-                            ),
-                        )
-                    }
-                    "InvalidDBClusterStateFault" => {
-                        return RusotoError::Service(
-                            CreateDBClusterError::InvalidDBClusterStateFault(parsed_error.message),
-                        )
-                    }
-                    "InvalidDBInstanceState" => {
-                        return RusotoError::Service(
-                            CreateDBClusterError::InvalidDBInstanceStateFault(parsed_error.message),
-                        )
-                    }
-                    "InvalidDBSubnetGroupStateFault" => {
-                        return RusotoError::Service(
-                            CreateDBClusterError::InvalidDBSubnetGroupStateFault(
-                                parsed_error.message,
-                            ),
-                        )
-                    }
-                    "InvalidGlobalClusterStateFault" => {
-                        return RusotoError::Service(
-                            CreateDBClusterError::InvalidGlobalClusterStateFault(
-                                parsed_error.message,
-                            ),
-                        )
-                    }
-                    "InvalidSubnet" => {
-                        return RusotoError::Service(CreateDBClusterError::InvalidSubnet(
-                            parsed_error.message,
-                        ))
-                    }
-                    "InvalidVPCNetworkStateFault" => {
-                        return RusotoError::Service(
-                            CreateDBClusterError::InvalidVPCNetworkStateFault(parsed_error.message),
-                        )
-                    }
-                    "KMSKeyNotAccessibleFault" => {
-                        return RusotoError::Service(
-                            CreateDBClusterError::KMSKeyNotAccessibleFault(parsed_error.message),
-                        )
-                    }
-                    "StorageQuotaExceeded" => {
-                        return RusotoError::Service(
-                            CreateDBClusterError::StorageQuotaExceededFault(parsed_error.message),
-                        )
-                    }
-                    _ => {}
                 }
             }
         }
@@ -20793,51 +21392,54 @@ impl CreateDBClusterEndpointError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    "DBClusterEndpointAlreadyExistsFault" => {
-                        return RusotoError::Service(
-                            CreateDBClusterEndpointError::DBClusterEndpointAlreadyExistsFault(
-                                parsed_error.message,
-                            ),
-                        )
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {
+                        "DBClusterEndpointAlreadyExistsFault" => {
+                            return RusotoError::Service(
+                                CreateDBClusterEndpointError::DBClusterEndpointAlreadyExistsFault(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "DBClusterEndpointQuotaExceededFault" => {
+                            return RusotoError::Service(
+                                CreateDBClusterEndpointError::DBClusterEndpointQuotaExceededFault(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "DBClusterNotFoundFault" => {
+                            return RusotoError::Service(
+                                CreateDBClusterEndpointError::DBClusterNotFoundFault(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "DBInstanceNotFound" => {
+                            return RusotoError::Service(
+                                CreateDBClusterEndpointError::DBInstanceNotFoundFault(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "InvalidDBClusterStateFault" => {
+                            return RusotoError::Service(
+                                CreateDBClusterEndpointError::InvalidDBClusterStateFault(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "InvalidDBInstanceState" => {
+                            return RusotoError::Service(
+                                CreateDBClusterEndpointError::InvalidDBInstanceStateFault(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        _ => {}
                     }
-                    "DBClusterEndpointQuotaExceededFault" => {
-                        return RusotoError::Service(
-                            CreateDBClusterEndpointError::DBClusterEndpointQuotaExceededFault(
-                                parsed_error.message,
-                            ),
-                        )
-                    }
-                    "DBClusterNotFoundFault" => {
-                        return RusotoError::Service(
-                            CreateDBClusterEndpointError::DBClusterNotFoundFault(
-                                parsed_error.message,
-                            ),
-                        )
-                    }
-                    "DBInstanceNotFound" => {
-                        return RusotoError::Service(
-                            CreateDBClusterEndpointError::DBInstanceNotFoundFault(
-                                parsed_error.message,
-                            ),
-                        )
-                    }
-                    "InvalidDBClusterStateFault" => {
-                        return RusotoError::Service(
-                            CreateDBClusterEndpointError::InvalidDBClusterStateFault(
-                                parsed_error.message,
-                            ),
-                        )
-                    }
-                    "InvalidDBInstanceState" => {
-                        return RusotoError::Service(
-                            CreateDBClusterEndpointError::InvalidDBInstanceStateFault(
-                                parsed_error.message,
-                            ),
-                        )
-                    }
-                    _ => {}
                 }
             }
         }
@@ -20895,23 +21497,22 @@ impl CreateDBClusterParameterGroupError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    "DBParameterGroupAlreadyExists" => {
-                        return RusotoError::Service(
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {
+                        "DBParameterGroupAlreadyExists" => return RusotoError::Service(
                             CreateDBClusterParameterGroupError::DBParameterGroupAlreadyExistsFault(
                                 parsed_error.message,
                             ),
-                        )
-                    }
-                    "DBParameterGroupQuotaExceeded" => {
-                        return RusotoError::Service(
+                        ),
+                        "DBParameterGroupQuotaExceeded" => return RusotoError::Service(
                             CreateDBClusterParameterGroupError::DBParameterGroupQuotaExceededFault(
                                 parsed_error.message,
                             ),
-                        )
+                        ),
+                        _ => {}
                     }
-                    _ => {}
                 }
             }
         }
@@ -20961,44 +21562,47 @@ impl CreateDBClusterSnapshotError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    "DBClusterNotFoundFault" => {
-                        return RusotoError::Service(
-                            CreateDBClusterSnapshotError::DBClusterNotFoundFault(
-                                parsed_error.message,
-                            ),
-                        )
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {
+                        "DBClusterNotFoundFault" => {
+                            return RusotoError::Service(
+                                CreateDBClusterSnapshotError::DBClusterNotFoundFault(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "DBClusterSnapshotAlreadyExistsFault" => {
+                            return RusotoError::Service(
+                                CreateDBClusterSnapshotError::DBClusterSnapshotAlreadyExistsFault(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "InvalidDBClusterSnapshotStateFault" => {
+                            return RusotoError::Service(
+                                CreateDBClusterSnapshotError::InvalidDBClusterSnapshotStateFault(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "InvalidDBClusterStateFault" => {
+                            return RusotoError::Service(
+                                CreateDBClusterSnapshotError::InvalidDBClusterStateFault(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "SnapshotQuotaExceeded" => {
+                            return RusotoError::Service(
+                                CreateDBClusterSnapshotError::SnapshotQuotaExceededFault(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        _ => {}
                     }
-                    "DBClusterSnapshotAlreadyExistsFault" => {
-                        return RusotoError::Service(
-                            CreateDBClusterSnapshotError::DBClusterSnapshotAlreadyExistsFault(
-                                parsed_error.message,
-                            ),
-                        )
-                    }
-                    "InvalidDBClusterSnapshotStateFault" => {
-                        return RusotoError::Service(
-                            CreateDBClusterSnapshotError::InvalidDBClusterSnapshotStateFault(
-                                parsed_error.message,
-                            ),
-                        )
-                    }
-                    "InvalidDBClusterStateFault" => {
-                        return RusotoError::Service(
-                            CreateDBClusterSnapshotError::InvalidDBClusterStateFault(
-                                parsed_error.message,
-                            ),
-                        )
-                    }
-                    "SnapshotQuotaExceeded" => {
-                        return RusotoError::Service(
-                            CreateDBClusterSnapshotError::SnapshotQuotaExceededFault(
-                                parsed_error.message,
-                            ),
-                        )
-                    }
-                    _ => {}
                 }
             }
         }
@@ -21085,120 +21689,139 @@ impl CreateDBInstanceError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    "AuthorizationNotFound" => {
-                        return RusotoError::Service(
-                            CreateDBInstanceError::AuthorizationNotFoundFault(parsed_error.message),
-                        )
-                    }
-                    "BackupPolicyNotFoundFault" => {
-                        return RusotoError::Service(
-                            CreateDBInstanceError::BackupPolicyNotFoundFault(parsed_error.message),
-                        )
-                    }
-                    "DBClusterNotFoundFault" => {
-                        return RusotoError::Service(CreateDBInstanceError::DBClusterNotFoundFault(
-                            parsed_error.message,
-                        ))
-                    }
-                    "DBInstanceAlreadyExists" => {
-                        return RusotoError::Service(
-                            CreateDBInstanceError::DBInstanceAlreadyExistsFault(
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {
+                        "AuthorizationNotFound" => {
+                            return RusotoError::Service(
+                                CreateDBInstanceError::AuthorizationNotFoundFault(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "BackupPolicyNotFoundFault" => {
+                            return RusotoError::Service(
+                                CreateDBInstanceError::BackupPolicyNotFoundFault(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "DBClusterNotFoundFault" => {
+                            return RusotoError::Service(
+                                CreateDBInstanceError::DBClusterNotFoundFault(parsed_error.message),
+                            )
+                        }
+                        "DBInstanceAlreadyExists" => {
+                            return RusotoError::Service(
+                                CreateDBInstanceError::DBInstanceAlreadyExistsFault(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "DBParameterGroupNotFound" => {
+                            return RusotoError::Service(
+                                CreateDBInstanceError::DBParameterGroupNotFoundFault(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "DBSecurityGroupNotFound" => {
+                            return RusotoError::Service(
+                                CreateDBInstanceError::DBSecurityGroupNotFoundFault(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "DBSubnetGroupDoesNotCoverEnoughAZs" => {
+                            return RusotoError::Service(
+                                CreateDBInstanceError::DBSubnetGroupDoesNotCoverEnoughAZs(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "DBSubnetGroupNotFoundFault" => {
+                            return RusotoError::Service(
+                                CreateDBInstanceError::DBSubnetGroupNotFoundFault(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "DomainNotFoundFault" => {
+                            return RusotoError::Service(
+                                CreateDBInstanceError::DomainNotFoundFault(parsed_error.message),
+                            )
+                        }
+                        "InstanceQuotaExceeded" => {
+                            return RusotoError::Service(
+                                CreateDBInstanceError::InstanceQuotaExceededFault(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "InsufficientDBInstanceCapacity" => {
+                            return RusotoError::Service(
+                                CreateDBInstanceError::InsufficientDBInstanceCapacityFault(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "InvalidDBClusterStateFault" => {
+                            return RusotoError::Service(
+                                CreateDBInstanceError::InvalidDBClusterStateFault(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "InvalidSubnet" => {
+                            return RusotoError::Service(CreateDBInstanceError::InvalidSubnet(
                                 parsed_error.message,
-                            ),
-                        )
+                            ))
+                        }
+                        "InvalidVPCNetworkStateFault" => {
+                            return RusotoError::Service(
+                                CreateDBInstanceError::InvalidVPCNetworkStateFault(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "KMSKeyNotAccessibleFault" => {
+                            return RusotoError::Service(
+                                CreateDBInstanceError::KMSKeyNotAccessibleFault(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "OptionGroupNotFoundFault" => {
+                            return RusotoError::Service(
+                                CreateDBInstanceError::OptionGroupNotFoundFault(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "ProvisionedIopsNotAvailableInAZFault" => {
+                            return RusotoError::Service(
+                                CreateDBInstanceError::ProvisionedIopsNotAvailableInAZFault(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "StorageQuotaExceeded" => {
+                            return RusotoError::Service(
+                                CreateDBInstanceError::StorageQuotaExceededFault(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "StorageTypeNotSupported" => {
+                            return RusotoError::Service(
+                                CreateDBInstanceError::StorageTypeNotSupportedFault(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        _ => {}
                     }
-                    "DBParameterGroupNotFound" => {
-                        return RusotoError::Service(
-                            CreateDBInstanceError::DBParameterGroupNotFoundFault(
-                                parsed_error.message,
-                            ),
-                        )
-                    }
-                    "DBSecurityGroupNotFound" => {
-                        return RusotoError::Service(
-                            CreateDBInstanceError::DBSecurityGroupNotFoundFault(
-                                parsed_error.message,
-                            ),
-                        )
-                    }
-                    "DBSubnetGroupDoesNotCoverEnoughAZs" => {
-                        return RusotoError::Service(
-                            CreateDBInstanceError::DBSubnetGroupDoesNotCoverEnoughAZs(
-                                parsed_error.message,
-                            ),
-                        )
-                    }
-                    "DBSubnetGroupNotFoundFault" => {
-                        return RusotoError::Service(
-                            CreateDBInstanceError::DBSubnetGroupNotFoundFault(parsed_error.message),
-                        )
-                    }
-                    "DomainNotFoundFault" => {
-                        return RusotoError::Service(CreateDBInstanceError::DomainNotFoundFault(
-                            parsed_error.message,
-                        ))
-                    }
-                    "InstanceQuotaExceeded" => {
-                        return RusotoError::Service(
-                            CreateDBInstanceError::InstanceQuotaExceededFault(parsed_error.message),
-                        )
-                    }
-                    "InsufficientDBInstanceCapacity" => {
-                        return RusotoError::Service(
-                            CreateDBInstanceError::InsufficientDBInstanceCapacityFault(
-                                parsed_error.message,
-                            ),
-                        )
-                    }
-                    "InvalidDBClusterStateFault" => {
-                        return RusotoError::Service(
-                            CreateDBInstanceError::InvalidDBClusterStateFault(parsed_error.message),
-                        )
-                    }
-                    "InvalidSubnet" => {
-                        return RusotoError::Service(CreateDBInstanceError::InvalidSubnet(
-                            parsed_error.message,
-                        ))
-                    }
-                    "InvalidVPCNetworkStateFault" => {
-                        return RusotoError::Service(
-                            CreateDBInstanceError::InvalidVPCNetworkStateFault(
-                                parsed_error.message,
-                            ),
-                        )
-                    }
-                    "KMSKeyNotAccessibleFault" => {
-                        return RusotoError::Service(
-                            CreateDBInstanceError::KMSKeyNotAccessibleFault(parsed_error.message),
-                        )
-                    }
-                    "OptionGroupNotFoundFault" => {
-                        return RusotoError::Service(
-                            CreateDBInstanceError::OptionGroupNotFoundFault(parsed_error.message),
-                        )
-                    }
-                    "ProvisionedIopsNotAvailableInAZFault" => {
-                        return RusotoError::Service(
-                            CreateDBInstanceError::ProvisionedIopsNotAvailableInAZFault(
-                                parsed_error.message,
-                            ),
-                        )
-                    }
-                    "StorageQuotaExceeded" => {
-                        return RusotoError::Service(
-                            CreateDBInstanceError::StorageQuotaExceededFault(parsed_error.message),
-                        )
-                    }
-                    "StorageTypeNotSupported" => {
-                        return RusotoError::Service(
-                            CreateDBInstanceError::StorageTypeNotSupportedFault(
-                                parsed_error.message,
-                            ),
-                        )
-                    }
-                    _ => {}
                 }
             }
         }
@@ -21305,140 +21928,139 @@ impl CreateDBInstanceReadReplicaError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    "DBInstanceAlreadyExists" => {
-                        return RusotoError::Service(
-                            CreateDBInstanceReadReplicaError::DBInstanceAlreadyExistsFault(
-                                parsed_error.message,
-                            ),
-                        )
-                    }
-                    "DBInstanceNotFound" => {
-                        return RusotoError::Service(
-                            CreateDBInstanceReadReplicaError::DBInstanceNotFoundFault(
-                                parsed_error.message,
-                            ),
-                        )
-                    }
-                    "DBParameterGroupNotFound" => {
-                        return RusotoError::Service(
-                            CreateDBInstanceReadReplicaError::DBParameterGroupNotFoundFault(
-                                parsed_error.message,
-                            ),
-                        )
-                    }
-                    "DBSecurityGroupNotFound" => {
-                        return RusotoError::Service(
-                            CreateDBInstanceReadReplicaError::DBSecurityGroupNotFoundFault(
-                                parsed_error.message,
-                            ),
-                        )
-                    }
-                    "DBSubnetGroupDoesNotCoverEnoughAZs" => {
-                        return RusotoError::Service(
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {
+                        "DBInstanceAlreadyExists" => {
+                            return RusotoError::Service(
+                                CreateDBInstanceReadReplicaError::DBInstanceAlreadyExistsFault(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "DBInstanceNotFound" => {
+                            return RusotoError::Service(
+                                CreateDBInstanceReadReplicaError::DBInstanceNotFoundFault(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "DBParameterGroupNotFound" => {
+                            return RusotoError::Service(
+                                CreateDBInstanceReadReplicaError::DBParameterGroupNotFoundFault(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "DBSecurityGroupNotFound" => {
+                            return RusotoError::Service(
+                                CreateDBInstanceReadReplicaError::DBSecurityGroupNotFoundFault(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "DBSubnetGroupDoesNotCoverEnoughAZs" => return RusotoError::Service(
                             CreateDBInstanceReadReplicaError::DBSubnetGroupDoesNotCoverEnoughAZs(
                                 parsed_error.message,
                             ),
-                        )
-                    }
-                    "DBSubnetGroupNotAllowedFault" => {
-                        return RusotoError::Service(
-                            CreateDBInstanceReadReplicaError::DBSubnetGroupNotAllowedFault(
-                                parsed_error.message,
-                            ),
-                        )
-                    }
-                    "DBSubnetGroupNotFoundFault" => {
-                        return RusotoError::Service(
-                            CreateDBInstanceReadReplicaError::DBSubnetGroupNotFoundFault(
-                                parsed_error.message,
-                            ),
-                        )
-                    }
-                    "DomainNotFoundFault" => {
-                        return RusotoError::Service(
-                            CreateDBInstanceReadReplicaError::DomainNotFoundFault(
-                                parsed_error.message,
-                            ),
-                        )
-                    }
-                    "InstanceQuotaExceeded" => {
-                        return RusotoError::Service(
-                            CreateDBInstanceReadReplicaError::InstanceQuotaExceededFault(
-                                parsed_error.message,
-                            ),
-                        )
-                    }
-                    "InsufficientDBInstanceCapacity" => {
-                        return RusotoError::Service(
+                        ),
+                        "DBSubnetGroupNotAllowedFault" => {
+                            return RusotoError::Service(
+                                CreateDBInstanceReadReplicaError::DBSubnetGroupNotAllowedFault(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "DBSubnetGroupNotFoundFault" => {
+                            return RusotoError::Service(
+                                CreateDBInstanceReadReplicaError::DBSubnetGroupNotFoundFault(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "DomainNotFoundFault" => {
+                            return RusotoError::Service(
+                                CreateDBInstanceReadReplicaError::DomainNotFoundFault(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "InstanceQuotaExceeded" => {
+                            return RusotoError::Service(
+                                CreateDBInstanceReadReplicaError::InstanceQuotaExceededFault(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "InsufficientDBInstanceCapacity" => return RusotoError::Service(
                             CreateDBInstanceReadReplicaError::InsufficientDBInstanceCapacityFault(
                                 parsed_error.message,
                             ),
-                        )
-                    }
-                    "InvalidDBInstanceState" => {
-                        return RusotoError::Service(
-                            CreateDBInstanceReadReplicaError::InvalidDBInstanceStateFault(
-                                parsed_error.message,
-                            ),
-                        )
-                    }
-                    "InvalidDBSubnetGroupFault" => {
-                        return RusotoError::Service(
-                            CreateDBInstanceReadReplicaError::InvalidDBSubnetGroupFault(
-                                parsed_error.message,
-                            ),
-                        )
-                    }
-                    "InvalidSubnet" => {
-                        return RusotoError::Service(
-                            CreateDBInstanceReadReplicaError::InvalidSubnet(parsed_error.message),
-                        )
-                    }
-                    "InvalidVPCNetworkStateFault" => {
-                        return RusotoError::Service(
-                            CreateDBInstanceReadReplicaError::InvalidVPCNetworkStateFault(
-                                parsed_error.message,
-                            ),
-                        )
-                    }
-                    "KMSKeyNotAccessibleFault" => {
-                        return RusotoError::Service(
-                            CreateDBInstanceReadReplicaError::KMSKeyNotAccessibleFault(
-                                parsed_error.message,
-                            ),
-                        )
-                    }
-                    "OptionGroupNotFoundFault" => {
-                        return RusotoError::Service(
-                            CreateDBInstanceReadReplicaError::OptionGroupNotFoundFault(
-                                parsed_error.message,
-                            ),
-                        )
-                    }
-                    "ProvisionedIopsNotAvailableInAZFault" => {
-                        return RusotoError::Service(
+                        ),
+                        "InvalidDBInstanceState" => {
+                            return RusotoError::Service(
+                                CreateDBInstanceReadReplicaError::InvalidDBInstanceStateFault(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "InvalidDBSubnetGroupFault" => {
+                            return RusotoError::Service(
+                                CreateDBInstanceReadReplicaError::InvalidDBSubnetGroupFault(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "InvalidSubnet" => {
+                            return RusotoError::Service(
+                                CreateDBInstanceReadReplicaError::InvalidSubnet(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "InvalidVPCNetworkStateFault" => {
+                            return RusotoError::Service(
+                                CreateDBInstanceReadReplicaError::InvalidVPCNetworkStateFault(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "KMSKeyNotAccessibleFault" => {
+                            return RusotoError::Service(
+                                CreateDBInstanceReadReplicaError::KMSKeyNotAccessibleFault(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "OptionGroupNotFoundFault" => {
+                            return RusotoError::Service(
+                                CreateDBInstanceReadReplicaError::OptionGroupNotFoundFault(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "ProvisionedIopsNotAvailableInAZFault" => return RusotoError::Service(
                             CreateDBInstanceReadReplicaError::ProvisionedIopsNotAvailableInAZFault(
                                 parsed_error.message,
                             ),
-                        )
+                        ),
+                        "StorageQuotaExceeded" => {
+                            return RusotoError::Service(
+                                CreateDBInstanceReadReplicaError::StorageQuotaExceededFault(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "StorageTypeNotSupported" => {
+                            return RusotoError::Service(
+                                CreateDBInstanceReadReplicaError::StorageTypeNotSupportedFault(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        _ => {}
                     }
-                    "StorageQuotaExceeded" => {
-                        return RusotoError::Service(
-                            CreateDBInstanceReadReplicaError::StorageQuotaExceededFault(
-                                parsed_error.message,
-                            ),
-                        )
-                    }
-                    "StorageTypeNotSupported" => {
-                        return RusotoError::Service(
-                            CreateDBInstanceReadReplicaError::StorageTypeNotSupportedFault(
-                                parsed_error.message,
-                            ),
-                        )
-                    }
-                    _ => {}
                 }
             }
         }
@@ -21531,23 +22153,26 @@ impl CreateDBParameterGroupError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    "DBParameterGroupAlreadyExists" => {
-                        return RusotoError::Service(
-                            CreateDBParameterGroupError::DBParameterGroupAlreadyExistsFault(
-                                parsed_error.message,
-                            ),
-                        )
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {
+                        "DBParameterGroupAlreadyExists" => {
+                            return RusotoError::Service(
+                                CreateDBParameterGroupError::DBParameterGroupAlreadyExistsFault(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "DBParameterGroupQuotaExceeded" => {
+                            return RusotoError::Service(
+                                CreateDBParameterGroupError::DBParameterGroupQuotaExceededFault(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        _ => {}
                     }
-                    "DBParameterGroupQuotaExceeded" => {
-                        return RusotoError::Service(
-                            CreateDBParameterGroupError::DBParameterGroupQuotaExceededFault(
-                                parsed_error.message,
-                            ),
-                        )
-                    }
-                    _ => {}
                 }
             }
         }
@@ -21593,24 +22218,27 @@ impl CreateDBProxyError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    "DBProxyTargetExistsFault" => {
-                        return RusotoError::Service(CreateDBProxyError::DBProxyAlreadyExistsFault(
-                            parsed_error.message,
-                        ))
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {
+                        "DBProxyTargetExistsFault" => {
+                            return RusotoError::Service(
+                                CreateDBProxyError::DBProxyAlreadyExistsFault(parsed_error.message),
+                            )
+                        }
+                        "DBProxyQuotaExceededFault" => {
+                            return RusotoError::Service(
+                                CreateDBProxyError::DBProxyQuotaExceededFault(parsed_error.message),
+                            )
+                        }
+                        "InvalidSubnet" => {
+                            return RusotoError::Service(CreateDBProxyError::InvalidSubnet(
+                                parsed_error.message,
+                            ))
+                        }
+                        _ => {}
                     }
-                    "DBProxyQuotaExceededFault" => {
-                        return RusotoError::Service(CreateDBProxyError::DBProxyQuotaExceededFault(
-                            parsed_error.message,
-                        ))
-                    }
-                    "InvalidSubnet" => {
-                        return RusotoError::Service(CreateDBProxyError::InvalidSubnet(
-                            parsed_error.message,
-                        ))
-                    }
-                    _ => {}
                 }
             }
         }
@@ -21653,30 +22281,33 @@ impl CreateDBSecurityGroupError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    "DBSecurityGroupAlreadyExists" => {
-                        return RusotoError::Service(
-                            CreateDBSecurityGroupError::DBSecurityGroupAlreadyExistsFault(
-                                parsed_error.message,
-                            ),
-                        )
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {
+                        "DBSecurityGroupAlreadyExists" => {
+                            return RusotoError::Service(
+                                CreateDBSecurityGroupError::DBSecurityGroupAlreadyExistsFault(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "DBSecurityGroupNotSupported" => {
+                            return RusotoError::Service(
+                                CreateDBSecurityGroupError::DBSecurityGroupNotSupportedFault(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "QuotaExceeded.DBSecurityGroup" => {
+                            return RusotoError::Service(
+                                CreateDBSecurityGroupError::DBSecurityGroupQuotaExceededFault(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        _ => {}
                     }
-                    "DBSecurityGroupNotSupported" => {
-                        return RusotoError::Service(
-                            CreateDBSecurityGroupError::DBSecurityGroupNotSupportedFault(
-                                parsed_error.message,
-                            ),
-                        )
-                    }
-                    "QuotaExceeded.DBSecurityGroup" => {
-                        return RusotoError::Service(
-                            CreateDBSecurityGroupError::DBSecurityGroupQuotaExceededFault(
-                                parsed_error.message,
-                            ),
-                        )
-                    }
-                    _ => {}
                 }
             }
         }
@@ -21727,33 +22358,40 @@ impl CreateDBSnapshotError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    "DBInstanceNotFound" => {
-                        return RusotoError::Service(
-                            CreateDBSnapshotError::DBInstanceNotFoundFault(parsed_error.message),
-                        )
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {
+                        "DBInstanceNotFound" => {
+                            return RusotoError::Service(
+                                CreateDBSnapshotError::DBInstanceNotFoundFault(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "DBSnapshotAlreadyExists" => {
+                            return RusotoError::Service(
+                                CreateDBSnapshotError::DBSnapshotAlreadyExistsFault(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "InvalidDBInstanceState" => {
+                            return RusotoError::Service(
+                                CreateDBSnapshotError::InvalidDBInstanceStateFault(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "SnapshotQuotaExceeded" => {
+                            return RusotoError::Service(
+                                CreateDBSnapshotError::SnapshotQuotaExceededFault(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        _ => {}
                     }
-                    "DBSnapshotAlreadyExists" => {
-                        return RusotoError::Service(
-                            CreateDBSnapshotError::DBSnapshotAlreadyExistsFault(
-                                parsed_error.message,
-                            ),
-                        )
-                    }
-                    "InvalidDBInstanceState" => {
-                        return RusotoError::Service(
-                            CreateDBSnapshotError::InvalidDBInstanceStateFault(
-                                parsed_error.message,
-                            ),
-                        )
-                    }
-                    "SnapshotQuotaExceeded" => {
-                        return RusotoError::Service(
-                            CreateDBSnapshotError::SnapshotQuotaExceededFault(parsed_error.message),
-                        )
-                    }
-                    _ => {}
                 }
             }
         }
@@ -21803,42 +22441,45 @@ impl CreateDBSubnetGroupError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    "DBSubnetGroupAlreadyExists" => {
-                        return RusotoError::Service(
-                            CreateDBSubnetGroupError::DBSubnetGroupAlreadyExistsFault(
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {
+                        "DBSubnetGroupAlreadyExists" => {
+                            return RusotoError::Service(
+                                CreateDBSubnetGroupError::DBSubnetGroupAlreadyExistsFault(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "DBSubnetGroupDoesNotCoverEnoughAZs" => {
+                            return RusotoError::Service(
+                                CreateDBSubnetGroupError::DBSubnetGroupDoesNotCoverEnoughAZs(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "DBSubnetGroupQuotaExceeded" => {
+                            return RusotoError::Service(
+                                CreateDBSubnetGroupError::DBSubnetGroupQuotaExceededFault(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "DBSubnetQuotaExceededFault" => {
+                            return RusotoError::Service(
+                                CreateDBSubnetGroupError::DBSubnetQuotaExceededFault(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "InvalidSubnet" => {
+                            return RusotoError::Service(CreateDBSubnetGroupError::InvalidSubnet(
                                 parsed_error.message,
-                            ),
-                        )
+                            ))
+                        }
+                        _ => {}
                     }
-                    "DBSubnetGroupDoesNotCoverEnoughAZs" => {
-                        return RusotoError::Service(
-                            CreateDBSubnetGroupError::DBSubnetGroupDoesNotCoverEnoughAZs(
-                                parsed_error.message,
-                            ),
-                        )
-                    }
-                    "DBSubnetGroupQuotaExceeded" => {
-                        return RusotoError::Service(
-                            CreateDBSubnetGroupError::DBSubnetGroupQuotaExceededFault(
-                                parsed_error.message,
-                            ),
-                        )
-                    }
-                    "DBSubnetQuotaExceededFault" => {
-                        return RusotoError::Service(
-                            CreateDBSubnetGroupError::DBSubnetQuotaExceededFault(
-                                parsed_error.message,
-                            ),
-                        )
-                    }
-                    "InvalidSubnet" => {
-                        return RusotoError::Service(CreateDBSubnetGroupError::InvalidSubnet(
-                            parsed_error.message,
-                        ))
-                    }
-                    _ => {}
                 }
             }
         }
@@ -21899,56 +22540,61 @@ impl CreateEventSubscriptionError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    "EventSubscriptionQuotaExceeded" => {
-                        return RusotoError::Service(
-                            CreateEventSubscriptionError::EventSubscriptionQuotaExceededFault(
-                                parsed_error.message,
-                            ),
-                        )
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {
+                        "EventSubscriptionQuotaExceeded" => {
+                            return RusotoError::Service(
+                                CreateEventSubscriptionError::EventSubscriptionQuotaExceededFault(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "SNSInvalidTopic" => {
+                            return RusotoError::Service(
+                                CreateEventSubscriptionError::SNSInvalidTopicFault(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "SNSNoAuthorization" => {
+                            return RusotoError::Service(
+                                CreateEventSubscriptionError::SNSNoAuthorizationFault(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "SNSTopicArnNotFound" => {
+                            return RusotoError::Service(
+                                CreateEventSubscriptionError::SNSTopicArnNotFoundFault(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "SourceNotFound" => {
+                            return RusotoError::Service(
+                                CreateEventSubscriptionError::SourceNotFoundFault(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "SubscriptionAlreadyExist" => {
+                            return RusotoError::Service(
+                                CreateEventSubscriptionError::SubscriptionAlreadyExistFault(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "SubscriptionCategoryNotFound" => {
+                            return RusotoError::Service(
+                                CreateEventSubscriptionError::SubscriptionCategoryNotFoundFault(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        _ => {}
                     }
-                    "SNSInvalidTopic" => {
-                        return RusotoError::Service(
-                            CreateEventSubscriptionError::SNSInvalidTopicFault(
-                                parsed_error.message,
-                            ),
-                        )
-                    }
-                    "SNSNoAuthorization" => {
-                        return RusotoError::Service(
-                            CreateEventSubscriptionError::SNSNoAuthorizationFault(
-                                parsed_error.message,
-                            ),
-                        )
-                    }
-                    "SNSTopicArnNotFound" => {
-                        return RusotoError::Service(
-                            CreateEventSubscriptionError::SNSTopicArnNotFoundFault(
-                                parsed_error.message,
-                            ),
-                        )
-                    }
-                    "SourceNotFound" => {
-                        return RusotoError::Service(
-                            CreateEventSubscriptionError::SourceNotFoundFault(parsed_error.message),
-                        )
-                    }
-                    "SubscriptionAlreadyExist" => {
-                        return RusotoError::Service(
-                            CreateEventSubscriptionError::SubscriptionAlreadyExistFault(
-                                parsed_error.message,
-                            ),
-                        )
-                    }
-                    "SubscriptionCategoryNotFound" => {
-                        return RusotoError::Service(
-                            CreateEventSubscriptionError::SubscriptionCategoryNotFoundFault(
-                                parsed_error.message,
-                            ),
-                        )
-                    }
-                    _ => {}
                 }
             }
         }
@@ -22007,35 +22653,40 @@ impl CreateGlobalClusterError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    "DBClusterNotFoundFault" => {
-                        return RusotoError::Service(
-                            CreateGlobalClusterError::DBClusterNotFoundFault(parsed_error.message),
-                        )
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {
+                        "DBClusterNotFoundFault" => {
+                            return RusotoError::Service(
+                                CreateGlobalClusterError::DBClusterNotFoundFault(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "GlobalClusterAlreadyExistsFault" => {
+                            return RusotoError::Service(
+                                CreateGlobalClusterError::GlobalClusterAlreadyExistsFault(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "GlobalClusterQuotaExceededFault" => {
+                            return RusotoError::Service(
+                                CreateGlobalClusterError::GlobalClusterQuotaExceededFault(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "InvalidDBClusterStateFault" => {
+                            return RusotoError::Service(
+                                CreateGlobalClusterError::InvalidDBClusterStateFault(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        _ => {}
                     }
-                    "GlobalClusterAlreadyExistsFault" => {
-                        return RusotoError::Service(
-                            CreateGlobalClusterError::GlobalClusterAlreadyExistsFault(
-                                parsed_error.message,
-                            ),
-                        )
-                    }
-                    "GlobalClusterQuotaExceededFault" => {
-                        return RusotoError::Service(
-                            CreateGlobalClusterError::GlobalClusterQuotaExceededFault(
-                                parsed_error.message,
-                            ),
-                        )
-                    }
-                    "InvalidDBClusterStateFault" => {
-                        return RusotoError::Service(
-                            CreateGlobalClusterError::InvalidDBClusterStateFault(
-                                parsed_error.message,
-                            ),
-                        )
-                    }
-                    _ => {}
                 }
             }
         }
@@ -22083,23 +22734,26 @@ impl CreateOptionGroupError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    "OptionGroupAlreadyExistsFault" => {
-                        return RusotoError::Service(
-                            CreateOptionGroupError::OptionGroupAlreadyExistsFault(
-                                parsed_error.message,
-                            ),
-                        )
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {
+                        "OptionGroupAlreadyExistsFault" => {
+                            return RusotoError::Service(
+                                CreateOptionGroupError::OptionGroupAlreadyExistsFault(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "OptionGroupQuotaExceededFault" => {
+                            return RusotoError::Service(
+                                CreateOptionGroupError::OptionGroupQuotaExceededFault(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        _ => {}
                     }
-                    "OptionGroupQuotaExceededFault" => {
-                        return RusotoError::Service(
-                            CreateOptionGroupError::OptionGroupQuotaExceededFault(
-                                parsed_error.message,
-                            ),
-                        )
-                    }
-                    _ => {}
                 }
             }
         }
@@ -22145,23 +22799,24 @@ impl DeleteCustomAvailabilityZoneError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    "CustomAvailabilityZoneNotFound" => {
-                        return RusotoError::Service(
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {
+                        "CustomAvailabilityZoneNotFound" => return RusotoError::Service(
                             DeleteCustomAvailabilityZoneError::CustomAvailabilityZoneNotFoundFault(
                                 parsed_error.message,
                             ),
-                        )
+                        ),
+                        "KMSKeyNotAccessibleFault" => {
+                            return RusotoError::Service(
+                                DeleteCustomAvailabilityZoneError::KMSKeyNotAccessibleFault(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        _ => {}
                     }
-                    "KMSKeyNotAccessibleFault" => {
-                        return RusotoError::Service(
-                            DeleteCustomAvailabilityZoneError::KMSKeyNotAccessibleFault(
-                                parsed_error.message,
-                            ),
-                        )
-                    }
-                    _ => {}
                 }
             }
         }
@@ -22211,38 +22866,45 @@ impl DeleteDBClusterError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    "DBClusterNotFoundFault" => {
-                        return RusotoError::Service(DeleteDBClusterError::DBClusterNotFoundFault(
-                            parsed_error.message,
-                        ))
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {
+                        "DBClusterNotFoundFault" => {
+                            return RusotoError::Service(
+                                DeleteDBClusterError::DBClusterNotFoundFault(parsed_error.message),
+                            )
+                        }
+                        "DBClusterSnapshotAlreadyExistsFault" => {
+                            return RusotoError::Service(
+                                DeleteDBClusterError::DBClusterSnapshotAlreadyExistsFault(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "InvalidDBClusterSnapshotStateFault" => {
+                            return RusotoError::Service(
+                                DeleteDBClusterError::InvalidDBClusterSnapshotStateFault(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "InvalidDBClusterStateFault" => {
+                            return RusotoError::Service(
+                                DeleteDBClusterError::InvalidDBClusterStateFault(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "SnapshotQuotaExceeded" => {
+                            return RusotoError::Service(
+                                DeleteDBClusterError::SnapshotQuotaExceededFault(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        _ => {}
                     }
-                    "DBClusterSnapshotAlreadyExistsFault" => {
-                        return RusotoError::Service(
-                            DeleteDBClusterError::DBClusterSnapshotAlreadyExistsFault(
-                                parsed_error.message,
-                            ),
-                        )
-                    }
-                    "InvalidDBClusterSnapshotStateFault" => {
-                        return RusotoError::Service(
-                            DeleteDBClusterError::InvalidDBClusterSnapshotStateFault(
-                                parsed_error.message,
-                            ),
-                        )
-                    }
-                    "InvalidDBClusterStateFault" => {
-                        return RusotoError::Service(
-                            DeleteDBClusterError::InvalidDBClusterStateFault(parsed_error.message),
-                        )
-                    }
-                    "SnapshotQuotaExceeded" => {
-                        return RusotoError::Service(
-                            DeleteDBClusterError::SnapshotQuotaExceededFault(parsed_error.message),
-                        )
-                    }
-                    _ => {}
                 }
             }
         }
@@ -22291,30 +22953,33 @@ impl DeleteDBClusterEndpointError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    "DBClusterEndpointNotFoundFault" => {
-                        return RusotoError::Service(
-                            DeleteDBClusterEndpointError::DBClusterEndpointNotFoundFault(
-                                parsed_error.message,
-                            ),
-                        )
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {
+                        "DBClusterEndpointNotFoundFault" => {
+                            return RusotoError::Service(
+                                DeleteDBClusterEndpointError::DBClusterEndpointNotFoundFault(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "InvalidDBClusterEndpointStateFault" => {
+                            return RusotoError::Service(
+                                DeleteDBClusterEndpointError::InvalidDBClusterEndpointStateFault(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "InvalidDBClusterStateFault" => {
+                            return RusotoError::Service(
+                                DeleteDBClusterEndpointError::InvalidDBClusterStateFault(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        _ => {}
                     }
-                    "InvalidDBClusterEndpointStateFault" => {
-                        return RusotoError::Service(
-                            DeleteDBClusterEndpointError::InvalidDBClusterEndpointStateFault(
-                                parsed_error.message,
-                            ),
-                        )
-                    }
-                    "InvalidDBClusterStateFault" => {
-                        return RusotoError::Service(
-                            DeleteDBClusterEndpointError::InvalidDBClusterStateFault(
-                                parsed_error.message,
-                            ),
-                        )
-                    }
-                    _ => {}
                 }
             }
         }
@@ -22363,23 +23028,24 @@ impl DeleteDBClusterParameterGroupError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    "DBParameterGroupNotFound" => {
-                        return RusotoError::Service(
-                            DeleteDBClusterParameterGroupError::DBParameterGroupNotFoundFault(
-                                parsed_error.message,
-                            ),
-                        )
-                    }
-                    "InvalidDBParameterGroupState" => {
-                        return RusotoError::Service(
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {
+                        "DBParameterGroupNotFound" => {
+                            return RusotoError::Service(
+                                DeleteDBClusterParameterGroupError::DBParameterGroupNotFoundFault(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "InvalidDBParameterGroupState" => return RusotoError::Service(
                             DeleteDBClusterParameterGroupError::InvalidDBParameterGroupStateFault(
                                 parsed_error.message,
                             ),
-                        )
+                        ),
+                        _ => {}
                     }
-                    _ => {}
                 }
             }
         }
@@ -22423,23 +23089,26 @@ impl DeleteDBClusterSnapshotError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    "DBClusterSnapshotNotFoundFault" => {
-                        return RusotoError::Service(
-                            DeleteDBClusterSnapshotError::DBClusterSnapshotNotFoundFault(
-                                parsed_error.message,
-                            ),
-                        )
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {
+                        "DBClusterSnapshotNotFoundFault" => {
+                            return RusotoError::Service(
+                                DeleteDBClusterSnapshotError::DBClusterSnapshotNotFoundFault(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "InvalidDBClusterSnapshotStateFault" => {
+                            return RusotoError::Service(
+                                DeleteDBClusterSnapshotError::InvalidDBClusterSnapshotStateFault(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        _ => {}
                     }
-                    "InvalidDBClusterSnapshotStateFault" => {
-                        return RusotoError::Service(
-                            DeleteDBClusterSnapshotError::InvalidDBClusterSnapshotStateFault(
-                                parsed_error.message,
-                            ),
-                        )
-                    }
-                    _ => {}
                 }
             }
         }
@@ -22491,45 +23160,54 @@ impl DeleteDBInstanceError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    "DBInstanceAutomatedBackupQuotaExceeded" => {
-                        return RusotoError::Service(
-                            DeleteDBInstanceError::DBInstanceAutomatedBackupQuotaExceededFault(
-                                parsed_error.message,
-                            ),
-                        )
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {
+                        "DBInstanceAutomatedBackupQuotaExceeded" => {
+                            return RusotoError::Service(
+                                DeleteDBInstanceError::DBInstanceAutomatedBackupQuotaExceededFault(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "DBInstanceNotFound" => {
+                            return RusotoError::Service(
+                                DeleteDBInstanceError::DBInstanceNotFoundFault(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "DBSnapshotAlreadyExists" => {
+                            return RusotoError::Service(
+                                DeleteDBInstanceError::DBSnapshotAlreadyExistsFault(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "InvalidDBClusterStateFault" => {
+                            return RusotoError::Service(
+                                DeleteDBInstanceError::InvalidDBClusterStateFault(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "InvalidDBInstanceState" => {
+                            return RusotoError::Service(
+                                DeleteDBInstanceError::InvalidDBInstanceStateFault(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "SnapshotQuotaExceeded" => {
+                            return RusotoError::Service(
+                                DeleteDBInstanceError::SnapshotQuotaExceededFault(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        _ => {}
                     }
-                    "DBInstanceNotFound" => {
-                        return RusotoError::Service(
-                            DeleteDBInstanceError::DBInstanceNotFoundFault(parsed_error.message),
-                        )
-                    }
-                    "DBSnapshotAlreadyExists" => {
-                        return RusotoError::Service(
-                            DeleteDBInstanceError::DBSnapshotAlreadyExistsFault(
-                                parsed_error.message,
-                            ),
-                        )
-                    }
-                    "InvalidDBClusterStateFault" => {
-                        return RusotoError::Service(
-                            DeleteDBInstanceError::InvalidDBClusterStateFault(parsed_error.message),
-                        )
-                    }
-                    "InvalidDBInstanceState" => {
-                        return RusotoError::Service(
-                            DeleteDBInstanceError::InvalidDBInstanceStateFault(
-                                parsed_error.message,
-                            ),
-                        )
-                    }
-                    "SnapshotQuotaExceeded" => {
-                        return RusotoError::Service(
-                            DeleteDBInstanceError::SnapshotQuotaExceededFault(parsed_error.message),
-                        )
-                    }
-                    _ => {}
                 }
             }
         }
@@ -22579,10 +23257,13 @@ impl DeleteDBInstanceAutomatedBackupError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                                    "DBInstanceAutomatedBackupNotFound" => return RusotoError::Service(DeleteDBInstanceAutomatedBackupError::DBInstanceAutomatedBackupNotFoundFault(parsed_error.message)),"InvalidDBInstanceAutomatedBackupState" => return RusotoError::Service(DeleteDBInstanceAutomatedBackupError::InvalidDBInstanceAutomatedBackupStateFault(parsed_error.message)),_ => {}
-                                }
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {
+                        "DBInstanceAutomatedBackupNotFound" => return RusotoError::Service(DeleteDBInstanceAutomatedBackupError::DBInstanceAutomatedBackupNotFoundFault(parsed_error.message)),"InvalidDBInstanceAutomatedBackupState" => return RusotoError::Service(DeleteDBInstanceAutomatedBackupError::InvalidDBInstanceAutomatedBackupStateFault(parsed_error.message)),_ => {}
+                    }
+                }
             }
         }
         RusotoError::Unknown(res)
@@ -22625,23 +23306,26 @@ impl DeleteDBParameterGroupError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    "DBParameterGroupNotFound" => {
-                        return RusotoError::Service(
-                            DeleteDBParameterGroupError::DBParameterGroupNotFoundFault(
-                                parsed_error.message,
-                            ),
-                        )
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {
+                        "DBParameterGroupNotFound" => {
+                            return RusotoError::Service(
+                                DeleteDBParameterGroupError::DBParameterGroupNotFoundFault(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "InvalidDBParameterGroupState" => {
+                            return RusotoError::Service(
+                                DeleteDBParameterGroupError::InvalidDBParameterGroupStateFault(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        _ => {}
                     }
-                    "InvalidDBParameterGroupState" => {
-                        return RusotoError::Service(
-                            DeleteDBParameterGroupError::InvalidDBParameterGroupStateFault(
-                                parsed_error.message,
-                            ),
-                        )
-                    }
-                    _ => {}
                 }
             }
         }
@@ -22685,19 +23369,22 @@ impl DeleteDBProxyError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    "DBProxyNotFoundFault" => {
-                        return RusotoError::Service(DeleteDBProxyError::DBProxyNotFoundFault(
-                            parsed_error.message,
-                        ))
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {
+                        "DBProxyNotFoundFault" => {
+                            return RusotoError::Service(DeleteDBProxyError::DBProxyNotFoundFault(
+                                parsed_error.message,
+                            ))
+                        }
+                        "InvalidDBProxyStateFault" => {
+                            return RusotoError::Service(
+                                DeleteDBProxyError::InvalidDBProxyStateFault(parsed_error.message),
+                            )
+                        }
+                        _ => {}
                     }
-                    "InvalidDBProxyStateFault" => {
-                        return RusotoError::Service(DeleteDBProxyError::InvalidDBProxyStateFault(
-                            parsed_error.message,
-                        ))
-                    }
-                    _ => {}
                 }
             }
         }
@@ -22737,23 +23424,26 @@ impl DeleteDBSecurityGroupError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    "DBSecurityGroupNotFound" => {
-                        return RusotoError::Service(
-                            DeleteDBSecurityGroupError::DBSecurityGroupNotFoundFault(
-                                parsed_error.message,
-                            ),
-                        )
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {
+                        "DBSecurityGroupNotFound" => {
+                            return RusotoError::Service(
+                                DeleteDBSecurityGroupError::DBSecurityGroupNotFoundFault(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "InvalidDBSecurityGroupState" => {
+                            return RusotoError::Service(
+                                DeleteDBSecurityGroupError::InvalidDBSecurityGroupStateFault(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        _ => {}
                     }
-                    "InvalidDBSecurityGroupState" => {
-                        return RusotoError::Service(
-                            DeleteDBSecurityGroupError::InvalidDBSecurityGroupStateFault(
-                                parsed_error.message,
-                            ),
-                        )
-                    }
-                    _ => {}
                 }
             }
         }
@@ -22797,21 +23487,26 @@ impl DeleteDBSnapshotError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    "DBSnapshotNotFound" => {
-                        return RusotoError::Service(
-                            DeleteDBSnapshotError::DBSnapshotNotFoundFault(parsed_error.message),
-                        )
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {
+                        "DBSnapshotNotFound" => {
+                            return RusotoError::Service(
+                                DeleteDBSnapshotError::DBSnapshotNotFoundFault(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "InvalidDBSnapshotState" => {
+                            return RusotoError::Service(
+                                DeleteDBSnapshotError::InvalidDBSnapshotStateFault(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        _ => {}
                     }
-                    "InvalidDBSnapshotState" => {
-                        return RusotoError::Service(
-                            DeleteDBSnapshotError::InvalidDBSnapshotStateFault(
-                                parsed_error.message,
-                            ),
-                        )
-                    }
-                    _ => {}
                 }
             }
         }
@@ -22853,30 +23548,33 @@ impl DeleteDBSubnetGroupError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    "DBSubnetGroupNotFoundFault" => {
-                        return RusotoError::Service(
-                            DeleteDBSubnetGroupError::DBSubnetGroupNotFoundFault(
-                                parsed_error.message,
-                            ),
-                        )
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {
+                        "DBSubnetGroupNotFoundFault" => {
+                            return RusotoError::Service(
+                                DeleteDBSubnetGroupError::DBSubnetGroupNotFoundFault(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "InvalidDBSubnetGroupStateFault" => {
+                            return RusotoError::Service(
+                                DeleteDBSubnetGroupError::InvalidDBSubnetGroupStateFault(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "InvalidDBSubnetStateFault" => {
+                            return RusotoError::Service(
+                                DeleteDBSubnetGroupError::InvalidDBSubnetStateFault(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        _ => {}
                     }
-                    "InvalidDBSubnetGroupStateFault" => {
-                        return RusotoError::Service(
-                            DeleteDBSubnetGroupError::InvalidDBSubnetGroupStateFault(
-                                parsed_error.message,
-                            ),
-                        )
-                    }
-                    "InvalidDBSubnetStateFault" => {
-                        return RusotoError::Service(
-                            DeleteDBSubnetGroupError::InvalidDBSubnetStateFault(
-                                parsed_error.message,
-                            ),
-                        )
-                    }
-                    _ => {}
                 }
             }
         }
@@ -22923,23 +23621,26 @@ impl DeleteEventSubscriptionError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    "InvalidEventSubscriptionState" => {
-                        return RusotoError::Service(
-                            DeleteEventSubscriptionError::InvalidEventSubscriptionStateFault(
-                                parsed_error.message,
-                            ),
-                        )
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {
+                        "InvalidEventSubscriptionState" => {
+                            return RusotoError::Service(
+                                DeleteEventSubscriptionError::InvalidEventSubscriptionStateFault(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "SubscriptionNotFound" => {
+                            return RusotoError::Service(
+                                DeleteEventSubscriptionError::SubscriptionNotFoundFault(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        _ => {}
                     }
-                    "SubscriptionNotFound" => {
-                        return RusotoError::Service(
-                            DeleteEventSubscriptionError::SubscriptionNotFoundFault(
-                                parsed_error.message,
-                            ),
-                        )
-                    }
-                    _ => {}
                 }
             }
         }
@@ -22983,23 +23684,26 @@ impl DeleteGlobalClusterError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    "GlobalClusterNotFoundFault" => {
-                        return RusotoError::Service(
-                            DeleteGlobalClusterError::GlobalClusterNotFoundFault(
-                                parsed_error.message,
-                            ),
-                        )
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {
+                        "GlobalClusterNotFoundFault" => {
+                            return RusotoError::Service(
+                                DeleteGlobalClusterError::GlobalClusterNotFoundFault(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "InvalidGlobalClusterStateFault" => {
+                            return RusotoError::Service(
+                                DeleteGlobalClusterError::InvalidGlobalClusterStateFault(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        _ => {}
                     }
-                    "InvalidGlobalClusterStateFault" => {
-                        return RusotoError::Service(
-                            DeleteGlobalClusterError::InvalidGlobalClusterStateFault(
-                                parsed_error.message,
-                            ),
-                        )
-                    }
-                    _ => {}
                 }
             }
         }
@@ -23041,16 +23745,19 @@ impl DeleteInstallationMediaError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    "InstallationMediaNotFound" => {
-                        return RusotoError::Service(
-                            DeleteInstallationMediaError::InstallationMediaNotFoundFault(
-                                parsed_error.message,
-                            ),
-                        )
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {
+                        "InstallationMediaNotFound" => {
+                            return RusotoError::Service(
+                                DeleteInstallationMediaError::InstallationMediaNotFoundFault(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        _ => {}
                     }
-                    _ => {}
                 }
             }
         }
@@ -23091,21 +23798,26 @@ impl DeleteOptionGroupError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    "InvalidOptionGroupStateFault" => {
-                        return RusotoError::Service(
-                            DeleteOptionGroupError::InvalidOptionGroupStateFault(
-                                parsed_error.message,
-                            ),
-                        )
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {
+                        "InvalidOptionGroupStateFault" => {
+                            return RusotoError::Service(
+                                DeleteOptionGroupError::InvalidOptionGroupStateFault(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "OptionGroupNotFoundFault" => {
+                            return RusotoError::Service(
+                                DeleteOptionGroupError::OptionGroupNotFoundFault(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        _ => {}
                     }
-                    "OptionGroupNotFoundFault" => {
-                        return RusotoError::Service(
-                            DeleteOptionGroupError::OptionGroupNotFoundFault(parsed_error.message),
-                        )
-                    }
-                    _ => {}
                 }
             }
         }
@@ -23151,37 +23863,40 @@ impl DeregisterDBProxyTargetsError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    "DBProxyNotFoundFault" => {
-                        return RusotoError::Service(
-                            DeregisterDBProxyTargetsError::DBProxyNotFoundFault(
-                                parsed_error.message,
-                            ),
-                        )
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {
+                        "DBProxyNotFoundFault" => {
+                            return RusotoError::Service(
+                                DeregisterDBProxyTargetsError::DBProxyNotFoundFault(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "DBProxyTargetGroupNotFoundFault" => {
+                            return RusotoError::Service(
+                                DeregisterDBProxyTargetsError::DBProxyTargetGroupNotFoundFault(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "DBProxyTargetNotFoundFault" => {
+                            return RusotoError::Service(
+                                DeregisterDBProxyTargetsError::DBProxyTargetNotFoundFault(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "InvalidDBProxyStateFault" => {
+                            return RusotoError::Service(
+                                DeregisterDBProxyTargetsError::InvalidDBProxyStateFault(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        _ => {}
                     }
-                    "DBProxyTargetGroupNotFoundFault" => {
-                        return RusotoError::Service(
-                            DeregisterDBProxyTargetsError::DBProxyTargetGroupNotFoundFault(
-                                parsed_error.message,
-                            ),
-                        )
-                    }
-                    "DBProxyTargetNotFoundFault" => {
-                        return RusotoError::Service(
-                            DeregisterDBProxyTargetsError::DBProxyTargetNotFoundFault(
-                                parsed_error.message,
-                            ),
-                        )
-                    }
-                    "InvalidDBProxyStateFault" => {
-                        return RusotoError::Service(
-                            DeregisterDBProxyTargetsError::InvalidDBProxyStateFault(
-                                parsed_error.message,
-                            ),
-                        )
-                    }
-                    _ => {}
                 }
             }
         }
@@ -23226,11 +23941,7 @@ impl DescribeAccountAttributesError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    _ => {}
-                }
-            }
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {}
         }
         RusotoError::Unknown(res)
     }
@@ -23263,16 +23974,19 @@ impl DescribeCertificatesError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    "CertificateNotFound" => {
-                        return RusotoError::Service(
-                            DescribeCertificatesError::CertificateNotFoundFault(
-                                parsed_error.message,
-                            ),
-                        )
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {
+                        "CertificateNotFound" => {
+                            return RusotoError::Service(
+                                DescribeCertificatesError::CertificateNotFoundFault(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        _ => {}
                     }
-                    _ => {}
                 }
             }
         }
@@ -23313,14 +24027,12 @@ impl DescribeCustomAvailabilityZonesError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    "CustomAvailabilityZoneNotFound" => return RusotoError::Service(
-                        DescribeCustomAvailabilityZonesError::CustomAvailabilityZoneNotFoundFault(
-                            parsed_error.message,
-                        ),
-                    ),
-                    _ => {}
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {
+                        "CustomAvailabilityZoneNotFound" => return RusotoError::Service(DescribeCustomAvailabilityZonesError::CustomAvailabilityZoneNotFoundFault(parsed_error.message)),_ => {}
+                    }
                 }
             }
         }
@@ -23363,23 +24075,26 @@ impl DescribeDBClusterBacktracksError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    "DBClusterBacktrackNotFoundFault" => {
-                        return RusotoError::Service(
-                            DescribeDBClusterBacktracksError::DBClusterBacktrackNotFoundFault(
-                                parsed_error.message,
-                            ),
-                        )
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {
+                        "DBClusterBacktrackNotFoundFault" => {
+                            return RusotoError::Service(
+                                DescribeDBClusterBacktracksError::DBClusterBacktrackNotFoundFault(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "DBClusterNotFoundFault" => {
+                            return RusotoError::Service(
+                                DescribeDBClusterBacktracksError::DBClusterNotFoundFault(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        _ => {}
                     }
-                    "DBClusterNotFoundFault" => {
-                        return RusotoError::Service(
-                            DescribeDBClusterBacktracksError::DBClusterNotFoundFault(
-                                parsed_error.message,
-                            ),
-                        )
-                    }
-                    _ => {}
                 }
             }
         }
@@ -23423,16 +24138,19 @@ impl DescribeDBClusterEndpointsError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    "DBClusterNotFoundFault" => {
-                        return RusotoError::Service(
-                            DescribeDBClusterEndpointsError::DBClusterNotFoundFault(
-                                parsed_error.message,
-                            ),
-                        )
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {
+                        "DBClusterNotFoundFault" => {
+                            return RusotoError::Service(
+                                DescribeDBClusterEndpointsError::DBClusterNotFoundFault(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        _ => {}
                     }
-                    _ => {}
                 }
             }
         }
@@ -23473,16 +24191,17 @@ impl DescribeDBClusterParameterGroupsError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    "DBParameterGroupNotFound" => {
-                        return RusotoError::Service(
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {
+                        "DBParameterGroupNotFound" => return RusotoError::Service(
                             DescribeDBClusterParameterGroupsError::DBParameterGroupNotFoundFault(
                                 parsed_error.message,
                             ),
-                        )
+                        ),
+                        _ => {}
                     }
-                    _ => {}
                 }
             }
         }
@@ -23523,16 +24242,19 @@ impl DescribeDBClusterParametersError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    "DBParameterGroupNotFound" => {
-                        return RusotoError::Service(
-                            DescribeDBClusterParametersError::DBParameterGroupNotFoundFault(
-                                parsed_error.message,
-                            ),
-                        )
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {
+                        "DBParameterGroupNotFound" => {
+                            return RusotoError::Service(
+                                DescribeDBClusterParametersError::DBParameterGroupNotFoundFault(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        _ => {}
                     }
-                    _ => {}
                 }
             }
         }
@@ -23573,14 +24295,12 @@ impl DescribeDBClusterSnapshotAttributesError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    "DBClusterSnapshotNotFoundFault" => return RusotoError::Service(
-                        DescribeDBClusterSnapshotAttributesError::DBClusterSnapshotNotFoundFault(
-                            parsed_error.message,
-                        ),
-                    ),
-                    _ => {}
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {
+                        "DBClusterSnapshotNotFoundFault" => return RusotoError::Service(DescribeDBClusterSnapshotAttributesError::DBClusterSnapshotNotFoundFault(parsed_error.message)),_ => {}
+                    }
                 }
             }
         }
@@ -23621,16 +24341,19 @@ impl DescribeDBClusterSnapshotsError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    "DBClusterSnapshotNotFoundFault" => {
-                        return RusotoError::Service(
-                            DescribeDBClusterSnapshotsError::DBClusterSnapshotNotFoundFault(
-                                parsed_error.message,
-                            ),
-                        )
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {
+                        "DBClusterSnapshotNotFoundFault" => {
+                            return RusotoError::Service(
+                                DescribeDBClusterSnapshotsError::DBClusterSnapshotNotFoundFault(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        _ => {}
                     }
-                    _ => {}
                 }
             }
         }
@@ -23669,14 +24392,19 @@ impl DescribeDBClustersError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    "DBClusterNotFoundFault" => {
-                        return RusotoError::Service(
-                            DescribeDBClustersError::DBClusterNotFoundFault(parsed_error.message),
-                        )
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {
+                        "DBClusterNotFoundFault" => {
+                            return RusotoError::Service(
+                                DescribeDBClustersError::DBClusterNotFoundFault(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        _ => {}
                     }
-                    _ => {}
                 }
             }
         }
@@ -23710,11 +24438,7 @@ impl DescribeDBEngineVersionsError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    _ => {}
-                }
-            }
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {}
         }
         RusotoError::Unknown(res)
     }
@@ -23749,10 +24473,13 @@ impl DescribeDBInstanceAutomatedBackupsError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                                    "DBInstanceAutomatedBackupNotFound" => return RusotoError::Service(DescribeDBInstanceAutomatedBackupsError::DBInstanceAutomatedBackupNotFoundFault(parsed_error.message)),_ => {}
-                                }
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {
+                        "DBInstanceAutomatedBackupNotFound" => return RusotoError::Service(DescribeDBInstanceAutomatedBackupsError::DBInstanceAutomatedBackupNotFoundFault(parsed_error.message)),_ => {}
+                    }
+                }
             }
         }
         RusotoError::Unknown(res)
@@ -23790,14 +24517,19 @@ impl DescribeDBInstancesError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    "DBInstanceNotFound" => {
-                        return RusotoError::Service(
-                            DescribeDBInstancesError::DBInstanceNotFoundFault(parsed_error.message),
-                        )
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {
+                        "DBInstanceNotFound" => {
+                            return RusotoError::Service(
+                                DescribeDBInstancesError::DBInstanceNotFoundFault(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        _ => {}
                     }
-                    _ => {}
                 }
             }
         }
@@ -23834,14 +24566,19 @@ impl DescribeDBLogFilesError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    "DBInstanceNotFound" => {
-                        return RusotoError::Service(
-                            DescribeDBLogFilesError::DBInstanceNotFoundFault(parsed_error.message),
-                        )
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {
+                        "DBInstanceNotFound" => {
+                            return RusotoError::Service(
+                                DescribeDBLogFilesError::DBInstanceNotFoundFault(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        _ => {}
                     }
-                    _ => {}
                 }
             }
         }
@@ -23878,16 +24615,19 @@ impl DescribeDBParameterGroupsError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    "DBParameterGroupNotFound" => {
-                        return RusotoError::Service(
-                            DescribeDBParameterGroupsError::DBParameterGroupNotFoundFault(
-                                parsed_error.message,
-                            ),
-                        )
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {
+                        "DBParameterGroupNotFound" => {
+                            return RusotoError::Service(
+                                DescribeDBParameterGroupsError::DBParameterGroupNotFoundFault(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        _ => {}
                     }
-                    _ => {}
                 }
             }
         }
@@ -23926,16 +24666,19 @@ impl DescribeDBParametersError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    "DBParameterGroupNotFound" => {
-                        return RusotoError::Service(
-                            DescribeDBParametersError::DBParameterGroupNotFoundFault(
-                                parsed_error.message,
-                            ),
-                        )
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {
+                        "DBParameterGroupNotFound" => {
+                            return RusotoError::Service(
+                                DescribeDBParametersError::DBParameterGroupNotFoundFault(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        _ => {}
                     }
-                    _ => {}
                 }
             }
         }
@@ -23974,14 +24717,17 @@ impl DescribeDBProxiesError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    "DBProxyNotFoundFault" => {
-                        return RusotoError::Service(DescribeDBProxiesError::DBProxyNotFoundFault(
-                            parsed_error.message,
-                        ))
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {
+                        "DBProxyNotFoundFault" => {
+                            return RusotoError::Service(
+                                DescribeDBProxiesError::DBProxyNotFoundFault(parsed_error.message),
+                            )
+                        }
+                        _ => {}
                     }
-                    _ => {}
                 }
             }
         }
@@ -24024,30 +24770,33 @@ impl DescribeDBProxyTargetGroupsError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    "DBProxyNotFoundFault" => {
-                        return RusotoError::Service(
-                            DescribeDBProxyTargetGroupsError::DBProxyNotFoundFault(
-                                parsed_error.message,
-                            ),
-                        )
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {
+                        "DBProxyNotFoundFault" => {
+                            return RusotoError::Service(
+                                DescribeDBProxyTargetGroupsError::DBProxyNotFoundFault(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "DBProxyTargetGroupNotFoundFault" => {
+                            return RusotoError::Service(
+                                DescribeDBProxyTargetGroupsError::DBProxyTargetGroupNotFoundFault(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "InvalidDBProxyStateFault" => {
+                            return RusotoError::Service(
+                                DescribeDBProxyTargetGroupsError::InvalidDBProxyStateFault(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        _ => {}
                     }
-                    "DBProxyTargetGroupNotFoundFault" => {
-                        return RusotoError::Service(
-                            DescribeDBProxyTargetGroupsError::DBProxyTargetGroupNotFoundFault(
-                                parsed_error.message,
-                            ),
-                        )
-                    }
-                    "InvalidDBProxyStateFault" => {
-                        return RusotoError::Service(
-                            DescribeDBProxyTargetGroupsError::InvalidDBProxyStateFault(
-                                parsed_error.message,
-                            ),
-                        )
-                    }
-                    _ => {}
                 }
             }
         }
@@ -24098,35 +24847,40 @@ impl DescribeDBProxyTargetsError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    "DBProxyNotFoundFault" => {
-                        return RusotoError::Service(
-                            DescribeDBProxyTargetsError::DBProxyNotFoundFault(parsed_error.message),
-                        )
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {
+                        "DBProxyNotFoundFault" => {
+                            return RusotoError::Service(
+                                DescribeDBProxyTargetsError::DBProxyNotFoundFault(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "DBProxyTargetGroupNotFoundFault" => {
+                            return RusotoError::Service(
+                                DescribeDBProxyTargetsError::DBProxyTargetGroupNotFoundFault(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "DBProxyTargetNotFoundFault" => {
+                            return RusotoError::Service(
+                                DescribeDBProxyTargetsError::DBProxyTargetNotFoundFault(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "InvalidDBProxyStateFault" => {
+                            return RusotoError::Service(
+                                DescribeDBProxyTargetsError::InvalidDBProxyStateFault(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        _ => {}
                     }
-                    "DBProxyTargetGroupNotFoundFault" => {
-                        return RusotoError::Service(
-                            DescribeDBProxyTargetsError::DBProxyTargetGroupNotFoundFault(
-                                parsed_error.message,
-                            ),
-                        )
-                    }
-                    "DBProxyTargetNotFoundFault" => {
-                        return RusotoError::Service(
-                            DescribeDBProxyTargetsError::DBProxyTargetNotFoundFault(
-                                parsed_error.message,
-                            ),
-                        )
-                    }
-                    "InvalidDBProxyStateFault" => {
-                        return RusotoError::Service(
-                            DescribeDBProxyTargetsError::InvalidDBProxyStateFault(
-                                parsed_error.message,
-                            ),
-                        )
-                    }
-                    _ => {}
                 }
             }
         }
@@ -24172,16 +24926,19 @@ impl DescribeDBSecurityGroupsError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    "DBSecurityGroupNotFound" => {
-                        return RusotoError::Service(
-                            DescribeDBSecurityGroupsError::DBSecurityGroupNotFoundFault(
-                                parsed_error.message,
-                            ),
-                        )
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {
+                        "DBSecurityGroupNotFound" => {
+                            return RusotoError::Service(
+                                DescribeDBSecurityGroupsError::DBSecurityGroupNotFoundFault(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        _ => {}
                     }
-                    _ => {}
                 }
             }
         }
@@ -24222,16 +24979,19 @@ impl DescribeDBSnapshotAttributesError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    "DBSnapshotNotFound" => {
-                        return RusotoError::Service(
-                            DescribeDBSnapshotAttributesError::DBSnapshotNotFoundFault(
-                                parsed_error.message,
-                            ),
-                        )
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {
+                        "DBSnapshotNotFound" => {
+                            return RusotoError::Service(
+                                DescribeDBSnapshotAttributesError::DBSnapshotNotFoundFault(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        _ => {}
                     }
-                    _ => {}
                 }
             }
         }
@@ -24270,14 +25030,19 @@ impl DescribeDBSnapshotsError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    "DBSnapshotNotFound" => {
-                        return RusotoError::Service(
-                            DescribeDBSnapshotsError::DBSnapshotNotFoundFault(parsed_error.message),
-                        )
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {
+                        "DBSnapshotNotFound" => {
+                            return RusotoError::Service(
+                                DescribeDBSnapshotsError::DBSnapshotNotFoundFault(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        _ => {}
                     }
-                    _ => {}
                 }
             }
         }
@@ -24314,16 +25079,19 @@ impl DescribeDBSubnetGroupsError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    "DBSubnetGroupNotFoundFault" => {
-                        return RusotoError::Service(
-                            DescribeDBSubnetGroupsError::DBSubnetGroupNotFoundFault(
-                                parsed_error.message,
-                            ),
-                        )
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {
+                        "DBSubnetGroupNotFoundFault" => {
+                            return RusotoError::Service(
+                                DescribeDBSubnetGroupsError::DBSubnetGroupNotFoundFault(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        _ => {}
                     }
-                    _ => {}
                 }
             }
         }
@@ -24361,11 +25129,7 @@ impl DescribeEngineDefaultClusterParametersError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    _ => {}
-                }
-            }
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {}
         }
         RusotoError::Unknown(res)
     }
@@ -24397,11 +25161,7 @@ impl DescribeEngineDefaultParametersError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    _ => {}
-                }
-            }
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {}
         }
         RusotoError::Unknown(res)
     }
@@ -24431,11 +25191,7 @@ impl DescribeEventCategoriesError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    _ => {}
-                }
-            }
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {}
         }
         RusotoError::Unknown(res)
     }
@@ -24470,16 +25226,19 @@ impl DescribeEventSubscriptionsError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    "SubscriptionNotFound" => {
-                        return RusotoError::Service(
-                            DescribeEventSubscriptionsError::SubscriptionNotFoundFault(
-                                parsed_error.message,
-                            ),
-                        )
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {
+                        "SubscriptionNotFound" => {
+                            return RusotoError::Service(
+                                DescribeEventSubscriptionsError::SubscriptionNotFoundFault(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        _ => {}
                     }
-                    _ => {}
                 }
             }
         }
@@ -24515,11 +25274,7 @@ impl DescribeEventsError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    _ => {}
-                }
-            }
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {}
         }
         RusotoError::Unknown(res)
     }
@@ -24552,14 +25307,19 @@ impl DescribeExportTasksError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    "ExportTaskNotFound" => {
-                        return RusotoError::Service(
-                            DescribeExportTasksError::ExportTaskNotFoundFault(parsed_error.message),
-                        )
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {
+                        "ExportTaskNotFound" => {
+                            return RusotoError::Service(
+                                DescribeExportTasksError::ExportTaskNotFoundFault(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        _ => {}
                     }
-                    _ => {}
                 }
             }
         }
@@ -24596,16 +25356,19 @@ impl DescribeGlobalClustersError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    "GlobalClusterNotFoundFault" => {
-                        return RusotoError::Service(
-                            DescribeGlobalClustersError::GlobalClusterNotFoundFault(
-                                parsed_error.message,
-                            ),
-                        )
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {
+                        "GlobalClusterNotFoundFault" => {
+                            return RusotoError::Service(
+                                DescribeGlobalClustersError::GlobalClusterNotFoundFault(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        _ => {}
                     }
-                    _ => {}
                 }
             }
         }
@@ -24644,16 +25407,19 @@ impl DescribeInstallationMediaError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    "InstallationMediaNotFound" => {
-                        return RusotoError::Service(
-                            DescribeInstallationMediaError::InstallationMediaNotFoundFault(
-                                parsed_error.message,
-                            ),
-                        )
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {
+                        "InstallationMediaNotFound" => {
+                            return RusotoError::Service(
+                                DescribeInstallationMediaError::InstallationMediaNotFoundFault(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        _ => {}
                     }
-                    _ => {}
                 }
             }
         }
@@ -24691,11 +25457,7 @@ impl DescribeOptionGroupOptionsError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    _ => {}
-                }
-            }
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {}
         }
         RusotoError::Unknown(res)
     }
@@ -24728,16 +25490,19 @@ impl DescribeOptionGroupsError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    "OptionGroupNotFoundFault" => {
-                        return RusotoError::Service(
-                            DescribeOptionGroupsError::OptionGroupNotFoundFault(
-                                parsed_error.message,
-                            ),
-                        )
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {
+                        "OptionGroupNotFoundFault" => {
+                            return RusotoError::Service(
+                                DescribeOptionGroupsError::OptionGroupNotFoundFault(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        _ => {}
                     }
-                    _ => {}
                 }
             }
         }
@@ -24775,11 +25540,7 @@ impl DescribeOrderableDBInstanceOptionsError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    _ => {}
-                }
-            }
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {}
         }
         RusotoError::Unknown(res)
     }
@@ -24814,16 +25575,19 @@ impl DescribePendingMaintenanceActionsError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    "ResourceNotFoundFault" => {
-                        return RusotoError::Service(
-                            DescribePendingMaintenanceActionsError::ResourceNotFoundFault(
-                                parsed_error.message,
-                            ),
-                        )
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {
+                        "ResourceNotFoundFault" => {
+                            return RusotoError::Service(
+                                DescribePendingMaintenanceActionsError::ResourceNotFoundFault(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        _ => {}
                     }
-                    _ => {}
                 }
             }
         }
@@ -24864,16 +25628,19 @@ impl DescribeReservedDBInstancesError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    "ReservedDBInstanceNotFound" => {
-                        return RusotoError::Service(
-                            DescribeReservedDBInstancesError::ReservedDBInstanceNotFoundFault(
-                                parsed_error.message,
-                            ),
-                        )
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {
+                        "ReservedDBInstanceNotFound" => {
+                            return RusotoError::Service(
+                                DescribeReservedDBInstancesError::ReservedDBInstanceNotFoundFault(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        _ => {}
                     }
-                    _ => {}
                 }
             }
         }
@@ -24914,10 +25681,13 @@ impl DescribeReservedDBInstancesOfferingsError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                                    "ReservedDBInstancesOfferingNotFound" => return RusotoError::Service(DescribeReservedDBInstancesOfferingsError::ReservedDBInstancesOfferingNotFoundFault(parsed_error.message)),_ => {}
-                                }
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {
+                        "ReservedDBInstancesOfferingNotFound" => return RusotoError::Service(DescribeReservedDBInstancesOfferingsError::ReservedDBInstancesOfferingNotFoundFault(parsed_error.message)),_ => {}
+                    }
+                }
             }
         }
         RusotoError::Unknown(res)
@@ -24952,11 +25722,7 @@ impl DescribeSourceRegionsError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    _ => {}
-                }
-            }
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {}
         }
         RusotoError::Unknown(res)
     }
@@ -24993,23 +25759,24 @@ impl DescribeValidDBInstanceModificationsError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    "DBInstanceNotFound" => {
-                        return RusotoError::Service(
-                            DescribeValidDBInstanceModificationsError::DBInstanceNotFoundFault(
-                                parsed_error.message,
-                            ),
-                        )
-                    }
-                    "InvalidDBInstanceState" => {
-                        return RusotoError::Service(
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {
+                        "DBInstanceNotFound" => {
+                            return RusotoError::Service(
+                                DescribeValidDBInstanceModificationsError::DBInstanceNotFoundFault(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "InvalidDBInstanceState" => return RusotoError::Service(
                             DescribeValidDBInstanceModificationsError::InvalidDBInstanceStateFault(
                                 parsed_error.message,
                             ),
-                        )
+                        ),
+                        _ => {}
                     }
-                    _ => {}
                 }
             }
         }
@@ -25053,23 +25820,26 @@ impl DownloadDBLogFilePortionError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    "DBInstanceNotFound" => {
-                        return RusotoError::Service(
-                            DownloadDBLogFilePortionError::DBInstanceNotFoundFault(
-                                parsed_error.message,
-                            ),
-                        )
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {
+                        "DBInstanceNotFound" => {
+                            return RusotoError::Service(
+                                DownloadDBLogFilePortionError::DBInstanceNotFoundFault(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "DBLogFileNotFoundFault" => {
+                            return RusotoError::Service(
+                                DownloadDBLogFilePortionError::DBLogFileNotFoundFault(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        _ => {}
                     }
-                    "DBLogFileNotFoundFault" => {
-                        return RusotoError::Service(
-                            DownloadDBLogFilePortionError::DBLogFileNotFoundFault(
-                                parsed_error.message,
-                            ),
-                        )
-                    }
-                    _ => {}
                 }
             }
         }
@@ -25115,28 +25885,33 @@ impl FailoverDBClusterError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    "DBClusterNotFoundFault" => {
-                        return RusotoError::Service(
-                            FailoverDBClusterError::DBClusterNotFoundFault(parsed_error.message),
-                        )
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {
+                        "DBClusterNotFoundFault" => {
+                            return RusotoError::Service(
+                                FailoverDBClusterError::DBClusterNotFoundFault(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "InvalidDBClusterStateFault" => {
+                            return RusotoError::Service(
+                                FailoverDBClusterError::InvalidDBClusterStateFault(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "InvalidDBInstanceState" => {
+                            return RusotoError::Service(
+                                FailoverDBClusterError::InvalidDBInstanceStateFault(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        _ => {}
                     }
-                    "InvalidDBClusterStateFault" => {
-                        return RusotoError::Service(
-                            FailoverDBClusterError::InvalidDBClusterStateFault(
-                                parsed_error.message,
-                            ),
-                        )
-                    }
-                    "InvalidDBInstanceState" => {
-                        return RusotoError::Service(
-                            FailoverDBClusterError::InvalidDBInstanceStateFault(
-                                parsed_error.message,
-                            ),
-                        )
-                    }
-                    _ => {}
                 }
             }
         }
@@ -25179,23 +25954,26 @@ impl ImportInstallationMediaError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    "CustomAvailabilityZoneNotFound" => {
-                        return RusotoError::Service(
-                            ImportInstallationMediaError::CustomAvailabilityZoneNotFoundFault(
-                                parsed_error.message,
-                            ),
-                        )
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {
+                        "CustomAvailabilityZoneNotFound" => {
+                            return RusotoError::Service(
+                                ImportInstallationMediaError::CustomAvailabilityZoneNotFoundFault(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "InstallationMediaAlreadyExists" => {
+                            return RusotoError::Service(
+                                ImportInstallationMediaError::InstallationMediaAlreadyExistsFault(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        _ => {}
                     }
-                    "InstallationMediaAlreadyExists" => {
-                        return RusotoError::Service(
-                            ImportInstallationMediaError::InstallationMediaAlreadyExistsFault(
-                                parsed_error.message,
-                            ),
-                        )
-                    }
-                    _ => {}
                 }
             }
         }
@@ -25245,36 +26023,47 @@ impl ListTagsForResourceError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    "DBClusterNotFoundFault" => {
-                        return RusotoError::Service(
-                            ListTagsForResourceError::DBClusterNotFoundFault(parsed_error.message),
-                        )
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {
+                        "DBClusterNotFoundFault" => {
+                            return RusotoError::Service(
+                                ListTagsForResourceError::DBClusterNotFoundFault(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "DBInstanceNotFound" => {
+                            return RusotoError::Service(
+                                ListTagsForResourceError::DBInstanceNotFoundFault(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "DBProxyNotFoundFault" => {
+                            return RusotoError::Service(
+                                ListTagsForResourceError::DBProxyNotFoundFault(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "DBProxyTargetGroupNotFoundFault" => {
+                            return RusotoError::Service(
+                                ListTagsForResourceError::DBProxyTargetGroupNotFoundFault(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "DBSnapshotNotFound" => {
+                            return RusotoError::Service(
+                                ListTagsForResourceError::DBSnapshotNotFoundFault(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        _ => {}
                     }
-                    "DBInstanceNotFound" => {
-                        return RusotoError::Service(
-                            ListTagsForResourceError::DBInstanceNotFoundFault(parsed_error.message),
-                        )
-                    }
-                    "DBProxyNotFoundFault" => {
-                        return RusotoError::Service(
-                            ListTagsForResourceError::DBProxyNotFoundFault(parsed_error.message),
-                        )
-                    }
-                    "DBProxyTargetGroupNotFoundFault" => {
-                        return RusotoError::Service(
-                            ListTagsForResourceError::DBProxyTargetGroupNotFoundFault(
-                                parsed_error.message,
-                            ),
-                        )
-                    }
-                    "DBSnapshotNotFound" => {
-                        return RusotoError::Service(
-                            ListTagsForResourceError::DBSnapshotNotFoundFault(parsed_error.message),
-                        )
-                    }
-                    _ => {}
                 }
             }
         }
@@ -25317,14 +26106,19 @@ impl ModifyCertificatesError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    "CertificateNotFound" => {
-                        return RusotoError::Service(
-                            ModifyCertificatesError::CertificateNotFoundFault(parsed_error.message),
-                        )
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {
+                        "CertificateNotFound" => {
+                            return RusotoError::Service(
+                                ModifyCertificatesError::CertificateNotFoundFault(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        _ => {}
                     }
-                    _ => {}
                 }
             }
         }
@@ -25367,30 +26161,33 @@ impl ModifyCurrentDBClusterCapacityError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    "DBClusterNotFoundFault" => {
-                        return RusotoError::Service(
-                            ModifyCurrentDBClusterCapacityError::DBClusterNotFoundFault(
-                                parsed_error.message,
-                            ),
-                        )
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {
+                        "DBClusterNotFoundFault" => {
+                            return RusotoError::Service(
+                                ModifyCurrentDBClusterCapacityError::DBClusterNotFoundFault(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "InvalidDBClusterCapacityFault" => {
+                            return RusotoError::Service(
+                                ModifyCurrentDBClusterCapacityError::InvalidDBClusterCapacityFault(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "InvalidDBClusterStateFault" => {
+                            return RusotoError::Service(
+                                ModifyCurrentDBClusterCapacityError::InvalidDBClusterStateFault(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        _ => {}
                     }
-                    "InvalidDBClusterCapacityFault" => {
-                        return RusotoError::Service(
-                            ModifyCurrentDBClusterCapacityError::InvalidDBClusterCapacityFault(
-                                parsed_error.message,
-                            ),
-                        )
-                    }
-                    "InvalidDBClusterStateFault" => {
-                        return RusotoError::Service(
-                            ModifyCurrentDBClusterCapacityError::InvalidDBClusterStateFault(
-                                parsed_error.message,
-                            ),
-                        )
-                    }
-                    _ => {}
                 }
             }
         }
@@ -25457,75 +26254,90 @@ impl ModifyDBClusterError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    "DBClusterAlreadyExistsFault" => {
-                        return RusotoError::Service(
-                            ModifyDBClusterError::DBClusterAlreadyExistsFault(parsed_error.message),
-                        )
-                    }
-                    "DBClusterNotFoundFault" => {
-                        return RusotoError::Service(ModifyDBClusterError::DBClusterNotFoundFault(
-                            parsed_error.message,
-                        ))
-                    }
-                    "DBClusterParameterGroupNotFound" => {
-                        return RusotoError::Service(
-                            ModifyDBClusterError::DBClusterParameterGroupNotFoundFault(
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {
+                        "DBClusterAlreadyExistsFault" => {
+                            return RusotoError::Service(
+                                ModifyDBClusterError::DBClusterAlreadyExistsFault(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "DBClusterNotFoundFault" => {
+                            return RusotoError::Service(
+                                ModifyDBClusterError::DBClusterNotFoundFault(parsed_error.message),
+                            )
+                        }
+                        "DBClusterParameterGroupNotFound" => {
+                            return RusotoError::Service(
+                                ModifyDBClusterError::DBClusterParameterGroupNotFoundFault(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "DBSubnetGroupNotFoundFault" => {
+                            return RusotoError::Service(
+                                ModifyDBClusterError::DBSubnetGroupNotFoundFault(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "DomainNotFoundFault" => {
+                            return RusotoError::Service(ModifyDBClusterError::DomainNotFoundFault(
                                 parsed_error.message,
-                            ),
-                        )
-                    }
-                    "DBSubnetGroupNotFoundFault" => {
-                        return RusotoError::Service(
-                            ModifyDBClusterError::DBSubnetGroupNotFoundFault(parsed_error.message),
-                        )
-                    }
-                    "DomainNotFoundFault" => {
-                        return RusotoError::Service(ModifyDBClusterError::DomainNotFoundFault(
-                            parsed_error.message,
-                        ))
-                    }
-                    "InvalidDBClusterStateFault" => {
-                        return RusotoError::Service(
-                            ModifyDBClusterError::InvalidDBClusterStateFault(parsed_error.message),
-                        )
-                    }
-                    "InvalidDBInstanceState" => {
-                        return RusotoError::Service(
-                            ModifyDBClusterError::InvalidDBInstanceStateFault(parsed_error.message),
-                        )
-                    }
-                    "InvalidDBSecurityGroupState" => {
-                        return RusotoError::Service(
-                            ModifyDBClusterError::InvalidDBSecurityGroupStateFault(
+                            ))
+                        }
+                        "InvalidDBClusterStateFault" => {
+                            return RusotoError::Service(
+                                ModifyDBClusterError::InvalidDBClusterStateFault(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "InvalidDBInstanceState" => {
+                            return RusotoError::Service(
+                                ModifyDBClusterError::InvalidDBInstanceStateFault(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "InvalidDBSecurityGroupState" => {
+                            return RusotoError::Service(
+                                ModifyDBClusterError::InvalidDBSecurityGroupStateFault(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "InvalidDBSubnetGroupStateFault" => {
+                            return RusotoError::Service(
+                                ModifyDBClusterError::InvalidDBSubnetGroupStateFault(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "InvalidSubnet" => {
+                            return RusotoError::Service(ModifyDBClusterError::InvalidSubnet(
                                 parsed_error.message,
-                            ),
-                        )
+                            ))
+                        }
+                        "InvalidVPCNetworkStateFault" => {
+                            return RusotoError::Service(
+                                ModifyDBClusterError::InvalidVPCNetworkStateFault(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "StorageQuotaExceeded" => {
+                            return RusotoError::Service(
+                                ModifyDBClusterError::StorageQuotaExceededFault(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        _ => {}
                     }
-                    "InvalidDBSubnetGroupStateFault" => {
-                        return RusotoError::Service(
-                            ModifyDBClusterError::InvalidDBSubnetGroupStateFault(
-                                parsed_error.message,
-                            ),
-                        )
-                    }
-                    "InvalidSubnet" => {
-                        return RusotoError::Service(ModifyDBClusterError::InvalidSubnet(
-                            parsed_error.message,
-                        ))
-                    }
-                    "InvalidVPCNetworkStateFault" => {
-                        return RusotoError::Service(
-                            ModifyDBClusterError::InvalidVPCNetworkStateFault(parsed_error.message),
-                        )
-                    }
-                    "StorageQuotaExceeded" => {
-                        return RusotoError::Service(
-                            ModifyDBClusterError::StorageQuotaExceededFault(parsed_error.message),
-                        )
-                    }
-                    _ => {}
                 }
             }
         }
@@ -25587,44 +26399,47 @@ impl ModifyDBClusterEndpointError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    "DBClusterEndpointNotFoundFault" => {
-                        return RusotoError::Service(
-                            ModifyDBClusterEndpointError::DBClusterEndpointNotFoundFault(
-                                parsed_error.message,
-                            ),
-                        )
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {
+                        "DBClusterEndpointNotFoundFault" => {
+                            return RusotoError::Service(
+                                ModifyDBClusterEndpointError::DBClusterEndpointNotFoundFault(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "DBInstanceNotFound" => {
+                            return RusotoError::Service(
+                                ModifyDBClusterEndpointError::DBInstanceNotFoundFault(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "InvalidDBClusterEndpointStateFault" => {
+                            return RusotoError::Service(
+                                ModifyDBClusterEndpointError::InvalidDBClusterEndpointStateFault(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "InvalidDBClusterStateFault" => {
+                            return RusotoError::Service(
+                                ModifyDBClusterEndpointError::InvalidDBClusterStateFault(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "InvalidDBInstanceState" => {
+                            return RusotoError::Service(
+                                ModifyDBClusterEndpointError::InvalidDBInstanceStateFault(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        _ => {}
                     }
-                    "DBInstanceNotFound" => {
-                        return RusotoError::Service(
-                            ModifyDBClusterEndpointError::DBInstanceNotFoundFault(
-                                parsed_error.message,
-                            ),
-                        )
-                    }
-                    "InvalidDBClusterEndpointStateFault" => {
-                        return RusotoError::Service(
-                            ModifyDBClusterEndpointError::InvalidDBClusterEndpointStateFault(
-                                parsed_error.message,
-                            ),
-                        )
-                    }
-                    "InvalidDBClusterStateFault" => {
-                        return RusotoError::Service(
-                            ModifyDBClusterEndpointError::InvalidDBClusterStateFault(
-                                parsed_error.message,
-                            ),
-                        )
-                    }
-                    "InvalidDBInstanceState" => {
-                        return RusotoError::Service(
-                            ModifyDBClusterEndpointError::InvalidDBInstanceStateFault(
-                                parsed_error.message,
-                            ),
-                        )
-                    }
-                    _ => {}
                 }
             }
         }
@@ -25679,23 +26494,24 @@ impl ModifyDBClusterParameterGroupError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    "DBParameterGroupNotFound" => {
-                        return RusotoError::Service(
-                            ModifyDBClusterParameterGroupError::DBParameterGroupNotFoundFault(
-                                parsed_error.message,
-                            ),
-                        )
-                    }
-                    "InvalidDBParameterGroupState" => {
-                        return RusotoError::Service(
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {
+                        "DBParameterGroupNotFound" => {
+                            return RusotoError::Service(
+                                ModifyDBClusterParameterGroupError::DBParameterGroupNotFoundFault(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "InvalidDBParameterGroupState" => return RusotoError::Service(
                             ModifyDBClusterParameterGroupError::InvalidDBParameterGroupStateFault(
                                 parsed_error.message,
                             ),
-                        )
+                        ),
+                        _ => {}
                     }
-                    _ => {}
                 }
             }
         }
@@ -25743,28 +26559,12 @@ impl ModifyDBClusterSnapshotAttributeError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    "DBClusterSnapshotNotFoundFault" => {
-                        return RusotoError::Service(
-                            ModifyDBClusterSnapshotAttributeError::DBClusterSnapshotNotFoundFault(
-                                parsed_error.message,
-                            ),
-                        )
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {
+                        "DBClusterSnapshotNotFoundFault" => return RusotoError::Service(ModifyDBClusterSnapshotAttributeError::DBClusterSnapshotNotFoundFault(parsed_error.message)),"InvalidDBClusterSnapshotStateFault" => return RusotoError::Service(ModifyDBClusterSnapshotAttributeError::InvalidDBClusterSnapshotStateFault(parsed_error.message)),"SharedSnapshotQuotaExceeded" => return RusotoError::Service(ModifyDBClusterSnapshotAttributeError::SharedSnapshotQuotaExceededFault(parsed_error.message)),_ => {}
                     }
-                    "InvalidDBClusterSnapshotStateFault" => return RusotoError::Service(
-                        ModifyDBClusterSnapshotAttributeError::InvalidDBClusterSnapshotStateFault(
-                            parsed_error.message,
-                        ),
-                    ),
-                    "SharedSnapshotQuotaExceeded" => {
-                        return RusotoError::Service(
-                            ModifyDBClusterSnapshotAttributeError::SharedSnapshotQuotaExceededFault(
-                                parsed_error.message,
-                            ),
-                        )
-                    }
-                    _ => {}
                 }
             }
         }
@@ -25845,124 +26645,143 @@ impl ModifyDBInstanceError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    "AuthorizationNotFound" => {
-                        return RusotoError::Service(
-                            ModifyDBInstanceError::AuthorizationNotFoundFault(parsed_error.message),
-                        )
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {
+                        "AuthorizationNotFound" => {
+                            return RusotoError::Service(
+                                ModifyDBInstanceError::AuthorizationNotFoundFault(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "BackupPolicyNotFoundFault" => {
+                            return RusotoError::Service(
+                                ModifyDBInstanceError::BackupPolicyNotFoundFault(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "CertificateNotFound" => {
+                            return RusotoError::Service(
+                                ModifyDBInstanceError::CertificateNotFoundFault(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "DBInstanceAlreadyExists" => {
+                            return RusotoError::Service(
+                                ModifyDBInstanceError::DBInstanceAlreadyExistsFault(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "DBInstanceNotFound" => {
+                            return RusotoError::Service(
+                                ModifyDBInstanceError::DBInstanceNotFoundFault(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "DBParameterGroupNotFound" => {
+                            return RusotoError::Service(
+                                ModifyDBInstanceError::DBParameterGroupNotFoundFault(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "DBSecurityGroupNotFound" => {
+                            return RusotoError::Service(
+                                ModifyDBInstanceError::DBSecurityGroupNotFoundFault(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "DBUpgradeDependencyFailure" => {
+                            return RusotoError::Service(
+                                ModifyDBInstanceError::DBUpgradeDependencyFailureFault(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "DomainNotFoundFault" => {
+                            return RusotoError::Service(
+                                ModifyDBInstanceError::DomainNotFoundFault(parsed_error.message),
+                            )
+                        }
+                        "InsufficientDBInstanceCapacity" => {
+                            return RusotoError::Service(
+                                ModifyDBInstanceError::InsufficientDBInstanceCapacityFault(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "InvalidDBClusterStateFault" => {
+                            return RusotoError::Service(
+                                ModifyDBInstanceError::InvalidDBClusterStateFault(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "InvalidDBInstanceState" => {
+                            return RusotoError::Service(
+                                ModifyDBInstanceError::InvalidDBInstanceStateFault(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "InvalidDBSecurityGroupState" => {
+                            return RusotoError::Service(
+                                ModifyDBInstanceError::InvalidDBSecurityGroupStateFault(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "InvalidVPCNetworkStateFault" => {
+                            return RusotoError::Service(
+                                ModifyDBInstanceError::InvalidVPCNetworkStateFault(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "KMSKeyNotAccessibleFault" => {
+                            return RusotoError::Service(
+                                ModifyDBInstanceError::KMSKeyNotAccessibleFault(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "OptionGroupNotFoundFault" => {
+                            return RusotoError::Service(
+                                ModifyDBInstanceError::OptionGroupNotFoundFault(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "ProvisionedIopsNotAvailableInAZFault" => {
+                            return RusotoError::Service(
+                                ModifyDBInstanceError::ProvisionedIopsNotAvailableInAZFault(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "StorageQuotaExceeded" => {
+                            return RusotoError::Service(
+                                ModifyDBInstanceError::StorageQuotaExceededFault(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "StorageTypeNotSupported" => {
+                            return RusotoError::Service(
+                                ModifyDBInstanceError::StorageTypeNotSupportedFault(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        _ => {}
                     }
-                    "BackupPolicyNotFoundFault" => {
-                        return RusotoError::Service(
-                            ModifyDBInstanceError::BackupPolicyNotFoundFault(parsed_error.message),
-                        )
-                    }
-                    "CertificateNotFound" => {
-                        return RusotoError::Service(
-                            ModifyDBInstanceError::CertificateNotFoundFault(parsed_error.message),
-                        )
-                    }
-                    "DBInstanceAlreadyExists" => {
-                        return RusotoError::Service(
-                            ModifyDBInstanceError::DBInstanceAlreadyExistsFault(
-                                parsed_error.message,
-                            ),
-                        )
-                    }
-                    "DBInstanceNotFound" => {
-                        return RusotoError::Service(
-                            ModifyDBInstanceError::DBInstanceNotFoundFault(parsed_error.message),
-                        )
-                    }
-                    "DBParameterGroupNotFound" => {
-                        return RusotoError::Service(
-                            ModifyDBInstanceError::DBParameterGroupNotFoundFault(
-                                parsed_error.message,
-                            ),
-                        )
-                    }
-                    "DBSecurityGroupNotFound" => {
-                        return RusotoError::Service(
-                            ModifyDBInstanceError::DBSecurityGroupNotFoundFault(
-                                parsed_error.message,
-                            ),
-                        )
-                    }
-                    "DBUpgradeDependencyFailure" => {
-                        return RusotoError::Service(
-                            ModifyDBInstanceError::DBUpgradeDependencyFailureFault(
-                                parsed_error.message,
-                            ),
-                        )
-                    }
-                    "DomainNotFoundFault" => {
-                        return RusotoError::Service(ModifyDBInstanceError::DomainNotFoundFault(
-                            parsed_error.message,
-                        ))
-                    }
-                    "InsufficientDBInstanceCapacity" => {
-                        return RusotoError::Service(
-                            ModifyDBInstanceError::InsufficientDBInstanceCapacityFault(
-                                parsed_error.message,
-                            ),
-                        )
-                    }
-                    "InvalidDBClusterStateFault" => {
-                        return RusotoError::Service(
-                            ModifyDBInstanceError::InvalidDBClusterStateFault(parsed_error.message),
-                        )
-                    }
-                    "InvalidDBInstanceState" => {
-                        return RusotoError::Service(
-                            ModifyDBInstanceError::InvalidDBInstanceStateFault(
-                                parsed_error.message,
-                            ),
-                        )
-                    }
-                    "InvalidDBSecurityGroupState" => {
-                        return RusotoError::Service(
-                            ModifyDBInstanceError::InvalidDBSecurityGroupStateFault(
-                                parsed_error.message,
-                            ),
-                        )
-                    }
-                    "InvalidVPCNetworkStateFault" => {
-                        return RusotoError::Service(
-                            ModifyDBInstanceError::InvalidVPCNetworkStateFault(
-                                parsed_error.message,
-                            ),
-                        )
-                    }
-                    "KMSKeyNotAccessibleFault" => {
-                        return RusotoError::Service(
-                            ModifyDBInstanceError::KMSKeyNotAccessibleFault(parsed_error.message),
-                        )
-                    }
-                    "OptionGroupNotFoundFault" => {
-                        return RusotoError::Service(
-                            ModifyDBInstanceError::OptionGroupNotFoundFault(parsed_error.message),
-                        )
-                    }
-                    "ProvisionedIopsNotAvailableInAZFault" => {
-                        return RusotoError::Service(
-                            ModifyDBInstanceError::ProvisionedIopsNotAvailableInAZFault(
-                                parsed_error.message,
-                            ),
-                        )
-                    }
-                    "StorageQuotaExceeded" => {
-                        return RusotoError::Service(
-                            ModifyDBInstanceError::StorageQuotaExceededFault(parsed_error.message),
-                        )
-                    }
-                    "StorageTypeNotSupported" => {
-                        return RusotoError::Service(
-                            ModifyDBInstanceError::StorageTypeNotSupportedFault(
-                                parsed_error.message,
-                            ),
-                        )
-                    }
-                    _ => {}
                 }
             }
         }
@@ -26035,23 +26854,26 @@ impl ModifyDBParameterGroupError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    "DBParameterGroupNotFound" => {
-                        return RusotoError::Service(
-                            ModifyDBParameterGroupError::DBParameterGroupNotFoundFault(
-                                parsed_error.message,
-                            ),
-                        )
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {
+                        "DBParameterGroupNotFound" => {
+                            return RusotoError::Service(
+                                ModifyDBParameterGroupError::DBParameterGroupNotFoundFault(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "InvalidDBParameterGroupState" => {
+                            return RusotoError::Service(
+                                ModifyDBParameterGroupError::InvalidDBParameterGroupStateFault(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        _ => {}
                     }
-                    "InvalidDBParameterGroupState" => {
-                        return RusotoError::Service(
-                            ModifyDBParameterGroupError::InvalidDBParameterGroupStateFault(
-                                parsed_error.message,
-                            ),
-                        )
-                    }
-                    _ => {}
                 }
             }
         }
@@ -26097,24 +26919,27 @@ impl ModifyDBProxyError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    "DBProxyTargetExistsFault" => {
-                        return RusotoError::Service(ModifyDBProxyError::DBProxyAlreadyExistsFault(
-                            parsed_error.message,
-                        ))
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {
+                        "DBProxyTargetExistsFault" => {
+                            return RusotoError::Service(
+                                ModifyDBProxyError::DBProxyAlreadyExistsFault(parsed_error.message),
+                            )
+                        }
+                        "DBProxyNotFoundFault" => {
+                            return RusotoError::Service(ModifyDBProxyError::DBProxyNotFoundFault(
+                                parsed_error.message,
+                            ))
+                        }
+                        "InvalidDBProxyStateFault" => {
+                            return RusotoError::Service(
+                                ModifyDBProxyError::InvalidDBProxyStateFault(parsed_error.message),
+                            )
+                        }
+                        _ => {}
                     }
-                    "DBProxyNotFoundFault" => {
-                        return RusotoError::Service(ModifyDBProxyError::DBProxyNotFoundFault(
-                            parsed_error.message,
-                        ))
-                    }
-                    "InvalidDBProxyStateFault" => {
-                        return RusotoError::Service(ModifyDBProxyError::InvalidDBProxyStateFault(
-                            parsed_error.message,
-                        ))
-                    }
-                    _ => {}
                 }
             }
         }
@@ -26157,30 +26982,33 @@ impl ModifyDBProxyTargetGroupError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    "DBProxyNotFoundFault" => {
-                        return RusotoError::Service(
-                            ModifyDBProxyTargetGroupError::DBProxyNotFoundFault(
-                                parsed_error.message,
-                            ),
-                        )
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {
+                        "DBProxyNotFoundFault" => {
+                            return RusotoError::Service(
+                                ModifyDBProxyTargetGroupError::DBProxyNotFoundFault(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "DBProxyTargetGroupNotFoundFault" => {
+                            return RusotoError::Service(
+                                ModifyDBProxyTargetGroupError::DBProxyTargetGroupNotFoundFault(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "InvalidDBProxyStateFault" => {
+                            return RusotoError::Service(
+                                ModifyDBProxyTargetGroupError::InvalidDBProxyStateFault(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        _ => {}
                     }
-                    "DBProxyTargetGroupNotFoundFault" => {
-                        return RusotoError::Service(
-                            ModifyDBProxyTargetGroupError::DBProxyTargetGroupNotFoundFault(
-                                parsed_error.message,
-                            ),
-                        )
-                    }
-                    "InvalidDBProxyStateFault" => {
-                        return RusotoError::Service(
-                            ModifyDBProxyTargetGroupError::InvalidDBProxyStateFault(
-                                parsed_error.message,
-                            ),
-                        )
-                    }
-                    _ => {}
                 }
             }
         }
@@ -26225,14 +27053,19 @@ impl ModifyDBSnapshotError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    "DBSnapshotNotFound" => {
-                        return RusotoError::Service(
-                            ModifyDBSnapshotError::DBSnapshotNotFoundFault(parsed_error.message),
-                        )
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {
+                        "DBSnapshotNotFound" => {
+                            return RusotoError::Service(
+                                ModifyDBSnapshotError::DBSnapshotNotFoundFault(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        _ => {}
                     }
-                    _ => {}
                 }
             }
         }
@@ -26273,30 +27106,33 @@ impl ModifyDBSnapshotAttributeError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    "DBSnapshotNotFound" => {
-                        return RusotoError::Service(
-                            ModifyDBSnapshotAttributeError::DBSnapshotNotFoundFault(
-                                parsed_error.message,
-                            ),
-                        )
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {
+                        "DBSnapshotNotFound" => {
+                            return RusotoError::Service(
+                                ModifyDBSnapshotAttributeError::DBSnapshotNotFoundFault(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "InvalidDBSnapshotState" => {
+                            return RusotoError::Service(
+                                ModifyDBSnapshotAttributeError::InvalidDBSnapshotStateFault(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "SharedSnapshotQuotaExceeded" => {
+                            return RusotoError::Service(
+                                ModifyDBSnapshotAttributeError::SharedSnapshotQuotaExceededFault(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        _ => {}
                     }
-                    "InvalidDBSnapshotState" => {
-                        return RusotoError::Service(
-                            ModifyDBSnapshotAttributeError::InvalidDBSnapshotStateFault(
-                                parsed_error.message,
-                            ),
-                        )
-                    }
-                    "SharedSnapshotQuotaExceeded" => {
-                        return RusotoError::Service(
-                            ModifyDBSnapshotAttributeError::SharedSnapshotQuotaExceededFault(
-                                parsed_error.message,
-                            ),
-                        )
-                    }
-                    _ => {}
                 }
             }
         }
@@ -26349,40 +27185,43 @@ impl ModifyDBSubnetGroupError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    "DBSubnetGroupDoesNotCoverEnoughAZs" => {
-                        return RusotoError::Service(
-                            ModifyDBSubnetGroupError::DBSubnetGroupDoesNotCoverEnoughAZs(
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {
+                        "DBSubnetGroupDoesNotCoverEnoughAZs" => {
+                            return RusotoError::Service(
+                                ModifyDBSubnetGroupError::DBSubnetGroupDoesNotCoverEnoughAZs(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "DBSubnetGroupNotFoundFault" => {
+                            return RusotoError::Service(
+                                ModifyDBSubnetGroupError::DBSubnetGroupNotFoundFault(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "DBSubnetQuotaExceededFault" => {
+                            return RusotoError::Service(
+                                ModifyDBSubnetGroupError::DBSubnetQuotaExceededFault(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "InvalidSubnet" => {
+                            return RusotoError::Service(ModifyDBSubnetGroupError::InvalidSubnet(
                                 parsed_error.message,
-                            ),
-                        )
+                            ))
+                        }
+                        "SubnetAlreadyInUse" => {
+                            return RusotoError::Service(
+                                ModifyDBSubnetGroupError::SubnetAlreadyInUse(parsed_error.message),
+                            )
+                        }
+                        _ => {}
                     }
-                    "DBSubnetGroupNotFoundFault" => {
-                        return RusotoError::Service(
-                            ModifyDBSubnetGroupError::DBSubnetGroupNotFoundFault(
-                                parsed_error.message,
-                            ),
-                        )
-                    }
-                    "DBSubnetQuotaExceededFault" => {
-                        return RusotoError::Service(
-                            ModifyDBSubnetGroupError::DBSubnetQuotaExceededFault(
-                                parsed_error.message,
-                            ),
-                        )
-                    }
-                    "InvalidSubnet" => {
-                        return RusotoError::Service(ModifyDBSubnetGroupError::InvalidSubnet(
-                            parsed_error.message,
-                        ))
-                    }
-                    "SubnetAlreadyInUse" => {
-                        return RusotoError::Service(ModifyDBSubnetGroupError::SubnetAlreadyInUse(
-                            parsed_error.message,
-                        ))
-                    }
-                    _ => {}
                 }
             }
         }
@@ -26439,51 +27278,54 @@ impl ModifyEventSubscriptionError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    "EventSubscriptionQuotaExceeded" => {
-                        return RusotoError::Service(
-                            ModifyEventSubscriptionError::EventSubscriptionQuotaExceededFault(
-                                parsed_error.message,
-                            ),
-                        )
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {
+                        "EventSubscriptionQuotaExceeded" => {
+                            return RusotoError::Service(
+                                ModifyEventSubscriptionError::EventSubscriptionQuotaExceededFault(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "SNSInvalidTopic" => {
+                            return RusotoError::Service(
+                                ModifyEventSubscriptionError::SNSInvalidTopicFault(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "SNSNoAuthorization" => {
+                            return RusotoError::Service(
+                                ModifyEventSubscriptionError::SNSNoAuthorizationFault(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "SNSTopicArnNotFound" => {
+                            return RusotoError::Service(
+                                ModifyEventSubscriptionError::SNSTopicArnNotFoundFault(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "SubscriptionCategoryNotFound" => {
+                            return RusotoError::Service(
+                                ModifyEventSubscriptionError::SubscriptionCategoryNotFoundFault(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "SubscriptionNotFound" => {
+                            return RusotoError::Service(
+                                ModifyEventSubscriptionError::SubscriptionNotFoundFault(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        _ => {}
                     }
-                    "SNSInvalidTopic" => {
-                        return RusotoError::Service(
-                            ModifyEventSubscriptionError::SNSInvalidTopicFault(
-                                parsed_error.message,
-                            ),
-                        )
-                    }
-                    "SNSNoAuthorization" => {
-                        return RusotoError::Service(
-                            ModifyEventSubscriptionError::SNSNoAuthorizationFault(
-                                parsed_error.message,
-                            ),
-                        )
-                    }
-                    "SNSTopicArnNotFound" => {
-                        return RusotoError::Service(
-                            ModifyEventSubscriptionError::SNSTopicArnNotFoundFault(
-                                parsed_error.message,
-                            ),
-                        )
-                    }
-                    "SubscriptionCategoryNotFound" => {
-                        return RusotoError::Service(
-                            ModifyEventSubscriptionError::SubscriptionCategoryNotFoundFault(
-                                parsed_error.message,
-                            ),
-                        )
-                    }
-                    "SubscriptionNotFound" => {
-                        return RusotoError::Service(
-                            ModifyEventSubscriptionError::SubscriptionNotFoundFault(
-                                parsed_error.message,
-                            ),
-                        )
-                    }
-                    _ => {}
                 }
             }
         }
@@ -26537,23 +27379,26 @@ impl ModifyGlobalClusterError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    "GlobalClusterNotFoundFault" => {
-                        return RusotoError::Service(
-                            ModifyGlobalClusterError::GlobalClusterNotFoundFault(
-                                parsed_error.message,
-                            ),
-                        )
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {
+                        "GlobalClusterNotFoundFault" => {
+                            return RusotoError::Service(
+                                ModifyGlobalClusterError::GlobalClusterNotFoundFault(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "InvalidGlobalClusterStateFault" => {
+                            return RusotoError::Service(
+                                ModifyGlobalClusterError::InvalidGlobalClusterStateFault(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        _ => {}
                     }
-                    "InvalidGlobalClusterStateFault" => {
-                        return RusotoError::Service(
-                            ModifyGlobalClusterError::InvalidGlobalClusterStateFault(
-                                parsed_error.message,
-                            ),
-                        )
-                    }
-                    _ => {}
                 }
             }
         }
@@ -26597,21 +27442,26 @@ impl ModifyOptionGroupError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    "InvalidOptionGroupStateFault" => {
-                        return RusotoError::Service(
-                            ModifyOptionGroupError::InvalidOptionGroupStateFault(
-                                parsed_error.message,
-                            ),
-                        )
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {
+                        "InvalidOptionGroupStateFault" => {
+                            return RusotoError::Service(
+                                ModifyOptionGroupError::InvalidOptionGroupStateFault(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "OptionGroupNotFoundFault" => {
+                            return RusotoError::Service(
+                                ModifyOptionGroupError::OptionGroupNotFoundFault(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        _ => {}
                     }
-                    "OptionGroupNotFoundFault" => {
-                        return RusotoError::Service(
-                            ModifyOptionGroupError::OptionGroupNotFoundFault(parsed_error.message),
-                        )
-                    }
-                    _ => {}
                 }
             }
         }
@@ -26653,21 +27503,26 @@ impl PromoteReadReplicaError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    "DBInstanceNotFound" => {
-                        return RusotoError::Service(
-                            PromoteReadReplicaError::DBInstanceNotFoundFault(parsed_error.message),
-                        )
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {
+                        "DBInstanceNotFound" => {
+                            return RusotoError::Service(
+                                PromoteReadReplicaError::DBInstanceNotFoundFault(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "InvalidDBInstanceState" => {
+                            return RusotoError::Service(
+                                PromoteReadReplicaError::InvalidDBInstanceStateFault(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        _ => {}
                     }
-                    "InvalidDBInstanceState" => {
-                        return RusotoError::Service(
-                            PromoteReadReplicaError::InvalidDBInstanceStateFault(
-                                parsed_error.message,
-                            ),
-                        )
-                    }
-                    _ => {}
                 }
             }
         }
@@ -26711,23 +27566,26 @@ impl PromoteReadReplicaDBClusterError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    "DBClusterNotFoundFault" => {
-                        return RusotoError::Service(
-                            PromoteReadReplicaDBClusterError::DBClusterNotFoundFault(
-                                parsed_error.message,
-                            ),
-                        )
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {
+                        "DBClusterNotFoundFault" => {
+                            return RusotoError::Service(
+                                PromoteReadReplicaDBClusterError::DBClusterNotFoundFault(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "InvalidDBClusterStateFault" => {
+                            return RusotoError::Service(
+                                PromoteReadReplicaDBClusterError::InvalidDBClusterStateFault(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        _ => {}
                     }
-                    "InvalidDBClusterStateFault" => {
-                        return RusotoError::Service(
-                            PromoteReadReplicaDBClusterError::InvalidDBClusterStateFault(
-                                parsed_error.message,
-                            ),
-                        )
-                    }
-                    _ => {}
                 }
             }
         }
@@ -26775,10 +27633,13 @@ impl PurchaseReservedDBInstancesOfferingError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                                    "ReservedDBInstanceAlreadyExists" => return RusotoError::Service(PurchaseReservedDBInstancesOfferingError::ReservedDBInstanceAlreadyExistsFault(parsed_error.message)),"ReservedDBInstanceQuotaExceeded" => return RusotoError::Service(PurchaseReservedDBInstancesOfferingError::ReservedDBInstanceQuotaExceededFault(parsed_error.message)),"ReservedDBInstancesOfferingNotFound" => return RusotoError::Service(PurchaseReservedDBInstancesOfferingError::ReservedDBInstancesOfferingNotFoundFault(parsed_error.message)),_ => {}
-                                }
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {
+                        "ReservedDBInstanceAlreadyExists" => return RusotoError::Service(PurchaseReservedDBInstancesOfferingError::ReservedDBInstanceAlreadyExistsFault(parsed_error.message)),"ReservedDBInstanceQuotaExceeded" => return RusotoError::Service(PurchaseReservedDBInstancesOfferingError::ReservedDBInstanceQuotaExceededFault(parsed_error.message)),"ReservedDBInstancesOfferingNotFound" => return RusotoError::Service(PurchaseReservedDBInstancesOfferingError::ReservedDBInstancesOfferingNotFoundFault(parsed_error.message)),_ => {}
+                    }
+                }
             }
         }
         RusotoError::Unknown(res)
@@ -26824,21 +27685,26 @@ impl RebootDBInstanceError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    "DBInstanceNotFound" => {
-                        return RusotoError::Service(
-                            RebootDBInstanceError::DBInstanceNotFoundFault(parsed_error.message),
-                        )
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {
+                        "DBInstanceNotFound" => {
+                            return RusotoError::Service(
+                                RebootDBInstanceError::DBInstanceNotFoundFault(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "InvalidDBInstanceState" => {
+                            return RusotoError::Service(
+                                RebootDBInstanceError::InvalidDBInstanceStateFault(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        _ => {}
                     }
-                    "InvalidDBInstanceState" => {
-                        return RusotoError::Service(
-                            RebootDBInstanceError::InvalidDBInstanceStateFault(
-                                parsed_error.message,
-                            ),
-                        )
-                    }
-                    _ => {}
                 }
             }
         }
@@ -26892,70 +27758,75 @@ impl RegisterDBProxyTargetsError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    "DBClusterNotFoundFault" => {
-                        return RusotoError::Service(
-                            RegisterDBProxyTargetsError::DBClusterNotFoundFault(
-                                parsed_error.message,
-                            ),
-                        )
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {
+                        "DBClusterNotFoundFault" => {
+                            return RusotoError::Service(
+                                RegisterDBProxyTargetsError::DBClusterNotFoundFault(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "DBInstanceNotFound" => {
+                            return RusotoError::Service(
+                                RegisterDBProxyTargetsError::DBInstanceNotFoundFault(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "DBProxyNotFoundFault" => {
+                            return RusotoError::Service(
+                                RegisterDBProxyTargetsError::DBProxyNotFoundFault(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "DBProxyTargetAlreadyRegisteredFault" => {
+                            return RusotoError::Service(
+                                RegisterDBProxyTargetsError::DBProxyTargetAlreadyRegisteredFault(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "DBProxyTargetGroupNotFoundFault" => {
+                            return RusotoError::Service(
+                                RegisterDBProxyTargetsError::DBProxyTargetGroupNotFoundFault(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "InsufficientAvailableIPsInSubnetFault" => {
+                            return RusotoError::Service(
+                                RegisterDBProxyTargetsError::InsufficientAvailableIPsInSubnetFault(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "InvalidDBClusterStateFault" => {
+                            return RusotoError::Service(
+                                RegisterDBProxyTargetsError::InvalidDBClusterStateFault(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "InvalidDBInstanceState" => {
+                            return RusotoError::Service(
+                                RegisterDBProxyTargetsError::InvalidDBInstanceStateFault(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "InvalidDBProxyStateFault" => {
+                            return RusotoError::Service(
+                                RegisterDBProxyTargetsError::InvalidDBProxyStateFault(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        _ => {}
                     }
-                    "DBInstanceNotFound" => {
-                        return RusotoError::Service(
-                            RegisterDBProxyTargetsError::DBInstanceNotFoundFault(
-                                parsed_error.message,
-                            ),
-                        )
-                    }
-                    "DBProxyNotFoundFault" => {
-                        return RusotoError::Service(
-                            RegisterDBProxyTargetsError::DBProxyNotFoundFault(parsed_error.message),
-                        )
-                    }
-                    "DBProxyTargetAlreadyRegisteredFault" => {
-                        return RusotoError::Service(
-                            RegisterDBProxyTargetsError::DBProxyTargetAlreadyRegisteredFault(
-                                parsed_error.message,
-                            ),
-                        )
-                    }
-                    "DBProxyTargetGroupNotFoundFault" => {
-                        return RusotoError::Service(
-                            RegisterDBProxyTargetsError::DBProxyTargetGroupNotFoundFault(
-                                parsed_error.message,
-                            ),
-                        )
-                    }
-                    "InsufficientAvailableIPsInSubnetFault" => {
-                        return RusotoError::Service(
-                            RegisterDBProxyTargetsError::InsufficientAvailableIPsInSubnetFault(
-                                parsed_error.message,
-                            ),
-                        )
-                    }
-                    "InvalidDBClusterStateFault" => {
-                        return RusotoError::Service(
-                            RegisterDBProxyTargetsError::InvalidDBClusterStateFault(
-                                parsed_error.message,
-                            ),
-                        )
-                    }
-                    "InvalidDBInstanceState" => {
-                        return RusotoError::Service(
-                            RegisterDBProxyTargetsError::InvalidDBInstanceStateFault(
-                                parsed_error.message,
-                            ),
-                        )
-                    }
-                    "InvalidDBProxyStateFault" => {
-                        return RusotoError::Service(
-                            RegisterDBProxyTargetsError::InvalidDBProxyStateFault(
-                                parsed_error.message,
-                            ),
-                        )
-                    }
-                    _ => {}
                 }
             }
         }
@@ -27020,30 +27891,33 @@ impl RemoveFromGlobalClusterError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    "DBClusterNotFoundFault" => {
-                        return RusotoError::Service(
-                            RemoveFromGlobalClusterError::DBClusterNotFoundFault(
-                                parsed_error.message,
-                            ),
-                        )
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {
+                        "DBClusterNotFoundFault" => {
+                            return RusotoError::Service(
+                                RemoveFromGlobalClusterError::DBClusterNotFoundFault(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "GlobalClusterNotFoundFault" => {
+                            return RusotoError::Service(
+                                RemoveFromGlobalClusterError::GlobalClusterNotFoundFault(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "InvalidGlobalClusterStateFault" => {
+                            return RusotoError::Service(
+                                RemoveFromGlobalClusterError::InvalidGlobalClusterStateFault(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        _ => {}
                     }
-                    "GlobalClusterNotFoundFault" => {
-                        return RusotoError::Service(
-                            RemoveFromGlobalClusterError::GlobalClusterNotFoundFault(
-                                parsed_error.message,
-                            ),
-                        )
-                    }
-                    "InvalidGlobalClusterStateFault" => {
-                        return RusotoError::Service(
-                            RemoveFromGlobalClusterError::InvalidGlobalClusterStateFault(
-                                parsed_error.message,
-                            ),
-                        )
-                    }
-                    _ => {}
                 }
             }
         }
@@ -27092,30 +27966,33 @@ impl RemoveRoleFromDBClusterError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    "DBClusterNotFoundFault" => {
-                        return RusotoError::Service(
-                            RemoveRoleFromDBClusterError::DBClusterNotFoundFault(
-                                parsed_error.message,
-                            ),
-                        )
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {
+                        "DBClusterNotFoundFault" => {
+                            return RusotoError::Service(
+                                RemoveRoleFromDBClusterError::DBClusterNotFoundFault(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "DBClusterRoleNotFound" => {
+                            return RusotoError::Service(
+                                RemoveRoleFromDBClusterError::DBClusterRoleNotFoundFault(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "InvalidDBClusterStateFault" => {
+                            return RusotoError::Service(
+                                RemoveRoleFromDBClusterError::InvalidDBClusterStateFault(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        _ => {}
                     }
-                    "DBClusterRoleNotFound" => {
-                        return RusotoError::Service(
-                            RemoveRoleFromDBClusterError::DBClusterRoleNotFoundFault(
-                                parsed_error.message,
-                            ),
-                        )
-                    }
-                    "InvalidDBClusterStateFault" => {
-                        return RusotoError::Service(
-                            RemoveRoleFromDBClusterError::InvalidDBClusterStateFault(
-                                parsed_error.message,
-                            ),
-                        )
-                    }
-                    _ => {}
                 }
             }
         }
@@ -27164,30 +28041,33 @@ impl RemoveRoleFromDBInstanceError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    "DBInstanceNotFound" => {
-                        return RusotoError::Service(
-                            RemoveRoleFromDBInstanceError::DBInstanceNotFoundFault(
-                                parsed_error.message,
-                            ),
-                        )
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {
+                        "DBInstanceNotFound" => {
+                            return RusotoError::Service(
+                                RemoveRoleFromDBInstanceError::DBInstanceNotFoundFault(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "DBInstanceRoleNotFound" => {
+                            return RusotoError::Service(
+                                RemoveRoleFromDBInstanceError::DBInstanceRoleNotFoundFault(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "InvalidDBInstanceState" => {
+                            return RusotoError::Service(
+                                RemoveRoleFromDBInstanceError::InvalidDBInstanceStateFault(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        _ => {}
                     }
-                    "DBInstanceRoleNotFound" => {
-                        return RusotoError::Service(
-                            RemoveRoleFromDBInstanceError::DBInstanceRoleNotFoundFault(
-                                parsed_error.message,
-                            ),
-                        )
-                    }
-                    "InvalidDBInstanceState" => {
-                        return RusotoError::Service(
-                            RemoveRoleFromDBInstanceError::InvalidDBInstanceStateFault(
-                                parsed_error.message,
-                            ),
-                        )
-                    }
-                    _ => {}
                 }
             }
         }
@@ -27236,23 +28116,24 @@ impl RemoveSourceIdentifierFromSubscriptionError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    "SourceNotFound" => {
-                        return RusotoError::Service(
-                            RemoveSourceIdentifierFromSubscriptionError::SourceNotFoundFault(
-                                parsed_error.message,
-                            ),
-                        )
-                    }
-                    "SubscriptionNotFound" => {
-                        return RusotoError::Service(
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {
+                        "SourceNotFound" => {
+                            return RusotoError::Service(
+                                RemoveSourceIdentifierFromSubscriptionError::SourceNotFoundFault(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "SubscriptionNotFound" => return RusotoError::Service(
                             RemoveSourceIdentifierFromSubscriptionError::SubscriptionNotFoundFault(
                                 parsed_error.message,
                             ),
-                        )
+                        ),
+                        _ => {}
                     }
-                    _ => {}
                 }
             }
         }
@@ -27302,42 +28183,47 @@ impl RemoveTagsFromResourceError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    "DBClusterNotFoundFault" => {
-                        return RusotoError::Service(
-                            RemoveTagsFromResourceError::DBClusterNotFoundFault(
-                                parsed_error.message,
-                            ),
-                        )
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {
+                        "DBClusterNotFoundFault" => {
+                            return RusotoError::Service(
+                                RemoveTagsFromResourceError::DBClusterNotFoundFault(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "DBInstanceNotFound" => {
+                            return RusotoError::Service(
+                                RemoveTagsFromResourceError::DBInstanceNotFoundFault(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "DBProxyNotFoundFault" => {
+                            return RusotoError::Service(
+                                RemoveTagsFromResourceError::DBProxyNotFoundFault(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "DBProxyTargetGroupNotFoundFault" => {
+                            return RusotoError::Service(
+                                RemoveTagsFromResourceError::DBProxyTargetGroupNotFoundFault(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "DBSnapshotNotFound" => {
+                            return RusotoError::Service(
+                                RemoveTagsFromResourceError::DBSnapshotNotFoundFault(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        _ => {}
                     }
-                    "DBInstanceNotFound" => {
-                        return RusotoError::Service(
-                            RemoveTagsFromResourceError::DBInstanceNotFoundFault(
-                                parsed_error.message,
-                            ),
-                        )
-                    }
-                    "DBProxyNotFoundFault" => {
-                        return RusotoError::Service(
-                            RemoveTagsFromResourceError::DBProxyNotFoundFault(parsed_error.message),
-                        )
-                    }
-                    "DBProxyTargetGroupNotFoundFault" => {
-                        return RusotoError::Service(
-                            RemoveTagsFromResourceError::DBProxyTargetGroupNotFoundFault(
-                                parsed_error.message,
-                            ),
-                        )
-                    }
-                    "DBSnapshotNotFound" => {
-                        return RusotoError::Service(
-                            RemoveTagsFromResourceError::DBSnapshotNotFoundFault(
-                                parsed_error.message,
-                            ),
-                        )
-                    }
-                    _ => {}
                 }
             }
         }
@@ -27390,23 +28276,24 @@ impl ResetDBClusterParameterGroupError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    "DBParameterGroupNotFound" => {
-                        return RusotoError::Service(
-                            ResetDBClusterParameterGroupError::DBParameterGroupNotFoundFault(
-                                parsed_error.message,
-                            ),
-                        )
-                    }
-                    "InvalidDBParameterGroupState" => {
-                        return RusotoError::Service(
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {
+                        "DBParameterGroupNotFound" => {
+                            return RusotoError::Service(
+                                ResetDBClusterParameterGroupError::DBParameterGroupNotFoundFault(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "InvalidDBParameterGroupState" => return RusotoError::Service(
                             ResetDBClusterParameterGroupError::InvalidDBParameterGroupStateFault(
                                 parsed_error.message,
                             ),
-                        )
+                        ),
+                        _ => {}
                     }
-                    _ => {}
                 }
             }
         }
@@ -27450,23 +28337,26 @@ impl ResetDBParameterGroupError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    "DBParameterGroupNotFound" => {
-                        return RusotoError::Service(
-                            ResetDBParameterGroupError::DBParameterGroupNotFoundFault(
-                                parsed_error.message,
-                            ),
-                        )
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {
+                        "DBParameterGroupNotFound" => {
+                            return RusotoError::Service(
+                                ResetDBParameterGroupError::DBParameterGroupNotFoundFault(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "InvalidDBParameterGroupState" => {
+                            return RusotoError::Service(
+                                ResetDBParameterGroupError::InvalidDBParameterGroupStateFault(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        _ => {}
                     }
-                    "InvalidDBParameterGroupState" => {
-                        return RusotoError::Service(
-                            ResetDBParameterGroupError::InvalidDBParameterGroupStateFault(
-                                parsed_error.message,
-                            ),
-                        )
-                    }
-                    _ => {}
                 }
             }
         }
@@ -27534,101 +28424,106 @@ impl RestoreDBClusterFromS3Error {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    "DBClusterAlreadyExistsFault" => {
-                        return RusotoError::Service(
-                            RestoreDBClusterFromS3Error::DBClusterAlreadyExistsFault(
-                                parsed_error.message,
-                            ),
-                        )
-                    }
-                    "DBClusterNotFoundFault" => {
-                        return RusotoError::Service(
-                            RestoreDBClusterFromS3Error::DBClusterNotFoundFault(
-                                parsed_error.message,
-                            ),
-                        )
-                    }
-                    "DBClusterParameterGroupNotFound" => {
-                        return RusotoError::Service(
-                            RestoreDBClusterFromS3Error::DBClusterParameterGroupNotFoundFault(
-                                parsed_error.message,
-                            ),
-                        )
-                    }
-                    "DBClusterQuotaExceededFault" => {
-                        return RusotoError::Service(
-                            RestoreDBClusterFromS3Error::DBClusterQuotaExceededFault(
-                                parsed_error.message,
-                            ),
-                        )
-                    }
-                    "DBSubnetGroupNotFoundFault" => {
-                        return RusotoError::Service(
-                            RestoreDBClusterFromS3Error::DBSubnetGroupNotFoundFault(
-                                parsed_error.message,
-                            ),
-                        )
-                    }
-                    "DomainNotFoundFault" => {
-                        return RusotoError::Service(
-                            RestoreDBClusterFromS3Error::DomainNotFoundFault(parsed_error.message),
-                        )
-                    }
-                    "InsufficientStorageClusterCapacity" => {
-                        return RusotoError::Service(
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {
+                        "DBClusterAlreadyExistsFault" => {
+                            return RusotoError::Service(
+                                RestoreDBClusterFromS3Error::DBClusterAlreadyExistsFault(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "DBClusterNotFoundFault" => {
+                            return RusotoError::Service(
+                                RestoreDBClusterFromS3Error::DBClusterNotFoundFault(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "DBClusterParameterGroupNotFound" => {
+                            return RusotoError::Service(
+                                RestoreDBClusterFromS3Error::DBClusterParameterGroupNotFoundFault(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "DBClusterQuotaExceededFault" => {
+                            return RusotoError::Service(
+                                RestoreDBClusterFromS3Error::DBClusterQuotaExceededFault(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "DBSubnetGroupNotFoundFault" => {
+                            return RusotoError::Service(
+                                RestoreDBClusterFromS3Error::DBSubnetGroupNotFoundFault(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "DomainNotFoundFault" => {
+                            return RusotoError::Service(
+                                RestoreDBClusterFromS3Error::DomainNotFoundFault(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "InsufficientStorageClusterCapacity" => return RusotoError::Service(
                             RestoreDBClusterFromS3Error::InsufficientStorageClusterCapacityFault(
                                 parsed_error.message,
                             ),
-                        )
+                        ),
+                        "InvalidDBClusterStateFault" => {
+                            return RusotoError::Service(
+                                RestoreDBClusterFromS3Error::InvalidDBClusterStateFault(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "InvalidDBSubnetGroupStateFault" => {
+                            return RusotoError::Service(
+                                RestoreDBClusterFromS3Error::InvalidDBSubnetGroupStateFault(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "InvalidS3BucketFault" => {
+                            return RusotoError::Service(
+                                RestoreDBClusterFromS3Error::InvalidS3BucketFault(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "InvalidSubnet" => {
+                            return RusotoError::Service(
+                                RestoreDBClusterFromS3Error::InvalidSubnet(parsed_error.message),
+                            )
+                        }
+                        "InvalidVPCNetworkStateFault" => {
+                            return RusotoError::Service(
+                                RestoreDBClusterFromS3Error::InvalidVPCNetworkStateFault(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "KMSKeyNotAccessibleFault" => {
+                            return RusotoError::Service(
+                                RestoreDBClusterFromS3Error::KMSKeyNotAccessibleFault(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "StorageQuotaExceeded" => {
+                            return RusotoError::Service(
+                                RestoreDBClusterFromS3Error::StorageQuotaExceededFault(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        _ => {}
                     }
-                    "InvalidDBClusterStateFault" => {
-                        return RusotoError::Service(
-                            RestoreDBClusterFromS3Error::InvalidDBClusterStateFault(
-                                parsed_error.message,
-                            ),
-                        )
-                    }
-                    "InvalidDBSubnetGroupStateFault" => {
-                        return RusotoError::Service(
-                            RestoreDBClusterFromS3Error::InvalidDBSubnetGroupStateFault(
-                                parsed_error.message,
-                            ),
-                        )
-                    }
-                    "InvalidS3BucketFault" => {
-                        return RusotoError::Service(
-                            RestoreDBClusterFromS3Error::InvalidS3BucketFault(parsed_error.message),
-                        )
-                    }
-                    "InvalidSubnet" => {
-                        return RusotoError::Service(RestoreDBClusterFromS3Error::InvalidSubnet(
-                            parsed_error.message,
-                        ))
-                    }
-                    "InvalidVPCNetworkStateFault" => {
-                        return RusotoError::Service(
-                            RestoreDBClusterFromS3Error::InvalidVPCNetworkStateFault(
-                                parsed_error.message,
-                            ),
-                        )
-                    }
-                    "KMSKeyNotAccessibleFault" => {
-                        return RusotoError::Service(
-                            RestoreDBClusterFromS3Error::KMSKeyNotAccessibleFault(
-                                parsed_error.message,
-                            ),
-                        )
-                    }
-                    "StorageQuotaExceeded" => {
-                        return RusotoError::Service(
-                            RestoreDBClusterFromS3Error::StorageQuotaExceededFault(
-                                parsed_error.message,
-                            ),
-                        )
-                    }
-                    _ => {}
                 }
             }
         }
@@ -27734,124 +28629,12 @@ impl RestoreDBClusterFromSnapshotError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    "DBClusterAlreadyExistsFault" => {
-                        return RusotoError::Service(
-                            RestoreDBClusterFromSnapshotError::DBClusterAlreadyExistsFault(
-                                parsed_error.message,
-                            ),
-                        )
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {
+                        "DBClusterAlreadyExistsFault" => return RusotoError::Service(RestoreDBClusterFromSnapshotError::DBClusterAlreadyExistsFault(parsed_error.message)),"DBClusterParameterGroupNotFound" => return RusotoError::Service(RestoreDBClusterFromSnapshotError::DBClusterParameterGroupNotFoundFault(parsed_error.message)),"DBClusterQuotaExceededFault" => return RusotoError::Service(RestoreDBClusterFromSnapshotError::DBClusterQuotaExceededFault(parsed_error.message)),"DBClusterSnapshotNotFoundFault" => return RusotoError::Service(RestoreDBClusterFromSnapshotError::DBClusterSnapshotNotFoundFault(parsed_error.message)),"DBSnapshotNotFound" => return RusotoError::Service(RestoreDBClusterFromSnapshotError::DBSnapshotNotFoundFault(parsed_error.message)),"DBSubnetGroupNotFoundFault" => return RusotoError::Service(RestoreDBClusterFromSnapshotError::DBSubnetGroupNotFoundFault(parsed_error.message)),"DomainNotFoundFault" => return RusotoError::Service(RestoreDBClusterFromSnapshotError::DomainNotFoundFault(parsed_error.message)),"InsufficientDBClusterCapacityFault" => return RusotoError::Service(RestoreDBClusterFromSnapshotError::InsufficientDBClusterCapacityFault(parsed_error.message)),"InsufficientStorageClusterCapacity" => return RusotoError::Service(RestoreDBClusterFromSnapshotError::InsufficientStorageClusterCapacityFault(parsed_error.message)),"InvalidDBClusterSnapshotStateFault" => return RusotoError::Service(RestoreDBClusterFromSnapshotError::InvalidDBClusterSnapshotStateFault(parsed_error.message)),"InvalidDBSnapshotState" => return RusotoError::Service(RestoreDBClusterFromSnapshotError::InvalidDBSnapshotStateFault(parsed_error.message)),"InvalidRestoreFault" => return RusotoError::Service(RestoreDBClusterFromSnapshotError::InvalidRestoreFault(parsed_error.message)),"InvalidSubnet" => return RusotoError::Service(RestoreDBClusterFromSnapshotError::InvalidSubnet(parsed_error.message)),"InvalidVPCNetworkStateFault" => return RusotoError::Service(RestoreDBClusterFromSnapshotError::InvalidVPCNetworkStateFault(parsed_error.message)),"KMSKeyNotAccessibleFault" => return RusotoError::Service(RestoreDBClusterFromSnapshotError::KMSKeyNotAccessibleFault(parsed_error.message)),"OptionGroupNotFoundFault" => return RusotoError::Service(RestoreDBClusterFromSnapshotError::OptionGroupNotFoundFault(parsed_error.message)),"StorageQuotaExceeded" => return RusotoError::Service(RestoreDBClusterFromSnapshotError::StorageQuotaExceededFault(parsed_error.message)),_ => {}
                     }
-                    "DBClusterParameterGroupNotFound" => {
-                        return RusotoError::Service(
-                            RestoreDBClusterFromSnapshotError::DBClusterParameterGroupNotFoundFault(
-                                parsed_error.message,
-                            ),
-                        )
-                    }
-                    "DBClusterQuotaExceededFault" => {
-                        return RusotoError::Service(
-                            RestoreDBClusterFromSnapshotError::DBClusterQuotaExceededFault(
-                                parsed_error.message,
-                            ),
-                        )
-                    }
-                    "DBClusterSnapshotNotFoundFault" => {
-                        return RusotoError::Service(
-                            RestoreDBClusterFromSnapshotError::DBClusterSnapshotNotFoundFault(
-                                parsed_error.message,
-                            ),
-                        )
-                    }
-                    "DBSnapshotNotFound" => {
-                        return RusotoError::Service(
-                            RestoreDBClusterFromSnapshotError::DBSnapshotNotFoundFault(
-                                parsed_error.message,
-                            ),
-                        )
-                    }
-                    "DBSubnetGroupNotFoundFault" => {
-                        return RusotoError::Service(
-                            RestoreDBClusterFromSnapshotError::DBSubnetGroupNotFoundFault(
-                                parsed_error.message,
-                            ),
-                        )
-                    }
-                    "DomainNotFoundFault" => {
-                        return RusotoError::Service(
-                            RestoreDBClusterFromSnapshotError::DomainNotFoundFault(
-                                parsed_error.message,
-                            ),
-                        )
-                    }
-                    "InsufficientDBClusterCapacityFault" => {
-                        return RusotoError::Service(
-                            RestoreDBClusterFromSnapshotError::InsufficientDBClusterCapacityFault(
-                                parsed_error.message,
-                            ),
-                        )
-                    }
-                    "InsufficientStorageClusterCapacity" => return RusotoError::Service(
-                        RestoreDBClusterFromSnapshotError::InsufficientStorageClusterCapacityFault(
-                            parsed_error.message,
-                        ),
-                    ),
-                    "InvalidDBClusterSnapshotStateFault" => {
-                        return RusotoError::Service(
-                            RestoreDBClusterFromSnapshotError::InvalidDBClusterSnapshotStateFault(
-                                parsed_error.message,
-                            ),
-                        )
-                    }
-                    "InvalidDBSnapshotState" => {
-                        return RusotoError::Service(
-                            RestoreDBClusterFromSnapshotError::InvalidDBSnapshotStateFault(
-                                parsed_error.message,
-                            ),
-                        )
-                    }
-                    "InvalidRestoreFault" => {
-                        return RusotoError::Service(
-                            RestoreDBClusterFromSnapshotError::InvalidRestoreFault(
-                                parsed_error.message,
-                            ),
-                        )
-                    }
-                    "InvalidSubnet" => {
-                        return RusotoError::Service(
-                            RestoreDBClusterFromSnapshotError::InvalidSubnet(parsed_error.message),
-                        )
-                    }
-                    "InvalidVPCNetworkStateFault" => {
-                        return RusotoError::Service(
-                            RestoreDBClusterFromSnapshotError::InvalidVPCNetworkStateFault(
-                                parsed_error.message,
-                            ),
-                        )
-                    }
-                    "KMSKeyNotAccessibleFault" => {
-                        return RusotoError::Service(
-                            RestoreDBClusterFromSnapshotError::KMSKeyNotAccessibleFault(
-                                parsed_error.message,
-                            ),
-                        )
-                    }
-                    "OptionGroupNotFoundFault" => {
-                        return RusotoError::Service(
-                            RestoreDBClusterFromSnapshotError::OptionGroupNotFoundFault(
-                                parsed_error.message,
-                            ),
-                        )
-                    }
-                    "StorageQuotaExceeded" => {
-                        return RusotoError::Service(
-                            RestoreDBClusterFromSnapshotError::StorageQuotaExceededFault(
-                                parsed_error.message,
-                            ),
-                        )
-                    }
-                    _ => {}
                 }
             }
         }
@@ -27972,129 +28755,12 @@ impl RestoreDBClusterToPointInTimeError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    "DBClusterAlreadyExistsFault" => {
-                        return RusotoError::Service(
-                            RestoreDBClusterToPointInTimeError::DBClusterAlreadyExistsFault(
-                                parsed_error.message,
-                            ),
-                        )
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {
+                        "DBClusterAlreadyExistsFault" => return RusotoError::Service(RestoreDBClusterToPointInTimeError::DBClusterAlreadyExistsFault(parsed_error.message)),"DBClusterNotFoundFault" => return RusotoError::Service(RestoreDBClusterToPointInTimeError::DBClusterNotFoundFault(parsed_error.message)),"DBClusterParameterGroupNotFound" => return RusotoError::Service(RestoreDBClusterToPointInTimeError::DBClusterParameterGroupNotFoundFault(parsed_error.message)),"DBClusterQuotaExceededFault" => return RusotoError::Service(RestoreDBClusterToPointInTimeError::DBClusterQuotaExceededFault(parsed_error.message)),"DBClusterSnapshotNotFoundFault" => return RusotoError::Service(RestoreDBClusterToPointInTimeError::DBClusterSnapshotNotFoundFault(parsed_error.message)),"DBSubnetGroupNotFoundFault" => return RusotoError::Service(RestoreDBClusterToPointInTimeError::DBSubnetGroupNotFoundFault(parsed_error.message)),"DomainNotFoundFault" => return RusotoError::Service(RestoreDBClusterToPointInTimeError::DomainNotFoundFault(parsed_error.message)),"InsufficientDBClusterCapacityFault" => return RusotoError::Service(RestoreDBClusterToPointInTimeError::InsufficientDBClusterCapacityFault(parsed_error.message)),"InsufficientStorageClusterCapacity" => return RusotoError::Service(RestoreDBClusterToPointInTimeError::InsufficientStorageClusterCapacityFault(parsed_error.message)),"InvalidDBClusterSnapshotStateFault" => return RusotoError::Service(RestoreDBClusterToPointInTimeError::InvalidDBClusterSnapshotStateFault(parsed_error.message)),"InvalidDBClusterStateFault" => return RusotoError::Service(RestoreDBClusterToPointInTimeError::InvalidDBClusterStateFault(parsed_error.message)),"InvalidDBSnapshotState" => return RusotoError::Service(RestoreDBClusterToPointInTimeError::InvalidDBSnapshotStateFault(parsed_error.message)),"InvalidRestoreFault" => return RusotoError::Service(RestoreDBClusterToPointInTimeError::InvalidRestoreFault(parsed_error.message)),"InvalidSubnet" => return RusotoError::Service(RestoreDBClusterToPointInTimeError::InvalidSubnet(parsed_error.message)),"InvalidVPCNetworkStateFault" => return RusotoError::Service(RestoreDBClusterToPointInTimeError::InvalidVPCNetworkStateFault(parsed_error.message)),"KMSKeyNotAccessibleFault" => return RusotoError::Service(RestoreDBClusterToPointInTimeError::KMSKeyNotAccessibleFault(parsed_error.message)),"OptionGroupNotFoundFault" => return RusotoError::Service(RestoreDBClusterToPointInTimeError::OptionGroupNotFoundFault(parsed_error.message)),"StorageQuotaExceeded" => return RusotoError::Service(RestoreDBClusterToPointInTimeError::StorageQuotaExceededFault(parsed_error.message)),_ => {}
                     }
-                    "DBClusterNotFoundFault" => {
-                        return RusotoError::Service(
-                            RestoreDBClusterToPointInTimeError::DBClusterNotFoundFault(
-                                parsed_error.message,
-                            ),
-                        )
-                    }
-                    "DBClusterParameterGroupNotFound" => return RusotoError::Service(
-                        RestoreDBClusterToPointInTimeError::DBClusterParameterGroupNotFoundFault(
-                            parsed_error.message,
-                        ),
-                    ),
-                    "DBClusterQuotaExceededFault" => {
-                        return RusotoError::Service(
-                            RestoreDBClusterToPointInTimeError::DBClusterQuotaExceededFault(
-                                parsed_error.message,
-                            ),
-                        )
-                    }
-                    "DBClusterSnapshotNotFoundFault" => {
-                        return RusotoError::Service(
-                            RestoreDBClusterToPointInTimeError::DBClusterSnapshotNotFoundFault(
-                                parsed_error.message,
-                            ),
-                        )
-                    }
-                    "DBSubnetGroupNotFoundFault" => {
-                        return RusotoError::Service(
-                            RestoreDBClusterToPointInTimeError::DBSubnetGroupNotFoundFault(
-                                parsed_error.message,
-                            ),
-                        )
-                    }
-                    "DomainNotFoundFault" => {
-                        return RusotoError::Service(
-                            RestoreDBClusterToPointInTimeError::DomainNotFoundFault(
-                                parsed_error.message,
-                            ),
-                        )
-                    }
-                    "InsufficientDBClusterCapacityFault" => {
-                        return RusotoError::Service(
-                            RestoreDBClusterToPointInTimeError::InsufficientDBClusterCapacityFault(
-                                parsed_error.message,
-                            ),
-                        )
-                    }
-                    "InsufficientStorageClusterCapacity" => return RusotoError::Service(
-                        RestoreDBClusterToPointInTimeError::InsufficientStorageClusterCapacityFault(
-                            parsed_error.message,
-                        ),
-                    ),
-                    "InvalidDBClusterSnapshotStateFault" => {
-                        return RusotoError::Service(
-                            RestoreDBClusterToPointInTimeError::InvalidDBClusterSnapshotStateFault(
-                                parsed_error.message,
-                            ),
-                        )
-                    }
-                    "InvalidDBClusterStateFault" => {
-                        return RusotoError::Service(
-                            RestoreDBClusterToPointInTimeError::InvalidDBClusterStateFault(
-                                parsed_error.message,
-                            ),
-                        )
-                    }
-                    "InvalidDBSnapshotState" => {
-                        return RusotoError::Service(
-                            RestoreDBClusterToPointInTimeError::InvalidDBSnapshotStateFault(
-                                parsed_error.message,
-                            ),
-                        )
-                    }
-                    "InvalidRestoreFault" => {
-                        return RusotoError::Service(
-                            RestoreDBClusterToPointInTimeError::InvalidRestoreFault(
-                                parsed_error.message,
-                            ),
-                        )
-                    }
-                    "InvalidSubnet" => {
-                        return RusotoError::Service(
-                            RestoreDBClusterToPointInTimeError::InvalidSubnet(parsed_error.message),
-                        )
-                    }
-                    "InvalidVPCNetworkStateFault" => {
-                        return RusotoError::Service(
-                            RestoreDBClusterToPointInTimeError::InvalidVPCNetworkStateFault(
-                                parsed_error.message,
-                            ),
-                        )
-                    }
-                    "KMSKeyNotAccessibleFault" => {
-                        return RusotoError::Service(
-                            RestoreDBClusterToPointInTimeError::KMSKeyNotAccessibleFault(
-                                parsed_error.message,
-                            ),
-                        )
-                    }
-                    "OptionGroupNotFoundFault" => {
-                        return RusotoError::Service(
-                            RestoreDBClusterToPointInTimeError::OptionGroupNotFoundFault(
-                                parsed_error.message,
-                            ),
-                        )
-                    }
-                    "StorageQuotaExceeded" => {
-                        return RusotoError::Service(
-                            RestoreDBClusterToPointInTimeError::StorageQuotaExceededFault(
-                                parsed_error.message,
-                            ),
-                        )
-                    }
-                    _ => {}
                 }
             }
         }
@@ -28222,143 +28888,12 @@ impl RestoreDBInstanceFromDBSnapshotError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    "AuthorizationNotFound" => {
-                        return RusotoError::Service(
-                            RestoreDBInstanceFromDBSnapshotError::AuthorizationNotFoundFault(
-                                parsed_error.message,
-                            ),
-                        )
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {
+                        "AuthorizationNotFound" => return RusotoError::Service(RestoreDBInstanceFromDBSnapshotError::AuthorizationNotFoundFault(parsed_error.message)),"BackupPolicyNotFoundFault" => return RusotoError::Service(RestoreDBInstanceFromDBSnapshotError::BackupPolicyNotFoundFault(parsed_error.message)),"DBInstanceAlreadyExists" => return RusotoError::Service(RestoreDBInstanceFromDBSnapshotError::DBInstanceAlreadyExistsFault(parsed_error.message)),"DBParameterGroupNotFound" => return RusotoError::Service(RestoreDBInstanceFromDBSnapshotError::DBParameterGroupNotFoundFault(parsed_error.message)),"DBSecurityGroupNotFound" => return RusotoError::Service(RestoreDBInstanceFromDBSnapshotError::DBSecurityGroupNotFoundFault(parsed_error.message)),"DBSnapshotNotFound" => return RusotoError::Service(RestoreDBInstanceFromDBSnapshotError::DBSnapshotNotFoundFault(parsed_error.message)),"DBSubnetGroupDoesNotCoverEnoughAZs" => return RusotoError::Service(RestoreDBInstanceFromDBSnapshotError::DBSubnetGroupDoesNotCoverEnoughAZs(parsed_error.message)),"DBSubnetGroupNotFoundFault" => return RusotoError::Service(RestoreDBInstanceFromDBSnapshotError::DBSubnetGroupNotFoundFault(parsed_error.message)),"DomainNotFoundFault" => return RusotoError::Service(RestoreDBInstanceFromDBSnapshotError::DomainNotFoundFault(parsed_error.message)),"InstanceQuotaExceeded" => return RusotoError::Service(RestoreDBInstanceFromDBSnapshotError::InstanceQuotaExceededFault(parsed_error.message)),"InsufficientDBInstanceCapacity" => return RusotoError::Service(RestoreDBInstanceFromDBSnapshotError::InsufficientDBInstanceCapacityFault(parsed_error.message)),"InvalidDBSnapshotState" => return RusotoError::Service(RestoreDBInstanceFromDBSnapshotError::InvalidDBSnapshotStateFault(parsed_error.message)),"InvalidRestoreFault" => return RusotoError::Service(RestoreDBInstanceFromDBSnapshotError::InvalidRestoreFault(parsed_error.message)),"InvalidSubnet" => return RusotoError::Service(RestoreDBInstanceFromDBSnapshotError::InvalidSubnet(parsed_error.message)),"InvalidVPCNetworkStateFault" => return RusotoError::Service(RestoreDBInstanceFromDBSnapshotError::InvalidVPCNetworkStateFault(parsed_error.message)),"KMSKeyNotAccessibleFault" => return RusotoError::Service(RestoreDBInstanceFromDBSnapshotError::KMSKeyNotAccessibleFault(parsed_error.message)),"OptionGroupNotFoundFault" => return RusotoError::Service(RestoreDBInstanceFromDBSnapshotError::OptionGroupNotFoundFault(parsed_error.message)),"ProvisionedIopsNotAvailableInAZFault" => return RusotoError::Service(RestoreDBInstanceFromDBSnapshotError::ProvisionedIopsNotAvailableInAZFault(parsed_error.message)),"StorageQuotaExceeded" => return RusotoError::Service(RestoreDBInstanceFromDBSnapshotError::StorageQuotaExceededFault(parsed_error.message)),"StorageTypeNotSupported" => return RusotoError::Service(RestoreDBInstanceFromDBSnapshotError::StorageTypeNotSupportedFault(parsed_error.message)),_ => {}
                     }
-                    "BackupPolicyNotFoundFault" => {
-                        return RusotoError::Service(
-                            RestoreDBInstanceFromDBSnapshotError::BackupPolicyNotFoundFault(
-                                parsed_error.message,
-                            ),
-                        )
-                    }
-                    "DBInstanceAlreadyExists" => {
-                        return RusotoError::Service(
-                            RestoreDBInstanceFromDBSnapshotError::DBInstanceAlreadyExistsFault(
-                                parsed_error.message,
-                            ),
-                        )
-                    }
-                    "DBParameterGroupNotFound" => {
-                        return RusotoError::Service(
-                            RestoreDBInstanceFromDBSnapshotError::DBParameterGroupNotFoundFault(
-                                parsed_error.message,
-                            ),
-                        )
-                    }
-                    "DBSecurityGroupNotFound" => {
-                        return RusotoError::Service(
-                            RestoreDBInstanceFromDBSnapshotError::DBSecurityGroupNotFoundFault(
-                                parsed_error.message,
-                            ),
-                        )
-                    }
-                    "DBSnapshotNotFound" => {
-                        return RusotoError::Service(
-                            RestoreDBInstanceFromDBSnapshotError::DBSnapshotNotFoundFault(
-                                parsed_error.message,
-                            ),
-                        )
-                    }
-                    "DBSubnetGroupDoesNotCoverEnoughAZs" => return RusotoError::Service(
-                        RestoreDBInstanceFromDBSnapshotError::DBSubnetGroupDoesNotCoverEnoughAZs(
-                            parsed_error.message,
-                        ),
-                    ),
-                    "DBSubnetGroupNotFoundFault" => {
-                        return RusotoError::Service(
-                            RestoreDBInstanceFromDBSnapshotError::DBSubnetGroupNotFoundFault(
-                                parsed_error.message,
-                            ),
-                        )
-                    }
-                    "DomainNotFoundFault" => {
-                        return RusotoError::Service(
-                            RestoreDBInstanceFromDBSnapshotError::DomainNotFoundFault(
-                                parsed_error.message,
-                            ),
-                        )
-                    }
-                    "InstanceQuotaExceeded" => {
-                        return RusotoError::Service(
-                            RestoreDBInstanceFromDBSnapshotError::InstanceQuotaExceededFault(
-                                parsed_error.message,
-                            ),
-                        )
-                    }
-                    "InsufficientDBInstanceCapacity" => return RusotoError::Service(
-                        RestoreDBInstanceFromDBSnapshotError::InsufficientDBInstanceCapacityFault(
-                            parsed_error.message,
-                        ),
-                    ),
-                    "InvalidDBSnapshotState" => {
-                        return RusotoError::Service(
-                            RestoreDBInstanceFromDBSnapshotError::InvalidDBSnapshotStateFault(
-                                parsed_error.message,
-                            ),
-                        )
-                    }
-                    "InvalidRestoreFault" => {
-                        return RusotoError::Service(
-                            RestoreDBInstanceFromDBSnapshotError::InvalidRestoreFault(
-                                parsed_error.message,
-                            ),
-                        )
-                    }
-                    "InvalidSubnet" => {
-                        return RusotoError::Service(
-                            RestoreDBInstanceFromDBSnapshotError::InvalidSubnet(
-                                parsed_error.message,
-                            ),
-                        )
-                    }
-                    "InvalidVPCNetworkStateFault" => {
-                        return RusotoError::Service(
-                            RestoreDBInstanceFromDBSnapshotError::InvalidVPCNetworkStateFault(
-                                parsed_error.message,
-                            ),
-                        )
-                    }
-                    "KMSKeyNotAccessibleFault" => {
-                        return RusotoError::Service(
-                            RestoreDBInstanceFromDBSnapshotError::KMSKeyNotAccessibleFault(
-                                parsed_error.message,
-                            ),
-                        )
-                    }
-                    "OptionGroupNotFoundFault" => {
-                        return RusotoError::Service(
-                            RestoreDBInstanceFromDBSnapshotError::OptionGroupNotFoundFault(
-                                parsed_error.message,
-                            ),
-                        )
-                    }
-                    "ProvisionedIopsNotAvailableInAZFault" => return RusotoError::Service(
-                        RestoreDBInstanceFromDBSnapshotError::ProvisionedIopsNotAvailableInAZFault(
-                            parsed_error.message,
-                        ),
-                    ),
-                    "StorageQuotaExceeded" => {
-                        return RusotoError::Service(
-                            RestoreDBInstanceFromDBSnapshotError::StorageQuotaExceededFault(
-                                parsed_error.message,
-                            ),
-                        )
-                    }
-                    "StorageTypeNotSupported" => {
-                        return RusotoError::Service(
-                            RestoreDBInstanceFromDBSnapshotError::StorageTypeNotSupportedFault(
-                                parsed_error.message,
-                            ),
-                        )
-                    }
-                    _ => {}
                 }
             }
         }
@@ -28486,126 +29021,129 @@ impl RestoreDBInstanceFromS3Error {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    "AuthorizationNotFound" => {
-                        return RusotoError::Service(
-                            RestoreDBInstanceFromS3Error::AuthorizationNotFoundFault(
-                                parsed_error.message,
-                            ),
-                        )
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {
+                        "AuthorizationNotFound" => {
+                            return RusotoError::Service(
+                                RestoreDBInstanceFromS3Error::AuthorizationNotFoundFault(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "BackupPolicyNotFoundFault" => {
+                            return RusotoError::Service(
+                                RestoreDBInstanceFromS3Error::BackupPolicyNotFoundFault(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "DBInstanceAlreadyExists" => {
+                            return RusotoError::Service(
+                                RestoreDBInstanceFromS3Error::DBInstanceAlreadyExistsFault(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "DBParameterGroupNotFound" => {
+                            return RusotoError::Service(
+                                RestoreDBInstanceFromS3Error::DBParameterGroupNotFoundFault(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "DBSecurityGroupNotFound" => {
+                            return RusotoError::Service(
+                                RestoreDBInstanceFromS3Error::DBSecurityGroupNotFoundFault(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "DBSubnetGroupDoesNotCoverEnoughAZs" => {
+                            return RusotoError::Service(
+                                RestoreDBInstanceFromS3Error::DBSubnetGroupDoesNotCoverEnoughAZs(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "DBSubnetGroupNotFoundFault" => {
+                            return RusotoError::Service(
+                                RestoreDBInstanceFromS3Error::DBSubnetGroupNotFoundFault(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "InstanceQuotaExceeded" => {
+                            return RusotoError::Service(
+                                RestoreDBInstanceFromS3Error::InstanceQuotaExceededFault(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "InsufficientDBInstanceCapacity" => {
+                            return RusotoError::Service(
+                                RestoreDBInstanceFromS3Error::InsufficientDBInstanceCapacityFault(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "InvalidS3BucketFault" => {
+                            return RusotoError::Service(
+                                RestoreDBInstanceFromS3Error::InvalidS3BucketFault(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "InvalidSubnet" => {
+                            return RusotoError::Service(
+                                RestoreDBInstanceFromS3Error::InvalidSubnet(parsed_error.message),
+                            )
+                        }
+                        "InvalidVPCNetworkStateFault" => {
+                            return RusotoError::Service(
+                                RestoreDBInstanceFromS3Error::InvalidVPCNetworkStateFault(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "KMSKeyNotAccessibleFault" => {
+                            return RusotoError::Service(
+                                RestoreDBInstanceFromS3Error::KMSKeyNotAccessibleFault(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "OptionGroupNotFoundFault" => {
+                            return RusotoError::Service(
+                                RestoreDBInstanceFromS3Error::OptionGroupNotFoundFault(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "ProvisionedIopsNotAvailableInAZFault" => {
+                            return RusotoError::Service(
+                                RestoreDBInstanceFromS3Error::ProvisionedIopsNotAvailableInAZFault(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "StorageQuotaExceeded" => {
+                            return RusotoError::Service(
+                                RestoreDBInstanceFromS3Error::StorageQuotaExceededFault(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "StorageTypeNotSupported" => {
+                            return RusotoError::Service(
+                                RestoreDBInstanceFromS3Error::StorageTypeNotSupportedFault(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        _ => {}
                     }
-                    "BackupPolicyNotFoundFault" => {
-                        return RusotoError::Service(
-                            RestoreDBInstanceFromS3Error::BackupPolicyNotFoundFault(
-                                parsed_error.message,
-                            ),
-                        )
-                    }
-                    "DBInstanceAlreadyExists" => {
-                        return RusotoError::Service(
-                            RestoreDBInstanceFromS3Error::DBInstanceAlreadyExistsFault(
-                                parsed_error.message,
-                            ),
-                        )
-                    }
-                    "DBParameterGroupNotFound" => {
-                        return RusotoError::Service(
-                            RestoreDBInstanceFromS3Error::DBParameterGroupNotFoundFault(
-                                parsed_error.message,
-                            ),
-                        )
-                    }
-                    "DBSecurityGroupNotFound" => {
-                        return RusotoError::Service(
-                            RestoreDBInstanceFromS3Error::DBSecurityGroupNotFoundFault(
-                                parsed_error.message,
-                            ),
-                        )
-                    }
-                    "DBSubnetGroupDoesNotCoverEnoughAZs" => {
-                        return RusotoError::Service(
-                            RestoreDBInstanceFromS3Error::DBSubnetGroupDoesNotCoverEnoughAZs(
-                                parsed_error.message,
-                            ),
-                        )
-                    }
-                    "DBSubnetGroupNotFoundFault" => {
-                        return RusotoError::Service(
-                            RestoreDBInstanceFromS3Error::DBSubnetGroupNotFoundFault(
-                                parsed_error.message,
-                            ),
-                        )
-                    }
-                    "InstanceQuotaExceeded" => {
-                        return RusotoError::Service(
-                            RestoreDBInstanceFromS3Error::InstanceQuotaExceededFault(
-                                parsed_error.message,
-                            ),
-                        )
-                    }
-                    "InsufficientDBInstanceCapacity" => {
-                        return RusotoError::Service(
-                            RestoreDBInstanceFromS3Error::InsufficientDBInstanceCapacityFault(
-                                parsed_error.message,
-                            ),
-                        )
-                    }
-                    "InvalidS3BucketFault" => {
-                        return RusotoError::Service(
-                            RestoreDBInstanceFromS3Error::InvalidS3BucketFault(
-                                parsed_error.message,
-                            ),
-                        )
-                    }
-                    "InvalidSubnet" => {
-                        return RusotoError::Service(RestoreDBInstanceFromS3Error::InvalidSubnet(
-                            parsed_error.message,
-                        ))
-                    }
-                    "InvalidVPCNetworkStateFault" => {
-                        return RusotoError::Service(
-                            RestoreDBInstanceFromS3Error::InvalidVPCNetworkStateFault(
-                                parsed_error.message,
-                            ),
-                        )
-                    }
-                    "KMSKeyNotAccessibleFault" => {
-                        return RusotoError::Service(
-                            RestoreDBInstanceFromS3Error::KMSKeyNotAccessibleFault(
-                                parsed_error.message,
-                            ),
-                        )
-                    }
-                    "OptionGroupNotFoundFault" => {
-                        return RusotoError::Service(
-                            RestoreDBInstanceFromS3Error::OptionGroupNotFoundFault(
-                                parsed_error.message,
-                            ),
-                        )
-                    }
-                    "ProvisionedIopsNotAvailableInAZFault" => {
-                        return RusotoError::Service(
-                            RestoreDBInstanceFromS3Error::ProvisionedIopsNotAvailableInAZFault(
-                                parsed_error.message,
-                            ),
-                        )
-                    }
-                    "StorageQuotaExceeded" => {
-                        return RusotoError::Service(
-                            RestoreDBInstanceFromS3Error::StorageQuotaExceededFault(
-                                parsed_error.message,
-                            ),
-                        )
-                    }
-                    "StorageTypeNotSupported" => {
-                        return RusotoError::Service(
-                            RestoreDBInstanceFromS3Error::StorageTypeNotSupportedFault(
-                                parsed_error.message,
-                            ),
-                        )
-                    }
-                    _ => {}
                 }
             }
         }
@@ -28732,157 +29270,12 @@ impl RestoreDBInstanceToPointInTimeError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    "AuthorizationNotFound" => {
-                        return RusotoError::Service(
-                            RestoreDBInstanceToPointInTimeError::AuthorizationNotFoundFault(
-                                parsed_error.message,
-                            ),
-                        )
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {
+                        "AuthorizationNotFound" => return RusotoError::Service(RestoreDBInstanceToPointInTimeError::AuthorizationNotFoundFault(parsed_error.message)),"BackupPolicyNotFoundFault" => return RusotoError::Service(RestoreDBInstanceToPointInTimeError::BackupPolicyNotFoundFault(parsed_error.message)),"DBInstanceAlreadyExists" => return RusotoError::Service(RestoreDBInstanceToPointInTimeError::DBInstanceAlreadyExistsFault(parsed_error.message)),"DBInstanceAutomatedBackupNotFound" => return RusotoError::Service(RestoreDBInstanceToPointInTimeError::DBInstanceAutomatedBackupNotFoundFault(parsed_error.message)),"DBInstanceNotFound" => return RusotoError::Service(RestoreDBInstanceToPointInTimeError::DBInstanceNotFoundFault(parsed_error.message)),"DBParameterGroupNotFound" => return RusotoError::Service(RestoreDBInstanceToPointInTimeError::DBParameterGroupNotFoundFault(parsed_error.message)),"DBSecurityGroupNotFound" => return RusotoError::Service(RestoreDBInstanceToPointInTimeError::DBSecurityGroupNotFoundFault(parsed_error.message)),"DBSubnetGroupDoesNotCoverEnoughAZs" => return RusotoError::Service(RestoreDBInstanceToPointInTimeError::DBSubnetGroupDoesNotCoverEnoughAZs(parsed_error.message)),"DBSubnetGroupNotFoundFault" => return RusotoError::Service(RestoreDBInstanceToPointInTimeError::DBSubnetGroupNotFoundFault(parsed_error.message)),"DomainNotFoundFault" => return RusotoError::Service(RestoreDBInstanceToPointInTimeError::DomainNotFoundFault(parsed_error.message)),"InstanceQuotaExceeded" => return RusotoError::Service(RestoreDBInstanceToPointInTimeError::InstanceQuotaExceededFault(parsed_error.message)),"InsufficientDBInstanceCapacity" => return RusotoError::Service(RestoreDBInstanceToPointInTimeError::InsufficientDBInstanceCapacityFault(parsed_error.message)),"InvalidDBInstanceState" => return RusotoError::Service(RestoreDBInstanceToPointInTimeError::InvalidDBInstanceStateFault(parsed_error.message)),"InvalidRestoreFault" => return RusotoError::Service(RestoreDBInstanceToPointInTimeError::InvalidRestoreFault(parsed_error.message)),"InvalidSubnet" => return RusotoError::Service(RestoreDBInstanceToPointInTimeError::InvalidSubnet(parsed_error.message)),"InvalidVPCNetworkStateFault" => return RusotoError::Service(RestoreDBInstanceToPointInTimeError::InvalidVPCNetworkStateFault(parsed_error.message)),"KMSKeyNotAccessibleFault" => return RusotoError::Service(RestoreDBInstanceToPointInTimeError::KMSKeyNotAccessibleFault(parsed_error.message)),"OptionGroupNotFoundFault" => return RusotoError::Service(RestoreDBInstanceToPointInTimeError::OptionGroupNotFoundFault(parsed_error.message)),"PointInTimeRestoreNotEnabled" => return RusotoError::Service(RestoreDBInstanceToPointInTimeError::PointInTimeRestoreNotEnabledFault(parsed_error.message)),"ProvisionedIopsNotAvailableInAZFault" => return RusotoError::Service(RestoreDBInstanceToPointInTimeError::ProvisionedIopsNotAvailableInAZFault(parsed_error.message)),"StorageQuotaExceeded" => return RusotoError::Service(RestoreDBInstanceToPointInTimeError::StorageQuotaExceededFault(parsed_error.message)),"StorageTypeNotSupported" => return RusotoError::Service(RestoreDBInstanceToPointInTimeError::StorageTypeNotSupportedFault(parsed_error.message)),_ => {}
                     }
-                    "BackupPolicyNotFoundFault" => {
-                        return RusotoError::Service(
-                            RestoreDBInstanceToPointInTimeError::BackupPolicyNotFoundFault(
-                                parsed_error.message,
-                            ),
-                        )
-                    }
-                    "DBInstanceAlreadyExists" => {
-                        return RusotoError::Service(
-                            RestoreDBInstanceToPointInTimeError::DBInstanceAlreadyExistsFault(
-                                parsed_error.message,
-                            ),
-                        )
-                    }
-                    "DBInstanceAutomatedBackupNotFound" => return RusotoError::Service(
-                        RestoreDBInstanceToPointInTimeError::DBInstanceAutomatedBackupNotFoundFault(
-                            parsed_error.message,
-                        ),
-                    ),
-                    "DBInstanceNotFound" => {
-                        return RusotoError::Service(
-                            RestoreDBInstanceToPointInTimeError::DBInstanceNotFoundFault(
-                                parsed_error.message,
-                            ),
-                        )
-                    }
-                    "DBParameterGroupNotFound" => {
-                        return RusotoError::Service(
-                            RestoreDBInstanceToPointInTimeError::DBParameterGroupNotFoundFault(
-                                parsed_error.message,
-                            ),
-                        )
-                    }
-                    "DBSecurityGroupNotFound" => {
-                        return RusotoError::Service(
-                            RestoreDBInstanceToPointInTimeError::DBSecurityGroupNotFoundFault(
-                                parsed_error.message,
-                            ),
-                        )
-                    }
-                    "DBSubnetGroupDoesNotCoverEnoughAZs" => {
-                        return RusotoError::Service(
-                            RestoreDBInstanceToPointInTimeError::DBSubnetGroupDoesNotCoverEnoughAZs(
-                                parsed_error.message,
-                            ),
-                        )
-                    }
-                    "DBSubnetGroupNotFoundFault" => {
-                        return RusotoError::Service(
-                            RestoreDBInstanceToPointInTimeError::DBSubnetGroupNotFoundFault(
-                                parsed_error.message,
-                            ),
-                        )
-                    }
-                    "DomainNotFoundFault" => {
-                        return RusotoError::Service(
-                            RestoreDBInstanceToPointInTimeError::DomainNotFoundFault(
-                                parsed_error.message,
-                            ),
-                        )
-                    }
-                    "InstanceQuotaExceeded" => {
-                        return RusotoError::Service(
-                            RestoreDBInstanceToPointInTimeError::InstanceQuotaExceededFault(
-                                parsed_error.message,
-                            ),
-                        )
-                    }
-                    "InsufficientDBInstanceCapacity" => return RusotoError::Service(
-                        RestoreDBInstanceToPointInTimeError::InsufficientDBInstanceCapacityFault(
-                            parsed_error.message,
-                        ),
-                    ),
-                    "InvalidDBInstanceState" => {
-                        return RusotoError::Service(
-                            RestoreDBInstanceToPointInTimeError::InvalidDBInstanceStateFault(
-                                parsed_error.message,
-                            ),
-                        )
-                    }
-                    "InvalidRestoreFault" => {
-                        return RusotoError::Service(
-                            RestoreDBInstanceToPointInTimeError::InvalidRestoreFault(
-                                parsed_error.message,
-                            ),
-                        )
-                    }
-                    "InvalidSubnet" => {
-                        return RusotoError::Service(
-                            RestoreDBInstanceToPointInTimeError::InvalidSubnet(
-                                parsed_error.message,
-                            ),
-                        )
-                    }
-                    "InvalidVPCNetworkStateFault" => {
-                        return RusotoError::Service(
-                            RestoreDBInstanceToPointInTimeError::InvalidVPCNetworkStateFault(
-                                parsed_error.message,
-                            ),
-                        )
-                    }
-                    "KMSKeyNotAccessibleFault" => {
-                        return RusotoError::Service(
-                            RestoreDBInstanceToPointInTimeError::KMSKeyNotAccessibleFault(
-                                parsed_error.message,
-                            ),
-                        )
-                    }
-                    "OptionGroupNotFoundFault" => {
-                        return RusotoError::Service(
-                            RestoreDBInstanceToPointInTimeError::OptionGroupNotFoundFault(
-                                parsed_error.message,
-                            ),
-                        )
-                    }
-                    "PointInTimeRestoreNotEnabled" => {
-                        return RusotoError::Service(
-                            RestoreDBInstanceToPointInTimeError::PointInTimeRestoreNotEnabledFault(
-                                parsed_error.message,
-                            ),
-                        )
-                    }
-                    "ProvisionedIopsNotAvailableInAZFault" => return RusotoError::Service(
-                        RestoreDBInstanceToPointInTimeError::ProvisionedIopsNotAvailableInAZFault(
-                            parsed_error.message,
-                        ),
-                    ),
-                    "StorageQuotaExceeded" => {
-                        return RusotoError::Service(
-                            RestoreDBInstanceToPointInTimeError::StorageQuotaExceededFault(
-                                parsed_error.message,
-                            ),
-                        )
-                    }
-                    "StorageTypeNotSupported" => {
-                        return RusotoError::Service(
-                            RestoreDBInstanceToPointInTimeError::StorageTypeNotSupportedFault(
-                                parsed_error.message,
-                            ),
-                        )
-                    }
-                    _ => {}
                 }
             }
         }
@@ -28988,30 +29381,33 @@ impl RevokeDBSecurityGroupIngressError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    "AuthorizationNotFound" => {
-                        return RusotoError::Service(
-                            RevokeDBSecurityGroupIngressError::AuthorizationNotFoundFault(
-                                parsed_error.message,
-                            ),
-                        )
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {
+                        "AuthorizationNotFound" => {
+                            return RusotoError::Service(
+                                RevokeDBSecurityGroupIngressError::AuthorizationNotFoundFault(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "DBSecurityGroupNotFound" => {
+                            return RusotoError::Service(
+                                RevokeDBSecurityGroupIngressError::DBSecurityGroupNotFoundFault(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "InvalidDBSecurityGroupState" => {
+                            return RusotoError::Service(
+                                RevokeDBSecurityGroupIngressError::InvalidDBSecurityGroupStateFault(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        _ => {}
                     }
-                    "DBSecurityGroupNotFound" => {
-                        return RusotoError::Service(
-                            RevokeDBSecurityGroupIngressError::DBSecurityGroupNotFoundFault(
-                                parsed_error.message,
-                            ),
-                        )
-                    }
-                    "InvalidDBSecurityGroupState" => {
-                        return RusotoError::Service(
-                            RevokeDBSecurityGroupIngressError::InvalidDBSecurityGroupStateFault(
-                                parsed_error.message,
-                            ),
-                        )
-                    }
-                    _ => {}
                 }
             }
         }
@@ -29066,45 +29462,54 @@ impl StartActivityStreamError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    "DBClusterNotFoundFault" => {
-                        return RusotoError::Service(
-                            StartActivityStreamError::DBClusterNotFoundFault(parsed_error.message),
-                        )
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {
+                        "DBClusterNotFoundFault" => {
+                            return RusotoError::Service(
+                                StartActivityStreamError::DBClusterNotFoundFault(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "DBInstanceNotFound" => {
+                            return RusotoError::Service(
+                                StartActivityStreamError::DBInstanceNotFoundFault(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "InvalidDBClusterStateFault" => {
+                            return RusotoError::Service(
+                                StartActivityStreamError::InvalidDBClusterStateFault(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "InvalidDBInstanceState" => {
+                            return RusotoError::Service(
+                                StartActivityStreamError::InvalidDBInstanceStateFault(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "KMSKeyNotAccessibleFault" => {
+                            return RusotoError::Service(
+                                StartActivityStreamError::KMSKeyNotAccessibleFault(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "ResourceNotFoundFault" => {
+                            return RusotoError::Service(
+                                StartActivityStreamError::ResourceNotFoundFault(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        _ => {}
                     }
-                    "DBInstanceNotFound" => {
-                        return RusotoError::Service(
-                            StartActivityStreamError::DBInstanceNotFoundFault(parsed_error.message),
-                        )
-                    }
-                    "InvalidDBClusterStateFault" => {
-                        return RusotoError::Service(
-                            StartActivityStreamError::InvalidDBClusterStateFault(
-                                parsed_error.message,
-                            ),
-                        )
-                    }
-                    "InvalidDBInstanceState" => {
-                        return RusotoError::Service(
-                            StartActivityStreamError::InvalidDBInstanceStateFault(
-                                parsed_error.message,
-                            ),
-                        )
-                    }
-                    "KMSKeyNotAccessibleFault" => {
-                        return RusotoError::Service(
-                            StartActivityStreamError::KMSKeyNotAccessibleFault(
-                                parsed_error.message,
-                            ),
-                        )
-                    }
-                    "ResourceNotFoundFault" => {
-                        return RusotoError::Service(
-                            StartActivityStreamError::ResourceNotFoundFault(parsed_error.message),
-                        )
-                    }
-                    _ => {}
                 }
             }
         }
@@ -29154,24 +29559,31 @@ impl StartDBClusterError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    "DBClusterNotFoundFault" => {
-                        return RusotoError::Service(StartDBClusterError::DBClusterNotFoundFault(
-                            parsed_error.message,
-                        ))
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {
+                        "DBClusterNotFoundFault" => {
+                            return RusotoError::Service(
+                                StartDBClusterError::DBClusterNotFoundFault(parsed_error.message),
+                            )
+                        }
+                        "InvalidDBClusterStateFault" => {
+                            return RusotoError::Service(
+                                StartDBClusterError::InvalidDBClusterStateFault(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "InvalidDBInstanceState" => {
+                            return RusotoError::Service(
+                                StartDBClusterError::InvalidDBInstanceStateFault(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        _ => {}
                     }
-                    "InvalidDBClusterStateFault" => {
-                        return RusotoError::Service(
-                            StartDBClusterError::InvalidDBClusterStateFault(parsed_error.message),
-                        )
-                    }
-                    "InvalidDBInstanceState" => {
-                        return RusotoError::Service(
-                            StartDBClusterError::InvalidDBInstanceStateFault(parsed_error.message),
-                        )
-                    }
-                    _ => {}
                 }
             }
         }
@@ -29230,68 +29642,83 @@ impl StartDBInstanceError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    "AuthorizationNotFound" => {
-                        return RusotoError::Service(
-                            StartDBInstanceError::AuthorizationNotFoundFault(parsed_error.message),
-                        )
-                    }
-                    "DBClusterNotFoundFault" => {
-                        return RusotoError::Service(StartDBInstanceError::DBClusterNotFoundFault(
-                            parsed_error.message,
-                        ))
-                    }
-                    "DBInstanceNotFound" => {
-                        return RusotoError::Service(StartDBInstanceError::DBInstanceNotFoundFault(
-                            parsed_error.message,
-                        ))
-                    }
-                    "DBSubnetGroupDoesNotCoverEnoughAZs" => {
-                        return RusotoError::Service(
-                            StartDBInstanceError::DBSubnetGroupDoesNotCoverEnoughAZs(
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {
+                        "AuthorizationNotFound" => {
+                            return RusotoError::Service(
+                                StartDBInstanceError::AuthorizationNotFoundFault(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "DBClusterNotFoundFault" => {
+                            return RusotoError::Service(
+                                StartDBInstanceError::DBClusterNotFoundFault(parsed_error.message),
+                            )
+                        }
+                        "DBInstanceNotFound" => {
+                            return RusotoError::Service(
+                                StartDBInstanceError::DBInstanceNotFoundFault(parsed_error.message),
+                            )
+                        }
+                        "DBSubnetGroupDoesNotCoverEnoughAZs" => {
+                            return RusotoError::Service(
+                                StartDBInstanceError::DBSubnetGroupDoesNotCoverEnoughAZs(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "DBSubnetGroupNotFoundFault" => {
+                            return RusotoError::Service(
+                                StartDBInstanceError::DBSubnetGroupNotFoundFault(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "InsufficientDBInstanceCapacity" => {
+                            return RusotoError::Service(
+                                StartDBInstanceError::InsufficientDBInstanceCapacityFault(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "InvalidDBClusterStateFault" => {
+                            return RusotoError::Service(
+                                StartDBInstanceError::InvalidDBClusterStateFault(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "InvalidDBInstanceState" => {
+                            return RusotoError::Service(
+                                StartDBInstanceError::InvalidDBInstanceStateFault(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "InvalidSubnet" => {
+                            return RusotoError::Service(StartDBInstanceError::InvalidSubnet(
                                 parsed_error.message,
-                            ),
-                        )
+                            ))
+                        }
+                        "InvalidVPCNetworkStateFault" => {
+                            return RusotoError::Service(
+                                StartDBInstanceError::InvalidVPCNetworkStateFault(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "KMSKeyNotAccessibleFault" => {
+                            return RusotoError::Service(
+                                StartDBInstanceError::KMSKeyNotAccessibleFault(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        _ => {}
                     }
-                    "DBSubnetGroupNotFoundFault" => {
-                        return RusotoError::Service(
-                            StartDBInstanceError::DBSubnetGroupNotFoundFault(parsed_error.message),
-                        )
-                    }
-                    "InsufficientDBInstanceCapacity" => {
-                        return RusotoError::Service(
-                            StartDBInstanceError::InsufficientDBInstanceCapacityFault(
-                                parsed_error.message,
-                            ),
-                        )
-                    }
-                    "InvalidDBClusterStateFault" => {
-                        return RusotoError::Service(
-                            StartDBInstanceError::InvalidDBClusterStateFault(parsed_error.message),
-                        )
-                    }
-                    "InvalidDBInstanceState" => {
-                        return RusotoError::Service(
-                            StartDBInstanceError::InvalidDBInstanceStateFault(parsed_error.message),
-                        )
-                    }
-                    "InvalidSubnet" => {
-                        return RusotoError::Service(StartDBInstanceError::InvalidSubnet(
-                            parsed_error.message,
-                        ))
-                    }
-                    "InvalidVPCNetworkStateFault" => {
-                        return RusotoError::Service(
-                            StartDBInstanceError::InvalidVPCNetworkStateFault(parsed_error.message),
-                        )
-                    }
-                    "KMSKeyNotAccessibleFault" => {
-                        return RusotoError::Service(
-                            StartDBInstanceError::KMSKeyNotAccessibleFault(parsed_error.message),
-                        )
-                    }
-                    _ => {}
                 }
             }
         }
@@ -29352,10 +29779,13 @@ impl StartDBInstanceAutomatedBackupsReplicationError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                                    "DBInstanceAutomatedBackupQuotaExceeded" => return RusotoError::Service(StartDBInstanceAutomatedBackupsReplicationError::DBInstanceAutomatedBackupQuotaExceededFault(parsed_error.message)),"DBInstanceNotFound" => return RusotoError::Service(StartDBInstanceAutomatedBackupsReplicationError::DBInstanceNotFoundFault(parsed_error.message)),"InvalidDBInstanceState" => return RusotoError::Service(StartDBInstanceAutomatedBackupsReplicationError::InvalidDBInstanceStateFault(parsed_error.message)),"KMSKeyNotAccessibleFault" => return RusotoError::Service(StartDBInstanceAutomatedBackupsReplicationError::KMSKeyNotAccessibleFault(parsed_error.message)),"StorageTypeNotSupported" => return RusotoError::Service(StartDBInstanceAutomatedBackupsReplicationError::StorageTypeNotSupportedFault(parsed_error.message)),_ => {}
-                                }
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {
+                        "DBInstanceAutomatedBackupQuotaExceeded" => return RusotoError::Service(StartDBInstanceAutomatedBackupsReplicationError::DBInstanceAutomatedBackupQuotaExceededFault(parsed_error.message)),"DBInstanceNotFound" => return RusotoError::Service(StartDBInstanceAutomatedBackupsReplicationError::DBInstanceNotFoundFault(parsed_error.message)),"InvalidDBInstanceState" => return RusotoError::Service(StartDBInstanceAutomatedBackupsReplicationError::InvalidDBInstanceStateFault(parsed_error.message)),"KMSKeyNotAccessibleFault" => return RusotoError::Service(StartDBInstanceAutomatedBackupsReplicationError::KMSKeyNotAccessibleFault(parsed_error.message)),"StorageTypeNotSupported" => return RusotoError::Service(StartDBInstanceAutomatedBackupsReplicationError::StorageTypeNotSupportedFault(parsed_error.message)),_ => {}
+                    }
+                }
             }
         }
         RusotoError::Unknown(res)
@@ -29411,62 +29841,67 @@ impl StartExportTaskError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    "DBClusterSnapshotNotFoundFault" => {
-                        return RusotoError::Service(
-                            StartExportTaskError::DBClusterSnapshotNotFoundFault(
-                                parsed_error.message,
-                            ),
-                        )
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {
+                        "DBClusterSnapshotNotFoundFault" => {
+                            return RusotoError::Service(
+                                StartExportTaskError::DBClusterSnapshotNotFoundFault(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "DBSnapshotNotFound" => {
+                            return RusotoError::Service(
+                                StartExportTaskError::DBSnapshotNotFoundFault(parsed_error.message),
+                            )
+                        }
+                        "ExportTaskAlreadyExists" => {
+                            return RusotoError::Service(
+                                StartExportTaskError::ExportTaskAlreadyExistsFault(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "IamRoleMissingPermissions" => {
+                            return RusotoError::Service(
+                                StartExportTaskError::IamRoleMissingPermissionsFault(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "IamRoleNotFound" => {
+                            return RusotoError::Service(
+                                StartExportTaskError::IamRoleNotFoundFault(parsed_error.message),
+                            )
+                        }
+                        "InvalidExportOnly" => {
+                            return RusotoError::Service(
+                                StartExportTaskError::InvalidExportOnlyFault(parsed_error.message),
+                            )
+                        }
+                        "InvalidExportSourceState" => {
+                            return RusotoError::Service(
+                                StartExportTaskError::InvalidExportSourceStateFault(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "InvalidS3BucketFault" => {
+                            return RusotoError::Service(
+                                StartExportTaskError::InvalidS3BucketFault(parsed_error.message),
+                            )
+                        }
+                        "KMSKeyNotAccessibleFault" => {
+                            return RusotoError::Service(
+                                StartExportTaskError::KMSKeyNotAccessibleFault(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        _ => {}
                     }
-                    "DBSnapshotNotFound" => {
-                        return RusotoError::Service(StartExportTaskError::DBSnapshotNotFoundFault(
-                            parsed_error.message,
-                        ))
-                    }
-                    "ExportTaskAlreadyExists" => {
-                        return RusotoError::Service(
-                            StartExportTaskError::ExportTaskAlreadyExistsFault(
-                                parsed_error.message,
-                            ),
-                        )
-                    }
-                    "IamRoleMissingPermissions" => {
-                        return RusotoError::Service(
-                            StartExportTaskError::IamRoleMissingPermissionsFault(
-                                parsed_error.message,
-                            ),
-                        )
-                    }
-                    "IamRoleNotFound" => {
-                        return RusotoError::Service(StartExportTaskError::IamRoleNotFoundFault(
-                            parsed_error.message,
-                        ))
-                    }
-                    "InvalidExportOnly" => {
-                        return RusotoError::Service(StartExportTaskError::InvalidExportOnlyFault(
-                            parsed_error.message,
-                        ))
-                    }
-                    "InvalidExportSourceState" => {
-                        return RusotoError::Service(
-                            StartExportTaskError::InvalidExportSourceStateFault(
-                                parsed_error.message,
-                            ),
-                        )
-                    }
-                    "InvalidS3BucketFault" => {
-                        return RusotoError::Service(StartExportTaskError::InvalidS3BucketFault(
-                            parsed_error.message,
-                        ))
-                    }
-                    "KMSKeyNotAccessibleFault" => {
-                        return RusotoError::Service(
-                            StartExportTaskError::KMSKeyNotAccessibleFault(parsed_error.message),
-                        )
-                    }
-                    _ => {}
                 }
             }
         }
@@ -29525,38 +29960,47 @@ impl StopActivityStreamError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    "DBClusterNotFoundFault" => {
-                        return RusotoError::Service(
-                            StopActivityStreamError::DBClusterNotFoundFault(parsed_error.message),
-                        )
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {
+                        "DBClusterNotFoundFault" => {
+                            return RusotoError::Service(
+                                StopActivityStreamError::DBClusterNotFoundFault(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "DBInstanceNotFound" => {
+                            return RusotoError::Service(
+                                StopActivityStreamError::DBInstanceNotFoundFault(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "InvalidDBClusterStateFault" => {
+                            return RusotoError::Service(
+                                StopActivityStreamError::InvalidDBClusterStateFault(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "InvalidDBInstanceState" => {
+                            return RusotoError::Service(
+                                StopActivityStreamError::InvalidDBInstanceStateFault(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "ResourceNotFoundFault" => {
+                            return RusotoError::Service(
+                                StopActivityStreamError::ResourceNotFoundFault(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        _ => {}
                     }
-                    "DBInstanceNotFound" => {
-                        return RusotoError::Service(
-                            StopActivityStreamError::DBInstanceNotFoundFault(parsed_error.message),
-                        )
-                    }
-                    "InvalidDBClusterStateFault" => {
-                        return RusotoError::Service(
-                            StopActivityStreamError::InvalidDBClusterStateFault(
-                                parsed_error.message,
-                            ),
-                        )
-                    }
-                    "InvalidDBInstanceState" => {
-                        return RusotoError::Service(
-                            StopActivityStreamError::InvalidDBInstanceStateFault(
-                                parsed_error.message,
-                            ),
-                        )
-                    }
-                    "ResourceNotFoundFault" => {
-                        return RusotoError::Service(
-                            StopActivityStreamError::ResourceNotFoundFault(parsed_error.message),
-                        )
-                    }
-                    _ => {}
                 }
             }
         }
@@ -29605,24 +30049,31 @@ impl StopDBClusterError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    "DBClusterNotFoundFault" => {
-                        return RusotoError::Service(StopDBClusterError::DBClusterNotFoundFault(
-                            parsed_error.message,
-                        ))
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {
+                        "DBClusterNotFoundFault" => {
+                            return RusotoError::Service(
+                                StopDBClusterError::DBClusterNotFoundFault(parsed_error.message),
+                            )
+                        }
+                        "InvalidDBClusterStateFault" => {
+                            return RusotoError::Service(
+                                StopDBClusterError::InvalidDBClusterStateFault(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "InvalidDBInstanceState" => {
+                            return RusotoError::Service(
+                                StopDBClusterError::InvalidDBInstanceStateFault(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        _ => {}
                     }
-                    "InvalidDBClusterStateFault" => {
-                        return RusotoError::Service(
-                            StopDBClusterError::InvalidDBClusterStateFault(parsed_error.message),
-                        )
-                    }
-                    "InvalidDBInstanceState" => {
-                        return RusotoError::Service(
-                            StopDBClusterError::InvalidDBInstanceStateFault(parsed_error.message),
-                        )
-                    }
-                    _ => {}
                 }
             }
         }
@@ -29669,34 +30120,45 @@ impl StopDBInstanceError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    "DBInstanceNotFound" => {
-                        return RusotoError::Service(StopDBInstanceError::DBInstanceNotFoundFault(
-                            parsed_error.message,
-                        ))
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {
+                        "DBInstanceNotFound" => {
+                            return RusotoError::Service(
+                                StopDBInstanceError::DBInstanceNotFoundFault(parsed_error.message),
+                            )
+                        }
+                        "DBSnapshotAlreadyExists" => {
+                            return RusotoError::Service(
+                                StopDBInstanceError::DBSnapshotAlreadyExistsFault(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "InvalidDBClusterStateFault" => {
+                            return RusotoError::Service(
+                                StopDBInstanceError::InvalidDBClusterStateFault(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "InvalidDBInstanceState" => {
+                            return RusotoError::Service(
+                                StopDBInstanceError::InvalidDBInstanceStateFault(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "SnapshotQuotaExceeded" => {
+                            return RusotoError::Service(
+                                StopDBInstanceError::SnapshotQuotaExceededFault(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        _ => {}
                     }
-                    "DBSnapshotAlreadyExists" => {
-                        return RusotoError::Service(
-                            StopDBInstanceError::DBSnapshotAlreadyExistsFault(parsed_error.message),
-                        )
-                    }
-                    "InvalidDBClusterStateFault" => {
-                        return RusotoError::Service(
-                            StopDBInstanceError::InvalidDBClusterStateFault(parsed_error.message),
-                        )
-                    }
-                    "InvalidDBInstanceState" => {
-                        return RusotoError::Service(
-                            StopDBInstanceError::InvalidDBInstanceStateFault(parsed_error.message),
-                        )
-                    }
-                    "SnapshotQuotaExceeded" => {
-                        return RusotoError::Service(
-                            StopDBInstanceError::SnapshotQuotaExceededFault(parsed_error.message),
-                        )
-                    }
-                    _ => {}
                 }
             }
         }
@@ -29741,21 +30203,12 @@ impl StopDBInstanceAutomatedBackupsReplicationError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    "DBInstanceNotFound" => {
-                        return RusotoError::Service(
-                            StopDBInstanceAutomatedBackupsReplicationError::DBInstanceNotFoundFault(
-                                parsed_error.message,
-                            ),
-                        )
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {
+                        "DBInstanceNotFound" => return RusotoError::Service(StopDBInstanceAutomatedBackupsReplicationError::DBInstanceNotFoundFault(parsed_error.message)),"InvalidDBInstanceState" => return RusotoError::Service(StopDBInstanceAutomatedBackupsReplicationError::InvalidDBInstanceStateFault(parsed_error.message)),_ => {}
                     }
-                    "InvalidDBInstanceState" => return RusotoError::Service(
-                        StopDBInstanceAutomatedBackupsReplicationError::InvalidDBInstanceStateFault(
-                            parsed_error.message,
-                        ),
-                    ),
-                    _ => {}
                 }
             }
         }

@@ -49,7 +49,6 @@ impl Cloud9Client {
     }
 }
 
-use serde_json;
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateEnvironmentEC2Request {
@@ -455,6 +454,7 @@ pub enum CreateEnvironmentEC2Error {
 impl CreateEnvironmentEC2Error {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateEnvironmentEC2Error> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(CreateEnvironmentEC2Error::BadRequest(err.msg))
@@ -527,6 +527,7 @@ impl CreateEnvironmentMembershipError {
         res: BufferedHttpResponse,
     ) -> RusotoError<CreateEnvironmentMembershipError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(CreateEnvironmentMembershipError::BadRequest(
@@ -609,6 +610,7 @@ pub enum DeleteEnvironmentError {
 impl DeleteEnvironmentError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteEnvironmentError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(DeleteEnvironmentError::BadRequest(err.msg))
@@ -679,6 +681,7 @@ impl DeleteEnvironmentMembershipError {
         res: BufferedHttpResponse,
     ) -> RusotoError<DeleteEnvironmentMembershipError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(DeleteEnvironmentMembershipError::BadRequest(
@@ -763,6 +766,7 @@ impl DescribeEnvironmentMembershipsError {
         res: BufferedHttpResponse,
     ) -> RusotoError<DescribeEnvironmentMembershipsError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(DescribeEnvironmentMembershipsError::BadRequest(
@@ -847,6 +851,7 @@ pub enum DescribeEnvironmentStatusError {
 impl DescribeEnvironmentStatusError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeEnvironmentStatusError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(DescribeEnvironmentStatusError::BadRequest(
@@ -923,6 +928,7 @@ pub enum DescribeEnvironmentsError {
 impl DescribeEnvironmentsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeEnvironmentsError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(DescribeEnvironmentsError::BadRequest(err.msg))
@@ -993,6 +999,7 @@ pub enum ListEnvironmentsError {
 impl ListEnvironmentsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListEnvironmentsError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(ListEnvironmentsError::BadRequest(err.msg))
@@ -1053,6 +1060,7 @@ pub enum ListTagsForResourceError {
 impl ListTagsForResourceError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListTagsForResourceError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(ListTagsForResourceError::BadRequest(err.msg))
@@ -1099,6 +1107,7 @@ pub enum TagResourceError {
 impl TagResourceError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<TagResourceError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(TagResourceError::BadRequest(err.msg))
@@ -1147,6 +1156,7 @@ pub enum UntagResourceError {
 impl UntagResourceError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UntagResourceError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(UntagResourceError::BadRequest(err.msg))
@@ -1201,6 +1211,7 @@ pub enum UpdateEnvironmentError {
 impl UpdateEnvironmentError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateEnvironmentError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(UpdateEnvironmentError::BadRequest(err.msg))
@@ -1271,6 +1282,7 @@ impl UpdateEnvironmentMembershipError {
         res: BufferedHttpResponse,
     ) -> RusotoError<UpdateEnvironmentMembershipError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(UpdateEnvironmentMembershipError::BadRequest(

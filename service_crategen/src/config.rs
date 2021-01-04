@@ -6,7 +6,6 @@ use std::io::{self, Read};
 use std::path::Path;
 
 use serde::Deserialize;
-use serde_json;
 
 use crate::cargo;
 

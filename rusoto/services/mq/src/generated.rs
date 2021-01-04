@@ -24,7 +24,6 @@ use rusoto_core::proto;
 use rusoto_core::signature::SignedRequest;
 #[allow(unused_imports)]
 use serde::{Deserialize, Serialize};
-use serde_json;
 /// <p>Name of the availability zone.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
@@ -1379,6 +1378,7 @@ pub enum CreateBrokerError {
 impl CreateBrokerError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateBrokerError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(CreateBrokerError::BadRequest(err.msg))
@@ -1431,6 +1431,7 @@ pub enum CreateConfigurationError {
 impl CreateConfigurationError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateConfigurationError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(CreateConfigurationError::BadRequest(err.msg))
@@ -1481,6 +1482,7 @@ pub enum CreateTagsError {
 impl CreateTagsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateTagsError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(CreateTagsError::BadRequest(err.msg))
@@ -1531,6 +1533,7 @@ pub enum CreateUserError {
 impl CreateUserError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateUserError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(CreateUserError::BadRequest(err.msg))
@@ -1583,6 +1586,7 @@ pub enum DeleteBrokerError {
 impl DeleteBrokerError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteBrokerError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(DeleteBrokerError::BadRequest(err.msg))
@@ -1631,6 +1635,7 @@ pub enum DeleteTagsError {
 impl DeleteTagsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteTagsError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(DeleteTagsError::BadRequest(err.msg))
@@ -1679,6 +1684,7 @@ pub enum DeleteUserError {
 impl DeleteUserError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteUserError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(DeleteUserError::BadRequest(err.msg))
@@ -1727,6 +1733,7 @@ pub enum DescribeBrokerError {
 impl DescribeBrokerError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeBrokerError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(DescribeBrokerError::BadRequest(err.msg))
@@ -1773,6 +1780,7 @@ pub enum DescribeBrokerEngineTypesError {
 impl DescribeBrokerEngineTypesError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeBrokerEngineTypesError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(DescribeBrokerEngineTypesError::BadRequest(
@@ -1823,6 +1831,7 @@ impl DescribeBrokerInstanceOptionsError {
         res: BufferedHttpResponse,
     ) -> RusotoError<DescribeBrokerInstanceOptionsError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(DescribeBrokerInstanceOptionsError::BadRequest(
@@ -1875,6 +1884,7 @@ pub enum DescribeConfigurationError {
 impl DescribeConfigurationError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeConfigurationError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(DescribeConfigurationError::BadRequest(err.msg))
@@ -1927,6 +1937,7 @@ impl DescribeConfigurationRevisionError {
         res: BufferedHttpResponse,
     ) -> RusotoError<DescribeConfigurationRevisionError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(DescribeConfigurationRevisionError::BadRequest(
@@ -1985,6 +1996,7 @@ pub enum DescribeUserError {
 impl DescribeUserError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeUserError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(DescribeUserError::BadRequest(err.msg))
@@ -2031,6 +2043,7 @@ pub enum ListBrokersError {
 impl ListBrokersError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListBrokersError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(ListBrokersError::BadRequest(err.msg))
@@ -2077,6 +2090,7 @@ impl ListConfigurationRevisionsError {
         res: BufferedHttpResponse,
     ) -> RusotoError<ListConfigurationRevisionsError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(ListConfigurationRevisionsError::BadRequest(
@@ -2131,6 +2145,7 @@ pub enum ListConfigurationsError {
 impl ListConfigurationsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListConfigurationsError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(ListConfigurationsError::BadRequest(err.msg))
@@ -2177,6 +2192,7 @@ pub enum ListTagsError {
 impl ListTagsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListTagsError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(ListTagsError::BadRequest(err.msg))
@@ -2225,6 +2241,7 @@ pub enum ListUsersError {
 impl ListUsersError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListUsersError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(ListUsersError::BadRequest(err.msg))
@@ -2273,6 +2290,7 @@ pub enum RebootBrokerError {
 impl RebootBrokerError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<RebootBrokerError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(RebootBrokerError::BadRequest(err.msg))
@@ -2323,6 +2341,7 @@ pub enum UpdateBrokerError {
 impl UpdateBrokerError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateBrokerError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(UpdateBrokerError::BadRequest(err.msg))
@@ -2377,6 +2396,7 @@ pub enum UpdateConfigurationError {
 impl UpdateConfigurationError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateConfigurationError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(UpdateConfigurationError::BadRequest(err.msg))
@@ -2433,6 +2453,7 @@ pub enum UpdateUserError {
 impl UpdateUserError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateUserError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(UpdateUserError::BadRequest(err.msg))
@@ -2656,6 +2677,7 @@ impl MQ for MQClient {
         &self,
         input: CreateBrokerRequest,
     ) -> Result<CreateBrokerResponse, RusotoError<CreateBrokerError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/v1/brokers";
 
         let mut request = SignedRequest::new("POST", "mq", &self.region, &request_uri);
@@ -2687,6 +2709,7 @@ impl MQ for MQClient {
         &self,
         input: CreateConfigurationRequest,
     ) -> Result<CreateConfigurationResponse, RusotoError<CreateConfigurationError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/v1/configurations";
 
         let mut request = SignedRequest::new("POST", "mq", &self.region, &request_uri);
@@ -2718,6 +2741,7 @@ impl MQ for MQClient {
         &self,
         input: CreateTagsRequest,
     ) -> Result<(), RusotoError<CreateTagsError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!("/v1/tags/{resource_arn}", resource_arn = input.resource_arn);
 
         let mut request = SignedRequest::new("POST", "mq", &self.region, &request_uri);
@@ -2733,9 +2757,9 @@ impl MQ for MQClient {
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 204 {
             let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = ::std::mem::drop(response);
+            let _result = ::std::mem::drop(response);
 
-            Ok(result)
+            Ok(())
         } else {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             Err(CreateTagsError::from_response(response))
@@ -2748,6 +2772,7 @@ impl MQ for MQClient {
         &self,
         input: CreateUserRequest,
     ) -> Result<CreateUserResponse, RusotoError<CreateUserError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/v1/brokers/{broker_id}/users/{username}",
             broker_id = input.broker_id,
@@ -2783,6 +2808,7 @@ impl MQ for MQClient {
         &self,
         input: DeleteBrokerRequest,
     ) -> Result<DeleteBrokerResponse, RusotoError<DeleteBrokerError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!("/v1/brokers/{broker_id}", broker_id = input.broker_id);
 
         let mut request = SignedRequest::new("DELETE", "mq", &self.region, &request_uri);
@@ -2811,6 +2837,7 @@ impl MQ for MQClient {
         &self,
         input: DeleteTagsRequest,
     ) -> Result<(), RusotoError<DeleteTagsError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!("/v1/tags/{resource_arn}", resource_arn = input.resource_arn);
 
         let mut request = SignedRequest::new("DELETE", "mq", &self.region, &request_uri);
@@ -2829,9 +2856,9 @@ impl MQ for MQClient {
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 204 {
             let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = ::std::mem::drop(response);
+            let _result = ::std::mem::drop(response);
 
-            Ok(result)
+            Ok(())
         } else {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             Err(DeleteTagsError::from_response(response))
@@ -2844,6 +2871,7 @@ impl MQ for MQClient {
         &self,
         input: DeleteUserRequest,
     ) -> Result<DeleteUserResponse, RusotoError<DeleteUserError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/v1/brokers/{broker_id}/users/{username}",
             broker_id = input.broker_id,
@@ -2876,6 +2904,7 @@ impl MQ for MQClient {
         &self,
         input: DescribeBrokerRequest,
     ) -> Result<DescribeBrokerResponse, RusotoError<DescribeBrokerError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!("/v1/brokers/{broker_id}", broker_id = input.broker_id);
 
         let mut request = SignedRequest::new("GET", "mq", &self.region, &request_uri);
@@ -2905,6 +2934,7 @@ impl MQ for MQClient {
         input: DescribeBrokerEngineTypesRequest,
     ) -> Result<DescribeBrokerEngineTypesResponse, RusotoError<DescribeBrokerEngineTypesError>>
     {
+        #![allow(clippy::needless_update)]
         let request_uri = "/v1/broker-engine-types";
 
         let mut request = SignedRequest::new("GET", "mq", &self.region, &request_uri);
@@ -2948,6 +2978,7 @@ impl MQ for MQClient {
         DescribeBrokerInstanceOptionsResponse,
         RusotoError<DescribeBrokerInstanceOptionsError>,
     > {
+        #![allow(clippy::needless_update)]
         let request_uri = "/v1/broker-instance-options";
 
         let mut request = SignedRequest::new("GET", "mq", &self.region, &request_uri);
@@ -2994,6 +3025,7 @@ impl MQ for MQClient {
         &self,
         input: DescribeConfigurationRequest,
     ) -> Result<DescribeConfigurationResponse, RusotoError<DescribeConfigurationError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/v1/configurations/{configuration_id}",
             configuration_id = input.configuration_id
@@ -3028,6 +3060,7 @@ impl MQ for MQClient {
         DescribeConfigurationRevisionResponse,
         RusotoError<DescribeConfigurationRevisionError>,
     > {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/v1/configurations/{configuration_id}/revisions/{configuration_revision}",
             configuration_id = input.configuration_id,
@@ -3060,6 +3093,7 @@ impl MQ for MQClient {
         &self,
         input: DescribeUserRequest,
     ) -> Result<DescribeUserResponse, RusotoError<DescribeUserError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/v1/brokers/{broker_id}/users/{username}",
             broker_id = input.broker_id,
@@ -3092,6 +3126,7 @@ impl MQ for MQClient {
         &self,
         input: ListBrokersRequest,
     ) -> Result<ListBrokersResponse, RusotoError<ListBrokersError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/v1/brokers";
 
         let mut request = SignedRequest::new("GET", "mq", &self.region, &request_uri);
@@ -3130,6 +3165,7 @@ impl MQ for MQClient {
         input: ListConfigurationRevisionsRequest,
     ) -> Result<ListConfigurationRevisionsResponse, RusotoError<ListConfigurationRevisionsError>>
     {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/v1/configurations/{configuration_id}/revisions",
             configuration_id = input.configuration_id
@@ -3170,6 +3206,7 @@ impl MQ for MQClient {
         &self,
         input: ListConfigurationsRequest,
     ) -> Result<ListConfigurationsResponse, RusotoError<ListConfigurationsError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/v1/configurations";
 
         let mut request = SignedRequest::new("GET", "mq", &self.region, &request_uri);
@@ -3207,6 +3244,7 @@ impl MQ for MQClient {
         &self,
         input: ListTagsRequest,
     ) -> Result<ListTagsResponse, RusotoError<ListTagsError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!("/v1/tags/{resource_arn}", resource_arn = input.resource_arn);
 
         let mut request = SignedRequest::new("GET", "mq", &self.region, &request_uri);
@@ -3235,6 +3273,7 @@ impl MQ for MQClient {
         &self,
         input: ListUsersRequest,
     ) -> Result<ListUsersResponse, RusotoError<ListUsersError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!("/v1/brokers/{broker_id}/users", broker_id = input.broker_id);
 
         let mut request = SignedRequest::new("GET", "mq", &self.region, &request_uri);
@@ -3272,6 +3311,7 @@ impl MQ for MQClient {
         &self,
         input: RebootBrokerRequest,
     ) -> Result<RebootBrokerResponse, RusotoError<RebootBrokerError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/v1/brokers/{broker_id}/reboot",
             broker_id = input.broker_id
@@ -3303,6 +3343,7 @@ impl MQ for MQClient {
         &self,
         input: UpdateBrokerRequest,
     ) -> Result<UpdateBrokerResponse, RusotoError<UpdateBrokerError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!("/v1/brokers/{broker_id}", broker_id = input.broker_id);
 
         let mut request = SignedRequest::new("PUT", "mq", &self.region, &request_uri);
@@ -3334,6 +3375,7 @@ impl MQ for MQClient {
         &self,
         input: UpdateConfigurationRequest,
     ) -> Result<UpdateConfigurationResponse, RusotoError<UpdateConfigurationError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/v1/configurations/{configuration_id}",
             configuration_id = input.configuration_id
@@ -3368,6 +3410,7 @@ impl MQ for MQClient {
         &self,
         input: UpdateUserRequest,
     ) -> Result<UpdateUserResponse, RusotoError<UpdateUserError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/v1/brokers/{broker_id}/users/{username}",
             broker_id = input.broker_id,

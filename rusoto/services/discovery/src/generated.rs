@@ -49,7 +49,6 @@ impl DiscoveryClient {
     }
 }
 
-use serde_json;
 /// <p>Information about agents or connectors that were instructed to start collecting data. Information includes the agent/connector ID, a description of the operation, and whether the agent/connector configuration was updated.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
@@ -1073,6 +1072,7 @@ impl AssociateConfigurationItemsToApplicationError {
         res: BufferedHttpResponse,
     ) -> RusotoError<AssociateConfigurationItemsToApplicationError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AuthorizationErrorException" => {
                     return RusotoError::Service(
@@ -1149,6 +1149,7 @@ pub enum BatchDeleteImportDataError {
 impl BatchDeleteImportDataError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<BatchDeleteImportDataError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AuthorizationErrorException" => {
                     return RusotoError::Service(BatchDeleteImportDataError::AuthorizationError(
@@ -1213,6 +1214,7 @@ pub enum CreateApplicationError {
 impl CreateApplicationError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateApplicationError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AuthorizationErrorException" => {
                     return RusotoError::Service(CreateApplicationError::AuthorizationError(
@@ -1275,6 +1277,7 @@ pub enum CreateTagsError {
 impl CreateTagsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateTagsError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AuthorizationErrorException" => {
                     return RusotoError::Service(CreateTagsError::AuthorizationError(err.msg))
@@ -1333,6 +1336,7 @@ pub enum DeleteApplicationsError {
 impl DeleteApplicationsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteApplicationsError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AuthorizationErrorException" => {
                     return RusotoError::Service(DeleteApplicationsError::AuthorizationError(
@@ -1395,6 +1399,7 @@ pub enum DeleteTagsError {
 impl DeleteTagsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteTagsError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AuthorizationErrorException" => {
                     return RusotoError::Service(DeleteTagsError::AuthorizationError(err.msg))
@@ -1453,6 +1458,7 @@ pub enum DescribeAgentsError {
 impl DescribeAgentsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeAgentsError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AuthorizationErrorException" => {
                     return RusotoError::Service(DescribeAgentsError::AuthorizationError(err.msg))
@@ -1509,6 +1515,7 @@ pub enum DescribeConfigurationsError {
 impl DescribeConfigurationsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeConfigurationsError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AuthorizationErrorException" => {
                     return RusotoError::Service(DescribeConfigurationsError::AuthorizationError(
@@ -1577,6 +1584,7 @@ pub enum DescribeContinuousExportsError {
 impl DescribeContinuousExportsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeContinuousExportsError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AuthorizationErrorException" => {
                     return RusotoError::Service(
@@ -1663,6 +1671,7 @@ impl DescribeExportConfigurationsError {
         res: BufferedHttpResponse,
     ) -> RusotoError<DescribeExportConfigurationsError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AuthorizationErrorException" => {
                     return RusotoError::Service(
@@ -1745,6 +1754,7 @@ pub enum DescribeExportTasksError {
 impl DescribeExportTasksError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeExportTasksError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AuthorizationErrorException" => {
                     return RusotoError::Service(DescribeExportTasksError::AuthorizationError(
@@ -1809,6 +1819,7 @@ pub enum DescribeImportTasksError {
 impl DescribeImportTasksError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeImportTasksError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AuthorizationErrorException" => {
                     return RusotoError::Service(DescribeImportTasksError::AuthorizationError(
@@ -1875,6 +1886,7 @@ pub enum DescribeTagsError {
 impl DescribeTagsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeTagsError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AuthorizationErrorException" => {
                     return RusotoError::Service(DescribeTagsError::AuthorizationError(err.msg))
@@ -1935,6 +1947,7 @@ impl DisassociateConfigurationItemsFromApplicationError {
         res: BufferedHttpResponse,
     ) -> RusotoError<DisassociateConfigurationItemsFromApplicationError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AuthorizationErrorException" => {
                     return RusotoError::Service(
@@ -2021,6 +2034,7 @@ pub enum ExportConfigurationsError {
 impl ExportConfigurationsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ExportConfigurationsError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AuthorizationErrorException" => {
                     return RusotoError::Service(ExportConfigurationsError::AuthorizationError(
@@ -2091,6 +2105,7 @@ pub enum GetDiscoverySummaryError {
 impl GetDiscoverySummaryError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetDiscoverySummaryError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AuthorizationErrorException" => {
                     return RusotoError::Service(GetDiscoverySummaryError::AuthorizationError(
@@ -2157,6 +2172,7 @@ pub enum ListConfigurationsError {
 impl ListConfigurationsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListConfigurationsError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AuthorizationErrorException" => {
                     return RusotoError::Service(ListConfigurationsError::AuthorizationError(
@@ -2221,6 +2237,7 @@ pub enum ListServerNeighborsError {
 impl ListServerNeighborsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListServerNeighborsError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AuthorizationErrorException" => {
                     return RusotoError::Service(ListServerNeighborsError::AuthorizationError(
@@ -2291,6 +2308,7 @@ pub enum StartContinuousExportError {
 impl StartContinuousExportError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<StartContinuousExportError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AuthorizationErrorException" => {
                     return RusotoError::Service(StartContinuousExportError::AuthorizationError(
@@ -2371,6 +2389,7 @@ impl StartDataCollectionByAgentIdsError {
         res: BufferedHttpResponse,
     ) -> RusotoError<StartDataCollectionByAgentIdsError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AuthorizationErrorException" => {
                     return RusotoError::Service(
@@ -2447,6 +2466,7 @@ pub enum StartExportTaskError {
 impl StartExportTaskError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<StartExportTaskError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AuthorizationErrorException" => {
                     return RusotoError::Service(StartExportTaskError::AuthorizationError(err.msg))
@@ -2511,6 +2531,7 @@ pub enum StartImportTaskError {
 impl StartImportTaskError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<StartImportTaskError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AuthorizationErrorException" => {
                     return RusotoError::Service(StartImportTaskError::AuthorizationError(err.msg))
@@ -2577,6 +2598,7 @@ pub enum StopContinuousExportError {
 impl StopContinuousExportError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<StopContinuousExportError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AuthorizationErrorException" => {
                     return RusotoError::Service(StopContinuousExportError::AuthorizationError(
@@ -2659,6 +2681,7 @@ impl StopDataCollectionByAgentIdsError {
         res: BufferedHttpResponse,
     ) -> RusotoError<StopDataCollectionByAgentIdsError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AuthorizationErrorException" => {
                     return RusotoError::Service(
@@ -2733,6 +2756,7 @@ pub enum UpdateApplicationError {
 impl UpdateApplicationError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateApplicationError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AuthorizationErrorException" => {
                     return RusotoError::Service(UpdateApplicationError::AuthorizationError(

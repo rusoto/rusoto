@@ -49,7 +49,6 @@ impl OpsWorksClient {
     }
 }
 
-use serde_json;
 /// <p>Describes an agent version.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
@@ -3366,6 +3365,7 @@ pub enum AssignInstanceError {
 impl AssignInstanceError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<AssignInstanceError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(AssignInstanceError::ResourceNotFound(err.msg))
@@ -3396,6 +3396,7 @@ pub enum AssignVolumeError {
 impl AssignVolumeError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<AssignVolumeError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(AssignVolumeError::ResourceNotFound(err.msg))
@@ -3426,6 +3427,7 @@ pub enum AssociateElasticIpError {
 impl AssociateElasticIpError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<AssociateElasticIpError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(AssociateElasticIpError::ResourceNotFound(err.msg))
@@ -3456,6 +3458,7 @@ pub enum AttachElasticLoadBalancerError {
 impl AttachElasticLoadBalancerError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<AttachElasticLoadBalancerError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(AttachElasticLoadBalancerError::ResourceNotFound(
@@ -3488,6 +3491,7 @@ pub enum CloneStackError {
 impl CloneStackError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CloneStackError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(CloneStackError::ResourceNotFound(err.msg))
@@ -3518,6 +3522,7 @@ pub enum CreateAppError {
 impl CreateAppError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateAppError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(CreateAppError::ResourceNotFound(err.msg))
@@ -3548,6 +3553,7 @@ pub enum CreateDeploymentError {
 impl CreateDeploymentError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateDeploymentError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(CreateDeploymentError::ResourceNotFound(err.msg))
@@ -3578,6 +3584,7 @@ pub enum CreateInstanceError {
 impl CreateInstanceError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateInstanceError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(CreateInstanceError::ResourceNotFound(err.msg))
@@ -3608,6 +3615,7 @@ pub enum CreateLayerError {
 impl CreateLayerError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateLayerError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(CreateLayerError::ResourceNotFound(err.msg))
@@ -3635,6 +3643,7 @@ pub enum CreateStackError {}
 impl CreateStackError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateStackError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
@@ -3657,6 +3666,7 @@ pub enum CreateUserProfileError {}
 impl CreateUserProfileError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateUserProfileError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
@@ -3682,6 +3692,7 @@ pub enum DeleteAppError {
 impl DeleteAppError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteAppError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(DeleteAppError::ResourceNotFound(err.msg))
@@ -3712,6 +3723,7 @@ pub enum DeleteInstanceError {
 impl DeleteInstanceError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteInstanceError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(DeleteInstanceError::ResourceNotFound(err.msg))
@@ -3742,6 +3754,7 @@ pub enum DeleteLayerError {
 impl DeleteLayerError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteLayerError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(DeleteLayerError::ResourceNotFound(err.msg))
@@ -3772,6 +3785,7 @@ pub enum DeleteStackError {
 impl DeleteStackError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteStackError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(DeleteStackError::ResourceNotFound(err.msg))
@@ -3802,6 +3816,7 @@ pub enum DeleteUserProfileError {
 impl DeleteUserProfileError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteUserProfileError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(DeleteUserProfileError::ResourceNotFound(err.msg))
@@ -3832,6 +3847,7 @@ pub enum DeregisterEcsClusterError {
 impl DeregisterEcsClusterError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeregisterEcsClusterError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(DeregisterEcsClusterError::ResourceNotFound(
@@ -3864,6 +3880,7 @@ pub enum DeregisterElasticIpError {
 impl DeregisterElasticIpError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeregisterElasticIpError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(DeregisterElasticIpError::ResourceNotFound(
@@ -3896,6 +3913,7 @@ pub enum DeregisterInstanceError {
 impl DeregisterInstanceError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeregisterInstanceError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(DeregisterInstanceError::ResourceNotFound(err.msg))
@@ -3926,6 +3944,7 @@ pub enum DeregisterRdsDbInstanceError {
 impl DeregisterRdsDbInstanceError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeregisterRdsDbInstanceError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(DeregisterRdsDbInstanceError::ResourceNotFound(
@@ -3958,6 +3977,7 @@ pub enum DeregisterVolumeError {
 impl DeregisterVolumeError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeregisterVolumeError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(DeregisterVolumeError::ResourceNotFound(err.msg))
@@ -3988,6 +4008,7 @@ pub enum DescribeAgentVersionsError {
 impl DescribeAgentVersionsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeAgentVersionsError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(DescribeAgentVersionsError::ResourceNotFound(
@@ -4020,6 +4041,7 @@ pub enum DescribeAppsError {
 impl DescribeAppsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeAppsError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(DescribeAppsError::ResourceNotFound(err.msg))
@@ -4050,6 +4072,7 @@ pub enum DescribeCommandsError {
 impl DescribeCommandsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeCommandsError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(DescribeCommandsError::ResourceNotFound(err.msg))
@@ -4080,6 +4103,7 @@ pub enum DescribeDeploymentsError {
 impl DescribeDeploymentsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeDeploymentsError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(DescribeDeploymentsError::ResourceNotFound(
@@ -4112,6 +4136,7 @@ pub enum DescribeEcsClustersError {
 impl DescribeEcsClustersError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeEcsClustersError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(DescribeEcsClustersError::ResourceNotFound(
@@ -4144,6 +4169,7 @@ pub enum DescribeElasticIpsError {
 impl DescribeElasticIpsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeElasticIpsError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(DescribeElasticIpsError::ResourceNotFound(err.msg))
@@ -4176,6 +4202,7 @@ impl DescribeElasticLoadBalancersError {
         res: BufferedHttpResponse,
     ) -> RusotoError<DescribeElasticLoadBalancersError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(
@@ -4210,6 +4237,7 @@ pub enum DescribeInstancesError {
 impl DescribeInstancesError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeInstancesError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(DescribeInstancesError::ResourceNotFound(err.msg))
@@ -4240,6 +4268,7 @@ pub enum DescribeLayersError {
 impl DescribeLayersError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeLayersError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(DescribeLayersError::ResourceNotFound(err.msg))
@@ -4272,6 +4301,7 @@ impl DescribeLoadBasedAutoScalingError {
         res: BufferedHttpResponse,
     ) -> RusotoError<DescribeLoadBasedAutoScalingError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(
@@ -4303,6 +4333,7 @@ pub enum DescribeMyUserProfileError {}
 impl DescribeMyUserProfileError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeMyUserProfileError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
@@ -4325,6 +4356,7 @@ pub enum DescribeOperatingSystemsError {}
 impl DescribeOperatingSystemsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeOperatingSystemsError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
@@ -4350,6 +4382,7 @@ pub enum DescribePermissionsError {
 impl DescribePermissionsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribePermissionsError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(DescribePermissionsError::ResourceNotFound(
@@ -4382,6 +4415,7 @@ pub enum DescribeRaidArraysError {
 impl DescribeRaidArraysError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeRaidArraysError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(DescribeRaidArraysError::ResourceNotFound(err.msg))
@@ -4412,6 +4446,7 @@ pub enum DescribeRdsDbInstancesError {
 impl DescribeRdsDbInstancesError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeRdsDbInstancesError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(DescribeRdsDbInstancesError::ResourceNotFound(
@@ -4444,6 +4479,7 @@ pub enum DescribeServiceErrorsError {
 impl DescribeServiceErrorsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeServiceErrorsError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(DescribeServiceErrorsError::ResourceNotFound(
@@ -4478,6 +4514,7 @@ impl DescribeStackProvisioningParametersError {
         res: BufferedHttpResponse,
     ) -> RusotoError<DescribeStackProvisioningParametersError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(
@@ -4512,6 +4549,7 @@ pub enum DescribeStackSummaryError {
 impl DescribeStackSummaryError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeStackSummaryError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(DescribeStackSummaryError::ResourceNotFound(
@@ -4544,6 +4582,7 @@ pub enum DescribeStacksError {
 impl DescribeStacksError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeStacksError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(DescribeStacksError::ResourceNotFound(err.msg))
@@ -4576,6 +4615,7 @@ impl DescribeTimeBasedAutoScalingError {
         res: BufferedHttpResponse,
     ) -> RusotoError<DescribeTimeBasedAutoScalingError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(
@@ -4610,6 +4650,7 @@ pub enum DescribeUserProfilesError {
 impl DescribeUserProfilesError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeUserProfilesError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(DescribeUserProfilesError::ResourceNotFound(
@@ -4642,6 +4683,7 @@ pub enum DescribeVolumesError {
 impl DescribeVolumesError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeVolumesError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(DescribeVolumesError::ResourceNotFound(err.msg))
@@ -4672,6 +4714,7 @@ pub enum DetachElasticLoadBalancerError {
 impl DetachElasticLoadBalancerError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DetachElasticLoadBalancerError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(DetachElasticLoadBalancerError::ResourceNotFound(
@@ -4704,6 +4747,7 @@ pub enum DisassociateElasticIpError {
 impl DisassociateElasticIpError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DisassociateElasticIpError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(DisassociateElasticIpError::ResourceNotFound(
@@ -4736,6 +4780,7 @@ pub enum GetHostnameSuggestionError {
 impl GetHostnameSuggestionError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetHostnameSuggestionError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(GetHostnameSuggestionError::ResourceNotFound(
@@ -4768,6 +4813,7 @@ pub enum GrantAccessError {
 impl GrantAccessError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GrantAccessError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(GrantAccessError::ResourceNotFound(err.msg))
@@ -4798,6 +4844,7 @@ pub enum ListTagsError {
 impl ListTagsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListTagsError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(ListTagsError::ResourceNotFound(err.msg))
@@ -4828,6 +4875,7 @@ pub enum RebootInstanceError {
 impl RebootInstanceError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<RebootInstanceError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(RebootInstanceError::ResourceNotFound(err.msg))
@@ -4858,6 +4906,7 @@ pub enum RegisterEcsClusterError {
 impl RegisterEcsClusterError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<RegisterEcsClusterError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(RegisterEcsClusterError::ResourceNotFound(err.msg))
@@ -4888,6 +4937,7 @@ pub enum RegisterElasticIpError {
 impl RegisterElasticIpError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<RegisterElasticIpError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(RegisterElasticIpError::ResourceNotFound(err.msg))
@@ -4918,6 +4968,7 @@ pub enum RegisterInstanceError {
 impl RegisterInstanceError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<RegisterInstanceError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(RegisterInstanceError::ResourceNotFound(err.msg))
@@ -4948,6 +4999,7 @@ pub enum RegisterRdsDbInstanceError {
 impl RegisterRdsDbInstanceError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<RegisterRdsDbInstanceError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(RegisterRdsDbInstanceError::ResourceNotFound(
@@ -4980,6 +5032,7 @@ pub enum RegisterVolumeError {
 impl RegisterVolumeError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<RegisterVolumeError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(RegisterVolumeError::ResourceNotFound(err.msg))
@@ -5010,6 +5063,7 @@ pub enum SetLoadBasedAutoScalingError {
 impl SetLoadBasedAutoScalingError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<SetLoadBasedAutoScalingError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(SetLoadBasedAutoScalingError::ResourceNotFound(
@@ -5042,6 +5096,7 @@ pub enum SetPermissionError {
 impl SetPermissionError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<SetPermissionError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(SetPermissionError::ResourceNotFound(err.msg))
@@ -5072,6 +5127,7 @@ pub enum SetTimeBasedAutoScalingError {
 impl SetTimeBasedAutoScalingError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<SetTimeBasedAutoScalingError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(SetTimeBasedAutoScalingError::ResourceNotFound(
@@ -5104,6 +5160,7 @@ pub enum StartInstanceError {
 impl StartInstanceError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<StartInstanceError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(StartInstanceError::ResourceNotFound(err.msg))
@@ -5134,6 +5191,7 @@ pub enum StartStackError {
 impl StartStackError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<StartStackError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(StartStackError::ResourceNotFound(err.msg))
@@ -5164,6 +5222,7 @@ pub enum StopInstanceError {
 impl StopInstanceError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<StopInstanceError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(StopInstanceError::ResourceNotFound(err.msg))
@@ -5194,6 +5253,7 @@ pub enum StopStackError {
 impl StopStackError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<StopStackError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(StopStackError::ResourceNotFound(err.msg))
@@ -5224,6 +5284,7 @@ pub enum TagResourceError {
 impl TagResourceError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<TagResourceError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(TagResourceError::ResourceNotFound(err.msg))
@@ -5254,6 +5315,7 @@ pub enum UnassignInstanceError {
 impl UnassignInstanceError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UnassignInstanceError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(UnassignInstanceError::ResourceNotFound(err.msg))
@@ -5284,6 +5346,7 @@ pub enum UnassignVolumeError {
 impl UnassignVolumeError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UnassignVolumeError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(UnassignVolumeError::ResourceNotFound(err.msg))
@@ -5314,6 +5377,7 @@ pub enum UntagResourceError {
 impl UntagResourceError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UntagResourceError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(UntagResourceError::ResourceNotFound(err.msg))
@@ -5344,6 +5408,7 @@ pub enum UpdateAppError {
 impl UpdateAppError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateAppError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(UpdateAppError::ResourceNotFound(err.msg))
@@ -5374,6 +5439,7 @@ pub enum UpdateElasticIpError {
 impl UpdateElasticIpError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateElasticIpError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(UpdateElasticIpError::ResourceNotFound(err.msg))
@@ -5404,6 +5470,7 @@ pub enum UpdateInstanceError {
 impl UpdateInstanceError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateInstanceError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(UpdateInstanceError::ResourceNotFound(err.msg))
@@ -5434,6 +5501,7 @@ pub enum UpdateLayerError {
 impl UpdateLayerError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateLayerError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(UpdateLayerError::ResourceNotFound(err.msg))
@@ -5461,6 +5529,7 @@ pub enum UpdateMyUserProfileError {}
 impl UpdateMyUserProfileError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateMyUserProfileError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
@@ -5486,6 +5555,7 @@ pub enum UpdateRdsDbInstanceError {
 impl UpdateRdsDbInstanceError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateRdsDbInstanceError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(UpdateRdsDbInstanceError::ResourceNotFound(
@@ -5518,6 +5588,7 @@ pub enum UpdateStackError {
 impl UpdateStackError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateStackError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(UpdateStackError::ResourceNotFound(err.msg))
@@ -5548,6 +5619,7 @@ pub enum UpdateUserProfileError {
 impl UpdateUserProfileError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateUserProfileError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(UpdateUserProfileError::ResourceNotFound(err.msg))
@@ -5578,6 +5650,7 @@ pub enum UpdateVolumeError {
 impl UpdateVolumeError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateVolumeError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(UpdateVolumeError::ResourceNotFound(err.msg))

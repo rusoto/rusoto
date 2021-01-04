@@ -24,7 +24,6 @@ use rusoto_core::proto;
 use rusoto_core::signature::SignedRequest;
 #[allow(unused_imports)]
 use serde::{Deserialize, Serialize};
-use serde_json;
 /// <p>A context is a variable that contains information about the current state of the conversation between a user and Amazon Lex. Context can be set automatically by Amazon Lex when an intent is fulfilled, or it can be set at runtime using the <code>PutContent</code>, <code>PutText</code>, or <code>PutSession</code> operation.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct ActiveContext {
@@ -537,6 +536,7 @@ pub enum DeleteSessionError {
 impl DeleteSessionError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteSessionError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(DeleteSessionError::BadRequest(err.msg))
@@ -589,6 +589,7 @@ pub enum GetSessionError {
 impl GetSessionError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetSessionError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(GetSessionError::BadRequest(err.msg))
@@ -651,6 +652,7 @@ pub enum PostContentError {
 impl PostContentError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<PostContentError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadGatewayException" => {
                     return RusotoError::Service(PostContentError::BadGateway(err.msg))
@@ -735,6 +737,7 @@ pub enum PostTextError {
 impl PostTextError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<PostTextError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadGatewayException" => {
                     return RusotoError::Service(PostTextError::BadGateway(err.msg))
@@ -807,6 +810,7 @@ pub enum PutSessionError {
 impl PutSessionError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<PutSessionError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadGatewayException" => {
                     return RusotoError::Service(PutSessionError::BadGateway(err.msg))
@@ -934,6 +938,7 @@ impl LexRuntime for LexRuntimeClient {
         &self,
         input: DeleteSessionRequest,
     ) -> Result<DeleteSessionResponse, RusotoError<DeleteSessionError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/bot/{bot_name}/alias/{bot_alias}/user/{user_id}/session",
             bot_alias = input.bot_alias,
@@ -969,6 +974,7 @@ impl LexRuntime for LexRuntimeClient {
         &self,
         input: GetSessionRequest,
     ) -> Result<GetSessionResponse, RusotoError<GetSessionError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/bot/{bot_name}/alias/{bot_alias}/user/{user_id}/session/",
             bot_alias = input.bot_alias,
@@ -1010,6 +1016,7 @@ impl LexRuntime for LexRuntimeClient {
         &self,
         input: PostContentRequest,
     ) -> Result<PostContentResponse, RusotoError<PostContentError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/bot/{bot_name}/alias/{bot_alias}/user/{user_id}/content",
             bot_alias = input.bot_alias,
@@ -1043,8 +1050,10 @@ impl LexRuntime for LexRuntimeClient {
         if response.status.is_success() {
             let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
 
-            let mut result = PostContentResponse::default();
-            result.audio_stream = Some(response.body);
+            let mut result = PostContentResponse {
+                audio_stream: Some(response.body),
+                ..PostContentResponse::default()
+            };
 
             result.active_contexts = response.headers.remove("x-amz-lex-active-contexts");
             result.alternative_intents = response.headers.remove("x-amz-lex-alternative-intents");
@@ -1076,6 +1085,7 @@ impl LexRuntime for LexRuntimeClient {
         &self,
         input: PostTextRequest,
     ) -> Result<PostTextResponse, RusotoError<PostTextError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/bot/{bot_name}/alias/{bot_alias}/user/{user_id}/text",
             bot_alias = input.bot_alias,
@@ -1113,6 +1123,7 @@ impl LexRuntime for LexRuntimeClient {
         &self,
         input: PutSessionRequest,
     ) -> Result<PutSessionResponse, RusotoError<PutSessionError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/bot/{bot_name}/alias/{bot_alias}/user/{user_id}/session",
             bot_alias = input.bot_alias,
@@ -1136,8 +1147,10 @@ impl LexRuntime for LexRuntimeClient {
         if response.status.is_success() {
             let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
 
-            let mut result = PutSessionResponse::default();
-            result.audio_stream = Some(response.body);
+            let mut result = PutSessionResponse {
+                audio_stream: Some(response.body),
+                ..PutSessionResponse::default()
+            };
 
             result.active_contexts = response.headers.remove("x-amz-lex-active-contexts");
             result.content_type = response.headers.remove("Content-Type");

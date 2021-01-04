@@ -49,7 +49,6 @@ impl MigrationHubClient {
     }
 }
 
-use serde_json;
 /// <p>The state of an application discovered through Migration Hub import, the AWS Agentless Discovery Connector, or the AWS Application Discovery Agent.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
@@ -614,6 +613,7 @@ pub enum AssociateCreatedArtifactError {
 impl AssociateCreatedArtifactError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<AssociateCreatedArtifactError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(AssociateCreatedArtifactError::AccessDenied(
@@ -714,6 +714,7 @@ impl AssociateDiscoveredResourceError {
         res: BufferedHttpResponse,
     ) -> RusotoError<AssociateDiscoveredResourceError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(AssociateDiscoveredResourceError::AccessDenied(
@@ -822,6 +823,7 @@ impl CreateProgressUpdateStreamError {
         res: BufferedHttpResponse,
     ) -> RusotoError<CreateProgressUpdateStreamError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(CreateProgressUpdateStreamError::AccessDenied(
@@ -920,6 +922,7 @@ impl DeleteProgressUpdateStreamError {
         res: BufferedHttpResponse,
     ) -> RusotoError<DeleteProgressUpdateStreamError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(DeleteProgressUpdateStreamError::AccessDenied(
@@ -1020,6 +1023,7 @@ pub enum DescribeApplicationStateError {
 impl DescribeApplicationStateError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeApplicationStateError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(DescribeApplicationStateError::AccessDenied(
@@ -1104,6 +1108,7 @@ pub enum DescribeMigrationTaskError {
 impl DescribeMigrationTaskError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeMigrationTaskError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(DescribeMigrationTaskError::AccessDenied(err.msg))
@@ -1184,6 +1189,7 @@ impl DisassociateCreatedArtifactError {
         res: BufferedHttpResponse,
     ) -> RusotoError<DisassociateCreatedArtifactError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(DisassociateCreatedArtifactError::AccessDenied(
@@ -1288,6 +1294,7 @@ impl DisassociateDiscoveredResourceError {
         res: BufferedHttpResponse,
     ) -> RusotoError<DisassociateDiscoveredResourceError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(DisassociateDiscoveredResourceError::AccessDenied(
@@ -1396,6 +1403,7 @@ pub enum ImportMigrationTaskError {
 impl ImportMigrationTaskError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ImportMigrationTaskError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(ImportMigrationTaskError::AccessDenied(err.msg))
@@ -1478,6 +1486,7 @@ pub enum ListApplicationStatesError {
 impl ListApplicationStatesError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListApplicationStatesError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(ListApplicationStatesError::AccessDenied(err.msg))
@@ -1546,6 +1555,7 @@ pub enum ListCreatedArtifactsError {
 impl ListCreatedArtifactsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListCreatedArtifactsError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(ListCreatedArtifactsError::AccessDenied(err.msg))
@@ -1620,6 +1630,7 @@ pub enum ListDiscoveredResourcesError {
 impl ListDiscoveredResourcesError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListDiscoveredResourcesError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(ListDiscoveredResourcesError::AccessDenied(
@@ -1700,6 +1711,7 @@ pub enum ListMigrationTasksError {
 impl ListMigrationTasksError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListMigrationTasksError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(ListMigrationTasksError::AccessDenied(err.msg))
@@ -1772,6 +1784,7 @@ pub enum ListProgressUpdateStreamsError {
 impl ListProgressUpdateStreamsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListProgressUpdateStreamsError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(ListProgressUpdateStreamsError::AccessDenied(
@@ -1854,6 +1867,7 @@ pub enum NotifyApplicationStateError {
 impl NotifyApplicationStateError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<NotifyApplicationStateError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(NotifyApplicationStateError::AccessDenied(err.msg))
@@ -1948,6 +1962,7 @@ pub enum NotifyMigrationTaskStateError {
 impl NotifyMigrationTaskStateError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<NotifyMigrationTaskStateError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(NotifyMigrationTaskStateError::AccessDenied(
@@ -2044,6 +2059,7 @@ pub enum PutResourceAttributesError {
 impl PutResourceAttributesError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<PutResourceAttributesError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(PutResourceAttributesError::AccessDenied(err.msg))

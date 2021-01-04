@@ -33,7 +33,6 @@ use serde::Deserialize;
 use serde::Serialize;
 use std::io::Write;
 use std::str::FromStr;
-use xml;
 use xml::EventReader;
 use xml::EventWriter;
 
@@ -65,11 +64,12 @@ pub struct AbortIncompleteMultipartUpload {
 #[allow(dead_code)]
 struct AbortIncompleteMultipartUploadDeserializer;
 impl AbortIncompleteMultipartUploadDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<AbortIncompleteMultipartUpload, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, AbortIncompleteMultipartUpload, _>(
             tag_name,
             stack,
@@ -118,11 +118,12 @@ pub struct AbortMultipartUploadOutput {
 #[allow(dead_code)]
 struct AbortMultipartUploadOutputDeserializer;
 impl AbortMultipartUploadOutputDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<AbortMultipartUploadOutput, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::start_element(tag_name, stack)?;
 
         let obj = AbortMultipartUploadOutput::default();
@@ -217,11 +218,12 @@ pub struct AccessControlTranslation {
 #[allow(dead_code)]
 struct AccessControlTranslationDeserializer;
 impl AccessControlTranslationDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<AccessControlTranslation, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, AccessControlTranslation, _>(
             tag_name,
             stack,
@@ -258,8 +260,9 @@ impl AccessControlTranslationSerializer {
 #[allow(dead_code)]
 struct AccountIdDeserializer;
 impl AccountIdDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
@@ -297,8 +300,9 @@ impl AllowQuotedRecordDelimiterSerializer {
 #[allow(dead_code)]
 struct AllowedHeaderDeserializer;
 impl AllowedHeaderDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
@@ -321,11 +325,13 @@ impl AllowedHeaderSerializer {
 #[allow(dead_code)]
 struct AllowedHeadersDeserializer;
 impl AllowedHeadersDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<String>, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
+
         let mut obj = vec![];
 
         loop {
@@ -368,8 +374,9 @@ impl AllowedHeadersSerializer {
 #[allow(dead_code)]
 struct AllowedMethodDeserializer;
 impl AllowedMethodDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
@@ -392,11 +399,13 @@ impl AllowedMethodSerializer {
 #[allow(dead_code)]
 struct AllowedMethodsDeserializer;
 impl AllowedMethodsDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<String>, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
+
         let mut obj = vec![];
 
         loop {
@@ -439,8 +448,9 @@ impl AllowedMethodsSerializer {
 #[allow(dead_code)]
 struct AllowedOriginDeserializer;
 impl AllowedOriginDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
@@ -463,11 +473,13 @@ impl AllowedOriginSerializer {
 #[allow(dead_code)]
 struct AllowedOriginsDeserializer;
 impl AllowedOriginsDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<String>, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
+
         let mut obj = vec![];
 
         loop {
@@ -521,11 +533,12 @@ pub struct AnalyticsAndOperator {
 #[allow(dead_code)]
 struct AnalyticsAndOperatorDeserializer;
 impl AnalyticsAndOperatorDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<AnalyticsAndOperator, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, AnalyticsAndOperator, _>(tag_name, stack, |name, stack, obj| {
             match name {
                 "Prefix" => {
@@ -581,11 +594,12 @@ pub struct AnalyticsConfiguration {
 #[allow(dead_code)]
 struct AnalyticsConfigurationDeserializer;
 impl AnalyticsConfigurationDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<AnalyticsConfiguration, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, AnalyticsConfiguration, _>(tag_name, stack, |name, stack, obj| {
             match name {
                 "Filter" => {
@@ -635,11 +649,13 @@ impl AnalyticsConfigurationSerializer {
 #[allow(dead_code)]
 struct AnalyticsConfigurationListDeserializer;
 impl AnalyticsConfigurationListDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<AnalyticsConfiguration>, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
+
         let mut obj = vec![];
 
         loop {
@@ -674,11 +690,12 @@ pub struct AnalyticsExportDestination {
 #[allow(dead_code)]
 struct AnalyticsExportDestinationDeserializer;
 impl AnalyticsExportDestinationDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<AnalyticsExportDestination, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, AnalyticsExportDestination, _>(
             tag_name,
             stack,
@@ -736,11 +753,12 @@ pub struct AnalyticsFilter {
 #[allow(dead_code)]
 struct AnalyticsFilterDeserializer;
 impl AnalyticsFilterDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<AnalyticsFilter, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, AnalyticsFilter, _>(tag_name, stack, |name, stack, obj| {
             match name {
                 "And" => {
@@ -787,8 +805,9 @@ impl AnalyticsFilterSerializer {
 #[allow(dead_code)]
 struct AnalyticsIdDeserializer;
 impl AnalyticsIdDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
@@ -826,11 +845,12 @@ pub struct AnalyticsS3BucketDestination {
 #[allow(dead_code)]
 struct AnalyticsS3BucketDestinationDeserializer;
 impl AnalyticsS3BucketDestinationDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<AnalyticsS3BucketDestination, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, AnalyticsS3BucketDestination, _>(
             tag_name,
             stack,
@@ -887,8 +907,9 @@ impl AnalyticsS3BucketDestinationSerializer {
 #[allow(dead_code)]
 struct AnalyticsS3ExportFileFormatDeserializer;
 impl AnalyticsS3ExportFileFormatDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
@@ -912,11 +933,12 @@ pub type StreamingBody = ::rusoto_core::ByteStream;
 #[allow(dead_code)]
 struct BodyDeserializer;
 impl BodyDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<bytes::Bytes, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::deserialize_primitive(tag_name, stack, |s| Ok(s.into()))
     }
 }
@@ -953,8 +975,9 @@ pub struct Bucket {
 #[allow(dead_code)]
 struct BucketDeserializer;
 impl BucketDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<Bucket, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, Bucket, _>(tag_name, stack, |name, stack, obj| {
             match name {
                 "CreationDate" => {
@@ -975,8 +998,9 @@ impl BucketDeserializer {
 #[allow(dead_code)]
 struct BucketAccelerateStatusDeserializer;
 impl BucketAccelerateStatusDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
@@ -999,8 +1023,9 @@ impl BucketAccelerateStatusSerializer {
 #[allow(dead_code)]
 struct BucketKeyEnabledDeserializer;
 impl BucketKeyEnabledDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<bool, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::deserialize_primitive(tag_name, stack, |s| Ok(bool::from_str(&s).unwrap()))
     }
 }
@@ -1048,8 +1073,9 @@ impl BucketLifecycleConfigurationSerializer {
 #[allow(dead_code)]
 struct BucketLocationConstraintDeserializer;
 impl BucketLocationConstraintDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
@@ -1098,8 +1124,9 @@ impl BucketLoggingStatusSerializer {
 #[allow(dead_code)]
 struct BucketLogsPermissionDeserializer;
 impl BucketLogsPermissionDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
@@ -1122,8 +1149,9 @@ impl BucketLogsPermissionSerializer {
 #[allow(dead_code)]
 struct BucketNameDeserializer;
 impl BucketNameDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
@@ -1146,8 +1174,9 @@ impl BucketNameSerializer {
 #[allow(dead_code)]
 struct BucketVersioningStatusDeserializer;
 impl BucketVersioningStatusDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
@@ -1170,11 +1199,13 @@ impl BucketVersioningStatusSerializer {
 #[allow(dead_code)]
 struct BucketsDeserializer;
 impl BucketsDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<Bucket>, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
+
         deserialize_elements::<_, Vec<_>, _>(tag_name, stack, |name, stack, obj| {
             if name == "Bucket" {
                 obj.push(BucketDeserializer::deserialize("Bucket", stack)?);
@@ -1188,24 +1219,27 @@ impl BucketsDeserializer {
 #[allow(dead_code)]
 struct BytesProcessedDeserializer;
 impl BytesProcessedDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<i64, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::deserialize_primitive(tag_name, stack, |s| Ok(i64::from_str(&s).unwrap()))
     }
 }
 #[allow(dead_code)]
 struct BytesReturnedDeserializer;
 impl BytesReturnedDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<i64, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::deserialize_primitive(tag_name, stack, |s| Ok(i64::from_str(&s).unwrap()))
     }
 }
 #[allow(dead_code)]
 struct BytesScannedDeserializer;
 impl BytesScannedDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<i64, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::deserialize_primitive(tag_name, stack, |s| Ok(i64::from_str(&s).unwrap()))
     }
 }
@@ -1254,11 +1288,12 @@ pub struct CORSRule {
 #[allow(dead_code)]
 struct CORSRuleDeserializer;
 impl CORSRuleDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<CORSRule, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, CORSRule, _>(tag_name, stack, |name, stack, obj| {
             match name {
                 "AllowedHeader" => {
@@ -1328,11 +1363,13 @@ impl CORSRuleSerializer {
 #[allow(dead_code)]
 struct CORSRulesDeserializer;
 impl CORSRulesDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<CORSRule>, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
+
         let mut obj = vec![];
 
         loop {
@@ -1479,8 +1516,9 @@ impl CSVOutputSerializer {
 #[allow(dead_code)]
 struct CloudFunctionDeserializer;
 impl CloudFunctionDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
@@ -1517,11 +1555,12 @@ pub struct CloudFunctionConfiguration {
 #[allow(dead_code)]
 struct CloudFunctionConfigurationDeserializer;
 impl CloudFunctionConfigurationDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<CloudFunctionConfiguration, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, CloudFunctionConfiguration, _>(
             tag_name,
             stack,
@@ -1587,8 +1626,9 @@ impl CloudFunctionConfigurationSerializer {
 #[allow(dead_code)]
 struct CloudFunctionInvocationRoleDeserializer;
 impl CloudFunctionInvocationRoleDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
@@ -1611,8 +1651,9 @@ impl CloudFunctionInvocationRoleSerializer {
 #[allow(dead_code)]
 struct CodeDeserializer;
 impl CodeDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
@@ -1643,11 +1684,12 @@ pub struct CommonPrefix {
 #[allow(dead_code)]
 struct CommonPrefixDeserializer;
 impl CommonPrefixDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<CommonPrefix, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, CommonPrefix, _>(tag_name, stack, |name, stack, obj| {
             match name {
                 "Prefix" => {
@@ -1662,11 +1704,13 @@ impl CommonPrefixDeserializer {
 #[allow(dead_code)]
 struct CommonPrefixListDeserializer;
 impl CommonPrefixListDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<CommonPrefix>, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
+
         let mut obj = vec![];
 
         loop {
@@ -1714,11 +1758,12 @@ pub struct CompleteMultipartUploadOutput {
 #[allow(dead_code)]
 struct CompleteMultipartUploadOutputDeserializer;
 impl CompleteMultipartUploadOutputDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<CompleteMultipartUploadOutput, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, CompleteMultipartUploadOutput, _>(
             tag_name,
             stack,
@@ -1865,11 +1910,12 @@ pub struct Condition {
 #[allow(dead_code)]
 struct ConditionDeserializer;
 impl ConditionDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Condition, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, Condition, _>(tag_name, stack, |name, stack, obj| {
             match name {
                 "HttpErrorCodeReturnedEquals" => {
@@ -1922,11 +1968,12 @@ pub struct ContinuationEvent {}
 #[allow(dead_code)]
 struct ContinuationEventDeserializer;
 impl ContinuationEventDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<ContinuationEvent, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::start_element(tag_name, stack)?;
 
         let obj = ContinuationEvent::default();
@@ -1965,11 +2012,13 @@ pub struct CopyObjectOutput {
 #[allow(dead_code)]
 struct CopyObjectOutputDeserializer;
 impl CopyObjectOutputDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<CopyObjectOutput, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
+
         Ok(CopyObjectOutput {
             copy_object_result: Some(CopyObjectResultDeserializer::deserialize(
                 "CopyObjectResult",
@@ -2076,11 +2125,12 @@ pub struct CopyObjectResult {
 #[allow(dead_code)]
 struct CopyObjectResultDeserializer;
 impl CopyObjectResultDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<CopyObjectResult, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, CopyObjectResult, _>(tag_name, stack, |name, stack, obj| {
             match name {
                 "ETag" => {
@@ -2111,11 +2161,12 @@ pub struct CopyPartResult {
 #[allow(dead_code)]
 struct CopyPartResultDeserializer;
 impl CopyPartResultDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<CopyPartResult, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, CopyPartResult, _>(tag_name, stack, |name, stack, obj| {
             match name {
                 "ETag" => {
@@ -2170,11 +2221,12 @@ pub struct CreateBucketOutput {
 #[allow(dead_code)]
 struct CreateBucketOutputDeserializer;
 impl CreateBucketOutputDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<CreateBucketOutput, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::start_element(tag_name, stack)?;
 
         let obj = CreateBucketOutput::default();
@@ -2238,11 +2290,12 @@ pub struct CreateMultipartUploadOutput {
 #[allow(dead_code)]
 struct CreateMultipartUploadOutputDeserializer;
 impl CreateMultipartUploadOutputDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<CreateMultipartUploadOutput, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, CreateMultipartUploadOutput, _>(
             tag_name,
             stack,
@@ -2331,16 +2384,18 @@ pub struct CreateMultipartUploadRequest {
 #[allow(dead_code)]
 struct CreationDateDeserializer;
 impl CreationDateDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 #[allow(dead_code)]
 struct DateDeserializer;
 impl DateDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
@@ -2363,8 +2418,9 @@ impl DateSerializer {
 #[allow(dead_code)]
 struct DaysDeserializer;
 impl DaysDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<i64, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::deserialize_primitive(tag_name, stack, |s| Ok(i64::from_str(&s).unwrap()))
     }
 }
@@ -2387,8 +2443,9 @@ impl DaysSerializer {
 #[allow(dead_code)]
 struct DaysAfterInitiationDeserializer;
 impl DaysAfterInitiationDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<i64, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::deserialize_primitive(tag_name, stack, |s| Ok(i64::from_str(&s).unwrap()))
     }
 }
@@ -2424,11 +2481,12 @@ pub struct DefaultRetention {
 #[allow(dead_code)]
 struct DefaultRetentionDeserializer;
 impl DefaultRetentionDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<DefaultRetention, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, DefaultRetention, _>(tag_name, stack, |name, stack, obj| {
             match name {
                 "Days" => {
@@ -2630,8 +2688,9 @@ pub struct DeleteBucketWebsiteRequest {
 #[allow(dead_code)]
 struct DeleteMarkerDeserializer;
 impl DeleteMarkerDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<bool, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::deserialize_primitive(tag_name, stack, |s| Ok(bool::from_str(&s).unwrap()))
     }
 }
@@ -2654,11 +2713,12 @@ pub struct DeleteMarkerEntry {
 #[allow(dead_code)]
 struct DeleteMarkerEntryDeserializer;
 impl DeleteMarkerEntryDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<DeleteMarkerEntry, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, DeleteMarkerEntry, _>(tag_name, stack, |name, stack, obj| {
             match name {
                 "IsLatest" => {
@@ -2700,11 +2760,12 @@ pub struct DeleteMarkerReplication {
 #[allow(dead_code)]
 struct DeleteMarkerReplicationDeserializer;
 impl DeleteMarkerReplicationDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<DeleteMarkerReplication, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, DeleteMarkerReplication, _>(
             tag_name,
             stack,
@@ -2745,8 +2806,9 @@ impl DeleteMarkerReplicationSerializer {
 #[allow(dead_code)]
 struct DeleteMarkerReplicationStatusDeserializer;
 impl DeleteMarkerReplicationStatusDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
@@ -2769,19 +2831,22 @@ impl DeleteMarkerReplicationStatusSerializer {
 #[allow(dead_code)]
 struct DeleteMarkerVersionIdDeserializer;
 impl DeleteMarkerVersionIdDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 #[allow(dead_code)]
 struct DeleteMarkersDeserializer;
 impl DeleteMarkersDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<DeleteMarkerEntry>, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
+
         let mut obj = vec![];
 
         loop {
@@ -2815,11 +2880,12 @@ pub struct DeleteObjectOutput {
 #[allow(dead_code)]
 struct DeleteObjectOutputDeserializer;
 impl DeleteObjectOutputDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<DeleteObjectOutput, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::start_element(tag_name, stack)?;
 
         let obj = DeleteObjectOutput::default();
@@ -2857,11 +2923,12 @@ pub struct DeleteObjectTaggingOutput {
 #[allow(dead_code)]
 struct DeleteObjectTaggingOutputDeserializer;
 impl DeleteObjectTaggingOutputDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<DeleteObjectTaggingOutput, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::start_element(tag_name, stack)?;
 
         let obj = DeleteObjectTaggingOutput::default();
@@ -2897,11 +2964,12 @@ pub struct DeleteObjectsOutput {
 #[allow(dead_code)]
 struct DeleteObjectsOutputDeserializer;
 impl DeleteObjectsOutputDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<DeleteObjectsOutput, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, DeleteObjectsOutput, _>(tag_name, stack, |name, stack, obj| {
             match name {
                 "Deleted" => {
@@ -2962,11 +3030,12 @@ pub struct DeletedObject {
 #[allow(dead_code)]
 struct DeletedObjectDeserializer;
 impl DeletedObjectDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<DeletedObject, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, DeletedObject, _>(tag_name, stack, |name, stack, obj| {
             match name {
                 "DeleteMarker" => {
@@ -3000,11 +3069,13 @@ impl DeletedObjectDeserializer {
 #[allow(dead_code)]
 struct DeletedObjectsDeserializer;
 impl DeletedObjectsDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<DeletedObject>, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
+
         let mut obj = vec![];
 
         loop {
@@ -3028,8 +3099,9 @@ impl DeletedObjectsDeserializer {
 #[allow(dead_code)]
 struct DelimiterDeserializer;
 impl DelimiterDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
@@ -3088,11 +3160,12 @@ pub struct Destination {
 #[allow(dead_code)]
 struct DestinationDeserializer;
 impl DestinationDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Destination, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, Destination, _>(tag_name, stack, |name, stack, obj| {
             match name {
                 "AccessControlTranslation" => {
@@ -3183,8 +3256,9 @@ impl DestinationSerializer {
 #[allow(dead_code)]
 struct DisplayNameDeserializer;
 impl DisplayNameDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
@@ -3207,8 +3281,9 @@ impl DisplayNameSerializer {
 #[allow(dead_code)]
 struct ETagDeserializer;
 impl ETagDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
@@ -3231,8 +3306,9 @@ impl ETagSerializer {
 #[allow(dead_code)]
 struct EmailAddressDeserializer;
 impl EmailAddressDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
@@ -3270,8 +3346,9 @@ impl EnableRequestProgressSerializer {
 #[allow(dead_code)]
 struct EncodingTypeDeserializer;
 impl EncodingTypeDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
@@ -3338,11 +3415,12 @@ pub struct EncryptionConfiguration {
 #[allow(dead_code)]
 struct EncryptionConfigurationDeserializer;
 impl EncryptionConfigurationDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<EncryptionConfiguration, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, EncryptionConfiguration, _>(
             tag_name,
             stack,
@@ -3404,11 +3482,12 @@ pub struct EndEvent {}
 #[allow(dead_code)]
 struct EndEventDeserializer;
 impl EndEventDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<EndEvent, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::start_element(tag_name, stack)?;
 
         let obj = EndEvent::default();
@@ -3435,11 +3514,12 @@ pub struct S3Error {
 #[allow(dead_code)]
 struct S3ErrorDeserializer;
 impl S3ErrorDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<S3Error, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, S3Error, _>(tag_name, stack, |name, stack, obj| {
             match name {
                 "Code" => {
@@ -3475,11 +3555,12 @@ pub struct ErrorDocument {
 #[allow(dead_code)]
 struct ErrorDocumentDeserializer;
 impl ErrorDocumentDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<ErrorDocument, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, ErrorDocument, _>(tag_name, stack, |name, stack, obj| {
             match name {
                 "Key" => {
@@ -3512,11 +3593,13 @@ impl ErrorDocumentSerializer {
 #[allow(dead_code)]
 struct ErrorsDeserializer;
 impl ErrorsDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<S3Error>, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
+
         let mut obj = vec![];
 
         loop {
@@ -3540,8 +3623,9 @@ impl ErrorsDeserializer {
 #[allow(dead_code)]
 struct EventDeserializer;
 impl EventDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
@@ -3564,11 +3648,13 @@ impl EventSerializer {
 #[allow(dead_code)]
 struct EventListDeserializer;
 impl EventListDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<String>, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
+
         let mut obj = vec![];
 
         loop {
@@ -3620,11 +3706,12 @@ pub struct ExistingObjectReplication {
 #[allow(dead_code)]
 struct ExistingObjectReplicationDeserializer;
 impl ExistingObjectReplicationDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<ExistingObjectReplication, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, ExistingObjectReplication, _>(
             tag_name,
             stack,
@@ -3663,8 +3750,9 @@ impl ExistingObjectReplicationSerializer {
 #[allow(dead_code)]
 struct ExistingObjectReplicationStatusDeserializer;
 impl ExistingObjectReplicationStatusDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
@@ -3687,8 +3775,9 @@ impl ExistingObjectReplicationStatusSerializer {
 #[allow(dead_code)]
 struct ExpirationStatusDeserializer;
 impl ExpirationStatusDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
@@ -3711,8 +3800,9 @@ impl ExpirationStatusSerializer {
 #[allow(dead_code)]
 struct ExpiredObjectDeleteMarkerDeserializer;
 impl ExpiredObjectDeleteMarkerDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<bool, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::deserialize_primitive(tag_name, stack, |s| Ok(bool::from_str(&s).unwrap()))
     }
 }
@@ -3735,8 +3825,9 @@ impl ExpiredObjectDeleteMarkerSerializer {
 #[allow(dead_code)]
 struct ExposeHeaderDeserializer;
 impl ExposeHeaderDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
@@ -3759,11 +3850,13 @@ impl ExposeHeaderSerializer {
 #[allow(dead_code)]
 struct ExposeHeadersDeserializer;
 impl ExposeHeadersDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<String>, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
+
         let mut obj = vec![];
 
         loop {
@@ -3892,11 +3985,12 @@ pub struct FilterRule {
 #[allow(dead_code)]
 struct FilterRuleDeserializer;
 impl FilterRuleDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<FilterRule, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, FilterRule, _>(tag_name, stack, |name, stack, obj| {
             match name {
                 "Name" => {
@@ -3937,11 +4031,13 @@ impl FilterRuleSerializer {
 #[allow(dead_code)]
 struct FilterRuleListDeserializer;
 impl FilterRuleListDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<FilterRule>, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
+
         let mut obj = vec![];
 
         loop {
@@ -3984,8 +4080,9 @@ impl FilterRuleListSerializer {
 #[allow(dead_code)]
 struct FilterRuleNameDeserializer;
 impl FilterRuleNameDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
@@ -4008,8 +4105,9 @@ impl FilterRuleNameSerializer {
 #[allow(dead_code)]
 struct FilterRuleValueDeserializer;
 impl FilterRuleValueDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
@@ -4039,11 +4137,12 @@ pub struct GetBucketAccelerateConfigurationOutput {
 #[allow(dead_code)]
 struct GetBucketAccelerateConfigurationOutputDeserializer;
 impl GetBucketAccelerateConfigurationOutputDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<GetBucketAccelerateConfigurationOutput, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, GetBucketAccelerateConfigurationOutput, _>(
             tag_name,
             stack,
@@ -4082,11 +4181,12 @@ pub struct GetBucketAclOutput {
 #[allow(dead_code)]
 struct GetBucketAclOutputDeserializer;
 impl GetBucketAclOutputDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<GetBucketAclOutput, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, GetBucketAclOutput, _>(tag_name, stack, |name, stack, obj| {
             match name {
                 "AccessControlList" => {
@@ -4122,11 +4222,13 @@ pub struct GetBucketAnalyticsConfigurationOutput {
 #[allow(dead_code)]
 struct GetBucketAnalyticsConfigurationOutputDeserializer;
 impl GetBucketAnalyticsConfigurationOutputDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<GetBucketAnalyticsConfigurationOutput, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
+
         Ok(GetBucketAnalyticsConfigurationOutput {
             analytics_configuration: Some(AnalyticsConfigurationDeserializer::deserialize(
                 "AnalyticsConfiguration",
@@ -4157,11 +4259,12 @@ pub struct GetBucketCorsOutput {
 #[allow(dead_code)]
 struct GetBucketCorsOutputDeserializer;
 impl GetBucketCorsOutputDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<GetBucketCorsOutput, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, GetBucketCorsOutput, _>(tag_name, stack, |name, stack, obj| {
             match name {
                 "CORSRule" => {
@@ -4193,11 +4296,13 @@ pub struct GetBucketEncryptionOutput {
 #[allow(dead_code)]
 struct GetBucketEncryptionOutputDeserializer;
 impl GetBucketEncryptionOutputDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<GetBucketEncryptionOutput, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
+
         Ok(GetBucketEncryptionOutput {
             server_side_encryption_configuration: Some(
                 ServerSideEncryptionConfigurationDeserializer::deserialize(
@@ -4228,11 +4333,13 @@ pub struct GetBucketIntelligentTieringConfigurationOutput {
 #[allow(dead_code)]
 struct GetBucketIntelligentTieringConfigurationOutputDeserializer;
 impl GetBucketIntelligentTieringConfigurationOutputDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<GetBucketIntelligentTieringConfigurationOutput, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
+
         Ok(GetBucketIntelligentTieringConfigurationOutput {
             intelligent_tiering_configuration: Some(
                 IntelligentTieringConfigurationDeserializer::deserialize(
@@ -4263,11 +4370,13 @@ pub struct GetBucketInventoryConfigurationOutput {
 #[allow(dead_code)]
 struct GetBucketInventoryConfigurationOutputDeserializer;
 impl GetBucketInventoryConfigurationOutputDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<GetBucketInventoryConfigurationOutput, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
+
         Ok(GetBucketInventoryConfigurationOutput {
             inventory_configuration: Some(InventoryConfigurationDeserializer::deserialize(
                 "InventoryConfiguration",
@@ -4298,11 +4407,12 @@ pub struct GetBucketLifecycleConfigurationOutput {
 #[allow(dead_code)]
 struct GetBucketLifecycleConfigurationOutputDeserializer;
 impl GetBucketLifecycleConfigurationOutputDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<GetBucketLifecycleConfigurationOutput, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, GetBucketLifecycleConfigurationOutput, _>(
             tag_name,
             stack,
@@ -4339,11 +4449,12 @@ pub struct GetBucketLifecycleOutput {
 #[allow(dead_code)]
 struct GetBucketLifecycleOutputDeserializer;
 impl GetBucketLifecycleOutputDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<GetBucketLifecycleOutput, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, GetBucketLifecycleOutput, _>(
             tag_name,
             stack,
@@ -4380,11 +4491,12 @@ pub struct GetBucketLocationOutput {
 #[allow(dead_code)]
 struct GetBucketLocationOutputDeserializer;
 impl GetBucketLocationOutputDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<GetBucketLocationOutput, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         let mut obj = GetBucketLocationOutput::default();
         obj.location_constraint = Some(BucketLocationConstraintDeserializer::deserialize(
             "LocationConstraint",
@@ -4411,11 +4523,12 @@ pub struct GetBucketLoggingOutput {
 #[allow(dead_code)]
 struct GetBucketLoggingOutputDeserializer;
 impl GetBucketLoggingOutputDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<GetBucketLoggingOutput, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, GetBucketLoggingOutput, _>(tag_name, stack, |name, stack, obj| {
             match name {
                 "LoggingEnabled" => {
@@ -4449,11 +4562,13 @@ pub struct GetBucketMetricsConfigurationOutput {
 #[allow(dead_code)]
 struct GetBucketMetricsConfigurationOutputDeserializer;
 impl GetBucketMetricsConfigurationOutputDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<GetBucketMetricsConfigurationOutput, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
+
         Ok(GetBucketMetricsConfigurationOutput {
             metrics_configuration: Some(MetricsConfigurationDeserializer::deserialize(
                 "MetricsConfiguration",
@@ -4493,11 +4608,13 @@ pub struct GetBucketOwnershipControlsOutput {
 #[allow(dead_code)]
 struct GetBucketOwnershipControlsOutputDeserializer;
 impl GetBucketOwnershipControlsOutputDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<GetBucketOwnershipControlsOutput, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
+
         Ok(GetBucketOwnershipControlsOutput {
             ownership_controls: Some(OwnershipControlsDeserializer::deserialize(
                 "OwnershipControls",
@@ -4541,11 +4658,13 @@ pub struct GetBucketPolicyStatusOutput {
 #[allow(dead_code)]
 struct GetBucketPolicyStatusOutputDeserializer;
 impl GetBucketPolicyStatusOutputDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<GetBucketPolicyStatusOutput, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
+
         Ok(GetBucketPolicyStatusOutput {
             policy_status: Some(PolicyStatusDeserializer::deserialize(
                 "PolicyStatus",
@@ -4573,11 +4692,13 @@ pub struct GetBucketReplicationOutput {
 #[allow(dead_code)]
 struct GetBucketReplicationOutputDeserializer;
 impl GetBucketReplicationOutputDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<GetBucketReplicationOutput, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
+
         Ok(GetBucketReplicationOutput {
             replication_configuration: Some(ReplicationConfigurationDeserializer::deserialize(
                 "ReplicationConfiguration",
@@ -4606,11 +4727,12 @@ pub struct GetBucketRequestPaymentOutput {
 #[allow(dead_code)]
 struct GetBucketRequestPaymentOutputDeserializer;
 impl GetBucketRequestPaymentOutputDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<GetBucketRequestPaymentOutput, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, GetBucketRequestPaymentOutput, _>(
             tag_name,
             stack,
@@ -4645,11 +4767,12 @@ pub struct GetBucketTaggingOutput {
 #[allow(dead_code)]
 struct GetBucketTaggingOutputDeserializer;
 impl GetBucketTaggingOutputDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<GetBucketTaggingOutput, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, GetBucketTaggingOutput, _>(tag_name, stack, |name, stack, obj| {
             match name {
                 "TagSet" => {
@@ -4683,11 +4806,12 @@ pub struct GetBucketVersioningOutput {
 #[allow(dead_code)]
 struct GetBucketVersioningOutputDeserializer;
 impl GetBucketVersioningOutputDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<GetBucketVersioningOutput, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, GetBucketVersioningOutput, _>(
             tag_name,
             stack,
@@ -4736,11 +4860,12 @@ pub struct GetBucketWebsiteOutput {
 #[allow(dead_code)]
 struct GetBucketWebsiteOutputDeserializer;
 impl GetBucketWebsiteOutputDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<GetBucketWebsiteOutput, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, GetBucketWebsiteOutput, _>(tag_name, stack, |name, stack, obj| {
             match name {
                 "ErrorDocument" => {
@@ -4795,11 +4920,12 @@ pub struct GetObjectAclOutput {
 #[allow(dead_code)]
 struct GetObjectAclOutputDeserializer;
 impl GetObjectAclOutputDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<GetObjectAclOutput, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, GetObjectAclOutput, _>(tag_name, stack, |name, stack, obj| {
             match name {
                 "AccessControlList" => {
@@ -4840,11 +4966,13 @@ pub struct GetObjectLegalHoldOutput {
 #[allow(dead_code)]
 struct GetObjectLegalHoldOutputDeserializer;
 impl GetObjectLegalHoldOutputDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<GetObjectLegalHoldOutput, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
+
         Ok(GetObjectLegalHoldOutput {
             legal_hold: Some(ObjectLockLegalHoldDeserializer::deserialize(
                 "LegalHold",
@@ -4878,11 +5006,13 @@ pub struct GetObjectLockConfigurationOutput {
 #[allow(dead_code)]
 struct GetObjectLockConfigurationOutputDeserializer;
 impl GetObjectLockConfigurationOutputDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<GetObjectLockConfigurationOutput, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
+
         Ok(GetObjectLockConfigurationOutput {
             object_lock_configuration: Some(ObjectLockConfigurationDeserializer::deserialize(
                 "ObjectLockConfiguration",
@@ -5022,11 +5152,13 @@ pub struct GetObjectRetentionOutput {
 #[allow(dead_code)]
 struct GetObjectRetentionOutputDeserializer;
 impl GetObjectRetentionOutputDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<GetObjectRetentionOutput, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
+
         Ok(GetObjectRetentionOutput {
             retention: Some(ObjectLockRetentionDeserializer::deserialize(
                 "Retention",
@@ -5062,11 +5194,12 @@ pub struct GetObjectTaggingOutput {
 #[allow(dead_code)]
 struct GetObjectTaggingOutputDeserializer;
 impl GetObjectTaggingOutputDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<GetObjectTaggingOutput, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, GetObjectTaggingOutput, _>(tag_name, stack, |name, stack, obj| {
             match name {
                 "TagSet" => {
@@ -5121,11 +5254,13 @@ pub struct GetPublicAccessBlockOutput {
 #[allow(dead_code)]
 struct GetPublicAccessBlockOutputDeserializer;
 impl GetPublicAccessBlockOutputDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<GetPublicAccessBlockOutput, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
+
         Ok(GetPublicAccessBlockOutput {
             public_access_block_configuration: Some(
                 PublicAccessBlockConfigurationDeserializer::deserialize(
@@ -5185,8 +5320,9 @@ pub struct Grant {
 #[allow(dead_code)]
 struct GrantDeserializer;
 impl GrantDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<Grant, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, Grant, _>(tag_name, stack, |name, stack, obj| {
             match name {
                 "Grantee" => {
@@ -5245,11 +5381,12 @@ pub struct Grantee {
 #[allow(dead_code)]
 struct GranteeDeserializer;
 impl GranteeDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Grantee, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, Grantee, _>(tag_name, stack, |name, stack, obj| {
             match name {
                 "DisplayName" => {
@@ -5310,11 +5447,13 @@ impl GranteeSerializer {
 #[allow(dead_code)]
 struct GrantsDeserializer;
 impl GrantsDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<Grant>, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
+
         deserialize_elements::<_, Vec<_>, _>(tag_name, stack, |name, stack, obj| {
             if name == "Grant" {
                 obj.push(GrantDeserializer::deserialize("Grant", stack)?);
@@ -5422,11 +5561,12 @@ pub struct HeadObjectOutput {
 #[allow(dead_code)]
 struct HeadObjectOutputDeserializer;
 impl HeadObjectOutputDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<HeadObjectOutput, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::start_element(tag_name, stack)?;
 
         let obj = HeadObjectOutput::default();
@@ -5471,8 +5611,9 @@ pub struct HeadObjectRequest {
 #[allow(dead_code)]
 struct HostNameDeserializer;
 impl HostNameDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
@@ -5495,8 +5636,9 @@ impl HostNameSerializer {
 #[allow(dead_code)]
 struct HttpErrorCodeReturnedEqualsDeserializer;
 impl HttpErrorCodeReturnedEqualsDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
@@ -5519,8 +5661,9 @@ impl HttpErrorCodeReturnedEqualsSerializer {
 #[allow(dead_code)]
 struct HttpRedirectCodeDeserializer;
 impl HttpRedirectCodeDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
@@ -5543,8 +5686,9 @@ impl HttpRedirectCodeSerializer {
 #[allow(dead_code)]
 struct IDDeserializer;
 impl IDDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
@@ -5576,11 +5720,12 @@ pub struct IndexDocument {
 #[allow(dead_code)]
 struct IndexDocumentDeserializer;
 impl IndexDocumentDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<IndexDocument, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, IndexDocument, _>(tag_name, stack, |name, stack, obj| {
             match name {
                 "Suffix" => {
@@ -5613,8 +5758,9 @@ impl IndexDocumentSerializer {
 #[allow(dead_code)]
 struct InitiatedDeserializer;
 impl InitiatedDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
@@ -5631,11 +5777,12 @@ pub struct Initiator {
 #[allow(dead_code)]
 struct InitiatorDeserializer;
 impl InitiatorDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Initiator, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, Initiator, _>(tag_name, stack, |name, stack, obj| {
             match name {
                 "DisplayName" => {
@@ -5696,8 +5843,9 @@ impl InputSerializationSerializer {
 #[allow(dead_code)]
 struct IntelligentTieringAccessTierDeserializer;
 impl IntelligentTieringAccessTierDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
@@ -5731,11 +5879,12 @@ pub struct IntelligentTieringAndOperator {
 #[allow(dead_code)]
 struct IntelligentTieringAndOperatorDeserializer;
 impl IntelligentTieringAndOperatorDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<IntelligentTieringAndOperator, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, IntelligentTieringAndOperator, _>(
             tag_name,
             stack,
@@ -5797,11 +5946,12 @@ pub struct IntelligentTieringConfiguration {
 #[allow(dead_code)]
 struct IntelligentTieringConfigurationDeserializer;
 impl IntelligentTieringConfigurationDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<IntelligentTieringConfiguration, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, IntelligentTieringConfiguration, _>(
             tag_name,
             stack,
@@ -5856,11 +6006,13 @@ impl IntelligentTieringConfigurationSerializer {
 #[allow(dead_code)]
 struct IntelligentTieringConfigurationListDeserializer;
 impl IntelligentTieringConfigurationListDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<IntelligentTieringConfiguration>, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
+
         let mut obj = vec![];
 
         loop {
@@ -5886,8 +6038,9 @@ impl IntelligentTieringConfigurationListDeserializer {
 #[allow(dead_code)]
 struct IntelligentTieringDaysDeserializer;
 impl IntelligentTieringDaysDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<i64, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::deserialize_primitive(tag_name, stack, |s| Ok(i64::from_str(&s).unwrap()))
     }
 }
@@ -5922,11 +6075,12 @@ pub struct IntelligentTieringFilter {
 #[allow(dead_code)]
 struct IntelligentTieringFilterDeserializer;
 impl IntelligentTieringFilterDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<IntelligentTieringFilter, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, IntelligentTieringFilter, _>(
             tag_name,
             stack,
@@ -5979,8 +6133,9 @@ impl IntelligentTieringFilterSerializer {
 #[allow(dead_code)]
 struct IntelligentTieringIdDeserializer;
 impl IntelligentTieringIdDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
@@ -6003,8 +6158,9 @@ impl IntelligentTieringIdSerializer {
 #[allow(dead_code)]
 struct IntelligentTieringStatusDeserializer;
 impl IntelligentTieringStatusDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
@@ -6048,11 +6204,12 @@ pub struct InventoryConfiguration {
 #[allow(dead_code)]
 struct InventoryConfigurationDeserializer;
 impl InventoryConfigurationDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<InventoryConfiguration, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, InventoryConfiguration, _>(tag_name, stack, |name, stack, obj| {
             match name {
                 "Destination" => {
@@ -6124,11 +6281,13 @@ impl InventoryConfigurationSerializer {
 #[allow(dead_code)]
 struct InventoryConfigurationListDeserializer;
 impl InventoryConfigurationListDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<InventoryConfiguration>, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
+
         let mut obj = vec![];
 
         loop {
@@ -6163,11 +6322,12 @@ pub struct InventoryDestination {
 #[allow(dead_code)]
 struct InventoryDestinationDeserializer;
 impl InventoryDestinationDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<InventoryDestination, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, InventoryDestination, _>(tag_name, stack, |name, stack, obj| {
             match name {
                 "S3BucketDestination" => {
@@ -6219,11 +6379,12 @@ pub struct InventoryEncryption {
 #[allow(dead_code)]
 struct InventoryEncryptionDeserializer;
 impl InventoryEncryptionDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<InventoryEncryption, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, InventoryEncryption, _>(tag_name, stack, |name, stack, obj| {
             match name {
                 "SSE-KMS" => {
@@ -6273,11 +6434,12 @@ pub struct InventoryFilter {
 #[allow(dead_code)]
 struct InventoryFilterDeserializer;
 impl InventoryFilterDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<InventoryFilter, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, InventoryFilter, _>(tag_name, stack, |name, stack, obj| {
             match name {
                 "Prefix" => {
@@ -6310,8 +6472,9 @@ impl InventoryFilterSerializer {
 #[allow(dead_code)]
 struct InventoryFormatDeserializer;
 impl InventoryFormatDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
@@ -6334,8 +6497,9 @@ impl InventoryFormatSerializer {
 #[allow(dead_code)]
 struct InventoryFrequencyDeserializer;
 impl InventoryFrequencyDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
@@ -6358,8 +6522,9 @@ impl InventoryFrequencySerializer {
 #[allow(dead_code)]
 struct InventoryIdDeserializer;
 impl InventoryIdDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
@@ -6382,8 +6547,9 @@ impl InventoryIdSerializer {
 #[allow(dead_code)]
 struct InventoryIncludedObjectVersionsDeserializer;
 impl InventoryIncludedObjectVersionsDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
@@ -6406,8 +6572,9 @@ impl InventoryIncludedObjectVersionsSerializer {
 #[allow(dead_code)]
 struct InventoryOptionalFieldDeserializer;
 impl InventoryOptionalFieldDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
@@ -6430,11 +6597,13 @@ impl InventoryOptionalFieldSerializer {
 #[allow(dead_code)]
 struct InventoryOptionalFieldsDeserializer;
 impl InventoryOptionalFieldsDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<String>, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
+
         deserialize_elements::<_, Vec<_>, _>(tag_name, stack, |name, stack, obj| {
             if name == "Field" {
                 obj.push(InventoryOptionalFieldDeserializer::deserialize(
@@ -6488,11 +6657,12 @@ pub struct InventoryS3BucketDestination {
 #[allow(dead_code)]
 struct InventoryS3BucketDestinationDeserializer;
 impl InventoryS3BucketDestinationDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<InventoryS3BucketDestination, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, InventoryS3BucketDestination, _>(
             tag_name,
             stack,
@@ -6564,11 +6734,12 @@ pub struct InventorySchedule {
 #[allow(dead_code)]
 struct InventoryScheduleDeserializer;
 impl InventoryScheduleDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<InventorySchedule, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, InventorySchedule, _>(tag_name, stack, |name, stack, obj| {
             match name {
                 "Frequency" => {
@@ -6602,8 +6773,9 @@ impl InventoryScheduleSerializer {
 #[allow(dead_code)]
 struct IsEnabledDeserializer;
 impl IsEnabledDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<bool, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::deserialize_primitive(tag_name, stack, |s| Ok(bool::from_str(&s).unwrap()))
     }
 }
@@ -6626,24 +6798,27 @@ impl IsEnabledSerializer {
 #[allow(dead_code)]
 struct IsLatestDeserializer;
 impl IsLatestDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<bool, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::deserialize_primitive(tag_name, stack, |s| Ok(bool::from_str(&s).unwrap()))
     }
 }
 #[allow(dead_code)]
 struct IsPublicDeserializer;
 impl IsPublicDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<bool, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::deserialize_primitive(tag_name, stack, |s| Ok(bool::from_str(&s).unwrap()))
     }
 }
 #[allow(dead_code)]
 struct IsTruncatedDeserializer;
 impl IsTruncatedDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<bool, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::deserialize_primitive(tag_name, stack, |s| Ok(bool::from_str(&s).unwrap()))
     }
 }
@@ -6734,16 +6909,18 @@ impl KMSContextSerializer {
 #[allow(dead_code)]
 struct KeyCountDeserializer;
 impl KeyCountDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<i64, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::deserialize_primitive(tag_name, stack, |s| Ok(i64::from_str(&s).unwrap()))
     }
 }
 #[allow(dead_code)]
 struct KeyMarkerDeserializer;
 impl KeyMarkerDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
@@ -6766,8 +6943,9 @@ impl KeyMarkerSerializer {
 #[allow(dead_code)]
 struct KeyPrefixEqualsDeserializer;
 impl KeyPrefixEqualsDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
@@ -6790,8 +6968,9 @@ impl KeyPrefixEqualsSerializer {
 #[allow(dead_code)]
 struct LambdaFunctionArnDeserializer;
 impl LambdaFunctionArnDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
@@ -6827,11 +7006,12 @@ pub struct LambdaFunctionConfiguration {
 #[allow(dead_code)]
 struct LambdaFunctionConfigurationDeserializer;
 impl LambdaFunctionConfigurationDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<LambdaFunctionConfiguration, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, LambdaFunctionConfiguration, _>(
             tag_name,
             stack,
@@ -6893,11 +7073,13 @@ impl LambdaFunctionConfigurationSerializer {
 #[allow(dead_code)]
 struct LambdaFunctionConfigurationListDeserializer;
 impl LambdaFunctionConfigurationListDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<LambdaFunctionConfiguration>, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
+
         let mut obj = vec![];
 
         loop {
@@ -6942,8 +7124,9 @@ impl LambdaFunctionConfigurationListSerializer {
 #[allow(dead_code)]
 struct LastModifiedDeserializer;
 impl LastModifiedDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
@@ -6988,11 +7171,12 @@ pub struct LifecycleExpiration {
 #[allow(dead_code)]
 struct LifecycleExpirationDeserializer;
 impl LifecycleExpirationDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<LifecycleExpiration, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, LifecycleExpiration, _>(tag_name, stack, |name, stack, obj| {
             match name {
                 "Date" => {
@@ -7063,11 +7247,12 @@ pub struct LifecycleRule {
 #[allow(dead_code)]
 struct LifecycleRuleDeserializer;
 impl LifecycleRuleDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<LifecycleRule, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, LifecycleRule, _>(tag_name, stack, |name, stack, obj| {
             match name {
                 "AbortIncompleteMultipartUpload" => {
@@ -7185,11 +7370,12 @@ pub struct LifecycleRuleAndOperator {
 #[allow(dead_code)]
 struct LifecycleRuleAndOperatorDeserializer;
 impl LifecycleRuleAndOperatorDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<LifecycleRuleAndOperator, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, LifecycleRuleAndOperator, _>(
             tag_name,
             stack,
@@ -7248,11 +7434,12 @@ pub struct LifecycleRuleFilter {
 #[allow(dead_code)]
 struct LifecycleRuleFilterDeserializer;
 impl LifecycleRuleFilterDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<LifecycleRuleFilter, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, LifecycleRuleFilter, _>(tag_name, stack, |name, stack, obj| {
             match name {
                 "And" => {
@@ -7301,11 +7488,13 @@ impl LifecycleRuleFilterSerializer {
 #[allow(dead_code)]
 struct LifecycleRulesDeserializer;
 impl LifecycleRulesDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<LifecycleRule>, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
+
         let mut obj = vec![];
 
         loop {
@@ -7361,11 +7550,12 @@ pub struct ListBucketAnalyticsConfigurationsOutput {
 #[allow(dead_code)]
 struct ListBucketAnalyticsConfigurationsOutputDeserializer;
 impl ListBucketAnalyticsConfigurationsOutputDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<ListBucketAnalyticsConfigurationsOutput, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, ListBucketAnalyticsConfigurationsOutput, _>(
             tag_name,
             stack,
@@ -7427,11 +7617,12 @@ pub struct ListBucketIntelligentTieringConfigurationsOutput {
 #[allow(dead_code)]
 struct ListBucketIntelligentTieringConfigurationsOutputDeserializer;
 impl ListBucketIntelligentTieringConfigurationsOutputDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<ListBucketIntelligentTieringConfigurationsOutput, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, ListBucketIntelligentTieringConfigurationsOutput, _>(
             tag_name,
             stack,
@@ -7493,11 +7684,12 @@ pub struct ListBucketInventoryConfigurationsOutput {
 #[allow(dead_code)]
 struct ListBucketInventoryConfigurationsOutputDeserializer;
 impl ListBucketInventoryConfigurationsOutputDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<ListBucketInventoryConfigurationsOutput, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, ListBucketInventoryConfigurationsOutput, _>(
             tag_name,
             stack,
@@ -7559,11 +7751,12 @@ pub struct ListBucketMetricsConfigurationsOutput {
 #[allow(dead_code)]
 struct ListBucketMetricsConfigurationsOutputDeserializer;
 impl ListBucketMetricsConfigurationsOutputDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<ListBucketMetricsConfigurationsOutput, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, ListBucketMetricsConfigurationsOutput, _>(
             tag_name,
             stack,
@@ -7621,11 +7814,12 @@ pub struct ListBucketsOutput {
 #[allow(dead_code)]
 struct ListBucketsOutputDeserializer;
 impl ListBucketsOutputDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<ListBucketsOutput, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, ListBucketsOutput, _>(tag_name, stack, |name, stack, obj| {
             match name {
                 "Buckets" => {
@@ -7674,11 +7868,12 @@ pub struct ListMultipartUploadsOutput {
 #[allow(dead_code)]
 struct ListMultipartUploadsOutputDeserializer;
 impl ListMultipartUploadsOutputDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<ListMultipartUploadsOutput, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, ListMultipartUploadsOutput, _>(
             tag_name,
             stack,
@@ -7802,11 +7997,12 @@ pub struct ListObjectVersionsOutput {
 #[allow(dead_code)]
 struct ListObjectVersionsOutputDeserializer;
 impl ListObjectVersionsOutputDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<ListObjectVersionsOutput, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, ListObjectVersionsOutput, _>(
             tag_name,
             stack,
@@ -7928,11 +8124,12 @@ pub struct ListObjectsOutput {
 #[allow(dead_code)]
 struct ListObjectsOutputDeserializer;
 impl ListObjectsOutputDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<ListObjectsOutput, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, ListObjectsOutput, _>(tag_name, stack, |name, stack, obj| {
             match name {
                 "CommonPrefixes" => {
@@ -8032,11 +8229,12 @@ pub struct ListObjectsV2Output {
 #[allow(dead_code)]
 struct ListObjectsV2OutputDeserializer;
 impl ListObjectsV2OutputDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<ListObjectsV2Output, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, ListObjectsV2Output, _>(tag_name, stack, |name, stack, obj| {
             match name {
                 "CommonPrefixes" => {
@@ -8154,11 +8352,12 @@ pub struct ListPartsOutput {
 #[allow(dead_code)]
 struct ListPartsOutputDeserializer;
 impl ListPartsOutputDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<ListPartsOutput, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, ListPartsOutput, _>(tag_name, stack, |name, stack, obj| {
             match name {
                 "Bucket" => {
@@ -8236,8 +8435,9 @@ pub struct ListPartsRequest {
 #[allow(dead_code)]
 struct LocationDeserializer;
 impl LocationDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
@@ -8273,11 +8473,12 @@ pub struct LoggingEnabled {
 #[allow(dead_code)]
 struct LoggingEnabledDeserializer;
 impl LoggingEnabledDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<LoggingEnabled, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, LoggingEnabled, _>(tag_name, stack, |name, stack, obj| {
             match name {
                 "TargetBucket" => {
@@ -8339,16 +8540,18 @@ impl MFADeleteSerializer {
 #[allow(dead_code)]
 struct MFADeleteStatusDeserializer;
 impl MFADeleteStatusDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 #[allow(dead_code)]
 struct MarkerDeserializer;
 impl MarkerDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
@@ -8371,8 +8574,9 @@ impl MarkerSerializer {
 #[allow(dead_code)]
 struct MaxAgeSecondsDeserializer;
 impl MaxAgeSecondsDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<i64, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::deserialize_primitive(tag_name, stack, |s| Ok(i64::from_str(&s).unwrap()))
     }
 }
@@ -8395,8 +8599,9 @@ impl MaxAgeSecondsSerializer {
 #[allow(dead_code)]
 struct MaxKeysDeserializer;
 impl MaxKeysDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<i64, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::deserialize_primitive(tag_name, stack, |s| Ok(i64::from_str(&s).unwrap()))
     }
 }
@@ -8419,8 +8624,9 @@ impl MaxKeysSerializer {
 #[allow(dead_code)]
 struct MaxPartsDeserializer;
 impl MaxPartsDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<i64, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::deserialize_primitive(tag_name, stack, |s| Ok(i64::from_str(&s).unwrap()))
     }
 }
@@ -8443,8 +8649,9 @@ impl MaxPartsSerializer {
 #[allow(dead_code)]
 struct MaxUploadsDeserializer;
 impl MaxUploadsDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<i64, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::deserialize_primitive(tag_name, stack, |s| Ok(i64::from_str(&s).unwrap()))
     }
 }
@@ -8467,8 +8674,9 @@ impl MaxUploadsSerializer {
 #[allow(dead_code)]
 struct MessageDeserializer;
 impl MessageDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
@@ -8548,11 +8756,12 @@ pub struct Metrics {
 #[allow(dead_code)]
 struct MetricsDeserializer;
 impl MetricsDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Metrics, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, Metrics, _>(tag_name, stack, |name, stack, obj| {
             match name {
                 "EventThreshold" => {
@@ -8605,11 +8814,12 @@ pub struct MetricsAndOperator {
 #[allow(dead_code)]
 struct MetricsAndOperatorDeserializer;
 impl MetricsAndOperatorDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<MetricsAndOperator, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, MetricsAndOperator, _>(tag_name, stack, |name, stack, obj| {
             match name {
                 "Prefix" => {
@@ -8663,11 +8873,12 @@ pub struct MetricsConfiguration {
 #[allow(dead_code)]
 struct MetricsConfigurationDeserializer;
 impl MetricsConfigurationDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<MetricsConfiguration, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, MetricsConfiguration, _>(tag_name, stack, |name, stack, obj| {
             match name {
                 "Filter" => {
@@ -8706,11 +8917,13 @@ impl MetricsConfigurationSerializer {
 #[allow(dead_code)]
 struct MetricsConfigurationListDeserializer;
 impl MetricsConfigurationListDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<MetricsConfiguration>, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
+
         let mut obj = vec![];
 
         loop {
@@ -8749,11 +8962,12 @@ pub struct MetricsFilter {
 #[allow(dead_code)]
 struct MetricsFilterDeserializer;
 impl MetricsFilterDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<MetricsFilter, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, MetricsFilter, _>(tag_name, stack, |name, stack, obj| {
             match name {
                 "And" => {
@@ -8800,8 +9014,9 @@ impl MetricsFilterSerializer {
 #[allow(dead_code)]
 struct MetricsIdDeserializer;
 impl MetricsIdDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
@@ -8824,8 +9039,9 @@ impl MetricsIdSerializer {
 #[allow(dead_code)]
 struct MetricsStatusDeserializer;
 impl MetricsStatusDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
@@ -8848,8 +9064,9 @@ impl MetricsStatusSerializer {
 #[allow(dead_code)]
 struct MinutesDeserializer;
 impl MinutesDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<i64, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::deserialize_primitive(tag_name, stack, |s| Ok(i64::from_str(&s).unwrap()))
     }
 }
@@ -8890,11 +9107,12 @@ pub struct MultipartUpload {
 #[allow(dead_code)]
 struct MultipartUploadDeserializer;
 impl MultipartUploadDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<MultipartUpload, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, MultipartUpload, _>(tag_name, stack, |name, stack, obj| {
             match name {
                 "Initiated" => {
@@ -8929,8 +9147,9 @@ impl MultipartUploadDeserializer {
 #[allow(dead_code)]
 struct MultipartUploadIdDeserializer;
 impl MultipartUploadIdDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
@@ -8953,11 +9172,13 @@ impl MultipartUploadIdSerializer {
 #[allow(dead_code)]
 struct MultipartUploadListDeserializer;
 impl MultipartUploadListDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<MultipartUpload>, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
+
         let mut obj = vec![];
 
         loop {
@@ -8981,48 +9202,54 @@ impl MultipartUploadListDeserializer {
 #[allow(dead_code)]
 struct NextKeyMarkerDeserializer;
 impl NextKeyMarkerDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 #[allow(dead_code)]
 struct NextMarkerDeserializer;
 impl NextMarkerDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 #[allow(dead_code)]
 struct NextPartNumberMarkerDeserializer;
 impl NextPartNumberMarkerDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<i64, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::deserialize_primitive(tag_name, stack, |s| Ok(i64::from_str(&s).unwrap()))
     }
 }
 #[allow(dead_code)]
 struct NextTokenDeserializer;
 impl NextTokenDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 #[allow(dead_code)]
 struct NextUploadIdMarkerDeserializer;
 impl NextUploadIdMarkerDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 #[allow(dead_code)]
 struct NextVersionIdMarkerDeserializer;
 impl NextVersionIdMarkerDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
@@ -9038,11 +9265,12 @@ pub struct NoncurrentVersionExpiration {
 #[allow(dead_code)]
 struct NoncurrentVersionExpirationDeserializer;
 impl NoncurrentVersionExpirationDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<NoncurrentVersionExpiration, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, NoncurrentVersionExpiration, _>(
             tag_name,
             stack,
@@ -9093,11 +9321,12 @@ pub struct NoncurrentVersionTransition {
 #[allow(dead_code)]
 struct NoncurrentVersionTransitionDeserializer;
 impl NoncurrentVersionTransitionDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<NoncurrentVersionTransition, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, NoncurrentVersionTransition, _>(
             tag_name,
             stack,
@@ -9146,11 +9375,13 @@ impl NoncurrentVersionTransitionSerializer {
 #[allow(dead_code)]
 struct NoncurrentVersionTransitionListDeserializer;
 impl NoncurrentVersionTransitionListDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<NoncurrentVersionTransition>, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
+
         let mut obj = vec![];
 
         loop {
@@ -9208,11 +9439,12 @@ pub struct NotificationConfiguration {
 #[allow(dead_code)]
 struct NotificationConfigurationDeserializer;
 impl NotificationConfigurationDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<NotificationConfiguration, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, NotificationConfiguration, _>(
             tag_name,
             stack,
@@ -9294,11 +9526,12 @@ pub struct NotificationConfigurationDeprecated {
 #[allow(dead_code)]
 struct NotificationConfigurationDeprecatedDeserializer;
 impl NotificationConfigurationDeprecatedDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<NotificationConfigurationDeprecated, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, NotificationConfigurationDeprecated, _>(
             tag_name,
             stack,
@@ -9381,11 +9614,12 @@ pub struct NotificationConfigurationFilter {
 #[allow(dead_code)]
 struct NotificationConfigurationFilterDeserializer;
 impl NotificationConfigurationFilterDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<NotificationConfigurationFilter, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, NotificationConfigurationFilter, _>(
             tag_name,
             stack,
@@ -9424,8 +9658,9 @@ impl NotificationConfigurationFilterSerializer {
 #[allow(dead_code)]
 struct NotificationIdDeserializer;
 impl NotificationIdDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
@@ -9466,8 +9701,9 @@ pub struct Object {
 #[allow(dead_code)]
 struct ObjectDeserializer;
 impl ObjectDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<Object, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, Object, _>(tag_name, stack, |name, stack, obj| {
             match name {
                 "ETag" => {
@@ -9567,8 +9803,9 @@ impl ObjectIdentifierListSerializer {
 #[allow(dead_code)]
 struct ObjectKeyDeserializer;
 impl ObjectKeyDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
@@ -9591,11 +9828,13 @@ impl ObjectKeySerializer {
 #[allow(dead_code)]
 struct ObjectListDeserializer;
 impl ObjectListDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<Object>, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
+
         let mut obj = vec![];
 
         loop {
@@ -9630,11 +9869,12 @@ pub struct ObjectLockConfiguration {
 #[allow(dead_code)]
 struct ObjectLockConfigurationDeserializer;
 impl ObjectLockConfigurationDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<ObjectLockConfiguration, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, ObjectLockConfiguration, _>(
             tag_name,
             stack,
@@ -9682,8 +9922,9 @@ impl ObjectLockConfigurationSerializer {
 #[allow(dead_code)]
 struct ObjectLockEnabledDeserializer;
 impl ObjectLockEnabledDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
@@ -9715,11 +9956,12 @@ pub struct ObjectLockLegalHold {
 #[allow(dead_code)]
 struct ObjectLockLegalHoldDeserializer;
 impl ObjectLockLegalHoldDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<ObjectLockLegalHold, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, ObjectLockLegalHold, _>(tag_name, stack, |name, stack, obj| {
             match name {
                 "Status" => {
@@ -9756,8 +9998,9 @@ impl ObjectLockLegalHoldSerializer {
 #[allow(dead_code)]
 struct ObjectLockLegalHoldStatusDeserializer;
 impl ObjectLockLegalHoldStatusDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
@@ -9791,11 +10034,12 @@ pub struct ObjectLockRetention {
 #[allow(dead_code)]
 struct ObjectLockRetentionDeserializer;
 impl ObjectLockRetentionDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<ObjectLockRetention, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, ObjectLockRetention, _>(tag_name, stack, |name, stack, obj| {
             match name {
                 "Mode" => {
@@ -9839,8 +10083,9 @@ impl ObjectLockRetentionSerializer {
 #[allow(dead_code)]
 struct ObjectLockRetentionModeDeserializer;
 impl ObjectLockRetentionModeDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
@@ -9872,11 +10117,12 @@ pub struct ObjectLockRule {
 #[allow(dead_code)]
 struct ObjectLockRuleDeserializer;
 impl ObjectLockRuleDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<ObjectLockRule, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, ObjectLockRule, _>(tag_name, stack, |name, stack, obj| {
             match name {
                 "DefaultRetention" => {
@@ -9914,8 +10160,9 @@ impl ObjectLockRuleSerializer {
 #[allow(dead_code)]
 struct ObjectOwnershipDeserializer;
 impl ObjectOwnershipDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
@@ -9938,8 +10185,9 @@ impl ObjectOwnershipSerializer {
 #[allow(dead_code)]
 struct ObjectStorageClassDeserializer;
 impl ObjectStorageClassDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
@@ -9968,11 +10216,12 @@ pub struct ObjectVersion {
 #[allow(dead_code)]
 struct ObjectVersionDeserializer;
 impl ObjectVersionDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<ObjectVersion, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, ObjectVersion, _>(tag_name, stack, |name, stack, obj| {
             match name {
                 "ETag" => {
@@ -10017,8 +10266,9 @@ impl ObjectVersionDeserializer {
 #[allow(dead_code)]
 struct ObjectVersionIdDeserializer;
 impl ObjectVersionIdDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
@@ -10041,11 +10291,13 @@ impl ObjectVersionIdSerializer {
 #[allow(dead_code)]
 struct ObjectVersionListDeserializer;
 impl ObjectVersionListDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<ObjectVersion>, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
+
         let mut obj = vec![];
 
         loop {
@@ -10069,8 +10321,9 @@ impl ObjectVersionListDeserializer {
 #[allow(dead_code)]
 struct ObjectVersionStorageClassDeserializer;
 impl ObjectVersionStorageClassDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
@@ -10147,8 +10400,9 @@ pub struct Owner {
 #[allow(dead_code)]
 struct OwnerDeserializer;
 impl OwnerDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<Owner, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, Owner, _>(tag_name, stack, |name, stack, obj| {
             match name {
                 "DisplayName" => {
@@ -10190,8 +10444,9 @@ impl OwnerSerializer {
 #[allow(dead_code)]
 struct OwnerOverrideDeserializer;
 impl OwnerOverrideDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
@@ -10223,11 +10478,12 @@ pub struct OwnershipControls {
 #[allow(dead_code)]
 struct OwnershipControlsDeserializer;
 impl OwnershipControlsDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<OwnershipControls, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, OwnershipControls, _>(tag_name, stack, |name, stack, obj| {
             match name {
                 "Rule" => {
@@ -10271,11 +10527,12 @@ pub struct OwnershipControlsRule {
 #[allow(dead_code)]
 struct OwnershipControlsRuleDeserializer;
 impl OwnershipControlsRuleDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<OwnershipControlsRule, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, OwnershipControlsRule, _>(tag_name, stack, |name, stack, obj| {
             match name {
                 "ObjectOwnership" => {
@@ -10309,11 +10566,13 @@ impl OwnershipControlsRuleSerializer {
 #[allow(dead_code)]
 struct OwnershipControlsRulesDeserializer;
 impl OwnershipControlsRulesDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<OwnershipControlsRule>, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
+
         let mut obj = vec![];
 
         loop {
@@ -10393,8 +10652,9 @@ pub struct Part {
 #[allow(dead_code)]
 struct PartDeserializer;
 impl PartDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<Part, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, Part, _>(tag_name, stack, |name, stack, obj| {
             match name {
                 "ETag" => {
@@ -10422,8 +10682,9 @@ impl PartDeserializer {
 #[allow(dead_code)]
 struct PartNumberDeserializer;
 impl PartNumberDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<i64, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::deserialize_primitive(tag_name, stack, |s| Ok(i64::from_str(&s).unwrap()))
     }
 }
@@ -10446,8 +10707,9 @@ impl PartNumberSerializer {
 #[allow(dead_code)]
 struct PartNumberMarkerDeserializer;
 impl PartNumberMarkerDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<i64, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::deserialize_primitive(tag_name, stack, |s| Ok(i64::from_str(&s).unwrap()))
     }
 }
@@ -10470,11 +10732,13 @@ impl PartNumberMarkerSerializer {
 #[allow(dead_code)]
 struct PartsDeserializer;
 impl PartsDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<Part>, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
+
         let mut obj = vec![];
 
         loop {
@@ -10498,8 +10762,9 @@ impl PartsDeserializer {
 #[allow(dead_code)]
 struct PayerDeserializer;
 impl PayerDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
@@ -10522,8 +10787,9 @@ impl PayerSerializer {
 #[allow(dead_code)]
 struct PermissionDeserializer;
 impl PermissionDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
@@ -10554,11 +10820,12 @@ pub struct PolicyStatus {
 #[allow(dead_code)]
 struct PolicyStatusDeserializer;
 impl PolicyStatusDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<PolicyStatus, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, PolicyStatus, _>(tag_name, stack, |name, stack, obj| {
             match name {
                 "IsPublic" => {
@@ -10573,8 +10840,9 @@ impl PolicyStatusDeserializer {
 #[allow(dead_code)]
 struct PrefixDeserializer;
 impl PrefixDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
@@ -10597,8 +10865,9 @@ impl PrefixSerializer {
 #[allow(dead_code)]
 struct PriorityDeserializer;
 impl PriorityDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<i64, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::deserialize_primitive(tag_name, stack, |s| Ok(i64::from_str(&s).unwrap()))
     }
 }
@@ -10633,11 +10902,12 @@ pub struct Progress {
 #[allow(dead_code)]
 struct ProgressDeserializer;
 impl ProgressDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Progress, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, Progress, _>(tag_name, stack, |name, stack, obj| {
             match name {
                 "BytesProcessed" => {
@@ -10675,11 +10945,12 @@ pub struct ProgressEvent {
 #[allow(dead_code)]
 struct ProgressEventDeserializer;
 impl ProgressEventDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<ProgressEvent, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, ProgressEvent, _>(tag_name, stack, |name, stack, obj| {
             match name {
                 "Details" => {
@@ -10694,8 +10965,9 @@ impl ProgressEventDeserializer {
 #[allow(dead_code)]
 struct ProtocolDeserializer;
 impl ProtocolDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
@@ -10733,11 +11005,12 @@ pub struct PublicAccessBlockConfiguration {
 #[allow(dead_code)]
 struct PublicAccessBlockConfigurationDeserializer;
 impl PublicAccessBlockConfigurationDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<PublicAccessBlockConfiguration, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, PublicAccessBlockConfiguration, _>(
             tag_name,
             stack,
@@ -11075,11 +11348,12 @@ pub struct PutObjectAclOutput {
 #[allow(dead_code)]
 struct PutObjectAclOutputDeserializer;
 impl PutObjectAclOutputDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<PutObjectAclOutput, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::start_element(tag_name, stack)?;
 
         let obj = PutObjectAclOutput::default();
@@ -11128,11 +11402,12 @@ pub struct PutObjectLegalHoldOutput {
 #[allow(dead_code)]
 struct PutObjectLegalHoldOutputDeserializer;
 impl PutObjectLegalHoldOutputDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<PutObjectLegalHoldOutput, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::start_element(tag_name, stack)?;
 
         let obj = PutObjectLegalHoldOutput::default();
@@ -11169,11 +11444,12 @@ pub struct PutObjectLockConfigurationOutput {
 #[allow(dead_code)]
 struct PutObjectLockConfigurationOutputDeserializer;
 impl PutObjectLockConfigurationOutputDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<PutObjectLockConfigurationOutput, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::start_element(tag_name, stack)?;
 
         let obj = PutObjectLockConfigurationOutput::default();
@@ -11226,11 +11502,12 @@ pub struct PutObjectOutput {
 #[allow(dead_code)]
 struct PutObjectOutputDeserializer;
 impl PutObjectOutputDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<PutObjectOutput, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::start_element(tag_name, stack)?;
 
         let obj = PutObjectOutput::default();
@@ -11316,11 +11593,12 @@ pub struct PutObjectRetentionOutput {
 #[allow(dead_code)]
 struct PutObjectRetentionOutputDeserializer;
 impl PutObjectRetentionOutputDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<PutObjectRetentionOutput, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::start_element(tag_name, stack)?;
 
         let obj = PutObjectRetentionOutput::default();
@@ -11360,11 +11638,12 @@ pub struct PutObjectTaggingOutput {
 #[allow(dead_code)]
 struct PutObjectTaggingOutputDeserializer;
 impl PutObjectTaggingOutputDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<PutObjectTaggingOutput, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::start_element(tag_name, stack)?;
 
         let obj = PutObjectTaggingOutput::default();
@@ -11407,8 +11686,9 @@ pub struct PutPublicAccessBlockRequest {
 #[allow(dead_code)]
 struct QueueArnDeserializer;
 impl QueueArnDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
@@ -11444,11 +11724,12 @@ pub struct QueueConfiguration {
 #[allow(dead_code)]
 struct QueueConfigurationDeserializer;
 impl QueueConfigurationDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<QueueConfiguration, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, QueueConfiguration, _>(tag_name, stack, |name, stack, obj| {
             match name {
                 "Event" => {
@@ -11512,11 +11793,12 @@ pub struct QueueConfigurationDeprecated {
 #[allow(dead_code)]
 struct QueueConfigurationDeprecatedDeserializer;
 impl QueueConfigurationDeprecatedDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<QueueConfigurationDeprecated, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, QueueConfigurationDeprecated, _>(
             tag_name,
             stack,
@@ -11569,11 +11851,13 @@ impl QueueConfigurationDeprecatedSerializer {
 #[allow(dead_code)]
 struct QueueConfigurationListDeserializer;
 impl QueueConfigurationListDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<QueueConfiguration>, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
+
         let mut obj = vec![];
 
         loop {
@@ -11701,11 +11985,12 @@ pub struct RecordsEvent {
 #[allow(dead_code)]
 struct RecordsEventDeserializer;
 impl RecordsEventDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<RecordsEvent, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, RecordsEvent, _>(tag_name, stack, |name, stack, obj| {
             match name {
                 "Payload" => {
@@ -11737,11 +12022,12 @@ pub struct Redirect {
 #[allow(dead_code)]
 struct RedirectDeserializer;
 impl RedirectDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Redirect, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, Redirect, _>(tag_name, stack, |name, stack, obj| {
             match name {
                 "HostName" => {
@@ -11821,11 +12107,12 @@ pub struct RedirectAllRequestsTo {
 #[allow(dead_code)]
 struct RedirectAllRequestsToDeserializer;
 impl RedirectAllRequestsToDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<RedirectAllRequestsTo, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, RedirectAllRequestsTo, _>(tag_name, stack, |name, stack, obj| {
             match name {
                 "HostName" => {
@@ -11864,8 +12151,9 @@ impl RedirectAllRequestsToSerializer {
 #[allow(dead_code)]
 struct ReplaceKeyPrefixWithDeserializer;
 impl ReplaceKeyPrefixWithDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
@@ -11888,8 +12176,9 @@ impl ReplaceKeyPrefixWithSerializer {
 #[allow(dead_code)]
 struct ReplaceKeyWithDeserializer;
 impl ReplaceKeyWithDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
@@ -11912,8 +12201,9 @@ impl ReplaceKeyWithSerializer {
 #[allow(dead_code)]
 struct ReplicaKmsKeyIDDeserializer;
 impl ReplicaKmsKeyIDDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
@@ -11945,11 +12235,12 @@ pub struct ReplicaModifications {
 #[allow(dead_code)]
 struct ReplicaModificationsDeserializer;
 impl ReplicaModificationsDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<ReplicaModifications, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, ReplicaModifications, _>(tag_name, stack, |name, stack, obj| {
             match name {
                 "Status" => {
@@ -11983,8 +12274,9 @@ impl ReplicaModificationsSerializer {
 #[allow(dead_code)]
 struct ReplicaModificationsStatusDeserializer;
 impl ReplicaModificationsStatusDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
@@ -12018,11 +12310,12 @@ pub struct ReplicationConfiguration {
 #[allow(dead_code)]
 struct ReplicationConfigurationDeserializer;
 impl ReplicationConfigurationDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<ReplicationConfiguration, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, ReplicationConfiguration, _>(
             tag_name,
             stack,
@@ -12085,11 +12378,12 @@ pub struct ReplicationRule {
 #[allow(dead_code)]
 struct ReplicationRuleDeserializer;
 impl ReplicationRuleDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<ReplicationRule, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, ReplicationRule, _>(tag_name, stack, |name, stack, obj| {
             match name {
                 "DeleteMarkerReplication" => {
@@ -12199,11 +12493,12 @@ pub struct ReplicationRuleAndOperator {
 #[allow(dead_code)]
 struct ReplicationRuleAndOperatorDeserializer;
 impl ReplicationRuleAndOperatorDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<ReplicationRuleAndOperator, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, ReplicationRuleAndOperator, _>(
             tag_name,
             stack,
@@ -12263,11 +12558,12 @@ pub struct ReplicationRuleFilter {
 #[allow(dead_code)]
 struct ReplicationRuleFilterDeserializer;
 impl ReplicationRuleFilterDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<ReplicationRuleFilter, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, ReplicationRuleFilter, _>(tag_name, stack, |name, stack, obj| {
             match name {
                 "And" => {
@@ -12316,8 +12612,9 @@ impl ReplicationRuleFilterSerializer {
 #[allow(dead_code)]
 struct ReplicationRuleStatusDeserializer;
 impl ReplicationRuleStatusDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
@@ -12340,11 +12637,13 @@ impl ReplicationRuleStatusSerializer {
 #[allow(dead_code)]
 struct ReplicationRulesDeserializer;
 impl ReplicationRulesDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<ReplicationRule>, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
+
         let mut obj = vec![];
 
         loop {
@@ -12398,11 +12697,12 @@ pub struct ReplicationTime {
 #[allow(dead_code)]
 struct ReplicationTimeDeserializer;
 impl ReplicationTimeDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<ReplicationTime, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, ReplicationTime, _>(tag_name, stack, |name, stack, obj| {
             match name {
                 "Status" => {
@@ -12439,8 +12739,9 @@ impl ReplicationTimeSerializer {
 #[allow(dead_code)]
 struct ReplicationTimeStatusDeserializer;
 impl ReplicationTimeStatusDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
@@ -12472,11 +12773,12 @@ pub struct ReplicationTimeValue {
 #[allow(dead_code)]
 struct ReplicationTimeValueDeserializer;
 impl ReplicationTimeValueDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<ReplicationTimeValue, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, ReplicationTimeValue, _>(tag_name, stack, |name, stack, obj| {
             match name {
                 "Minutes" => {
@@ -12661,11 +12963,12 @@ pub struct RestoreObjectOutput {
 #[allow(dead_code)]
 struct RestoreObjectOutputDeserializer;
 impl RestoreObjectOutputDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<RestoreObjectOutput, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::start_element(tag_name, stack)?;
 
         let obj = RestoreObjectOutput::default();
@@ -12765,8 +13068,9 @@ impl RestoreRequestTypeSerializer {
 #[allow(dead_code)]
 struct RoleDeserializer;
 impl RoleDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
@@ -12800,11 +13104,12 @@ pub struct RoutingRule {
 #[allow(dead_code)]
 struct RoutingRuleDeserializer;
 impl RoutingRuleDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<RoutingRule, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, RoutingRule, _>(tag_name, stack, |name, stack, obj| {
             match name {
                 "Condition" => {
@@ -12843,11 +13148,13 @@ impl RoutingRuleSerializer {
 #[allow(dead_code)]
 struct RoutingRulesDeserializer;
 impl RoutingRulesDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<RoutingRule>, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
+
         deserialize_elements::<_, Vec<_>, _>(tag_name, stack, |name, stack, obj| {
             if name == "RoutingRule" {
                 obj.push(RoutingRuleDeserializer::deserialize("RoutingRule", stack)?);
@@ -12902,8 +13209,9 @@ pub struct Rule {
 #[allow(dead_code)]
 struct RuleDeserializer;
 impl RuleDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<Rule, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, Rule, _>(tag_name, stack, |name, stack, obj| {
             match name {
                 "AbortIncompleteMultipartUpload" => {
@@ -13004,11 +13312,13 @@ impl RuleSerializer {
 #[allow(dead_code)]
 struct RulesDeserializer;
 impl RulesDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<Rule>, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
+
         let mut obj = vec![];
 
         loop {
@@ -13059,11 +13369,12 @@ pub struct S3KeyFilter {
 #[allow(dead_code)]
 struct S3KeyFilterDeserializer;
 impl S3KeyFilterDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<S3KeyFilter, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, S3KeyFilter, _>(tag_name, stack, |name, stack, obj| {
             match name {
                 "FilterRule" => {
@@ -13166,8 +13477,9 @@ pub struct SSEKMS {
 #[allow(dead_code)]
 struct SSEKMSDeserializer;
 impl SSEKMSDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<SSEKMS, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, SSEKMS, _>(tag_name, stack, |name, stack, obj| {
             match name {
                 "KeyId" => {
@@ -13200,8 +13512,9 @@ impl SSEKMSSerializer {
 #[allow(dead_code)]
 struct SSEKMSKeyIdDeserializer;
 impl SSEKMSKeyIdDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
@@ -13230,8 +13543,9 @@ pub struct SSES3 {}
 #[allow(dead_code)]
 struct SSES3Deserializer;
 impl SSES3Deserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<SSES3, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::start_element(tag_name, stack)?;
 
         let obj = SSES3::default();
@@ -13426,8 +13740,9 @@ impl SelectParametersSerializer {
 #[allow(dead_code)]
 struct ServerSideEncryptionDeserializer;
 impl ServerSideEncryptionDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
@@ -13461,11 +13776,12 @@ pub struct ServerSideEncryptionByDefault {
 #[allow(dead_code)]
 struct ServerSideEncryptionByDefaultDeserializer;
 impl ServerSideEncryptionByDefaultDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<ServerSideEncryptionByDefault, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, ServerSideEncryptionByDefault, _>(
             tag_name,
             stack,
@@ -13521,11 +13837,12 @@ pub struct ServerSideEncryptionConfiguration {
 #[allow(dead_code)]
 struct ServerSideEncryptionConfigurationDeserializer;
 impl ServerSideEncryptionConfigurationDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<ServerSideEncryptionConfiguration, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, ServerSideEncryptionConfiguration, _>(
             tag_name,
             stack,
@@ -13576,11 +13893,12 @@ pub struct ServerSideEncryptionRule {
 #[allow(dead_code)]
 struct ServerSideEncryptionRuleDeserializer;
 impl ServerSideEncryptionRuleDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<ServerSideEncryptionRule, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, ServerSideEncryptionRule, _>(
             tag_name,
             stack,
@@ -13636,11 +13954,13 @@ impl ServerSideEncryptionRuleSerializer {
 #[allow(dead_code)]
 struct ServerSideEncryptionRulesDeserializer;
 impl ServerSideEncryptionRulesDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<ServerSideEncryptionRule>, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
+
         let mut obj = vec![];
 
         loop {
@@ -13685,8 +14005,9 @@ impl ServerSideEncryptionRulesSerializer {
 #[allow(dead_code)]
 struct SettingDeserializer;
 impl SettingDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<bool, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::deserialize_primitive(tag_name, stack, |s| Ok(bool::from_str(&s).unwrap()))
     }
 }
@@ -13709,8 +14030,9 @@ impl SettingSerializer {
 #[allow(dead_code)]
 struct SizeDeserializer;
 impl SizeDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<i64, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::deserialize_primitive(tag_name, stack, |s| Ok(i64::from_str(&s).unwrap()))
     }
 }
@@ -13728,11 +14050,12 @@ pub struct SourceSelectionCriteria {
 #[allow(dead_code)]
 struct SourceSelectionCriteriaDeserializer;
 impl SourceSelectionCriteriaDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<SourceSelectionCriteria, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, SourceSelectionCriteria, _>(
             tag_name,
             stack,
@@ -13798,11 +14121,12 @@ pub struct SseKmsEncryptedObjects {
 #[allow(dead_code)]
 struct SseKmsEncryptedObjectsDeserializer;
 impl SseKmsEncryptedObjectsDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<SseKmsEncryptedObjects, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, SseKmsEncryptedObjects, _>(tag_name, stack, |name, stack, obj| {
             match name {
                 "Status" => {
@@ -13836,8 +14160,9 @@ impl SseKmsEncryptedObjectsSerializer {
 #[allow(dead_code)]
 struct SseKmsEncryptedObjectsStatusDeserializer;
 impl SseKmsEncryptedObjectsStatusDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
@@ -13875,8 +14200,9 @@ impl StartSerializer {
 #[allow(dead_code)]
 struct StartAfterDeserializer;
 impl StartAfterDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
@@ -13911,8 +14237,9 @@ pub struct Stats {
 #[allow(dead_code)]
 struct StatsDeserializer;
 impl StatsDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<Stats, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, Stats, _>(tag_name, stack, |name, stack, obj| {
             match name {
                 "BytesProcessed" => {
@@ -13950,11 +14277,12 @@ pub struct StatsEvent {
 #[allow(dead_code)]
 struct StatsEventDeserializer;
 impl StatsEventDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<StatsEvent, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, StatsEvent, _>(tag_name, stack, |name, stack, obj| {
             match name {
                 "Details" => {
@@ -13969,8 +14297,9 @@ impl StatsEventDeserializer {
 #[allow(dead_code)]
 struct StorageClassDeserializer;
 impl StorageClassDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
@@ -14002,11 +14331,12 @@ pub struct StorageClassAnalysis {
 #[allow(dead_code)]
 struct StorageClassAnalysisDeserializer;
 impl StorageClassAnalysisDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<StorageClassAnalysis, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, StorageClassAnalysis, _>(tag_name, stack, |name, stack, obj| {
             match name {
                 "DataExport" => {
@@ -14056,11 +14386,12 @@ pub struct StorageClassAnalysisDataExport {
 #[allow(dead_code)]
 struct StorageClassAnalysisDataExportDeserializer;
 impl StorageClassAnalysisDataExportDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<StorageClassAnalysisDataExport, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, StorageClassAnalysisDataExport, _>(
             tag_name,
             stack,
@@ -14116,8 +14447,9 @@ impl StorageClassAnalysisDataExportSerializer {
 #[allow(dead_code)]
 struct StorageClassAnalysisSchemaVersionDeserializer;
 impl StorageClassAnalysisSchemaVersionDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
@@ -14140,8 +14472,9 @@ impl StorageClassAnalysisSchemaVersionSerializer {
 #[allow(dead_code)]
 struct SuffixDeserializer;
 impl SuffixDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
@@ -14175,8 +14508,9 @@ pub struct Tag {
 #[allow(dead_code)]
 struct TagDeserializer;
 impl TagDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<Tag, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, Tag, _>(tag_name, stack, |name, stack, obj| {
             match name {
                 "Key" => {
@@ -14213,11 +14547,13 @@ impl TagSerializer {
 #[allow(dead_code)]
 struct TagSetDeserializer;
 impl TagSetDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<Tag>, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
+
         deserialize_elements::<_, Vec<_>, _>(tag_name, stack, |name, stack, obj| {
             if name == "Tag" {
                 obj.push(TagDeserializer::deserialize("Tag", stack)?);
@@ -14277,8 +14613,9 @@ impl TaggingSerializer {
 #[allow(dead_code)]
 struct TargetBucketDeserializer;
 impl TargetBucketDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
@@ -14312,11 +14649,12 @@ pub struct TargetGrant {
 #[allow(dead_code)]
 struct TargetGrantDeserializer;
 impl TargetGrantDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<TargetGrant, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, TargetGrant, _>(tag_name, stack, |name, stack, obj| {
             match name {
                 "Grantee" => {
@@ -14360,11 +14698,13 @@ impl TargetGrantSerializer {
 #[allow(dead_code)]
 struct TargetGrantsDeserializer;
 impl TargetGrantsDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<TargetGrant>, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
+
         deserialize_elements::<_, Vec<_>, _>(tag_name, stack, |name, stack, obj| {
             if name == "Grant" {
                 obj.push(TargetGrantDeserializer::deserialize("Grant", stack)?);
@@ -14399,8 +14739,9 @@ impl TargetGrantsSerializer {
 #[allow(dead_code)]
 struct TargetPrefixDeserializer;
 impl TargetPrefixDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
@@ -14449,11 +14790,12 @@ pub struct Tiering {
 #[allow(dead_code)]
 struct TieringDeserializer;
 impl TieringDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Tiering, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, Tiering, _>(tag_name, stack, |name, stack, obj| {
             match name {
                 "AccessTier" => {
@@ -14491,11 +14833,13 @@ impl TieringSerializer {
 #[allow(dead_code)]
 struct TieringListDeserializer;
 impl TieringListDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<Tiering>, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
+
         let mut obj = vec![];
 
         loop {
@@ -14538,8 +14882,9 @@ impl TieringListSerializer {
 #[allow(dead_code)]
 struct TokenDeserializer;
 impl TokenDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
@@ -14562,8 +14907,9 @@ impl TokenSerializer {
 #[allow(dead_code)]
 struct TopicArnDeserializer;
 impl TopicArnDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
@@ -14599,11 +14945,12 @@ pub struct TopicConfiguration {
 #[allow(dead_code)]
 struct TopicConfigurationDeserializer;
 impl TopicConfigurationDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<TopicConfiguration, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, TopicConfiguration, _>(tag_name, stack, |name, stack, obj| {
             match name {
                 "Event" => {
@@ -14667,11 +15014,12 @@ pub struct TopicConfigurationDeprecated {
 #[allow(dead_code)]
 struct TopicConfigurationDeprecatedDeserializer;
 impl TopicConfigurationDeprecatedDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<TopicConfigurationDeprecated, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, TopicConfigurationDeprecated, _>(
             tag_name,
             stack,
@@ -14724,11 +15072,13 @@ impl TopicConfigurationDeprecatedSerializer {
 #[allow(dead_code)]
 struct TopicConfigurationListDeserializer;
 impl TopicConfigurationListDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<TopicConfiguration>, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
+
         let mut obj = vec![];
 
         loop {
@@ -14786,11 +15136,12 @@ pub struct Transition {
 #[allow(dead_code)]
 struct TransitionDeserializer;
 impl TransitionDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Transition, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, Transition, _>(tag_name, stack, |name, stack, obj| {
             match name {
                 "Date" => {
@@ -14840,11 +15191,13 @@ impl TransitionSerializer {
 #[allow(dead_code)]
 struct TransitionListDeserializer;
 impl TransitionListDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<Transition>, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
+
         let mut obj = vec![];
 
         loop {
@@ -14887,8 +15240,9 @@ impl TransitionListSerializer {
 #[allow(dead_code)]
 struct TransitionStorageClassDeserializer;
 impl TransitionStorageClassDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
@@ -14911,8 +15265,9 @@ impl TransitionStorageClassSerializer {
 #[allow(dead_code)]
 struct TypeDeserializer;
 impl TypeDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
@@ -14935,8 +15290,9 @@ impl TypeSerializer {
 #[allow(dead_code)]
 struct URIDeserializer;
 impl URIDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
@@ -14959,8 +15315,9 @@ impl URISerializer {
 #[allow(dead_code)]
 struct UploadIdMarkerDeserializer;
 impl UploadIdMarkerDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
@@ -15003,11 +15360,13 @@ pub struct UploadPartCopyOutput {
 #[allow(dead_code)]
 struct UploadPartCopyOutputDeserializer;
 impl UploadPartCopyOutputDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<UploadPartCopyOutput, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
+
         Ok(UploadPartCopyOutput {
             copy_part_result: Some(CopyPartResultDeserializer::deserialize(
                 "CopyPartResult",
@@ -15080,11 +15439,12 @@ pub struct UploadPartOutput {
 #[allow(dead_code)]
 struct UploadPartOutputDeserializer;
 impl UploadPartOutputDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<UploadPartOutput, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::start_element(tag_name, stack)?;
 
         let obj = UploadPartOutput::default();
@@ -15144,8 +15504,9 @@ impl UserMetadataSerializer {
 #[allow(dead_code)]
 struct ValueDeserializer;
 impl ValueDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
@@ -15168,8 +15529,9 @@ impl ValueSerializer {
 #[allow(dead_code)]
 struct VersionIdMarkerDeserializer;
 impl VersionIdMarkerDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
@@ -15270,8 +15632,9 @@ impl WebsiteConfigurationSerializer {
 #[allow(dead_code)]
 struct YearsDeserializer;
 impl YearsDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<i64, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::deserialize_primitive(tag_name, stack, |s| Ok(i64::from_str(&s).unwrap()))
     }
 }
@@ -15304,14 +15667,17 @@ impl AbortMultipartUploadError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    "NoSuchUpload" => {
-                        return RusotoError::Service(AbortMultipartUploadError::NoSuchUpload(
-                            parsed_error.message,
-                        ))
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {
+                        "NoSuchUpload" => {
+                            return RusotoError::Service(AbortMultipartUploadError::NoSuchUpload(
+                                parsed_error.message,
+                            ))
+                        }
+                        _ => {}
                     }
-                    _ => {}
                 }
             }
         }
@@ -15344,11 +15710,7 @@ impl CompleteMultipartUploadError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    _ => {}
-                }
-            }
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {}
         }
         RusotoError::Unknown(res)
     }
@@ -15380,14 +15742,17 @@ impl CopyObjectError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    "ObjectNotInActiveTierError" => {
-                        return RusotoError::Service(CopyObjectError::ObjectNotInActiveTierError(
-                            parsed_error.message,
-                        ))
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {
+                        "ObjectNotInActiveTierError" => {
+                            return RusotoError::Service(
+                                CopyObjectError::ObjectNotInActiveTierError(parsed_error.message),
+                            )
+                        }
+                        _ => {}
                     }
-                    _ => {}
                 }
             }
         }
@@ -15425,19 +15790,22 @@ impl CreateBucketError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    "BucketAlreadyExists" => {
-                        return RusotoError::Service(CreateBucketError::BucketAlreadyExists(
-                            parsed_error.message,
-                        ))
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {
+                        "BucketAlreadyExists" => {
+                            return RusotoError::Service(CreateBucketError::BucketAlreadyExists(
+                                parsed_error.message,
+                            ))
+                        }
+                        "BucketAlreadyOwnedByYou" => {
+                            return RusotoError::Service(
+                                CreateBucketError::BucketAlreadyOwnedByYou(parsed_error.message),
+                            )
+                        }
+                        _ => {}
                     }
-                    "BucketAlreadyOwnedByYou" => {
-                        return RusotoError::Service(CreateBucketError::BucketAlreadyOwnedByYou(
-                            parsed_error.message,
-                        ))
-                    }
-                    _ => {}
                 }
             }
         }
@@ -15471,11 +15839,7 @@ impl CreateMultipartUploadError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    _ => {}
-                }
-            }
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {}
         }
         RusotoError::Unknown(res)
     }
@@ -15504,11 +15868,7 @@ impl DeleteBucketError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    _ => {}
-                }
-            }
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {}
         }
         RusotoError::Unknown(res)
     }
@@ -15539,11 +15899,7 @@ impl DeleteBucketAnalyticsConfigurationError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    _ => {}
-                }
-            }
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {}
         }
         RusotoError::Unknown(res)
     }
@@ -15572,11 +15928,7 @@ impl DeleteBucketCorsError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    _ => {}
-                }
-            }
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {}
         }
         RusotoError::Unknown(res)
     }
@@ -15605,11 +15957,7 @@ impl DeleteBucketEncryptionError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    _ => {}
-                }
-            }
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {}
         }
         RusotoError::Unknown(res)
     }
@@ -15640,11 +15988,7 @@ impl DeleteBucketIntelligentTieringConfigurationError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    _ => {}
-                }
-            }
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {}
         }
         RusotoError::Unknown(res)
     }
@@ -15675,11 +16019,7 @@ impl DeleteBucketInventoryConfigurationError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    _ => {}
-                }
-            }
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {}
         }
         RusotoError::Unknown(res)
     }
@@ -15708,11 +16048,7 @@ impl DeleteBucketLifecycleError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    _ => {}
-                }
-            }
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {}
         }
         RusotoError::Unknown(res)
     }
@@ -15743,11 +16079,7 @@ impl DeleteBucketMetricsConfigurationError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    _ => {}
-                }
-            }
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {}
         }
         RusotoError::Unknown(res)
     }
@@ -15778,11 +16110,7 @@ impl DeleteBucketOwnershipControlsError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    _ => {}
-                }
-            }
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {}
         }
         RusotoError::Unknown(res)
     }
@@ -15811,11 +16139,7 @@ impl DeleteBucketPolicyError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    _ => {}
-                }
-            }
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {}
         }
         RusotoError::Unknown(res)
     }
@@ -15844,11 +16168,7 @@ impl DeleteBucketReplicationError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    _ => {}
-                }
-            }
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {}
         }
         RusotoError::Unknown(res)
     }
@@ -15877,11 +16197,7 @@ impl DeleteBucketTaggingError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    _ => {}
-                }
-            }
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {}
         }
         RusotoError::Unknown(res)
     }
@@ -15910,11 +16226,7 @@ impl DeleteBucketWebsiteError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    _ => {}
-                }
-            }
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {}
         }
         RusotoError::Unknown(res)
     }
@@ -15943,11 +16255,7 @@ impl DeleteObjectError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    _ => {}
-                }
-            }
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {}
         }
         RusotoError::Unknown(res)
     }
@@ -15976,11 +16284,7 @@ impl DeleteObjectTaggingError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    _ => {}
-                }
-            }
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {}
         }
         RusotoError::Unknown(res)
     }
@@ -16009,11 +16313,7 @@ impl DeleteObjectsError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    _ => {}
-                }
-            }
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {}
         }
         RusotoError::Unknown(res)
     }
@@ -16042,11 +16342,7 @@ impl DeletePublicAccessBlockError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    _ => {}
-                }
-            }
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {}
         }
         RusotoError::Unknown(res)
     }
@@ -16077,11 +16373,7 @@ impl GetBucketAccelerateConfigurationError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    _ => {}
-                }
-            }
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {}
         }
         RusotoError::Unknown(res)
     }
@@ -16110,11 +16402,7 @@ impl GetBucketAclError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    _ => {}
-                }
-            }
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {}
         }
         RusotoError::Unknown(res)
     }
@@ -16145,11 +16433,7 @@ impl GetBucketAnalyticsConfigurationError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    _ => {}
-                }
-            }
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {}
         }
         RusotoError::Unknown(res)
     }
@@ -16178,11 +16462,7 @@ impl GetBucketCorsError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    _ => {}
-                }
-            }
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {}
         }
         RusotoError::Unknown(res)
     }
@@ -16211,11 +16491,7 @@ impl GetBucketEncryptionError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    _ => {}
-                }
-            }
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {}
         }
         RusotoError::Unknown(res)
     }
@@ -16246,11 +16522,7 @@ impl GetBucketIntelligentTieringConfigurationError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    _ => {}
-                }
-            }
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {}
         }
         RusotoError::Unknown(res)
     }
@@ -16281,11 +16553,7 @@ impl GetBucketInventoryConfigurationError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    _ => {}
-                }
-            }
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {}
         }
         RusotoError::Unknown(res)
     }
@@ -16314,11 +16582,7 @@ impl GetBucketLifecycleError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    _ => {}
-                }
-            }
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {}
         }
         RusotoError::Unknown(res)
     }
@@ -16349,11 +16613,7 @@ impl GetBucketLifecycleConfigurationError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    _ => {}
-                }
-            }
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {}
         }
         RusotoError::Unknown(res)
     }
@@ -16382,11 +16642,7 @@ impl GetBucketLocationError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    _ => {}
-                }
-            }
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {}
         }
         RusotoError::Unknown(res)
     }
@@ -16415,11 +16671,7 @@ impl GetBucketLoggingError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    _ => {}
-                }
-            }
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {}
         }
         RusotoError::Unknown(res)
     }
@@ -16450,11 +16702,7 @@ impl GetBucketMetricsConfigurationError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    _ => {}
-                }
-            }
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {}
         }
         RusotoError::Unknown(res)
     }
@@ -16483,11 +16731,7 @@ impl GetBucketNotificationError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    _ => {}
-                }
-            }
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {}
         }
         RusotoError::Unknown(res)
     }
@@ -16518,11 +16762,7 @@ impl GetBucketNotificationConfigurationError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    _ => {}
-                }
-            }
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {}
         }
         RusotoError::Unknown(res)
     }
@@ -16553,11 +16793,7 @@ impl GetBucketOwnershipControlsError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    _ => {}
-                }
-            }
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {}
         }
         RusotoError::Unknown(res)
     }
@@ -16586,11 +16822,7 @@ impl GetBucketPolicyError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    _ => {}
-                }
-            }
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {}
         }
         RusotoError::Unknown(res)
     }
@@ -16619,11 +16851,7 @@ impl GetBucketPolicyStatusError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    _ => {}
-                }
-            }
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {}
         }
         RusotoError::Unknown(res)
     }
@@ -16652,11 +16880,7 @@ impl GetBucketReplicationError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    _ => {}
-                }
-            }
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {}
         }
         RusotoError::Unknown(res)
     }
@@ -16685,11 +16909,7 @@ impl GetBucketRequestPaymentError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    _ => {}
-                }
-            }
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {}
         }
         RusotoError::Unknown(res)
     }
@@ -16718,11 +16938,7 @@ impl GetBucketTaggingError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    _ => {}
-                }
-            }
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {}
         }
         RusotoError::Unknown(res)
     }
@@ -16751,11 +16967,7 @@ impl GetBucketVersioningError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    _ => {}
-                }
-            }
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {}
         }
         RusotoError::Unknown(res)
     }
@@ -16784,11 +16996,7 @@ impl GetBucketWebsiteError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    _ => {}
-                }
-            }
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {}
         }
         RusotoError::Unknown(res)
     }
@@ -16822,19 +17030,22 @@ impl GetObjectError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    "InvalidObjectState" => {
-                        return RusotoError::Service(GetObjectError::InvalidObjectState(
-                            parsed_error.message,
-                        ))
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {
+                        "InvalidObjectState" => {
+                            return RusotoError::Service(GetObjectError::InvalidObjectState(
+                                parsed_error.message,
+                            ))
+                        }
+                        "NoSuchKey" => {
+                            return RusotoError::Service(GetObjectError::NoSuchKey(
+                                parsed_error.message,
+                            ))
+                        }
+                        _ => {}
                     }
-                    "NoSuchKey" => {
-                        return RusotoError::Service(GetObjectError::NoSuchKey(
-                            parsed_error.message,
-                        ))
-                    }
-                    _ => {}
                 }
             }
         }
@@ -16871,14 +17082,17 @@ impl GetObjectAclError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    "NoSuchKey" => {
-                        return RusotoError::Service(GetObjectAclError::NoSuchKey(
-                            parsed_error.message,
-                        ))
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {
+                        "NoSuchKey" => {
+                            return RusotoError::Service(GetObjectAclError::NoSuchKey(
+                                parsed_error.message,
+                            ))
+                        }
+                        _ => {}
                     }
-                    _ => {}
                 }
             }
         }
@@ -16911,11 +17125,7 @@ impl GetObjectLegalHoldError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    _ => {}
-                }
-            }
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {}
         }
         RusotoError::Unknown(res)
     }
@@ -16946,11 +17156,7 @@ impl GetObjectLockConfigurationError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    _ => {}
-                }
-            }
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {}
         }
         RusotoError::Unknown(res)
     }
@@ -16979,11 +17185,7 @@ impl GetObjectRetentionError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    _ => {}
-                }
-            }
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {}
         }
         RusotoError::Unknown(res)
     }
@@ -17012,11 +17214,7 @@ impl GetObjectTaggingError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    _ => {}
-                }
-            }
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {}
         }
         RusotoError::Unknown(res)
     }
@@ -17045,11 +17243,7 @@ impl GetObjectTorrentError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    _ => {}
-                }
-            }
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {}
         }
         RusotoError::Unknown(res)
     }
@@ -17078,11 +17272,7 @@ impl GetPublicAccessBlockError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    _ => {}
-                }
-            }
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {}
         }
         RusotoError::Unknown(res)
     }
@@ -17114,14 +17304,17 @@ impl HeadBucketError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    "NoSuchBucket" => {
-                        return RusotoError::Service(HeadBucketError::NoSuchBucket(
-                            parsed_error.message,
-                        ))
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {
+                        "NoSuchBucket" => {
+                            return RusotoError::Service(HeadBucketError::NoSuchBucket(
+                                parsed_error.message,
+                            ))
+                        }
+                        _ => {}
                     }
-                    _ => {}
                 }
             }
         }
@@ -17157,14 +17350,17 @@ impl HeadObjectError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    "NoSuchKey" => {
-                        return RusotoError::Service(HeadObjectError::NoSuchKey(
-                            parsed_error.message,
-                        ))
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {
+                        "NoSuchKey" => {
+                            return RusotoError::Service(HeadObjectError::NoSuchKey(
+                                parsed_error.message,
+                            ))
+                        }
+                        _ => {}
                     }
-                    _ => {}
                 }
             }
         }
@@ -17199,11 +17395,7 @@ impl ListBucketAnalyticsConfigurationsError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    _ => {}
-                }
-            }
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {}
         }
         RusotoError::Unknown(res)
     }
@@ -17234,11 +17426,7 @@ impl ListBucketIntelligentTieringConfigurationsError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    _ => {}
-                }
-            }
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {}
         }
         RusotoError::Unknown(res)
     }
@@ -17269,11 +17457,7 @@ impl ListBucketInventoryConfigurationsError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    _ => {}
-                }
-            }
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {}
         }
         RusotoError::Unknown(res)
     }
@@ -17304,11 +17488,7 @@ impl ListBucketMetricsConfigurationsError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    _ => {}
-                }
-            }
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {}
         }
         RusotoError::Unknown(res)
     }
@@ -17337,11 +17517,7 @@ impl ListBucketsError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    _ => {}
-                }
-            }
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {}
         }
         RusotoError::Unknown(res)
     }
@@ -17370,11 +17546,7 @@ impl ListMultipartUploadsError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    _ => {}
-                }
-            }
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {}
         }
         RusotoError::Unknown(res)
     }
@@ -17403,11 +17575,7 @@ impl ListObjectVersionsError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    _ => {}
-                }
-            }
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {}
         }
         RusotoError::Unknown(res)
     }
@@ -17439,14 +17607,17 @@ impl ListObjectsError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    "NoSuchBucket" => {
-                        return RusotoError::Service(ListObjectsError::NoSuchBucket(
-                            parsed_error.message,
-                        ))
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {
+                        "NoSuchBucket" => {
+                            return RusotoError::Service(ListObjectsError::NoSuchBucket(
+                                parsed_error.message,
+                            ))
+                        }
+                        _ => {}
                     }
-                    _ => {}
                 }
             }
         }
@@ -17482,14 +17653,17 @@ impl ListObjectsV2Error {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    "NoSuchBucket" => {
-                        return RusotoError::Service(ListObjectsV2Error::NoSuchBucket(
-                            parsed_error.message,
-                        ))
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {
+                        "NoSuchBucket" => {
+                            return RusotoError::Service(ListObjectsV2Error::NoSuchBucket(
+                                parsed_error.message,
+                            ))
+                        }
+                        _ => {}
                     }
-                    _ => {}
                 }
             }
         }
@@ -17522,11 +17696,7 @@ impl ListPartsError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    _ => {}
-                }
-            }
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {}
         }
         RusotoError::Unknown(res)
     }
@@ -17557,11 +17727,7 @@ impl PutBucketAccelerateConfigurationError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    _ => {}
-                }
-            }
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {}
         }
         RusotoError::Unknown(res)
     }
@@ -17590,11 +17756,7 @@ impl PutBucketAclError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    _ => {}
-                }
-            }
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {}
         }
         RusotoError::Unknown(res)
     }
@@ -17625,11 +17787,7 @@ impl PutBucketAnalyticsConfigurationError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    _ => {}
-                }
-            }
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {}
         }
         RusotoError::Unknown(res)
     }
@@ -17658,11 +17816,7 @@ impl PutBucketCorsError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    _ => {}
-                }
-            }
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {}
         }
         RusotoError::Unknown(res)
     }
@@ -17691,11 +17845,7 @@ impl PutBucketEncryptionError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    _ => {}
-                }
-            }
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {}
         }
         RusotoError::Unknown(res)
     }
@@ -17726,11 +17876,7 @@ impl PutBucketIntelligentTieringConfigurationError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    _ => {}
-                }
-            }
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {}
         }
         RusotoError::Unknown(res)
     }
@@ -17761,11 +17907,7 @@ impl PutBucketInventoryConfigurationError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    _ => {}
-                }
-            }
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {}
         }
         RusotoError::Unknown(res)
     }
@@ -17794,11 +17936,7 @@ impl PutBucketLifecycleError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    _ => {}
-                }
-            }
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {}
         }
         RusotoError::Unknown(res)
     }
@@ -17829,11 +17967,7 @@ impl PutBucketLifecycleConfigurationError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    _ => {}
-                }
-            }
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {}
         }
         RusotoError::Unknown(res)
     }
@@ -17862,11 +17996,7 @@ impl PutBucketLoggingError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    _ => {}
-                }
-            }
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {}
         }
         RusotoError::Unknown(res)
     }
@@ -17897,11 +18027,7 @@ impl PutBucketMetricsConfigurationError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    _ => {}
-                }
-            }
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {}
         }
         RusotoError::Unknown(res)
     }
@@ -17930,11 +18056,7 @@ impl PutBucketNotificationError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    _ => {}
-                }
-            }
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {}
         }
         RusotoError::Unknown(res)
     }
@@ -17965,11 +18087,7 @@ impl PutBucketNotificationConfigurationError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    _ => {}
-                }
-            }
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {}
         }
         RusotoError::Unknown(res)
     }
@@ -18000,11 +18118,7 @@ impl PutBucketOwnershipControlsError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    _ => {}
-                }
-            }
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {}
         }
         RusotoError::Unknown(res)
     }
@@ -18033,11 +18147,7 @@ impl PutBucketPolicyError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    _ => {}
-                }
-            }
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {}
         }
         RusotoError::Unknown(res)
     }
@@ -18066,11 +18176,7 @@ impl PutBucketReplicationError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    _ => {}
-                }
-            }
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {}
         }
         RusotoError::Unknown(res)
     }
@@ -18099,11 +18205,7 @@ impl PutBucketRequestPaymentError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    _ => {}
-                }
-            }
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {}
         }
         RusotoError::Unknown(res)
     }
@@ -18132,11 +18234,7 @@ impl PutBucketTaggingError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    _ => {}
-                }
-            }
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {}
         }
         RusotoError::Unknown(res)
     }
@@ -18165,11 +18263,7 @@ impl PutBucketVersioningError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    _ => {}
-                }
-            }
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {}
         }
         RusotoError::Unknown(res)
     }
@@ -18198,11 +18292,7 @@ impl PutBucketWebsiteError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    _ => {}
-                }
-            }
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {}
         }
         RusotoError::Unknown(res)
     }
@@ -18231,11 +18321,7 @@ impl PutObjectError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    _ => {}
-                }
-            }
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {}
         }
         RusotoError::Unknown(res)
     }
@@ -18267,14 +18353,17 @@ impl PutObjectAclError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    "NoSuchKey" => {
-                        return RusotoError::Service(PutObjectAclError::NoSuchKey(
-                            parsed_error.message,
-                        ))
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {
+                        "NoSuchKey" => {
+                            return RusotoError::Service(PutObjectAclError::NoSuchKey(
+                                parsed_error.message,
+                            ))
+                        }
+                        _ => {}
                     }
-                    _ => {}
                 }
             }
         }
@@ -18307,11 +18396,7 @@ impl PutObjectLegalHoldError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    _ => {}
-                }
-            }
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {}
         }
         RusotoError::Unknown(res)
     }
@@ -18342,11 +18427,7 @@ impl PutObjectLockConfigurationError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    _ => {}
-                }
-            }
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {}
         }
         RusotoError::Unknown(res)
     }
@@ -18375,11 +18456,7 @@ impl PutObjectRetentionError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    _ => {}
-                }
-            }
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {}
         }
         RusotoError::Unknown(res)
     }
@@ -18408,11 +18485,7 @@ impl PutObjectTaggingError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    _ => {}
-                }
-            }
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {}
         }
         RusotoError::Unknown(res)
     }
@@ -18441,11 +18514,7 @@ impl PutPublicAccessBlockError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    _ => {}
-                }
-            }
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {}
         }
         RusotoError::Unknown(res)
     }
@@ -18477,16 +18546,19 @@ impl RestoreObjectError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    "ObjectAlreadyInActiveTierError" => {
-                        return RusotoError::Service(
-                            RestoreObjectError::ObjectAlreadyInActiveTierError(
-                                parsed_error.message,
-                            ),
-                        )
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {
+                        "ObjectAlreadyInActiveTierError" => {
+                            return RusotoError::Service(
+                                RestoreObjectError::ObjectAlreadyInActiveTierError(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        _ => {}
                     }
-                    _ => {}
                 }
             }
         }
@@ -18519,11 +18591,7 @@ impl SelectObjectContentError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    _ => {}
-                }
-            }
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {}
         }
         RusotoError::Unknown(res)
     }
@@ -18552,11 +18620,7 @@ impl UploadPartError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    _ => {}
-                }
-            }
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {}
         }
         RusotoError::Unknown(res)
     }
@@ -18585,11 +18649,7 @@ impl UploadPartCopyError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    _ => {}
-                }
-            }
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {}
         }
         RusotoError::Unknown(res)
     }

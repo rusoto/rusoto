@@ -50,7 +50,6 @@ impl Route53DomainsClient {
     }
 }
 
-use serde_json;
 /// <p>The AcceptDomainTransferFromAnotherAwsAccount request includes the following elements.</p>
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
@@ -1022,6 +1021,7 @@ impl AcceptDomainTransferFromAnotherAwsAccountError {
         res: BufferedHttpResponse,
     ) -> RusotoError<AcceptDomainTransferFromAnotherAwsAccountError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "DomainLimitExceeded" => {
                     return RusotoError::Service(
@@ -1080,6 +1080,7 @@ impl CancelDomainTransferToAnotherAwsAccountError {
         res: BufferedHttpResponse,
     ) -> RusotoError<CancelDomainTransferToAnotherAwsAccountError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidInput" => {
                     return RusotoError::Service(
@@ -1126,6 +1127,7 @@ pub enum CheckDomainAvailabilityError {
 impl CheckDomainAvailabilityError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CheckDomainAvailabilityError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidInput" => {
                     return RusotoError::Service(CheckDomainAvailabilityError::InvalidInput(
@@ -1168,6 +1170,7 @@ impl CheckDomainTransferabilityError {
         res: BufferedHttpResponse,
     ) -> RusotoError<CheckDomainTransferabilityError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidInput" => {
                     return RusotoError::Service(CheckDomainTransferabilityError::InvalidInput(
@@ -1210,6 +1213,7 @@ pub enum DeleteTagsForDomainError {
 impl DeleteTagsForDomainError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteTagsForDomainError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidInput" => {
                     return RusotoError::Service(DeleteTagsForDomainError::InvalidInput(err.msg))
@@ -1252,6 +1256,7 @@ pub enum DisableDomainAutoRenewError {
 impl DisableDomainAutoRenewError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DisableDomainAutoRenewError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidInput" => {
                     return RusotoError::Service(DisableDomainAutoRenewError::InvalidInput(err.msg))
@@ -1296,6 +1301,7 @@ pub enum DisableDomainTransferLockError {
 impl DisableDomainTransferLockError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DisableDomainTransferLockError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "DuplicateRequest" => {
                     return RusotoError::Service(DisableDomainTransferLockError::DuplicateRequest(
@@ -1358,6 +1364,7 @@ pub enum EnableDomainAutoRenewError {
 impl EnableDomainAutoRenewError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<EnableDomainAutoRenewError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidInput" => {
                     return RusotoError::Service(EnableDomainAutoRenewError::InvalidInput(err.msg))
@@ -1408,6 +1415,7 @@ pub enum EnableDomainTransferLockError {
 impl EnableDomainTransferLockError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<EnableDomainTransferLockError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "DuplicateRequest" => {
                     return RusotoError::Service(EnableDomainTransferLockError::DuplicateRequest(
@@ -1472,6 +1480,7 @@ impl GetContactReachabilityStatusError {
         res: BufferedHttpResponse,
     ) -> RusotoError<GetContactReachabilityStatusError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidInput" => {
                     return RusotoError::Service(GetContactReachabilityStatusError::InvalidInput(
@@ -1520,6 +1529,7 @@ pub enum GetDomainDetailError {
 impl GetDomainDetailError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetDomainDetailError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidInput" => {
                     return RusotoError::Service(GetDomainDetailError::InvalidInput(err.msg))
@@ -1556,6 +1566,7 @@ pub enum GetDomainSuggestionsError {
 impl GetDomainSuggestionsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetDomainSuggestionsError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidInput" => {
                     return RusotoError::Service(GetDomainSuggestionsError::InvalidInput(err.msg))
@@ -1590,6 +1601,7 @@ pub enum GetOperationDetailError {
 impl GetOperationDetailError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetOperationDetailError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidInput" => {
                     return RusotoError::Service(GetOperationDetailError::InvalidInput(err.msg))
@@ -1620,6 +1632,7 @@ pub enum ListDomainsError {
 impl ListDomainsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListDomainsError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidInput" => {
                     return RusotoError::Service(ListDomainsError::InvalidInput(err.msg))
@@ -1650,6 +1663,7 @@ pub enum ListOperationsError {
 impl ListOperationsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListOperationsError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidInput" => {
                     return RusotoError::Service(ListOperationsError::InvalidInput(err.msg))
@@ -1684,6 +1698,7 @@ pub enum ListTagsForDomainError {
 impl ListTagsForDomainError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListTagsForDomainError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidInput" => {
                     return RusotoError::Service(ListTagsForDomainError::InvalidInput(err.msg))
@@ -1734,6 +1749,7 @@ pub enum RegisterDomainError {
 impl RegisterDomainError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<RegisterDomainError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "DomainLimitExceeded" => {
                     return RusotoError::Service(RegisterDomainError::DomainLimitExceeded(err.msg))
@@ -1790,6 +1806,7 @@ impl RejectDomainTransferFromAnotherAwsAccountError {
         res: BufferedHttpResponse,
     ) -> RusotoError<RejectDomainTransferFromAnotherAwsAccountError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidInput" => {
                     return RusotoError::Service(
@@ -1842,6 +1859,7 @@ pub enum RenewDomainError {
 impl RenewDomainError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<RenewDomainError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "DuplicateRequest" => {
                     return RusotoError::Service(RenewDomainError::DuplicateRequest(err.msg))
@@ -1894,6 +1912,7 @@ impl ResendContactReachabilityEmailError {
         res: BufferedHttpResponse,
     ) -> RusotoError<ResendContactReachabilityEmailError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidInput" => {
                     return RusotoError::Service(ResendContactReachabilityEmailError::InvalidInput(
@@ -1944,6 +1963,7 @@ pub enum RetrieveDomainAuthCodeError {
 impl RetrieveDomainAuthCodeError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<RetrieveDomainAuthCodeError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidInput" => {
                     return RusotoError::Service(RetrieveDomainAuthCodeError::InvalidInput(err.msg))
@@ -1990,6 +2010,7 @@ pub enum TransferDomainError {
 impl TransferDomainError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<TransferDomainError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "DomainLimitExceeded" => {
                     return RusotoError::Service(TransferDomainError::DomainLimitExceeded(err.msg))
@@ -2048,6 +2069,7 @@ impl TransferDomainToAnotherAwsAccountError {
         res: BufferedHttpResponse,
     ) -> RusotoError<TransferDomainToAnotherAwsAccountError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "DuplicateRequest" => {
                     return RusotoError::Service(
@@ -2106,6 +2128,7 @@ pub enum UpdateDomainContactError {
 impl UpdateDomainContactError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateDomainContactError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "DuplicateRequest" => {
                     return RusotoError::Service(UpdateDomainContactError::DuplicateRequest(
@@ -2168,6 +2191,7 @@ impl UpdateDomainContactPrivacyError {
         res: BufferedHttpResponse,
     ) -> RusotoError<UpdateDomainContactPrivacyError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "DuplicateRequest" => {
                     return RusotoError::Service(UpdateDomainContactPrivacyError::DuplicateRequest(
@@ -2234,6 +2258,7 @@ pub enum UpdateDomainNameserversError {
 impl UpdateDomainNameserversError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateDomainNameserversError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "DuplicateRequest" => {
                     return RusotoError::Service(UpdateDomainNameserversError::DuplicateRequest(
@@ -2296,6 +2321,7 @@ pub enum UpdateTagsForDomainError {
 impl UpdateTagsForDomainError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateTagsForDomainError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidInput" => {
                     return RusotoError::Service(UpdateTagsForDomainError::InvalidInput(err.msg))
@@ -2336,6 +2362,7 @@ pub enum ViewBillingError {
 impl ViewBillingError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ViewBillingError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidInput" => {
                     return RusotoError::Service(ViewBillingError::InvalidInput(err.msg))

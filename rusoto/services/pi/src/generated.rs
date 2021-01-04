@@ -49,7 +49,6 @@ impl PerformanceInsightsClient {
     }
 }
 
-use serde_json;
 /// <p>A timestamp, and a single numerical value, which together represent a measurement at a particular point in time.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
@@ -289,6 +288,7 @@ pub enum DescribeDimensionKeysError {
 impl DescribeDimensionKeysError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeDimensionKeysError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalServiceError" => {
                     return RusotoError::Service(DescribeDimensionKeysError::InternalServiceError(
@@ -335,6 +335,7 @@ pub enum GetResourceMetricsError {
 impl GetResourceMetricsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetResourceMetricsError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalServiceError" => {
                     return RusotoError::Service(GetResourceMetricsError::InternalServiceError(

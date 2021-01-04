@@ -31,7 +31,6 @@ use rusoto_core::signature::SignedRequest;
 use serde::Deserialize;
 #[cfg(feature = "serialize_structs")]
 use serde::Serialize;
-use serde_urlencoded;
 use std::str::FromStr;
 use xml::EventReader;
 
@@ -63,11 +62,13 @@ impl AutoscalingClient {
 #[allow(dead_code)]
 struct ActivitiesDeserializer;
 impl ActivitiesDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<Activity>, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
+
         deserialize_elements::<_, Vec<_>, _>(tag_name, stack, |name, stack, obj| {
             if name == "member" {
                 obj.push(ActivityDeserializer::deserialize("member", stack)?);
@@ -90,11 +91,12 @@ pub struct ActivitiesType {
 #[allow(dead_code)]
 struct ActivitiesTypeDeserializer;
 impl ActivitiesTypeDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<ActivitiesType, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, ActivitiesType, _>(tag_name, stack, |name, stack, obj| {
             match name {
                 "Activities" => {
@@ -139,11 +141,12 @@ pub struct Activity {
 #[allow(dead_code)]
 struct ActivityDeserializer;
 impl ActivityDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Activity, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, Activity, _>(tag_name, stack, |name, stack, obj| {
             match name {
                 "ActivityId" => {
@@ -192,6 +195,7 @@ impl ActivityDeserializer {
 /// Serialize `ActivityIds` contents to a `SignedRequest`.
 struct ActivityIdsSerializer;
 impl ActivityIdsSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &Vec<String>) {
         for (index, obj) in obj.iter().enumerate() {
             let key = format!("{}.member.{}", name, index + 1);
@@ -210,11 +214,12 @@ pub struct ActivityType {
 #[allow(dead_code)]
 struct ActivityTypeDeserializer;
 impl ActivityTypeDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<ActivityType, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, ActivityType, _>(tag_name, stack, |name, stack, obj| {
             match name {
                 "Activity" => {
@@ -237,11 +242,12 @@ pub struct AdjustmentType {
 #[allow(dead_code)]
 struct AdjustmentTypeDeserializer;
 impl AdjustmentTypeDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<AdjustmentType, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, AdjustmentType, _>(tag_name, stack, |name, stack, obj| {
             match name {
                 "AdjustmentType" => {
@@ -259,11 +265,13 @@ impl AdjustmentTypeDeserializer {
 #[allow(dead_code)]
 struct AdjustmentTypesDeserializer;
 impl AdjustmentTypesDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<AdjustmentType>, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
+
         deserialize_elements::<_, Vec<_>, _>(tag_name, stack, |name, stack, obj| {
             if name == "member" {
                 obj.push(AdjustmentTypeDeserializer::deserialize("member", stack)?);
@@ -287,8 +295,9 @@ pub struct Alarm {
 #[allow(dead_code)]
 struct AlarmDeserializer;
 impl AlarmDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<Alarm, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, Alarm, _>(tag_name, stack, |name, stack, obj| {
             match name {
                 "AlarmARN" => {
@@ -309,11 +318,13 @@ impl AlarmDeserializer {
 #[allow(dead_code)]
 struct AlarmsDeserializer;
 impl AlarmsDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<Alarm>, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
+
         deserialize_elements::<_, Vec<_>, _>(tag_name, stack, |name, stack, obj| {
             if name == "member" {
                 obj.push(AlarmDeserializer::deserialize("member", stack)?);
@@ -327,16 +338,18 @@ impl AlarmsDeserializer {
 #[allow(dead_code)]
 struct AsciiStringMaxLen255Deserializer;
 impl AsciiStringMaxLen255Deserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 #[allow(dead_code)]
 struct AssociatePublicIpAddressDeserializer;
 impl AssociatePublicIpAddressDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<bool, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::deserialize_primitive(tag_name, stack, |s| Ok(bool::from_str(&s).unwrap()))
     }
 }
@@ -352,10 +365,11 @@ pub struct AttachInstancesQuery {
 /// Serialize `AttachInstancesQuery` contents to a `SignedRequest`.
 struct AttachInstancesQuerySerializer;
 impl AttachInstancesQuerySerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &AttachInstancesQuery) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         params.put(
@@ -379,11 +393,12 @@ pub struct AttachLoadBalancerTargetGroupsResultType {}
 #[allow(dead_code)]
 struct AttachLoadBalancerTargetGroupsResultTypeDeserializer;
 impl AttachLoadBalancerTargetGroupsResultTypeDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<AttachLoadBalancerTargetGroupsResultType, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::start_element(tag_name, stack)?;
 
         let obj = AttachLoadBalancerTargetGroupsResultType::default();
@@ -405,10 +420,11 @@ pub struct AttachLoadBalancerTargetGroupsType {
 /// Serialize `AttachLoadBalancerTargetGroupsType` contents to a `SignedRequest`.
 struct AttachLoadBalancerTargetGroupsTypeSerializer;
 impl AttachLoadBalancerTargetGroupsTypeSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &AttachLoadBalancerTargetGroupsType) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         params.put(
@@ -430,11 +446,12 @@ pub struct AttachLoadBalancersResultType {}
 #[allow(dead_code)]
 struct AttachLoadBalancersResultTypeDeserializer;
 impl AttachLoadBalancersResultTypeDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<AttachLoadBalancersResultType, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::start_element(tag_name, stack)?;
 
         let obj = AttachLoadBalancersResultType::default();
@@ -456,10 +473,11 @@ pub struct AttachLoadBalancersType {
 /// Serialize `AttachLoadBalancersType` contents to a `SignedRequest`.
 struct AttachLoadBalancersTypeSerializer;
 impl AttachLoadBalancersTypeSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &AttachLoadBalancersType) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         params.put(
@@ -537,11 +555,12 @@ pub struct AutoScalingGroup {
 #[allow(dead_code)]
 struct AutoScalingGroupDeserializer;
 impl AutoScalingGroupDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<AutoScalingGroup, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, AutoScalingGroup, _>(tag_name, stack, |name, stack, obj| {
             match name {
                 "AutoScalingGroupARN" => {
@@ -703,24 +722,27 @@ impl AutoScalingGroupDeserializer {
 #[allow(dead_code)]
 struct AutoScalingGroupDesiredCapacityDeserializer;
 impl AutoScalingGroupDesiredCapacityDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<i64, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::deserialize_primitive(tag_name, stack, |s| Ok(i64::from_str(&s).unwrap()))
     }
 }
 #[allow(dead_code)]
 struct AutoScalingGroupMaxSizeDeserializer;
 impl AutoScalingGroupMaxSizeDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<i64, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::deserialize_primitive(tag_name, stack, |s| Ok(i64::from_str(&s).unwrap()))
     }
 }
 #[allow(dead_code)]
 struct AutoScalingGroupMinSizeDeserializer;
 impl AutoScalingGroupMinSizeDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<i64, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::deserialize_primitive(tag_name, stack, |s| Ok(i64::from_str(&s).unwrap()))
     }
 }
@@ -728,6 +750,7 @@ impl AutoScalingGroupMinSizeDeserializer {
 /// Serialize `AutoScalingGroupNames` contents to a `SignedRequest`.
 struct AutoScalingGroupNamesSerializer;
 impl AutoScalingGroupNamesSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &Vec<String>) {
         for (index, obj) in obj.iter().enumerate() {
             let key = format!("{}.member.{}", name, index + 1);
@@ -750,10 +773,11 @@ pub struct AutoScalingGroupNamesType {
 /// Serialize `AutoScalingGroupNamesType` contents to a `SignedRequest`.
 struct AutoScalingGroupNamesTypeSerializer;
 impl AutoScalingGroupNamesTypeSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &AutoScalingGroupNamesType) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         if let Some(ref field_value) = obj.auto_scaling_group_names {
@@ -775,11 +799,13 @@ impl AutoScalingGroupNamesTypeSerializer {
 #[allow(dead_code)]
 struct AutoScalingGroupsDeserializer;
 impl AutoScalingGroupsDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<AutoScalingGroup>, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
+
         deserialize_elements::<_, Vec<_>, _>(tag_name, stack, |name, stack, obj| {
             if name == "member" {
                 obj.push(AutoScalingGroupDeserializer::deserialize("member", stack)?);
@@ -802,11 +828,12 @@ pub struct AutoScalingGroupsType {
 #[allow(dead_code)]
 struct AutoScalingGroupsTypeDeserializer;
 impl AutoScalingGroupsTypeDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<AutoScalingGroupsType, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, AutoScalingGroupsType, _>(tag_name, stack, |name, stack, obj| {
             match name {
                 "AutoScalingGroups" => {
@@ -854,11 +881,12 @@ pub struct AutoScalingInstanceDetails {
 #[allow(dead_code)]
 struct AutoScalingInstanceDetailsDeserializer;
 impl AutoScalingInstanceDetailsDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<AutoScalingInstanceDetails, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, AutoScalingInstanceDetails, _>(
             tag_name,
             stack,
@@ -928,11 +956,13 @@ impl AutoScalingInstanceDetailsDeserializer {
 #[allow(dead_code)]
 struct AutoScalingInstancesDeserializer;
 impl AutoScalingInstancesDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<AutoScalingInstanceDetails>, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
+
         deserialize_elements::<_, Vec<_>, _>(tag_name, stack, |name, stack, obj| {
             if name == "member" {
                 obj.push(AutoScalingInstanceDetailsDeserializer::deserialize(
@@ -957,11 +987,12 @@ pub struct AutoScalingInstancesType {
 #[allow(dead_code)]
 struct AutoScalingInstancesTypeDeserializer;
 impl AutoScalingInstancesTypeDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<AutoScalingInstancesType, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, AutoScalingInstancesType, _>(
             tag_name,
             stack,
@@ -989,11 +1020,13 @@ impl AutoScalingInstancesTypeDeserializer {
 #[allow(dead_code)]
 struct AutoScalingNotificationTypesDeserializer;
 impl AutoScalingNotificationTypesDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<String>, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
+
         deserialize_elements::<_, Vec<_>, _>(tag_name, stack, |name, stack, obj| {
             if name == "member" {
                 obj.push(XmlStringMaxLen255Deserializer::deserialize(
@@ -1010,6 +1043,7 @@ impl AutoScalingNotificationTypesDeserializer {
 /// Serialize `AutoScalingNotificationTypes` contents to a `SignedRequest`.
 struct AutoScalingNotificationTypesSerializer;
 impl AutoScalingNotificationTypesSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &Vec<String>) {
         for (index, obj) in obj.iter().enumerate() {
             let key = format!("{}.member.{}", name, index + 1);
@@ -1021,11 +1055,13 @@ impl AutoScalingNotificationTypesSerializer {
 #[allow(dead_code)]
 struct AvailabilityZonesDeserializer;
 impl AvailabilityZonesDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<String>, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
+
         deserialize_elements::<_, Vec<_>, _>(tag_name, stack, |name, stack, obj| {
             if name == "member" {
                 obj.push(XmlStringMaxLen255Deserializer::deserialize(
@@ -1042,6 +1078,7 @@ impl AvailabilityZonesDeserializer {
 /// Serialize `AvailabilityZones` contents to a `SignedRequest`.
 struct AvailabilityZonesSerializer;
 impl AvailabilityZonesSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &Vec<String>) {
         for (index, obj) in obj.iter().enumerate() {
             let key = format!("{}.member.{}", name, index + 1);
@@ -1060,11 +1097,12 @@ pub struct BatchDeleteScheduledActionAnswer {
 #[allow(dead_code)]
 struct BatchDeleteScheduledActionAnswerDeserializer;
 impl BatchDeleteScheduledActionAnswerDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<BatchDeleteScheduledActionAnswer, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, BatchDeleteScheduledActionAnswer, _>(
             tag_name,
             stack,
@@ -1097,10 +1135,11 @@ pub struct BatchDeleteScheduledActionType {
 /// Serialize `BatchDeleteScheduledActionType` contents to a `SignedRequest`.
 struct BatchDeleteScheduledActionTypeSerializer;
 impl BatchDeleteScheduledActionTypeSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &BatchDeleteScheduledActionType) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         params.put(
@@ -1125,11 +1164,12 @@ pub struct BatchPutScheduledUpdateGroupActionAnswer {
 #[allow(dead_code)]
 struct BatchPutScheduledUpdateGroupActionAnswerDeserializer;
 impl BatchPutScheduledUpdateGroupActionAnswerDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<BatchPutScheduledUpdateGroupActionAnswer, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, BatchPutScheduledUpdateGroupActionAnswer, _>(
             tag_name,
             stack,
@@ -1164,10 +1204,11 @@ pub struct BatchPutScheduledUpdateGroupActionType {
 /// Serialize `BatchPutScheduledUpdateGroupActionType` contents to a `SignedRequest`.
 struct BatchPutScheduledUpdateGroupActionTypeSerializer;
 impl BatchPutScheduledUpdateGroupActionTypeSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &BatchPutScheduledUpdateGroupActionType) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         params.put(
@@ -1185,40 +1226,45 @@ impl BatchPutScheduledUpdateGroupActionTypeSerializer {
 #[allow(dead_code)]
 struct BlockDeviceEbsDeleteOnTerminationDeserializer;
 impl BlockDeviceEbsDeleteOnTerminationDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<bool, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::deserialize_primitive(tag_name, stack, |s| Ok(bool::from_str(&s).unwrap()))
     }
 }
 #[allow(dead_code)]
 struct BlockDeviceEbsEncryptedDeserializer;
 impl BlockDeviceEbsEncryptedDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<bool, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::deserialize_primitive(tag_name, stack, |s| Ok(bool::from_str(&s).unwrap()))
     }
 }
 #[allow(dead_code)]
 struct BlockDeviceEbsIopsDeserializer;
 impl BlockDeviceEbsIopsDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<i64, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::deserialize_primitive(tag_name, stack, |s| Ok(i64::from_str(&s).unwrap()))
     }
 }
 #[allow(dead_code)]
 struct BlockDeviceEbsVolumeSizeDeserializer;
 impl BlockDeviceEbsVolumeSizeDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<i64, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::deserialize_primitive(tag_name, stack, |s| Ok(i64::from_str(&s).unwrap()))
     }
 }
 #[allow(dead_code)]
 struct BlockDeviceEbsVolumeTypeDeserializer;
 impl BlockDeviceEbsVolumeTypeDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
@@ -1240,11 +1286,12 @@ pub struct BlockDeviceMapping {
 #[allow(dead_code)]
 struct BlockDeviceMappingDeserializer;
 impl BlockDeviceMappingDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<BlockDeviceMapping, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, BlockDeviceMapping, _>(tag_name, stack, |name, stack, obj| {
             match name {
                 "DeviceName" => {
@@ -1273,10 +1320,11 @@ impl BlockDeviceMappingDeserializer {
 /// Serialize `BlockDeviceMapping` contents to a `SignedRequest`.
 struct BlockDeviceMappingSerializer;
 impl BlockDeviceMappingSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &BlockDeviceMapping) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         params.put(&format!("{}{}", prefix, "DeviceName"), &obj.device_name);
@@ -1295,11 +1343,13 @@ impl BlockDeviceMappingSerializer {
 #[allow(dead_code)]
 struct BlockDeviceMappingsDeserializer;
 impl BlockDeviceMappingsDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<BlockDeviceMapping>, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
+
         deserialize_elements::<_, Vec<_>, _>(tag_name, stack, |name, stack, obj| {
             if name == "member" {
                 obj.push(BlockDeviceMappingDeserializer::deserialize(
@@ -1316,6 +1366,7 @@ impl BlockDeviceMappingsDeserializer {
 /// Serialize `BlockDeviceMappings` contents to a `SignedRequest`.
 struct BlockDeviceMappingsSerializer;
 impl BlockDeviceMappingsSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &Vec<BlockDeviceMapping>) {
         for (index, obj) in obj.iter().enumerate() {
             let key = format!("{}.member.{}", name, index + 1);
@@ -1334,11 +1385,12 @@ pub struct CancelInstanceRefreshAnswer {
 #[allow(dead_code)]
 struct CancelInstanceRefreshAnswerDeserializer;
 impl CancelInstanceRefreshAnswerDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<CancelInstanceRefreshAnswer, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, CancelInstanceRefreshAnswer, _>(
             tag_name,
             stack,
@@ -1368,10 +1420,11 @@ pub struct CancelInstanceRefreshType {
 /// Serialize `CancelInstanceRefreshType` contents to a `SignedRequest`.
 struct CancelInstanceRefreshTypeSerializer;
 impl CancelInstanceRefreshTypeSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &CancelInstanceRefreshType) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         params.put(
@@ -1384,19 +1437,22 @@ impl CancelInstanceRefreshTypeSerializer {
 #[allow(dead_code)]
 struct CapacityRebalanceEnabledDeserializer;
 impl CapacityRebalanceEnabledDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<bool, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::deserialize_primitive(tag_name, stack, |s| Ok(bool::from_str(&s).unwrap()))
     }
 }
 #[allow(dead_code)]
 struct ClassicLinkVPCSecurityGroupsDeserializer;
 impl ClassicLinkVPCSecurityGroupsDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<String>, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
+
         deserialize_elements::<_, Vec<_>, _>(tag_name, stack, |name, stack, obj| {
             if name == "member" {
                 obj.push(XmlStringMaxLen255Deserializer::deserialize(
@@ -1413,6 +1469,7 @@ impl ClassicLinkVPCSecurityGroupsDeserializer {
 /// Serialize `ClassicLinkVPCSecurityGroups` contents to a `SignedRequest`.
 struct ClassicLinkVPCSecurityGroupsSerializer;
 impl ClassicLinkVPCSecurityGroupsSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &Vec<String>) {
         for (index, obj) in obj.iter().enumerate() {
             let key = format!("{}.member.{}", name, index + 1);
@@ -1428,11 +1485,12 @@ pub struct CompleteLifecycleActionAnswer {}
 #[allow(dead_code)]
 struct CompleteLifecycleActionAnswerDeserializer;
 impl CompleteLifecycleActionAnswerDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<CompleteLifecycleActionAnswer, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::start_element(tag_name, stack)?;
 
         let obj = CompleteLifecycleActionAnswer::default();
@@ -1460,10 +1518,11 @@ pub struct CompleteLifecycleActionType {
 /// Serialize `CompleteLifecycleActionType` contents to a `SignedRequest`.
 struct CompleteLifecycleActionTypeSerializer;
 impl CompleteLifecycleActionTypeSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &CompleteLifecycleActionType) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         params.put(
@@ -1493,8 +1552,9 @@ impl CompleteLifecycleActionTypeSerializer {
 #[allow(dead_code)]
 struct CooldownDeserializer;
 impl CooldownDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<i64, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::deserialize_primitive(tag_name, stack, |s| Ok(i64::from_str(&s).unwrap()))
     }
 }
@@ -1552,10 +1612,11 @@ pub struct CreateAutoScalingGroupType {
 /// Serialize `CreateAutoScalingGroupType` contents to a `SignedRequest`.
 struct CreateAutoScalingGroupTypeSerializer;
 impl CreateAutoScalingGroupTypeSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &CreateAutoScalingGroupType) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         params.put(
@@ -1716,10 +1777,11 @@ pub struct CreateLaunchConfigurationType {
 /// Serialize `CreateLaunchConfigurationType` contents to a `SignedRequest`.
 struct CreateLaunchConfigurationTypeSerializer;
 impl CreateLaunchConfigurationTypeSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &CreateLaunchConfigurationType) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         if let Some(ref field_value) = obj.associate_public_ip_address {
@@ -1816,10 +1878,11 @@ pub struct CreateOrUpdateTagsType {
 /// Serialize `CreateOrUpdateTagsType` contents to a `SignedRequest`.
 struct CreateOrUpdateTagsTypeSerializer;
 impl CreateOrUpdateTagsTypeSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &CreateOrUpdateTagsType) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         TagsSerializer::serialize(params, &format!("{}{}", prefix, "Tags"), &obj.tags);
@@ -1846,11 +1909,12 @@ pub struct CustomizedMetricSpecification {
 #[allow(dead_code)]
 struct CustomizedMetricSpecificationDeserializer;
 impl CustomizedMetricSpecificationDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<CustomizedMetricSpecification, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, CustomizedMetricSpecification, _>(
             tag_name,
             stack,
@@ -1886,10 +1950,11 @@ impl CustomizedMetricSpecificationDeserializer {
 /// Serialize `CustomizedMetricSpecification` contents to a `SignedRequest`.
 struct CustomizedMetricSpecificationSerializer;
 impl CustomizedMetricSpecificationSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &CustomizedMetricSpecification) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         if let Some(ref field_value) = obj.dimensions {
@@ -1920,10 +1985,11 @@ pub struct DeleteAutoScalingGroupType {
 /// Serialize `DeleteAutoScalingGroupType` contents to a `SignedRequest`.
 struct DeleteAutoScalingGroupTypeSerializer;
 impl DeleteAutoScalingGroupTypeSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &DeleteAutoScalingGroupType) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         params.put(
@@ -1943,11 +2009,12 @@ pub struct DeleteLifecycleHookAnswer {}
 #[allow(dead_code)]
 struct DeleteLifecycleHookAnswerDeserializer;
 impl DeleteLifecycleHookAnswerDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<DeleteLifecycleHookAnswer, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::start_element(tag_name, stack)?;
 
         let obj = DeleteLifecycleHookAnswer::default();
@@ -1969,10 +2036,11 @@ pub struct DeleteLifecycleHookType {
 /// Serialize `DeleteLifecycleHookType` contents to a `SignedRequest`.
 struct DeleteLifecycleHookTypeSerializer;
 impl DeleteLifecycleHookTypeSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &DeleteLifecycleHookType) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         params.put(
@@ -1998,10 +2066,11 @@ pub struct DeleteNotificationConfigurationType {
 /// Serialize `DeleteNotificationConfigurationType` contents to a `SignedRequest`.
 struct DeleteNotificationConfigurationTypeSerializer;
 impl DeleteNotificationConfigurationTypeSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &DeleteNotificationConfigurationType) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         params.put(
@@ -2024,10 +2093,11 @@ pub struct DeletePolicyType {
 /// Serialize `DeletePolicyType` contents to a `SignedRequest`.
 struct DeletePolicyTypeSerializer;
 impl DeletePolicyTypeSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &DeletePolicyType) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         if let Some(ref field_value) = obj.auto_scaling_group_name {
@@ -2052,10 +2122,11 @@ pub struct DeleteScheduledActionType {
 /// Serialize `DeleteScheduledActionType` contents to a `SignedRequest`.
 struct DeleteScheduledActionTypeSerializer;
 impl DeleteScheduledActionTypeSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &DeleteScheduledActionType) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         params.put(
@@ -2079,10 +2150,11 @@ pub struct DeleteTagsType {
 /// Serialize `DeleteTagsType` contents to a `SignedRequest`.
 struct DeleteTagsTypeSerializer;
 impl DeleteTagsTypeSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &DeleteTagsType) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         TagsSerializer::serialize(params, &format!("{}{}", prefix, "Tags"), &obj.tags);
@@ -2105,11 +2177,12 @@ pub struct DescribeAccountLimitsAnswer {
 #[allow(dead_code)]
 struct DescribeAccountLimitsAnswerDeserializer;
 impl DescribeAccountLimitsAnswerDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<DescribeAccountLimitsAnswer, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, DescribeAccountLimitsAnswer, _>(
             tag_name,
             stack,
@@ -2160,11 +2233,12 @@ pub struct DescribeAdjustmentTypesAnswer {
 #[allow(dead_code)]
 struct DescribeAdjustmentTypesAnswerDeserializer;
 impl DescribeAdjustmentTypesAnswerDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<DescribeAdjustmentTypesAnswer, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, DescribeAdjustmentTypesAnswer, _>(
             tag_name,
             stack,
@@ -2196,10 +2270,11 @@ pub struct DescribeAutoScalingInstancesType {
 /// Serialize `DescribeAutoScalingInstancesType` contents to a `SignedRequest`.
 struct DescribeAutoScalingInstancesTypeSerializer;
 impl DescribeAutoScalingInstancesTypeSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &DescribeAutoScalingInstancesType) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         if let Some(ref field_value) = obj.instance_ids {
@@ -2228,11 +2303,12 @@ pub struct DescribeAutoScalingNotificationTypesAnswer {
 #[allow(dead_code)]
 struct DescribeAutoScalingNotificationTypesAnswerDeserializer;
 impl DescribeAutoScalingNotificationTypesAnswerDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<DescribeAutoScalingNotificationTypesAnswer, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, DescribeAutoScalingNotificationTypesAnswer, _>(
             tag_name,
             stack,
@@ -2265,11 +2341,12 @@ pub struct DescribeInstanceRefreshesAnswer {
 #[allow(dead_code)]
 struct DescribeInstanceRefreshesAnswerDeserializer;
 impl DescribeInstanceRefreshesAnswerDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<DescribeInstanceRefreshesAnswer, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, DescribeInstanceRefreshesAnswer, _>(
             tag_name,
             stack,
@@ -2307,10 +2384,11 @@ pub struct DescribeInstanceRefreshesType {
 /// Serialize `DescribeInstanceRefreshesType` contents to a `SignedRequest`.
 struct DescribeInstanceRefreshesTypeSerializer;
 impl DescribeInstanceRefreshesTypeSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &DescribeInstanceRefreshesType) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         params.put(
@@ -2343,11 +2421,12 @@ pub struct DescribeLifecycleHookTypesAnswer {
 #[allow(dead_code)]
 struct DescribeLifecycleHookTypesAnswerDeserializer;
 impl DescribeLifecycleHookTypesAnswerDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<DescribeLifecycleHookTypesAnswer, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, DescribeLifecycleHookTypesAnswer, _>(
             tag_name,
             stack,
@@ -2378,11 +2457,12 @@ pub struct DescribeLifecycleHooksAnswer {
 #[allow(dead_code)]
 struct DescribeLifecycleHooksAnswerDeserializer;
 impl DescribeLifecycleHooksAnswerDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<DescribeLifecycleHooksAnswer, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, DescribeLifecycleHooksAnswer, _>(
             tag_name,
             stack,
@@ -2412,10 +2492,11 @@ pub struct DescribeLifecycleHooksType {
 /// Serialize `DescribeLifecycleHooksType` contents to a `SignedRequest`.
 struct DescribeLifecycleHooksTypeSerializer;
 impl DescribeLifecycleHooksTypeSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &DescribeLifecycleHooksType) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         params.put(
@@ -2446,10 +2527,11 @@ pub struct DescribeLoadBalancerTargetGroupsRequest {
 /// Serialize `DescribeLoadBalancerTargetGroupsRequest` contents to a `SignedRequest`.
 struct DescribeLoadBalancerTargetGroupsRequestSerializer;
 impl DescribeLoadBalancerTargetGroupsRequestSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &DescribeLoadBalancerTargetGroupsRequest) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         params.put(
@@ -2477,11 +2559,12 @@ pub struct DescribeLoadBalancerTargetGroupsResponse {
 #[allow(dead_code)]
 struct DescribeLoadBalancerTargetGroupsResponseDeserializer;
 impl DescribeLoadBalancerTargetGroupsResponseDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<DescribeLoadBalancerTargetGroupsResponse, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, DescribeLoadBalancerTargetGroupsResponse, _>(
             tag_name,
             stack,
@@ -2520,10 +2603,11 @@ pub struct DescribeLoadBalancersRequest {
 /// Serialize `DescribeLoadBalancersRequest` contents to a `SignedRequest`.
 struct DescribeLoadBalancersRequestSerializer;
 impl DescribeLoadBalancersRequestSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &DescribeLoadBalancersRequest) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         params.put(
@@ -2551,11 +2635,12 @@ pub struct DescribeLoadBalancersResponse {
 #[allow(dead_code)]
 struct DescribeLoadBalancersResponseDeserializer;
 impl DescribeLoadBalancersResponseDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<DescribeLoadBalancersResponse, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, DescribeLoadBalancersResponse, _>(
             tag_name,
             stack,
@@ -2589,11 +2674,12 @@ pub struct DescribeMetricCollectionTypesAnswer {
 #[allow(dead_code)]
 struct DescribeMetricCollectionTypesAnswerDeserializer;
 impl DescribeMetricCollectionTypesAnswerDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<DescribeMetricCollectionTypesAnswer, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, DescribeMetricCollectionTypesAnswer, _>(
             tag_name,
             stack,
@@ -2631,11 +2717,12 @@ pub struct DescribeNotificationConfigurationsAnswer {
 #[allow(dead_code)]
 struct DescribeNotificationConfigurationsAnswerDeserializer;
 impl DescribeNotificationConfigurationsAnswerDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<DescribeNotificationConfigurationsAnswer, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, DescribeNotificationConfigurationsAnswer, _>(
             tag_name,
             stack,
@@ -2674,10 +2761,11 @@ pub struct DescribeNotificationConfigurationsType {
 /// Serialize `DescribeNotificationConfigurationsType` contents to a `SignedRequest`.
 struct DescribeNotificationConfigurationsTypeSerializer;
 impl DescribeNotificationConfigurationsTypeSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &DescribeNotificationConfigurationsType) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         if let Some(ref field_value) = obj.auto_scaling_group_names {
@@ -2714,10 +2802,11 @@ pub struct DescribePoliciesType {
 /// Serialize `DescribePoliciesType` contents to a `SignedRequest`.
 struct DescribePoliciesTypeSerializer;
 impl DescribePoliciesTypeSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &DescribePoliciesType) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         if let Some(ref field_value) = obj.auto_scaling_group_name {
@@ -2765,10 +2854,11 @@ pub struct DescribeScalingActivitiesType {
 /// Serialize `DescribeScalingActivitiesType` contents to a `SignedRequest`.
 struct DescribeScalingActivitiesTypeSerializer;
 impl DescribeScalingActivitiesTypeSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &DescribeScalingActivitiesType) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         if let Some(ref field_value) = obj.activity_ids {
@@ -2813,10 +2903,11 @@ pub struct DescribeScheduledActionsType {
 /// Serialize `DescribeScheduledActionsType` contents to a `SignedRequest`.
 struct DescribeScheduledActionsTypeSerializer;
 impl DescribeScheduledActionsTypeSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &DescribeScheduledActionsType) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         if let Some(ref field_value) = obj.auto_scaling_group_name {
@@ -2861,10 +2952,11 @@ pub struct DescribeTagsType {
 /// Serialize `DescribeTagsType` contents to a `SignedRequest`.
 struct DescribeTagsTypeSerializer;
 impl DescribeTagsTypeSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &DescribeTagsType) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         if let Some(ref field_value) = obj.filters {
@@ -2889,11 +2981,12 @@ pub struct DescribeTerminationPolicyTypesAnswer {
 #[allow(dead_code)]
 struct DescribeTerminationPolicyTypesAnswerDeserializer;
 impl DescribeTerminationPolicyTypesAnswerDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<DescribeTerminationPolicyTypesAnswer, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, DescribeTerminationPolicyTypesAnswer, _>(
             tag_name,
             stack,
@@ -2924,11 +3017,12 @@ pub struct DetachInstancesAnswer {
 #[allow(dead_code)]
 struct DetachInstancesAnswerDeserializer;
 impl DetachInstancesAnswerDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<DetachInstancesAnswer, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, DetachInstancesAnswer, _>(tag_name, stack, |name, stack, obj| {
             match name {
                 "Activities" => {
@@ -2956,10 +3050,11 @@ pub struct DetachInstancesQuery {
 /// Serialize `DetachInstancesQuery` contents to a `SignedRequest`.
 struct DetachInstancesQuerySerializer;
 impl DetachInstancesQuerySerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &DetachInstancesQuery) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         params.put(
@@ -2987,11 +3082,12 @@ pub struct DetachLoadBalancerTargetGroupsResultType {}
 #[allow(dead_code)]
 struct DetachLoadBalancerTargetGroupsResultTypeDeserializer;
 impl DetachLoadBalancerTargetGroupsResultTypeDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<DetachLoadBalancerTargetGroupsResultType, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::start_element(tag_name, stack)?;
 
         let obj = DetachLoadBalancerTargetGroupsResultType::default();
@@ -3013,10 +3109,11 @@ pub struct DetachLoadBalancerTargetGroupsType {
 /// Serialize `DetachLoadBalancerTargetGroupsType` contents to a `SignedRequest`.
 struct DetachLoadBalancerTargetGroupsTypeSerializer;
 impl DetachLoadBalancerTargetGroupsTypeSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &DetachLoadBalancerTargetGroupsType) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         params.put(
@@ -3038,11 +3135,12 @@ pub struct DetachLoadBalancersResultType {}
 #[allow(dead_code)]
 struct DetachLoadBalancersResultTypeDeserializer;
 impl DetachLoadBalancersResultTypeDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<DetachLoadBalancersResultType, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::start_element(tag_name, stack)?;
 
         let obj = DetachLoadBalancersResultType::default();
@@ -3064,10 +3162,11 @@ pub struct DetachLoadBalancersType {
 /// Serialize `DetachLoadBalancersType` contents to a `SignedRequest`.
 struct DetachLoadBalancersTypeSerializer;
 impl DetachLoadBalancersTypeSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &DetachLoadBalancersType) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         params.put(
@@ -3094,10 +3193,11 @@ pub struct DisableMetricsCollectionQuery {
 /// Serialize `DisableMetricsCollectionQuery` contents to a `SignedRequest`.
 struct DisableMetricsCollectionQuerySerializer;
 impl DisableMetricsCollectionQuerySerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &DisableMetricsCollectionQuery) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         params.put(
@@ -3113,8 +3213,9 @@ impl DisableMetricsCollectionQuerySerializer {
 #[allow(dead_code)]
 struct DisableScaleInDeserializer;
 impl DisableScaleInDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<bool, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::deserialize_primitive(tag_name, stack, |s| Ok(bool::from_str(&s).unwrap()))
     }
 }
@@ -3140,8 +3241,9 @@ pub struct Ebs {
 #[allow(dead_code)]
 struct EbsDeserializer;
 impl EbsDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<Ebs, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, Ebs, _>(tag_name, stack, |name, stack, obj| {
             match name {
                 "DeleteOnTermination" => {
@@ -3188,10 +3290,11 @@ impl EbsDeserializer {
 /// Serialize `Ebs` contents to a `SignedRequest`.
 struct EbsSerializer;
 impl EbsSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &Ebs) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         if let Some(ref field_value) = obj.delete_on_termination {
@@ -3221,8 +3324,9 @@ impl EbsSerializer {
 #[allow(dead_code)]
 struct EbsOptimizedDeserializer;
 impl EbsOptimizedDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<bool, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::deserialize_primitive(tag_name, stack, |s| Ok(bool::from_str(&s).unwrap()))
     }
 }
@@ -3240,10 +3344,11 @@ pub struct EnableMetricsCollectionQuery {
 /// Serialize `EnableMetricsCollectionQuery` contents to a `SignedRequest`.
 struct EnableMetricsCollectionQuerySerializer;
 impl EnableMetricsCollectionQuerySerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &EnableMetricsCollectionQuery) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         params.put(
@@ -3270,11 +3375,12 @@ pub struct EnabledMetric {
 #[allow(dead_code)]
 struct EnabledMetricDeserializer;
 impl EnabledMetricDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<EnabledMetric, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, EnabledMetric, _>(tag_name, stack, |name, stack, obj| {
             match name {
                 "Granularity" => {
@@ -3297,11 +3403,13 @@ impl EnabledMetricDeserializer {
 #[allow(dead_code)]
 struct EnabledMetricsDeserializer;
 impl EnabledMetricsDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<EnabledMetric>, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
+
         deserialize_elements::<_, Vec<_>, _>(tag_name, stack, |name, stack, obj| {
             if name == "member" {
                 obj.push(EnabledMetricDeserializer::deserialize("member", stack)?);
@@ -3322,11 +3430,12 @@ pub struct EnterStandbyAnswer {
 #[allow(dead_code)]
 struct EnterStandbyAnswerDeserializer;
 impl EnterStandbyAnswerDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<EnterStandbyAnswer, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, EnterStandbyAnswer, _>(tag_name, stack, |name, stack, obj| {
             match name {
                 "Activities" => {
@@ -3354,10 +3463,11 @@ pub struct EnterStandbyQuery {
 /// Serialize `EnterStandbyQuery` contents to a `SignedRequest`.
 struct EnterStandbyQuerySerializer;
 impl EnterStandbyQuerySerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &EnterStandbyQuery) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         params.put(
@@ -3381,8 +3491,9 @@ impl EnterStandbyQuerySerializer {
 #[allow(dead_code)]
 struct EstimatedInstanceWarmupDeserializer;
 impl EstimatedInstanceWarmupDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<i64, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::deserialize_primitive(tag_name, stack, |s| Ok(i64::from_str(&s).unwrap()))
     }
 }
@@ -3404,10 +3515,11 @@ pub struct ExecutePolicyType {
 /// Serialize `ExecutePolicyType` contents to a `SignedRequest`.
 struct ExecutePolicyTypeSerializer;
 impl ExecutePolicyTypeSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &ExecutePolicyType) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         if let Some(ref field_value) = obj.auto_scaling_group_name {
@@ -3439,11 +3551,12 @@ pub struct ExitStandbyAnswer {
 #[allow(dead_code)]
 struct ExitStandbyAnswerDeserializer;
 impl ExitStandbyAnswerDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<ExitStandbyAnswer, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, ExitStandbyAnswer, _>(tag_name, stack, |name, stack, obj| {
             match name {
                 "Activities" => {
@@ -3469,10 +3582,11 @@ pub struct ExitStandbyQuery {
 /// Serialize `ExitStandbyQuery` contents to a `SignedRequest`.
 struct ExitStandbyQuerySerializer;
 impl ExitStandbyQuerySerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &ExitStandbyQuery) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         params.put(
@@ -3504,11 +3618,12 @@ pub struct FailedScheduledUpdateGroupActionRequest {
 #[allow(dead_code)]
 struct FailedScheduledUpdateGroupActionRequestDeserializer;
 impl FailedScheduledUpdateGroupActionRequestDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<FailedScheduledUpdateGroupActionRequest, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, FailedScheduledUpdateGroupActionRequest, _>(
             tag_name,
             stack,
@@ -3540,11 +3655,13 @@ impl FailedScheduledUpdateGroupActionRequestDeserializer {
 #[allow(dead_code)]
 struct FailedScheduledUpdateGroupActionRequestsDeserializer;
 impl FailedScheduledUpdateGroupActionRequestsDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<FailedScheduledUpdateGroupActionRequest>, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
+
         deserialize_elements::<_, Vec<_>, _>(tag_name, stack, |name, stack, obj| {
             if name == "member" {
                 obj.push(
@@ -3572,10 +3689,11 @@ pub struct Filter {
 /// Serialize `Filter` contents to a `SignedRequest`.
 struct FilterSerializer;
 impl FilterSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &Filter) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         if let Some(ref field_value) = obj.name {
@@ -3590,6 +3708,7 @@ impl FilterSerializer {
 /// Serialize `Filters` contents to a `SignedRequest`.
 struct FiltersSerializer;
 impl FiltersSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &Vec<Filter>) {
         for (index, obj) in obj.iter().enumerate() {
             let key = format!("{}.member.{}", name, index + 1);
@@ -3601,24 +3720,27 @@ impl FiltersSerializer {
 #[allow(dead_code)]
 struct GlobalTimeoutDeserializer;
 impl GlobalTimeoutDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<i64, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::deserialize_primitive(tag_name, stack, |s| Ok(i64::from_str(&s).unwrap()))
     }
 }
 #[allow(dead_code)]
 struct HealthCheckGracePeriodDeserializer;
 impl HealthCheckGracePeriodDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<i64, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::deserialize_primitive(tag_name, stack, |s| Ok(i64::from_str(&s).unwrap()))
     }
 }
 #[allow(dead_code)]
 struct HeartbeatTimeoutDeserializer;
 impl HeartbeatTimeoutDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<i64, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::deserialize_primitive(tag_name, stack, |s| Ok(i64::from_str(&s).unwrap()))
     }
 }
@@ -3649,11 +3771,12 @@ pub struct Instance {
 #[allow(dead_code)]
 struct InstanceDeserializer;
 impl InstanceDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Instance, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, Instance, _>(tag_name, stack, |name, stack, obj| {
             match name {
                 "AvailabilityZone" => {
@@ -3712,6 +3835,7 @@ impl InstanceDeserializer {
 /// Serialize `InstanceIds` contents to a `SignedRequest`.
 struct InstanceIdsSerializer;
 impl InstanceIdsSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &Vec<String>) {
         for (index, obj) in obj.iter().enumerate() {
             let key = format!("{}.member.{}", name, index + 1);
@@ -3723,24 +3847,27 @@ impl InstanceIdsSerializer {
 #[allow(dead_code)]
 struct InstanceMetadataEndpointStateDeserializer;
 impl InstanceMetadataEndpointStateDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 #[allow(dead_code)]
 struct InstanceMetadataHttpPutResponseHopLimitDeserializer;
 impl InstanceMetadataHttpPutResponseHopLimitDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<i64, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::deserialize_primitive(tag_name, stack, |s| Ok(i64::from_str(&s).unwrap()))
     }
 }
 #[allow(dead_code)]
 struct InstanceMetadataHttpTokensStateDeserializer;
 impl InstanceMetadataHttpTokensStateDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
@@ -3760,11 +3887,12 @@ pub struct InstanceMetadataOptions {
 #[allow(dead_code)]
 struct InstanceMetadataOptionsDeserializer;
 impl InstanceMetadataOptionsDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<InstanceMetadataOptions, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, InstanceMetadataOptions, _>(
             tag_name,
             stack,
@@ -3803,10 +3931,11 @@ impl InstanceMetadataOptionsDeserializer {
 /// Serialize `InstanceMetadataOptions` contents to a `SignedRequest`.
 struct InstanceMetadataOptionsSerializer;
 impl InstanceMetadataOptionsSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &InstanceMetadataOptions) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         if let Some(ref field_value) = obj.http_endpoint {
@@ -3836,11 +3965,12 @@ pub struct InstanceMonitoring {
 #[allow(dead_code)]
 struct InstanceMonitoringDeserializer;
 impl InstanceMonitoringDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<InstanceMonitoring, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, InstanceMonitoring, _>(tag_name, stack, |name, stack, obj| {
             match name {
                 "Enabled" => {
@@ -3858,10 +3988,11 @@ impl InstanceMonitoringDeserializer {
 /// Serialize `InstanceMonitoring` contents to a `SignedRequest`.
 struct InstanceMonitoringSerializer;
 impl InstanceMonitoringSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &InstanceMonitoring) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         if let Some(ref field_value) = obj.enabled {
@@ -3873,8 +4004,9 @@ impl InstanceMonitoringSerializer {
 #[allow(dead_code)]
 struct InstanceProtectedDeserializer;
 impl InstanceProtectedDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<bool, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::deserialize_primitive(tag_name, stack, |s| Ok(bool::from_str(&s).unwrap()))
     }
 }
@@ -3903,11 +4035,12 @@ pub struct InstanceRefresh {
 #[allow(dead_code)]
 struct InstanceRefreshDeserializer;
 impl InstanceRefreshDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<InstanceRefresh, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, InstanceRefresh, _>(tag_name, stack, |name, stack, obj| {
             match name {
                 "AutoScalingGroupName" => {
@@ -3961,6 +4094,7 @@ impl InstanceRefreshDeserializer {
 /// Serialize `InstanceRefreshIds` contents to a `SignedRequest`.
 struct InstanceRefreshIdsSerializer;
 impl InstanceRefreshIdsSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &Vec<String>) {
         for (index, obj) in obj.iter().enumerate() {
             let key = format!("{}.member.{}", name, index + 1);
@@ -3972,19 +4106,22 @@ impl InstanceRefreshIdsSerializer {
 #[allow(dead_code)]
 struct InstanceRefreshStatusDeserializer;
 impl InstanceRefreshStatusDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 #[allow(dead_code)]
 struct InstanceRefreshesDeserializer;
 impl InstanceRefreshesDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<InstanceRefresh>, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
+
         deserialize_elements::<_, Vec<_>, _>(tag_name, stack, |name, stack, obj| {
             if name == "member" {
                 obj.push(InstanceRefreshDeserializer::deserialize("member", stack)?);
@@ -3998,11 +4135,13 @@ impl InstanceRefreshesDeserializer {
 #[allow(dead_code)]
 struct InstancesDeserializer;
 impl InstancesDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<Instance>, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
+
         deserialize_elements::<_, Vec<_>, _>(tag_name, stack, |name, stack, obj| {
             if name == "member" {
                 obj.push(InstanceDeserializer::deserialize("member", stack)?);
@@ -4035,11 +4174,12 @@ pub struct InstancesDistribution {
 #[allow(dead_code)]
 struct InstancesDistributionDeserializer;
 impl InstancesDistributionDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<InstancesDistribution, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, InstancesDistribution, _>(tag_name, stack, |name, stack, obj| {
             match name {
                 "OnDemandAllocationStrategy" => {
@@ -4091,10 +4231,11 @@ impl InstancesDistributionDeserializer {
 /// Serialize `InstancesDistribution` contents to a `SignedRequest`.
 struct InstancesDistributionSerializer;
 impl InstancesDistributionSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &InstancesDistribution) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         if let Some(ref field_value) = obj.on_demand_allocation_strategy {
@@ -4133,16 +4274,18 @@ impl InstancesDistributionSerializer {
 #[allow(dead_code)]
 struct InstancesToUpdateDeserializer;
 impl InstancesToUpdateDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<i64, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::deserialize_primitive(tag_name, stack, |s| Ok(i64::from_str(&s).unwrap()))
     }
 }
 #[allow(dead_code)]
 struct IntPercentDeserializer;
 impl IntPercentDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<i64, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::deserialize_primitive(tag_name, stack, |s| Ok(i64::from_str(&s).unwrap()))
     }
 }
@@ -4195,11 +4338,12 @@ pub struct LaunchConfiguration {
 #[allow(dead_code)]
 struct LaunchConfigurationDeserializer;
 impl LaunchConfigurationDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<LaunchConfiguration, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, LaunchConfiguration, _>(tag_name, stack, |name, stack, obj| {
             match name {
                 "AssociatePublicIpAddress" => {
@@ -4326,10 +4470,11 @@ pub struct LaunchConfigurationNameType {
 /// Serialize `LaunchConfigurationNameType` contents to a `SignedRequest`.
 struct LaunchConfigurationNameTypeSerializer;
 impl LaunchConfigurationNameTypeSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &LaunchConfigurationNameType) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         params.put(
@@ -4342,6 +4487,7 @@ impl LaunchConfigurationNameTypeSerializer {
 /// Serialize `LaunchConfigurationNames` contents to a `SignedRequest`.
 struct LaunchConfigurationNamesSerializer;
 impl LaunchConfigurationNamesSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &Vec<String>) {
         for (index, obj) in obj.iter().enumerate() {
             let key = format!("{}.member.{}", name, index + 1);
@@ -4364,10 +4510,11 @@ pub struct LaunchConfigurationNamesType {
 /// Serialize `LaunchConfigurationNamesType` contents to a `SignedRequest`.
 struct LaunchConfigurationNamesTypeSerializer;
 impl LaunchConfigurationNamesTypeSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &LaunchConfigurationNamesType) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         if let Some(ref field_value) = obj.launch_configuration_names {
@@ -4389,11 +4536,13 @@ impl LaunchConfigurationNamesTypeSerializer {
 #[allow(dead_code)]
 struct LaunchConfigurationsDeserializer;
 impl LaunchConfigurationsDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<LaunchConfiguration>, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
+
         deserialize_elements::<_, Vec<_>, _>(tag_name, stack, |name, stack, obj| {
             if name == "member" {
                 obj.push(LaunchConfigurationDeserializer::deserialize(
@@ -4418,11 +4567,12 @@ pub struct LaunchConfigurationsType {
 #[allow(dead_code)]
 struct LaunchConfigurationsTypeDeserializer;
 impl LaunchConfigurationsTypeDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<LaunchConfigurationsType, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, LaunchConfigurationsType, _>(
             tag_name,
             stack,
@@ -4461,11 +4611,12 @@ pub struct LaunchTemplate {
 #[allow(dead_code)]
 struct LaunchTemplateDeserializer;
 impl LaunchTemplateDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<LaunchTemplate, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, LaunchTemplate, _>(tag_name, stack, |name, stack, obj| {
             match name {
                 "LaunchTemplateSpecification" => {
@@ -4490,10 +4641,11 @@ impl LaunchTemplateDeserializer {
 /// Serialize `LaunchTemplate` contents to a `SignedRequest`.
 struct LaunchTemplateSerializer;
 impl LaunchTemplateSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &LaunchTemplate) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         if let Some(ref field_value) = obj.launch_template_specification {
@@ -4516,8 +4668,9 @@ impl LaunchTemplateSerializer {
 #[allow(dead_code)]
 struct LaunchTemplateNameDeserializer;
 impl LaunchTemplateNameDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
@@ -4537,11 +4690,12 @@ pub struct LaunchTemplateOverrides {
 #[allow(dead_code)]
 struct LaunchTemplateOverridesDeserializer;
 impl LaunchTemplateOverridesDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<LaunchTemplateOverrides, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, LaunchTemplateOverrides, _>(
             tag_name,
             stack,
@@ -4577,10 +4731,11 @@ impl LaunchTemplateOverridesDeserializer {
 /// Serialize `LaunchTemplateOverrides` contents to a `SignedRequest`.
 struct LaunchTemplateOverridesSerializer;
 impl LaunchTemplateOverridesSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &LaunchTemplateOverrides) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         if let Some(ref field_value) = obj.instance_type {
@@ -4615,11 +4770,12 @@ pub struct LaunchTemplateSpecification {
 #[allow(dead_code)]
 struct LaunchTemplateSpecificationDeserializer;
 impl LaunchTemplateSpecificationDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<LaunchTemplateSpecification, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, LaunchTemplateSpecification, _>(
             tag_name,
             stack,
@@ -4654,10 +4810,11 @@ impl LaunchTemplateSpecificationDeserializer {
 /// Serialize `LaunchTemplateSpecification` contents to a `SignedRequest`.
 struct LaunchTemplateSpecificationSerializer;
 impl LaunchTemplateSpecificationSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &LaunchTemplateSpecification) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         if let Some(ref field_value) = obj.launch_template_id {
@@ -4675,8 +4832,9 @@ impl LaunchTemplateSpecificationSerializer {
 #[allow(dead_code)]
 struct LifecycleActionResultDeserializer;
 impl LifecycleActionResultDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
@@ -4707,11 +4865,12 @@ pub struct LifecycleHook {
 #[allow(dead_code)]
 struct LifecycleHookDeserializer;
 impl LifecycleHookDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<LifecycleHook, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, LifecycleHook, _>(tag_name, stack, |name, stack, obj| {
             match name {
                 "AutoScalingGroupName" => {
@@ -4777,6 +4936,7 @@ impl LifecycleHookDeserializer {
 /// Serialize `LifecycleHookNames` contents to a `SignedRequest`.
 struct LifecycleHookNamesSerializer;
 impl LifecycleHookNamesSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &Vec<String>) {
         for (index, obj) in obj.iter().enumerate() {
             let key = format!("{}.member.{}", name, index + 1);
@@ -4808,10 +4968,11 @@ pub struct LifecycleHookSpecification {
 /// Serialize `LifecycleHookSpecification` contents to a `SignedRequest`.
 struct LifecycleHookSpecificationSerializer;
 impl LifecycleHookSpecificationSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &LifecycleHookSpecification) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         if let Some(ref field_value) = obj.default_result {
@@ -4849,6 +5010,7 @@ impl LifecycleHookSpecificationSerializer {
 /// Serialize `LifecycleHookSpecifications` contents to a `SignedRequest`.
 struct LifecycleHookSpecificationsSerializer;
 impl LifecycleHookSpecificationsSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &Vec<LifecycleHookSpecification>) {
         for (index, obj) in obj.iter().enumerate() {
             let key = format!("{}.member.{}", name, index + 1);
@@ -4860,11 +5022,13 @@ impl LifecycleHookSpecificationsSerializer {
 #[allow(dead_code)]
 struct LifecycleHooksDeserializer;
 impl LifecycleHooksDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<LifecycleHook>, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
+
         deserialize_elements::<_, Vec<_>, _>(tag_name, stack, |name, stack, obj| {
             if name == "member" {
                 obj.push(LifecycleHookDeserializer::deserialize("member", stack)?);
@@ -4878,27 +5042,31 @@ impl LifecycleHooksDeserializer {
 #[allow(dead_code)]
 struct LifecycleStateDeserializer;
 impl LifecycleStateDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 #[allow(dead_code)]
 struct LifecycleTransitionDeserializer;
 impl LifecycleTransitionDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 #[allow(dead_code)]
 struct LoadBalancerNamesDeserializer;
 impl LoadBalancerNamesDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<String>, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
+
         deserialize_elements::<_, Vec<_>, _>(tag_name, stack, |name, stack, obj| {
             if name == "member" {
                 obj.push(XmlStringMaxLen255Deserializer::deserialize(
@@ -4915,6 +5083,7 @@ impl LoadBalancerNamesDeserializer {
 /// Serialize `LoadBalancerNames` contents to a `SignedRequest`.
 struct LoadBalancerNamesSerializer;
 impl LoadBalancerNamesSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &Vec<String>) {
         for (index, obj) in obj.iter().enumerate() {
             let key = format!("{}.member.{}", name, index + 1);
@@ -4936,11 +5105,12 @@ pub struct LoadBalancerState {
 #[allow(dead_code)]
 struct LoadBalancerStateDeserializer;
 impl LoadBalancerStateDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<LoadBalancerState, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, LoadBalancerState, _>(tag_name, stack, |name, stack, obj| {
             match name {
                 "LoadBalancerName" => {
@@ -4961,11 +5131,13 @@ impl LoadBalancerStateDeserializer {
 #[allow(dead_code)]
 struct LoadBalancerStatesDeserializer;
 impl LoadBalancerStatesDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<LoadBalancerState>, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
+
         deserialize_elements::<_, Vec<_>, _>(tag_name, stack, |name, stack, obj| {
             if name == "member" {
                 obj.push(LoadBalancerStateDeserializer::deserialize("member", stack)?);
@@ -4989,11 +5161,12 @@ pub struct LoadBalancerTargetGroupState {
 #[allow(dead_code)]
 struct LoadBalancerTargetGroupStateDeserializer;
 impl LoadBalancerTargetGroupStateDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<LoadBalancerTargetGroupState, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, LoadBalancerTargetGroupState, _>(
             tag_name,
             stack,
@@ -5020,11 +5193,13 @@ impl LoadBalancerTargetGroupStateDeserializer {
 #[allow(dead_code)]
 struct LoadBalancerTargetGroupStatesDeserializer;
 impl LoadBalancerTargetGroupStatesDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<LoadBalancerTargetGroupState>, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
+
         deserialize_elements::<_, Vec<_>, _>(tag_name, stack, |name, stack, obj| {
             if name == "member" {
                 obj.push(LoadBalancerTargetGroupStateDeserializer::deserialize(
@@ -5040,24 +5215,27 @@ impl LoadBalancerTargetGroupStatesDeserializer {
 #[allow(dead_code)]
 struct MaxInstanceLifetimeDeserializer;
 impl MaxInstanceLifetimeDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<i64, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::deserialize_primitive(tag_name, stack, |s| Ok(i64::from_str(&s).unwrap()))
     }
 }
 #[allow(dead_code)]
 struct MaxNumberOfAutoScalingGroupsDeserializer;
 impl MaxNumberOfAutoScalingGroupsDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<i64, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::deserialize_primitive(tag_name, stack, |s| Ok(i64::from_str(&s).unwrap()))
     }
 }
 #[allow(dead_code)]
 struct MaxNumberOfLaunchConfigurationsDeserializer;
 impl MaxNumberOfLaunchConfigurationsDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<i64, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::deserialize_primitive(tag_name, stack, |s| Ok(i64::from_str(&s).unwrap()))
     }
 }
@@ -5072,11 +5250,12 @@ pub struct MetricCollectionType {
 #[allow(dead_code)]
 struct MetricCollectionTypeDeserializer;
 impl MetricCollectionTypeDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<MetricCollectionType, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, MetricCollectionType, _>(tag_name, stack, |name, stack, obj| {
             match name {
                 "Metric" => {
@@ -5093,11 +5272,13 @@ impl MetricCollectionTypeDeserializer {
 #[allow(dead_code)]
 struct MetricCollectionTypesDeserializer;
 impl MetricCollectionTypesDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<MetricCollectionType>, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
+
         deserialize_elements::<_, Vec<_>, _>(tag_name, stack, |name, stack, obj| {
             if name == "member" {
                 obj.push(MetricCollectionTypeDeserializer::deserialize(
@@ -5124,11 +5305,12 @@ pub struct MetricDimension {
 #[allow(dead_code)]
 struct MetricDimensionDeserializer;
 impl MetricDimensionDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<MetricDimension, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, MetricDimension, _>(tag_name, stack, |name, stack, obj| {
             match name {
                 "Name" => {
@@ -5147,10 +5329,11 @@ impl MetricDimensionDeserializer {
 /// Serialize `MetricDimension` contents to a `SignedRequest`.
 struct MetricDimensionSerializer;
 impl MetricDimensionSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &MetricDimension) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         params.put(&format!("{}{}", prefix, "Name"), &obj.name);
@@ -5161,27 +5344,31 @@ impl MetricDimensionSerializer {
 #[allow(dead_code)]
 struct MetricDimensionNameDeserializer;
 impl MetricDimensionNameDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 #[allow(dead_code)]
 struct MetricDimensionValueDeserializer;
 impl MetricDimensionValueDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 #[allow(dead_code)]
 struct MetricDimensionsDeserializer;
 impl MetricDimensionsDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<MetricDimension>, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
+
         deserialize_elements::<_, Vec<_>, _>(tag_name, stack, |name, stack, obj| {
             if name == "member" {
                 obj.push(MetricDimensionDeserializer::deserialize("member", stack)?);
@@ -5196,6 +5383,7 @@ impl MetricDimensionsDeserializer {
 /// Serialize `MetricDimensions` contents to a `SignedRequest`.
 struct MetricDimensionsSerializer;
 impl MetricDimensionsSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &Vec<MetricDimension>) {
         for (index, obj) in obj.iter().enumerate() {
             let key = format!("{}.member.{}", name, index + 1);
@@ -5215,11 +5403,12 @@ pub struct MetricGranularityType {
 #[allow(dead_code)]
 struct MetricGranularityTypeDeserializer;
 impl MetricGranularityTypeDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<MetricGranularityType, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, MetricGranularityType, _>(tag_name, stack, |name, stack, obj| {
             match name {
                 "Granularity" => {
@@ -5237,11 +5426,13 @@ impl MetricGranularityTypeDeserializer {
 #[allow(dead_code)]
 struct MetricGranularityTypesDeserializer;
 impl MetricGranularityTypesDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<MetricGranularityType>, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
+
         deserialize_elements::<_, Vec<_>, _>(tag_name, stack, |name, stack, obj| {
             if name == "member" {
                 obj.push(MetricGranularityTypeDeserializer::deserialize(
@@ -5257,48 +5448,54 @@ impl MetricGranularityTypesDeserializer {
 #[allow(dead_code)]
 struct MetricNameDeserializer;
 impl MetricNameDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 #[allow(dead_code)]
 struct MetricNamespaceDeserializer;
 impl MetricNamespaceDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 #[allow(dead_code)]
 struct MetricScaleDeserializer;
 impl MetricScaleDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<f64, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::deserialize_primitive(tag_name, stack, |s| Ok(f64::from_str(&s).unwrap()))
     }
 }
 #[allow(dead_code)]
 struct MetricStatisticDeserializer;
 impl MetricStatisticDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 #[allow(dead_code)]
 struct MetricTypeDeserializer;
 impl MetricTypeDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 #[allow(dead_code)]
 struct MetricUnitDeserializer;
 impl MetricUnitDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
@@ -5306,6 +5503,7 @@ impl MetricUnitDeserializer {
 /// Serialize `Metrics` contents to a `SignedRequest`.
 struct MetricsSerializer;
 impl MetricsSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &Vec<String>) {
         for (index, obj) in obj.iter().enumerate() {
             let key = format!("{}.member.{}", name, index + 1);
@@ -5317,24 +5515,27 @@ impl MetricsSerializer {
 #[allow(dead_code)]
 struct MinAdjustmentMagnitudeDeserializer;
 impl MinAdjustmentMagnitudeDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<i64, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::deserialize_primitive(tag_name, stack, |s| Ok(i64::from_str(&s).unwrap()))
     }
 }
 #[allow(dead_code)]
 struct MinAdjustmentStepDeserializer;
 impl MinAdjustmentStepDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<i64, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::deserialize_primitive(tag_name, stack, |s| Ok(i64::from_str(&s).unwrap()))
     }
 }
 #[allow(dead_code)]
 struct MixedInstanceSpotPriceDeserializer;
 impl MixedInstanceSpotPriceDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
@@ -5352,11 +5553,12 @@ pub struct MixedInstancesPolicy {
 #[allow(dead_code)]
 struct MixedInstancesPolicyDeserializer;
 impl MixedInstancesPolicyDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<MixedInstancesPolicy, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, MixedInstancesPolicy, _>(tag_name, stack, |name, stack, obj| {
             match name {
                 "InstancesDistribution" => {
@@ -5382,10 +5584,11 @@ impl MixedInstancesPolicyDeserializer {
 /// Serialize `MixedInstancesPolicy` contents to a `SignedRequest`.
 struct MixedInstancesPolicySerializer;
 impl MixedInstancesPolicySerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &MixedInstancesPolicy) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         if let Some(ref field_value) = obj.instances_distribution {
@@ -5408,16 +5611,18 @@ impl MixedInstancesPolicySerializer {
 #[allow(dead_code)]
 struct MonitoringEnabledDeserializer;
 impl MonitoringEnabledDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<bool, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::deserialize_primitive(tag_name, stack, |s| Ok(bool::from_str(&s).unwrap()))
     }
 }
 #[allow(dead_code)]
 struct NoDeviceDeserializer;
 impl NoDeviceDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<bool, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::deserialize_primitive(tag_name, stack, |s| Ok(bool::from_str(&s).unwrap()))
     }
 }
@@ -5436,11 +5641,12 @@ pub struct NotificationConfiguration {
 #[allow(dead_code)]
 struct NotificationConfigurationDeserializer;
 impl NotificationConfigurationDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<NotificationConfiguration, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, NotificationConfiguration, _>(
             tag_name,
             stack,
@@ -5474,11 +5680,13 @@ impl NotificationConfigurationDeserializer {
 #[allow(dead_code)]
 struct NotificationConfigurationsDeserializer;
 impl NotificationConfigurationsDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<NotificationConfiguration>, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
+
         deserialize_elements::<_, Vec<_>, _>(tag_name, stack, |name, stack, obj| {
             if name == "member" {
                 obj.push(NotificationConfigurationDeserializer::deserialize(
@@ -5494,51 +5702,58 @@ impl NotificationConfigurationsDeserializer {
 #[allow(dead_code)]
 struct NotificationTargetResourceNameDeserializer;
 impl NotificationTargetResourceNameDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 #[allow(dead_code)]
 struct NumberOfAutoScalingGroupsDeserializer;
 impl NumberOfAutoScalingGroupsDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<i64, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::deserialize_primitive(tag_name, stack, |s| Ok(i64::from_str(&s).unwrap()))
     }
 }
 #[allow(dead_code)]
 struct NumberOfLaunchConfigurationsDeserializer;
 impl NumberOfLaunchConfigurationsDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<i64, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::deserialize_primitive(tag_name, stack, |s| Ok(i64::from_str(&s).unwrap()))
     }
 }
 #[allow(dead_code)]
 struct OnDemandBaseCapacityDeserializer;
 impl OnDemandBaseCapacityDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<i64, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::deserialize_primitive(tag_name, stack, |s| Ok(i64::from_str(&s).unwrap()))
     }
 }
 #[allow(dead_code)]
 struct OnDemandPercentageAboveBaseCapacityDeserializer;
 impl OnDemandPercentageAboveBaseCapacityDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<i64, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::deserialize_primitive(tag_name, stack, |s| Ok(i64::from_str(&s).unwrap()))
     }
 }
 #[allow(dead_code)]
 struct OverridesDeserializer;
 impl OverridesDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<LaunchTemplateOverrides>, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
+
         deserialize_elements::<_, Vec<_>, _>(tag_name, stack, |name, stack, obj| {
             if name == "member" {
                 obj.push(LaunchTemplateOverridesDeserializer::deserialize(
@@ -5555,6 +5770,7 @@ impl OverridesDeserializer {
 /// Serialize `Overrides` contents to a `SignedRequest`.
 struct OverridesSerializer;
 impl OverridesSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &Vec<LaunchTemplateOverrides>) {
         for (index, obj) in obj.iter().enumerate() {
             let key = format!("{}.member.{}", name, index + 1);
@@ -5575,11 +5791,12 @@ pub struct PoliciesType {
 #[allow(dead_code)]
 struct PoliciesTypeDeserializer;
 impl PoliciesTypeDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<PoliciesType, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, PoliciesType, _>(tag_name, stack, |name, stack, obj| {
             match name {
                 "NextToken" => {
@@ -5609,11 +5826,12 @@ pub struct PolicyARNType {
 #[allow(dead_code)]
 struct PolicyARNTypeDeserializer;
 impl PolicyARNTypeDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<PolicyARNType, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, PolicyARNType, _>(tag_name, stack, |name, stack, obj| {
             match name {
                 "Alarms" => {
@@ -5634,8 +5852,9 @@ impl PolicyARNTypeDeserializer {
 #[allow(dead_code)]
 struct PolicyIncrementDeserializer;
 impl PolicyIncrementDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<i64, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::deserialize_primitive(tag_name, stack, |s| Ok(i64::from_str(&s).unwrap()))
     }
 }
@@ -5643,6 +5862,7 @@ impl PolicyIncrementDeserializer {
 /// Serialize `PolicyNames` contents to a `SignedRequest`.
 struct PolicyNamesSerializer;
 impl PolicyNamesSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &Vec<String>) {
         for (index, obj) in obj.iter().enumerate() {
             let key = format!("{}.member.{}", name, index + 1);
@@ -5654,6 +5874,7 @@ impl PolicyNamesSerializer {
 /// Serialize `PolicyTypes` contents to a `SignedRequest`.
 struct PolicyTypesSerializer;
 impl PolicyTypesSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &Vec<String>) {
         for (index, obj) in obj.iter().enumerate() {
             let key = format!("{}.member.{}", name, index + 1);
@@ -5676,11 +5897,12 @@ pub struct PredefinedMetricSpecification {
 #[allow(dead_code)]
 struct PredefinedMetricSpecificationDeserializer;
 impl PredefinedMetricSpecificationDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<PredefinedMetricSpecification, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, PredefinedMetricSpecification, _>(
             tag_name,
             stack,
@@ -5707,10 +5929,11 @@ impl PredefinedMetricSpecificationDeserializer {
 /// Serialize `PredefinedMetricSpecification` contents to a `SignedRequest`.
 struct PredefinedMetricSpecificationSerializer;
 impl PredefinedMetricSpecificationSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &PredefinedMetricSpecification) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         params.put(
@@ -5726,6 +5949,7 @@ impl PredefinedMetricSpecificationSerializer {
 /// Serialize `ProcessNames` contents to a `SignedRequest`.
 struct ProcessNamesSerializer;
 impl ProcessNamesSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &Vec<String>) {
         for (index, obj) in obj.iter().enumerate() {
             let key = format!("{}.member.{}", name, index + 1);
@@ -5745,11 +5969,12 @@ pub struct ProcessType {
 #[allow(dead_code)]
 struct ProcessTypeDeserializer;
 impl ProcessTypeDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<ProcessType, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, ProcessType, _>(tag_name, stack, |name, stack, obj| {
             match name {
                 "ProcessName" => {
@@ -5765,11 +5990,13 @@ impl ProcessTypeDeserializer {
 #[allow(dead_code)]
 struct ProcessesDeserializer;
 impl ProcessesDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<ProcessType>, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
+
         deserialize_elements::<_, Vec<_>, _>(tag_name, stack, |name, stack, obj| {
             if name == "member" {
                 obj.push(ProcessTypeDeserializer::deserialize("member", stack)?);
@@ -5790,11 +6017,12 @@ pub struct ProcessesType {
 #[allow(dead_code)]
 struct ProcessesTypeDeserializer;
 impl ProcessesTypeDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<ProcessesType, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, ProcessesType, _>(tag_name, stack, |name, stack, obj| {
             match name {
                 "Processes" => {
@@ -5811,16 +6039,18 @@ impl ProcessesTypeDeserializer {
 #[allow(dead_code)]
 struct ProgressDeserializer;
 impl ProgressDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<i64, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::deserialize_primitive(tag_name, stack, |s| Ok(i64::from_str(&s).unwrap()))
     }
 }
 #[allow(dead_code)]
 struct PropagateAtLaunchDeserializer;
 impl PropagateAtLaunchDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<bool, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::deserialize_primitive(tag_name, stack, |s| Ok(bool::from_str(&s).unwrap()))
     }
 }
@@ -5831,11 +6061,12 @@ pub struct PutLifecycleHookAnswer {}
 #[allow(dead_code)]
 struct PutLifecycleHookAnswerDeserializer;
 impl PutLifecycleHookAnswerDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<PutLifecycleHookAnswer, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::start_element(tag_name, stack)?;
 
         let obj = PutLifecycleHookAnswer::default();
@@ -5869,10 +6100,11 @@ pub struct PutLifecycleHookType {
 /// Serialize `PutLifecycleHookType` contents to a `SignedRequest`.
 struct PutLifecycleHookTypeSerializer;
 impl PutLifecycleHookTypeSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &PutLifecycleHookType) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         params.put(
@@ -5927,10 +6159,11 @@ pub struct PutNotificationConfigurationType {
 /// Serialize `PutNotificationConfigurationType` contents to a `SignedRequest`.
 struct PutNotificationConfigurationTypeSerializer;
 impl PutNotificationConfigurationTypeSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &PutNotificationConfigurationType) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         params.put(
@@ -5980,10 +6213,11 @@ pub struct PutScalingPolicyType {
 /// Serialize `PutScalingPolicyType` contents to a `SignedRequest`.
 struct PutScalingPolicyTypeSerializer;
 impl PutScalingPolicyTypeSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &PutScalingPolicyType) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         if let Some(ref field_value) = obj.adjustment_type {
@@ -6070,10 +6304,11 @@ pub struct PutScheduledUpdateGroupActionType {
 /// Serialize `PutScheduledUpdateGroupActionType` contents to a `SignedRequest`.
 struct PutScheduledUpdateGroupActionTypeSerializer;
 impl PutScheduledUpdateGroupActionTypeSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &PutScheduledUpdateGroupActionType) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         params.put(
@@ -6115,11 +6350,12 @@ pub struct RecordLifecycleActionHeartbeatAnswer {}
 #[allow(dead_code)]
 struct RecordLifecycleActionHeartbeatAnswerDeserializer;
 impl RecordLifecycleActionHeartbeatAnswerDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<RecordLifecycleActionHeartbeatAnswer, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::start_element(tag_name, stack)?;
 
         let obj = RecordLifecycleActionHeartbeatAnswer::default();
@@ -6145,10 +6381,11 @@ pub struct RecordLifecycleActionHeartbeatType {
 /// Serialize `RecordLifecycleActionHeartbeatType` contents to a `SignedRequest`.
 struct RecordLifecycleActionHeartbeatTypeSerializer;
 impl RecordLifecycleActionHeartbeatTypeSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &RecordLifecycleActionHeartbeatType) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         params.put(
@@ -6184,10 +6421,11 @@ pub struct RefreshPreferences {
 /// Serialize `RefreshPreferences` contents to a `SignedRequest`.
 struct RefreshPreferencesSerializer;
 impl RefreshPreferencesSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &RefreshPreferences) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         if let Some(ref field_value) = obj.instance_warmup {
@@ -6205,27 +6443,31 @@ impl RefreshPreferencesSerializer {
 #[allow(dead_code)]
 struct ResourceNameDeserializer;
 impl ResourceNameDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 #[allow(dead_code)]
 struct ScalingActivityStatusCodeDeserializer;
 impl ScalingActivityStatusCodeDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 #[allow(dead_code)]
 struct ScalingPoliciesDeserializer;
 impl ScalingPoliciesDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<ScalingPolicy>, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
+
         deserialize_elements::<_, Vec<_>, _>(tag_name, stack, |name, stack, obj| {
             if name == "member" {
                 obj.push(ScalingPolicyDeserializer::deserialize("member", stack)?);
@@ -6275,11 +6517,12 @@ pub struct ScalingPolicy {
 #[allow(dead_code)]
 struct ScalingPolicyDeserializer;
 impl ScalingPolicyDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<ScalingPolicy, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, ScalingPolicy, _>(tag_name, stack, |name, stack, obj| {
             match name {
                 "AdjustmentType" => {
@@ -6375,8 +6618,9 @@ impl ScalingPolicyDeserializer {
 #[allow(dead_code)]
 struct ScalingPolicyEnabledDeserializer;
 impl ScalingPolicyEnabledDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<bool, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::deserialize_primitive(tag_name, stack, |s| Ok(bool::from_str(&s).unwrap()))
     }
 }
@@ -6392,10 +6636,11 @@ pub struct ScalingProcessQuery {
 /// Serialize `ScalingProcessQuery` contents to a `SignedRequest`.
 struct ScalingProcessQuerySerializer;
 impl ScalingProcessQuerySerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &ScalingProcessQuery) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         params.put(
@@ -6415,6 +6660,7 @@ impl ScalingProcessQuerySerializer {
 /// Serialize `ScheduledActionNames` contents to a `SignedRequest`.
 struct ScheduledActionNamesSerializer;
 impl ScheduledActionNamesSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &Vec<String>) {
         for (index, obj) in obj.iter().enumerate() {
             let key = format!("{}.member.{}", name, index + 1);
@@ -6435,11 +6681,12 @@ pub struct ScheduledActionsType {
 #[allow(dead_code)]
 struct ScheduledActionsTypeDeserializer;
 impl ScheduledActionsTypeDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<ScheduledActionsType, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, ScheduledActionsType, _>(tag_name, stack, |name, stack, obj| {
             match name {
                 "NextToken" => {
@@ -6488,11 +6735,12 @@ pub struct ScheduledUpdateGroupAction {
 #[allow(dead_code)]
 struct ScheduledUpdateGroupActionDeserializer;
 impl ScheduledUpdateGroupActionDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<ScheduledUpdateGroupAction, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, ScheduledUpdateGroupAction, _>(
             tag_name,
             stack,
@@ -6582,10 +6830,11 @@ pub struct ScheduledUpdateGroupActionRequest {
 /// Serialize `ScheduledUpdateGroupActionRequest` contents to a `SignedRequest`.
 struct ScheduledUpdateGroupActionRequestSerializer;
 impl ScheduledUpdateGroupActionRequestSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &ScheduledUpdateGroupActionRequest) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         if let Some(ref field_value) = obj.desired_capacity {
@@ -6616,6 +6865,7 @@ impl ScheduledUpdateGroupActionRequestSerializer {
 /// Serialize `ScheduledUpdateGroupActionRequests` contents to a `SignedRequest`.
 struct ScheduledUpdateGroupActionRequestsSerializer;
 impl ScheduledUpdateGroupActionRequestsSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &Vec<ScheduledUpdateGroupActionRequest>) {
         for (index, obj) in obj.iter().enumerate() {
             let key = format!("{}.member.{}", name, index + 1);
@@ -6627,11 +6877,13 @@ impl ScheduledUpdateGroupActionRequestsSerializer {
 #[allow(dead_code)]
 struct ScheduledUpdateGroupActionsDeserializer;
 impl ScheduledUpdateGroupActionsDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<ScheduledUpdateGroupAction>, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
+
         deserialize_elements::<_, Vec<_>, _>(tag_name, stack, |name, stack, obj| {
             if name == "member" {
                 obj.push(ScheduledUpdateGroupActionDeserializer::deserialize(
@@ -6647,11 +6899,13 @@ impl ScheduledUpdateGroupActionsDeserializer {
 #[allow(dead_code)]
 struct SecurityGroupsDeserializer;
 impl SecurityGroupsDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<String>, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
+
         deserialize_elements::<_, Vec<_>, _>(tag_name, stack, |name, stack, obj| {
             if name == "member" {
                 obj.push(XmlStringDeserializer::deserialize("member", stack)?);
@@ -6666,6 +6920,7 @@ impl SecurityGroupsDeserializer {
 /// Serialize `SecurityGroups` contents to a `SignedRequest`.
 struct SecurityGroupsSerializer;
 impl SecurityGroupsSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &Vec<String>) {
         for (index, obj) in obj.iter().enumerate() {
             let key = format!("{}.member.{}", name, index + 1);
@@ -6688,10 +6943,11 @@ pub struct SetDesiredCapacityType {
 /// Serialize `SetDesiredCapacityType` contents to a `SignedRequest`.
 struct SetDesiredCapacityTypeSerializer;
 impl SetDesiredCapacityTypeSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &SetDesiredCapacityType) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         params.put(
@@ -6722,10 +6978,11 @@ pub struct SetInstanceHealthQuery {
 /// Serialize `SetInstanceHealthQuery` contents to a `SignedRequest`.
 struct SetInstanceHealthQuerySerializer;
 impl SetInstanceHealthQuerySerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &SetInstanceHealthQuery) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         params.put(&format!("{}{}", prefix, "HealthStatus"), &obj.health_status);
@@ -6746,11 +7003,12 @@ pub struct SetInstanceProtectionAnswer {}
 #[allow(dead_code)]
 struct SetInstanceProtectionAnswerDeserializer;
 impl SetInstanceProtectionAnswerDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<SetInstanceProtectionAnswer, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::start_element(tag_name, stack)?;
 
         let obj = SetInstanceProtectionAnswer::default();
@@ -6774,10 +7032,11 @@ pub struct SetInstanceProtectionQuery {
 /// Serialize `SetInstanceProtectionQuery` contents to a `SignedRequest`.
 struct SetInstanceProtectionQuerySerializer;
 impl SetInstanceProtectionQuerySerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &SetInstanceProtectionQuery) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         params.put(
@@ -6799,16 +7058,18 @@ impl SetInstanceProtectionQuerySerializer {
 #[allow(dead_code)]
 struct SpotInstancePoolsDeserializer;
 impl SpotInstancePoolsDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<i64, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::deserialize_primitive(tag_name, stack, |s| Ok(i64::from_str(&s).unwrap()))
     }
 }
 #[allow(dead_code)]
 struct SpotPriceDeserializer;
 impl SpotPriceDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
@@ -6822,11 +7083,12 @@ pub struct StartInstanceRefreshAnswer {
 #[allow(dead_code)]
 struct StartInstanceRefreshAnswerDeserializer;
 impl StartInstanceRefreshAnswerDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<StartInstanceRefreshAnswer, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, StartInstanceRefreshAnswer, _>(
             tag_name,
             stack,
@@ -6860,10 +7122,11 @@ pub struct StartInstanceRefreshType {
 /// Serialize `StartInstanceRefreshType` contents to a `SignedRequest`.
 struct StartInstanceRefreshTypeSerializer;
 impl StartInstanceRefreshTypeSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &StartInstanceRefreshType) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         params.put(
@@ -6899,11 +7162,12 @@ pub struct StepAdjustment {
 #[allow(dead_code)]
 struct StepAdjustmentDeserializer;
 impl StepAdjustmentDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<StepAdjustment, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, StepAdjustment, _>(tag_name, stack, |name, stack, obj| {
             match name {
                 "MetricIntervalLowerBound" => {
@@ -6932,10 +7196,11 @@ impl StepAdjustmentDeserializer {
 /// Serialize `StepAdjustment` contents to a `SignedRequest`.
 struct StepAdjustmentSerializer;
 impl StepAdjustmentSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &StepAdjustment) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         if let Some(ref field_value) = obj.metric_interval_lower_bound {
@@ -6960,11 +7225,13 @@ impl StepAdjustmentSerializer {
 #[allow(dead_code)]
 struct StepAdjustmentsDeserializer;
 impl StepAdjustmentsDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<StepAdjustment>, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
+
         deserialize_elements::<_, Vec<_>, _>(tag_name, stack, |name, stack, obj| {
             if name == "member" {
                 obj.push(StepAdjustmentDeserializer::deserialize("member", stack)?);
@@ -6979,6 +7246,7 @@ impl StepAdjustmentsDeserializer {
 /// Serialize `StepAdjustments` contents to a `SignedRequest`.
 struct StepAdjustmentsSerializer;
 impl StepAdjustmentsSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &Vec<StepAdjustment>) {
         for (index, obj) in obj.iter().enumerate() {
             let key = format!("{}.member.{}", name, index + 1);
@@ -7000,11 +7268,12 @@ pub struct SuspendedProcess {
 #[allow(dead_code)]
 struct SuspendedProcessDeserializer;
 impl SuspendedProcessDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<SuspendedProcess, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, SuspendedProcess, _>(tag_name, stack, |name, stack, obj| {
             match name {
                 "ProcessName" => {
@@ -7028,11 +7297,13 @@ impl SuspendedProcessDeserializer {
 #[allow(dead_code)]
 struct SuspendedProcessesDeserializer;
 impl SuspendedProcessesDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<SuspendedProcess>, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
+
         deserialize_elements::<_, Vec<_>, _>(tag_name, stack, |name, stack, obj| {
             if name == "member" {
                 obj.push(SuspendedProcessDeserializer::deserialize("member", stack)?);
@@ -7062,10 +7333,11 @@ pub struct Tag {
 /// Serialize `Tag` contents to a `SignedRequest`.
 struct TagSerializer;
 impl TagSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &Tag) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         params.put(&format!("{}{}", prefix, "Key"), &obj.key);
@@ -7103,11 +7375,12 @@ pub struct TagDescription {
 #[allow(dead_code)]
 struct TagDescriptionDeserializer;
 impl TagDescriptionDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<TagDescription, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, TagDescription, _>(tag_name, stack, |name, stack, obj| {
             match name {
                 "Key" => {
@@ -7139,11 +7412,13 @@ impl TagDescriptionDeserializer {
 #[allow(dead_code)]
 struct TagDescriptionListDeserializer;
 impl TagDescriptionListDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<TagDescription>, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
+
         deserialize_elements::<_, Vec<_>, _>(tag_name, stack, |name, stack, obj| {
             if name == "member" {
                 obj.push(TagDescriptionDeserializer::deserialize("member", stack)?);
@@ -7157,16 +7432,18 @@ impl TagDescriptionListDeserializer {
 #[allow(dead_code)]
 struct TagKeyDeserializer;
 impl TagKeyDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 #[allow(dead_code)]
 struct TagValueDeserializer;
 impl TagValueDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
@@ -7174,6 +7451,7 @@ impl TagValueDeserializer {
 /// Serialize `Tags` contents to a `SignedRequest`.
 struct TagsSerializer;
 impl TagsSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &Vec<Tag>) {
         for (index, obj) in obj.iter().enumerate() {
             let key = format!("{}.member.{}", name, index + 1);
@@ -7194,11 +7472,12 @@ pub struct TagsType {
 #[allow(dead_code)]
 struct TagsTypeDeserializer;
 impl TagsTypeDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<TagsType, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, TagsType, _>(tag_name, stack, |name, stack, obj| {
             match name {
                 "NextToken" => {
@@ -7218,11 +7497,13 @@ impl TagsTypeDeserializer {
 #[allow(dead_code)]
 struct TargetGroupARNsDeserializer;
 impl TargetGroupARNsDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<String>, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
+
         deserialize_elements::<_, Vec<_>, _>(tag_name, stack, |name, stack, obj| {
             if name == "member" {
                 obj.push(XmlStringMaxLen511Deserializer::deserialize(
@@ -7239,6 +7520,7 @@ impl TargetGroupARNsDeserializer {
 /// Serialize `TargetGroupARNs` contents to a `SignedRequest`.
 struct TargetGroupARNsSerializer;
 impl TargetGroupARNsSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &Vec<String>) {
         for (index, obj) in obj.iter().enumerate() {
             let key = format!("{}.member.{}", name, index + 1);
@@ -7265,11 +7547,12 @@ pub struct TargetTrackingConfiguration {
 #[allow(dead_code)]
 struct TargetTrackingConfigurationDeserializer;
 impl TargetTrackingConfigurationDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<TargetTrackingConfiguration, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, TargetTrackingConfiguration, _>(
             tag_name,
             stack,
@@ -7310,10 +7593,11 @@ impl TargetTrackingConfigurationDeserializer {
 /// Serialize `TargetTrackingConfiguration` contents to a `SignedRequest`.
 struct TargetTrackingConfigurationSerializer;
 impl TargetTrackingConfigurationSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &TargetTrackingConfiguration) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         if let Some(ref field_value) = obj.customized_metric_specification {
@@ -7349,10 +7633,11 @@ pub struct TerminateInstanceInAutoScalingGroupType {
 /// Serialize `TerminateInstanceInAutoScalingGroupType` contents to a `SignedRequest`.
 struct TerminateInstanceInAutoScalingGroupTypeSerializer;
 impl TerminateInstanceInAutoScalingGroupTypeSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &TerminateInstanceInAutoScalingGroupType) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         params.put(&format!("{}{}", prefix, "InstanceId"), &obj.instance_id);
@@ -7366,11 +7651,13 @@ impl TerminateInstanceInAutoScalingGroupTypeSerializer {
 #[allow(dead_code)]
 struct TerminationPoliciesDeserializer;
 impl TerminationPoliciesDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<String>, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
+
         deserialize_elements::<_, Vec<_>, _>(tag_name, stack, |name, stack, obj| {
             if name == "member" {
                 obj.push(XmlStringMaxLen1600Deserializer::deserialize(
@@ -7387,6 +7674,7 @@ impl TerminationPoliciesDeserializer {
 /// Serialize `TerminationPolicies` contents to a `SignedRequest`.
 struct TerminationPoliciesSerializer;
 impl TerminationPoliciesSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &Vec<String>) {
         for (index, obj) in obj.iter().enumerate() {
             let key = format!("{}.member.{}", name, index + 1);
@@ -7398,8 +7686,9 @@ impl TerminationPoliciesSerializer {
 #[allow(dead_code)]
 struct TimestampTypeDeserializer;
 impl TimestampTypeDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
@@ -7447,10 +7736,11 @@ pub struct UpdateAutoScalingGroupType {
 /// Serialize `UpdateAutoScalingGroupType` contents to a `SignedRequest`.
 struct UpdateAutoScalingGroupTypeSerializer;
 impl UpdateAutoScalingGroupTypeSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &UpdateAutoScalingGroupType) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         params.put(
@@ -7545,6 +7835,7 @@ impl UpdateAutoScalingGroupTypeSerializer {
 /// Serialize `Values` contents to a `SignedRequest`.
 struct ValuesSerializer;
 impl ValuesSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &Vec<String>) {
         for (index, obj) in obj.iter().enumerate() {
             let key = format!("{}.member.{}", name, index + 1);
@@ -7556,80 +7847,90 @@ impl ValuesSerializer {
 #[allow(dead_code)]
 struct XmlStringDeserializer;
 impl XmlStringDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 #[allow(dead_code)]
 struct XmlStringMaxLen1023Deserializer;
 impl XmlStringMaxLen1023Deserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 #[allow(dead_code)]
 struct XmlStringMaxLen1600Deserializer;
 impl XmlStringMaxLen1600Deserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 #[allow(dead_code)]
 struct XmlStringMaxLen19Deserializer;
 impl XmlStringMaxLen19Deserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 #[allow(dead_code)]
 struct XmlStringMaxLen2047Deserializer;
 impl XmlStringMaxLen2047Deserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 #[allow(dead_code)]
 struct XmlStringMaxLen255Deserializer;
 impl XmlStringMaxLen255Deserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 #[allow(dead_code)]
 struct XmlStringMaxLen32Deserializer;
 impl XmlStringMaxLen32Deserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 #[allow(dead_code)]
 struct XmlStringMaxLen511Deserializer;
 impl XmlStringMaxLen511Deserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 #[allow(dead_code)]
 struct XmlStringMaxLen64Deserializer;
 impl XmlStringMaxLen64Deserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 #[allow(dead_code)]
 struct XmlStringUserDataDeserializer;
 impl XmlStringUserDataDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
@@ -7648,19 +7949,24 @@ impl AttachInstancesError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    "ResourceContention" => {
-                        return RusotoError::Service(AttachInstancesError::ResourceContentionFault(
-                            parsed_error.message,
-                        ))
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {
+                        "ResourceContention" => {
+                            return RusotoError::Service(
+                                AttachInstancesError::ResourceContentionFault(parsed_error.message),
+                            )
+                        }
+                        "ServiceLinkedRoleFailure" => {
+                            return RusotoError::Service(
+                                AttachInstancesError::ServiceLinkedRoleFailure(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        _ => {}
                     }
-                    "ServiceLinkedRoleFailure" => {
-                        return RusotoError::Service(
-                            AttachInstancesError::ServiceLinkedRoleFailure(parsed_error.message),
-                        )
-                    }
-                    _ => {}
                 }
             }
         }
@@ -7702,23 +8008,26 @@ impl AttachLoadBalancerTargetGroupsError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    "ResourceContention" => {
-                        return RusotoError::Service(
-                            AttachLoadBalancerTargetGroupsError::ResourceContentionFault(
-                                parsed_error.message,
-                            ),
-                        )
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {
+                        "ResourceContention" => {
+                            return RusotoError::Service(
+                                AttachLoadBalancerTargetGroupsError::ResourceContentionFault(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "ServiceLinkedRoleFailure" => {
+                            return RusotoError::Service(
+                                AttachLoadBalancerTargetGroupsError::ServiceLinkedRoleFailure(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        _ => {}
                     }
-                    "ServiceLinkedRoleFailure" => {
-                        return RusotoError::Service(
-                            AttachLoadBalancerTargetGroupsError::ServiceLinkedRoleFailure(
-                                parsed_error.message,
-                            ),
-                        )
-                    }
-                    _ => {}
                 }
             }
         }
@@ -7762,21 +8071,26 @@ impl AttachLoadBalancersError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    "ResourceContention" => {
-                        return RusotoError::Service(
-                            AttachLoadBalancersError::ResourceContentionFault(parsed_error.message),
-                        )
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {
+                        "ResourceContention" => {
+                            return RusotoError::Service(
+                                AttachLoadBalancersError::ResourceContentionFault(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "ServiceLinkedRoleFailure" => {
+                            return RusotoError::Service(
+                                AttachLoadBalancersError::ServiceLinkedRoleFailure(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        _ => {}
                     }
-                    "ServiceLinkedRoleFailure" => {
-                        return RusotoError::Service(
-                            AttachLoadBalancersError::ServiceLinkedRoleFailure(
-                                parsed_error.message,
-                            ),
-                        )
-                    }
-                    _ => {}
                 }
             }
         }
@@ -7816,16 +8130,19 @@ impl BatchDeleteScheduledActionError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    "ResourceContention" => {
-                        return RusotoError::Service(
-                            BatchDeleteScheduledActionError::ResourceContentionFault(
-                                parsed_error.message,
-                            ),
-                        )
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {
+                        "ResourceContention" => {
+                            return RusotoError::Service(
+                                BatchDeleteScheduledActionError::ResourceContentionFault(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        _ => {}
                     }
-                    _ => {}
                 }
             }
         }
@@ -7870,30 +8187,33 @@ impl BatchPutScheduledUpdateGroupActionError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    "AlreadyExists" => {
-                        return RusotoError::Service(
-                            BatchPutScheduledUpdateGroupActionError::AlreadyExistsFault(
-                                parsed_error.message,
-                            ),
-                        )
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {
+                        "AlreadyExists" => {
+                            return RusotoError::Service(
+                                BatchPutScheduledUpdateGroupActionError::AlreadyExistsFault(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "LimitExceeded" => {
+                            return RusotoError::Service(
+                                BatchPutScheduledUpdateGroupActionError::LimitExceededFault(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "ResourceContention" => {
+                            return RusotoError::Service(
+                                BatchPutScheduledUpdateGroupActionError::ResourceContentionFault(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        _ => {}
                     }
-                    "LimitExceeded" => {
-                        return RusotoError::Service(
-                            BatchPutScheduledUpdateGroupActionError::LimitExceededFault(
-                                parsed_error.message,
-                            ),
-                        )
-                    }
-                    "ResourceContention" => {
-                        return RusotoError::Service(
-                            BatchPutScheduledUpdateGroupActionError::ResourceContentionFault(
-                                parsed_error.message,
-                            ),
-                        )
-                    }
-                    _ => {}
                 }
             }
         }
@@ -7942,28 +8262,33 @@ impl CancelInstanceRefreshError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    "ActiveInstanceRefreshNotFound" => {
-                        return RusotoError::Service(
-                            CancelInstanceRefreshError::ActiveInstanceRefreshNotFoundFault(
-                                parsed_error.message,
-                            ),
-                        )
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {
+                        "ActiveInstanceRefreshNotFound" => {
+                            return RusotoError::Service(
+                                CancelInstanceRefreshError::ActiveInstanceRefreshNotFoundFault(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "LimitExceeded" => {
+                            return RusotoError::Service(
+                                CancelInstanceRefreshError::LimitExceededFault(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "ResourceContention" => {
+                            return RusotoError::Service(
+                                CancelInstanceRefreshError::ResourceContentionFault(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        _ => {}
                     }
-                    "LimitExceeded" => {
-                        return RusotoError::Service(
-                            CancelInstanceRefreshError::LimitExceededFault(parsed_error.message),
-                        )
-                    }
-                    "ResourceContention" => {
-                        return RusotoError::Service(
-                            CancelInstanceRefreshError::ResourceContentionFault(
-                                parsed_error.message,
-                            ),
-                        )
-                    }
-                    _ => {}
                 }
             }
         }
@@ -8006,16 +8331,19 @@ impl CompleteLifecycleActionError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    "ResourceContention" => {
-                        return RusotoError::Service(
-                            CompleteLifecycleActionError::ResourceContentionFault(
-                                parsed_error.message,
-                            ),
-                        )
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {
+                        "ResourceContention" => {
+                            return RusotoError::Service(
+                                CompleteLifecycleActionError::ResourceContentionFault(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        _ => {}
                     }
-                    _ => {}
                 }
             }
         }
@@ -8060,33 +8388,40 @@ impl CreateAutoScalingGroupError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    "AlreadyExists" => {
-                        return RusotoError::Service(
-                            CreateAutoScalingGroupError::AlreadyExistsFault(parsed_error.message),
-                        )
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {
+                        "AlreadyExists" => {
+                            return RusotoError::Service(
+                                CreateAutoScalingGroupError::AlreadyExistsFault(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "LimitExceeded" => {
+                            return RusotoError::Service(
+                                CreateAutoScalingGroupError::LimitExceededFault(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "ResourceContention" => {
+                            return RusotoError::Service(
+                                CreateAutoScalingGroupError::ResourceContentionFault(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "ServiceLinkedRoleFailure" => {
+                            return RusotoError::Service(
+                                CreateAutoScalingGroupError::ServiceLinkedRoleFailure(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        _ => {}
                     }
-                    "LimitExceeded" => {
-                        return RusotoError::Service(
-                            CreateAutoScalingGroupError::LimitExceededFault(parsed_error.message),
-                        )
-                    }
-                    "ResourceContention" => {
-                        return RusotoError::Service(
-                            CreateAutoScalingGroupError::ResourceContentionFault(
-                                parsed_error.message,
-                            ),
-                        )
-                    }
-                    "ServiceLinkedRoleFailure" => {
-                        return RusotoError::Service(
-                            CreateAutoScalingGroupError::ServiceLinkedRoleFailure(
-                                parsed_error.message,
-                            ),
-                        )
-                    }
-                    _ => {}
                 }
             }
         }
@@ -8134,30 +8469,33 @@ impl CreateLaunchConfigurationError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    "AlreadyExists" => {
-                        return RusotoError::Service(
-                            CreateLaunchConfigurationError::AlreadyExistsFault(
-                                parsed_error.message,
-                            ),
-                        )
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {
+                        "AlreadyExists" => {
+                            return RusotoError::Service(
+                                CreateLaunchConfigurationError::AlreadyExistsFault(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "LimitExceeded" => {
+                            return RusotoError::Service(
+                                CreateLaunchConfigurationError::LimitExceededFault(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "ResourceContention" => {
+                            return RusotoError::Service(
+                                CreateLaunchConfigurationError::ResourceContentionFault(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        _ => {}
                     }
-                    "LimitExceeded" => {
-                        return RusotoError::Service(
-                            CreateLaunchConfigurationError::LimitExceededFault(
-                                parsed_error.message,
-                            ),
-                        )
-                    }
-                    "ResourceContention" => {
-                        return RusotoError::Service(
-                            CreateLaunchConfigurationError::ResourceContentionFault(
-                                parsed_error.message,
-                            ),
-                        )
-                    }
-                    _ => {}
                 }
             }
         }
@@ -8204,29 +8542,34 @@ impl CreateOrUpdateTagsError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    "AlreadyExists" => {
-                        return RusotoError::Service(CreateOrUpdateTagsError::AlreadyExistsFault(
-                            parsed_error.message,
-                        ))
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {
+                        "AlreadyExists" => {
+                            return RusotoError::Service(
+                                CreateOrUpdateTagsError::AlreadyExistsFault(parsed_error.message),
+                            )
+                        }
+                        "LimitExceeded" => {
+                            return RusotoError::Service(
+                                CreateOrUpdateTagsError::LimitExceededFault(parsed_error.message),
+                            )
+                        }
+                        "ResourceContention" => {
+                            return RusotoError::Service(
+                                CreateOrUpdateTagsError::ResourceContentionFault(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "ResourceInUse" => {
+                            return RusotoError::Service(
+                                CreateOrUpdateTagsError::ResourceInUseFault(parsed_error.message),
+                            )
+                        }
+                        _ => {}
                     }
-                    "LimitExceeded" => {
-                        return RusotoError::Service(CreateOrUpdateTagsError::LimitExceededFault(
-                            parsed_error.message,
-                        ))
-                    }
-                    "ResourceContention" => {
-                        return RusotoError::Service(
-                            CreateOrUpdateTagsError::ResourceContentionFault(parsed_error.message),
-                        )
-                    }
-                    "ResourceInUse" => {
-                        return RusotoError::Service(CreateOrUpdateTagsError::ResourceInUseFault(
-                            parsed_error.message,
-                        ))
-                    }
-                    _ => {}
                 }
             }
         }
@@ -8270,28 +8613,33 @@ impl DeleteAutoScalingGroupError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    "ResourceContention" => {
-                        return RusotoError::Service(
-                            DeleteAutoScalingGroupError::ResourceContentionFault(
-                                parsed_error.message,
-                            ),
-                        )
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {
+                        "ResourceContention" => {
+                            return RusotoError::Service(
+                                DeleteAutoScalingGroupError::ResourceContentionFault(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "ResourceInUse" => {
+                            return RusotoError::Service(
+                                DeleteAutoScalingGroupError::ResourceInUseFault(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "ScalingActivityInProgress" => {
+                            return RusotoError::Service(
+                                DeleteAutoScalingGroupError::ScalingActivityInProgressFault(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        _ => {}
                     }
-                    "ResourceInUse" => {
-                        return RusotoError::Service(
-                            DeleteAutoScalingGroupError::ResourceInUseFault(parsed_error.message),
-                        )
-                    }
-                    "ScalingActivityInProgress" => {
-                        return RusotoError::Service(
-                            DeleteAutoScalingGroupError::ScalingActivityInProgressFault(
-                                parsed_error.message,
-                            ),
-                        )
-                    }
-                    _ => {}
                 }
             }
         }
@@ -8336,23 +8684,26 @@ impl DeleteLaunchConfigurationError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    "ResourceContention" => {
-                        return RusotoError::Service(
-                            DeleteLaunchConfigurationError::ResourceContentionFault(
-                                parsed_error.message,
-                            ),
-                        )
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {
+                        "ResourceContention" => {
+                            return RusotoError::Service(
+                                DeleteLaunchConfigurationError::ResourceContentionFault(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "ResourceInUse" => {
+                            return RusotoError::Service(
+                                DeleteLaunchConfigurationError::ResourceInUseFault(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        _ => {}
                     }
-                    "ResourceInUse" => {
-                        return RusotoError::Service(
-                            DeleteLaunchConfigurationError::ResourceInUseFault(
-                                parsed_error.message,
-                            ),
-                        )
-                    }
-                    _ => {}
                 }
             }
         }
@@ -8392,14 +8743,19 @@ impl DeleteLifecycleHookError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    "ResourceContention" => {
-                        return RusotoError::Service(
-                            DeleteLifecycleHookError::ResourceContentionFault(parsed_error.message),
-                        )
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {
+                        "ResourceContention" => {
+                            return RusotoError::Service(
+                                DeleteLifecycleHookError::ResourceContentionFault(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        _ => {}
                     }
-                    _ => {}
                 }
             }
         }
@@ -8438,16 +8794,19 @@ impl DeleteNotificationConfigurationError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    "ResourceContention" => {
-                        return RusotoError::Service(
-                            DeleteNotificationConfigurationError::ResourceContentionFault(
-                                parsed_error.message,
-                            ),
-                        )
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {
+                        "ResourceContention" => {
+                            return RusotoError::Service(
+                                DeleteNotificationConfigurationError::ResourceContentionFault(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        _ => {}
                     }
-                    _ => {}
                 }
             }
         }
@@ -8488,19 +8847,22 @@ impl DeletePolicyError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    "ResourceContention" => {
-                        return RusotoError::Service(DeletePolicyError::ResourceContentionFault(
-                            parsed_error.message,
-                        ))
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {
+                        "ResourceContention" => {
+                            return RusotoError::Service(
+                                DeletePolicyError::ResourceContentionFault(parsed_error.message),
+                            )
+                        }
+                        "ServiceLinkedRoleFailure" => {
+                            return RusotoError::Service(
+                                DeletePolicyError::ServiceLinkedRoleFailure(parsed_error.message),
+                            )
+                        }
+                        _ => {}
                     }
-                    "ServiceLinkedRoleFailure" => {
-                        return RusotoError::Service(DeletePolicyError::ServiceLinkedRoleFailure(
-                            parsed_error.message,
-                        ))
-                    }
-                    _ => {}
                 }
             }
         }
@@ -8538,16 +8900,19 @@ impl DeleteScheduledActionError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    "ResourceContention" => {
-                        return RusotoError::Service(
-                            DeleteScheduledActionError::ResourceContentionFault(
-                                parsed_error.message,
-                            ),
-                        )
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {
+                        "ResourceContention" => {
+                            return RusotoError::Service(
+                                DeleteScheduledActionError::ResourceContentionFault(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        _ => {}
                     }
-                    _ => {}
                 }
             }
         }
@@ -8588,19 +8953,22 @@ impl DeleteTagsError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    "ResourceContention" => {
-                        return RusotoError::Service(DeleteTagsError::ResourceContentionFault(
-                            parsed_error.message,
-                        ))
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {
+                        "ResourceContention" => {
+                            return RusotoError::Service(DeleteTagsError::ResourceContentionFault(
+                                parsed_error.message,
+                            ))
+                        }
+                        "ResourceInUse" => {
+                            return RusotoError::Service(DeleteTagsError::ResourceInUseFault(
+                                parsed_error.message,
+                            ))
+                        }
+                        _ => {}
                     }
-                    "ResourceInUse" => {
-                        return RusotoError::Service(DeleteTagsError::ResourceInUseFault(
-                            parsed_error.message,
-                        ))
-                    }
-                    _ => {}
                 }
             }
         }
@@ -8638,16 +9006,19 @@ impl DescribeAccountLimitsError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    "ResourceContention" => {
-                        return RusotoError::Service(
-                            DescribeAccountLimitsError::ResourceContentionFault(
-                                parsed_error.message,
-                            ),
-                        )
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {
+                        "ResourceContention" => {
+                            return RusotoError::Service(
+                                DescribeAccountLimitsError::ResourceContentionFault(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        _ => {}
                     }
-                    _ => {}
                 }
             }
         }
@@ -8686,16 +9057,19 @@ impl DescribeAdjustmentTypesError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    "ResourceContention" => {
-                        return RusotoError::Service(
-                            DescribeAdjustmentTypesError::ResourceContentionFault(
-                                parsed_error.message,
-                            ),
-                        )
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {
+                        "ResourceContention" => {
+                            return RusotoError::Service(
+                                DescribeAdjustmentTypesError::ResourceContentionFault(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        _ => {}
                     }
-                    _ => {}
                 }
             }
         }
@@ -8736,21 +9110,26 @@ impl DescribeAutoScalingGroupsError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    "InvalidNextToken" => {
-                        return RusotoError::Service(
-                            DescribeAutoScalingGroupsError::InvalidNextToken(parsed_error.message),
-                        )
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {
+                        "InvalidNextToken" => {
+                            return RusotoError::Service(
+                                DescribeAutoScalingGroupsError::InvalidNextToken(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "ResourceContention" => {
+                            return RusotoError::Service(
+                                DescribeAutoScalingGroupsError::ResourceContentionFault(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        _ => {}
                     }
-                    "ResourceContention" => {
-                        return RusotoError::Service(
-                            DescribeAutoScalingGroupsError::ResourceContentionFault(
-                                parsed_error.message,
-                            ),
-                        )
-                    }
-                    _ => {}
                 }
             }
         }
@@ -8794,23 +9173,26 @@ impl DescribeAutoScalingInstancesError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    "InvalidNextToken" => {
-                        return RusotoError::Service(
-                            DescribeAutoScalingInstancesError::InvalidNextToken(
-                                parsed_error.message,
-                            ),
-                        )
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {
+                        "InvalidNextToken" => {
+                            return RusotoError::Service(
+                                DescribeAutoScalingInstancesError::InvalidNextToken(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "ResourceContention" => {
+                            return RusotoError::Service(
+                                DescribeAutoScalingInstancesError::ResourceContentionFault(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        _ => {}
                     }
-                    "ResourceContention" => {
-                        return RusotoError::Service(
-                            DescribeAutoScalingInstancesError::ResourceContentionFault(
-                                parsed_error.message,
-                            ),
-                        )
-                    }
-                    _ => {}
                 }
             }
         }
@@ -8854,16 +9236,19 @@ impl DescribeAutoScalingNotificationTypesError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    "ResourceContention" => {
-                        return RusotoError::Service(
-                            DescribeAutoScalingNotificationTypesError::ResourceContentionFault(
-                                parsed_error.message,
-                            ),
-                        )
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {
+                        "ResourceContention" => {
+                            return RusotoError::Service(
+                                DescribeAutoScalingNotificationTypesError::ResourceContentionFault(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        _ => {}
                     }
-                    _ => {}
                 }
             }
         }
@@ -8904,21 +9289,26 @@ impl DescribeInstanceRefreshesError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    "InvalidNextToken" => {
-                        return RusotoError::Service(
-                            DescribeInstanceRefreshesError::InvalidNextToken(parsed_error.message),
-                        )
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {
+                        "InvalidNextToken" => {
+                            return RusotoError::Service(
+                                DescribeInstanceRefreshesError::InvalidNextToken(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "ResourceContention" => {
+                            return RusotoError::Service(
+                                DescribeInstanceRefreshesError::ResourceContentionFault(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        _ => {}
                     }
-                    "ResourceContention" => {
-                        return RusotoError::Service(
-                            DescribeInstanceRefreshesError::ResourceContentionFault(
-                                parsed_error.message,
-                            ),
-                        )
-                    }
-                    _ => {}
                 }
             }
         }
@@ -8962,23 +9352,26 @@ impl DescribeLaunchConfigurationsError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    "InvalidNextToken" => {
-                        return RusotoError::Service(
-                            DescribeLaunchConfigurationsError::InvalidNextToken(
-                                parsed_error.message,
-                            ),
-                        )
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {
+                        "InvalidNextToken" => {
+                            return RusotoError::Service(
+                                DescribeLaunchConfigurationsError::InvalidNextToken(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "ResourceContention" => {
+                            return RusotoError::Service(
+                                DescribeLaunchConfigurationsError::ResourceContentionFault(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        _ => {}
                     }
-                    "ResourceContention" => {
-                        return RusotoError::Service(
-                            DescribeLaunchConfigurationsError::ResourceContentionFault(
-                                parsed_error.message,
-                            ),
-                        )
-                    }
-                    _ => {}
                 }
             }
         }
@@ -9022,16 +9415,19 @@ impl DescribeLifecycleHookTypesError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    "ResourceContention" => {
-                        return RusotoError::Service(
-                            DescribeLifecycleHookTypesError::ResourceContentionFault(
-                                parsed_error.message,
-                            ),
-                        )
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {
+                        "ResourceContention" => {
+                            return RusotoError::Service(
+                                DescribeLifecycleHookTypesError::ResourceContentionFault(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        _ => {}
                     }
-                    _ => {}
                 }
             }
         }
@@ -9070,16 +9466,19 @@ impl DescribeLifecycleHooksError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    "ResourceContention" => {
-                        return RusotoError::Service(
-                            DescribeLifecycleHooksError::ResourceContentionFault(
-                                parsed_error.message,
-                            ),
-                        )
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {
+                        "ResourceContention" => {
+                            return RusotoError::Service(
+                                DescribeLifecycleHooksError::ResourceContentionFault(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        _ => {}
                     }
-                    _ => {}
                 }
             }
         }
@@ -9120,16 +9519,19 @@ impl DescribeLoadBalancerTargetGroupsError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    "ResourceContention" => {
-                        return RusotoError::Service(
-                            DescribeLoadBalancerTargetGroupsError::ResourceContentionFault(
-                                parsed_error.message,
-                            ),
-                        )
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {
+                        "ResourceContention" => {
+                            return RusotoError::Service(
+                                DescribeLoadBalancerTargetGroupsError::ResourceContentionFault(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        _ => {}
                     }
-                    _ => {}
                 }
             }
         }
@@ -9168,16 +9570,19 @@ impl DescribeLoadBalancersError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    "ResourceContention" => {
-                        return RusotoError::Service(
-                            DescribeLoadBalancersError::ResourceContentionFault(
-                                parsed_error.message,
-                            ),
-                        )
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {
+                        "ResourceContention" => {
+                            return RusotoError::Service(
+                                DescribeLoadBalancersError::ResourceContentionFault(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        _ => {}
                     }
-                    _ => {}
                 }
             }
         }
@@ -9218,16 +9623,19 @@ impl DescribeMetricCollectionTypesError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    "ResourceContention" => {
-                        return RusotoError::Service(
-                            DescribeMetricCollectionTypesError::ResourceContentionFault(
-                                parsed_error.message,
-                            ),
-                        )
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {
+                        "ResourceContention" => {
+                            return RusotoError::Service(
+                                DescribeMetricCollectionTypesError::ResourceContentionFault(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        _ => {}
                     }
-                    _ => {}
                 }
             }
         }
@@ -9270,23 +9678,26 @@ impl DescribeNotificationConfigurationsError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    "InvalidNextToken" => {
-                        return RusotoError::Service(
-                            DescribeNotificationConfigurationsError::InvalidNextToken(
-                                parsed_error.message,
-                            ),
-                        )
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {
+                        "InvalidNextToken" => {
+                            return RusotoError::Service(
+                                DescribeNotificationConfigurationsError::InvalidNextToken(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "ResourceContention" => {
+                            return RusotoError::Service(
+                                DescribeNotificationConfigurationsError::ResourceContentionFault(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        _ => {}
                     }
-                    "ResourceContention" => {
-                        return RusotoError::Service(
-                            DescribeNotificationConfigurationsError::ResourceContentionFault(
-                                parsed_error.message,
-                            ),
-                        )
-                    }
-                    _ => {}
                 }
             }
         }
@@ -9332,24 +9743,31 @@ impl DescribePoliciesError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    "InvalidNextToken" => {
-                        return RusotoError::Service(DescribePoliciesError::InvalidNextToken(
-                            parsed_error.message,
-                        ))
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {
+                        "InvalidNextToken" => {
+                            return RusotoError::Service(DescribePoliciesError::InvalidNextToken(
+                                parsed_error.message,
+                            ))
+                        }
+                        "ResourceContention" => {
+                            return RusotoError::Service(
+                                DescribePoliciesError::ResourceContentionFault(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "ServiceLinkedRoleFailure" => {
+                            return RusotoError::Service(
+                                DescribePoliciesError::ServiceLinkedRoleFailure(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        _ => {}
                     }
-                    "ResourceContention" => {
-                        return RusotoError::Service(
-                            DescribePoliciesError::ResourceContentionFault(parsed_error.message),
-                        )
-                    }
-                    "ServiceLinkedRoleFailure" => {
-                        return RusotoError::Service(
-                            DescribePoliciesError::ServiceLinkedRoleFailure(parsed_error.message),
-                        )
-                    }
-                    _ => {}
                 }
             }
         }
@@ -9390,21 +9808,26 @@ impl DescribeScalingActivitiesError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    "InvalidNextToken" => {
-                        return RusotoError::Service(
-                            DescribeScalingActivitiesError::InvalidNextToken(parsed_error.message),
-                        )
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {
+                        "InvalidNextToken" => {
+                            return RusotoError::Service(
+                                DescribeScalingActivitiesError::InvalidNextToken(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "ResourceContention" => {
+                            return RusotoError::Service(
+                                DescribeScalingActivitiesError::ResourceContentionFault(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        _ => {}
                     }
-                    "ResourceContention" => {
-                        return RusotoError::Service(
-                            DescribeScalingActivitiesError::ResourceContentionFault(
-                                parsed_error.message,
-                            ),
-                        )
-                    }
-                    _ => {}
                 }
             }
         }
@@ -9446,16 +9869,19 @@ impl DescribeScalingProcessTypesError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    "ResourceContention" => {
-                        return RusotoError::Service(
-                            DescribeScalingProcessTypesError::ResourceContentionFault(
-                                parsed_error.message,
-                            ),
-                        )
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {
+                        "ResourceContention" => {
+                            return RusotoError::Service(
+                                DescribeScalingProcessTypesError::ResourceContentionFault(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        _ => {}
                     }
-                    _ => {}
                 }
             }
         }
@@ -9496,21 +9922,26 @@ impl DescribeScheduledActionsError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    "InvalidNextToken" => {
-                        return RusotoError::Service(
-                            DescribeScheduledActionsError::InvalidNextToken(parsed_error.message),
-                        )
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {
+                        "InvalidNextToken" => {
+                            return RusotoError::Service(
+                                DescribeScheduledActionsError::InvalidNextToken(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "ResourceContention" => {
+                            return RusotoError::Service(
+                                DescribeScheduledActionsError::ResourceContentionFault(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        _ => {}
                     }
-                    "ResourceContention" => {
-                        return RusotoError::Service(
-                            DescribeScheduledActionsError::ResourceContentionFault(
-                                parsed_error.message,
-                            ),
-                        )
-                    }
-                    _ => {}
                 }
             }
         }
@@ -9552,19 +9983,22 @@ impl DescribeTagsError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    "InvalidNextToken" => {
-                        return RusotoError::Service(DescribeTagsError::InvalidNextToken(
-                            parsed_error.message,
-                        ))
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {
+                        "InvalidNextToken" => {
+                            return RusotoError::Service(DescribeTagsError::InvalidNextToken(
+                                parsed_error.message,
+                            ))
+                        }
+                        "ResourceContention" => {
+                            return RusotoError::Service(
+                                DescribeTagsError::ResourceContentionFault(parsed_error.message),
+                            )
+                        }
+                        _ => {}
                     }
-                    "ResourceContention" => {
-                        return RusotoError::Service(DescribeTagsError::ResourceContentionFault(
-                            parsed_error.message,
-                        ))
-                    }
-                    _ => {}
                 }
             }
         }
@@ -9604,16 +10038,19 @@ impl DescribeTerminationPolicyTypesError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    "ResourceContention" => {
-                        return RusotoError::Service(
-                            DescribeTerminationPolicyTypesError::ResourceContentionFault(
-                                parsed_error.message,
-                            ),
-                        )
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {
+                        "ResourceContention" => {
+                            return RusotoError::Service(
+                                DescribeTerminationPolicyTypesError::ResourceContentionFault(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        _ => {}
                     }
-                    _ => {}
                 }
             }
         }
@@ -9652,14 +10089,17 @@ impl DetachInstancesError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    "ResourceContention" => {
-                        return RusotoError::Service(DetachInstancesError::ResourceContentionFault(
-                            parsed_error.message,
-                        ))
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {
+                        "ResourceContention" => {
+                            return RusotoError::Service(
+                                DetachInstancesError::ResourceContentionFault(parsed_error.message),
+                            )
+                        }
+                        _ => {}
                     }
-                    _ => {}
                 }
             }
         }
@@ -9698,16 +10138,19 @@ impl DetachLoadBalancerTargetGroupsError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    "ResourceContention" => {
-                        return RusotoError::Service(
-                            DetachLoadBalancerTargetGroupsError::ResourceContentionFault(
-                                parsed_error.message,
-                            ),
-                        )
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {
+                        "ResourceContention" => {
+                            return RusotoError::Service(
+                                DetachLoadBalancerTargetGroupsError::ResourceContentionFault(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        _ => {}
                     }
-                    _ => {}
                 }
             }
         }
@@ -9746,14 +10189,19 @@ impl DetachLoadBalancersError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    "ResourceContention" => {
-                        return RusotoError::Service(
-                            DetachLoadBalancersError::ResourceContentionFault(parsed_error.message),
-                        )
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {
+                        "ResourceContention" => {
+                            return RusotoError::Service(
+                                DetachLoadBalancersError::ResourceContentionFault(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        _ => {}
                     }
-                    _ => {}
                 }
             }
         }
@@ -9790,16 +10238,19 @@ impl DisableMetricsCollectionError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    "ResourceContention" => {
-                        return RusotoError::Service(
-                            DisableMetricsCollectionError::ResourceContentionFault(
-                                parsed_error.message,
-                            ),
-                        )
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {
+                        "ResourceContention" => {
+                            return RusotoError::Service(
+                                DisableMetricsCollectionError::ResourceContentionFault(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        _ => {}
                     }
-                    _ => {}
                 }
             }
         }
@@ -9838,16 +10289,19 @@ impl EnableMetricsCollectionError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    "ResourceContention" => {
-                        return RusotoError::Service(
-                            EnableMetricsCollectionError::ResourceContentionFault(
-                                parsed_error.message,
-                            ),
-                        )
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {
+                        "ResourceContention" => {
+                            return RusotoError::Service(
+                                EnableMetricsCollectionError::ResourceContentionFault(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        _ => {}
                     }
-                    _ => {}
                 }
             }
         }
@@ -9886,14 +10340,17 @@ impl EnterStandbyError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    "ResourceContention" => {
-                        return RusotoError::Service(EnterStandbyError::ResourceContentionFault(
-                            parsed_error.message,
-                        ))
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {
+                        "ResourceContention" => {
+                            return RusotoError::Service(
+                                EnterStandbyError::ResourceContentionFault(parsed_error.message),
+                            )
+                        }
+                        _ => {}
                     }
-                    _ => {}
                 }
             }
         }
@@ -9932,21 +10389,24 @@ impl ExecutePolicyError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    "ResourceContention" => {
-                        return RusotoError::Service(ExecutePolicyError::ResourceContentionFault(
-                            parsed_error.message,
-                        ))
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {
+                        "ResourceContention" => {
+                            return RusotoError::Service(
+                                ExecutePolicyError::ResourceContentionFault(parsed_error.message),
+                            )
+                        }
+                        "ScalingActivityInProgress" => {
+                            return RusotoError::Service(
+                                ExecutePolicyError::ScalingActivityInProgressFault(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        _ => {}
                     }
-                    "ScalingActivityInProgress" => {
-                        return RusotoError::Service(
-                            ExecutePolicyError::ScalingActivityInProgressFault(
-                                parsed_error.message,
-                            ),
-                        )
-                    }
-                    _ => {}
                 }
             }
         }
@@ -9984,14 +10444,17 @@ impl ExitStandbyError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    "ResourceContention" => {
-                        return RusotoError::Service(ExitStandbyError::ResourceContentionFault(
-                            parsed_error.message,
-                        ))
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {
+                        "ResourceContention" => {
+                            return RusotoError::Service(ExitStandbyError::ResourceContentionFault(
+                                parsed_error.message,
+                            ))
+                        }
+                        _ => {}
                     }
-                    _ => {}
                 }
             }
         }
@@ -10030,19 +10493,24 @@ impl PutLifecycleHookError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    "LimitExceeded" => {
-                        return RusotoError::Service(PutLifecycleHookError::LimitExceededFault(
-                            parsed_error.message,
-                        ))
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {
+                        "LimitExceeded" => {
+                            return RusotoError::Service(PutLifecycleHookError::LimitExceededFault(
+                                parsed_error.message,
+                            ))
+                        }
+                        "ResourceContention" => {
+                            return RusotoError::Service(
+                                PutLifecycleHookError::ResourceContentionFault(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        _ => {}
                     }
-                    "ResourceContention" => {
-                        return RusotoError::Service(
-                            PutLifecycleHookError::ResourceContentionFault(parsed_error.message),
-                        )
-                    }
-                    _ => {}
                 }
             }
         }
@@ -10086,30 +10554,33 @@ impl PutNotificationConfigurationError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    "LimitExceeded" => {
-                        return RusotoError::Service(
-                            PutNotificationConfigurationError::LimitExceededFault(
-                                parsed_error.message,
-                            ),
-                        )
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {
+                        "LimitExceeded" => {
+                            return RusotoError::Service(
+                                PutNotificationConfigurationError::LimitExceededFault(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "ResourceContention" => {
+                            return RusotoError::Service(
+                                PutNotificationConfigurationError::ResourceContentionFault(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "ServiceLinkedRoleFailure" => {
+                            return RusotoError::Service(
+                                PutNotificationConfigurationError::ServiceLinkedRoleFailure(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        _ => {}
                     }
-                    "ResourceContention" => {
-                        return RusotoError::Service(
-                            PutNotificationConfigurationError::ResourceContentionFault(
-                                parsed_error.message,
-                            ),
-                        )
-                    }
-                    "ServiceLinkedRoleFailure" => {
-                        return RusotoError::Service(
-                            PutNotificationConfigurationError::ServiceLinkedRoleFailure(
-                                parsed_error.message,
-                            ),
-                        )
-                    }
-                    _ => {}
                 }
             }
         }
@@ -10158,24 +10629,31 @@ impl PutScalingPolicyError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    "LimitExceeded" => {
-                        return RusotoError::Service(PutScalingPolicyError::LimitExceededFault(
-                            parsed_error.message,
-                        ))
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {
+                        "LimitExceeded" => {
+                            return RusotoError::Service(PutScalingPolicyError::LimitExceededFault(
+                                parsed_error.message,
+                            ))
+                        }
+                        "ResourceContention" => {
+                            return RusotoError::Service(
+                                PutScalingPolicyError::ResourceContentionFault(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "ServiceLinkedRoleFailure" => {
+                            return RusotoError::Service(
+                                PutScalingPolicyError::ServiceLinkedRoleFailure(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        _ => {}
                     }
-                    "ResourceContention" => {
-                        return RusotoError::Service(
-                            PutScalingPolicyError::ResourceContentionFault(parsed_error.message),
-                        )
-                    }
-                    "ServiceLinkedRoleFailure" => {
-                        return RusotoError::Service(
-                            PutScalingPolicyError::ServiceLinkedRoleFailure(parsed_error.message),
-                        )
-                    }
-                    _ => {}
                 }
             }
         }
@@ -10220,30 +10698,33 @@ impl PutScheduledUpdateGroupActionError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    "AlreadyExists" => {
-                        return RusotoError::Service(
-                            PutScheduledUpdateGroupActionError::AlreadyExistsFault(
-                                parsed_error.message,
-                            ),
-                        )
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {
+                        "AlreadyExists" => {
+                            return RusotoError::Service(
+                                PutScheduledUpdateGroupActionError::AlreadyExistsFault(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "LimitExceeded" => {
+                            return RusotoError::Service(
+                                PutScheduledUpdateGroupActionError::LimitExceededFault(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "ResourceContention" => {
+                            return RusotoError::Service(
+                                PutScheduledUpdateGroupActionError::ResourceContentionFault(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        _ => {}
                     }
-                    "LimitExceeded" => {
-                        return RusotoError::Service(
-                            PutScheduledUpdateGroupActionError::LimitExceededFault(
-                                parsed_error.message,
-                            ),
-                        )
-                    }
-                    "ResourceContention" => {
-                        return RusotoError::Service(
-                            PutScheduledUpdateGroupActionError::ResourceContentionFault(
-                                parsed_error.message,
-                            ),
-                        )
-                    }
-                    _ => {}
                 }
             }
         }
@@ -10290,16 +10771,19 @@ impl RecordLifecycleActionHeartbeatError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    "ResourceContention" => {
-                        return RusotoError::Service(
-                            RecordLifecycleActionHeartbeatError::ResourceContentionFault(
-                                parsed_error.message,
-                            ),
-                        )
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {
+                        "ResourceContention" => {
+                            return RusotoError::Service(
+                                RecordLifecycleActionHeartbeatError::ResourceContentionFault(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        _ => {}
                     }
-                    _ => {}
                 }
             }
         }
@@ -10340,19 +10824,22 @@ impl ResumeProcessesError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    "ResourceContention" => {
-                        return RusotoError::Service(ResumeProcessesError::ResourceContentionFault(
-                            parsed_error.message,
-                        ))
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {
+                        "ResourceContention" => {
+                            return RusotoError::Service(
+                                ResumeProcessesError::ResourceContentionFault(parsed_error.message),
+                            )
+                        }
+                        "ResourceInUse" => {
+                            return RusotoError::Service(ResumeProcessesError::ResourceInUseFault(
+                                parsed_error.message,
+                            ))
+                        }
+                        _ => {}
                     }
-                    "ResourceInUse" => {
-                        return RusotoError::Service(ResumeProcessesError::ResourceInUseFault(
-                            parsed_error.message,
-                        ))
-                    }
-                    _ => {}
                 }
             }
         }
@@ -10392,21 +10879,26 @@ impl SetDesiredCapacityError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    "ResourceContention" => {
-                        return RusotoError::Service(
-                            SetDesiredCapacityError::ResourceContentionFault(parsed_error.message),
-                        )
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {
+                        "ResourceContention" => {
+                            return RusotoError::Service(
+                                SetDesiredCapacityError::ResourceContentionFault(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "ScalingActivityInProgress" => {
+                            return RusotoError::Service(
+                                SetDesiredCapacityError::ScalingActivityInProgressFault(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        _ => {}
                     }
-                    "ScalingActivityInProgress" => {
-                        return RusotoError::Service(
-                            SetDesiredCapacityError::ScalingActivityInProgressFault(
-                                parsed_error.message,
-                            ),
-                        )
-                    }
-                    _ => {}
                 }
             }
         }
@@ -10446,14 +10938,19 @@ impl SetInstanceHealthError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    "ResourceContention" => {
-                        return RusotoError::Service(
-                            SetInstanceHealthError::ResourceContentionFault(parsed_error.message),
-                        )
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {
+                        "ResourceContention" => {
+                            return RusotoError::Service(
+                                SetInstanceHealthError::ResourceContentionFault(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        _ => {}
                     }
-                    _ => {}
                 }
             }
         }
@@ -10492,21 +10989,26 @@ impl SetInstanceProtectionError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    "LimitExceeded" => {
-                        return RusotoError::Service(
-                            SetInstanceProtectionError::LimitExceededFault(parsed_error.message),
-                        )
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {
+                        "LimitExceeded" => {
+                            return RusotoError::Service(
+                                SetInstanceProtectionError::LimitExceededFault(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "ResourceContention" => {
+                            return RusotoError::Service(
+                                SetInstanceProtectionError::ResourceContentionFault(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        _ => {}
                     }
-                    "ResourceContention" => {
-                        return RusotoError::Service(
-                            SetInstanceProtectionError::ResourceContentionFault(
-                                parsed_error.message,
-                            ),
-                        )
-                    }
-                    _ => {}
                 }
             }
         }
@@ -10550,28 +11052,31 @@ impl StartInstanceRefreshError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    "InstanceRefreshInProgress" => {
-                        return RusotoError::Service(
-                            StartInstanceRefreshError::InstanceRefreshInProgressFault(
-                                parsed_error.message,
-                            ),
-                        )
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {
+                        "InstanceRefreshInProgress" => {
+                            return RusotoError::Service(
+                                StartInstanceRefreshError::InstanceRefreshInProgressFault(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "LimitExceeded" => {
+                            return RusotoError::Service(
+                                StartInstanceRefreshError::LimitExceededFault(parsed_error.message),
+                            )
+                        }
+                        "ResourceContention" => {
+                            return RusotoError::Service(
+                                StartInstanceRefreshError::ResourceContentionFault(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        _ => {}
                     }
-                    "LimitExceeded" => {
-                        return RusotoError::Service(StartInstanceRefreshError::LimitExceededFault(
-                            parsed_error.message,
-                        ))
-                    }
-                    "ResourceContention" => {
-                        return RusotoError::Service(
-                            StartInstanceRefreshError::ResourceContentionFault(
-                                parsed_error.message,
-                            ),
-                        )
-                    }
-                    _ => {}
                 }
             }
         }
@@ -10614,19 +11119,24 @@ impl SuspendProcessesError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    "ResourceContention" => {
-                        return RusotoError::Service(
-                            SuspendProcessesError::ResourceContentionFault(parsed_error.message),
-                        )
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {
+                        "ResourceContention" => {
+                            return RusotoError::Service(
+                                SuspendProcessesError::ResourceContentionFault(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "ResourceInUse" => {
+                            return RusotoError::Service(SuspendProcessesError::ResourceInUseFault(
+                                parsed_error.message,
+                            ))
+                        }
+                        _ => {}
                     }
-                    "ResourceInUse" => {
-                        return RusotoError::Service(SuspendProcessesError::ResourceInUseFault(
-                            parsed_error.message,
-                        ))
-                    }
-                    _ => {}
                 }
             }
         }
@@ -10668,21 +11178,12 @@ impl TerminateInstanceInAutoScalingGroupError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    "ResourceContention" => {
-                        return RusotoError::Service(
-                            TerminateInstanceInAutoScalingGroupError::ResourceContentionFault(
-                                parsed_error.message,
-                            ),
-                        )
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {
+                        "ResourceContention" => return RusotoError::Service(TerminateInstanceInAutoScalingGroupError::ResourceContentionFault(parsed_error.message)),"ScalingActivityInProgress" => return RusotoError::Service(TerminateInstanceInAutoScalingGroupError::ScalingActivityInProgressFault(parsed_error.message)),_ => {}
                     }
-                    "ScalingActivityInProgress" => return RusotoError::Service(
-                        TerminateInstanceInAutoScalingGroupError::ScalingActivityInProgressFault(
-                            parsed_error.message,
-                        ),
-                    ),
-                    _ => {}
                 }
             }
         }
@@ -10728,30 +11229,33 @@ impl UpdateAutoScalingGroupError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    "ResourceContention" => {
-                        return RusotoError::Service(
-                            UpdateAutoScalingGroupError::ResourceContentionFault(
-                                parsed_error.message,
-                            ),
-                        )
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {
+                        "ResourceContention" => {
+                            return RusotoError::Service(
+                                UpdateAutoScalingGroupError::ResourceContentionFault(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "ScalingActivityInProgress" => {
+                            return RusotoError::Service(
+                                UpdateAutoScalingGroupError::ScalingActivityInProgressFault(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "ServiceLinkedRoleFailure" => {
+                            return RusotoError::Service(
+                                UpdateAutoScalingGroupError::ServiceLinkedRoleFailure(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        _ => {}
                     }
-                    "ScalingActivityInProgress" => {
-                        return RusotoError::Service(
-                            UpdateAutoScalingGroupError::ScalingActivityInProgressFault(
-                                parsed_error.message,
-                            ),
-                        )
-                    }
-                    "ServiceLinkedRoleFailure" => {
-                        return RusotoError::Service(
-                            UpdateAutoScalingGroupError::ServiceLinkedRoleFailure(
-                                parsed_error.message,
-                            ),
-                        )
-                    }
-                    _ => {}
                 }
             }
         }

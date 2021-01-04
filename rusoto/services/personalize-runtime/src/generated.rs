@@ -23,7 +23,6 @@ use rusoto_core::proto;
 use rusoto_core::signature::SignedRequest;
 #[allow(unused_imports)]
 use serde::{Deserialize, Serialize};
-use serde_json;
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetPersonalizedRankingRequest {
@@ -134,6 +133,7 @@ pub enum GetPersonalizedRankingError {
 impl GetPersonalizedRankingError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetPersonalizedRankingError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidInputException" => {
                     return RusotoError::Service(GetPersonalizedRankingError::InvalidInput(err.msg))
@@ -172,6 +172,7 @@ pub enum GetRecommendationsError {
 impl GetRecommendationsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetRecommendationsError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidInputException" => {
                     return RusotoError::Service(GetRecommendationsError::InvalidInput(err.msg))
@@ -257,6 +258,7 @@ impl PersonalizeRuntime for PersonalizeRuntimeClient {
         &self,
         input: GetPersonalizedRankingRequest,
     ) -> Result<GetPersonalizedRankingResponse, RusotoError<GetPersonalizedRankingError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/personalize-ranking";
 
         let mut request = SignedRequest::new("POST", "personalize", &self.region, &request_uri);
@@ -289,6 +291,7 @@ impl PersonalizeRuntime for PersonalizeRuntimeClient {
         &self,
         input: GetRecommendationsRequest,
     ) -> Result<GetRecommendationsResponse, RusotoError<GetRecommendationsError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/recommendations";
 
         let mut request = SignedRequest::new("POST", "personalize", &self.region, &request_uri);

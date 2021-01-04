@@ -50,7 +50,6 @@ impl EcrClient {
     }
 }
 
-use serde_json;
 /// <p>This data type is used in the <a>ImageScanFinding</a> data type.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
@@ -1519,6 +1518,7 @@ impl BatchCheckLayerAvailabilityError {
         res: BufferedHttpResponse,
     ) -> RusotoError<BatchCheckLayerAvailabilityError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidParameterException" => {
                     return RusotoError::Service(
@@ -1567,6 +1567,7 @@ pub enum BatchDeleteImageError {
 impl BatchDeleteImageError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<BatchDeleteImageError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidParameterException" => {
                     return RusotoError::Service(BatchDeleteImageError::InvalidParameter(err.msg))
@@ -1609,6 +1610,7 @@ pub enum BatchGetImageError {
 impl BatchGetImageError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<BatchGetImageError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidParameterException" => {
                     return RusotoError::Service(BatchGetImageError::InvalidParameter(err.msg))
@@ -1663,6 +1665,7 @@ pub enum CompleteLayerUploadError {
 impl CompleteLayerUploadError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CompleteLayerUploadError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "EmptyUploadException" => {
                     return RusotoError::Service(CompleteLayerUploadError::EmptyUpload(err.msg))
@@ -1745,6 +1748,7 @@ pub enum CreateRepositoryError {
 impl CreateRepositoryError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateRepositoryError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidParameterException" => {
                     return RusotoError::Service(CreateRepositoryError::InvalidParameter(err.msg))
@@ -1807,6 +1811,7 @@ pub enum DeleteLifecyclePolicyError {
 impl DeleteLifecyclePolicyError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteLifecyclePolicyError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidParameterException" => {
                     return RusotoError::Service(DeleteLifecyclePolicyError::InvalidParameter(
@@ -1861,6 +1866,7 @@ pub enum DeleteRegistryPolicyError {
 impl DeleteRegistryPolicyError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteRegistryPolicyError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidParameterException" => {
                     return RusotoError::Service(DeleteRegistryPolicyError::InvalidParameter(
@@ -1911,6 +1917,7 @@ pub enum DeleteRepositoryError {
 impl DeleteRepositoryError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteRepositoryError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidParameterException" => {
                     return RusotoError::Service(DeleteRepositoryError::InvalidParameter(err.msg))
@@ -1961,6 +1968,7 @@ pub enum DeleteRepositoryPolicyError {
 impl DeleteRepositoryPolicyError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteRepositoryPolicyError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidParameterException" => {
                     return RusotoError::Service(DeleteRepositoryPolicyError::InvalidParameter(
@@ -2019,6 +2027,7 @@ pub enum DescribeImageScanFindingsError {
 impl DescribeImageScanFindingsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeImageScanFindingsError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ImageNotFoundException" => {
                     return RusotoError::Service(DescribeImageScanFindingsError::ImageNotFound(
@@ -2079,6 +2088,7 @@ pub enum DescribeImagesError {
 impl DescribeImagesError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeImagesError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ImageNotFoundException" => {
                     return RusotoError::Service(DescribeImagesError::ImageNotFound(err.msg))
@@ -2123,6 +2133,7 @@ pub enum DescribeRegistryError {
 impl DescribeRegistryError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeRegistryError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidParameterException" => {
                     return RusotoError::Service(DescribeRegistryError::InvalidParameter(err.msg))
@@ -2161,6 +2172,7 @@ pub enum DescribeRepositoriesError {
 impl DescribeRepositoriesError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeRepositoriesError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidParameterException" => {
                     return RusotoError::Service(DescribeRepositoriesError::InvalidParameter(
@@ -2205,6 +2217,7 @@ pub enum GetAuthorizationTokenError {
 impl GetAuthorizationTokenError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetAuthorizationTokenError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidParameterException" => {
                     return RusotoError::Service(GetAuthorizationTokenError::InvalidParameter(
@@ -2249,6 +2262,7 @@ pub enum GetDownloadUrlForLayerError {
 impl GetDownloadUrlForLayerError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetDownloadUrlForLayerError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidParameterException" => {
                     return RusotoError::Service(GetDownloadUrlForLayerError::InvalidParameter(
@@ -2309,6 +2323,7 @@ pub enum GetLifecyclePolicyError {
 impl GetLifecyclePolicyError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetLifecyclePolicyError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidParameterException" => {
                     return RusotoError::Service(GetLifecyclePolicyError::InvalidParameter(err.msg))
@@ -2361,6 +2376,7 @@ pub enum GetLifecyclePolicyPreviewError {
 impl GetLifecyclePolicyPreviewError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetLifecyclePolicyPreviewError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidParameterException" => {
                     return RusotoError::Service(GetLifecyclePolicyPreviewError::InvalidParameter(
@@ -2415,6 +2431,7 @@ pub enum GetRegistryPolicyError {
 impl GetRegistryPolicyError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetRegistryPolicyError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidParameterException" => {
                     return RusotoError::Service(GetRegistryPolicyError::InvalidParameter(err.msg))
@@ -2461,6 +2478,7 @@ pub enum GetRepositoryPolicyError {
 impl GetRepositoryPolicyError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetRepositoryPolicyError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidParameterException" => {
                     return RusotoError::Service(GetRepositoryPolicyError::InvalidParameter(
@@ -2515,6 +2533,7 @@ pub enum InitiateLayerUploadError {
 impl InitiateLayerUploadError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<InitiateLayerUploadError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidParameterException" => {
                     return RusotoError::Service(InitiateLayerUploadError::InvalidParameter(
@@ -2565,6 +2584,7 @@ pub enum ListImagesError {
 impl ListImagesError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListImagesError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidParameterException" => {
                     return RusotoError::Service(ListImagesError::InvalidParameter(err.msg))
@@ -2605,6 +2625,7 @@ pub enum ListTagsForResourceError {
 impl ListTagsForResourceError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListTagsForResourceError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidParameterException" => {
                     return RusotoError::Service(ListTagsForResourceError::InvalidParameter(
@@ -2665,6 +2686,7 @@ pub enum PutImageError {
 impl PutImageError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<PutImageError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ImageAlreadyExistsException" => {
                     return RusotoError::Service(PutImageError::ImageAlreadyExists(err.msg))
@@ -2733,6 +2755,7 @@ impl PutImageScanningConfigurationError {
         res: BufferedHttpResponse,
     ) -> RusotoError<PutImageScanningConfigurationError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidParameterException" => {
                     return RusotoError::Service(
@@ -2785,6 +2808,7 @@ pub enum PutImageTagMutabilityError {
 impl PutImageTagMutabilityError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<PutImageTagMutabilityError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidParameterException" => {
                     return RusotoError::Service(PutImageTagMutabilityError::InvalidParameter(
@@ -2831,6 +2855,7 @@ pub enum PutLifecyclePolicyError {
 impl PutLifecyclePolicyError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<PutLifecyclePolicyError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidParameterException" => {
                     return RusotoError::Service(PutLifecyclePolicyError::InvalidParameter(err.msg))
@@ -2873,6 +2898,7 @@ pub enum PutRegistryPolicyError {
 impl PutRegistryPolicyError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<PutRegistryPolicyError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidParameterException" => {
                     return RusotoError::Service(PutRegistryPolicyError::InvalidParameter(err.msg))
@@ -2911,6 +2937,7 @@ impl PutReplicationConfigurationError {
         res: BufferedHttpResponse,
     ) -> RusotoError<PutReplicationConfigurationError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidParameterException" => {
                     return RusotoError::Service(
@@ -2951,6 +2978,7 @@ pub enum SetRepositoryPolicyError {
 impl SetRepositoryPolicyError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<SetRepositoryPolicyError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidParameterException" => {
                     return RusotoError::Service(SetRepositoryPolicyError::InvalidParameter(
@@ -3003,6 +3031,7 @@ pub enum StartImageScanError {
 impl StartImageScanError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<StartImageScanError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ImageNotFoundException" => {
                     return RusotoError::Service(StartImageScanError::ImageNotFound(err.msg))
@@ -3063,6 +3092,7 @@ impl StartLifecyclePolicyPreviewError {
         res: BufferedHttpResponse,
     ) -> RusotoError<StartLifecyclePolicyPreviewError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidParameterException" => {
                     return RusotoError::Service(
@@ -3131,6 +3161,7 @@ pub enum TagResourceError {
 impl TagResourceError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<TagResourceError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidParameterException" => {
                     return RusotoError::Service(TagResourceError::InvalidParameter(err.msg))
@@ -3185,6 +3216,7 @@ pub enum UntagResourceError {
 impl UntagResourceError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UntagResourceError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidParameterException" => {
                     return RusotoError::Service(UntagResourceError::InvalidParameter(err.msg))
@@ -3243,6 +3275,7 @@ pub enum UploadLayerPartError {
 impl UploadLayerPartError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UploadLayerPartError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidLayerPartException" => {
                     return RusotoError::Service(UploadLayerPartError::InvalidLayerPart(err.msg))

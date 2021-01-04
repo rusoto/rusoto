@@ -24,7 +24,6 @@ use rusoto_core::proto;
 use rusoto_core::signature::SignedRequest;
 #[allow(unused_imports)]
 use serde::{Deserialize, Serialize};
-use serde_json;
 /// <p>A nested application summary.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
@@ -1055,6 +1054,7 @@ pub enum CreateApplicationError {
 impl CreateApplicationError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateApplicationError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(CreateApplicationError::BadRequest(err.msg))
@@ -1111,6 +1111,7 @@ pub enum CreateApplicationVersionError {
 impl CreateApplicationVersionError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateApplicationVersionError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(CreateApplicationVersionError::BadRequest(err.msg))
@@ -1169,6 +1170,7 @@ impl CreateCloudFormationChangeSetError {
         res: BufferedHttpResponse,
     ) -> RusotoError<CreateCloudFormationChangeSetError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(CreateCloudFormationChangeSetError::BadRequest(
@@ -1233,6 +1235,7 @@ impl CreateCloudFormationTemplateError {
         res: BufferedHttpResponse,
     ) -> RusotoError<CreateCloudFormationTemplateError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(CreateCloudFormationTemplateError::BadRequest(
@@ -1301,6 +1304,7 @@ pub enum DeleteApplicationError {
 impl DeleteApplicationError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteApplicationError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(DeleteApplicationError::BadRequest(err.msg))
@@ -1361,6 +1365,7 @@ pub enum GetApplicationError {
 impl GetApplicationError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetApplicationError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(GetApplicationError::BadRequest(err.msg))
@@ -1415,6 +1420,7 @@ pub enum GetApplicationPolicyError {
 impl GetApplicationPolicyError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetApplicationPolicyError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(GetApplicationPolicyError::BadRequest(err.msg))
@@ -1473,6 +1479,7 @@ pub enum GetCloudFormationTemplateError {
 impl GetCloudFormationTemplateError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetCloudFormationTemplateError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(GetCloudFormationTemplateError::BadRequest(
@@ -1537,6 +1544,7 @@ impl ListApplicationDependenciesError {
         res: BufferedHttpResponse,
     ) -> RusotoError<ListApplicationDependenciesError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(ListApplicationDependenciesError::BadRequest(
@@ -1603,6 +1611,7 @@ pub enum ListApplicationVersionsError {
 impl ListApplicationVersionsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListApplicationVersionsError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(ListApplicationVersionsError::BadRequest(err.msg))
@@ -1659,6 +1668,7 @@ pub enum ListApplicationsError {
 impl ListApplicationsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListApplicationsError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(ListApplicationsError::BadRequest(err.msg))
@@ -1711,6 +1721,7 @@ pub enum PutApplicationPolicyError {
 impl PutApplicationPolicyError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<PutApplicationPolicyError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(PutApplicationPolicyError::BadRequest(err.msg))
@@ -1769,6 +1780,7 @@ pub enum UnshareApplicationError {
 impl UnshareApplicationError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UnshareApplicationError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(UnshareApplicationError::BadRequest(err.msg))
@@ -1827,6 +1839,7 @@ pub enum UpdateApplicationError {
 impl UpdateApplicationError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateApplicationError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(UpdateApplicationError::BadRequest(err.msg))
@@ -2008,6 +2021,7 @@ impl ServerlessRepo for ServerlessRepoClient {
         &self,
         input: CreateApplicationRequest,
     ) -> Result<CreateApplicationResponse, RusotoError<CreateApplicationError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/applications";
 
         let mut request = SignedRequest::new("POST", "serverlessrepo", &self.region, &request_uri);
@@ -2039,6 +2053,7 @@ impl ServerlessRepo for ServerlessRepoClient {
         &self,
         input: CreateApplicationVersionRequest,
     ) -> Result<CreateApplicationVersionResponse, RusotoError<CreateApplicationVersionError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/applications/{application_id}/versions/{semantic_version}",
             application_id = input.application_id,
@@ -2077,6 +2092,7 @@ impl ServerlessRepo for ServerlessRepoClient {
         CreateCloudFormationChangeSetResponse,
         RusotoError<CreateCloudFormationChangeSetError>,
     > {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/applications/{application_id}/changesets",
             application_id = input.application_id
@@ -2112,6 +2128,7 @@ impl ServerlessRepo for ServerlessRepoClient {
         input: CreateCloudFormationTemplateRequest,
     ) -> Result<CreateCloudFormationTemplateResponse, RusotoError<CreateCloudFormationTemplateError>>
     {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/applications/{application_id}/templates",
             application_id = input.application_id
@@ -2146,6 +2163,7 @@ impl ServerlessRepo for ServerlessRepoClient {
         &self,
         input: DeleteApplicationRequest,
     ) -> Result<(), RusotoError<DeleteApplicationError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/applications/{application_id}",
             application_id = input.application_id
@@ -2162,9 +2180,9 @@ impl ServerlessRepo for ServerlessRepoClient {
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 204 {
             let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = ::std::mem::drop(response);
+            let _result = ::std::mem::drop(response);
 
-            Ok(result)
+            Ok(())
         } else {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             Err(DeleteApplicationError::from_response(response))
@@ -2177,6 +2195,7 @@ impl ServerlessRepo for ServerlessRepoClient {
         &self,
         input: GetApplicationRequest,
     ) -> Result<GetApplicationResponse, RusotoError<GetApplicationError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/applications/{application_id}",
             application_id = input.application_id
@@ -2214,6 +2233,7 @@ impl ServerlessRepo for ServerlessRepoClient {
         &self,
         input: GetApplicationPolicyRequest,
     ) -> Result<GetApplicationPolicyResponse, RusotoError<GetApplicationPolicyError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/applications/{application_id}/policy",
             application_id = input.application_id
@@ -2246,6 +2266,7 @@ impl ServerlessRepo for ServerlessRepoClient {
         input: GetCloudFormationTemplateRequest,
     ) -> Result<GetCloudFormationTemplateResponse, RusotoError<GetCloudFormationTemplateError>>
     {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/applications/{application_id}/templates/{template_id}",
             application_id = input.application_id,
@@ -2279,6 +2300,7 @@ impl ServerlessRepo for ServerlessRepoClient {
         input: ListApplicationDependenciesRequest,
     ) -> Result<ListApplicationDependenciesResponse, RusotoError<ListApplicationDependenciesError>>
     {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/applications/{application_id}/dependencies",
             application_id = input.application_id
@@ -2322,6 +2344,7 @@ impl ServerlessRepo for ServerlessRepoClient {
         &self,
         input: ListApplicationVersionsRequest,
     ) -> Result<ListApplicationVersionsResponse, RusotoError<ListApplicationVersionsError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/applications/{application_id}/versions",
             application_id = input.application_id
@@ -2362,6 +2385,7 @@ impl ServerlessRepo for ServerlessRepoClient {
         &self,
         input: ListApplicationsRequest,
     ) -> Result<ListApplicationsResponse, RusotoError<ListApplicationsError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/applications";
 
         let mut request = SignedRequest::new("GET", "serverlessrepo", &self.region, &request_uri);
@@ -2402,6 +2426,7 @@ impl ServerlessRepo for ServerlessRepoClient {
         &self,
         input: PutApplicationPolicyRequest,
     ) -> Result<PutApplicationPolicyResponse, RusotoError<PutApplicationPolicyError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/applications/{application_id}/policy",
             application_id = input.application_id
@@ -2436,6 +2461,7 @@ impl ServerlessRepo for ServerlessRepoClient {
         &self,
         input: UnshareApplicationRequest,
     ) -> Result<(), RusotoError<UnshareApplicationError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/applications/{application_id}/unshare",
             application_id = input.application_id
@@ -2454,9 +2480,9 @@ impl ServerlessRepo for ServerlessRepoClient {
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 204 {
             let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = ::std::mem::drop(response);
+            let _result = ::std::mem::drop(response);
 
-            Ok(result)
+            Ok(())
         } else {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             Err(UnshareApplicationError::from_response(response))
@@ -2469,6 +2495,7 @@ impl ServerlessRepo for ServerlessRepoClient {
         &self,
         input: UpdateApplicationRequest,
     ) -> Result<UpdateApplicationResponse, RusotoError<UpdateApplicationError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/applications/{application_id}",
             application_id = input.application_id

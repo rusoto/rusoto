@@ -49,7 +49,6 @@ impl ResourceGroupsTaggingApiClient {
     }
 }
 
-use serde_json;
 /// <p>Information that shows whether a resource is compliant with the effective tag policy, including details on any noncompliant tag keys.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
@@ -388,6 +387,7 @@ pub enum DescribeReportCreationError {
 impl DescribeReportCreationError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeReportCreationError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ConstraintViolationException" => {
                     return RusotoError::Service(DescribeReportCreationError::ConstraintViolation(
@@ -442,6 +442,7 @@ pub enum GetComplianceSummaryError {
 impl GetComplianceSummaryError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetComplianceSummaryError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ConstraintViolationException" => {
                     return RusotoError::Service(GetComplianceSummaryError::ConstraintViolation(
@@ -496,6 +497,7 @@ pub enum GetResourcesError {
 impl GetResourcesError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetResourcesError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalServiceException" => {
                     return RusotoError::Service(GetResourcesError::InternalService(err.msg))
@@ -544,6 +546,7 @@ pub enum GetTagKeysError {
 impl GetTagKeysError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetTagKeysError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalServiceException" => {
                     return RusotoError::Service(GetTagKeysError::InternalService(err.msg))
@@ -592,6 +595,7 @@ pub enum GetTagValuesError {
 impl GetTagValuesError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetTagValuesError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalServiceException" => {
                     return RusotoError::Service(GetTagValuesError::InternalService(err.msg))
@@ -642,6 +646,7 @@ pub enum StartReportCreationError {
 impl StartReportCreationError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<StartReportCreationError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ConcurrentModificationException" => {
                     return RusotoError::Service(StartReportCreationError::ConcurrentModification(
@@ -698,6 +703,7 @@ pub enum TagResourcesError {
 impl TagResourcesError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<TagResourcesError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalServiceException" => {
                     return RusotoError::Service(TagResourcesError::InternalService(err.msg))
@@ -740,6 +746,7 @@ pub enum UntagResourcesError {
 impl UntagResourcesError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UntagResourcesError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalServiceException" => {
                     return RusotoError::Service(UntagResourcesError::InternalService(err.msg))

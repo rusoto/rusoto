@@ -49,7 +49,6 @@ impl WorkmailClient {
     }
 }
 
-use serde_json;
 /// <p>A rule that controls access to an Amazon WorkMail organization.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
@@ -1664,6 +1663,7 @@ impl AssociateDelegateToResourceError {
         res: BufferedHttpResponse,
     ) -> RusotoError<AssociateDelegateToResourceError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "EntityNotFoundException" => {
                     return RusotoError::Service(AssociateDelegateToResourceError::EntityNotFound(
@@ -1738,6 +1738,7 @@ pub enum AssociateMemberToGroupError {
 impl AssociateMemberToGroupError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<AssociateMemberToGroupError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "DirectoryServiceAuthenticationFailedException" => {
                     return RusotoError::Service(
@@ -1818,6 +1819,7 @@ pub enum CancelMailboxExportJobError {
 impl CancelMailboxExportJobError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CancelMailboxExportJobError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "EntityNotFoundException" => {
                     return RusotoError::Service(CancelMailboxExportJobError::EntityNotFound(
@@ -1884,6 +1886,7 @@ pub enum CreateAliasError {
 impl CreateAliasError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateAliasError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "EmailAddressInUseException" => {
                     return RusotoError::Service(CreateAliasError::EmailAddressInUse(err.msg))
@@ -1960,6 +1963,7 @@ pub enum CreateGroupError {
 impl CreateGroupError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateGroupError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "DirectoryServiceAuthenticationFailedException" => {
                     return RusotoError::Service(
@@ -2030,6 +2034,7 @@ pub enum CreateOrganizationError {
 impl CreateOrganizationError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateOrganizationError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "DirectoryInUseException" => {
                     return RusotoError::Service(CreateOrganizationError::DirectoryInUse(err.msg))
@@ -2090,6 +2095,7 @@ pub enum CreateResourceError {
 impl CreateResourceError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateResourceError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "DirectoryServiceAuthenticationFailedException" => {
                     return RusotoError::Service(
@@ -2164,6 +2170,7 @@ pub enum CreateUserError {
 impl CreateUserError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateUserError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "DirectoryServiceAuthenticationFailedException" => {
                     return RusotoError::Service(
@@ -2232,6 +2239,7 @@ pub enum DeleteAccessControlRuleError {
 impl DeleteAccessControlRuleError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteAccessControlRuleError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "OrganizationNotFoundException" => {
                     return RusotoError::Service(
@@ -2278,6 +2286,7 @@ pub enum DeleteAliasError {
 impl DeleteAliasError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteAliasError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "EntityNotFoundException" => {
                     return RusotoError::Service(DeleteAliasError::EntityNotFound(err.msg))
@@ -2336,6 +2345,7 @@ pub enum DeleteGroupError {
 impl DeleteGroupError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteGroupError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "DirectoryServiceAuthenticationFailedException" => {
                     return RusotoError::Service(
@@ -2402,6 +2412,7 @@ pub enum DeleteMailboxPermissionsError {
 impl DeleteMailboxPermissionsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteMailboxPermissionsError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "EntityNotFoundException" => {
                     return RusotoError::Service(DeleteMailboxPermissionsError::EntityNotFound(
@@ -2464,6 +2475,7 @@ pub enum DeleteOrganizationError {
 impl DeleteOrganizationError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteOrganizationError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidParameterException" => {
                     return RusotoError::Service(DeleteOrganizationError::InvalidParameter(err.msg))
@@ -2512,6 +2524,7 @@ pub enum DeleteResourceError {
 impl DeleteResourceError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteResourceError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "EntityStateException" => {
                     return RusotoError::Service(DeleteResourceError::EntityState(err.msg))
@@ -2558,6 +2571,7 @@ pub enum DeleteRetentionPolicyError {
 impl DeleteRetentionPolicyError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteRetentionPolicyError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidParameterException" => {
                     return RusotoError::Service(DeleteRetentionPolicyError::InvalidParameter(
@@ -2614,6 +2628,7 @@ pub enum DeleteUserError {
 impl DeleteUserError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteUserError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "DirectoryServiceAuthenticationFailedException" => {
                     return RusotoError::Service(
@@ -2680,6 +2695,7 @@ pub enum DeregisterFromWorkMailError {
 impl DeregisterFromWorkMailError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeregisterFromWorkMailError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "EntityNotFoundException" => {
                     return RusotoError::Service(DeregisterFromWorkMailError::EntityNotFound(
@@ -2740,6 +2756,7 @@ pub enum DescribeGroupError {
 impl DescribeGroupError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeGroupError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "EntityNotFoundException" => {
                     return RusotoError::Service(DescribeGroupError::EntityNotFound(err.msg))
@@ -2788,6 +2805,7 @@ pub enum DescribeMailboxExportJobError {
 impl DescribeMailboxExportJobError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeMailboxExportJobError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "EntityNotFoundException" => {
                     return RusotoError::Service(DescribeMailboxExportJobError::EntityNotFound(
@@ -2842,6 +2860,7 @@ pub enum DescribeOrganizationError {
 impl DescribeOrganizationError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeOrganizationError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidParameterException" => {
                     return RusotoError::Service(DescribeOrganizationError::InvalidParameter(
@@ -2886,6 +2905,7 @@ pub enum DescribeResourceError {
 impl DescribeResourceError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeResourceError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "EntityNotFoundException" => {
                     return RusotoError::Service(DescribeResourceError::EntityNotFound(err.msg))
@@ -2936,6 +2956,7 @@ pub enum DescribeUserError {
 impl DescribeUserError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeUserError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "EntityNotFoundException" => {
                     return RusotoError::Service(DescribeUserError::EntityNotFound(err.msg))
@@ -2988,6 +3009,7 @@ impl DisassociateDelegateFromResourceError {
         res: BufferedHttpResponse,
     ) -> RusotoError<DisassociateDelegateFromResourceError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "EntityNotFoundException" => {
                     return RusotoError::Service(
@@ -3068,6 +3090,7 @@ impl DisassociateMemberFromGroupError {
         res: BufferedHttpResponse,
     ) -> RusotoError<DisassociateMemberFromGroupError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "DirectoryServiceAuthenticationFailedException" => {
                     return RusotoError::Service(
@@ -3160,6 +3183,7 @@ pub enum GetAccessControlEffectError {
 impl GetAccessControlEffectError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetAccessControlEffectError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "EntityNotFoundException" => {
                     return RusotoError::Service(GetAccessControlEffectError::EntityNotFound(
@@ -3216,6 +3240,7 @@ pub enum GetDefaultRetentionPolicyError {
 impl GetDefaultRetentionPolicyError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetDefaultRetentionPolicyError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "EntityNotFoundException" => {
                     return RusotoError::Service(GetDefaultRetentionPolicyError::EntityNotFound(
@@ -3272,6 +3297,7 @@ pub enum GetMailboxDetailsError {
 impl GetMailboxDetailsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetMailboxDetailsError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "EntityNotFoundException" => {
                     return RusotoError::Service(GetMailboxDetailsError::EntityNotFound(err.msg))
@@ -3314,6 +3340,7 @@ pub enum ListAccessControlRulesError {
 impl ListAccessControlRulesError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListAccessControlRulesError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "OrganizationNotFoundException" => {
                     return RusotoError::Service(ListAccessControlRulesError::OrganizationNotFound(
@@ -3360,6 +3387,7 @@ pub enum ListAliasesError {
 impl ListAliasesError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListAliasesError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "EntityNotFoundException" => {
                     return RusotoError::Service(ListAliasesError::EntityNotFound(err.msg))
@@ -3414,6 +3442,7 @@ pub enum ListGroupMembersError {
 impl ListGroupMembersError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListGroupMembersError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "EntityNotFoundException" => {
                     return RusotoError::Service(ListGroupMembersError::EntityNotFound(err.msg))
@@ -3468,6 +3497,7 @@ pub enum ListGroupsError {
 impl ListGroupsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListGroupsError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "EntityNotFoundException" => {
                     return RusotoError::Service(ListGroupsError::EntityNotFound(err.msg))
@@ -3514,6 +3544,7 @@ pub enum ListMailboxExportJobsError {
 impl ListMailboxExportJobsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListMailboxExportJobsError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidParameterException" => {
                     return RusotoError::Service(ListMailboxExportJobsError::InvalidParameter(
@@ -3564,6 +3595,7 @@ pub enum ListMailboxPermissionsError {
 impl ListMailboxPermissionsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListMailboxPermissionsError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "EntityNotFoundException" => {
                     return RusotoError::Service(ListMailboxPermissionsError::EntityNotFound(
@@ -3614,6 +3646,7 @@ pub enum ListOrganizationsError {
 impl ListOrganizationsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListOrganizationsError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidParameterException" => {
                     return RusotoError::Service(ListOrganizationsError::InvalidParameter(err.msg))
@@ -3652,6 +3685,7 @@ pub enum ListResourceDelegatesError {
 impl ListResourceDelegatesError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListResourceDelegatesError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "EntityNotFoundException" => {
                     return RusotoError::Service(ListResourceDelegatesError::EntityNotFound(
@@ -3710,6 +3744,7 @@ pub enum ListResourcesError {
 impl ListResourcesError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListResourcesError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidParameterException" => {
                     return RusotoError::Service(ListResourcesError::InvalidParameter(err.msg))
@@ -3748,6 +3783,7 @@ pub enum ListTagsForResourceError {
 impl ListTagsForResourceError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListTagsForResourceError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(ListTagsForResourceError::ResourceNotFound(
@@ -3784,6 +3820,7 @@ pub enum ListUsersError {
 impl ListUsersError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListUsersError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidParameterException" => {
                     return RusotoError::Service(ListUsersError::InvalidParameter(err.msg))
@@ -3830,6 +3867,7 @@ pub enum PutAccessControlRuleError {
 impl PutAccessControlRuleError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<PutAccessControlRuleError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "EntityNotFoundException" => {
                     return RusotoError::Service(PutAccessControlRuleError::EntityNotFound(err.msg))
@@ -3890,6 +3928,7 @@ pub enum PutMailboxPermissionsError {
 impl PutMailboxPermissionsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<PutMailboxPermissionsError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "EntityNotFoundException" => {
                     return RusotoError::Service(PutMailboxPermissionsError::EntityNotFound(
@@ -3950,6 +3989,7 @@ pub enum PutRetentionPolicyError {
 impl PutRetentionPolicyError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<PutRetentionPolicyError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidParameterException" => {
                     return RusotoError::Service(PutRetentionPolicyError::InvalidParameter(err.msg))
@@ -4016,6 +4056,7 @@ pub enum RegisterToWorkMailError {
 impl RegisterToWorkMailError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<RegisterToWorkMailError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "DirectoryServiceAuthenticationFailedException" => {
                     return RusotoError::Service(
@@ -4118,6 +4159,7 @@ pub enum ResetPasswordError {
 impl ResetPasswordError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ResetPasswordError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "DirectoryServiceAuthenticationFailedException" => {
                     return RusotoError::Service(
@@ -4192,6 +4234,7 @@ pub enum StartMailboxExportJobError {
 impl StartMailboxExportJobError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<StartMailboxExportJobError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "EntityNotFoundException" => {
                     return RusotoError::Service(StartMailboxExportJobError::EntityNotFound(
@@ -4250,6 +4293,7 @@ pub enum TagResourceError {
 impl TagResourceError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<TagResourceError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "OrganizationStateException" => {
                     return RusotoError::Service(TagResourceError::OrganizationState(err.msg))
@@ -4288,6 +4332,7 @@ pub enum UntagResourceError {
 impl UntagResourceError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UntagResourceError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(UntagResourceError::ResourceNotFound(err.msg))
@@ -4326,6 +4371,7 @@ pub enum UpdateMailboxQuotaError {
 impl UpdateMailboxQuotaError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateMailboxQuotaError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "EntityNotFoundException" => {
                     return RusotoError::Service(UpdateMailboxQuotaError::EntityNotFound(err.msg))
@@ -4396,6 +4442,7 @@ pub enum UpdatePrimaryEmailAddressError {
 impl UpdatePrimaryEmailAddressError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdatePrimaryEmailAddressError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "DirectoryServiceAuthenticationFailedException" => {
                     return RusotoError::Service(
@@ -4516,6 +4563,7 @@ pub enum UpdateResourceError {
 impl UpdateResourceError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateResourceError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "DirectoryUnavailableException" => {
                     return RusotoError::Service(UpdateResourceError::DirectoryUnavailable(err.msg))

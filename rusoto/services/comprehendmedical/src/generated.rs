@@ -50,7 +50,6 @@ impl ComprehendMedicalClient {
     }
 }
 
-use serde_json;
 /// <p> An extracted segment of the text that is an attribute of an entity, or otherwise related to an entity, such as the dosage of a medication taken. It contains information about the attribute such as id, begin and end offset within the input text, and the segment of the input text. </p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
@@ -1062,6 +1061,7 @@ impl DescribeEntitiesDetectionV2JobError {
         res: BufferedHttpResponse,
     ) -> RusotoError<DescribeEntitiesDetectionV2JobError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalServerException" => {
                     return RusotoError::Service(
@@ -1128,6 +1128,7 @@ impl DescribeICD10CMInferenceJobError {
         res: BufferedHttpResponse,
     ) -> RusotoError<DescribeICD10CMInferenceJobError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalServerException" => {
                     return RusotoError::Service(DescribeICD10CMInferenceJobError::InternalServer(
@@ -1184,6 +1185,7 @@ pub enum DescribePHIDetectionJobError {
 impl DescribePHIDetectionJobError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribePHIDetectionJobError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalServerException" => {
                     return RusotoError::Service(DescribePHIDetectionJobError::InternalServer(
@@ -1242,6 +1244,7 @@ impl DescribeRxNormInferenceJobError {
         res: BufferedHttpResponse,
     ) -> RusotoError<DescribeRxNormInferenceJobError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalServerException" => {
                     return RusotoError::Service(DescribeRxNormInferenceJobError::InternalServer(
@@ -1302,6 +1305,7 @@ pub enum DetectEntitiesError {
 impl DetectEntitiesError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DetectEntitiesError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalServerException" => {
                     return RusotoError::Service(DetectEntitiesError::InternalServer(err.msg))
@@ -1364,6 +1368,7 @@ pub enum DetectEntitiesV2Error {
 impl DetectEntitiesV2Error {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DetectEntitiesV2Error> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalServerException" => {
                     return RusotoError::Service(DetectEntitiesV2Error::InternalServer(err.msg))
@@ -1426,6 +1431,7 @@ pub enum DetectPHIError {
 impl DetectPHIError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DetectPHIError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalServerException" => {
                     return RusotoError::Service(DetectPHIError::InternalServer(err.msg))
@@ -1486,6 +1492,7 @@ pub enum InferICD10CMError {
 impl InferICD10CMError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<InferICD10CMError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalServerException" => {
                     return RusotoError::Service(InferICD10CMError::InternalServer(err.msg))
@@ -1546,6 +1553,7 @@ pub enum InferRxNormError {
 impl InferRxNormError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<InferRxNormError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalServerException" => {
                     return RusotoError::Service(InferRxNormError::InternalServer(err.msg))
@@ -1602,6 +1610,7 @@ impl ListEntitiesDetectionV2JobsError {
         res: BufferedHttpResponse,
     ) -> RusotoError<ListEntitiesDetectionV2JobsError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalServerException" => {
                     return RusotoError::Service(ListEntitiesDetectionV2JobsError::InternalServer(
@@ -1650,6 +1659,7 @@ pub enum ListICD10CMInferenceJobsError {
 impl ListICD10CMInferenceJobsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListICD10CMInferenceJobsError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalServerException" => {
                     return RusotoError::Service(ListICD10CMInferenceJobsError::InternalServer(
@@ -1698,6 +1708,7 @@ pub enum ListPHIDetectionJobsError {
 impl ListPHIDetectionJobsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListPHIDetectionJobsError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalServerException" => {
                     return RusotoError::Service(ListPHIDetectionJobsError::InternalServer(err.msg))
@@ -1742,6 +1753,7 @@ pub enum ListRxNormInferenceJobsError {
 impl ListRxNormInferenceJobsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListRxNormInferenceJobsError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalServerException" => {
                     return RusotoError::Service(ListRxNormInferenceJobsError::InternalServer(
@@ -1794,6 +1806,7 @@ impl StartEntitiesDetectionV2JobError {
         res: BufferedHttpResponse,
     ) -> RusotoError<StartEntitiesDetectionV2JobError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalServerException" => {
                     return RusotoError::Service(StartEntitiesDetectionV2JobError::InternalServer(
@@ -1850,6 +1863,7 @@ pub enum StartICD10CMInferenceJobError {
 impl StartICD10CMInferenceJobError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<StartICD10CMInferenceJobError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalServerException" => {
                     return RusotoError::Service(StartICD10CMInferenceJobError::InternalServer(
@@ -1906,6 +1920,7 @@ pub enum StartPHIDetectionJobError {
 impl StartPHIDetectionJobError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<StartPHIDetectionJobError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalServerException" => {
                     return RusotoError::Service(StartPHIDetectionJobError::InternalServer(err.msg))
@@ -1958,6 +1973,7 @@ pub enum StartRxNormInferenceJobError {
 impl StartRxNormInferenceJobError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<StartRxNormInferenceJobError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalServerException" => {
                     return RusotoError::Service(StartRxNormInferenceJobError::InternalServer(
@@ -2014,6 +2030,7 @@ impl StopEntitiesDetectionV2JobError {
         res: BufferedHttpResponse,
     ) -> RusotoError<StopEntitiesDetectionV2JobError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalServerException" => {
                     return RusotoError::Service(StopEntitiesDetectionV2JobError::InternalServer(
@@ -2062,6 +2079,7 @@ pub enum StopICD10CMInferenceJobError {
 impl StopICD10CMInferenceJobError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<StopICD10CMInferenceJobError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalServerException" => {
                     return RusotoError::Service(StopICD10CMInferenceJobError::InternalServer(
@@ -2110,6 +2128,7 @@ pub enum StopPHIDetectionJobError {
 impl StopPHIDetectionJobError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<StopPHIDetectionJobError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalServerException" => {
                     return RusotoError::Service(StopPHIDetectionJobError::InternalServer(err.msg))
@@ -2154,6 +2173,7 @@ pub enum StopRxNormInferenceJobError {
 impl StopRxNormInferenceJobError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<StopRxNormInferenceJobError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalServerException" => {
                     return RusotoError::Service(StopRxNormInferenceJobError::InternalServer(

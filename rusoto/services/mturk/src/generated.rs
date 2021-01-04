@@ -50,7 +50,6 @@ impl MechanicalTurkClient {
     }
 }
 
-use serde_json;
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct AcceptQualificationRequestRequest {
@@ -1615,6 +1614,7 @@ impl AcceptQualificationRequestError {
         res: BufferedHttpResponse,
     ) -> RusotoError<AcceptQualificationRequestError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "RequestError" => {
                     return RusotoError::Service(AcceptQualificationRequestError::RequestError(
@@ -1655,6 +1655,7 @@ pub enum ApproveAssignmentError {
 impl ApproveAssignmentError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ApproveAssignmentError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "RequestError" => {
                     return RusotoError::Service(ApproveAssignmentError::RequestError(err.msg))
@@ -1693,6 +1694,7 @@ impl AssociateQualificationWithWorkerError {
         res: BufferedHttpResponse,
     ) -> RusotoError<AssociateQualificationWithWorkerError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "RequestError" => {
                     return RusotoError::Service(
@@ -1739,6 +1741,7 @@ impl CreateAdditionalAssignmentsForHITError {
         res: BufferedHttpResponse,
     ) -> RusotoError<CreateAdditionalAssignmentsForHITError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "RequestError" => {
                     return RusotoError::Service(
@@ -1783,6 +1786,7 @@ pub enum CreateHITError {
 impl CreateHITError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateHITError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "RequestError" => {
                     return RusotoError::Service(CreateHITError::RequestError(err.msg))
@@ -1819,6 +1823,7 @@ pub enum CreateHITTypeError {
 impl CreateHITTypeError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateHITTypeError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "RequestError" => {
                     return RusotoError::Service(CreateHITTypeError::RequestError(err.msg))
@@ -1855,6 +1860,7 @@ pub enum CreateHITWithHITTypeError {
 impl CreateHITWithHITTypeError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateHITWithHITTypeError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "RequestError" => {
                     return RusotoError::Service(CreateHITWithHITTypeError::RequestError(err.msg))
@@ -1891,6 +1897,7 @@ pub enum CreateQualificationTypeError {
 impl CreateQualificationTypeError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateQualificationTypeError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "RequestError" => {
                     return RusotoError::Service(CreateQualificationTypeError::RequestError(
@@ -1931,6 +1938,7 @@ pub enum CreateWorkerBlockError {
 impl CreateWorkerBlockError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateWorkerBlockError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "RequestError" => {
                     return RusotoError::Service(CreateWorkerBlockError::RequestError(err.msg))
@@ -1967,6 +1975,7 @@ pub enum DeleteHITError {
 impl DeleteHITError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteHITError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "RequestError" => {
                     return RusotoError::Service(DeleteHITError::RequestError(err.msg))
@@ -2003,6 +2012,7 @@ pub enum DeleteQualificationTypeError {
 impl DeleteQualificationTypeError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteQualificationTypeError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "RequestError" => {
                     return RusotoError::Service(DeleteQualificationTypeError::RequestError(
@@ -2043,6 +2053,7 @@ pub enum DeleteWorkerBlockError {
 impl DeleteWorkerBlockError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteWorkerBlockError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "RequestError" => {
                     return RusotoError::Service(DeleteWorkerBlockError::RequestError(err.msg))
@@ -2081,6 +2092,7 @@ impl DisassociateQualificationFromWorkerError {
         res: BufferedHttpResponse,
     ) -> RusotoError<DisassociateQualificationFromWorkerError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "RequestError" => {
                     return RusotoError::Service(
@@ -2125,6 +2137,7 @@ pub enum GetAccountBalanceError {
 impl GetAccountBalanceError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetAccountBalanceError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "RequestError" => {
                     return RusotoError::Service(GetAccountBalanceError::RequestError(err.msg))
@@ -2161,6 +2174,7 @@ pub enum GetAssignmentError {
 impl GetAssignmentError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetAssignmentError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "RequestError" => {
                     return RusotoError::Service(GetAssignmentError::RequestError(err.msg))
@@ -2197,6 +2211,7 @@ pub enum GetFileUploadURLError {
 impl GetFileUploadURLError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetFileUploadURLError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "RequestError" => {
                     return RusotoError::Service(GetFileUploadURLError::RequestError(err.msg))
@@ -2233,6 +2248,7 @@ pub enum GetHITError {
 impl GetHITError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetHITError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "RequestError" => return RusotoError::Service(GetHITError::RequestError(err.msg)),
                 "ServiceFault" => return RusotoError::Service(GetHITError::ServiceFault(err.msg)),
@@ -2265,6 +2281,7 @@ pub enum GetQualificationScoreError {
 impl GetQualificationScoreError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetQualificationScoreError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "RequestError" => {
                     return RusotoError::Service(GetQualificationScoreError::RequestError(err.msg))
@@ -2301,6 +2318,7 @@ pub enum GetQualificationTypeError {
 impl GetQualificationTypeError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetQualificationTypeError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "RequestError" => {
                     return RusotoError::Service(GetQualificationTypeError::RequestError(err.msg))
@@ -2337,6 +2355,7 @@ pub enum ListAssignmentsForHITError {
 impl ListAssignmentsForHITError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListAssignmentsForHITError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "RequestError" => {
                     return RusotoError::Service(ListAssignmentsForHITError::RequestError(err.msg))
@@ -2373,6 +2392,7 @@ pub enum ListBonusPaymentsError {
 impl ListBonusPaymentsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListBonusPaymentsError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "RequestError" => {
                     return RusotoError::Service(ListBonusPaymentsError::RequestError(err.msg))
@@ -2409,6 +2429,7 @@ pub enum ListHITsError {
 impl ListHITsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListHITsError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "RequestError" => {
                     return RusotoError::Service(ListHITsError::RequestError(err.msg))
@@ -2447,6 +2468,7 @@ impl ListHITsForQualificationTypeError {
         res: BufferedHttpResponse,
     ) -> RusotoError<ListHITsForQualificationTypeError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "RequestError" => {
                     return RusotoError::Service(ListHITsForQualificationTypeError::RequestError(
@@ -2487,6 +2509,7 @@ pub enum ListQualificationRequestsError {
 impl ListQualificationRequestsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListQualificationRequestsError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "RequestError" => {
                     return RusotoError::Service(ListQualificationRequestsError::RequestError(
@@ -2527,6 +2550,7 @@ pub enum ListQualificationTypesError {
 impl ListQualificationTypesError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListQualificationTypesError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "RequestError" => {
                     return RusotoError::Service(ListQualificationTypesError::RequestError(err.msg))
@@ -2565,6 +2589,7 @@ impl ListReviewPolicyResultsForHITError {
         res: BufferedHttpResponse,
     ) -> RusotoError<ListReviewPolicyResultsForHITError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "RequestError" => {
                     return RusotoError::Service(ListReviewPolicyResultsForHITError::RequestError(
@@ -2605,6 +2630,7 @@ pub enum ListReviewableHITsError {
 impl ListReviewableHITsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListReviewableHITsError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "RequestError" => {
                     return RusotoError::Service(ListReviewableHITsError::RequestError(err.msg))
@@ -2641,6 +2667,7 @@ pub enum ListWorkerBlocksError {
 impl ListWorkerBlocksError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListWorkerBlocksError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "RequestError" => {
                     return RusotoError::Service(ListWorkerBlocksError::RequestError(err.msg))
@@ -2679,6 +2706,7 @@ impl ListWorkersWithQualificationTypeError {
         res: BufferedHttpResponse,
     ) -> RusotoError<ListWorkersWithQualificationTypeError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "RequestError" => {
                     return RusotoError::Service(
@@ -2723,6 +2751,7 @@ pub enum NotifyWorkersError {
 impl NotifyWorkersError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<NotifyWorkersError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "RequestError" => {
                     return RusotoError::Service(NotifyWorkersError::RequestError(err.msg))
@@ -2759,6 +2788,7 @@ pub enum RejectAssignmentError {
 impl RejectAssignmentError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<RejectAssignmentError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "RequestError" => {
                     return RusotoError::Service(RejectAssignmentError::RequestError(err.msg))
@@ -2797,6 +2827,7 @@ impl RejectQualificationRequestError {
         res: BufferedHttpResponse,
     ) -> RusotoError<RejectQualificationRequestError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "RequestError" => {
                     return RusotoError::Service(RejectQualificationRequestError::RequestError(
@@ -2837,6 +2868,7 @@ pub enum SendBonusError {
 impl SendBonusError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<SendBonusError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "RequestError" => {
                     return RusotoError::Service(SendBonusError::RequestError(err.msg))
@@ -2873,6 +2905,7 @@ pub enum SendTestEventNotificationError {
 impl SendTestEventNotificationError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<SendTestEventNotificationError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "RequestError" => {
                     return RusotoError::Service(SendTestEventNotificationError::RequestError(
@@ -2913,6 +2946,7 @@ pub enum UpdateExpirationForHITError {
 impl UpdateExpirationForHITError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateExpirationForHITError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "RequestError" => {
                     return RusotoError::Service(UpdateExpirationForHITError::RequestError(err.msg))
@@ -2949,6 +2983,7 @@ pub enum UpdateHITReviewStatusError {
 impl UpdateHITReviewStatusError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateHITReviewStatusError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "RequestError" => {
                     return RusotoError::Service(UpdateHITReviewStatusError::RequestError(err.msg))
@@ -2985,6 +3020,7 @@ pub enum UpdateHITTypeOfHITError {
 impl UpdateHITTypeOfHITError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateHITTypeOfHITError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "RequestError" => {
                     return RusotoError::Service(UpdateHITTypeOfHITError::RequestError(err.msg))
@@ -3023,6 +3059,7 @@ impl UpdateNotificationSettingsError {
         res: BufferedHttpResponse,
     ) -> RusotoError<UpdateNotificationSettingsError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "RequestError" => {
                     return RusotoError::Service(UpdateNotificationSettingsError::RequestError(
@@ -3063,6 +3100,7 @@ pub enum UpdateQualificationTypeError {
 impl UpdateQualificationTypeError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateQualificationTypeError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "RequestError" => {
                     return RusotoError::Service(UpdateQualificationTypeError::RequestError(

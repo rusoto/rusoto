@@ -50,7 +50,6 @@ impl IotThingsGraphClient {
     }
 }
 
-use serde_json;
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct AssociateEntityToThingRequest {
@@ -1246,6 +1245,7 @@ pub enum AssociateEntityToThingError {
 impl AssociateEntityToThingError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<AssociateEntityToThingError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalFailureException" => {
                     return RusotoError::Service(AssociateEntityToThingError::InternalFailure(
@@ -1302,6 +1302,7 @@ pub enum CreateFlowTemplateError {
 impl CreateFlowTemplateError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateFlowTemplateError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalFailureException" => {
                     return RusotoError::Service(CreateFlowTemplateError::InternalFailure(err.msg))
@@ -1358,6 +1359,7 @@ pub enum CreateSystemInstanceError {
 impl CreateSystemInstanceError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateSystemInstanceError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalFailureException" => {
                     return RusotoError::Service(CreateSystemInstanceError::InternalFailure(
@@ -1414,6 +1416,7 @@ pub enum CreateSystemTemplateError {
 impl CreateSystemTemplateError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateSystemTemplateError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalFailureException" => {
                     return RusotoError::Service(CreateSystemTemplateError::InternalFailure(
@@ -1466,6 +1469,7 @@ pub enum DeleteFlowTemplateError {
 impl DeleteFlowTemplateError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteFlowTemplateError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalFailureException" => {
                     return RusotoError::Service(DeleteFlowTemplateError::InternalFailure(err.msg))
@@ -1510,6 +1514,7 @@ pub enum DeleteNamespaceError {
 impl DeleteNamespaceError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteNamespaceError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalFailureException" => {
                     return RusotoError::Service(DeleteNamespaceError::InternalFailure(err.msg))
@@ -1550,6 +1555,7 @@ pub enum DeleteSystemInstanceError {
 impl DeleteSystemInstanceError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteSystemInstanceError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalFailureException" => {
                     return RusotoError::Service(DeleteSystemInstanceError::InternalFailure(
@@ -1600,6 +1606,7 @@ pub enum DeleteSystemTemplateError {
 impl DeleteSystemTemplateError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteSystemTemplateError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalFailureException" => {
                     return RusotoError::Service(DeleteSystemTemplateError::InternalFailure(
@@ -1652,6 +1659,7 @@ pub enum DeploySystemInstanceError {
 impl DeploySystemInstanceError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeploySystemInstanceError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalFailureException" => {
                     return RusotoError::Service(DeploySystemInstanceError::InternalFailure(
@@ -1708,6 +1716,7 @@ pub enum DeprecateFlowTemplateError {
 impl DeprecateFlowTemplateError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeprecateFlowTemplateError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalFailureException" => {
                     return RusotoError::Service(DeprecateFlowTemplateError::InternalFailure(
@@ -1762,6 +1771,7 @@ pub enum DeprecateSystemTemplateError {
 impl DeprecateSystemTemplateError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeprecateSystemTemplateError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalFailureException" => {
                     return RusotoError::Service(DeprecateSystemTemplateError::InternalFailure(
@@ -1816,6 +1826,7 @@ pub enum DescribeNamespaceError {
 impl DescribeNamespaceError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeNamespaceError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalFailureException" => {
                     return RusotoError::Service(DescribeNamespaceError::InternalFailure(err.msg))
@@ -1864,6 +1875,7 @@ pub enum DissociateEntityFromThingError {
 impl DissociateEntityFromThingError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DissociateEntityFromThingError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalFailureException" => {
                     return RusotoError::Service(DissociateEntityFromThingError::InternalFailure(
@@ -1920,6 +1932,7 @@ pub enum GetEntitiesError {
 impl GetEntitiesError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetEntitiesError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalFailureException" => {
                     return RusotoError::Service(GetEntitiesError::InternalFailure(err.msg))
@@ -1968,6 +1981,7 @@ pub enum GetFlowTemplateError {
 impl GetFlowTemplateError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetFlowTemplateError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalFailureException" => {
                     return RusotoError::Service(GetFlowTemplateError::InternalFailure(err.msg))
@@ -2016,6 +2030,7 @@ pub enum GetFlowTemplateRevisionsError {
 impl GetFlowTemplateRevisionsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetFlowTemplateRevisionsError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalFailureException" => {
                     return RusotoError::Service(GetFlowTemplateRevisionsError::InternalFailure(
@@ -2070,6 +2085,7 @@ impl GetNamespaceDeletionStatusError {
         res: BufferedHttpResponse,
     ) -> RusotoError<GetNamespaceDeletionStatusError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalFailureException" => {
                     return RusotoError::Service(GetNamespaceDeletionStatusError::InternalFailure(
@@ -2120,6 +2136,7 @@ pub enum GetSystemInstanceError {
 impl GetSystemInstanceError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetSystemInstanceError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalFailureException" => {
                     return RusotoError::Service(GetSystemInstanceError::InternalFailure(err.msg))
@@ -2168,6 +2185,7 @@ pub enum GetSystemTemplateError {
 impl GetSystemTemplateError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetSystemTemplateError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalFailureException" => {
                     return RusotoError::Service(GetSystemTemplateError::InternalFailure(err.msg))
@@ -2218,6 +2236,7 @@ impl GetSystemTemplateRevisionsError {
         res: BufferedHttpResponse,
     ) -> RusotoError<GetSystemTemplateRevisionsError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalFailureException" => {
                     return RusotoError::Service(GetSystemTemplateRevisionsError::InternalFailure(
@@ -2274,6 +2293,7 @@ pub enum GetUploadStatusError {
 impl GetUploadStatusError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetUploadStatusError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalFailureException" => {
                     return RusotoError::Service(GetUploadStatusError::InternalFailure(err.msg))
@@ -2322,6 +2342,7 @@ pub enum ListFlowExecutionMessagesError {
 impl ListFlowExecutionMessagesError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListFlowExecutionMessagesError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalFailureException" => {
                     return RusotoError::Service(ListFlowExecutionMessagesError::InternalFailure(
@@ -2378,6 +2399,7 @@ pub enum ListTagsForResourceError {
 impl ListTagsForResourceError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListTagsForResourceError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalFailureException" => {
                     return RusotoError::Service(ListTagsForResourceError::InternalFailure(err.msg))
@@ -2426,6 +2448,7 @@ pub enum SearchEntitiesError {
 impl SearchEntitiesError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<SearchEntitiesError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalFailureException" => {
                     return RusotoError::Service(SearchEntitiesError::InternalFailure(err.msg))
@@ -2470,6 +2493,7 @@ pub enum SearchFlowExecutionsError {
 impl SearchFlowExecutionsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<SearchFlowExecutionsError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalFailureException" => {
                     return RusotoError::Service(SearchFlowExecutionsError::InternalFailure(
@@ -2520,6 +2544,7 @@ pub enum SearchFlowTemplatesError {
 impl SearchFlowTemplatesError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<SearchFlowTemplatesError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalFailureException" => {
                     return RusotoError::Service(SearchFlowTemplatesError::InternalFailure(err.msg))
@@ -2562,6 +2587,7 @@ pub enum SearchSystemInstancesError {
 impl SearchSystemInstancesError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<SearchSystemInstancesError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalFailureException" => {
                     return RusotoError::Service(SearchSystemInstancesError::InternalFailure(
@@ -2608,6 +2634,7 @@ pub enum SearchSystemTemplatesError {
 impl SearchSystemTemplatesError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<SearchSystemTemplatesError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalFailureException" => {
                     return RusotoError::Service(SearchSystemTemplatesError::InternalFailure(
@@ -2656,6 +2683,7 @@ pub enum SearchThingsError {
 impl SearchThingsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<SearchThingsError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalFailureException" => {
                     return RusotoError::Service(SearchThingsError::InternalFailure(err.msg))
@@ -2704,6 +2732,7 @@ pub enum TagResourceError {
 impl TagResourceError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<TagResourceError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalFailureException" => {
                     return RusotoError::Service(TagResourceError::InternalFailure(err.msg))
@@ -2754,6 +2783,7 @@ pub enum UndeploySystemInstanceError {
 impl UndeploySystemInstanceError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UndeploySystemInstanceError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalFailureException" => {
                     return RusotoError::Service(UndeploySystemInstanceError::InternalFailure(
@@ -2814,6 +2844,7 @@ pub enum UntagResourceError {
 impl UntagResourceError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UntagResourceError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalFailureException" => {
                     return RusotoError::Service(UntagResourceError::InternalFailure(err.msg))
@@ -2862,6 +2893,7 @@ pub enum UpdateFlowTemplateError {
 impl UpdateFlowTemplateError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateFlowTemplateError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalFailureException" => {
                     return RusotoError::Service(UpdateFlowTemplateError::InternalFailure(err.msg))
@@ -2910,6 +2942,7 @@ pub enum UpdateSystemTemplateError {
 impl UpdateSystemTemplateError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateSystemTemplateError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalFailureException" => {
                     return RusotoError::Service(UpdateSystemTemplateError::InternalFailure(
@@ -2960,6 +2993,7 @@ pub enum UploadEntityDefinitionsError {
 impl UploadEntityDefinitionsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UploadEntityDefinitionsError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalFailureException" => {
                     return RusotoError::Service(UploadEntityDefinitionsError::InternalFailure(

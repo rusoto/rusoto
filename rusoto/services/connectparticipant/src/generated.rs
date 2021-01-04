@@ -23,7 +23,6 @@ use rusoto_core::proto;
 use rusoto_core::signature::SignedRequest;
 #[allow(unused_imports)]
 use serde::{Deserialize, Serialize};
-use serde_json;
 /// <p>The case-insensitive input to indicate standard MIME type that describes the format of the file that will be uploaded.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
@@ -397,6 +396,7 @@ pub enum CompleteAttachmentUploadError {
 impl CompleteAttachmentUploadError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CompleteAttachmentUploadError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(CompleteAttachmentUploadError::AccessDenied(
@@ -457,6 +457,7 @@ impl CreateParticipantConnectionError {
         res: BufferedHttpResponse,
     ) -> RusotoError<CreateParticipantConnectionError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(CreateParticipantConnectionError::AccessDenied(
@@ -505,6 +506,7 @@ pub enum DisconnectParticipantError {
 impl DisconnectParticipantError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DisconnectParticipantError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(DisconnectParticipantError::AccessDenied(err.msg))
@@ -549,6 +551,7 @@ pub enum GetAttachmentError {
 impl GetAttachmentError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetAttachmentError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(GetAttachmentError::AccessDenied(err.msg))
@@ -591,6 +594,7 @@ pub enum GetTranscriptError {
 impl GetTranscriptError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetTranscriptError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(GetTranscriptError::AccessDenied(err.msg))
@@ -633,6 +637,7 @@ pub enum SendEventError {
 impl SendEventError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<SendEventError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(SendEventError::AccessDenied(err.msg))
@@ -675,6 +680,7 @@ pub enum SendMessageError {
 impl SendMessageError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<SendMessageError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(SendMessageError::AccessDenied(err.msg))
@@ -719,6 +725,7 @@ pub enum StartAttachmentUploadError {
 impl StartAttachmentUploadError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<StartAttachmentUploadError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(StartAttachmentUploadError::AccessDenied(err.msg))
@@ -852,6 +859,7 @@ impl ConnectParticipant for ConnectParticipantClient {
         &self,
         input: CompleteAttachmentUploadRequest,
     ) -> Result<CompleteAttachmentUploadResponse, RusotoError<CompleteAttachmentUploadError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/participant/complete-attachment-upload";
 
         let mut request = SignedRequest::new("POST", "execute-api", &self.region, &request_uri);
@@ -886,6 +894,7 @@ impl ConnectParticipant for ConnectParticipantClient {
         input: CreateParticipantConnectionRequest,
     ) -> Result<CreateParticipantConnectionResponse, RusotoError<CreateParticipantConnectionError>>
     {
+        #![allow(clippy::needless_update)]
         let request_uri = "/participant/connection";
 
         let mut request = SignedRequest::new("POST", "execute-api", &self.region, &request_uri);
@@ -919,6 +928,7 @@ impl ConnectParticipant for ConnectParticipantClient {
         &self,
         input: DisconnectParticipantRequest,
     ) -> Result<DisconnectParticipantResponse, RusotoError<DisconnectParticipantError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/participant/disconnect";
 
         let mut request = SignedRequest::new("POST", "execute-api", &self.region, &request_uri);
@@ -952,6 +962,7 @@ impl ConnectParticipant for ConnectParticipantClient {
         &self,
         input: GetAttachmentRequest,
     ) -> Result<GetAttachmentResponse, RusotoError<GetAttachmentError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/participant/attachment";
 
         let mut request = SignedRequest::new("POST", "execute-api", &self.region, &request_uri);
@@ -985,6 +996,7 @@ impl ConnectParticipant for ConnectParticipantClient {
         &self,
         input: GetTranscriptRequest,
     ) -> Result<GetTranscriptResponse, RusotoError<GetTranscriptError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/participant/transcript";
 
         let mut request = SignedRequest::new("POST", "execute-api", &self.region, &request_uri);
@@ -1018,6 +1030,7 @@ impl ConnectParticipant for ConnectParticipantClient {
         &self,
         input: SendEventRequest,
     ) -> Result<SendEventResponse, RusotoError<SendEventError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/participant/event";
 
         let mut request = SignedRequest::new("POST", "execute-api", &self.region, &request_uri);
@@ -1051,6 +1064,7 @@ impl ConnectParticipant for ConnectParticipantClient {
         &self,
         input: SendMessageRequest,
     ) -> Result<SendMessageResponse, RusotoError<SendMessageError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/participant/message";
 
         let mut request = SignedRequest::new("POST", "execute-api", &self.region, &request_uri);
@@ -1084,6 +1098,7 @@ impl ConnectParticipant for ConnectParticipantClient {
         &self,
         input: StartAttachmentUploadRequest,
     ) -> Result<StartAttachmentUploadResponse, RusotoError<StartAttachmentUploadError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/participant/start-attachment-upload";
 
         let mut request = SignedRequest::new("POST", "execute-api", &self.region, &request_uri);

@@ -49,7 +49,6 @@ impl DirectoryServiceClient {
     }
 }
 
-use serde_json;
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct AcceptSharedDirectoryRequest {
@@ -2304,6 +2303,7 @@ pub enum AcceptSharedDirectoryError {
 impl AcceptSharedDirectoryError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<AcceptSharedDirectoryError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ClientException" => {
                     return RusotoError::Service(AcceptSharedDirectoryError::Client(err.msg))
@@ -2368,6 +2368,7 @@ pub enum AddIpRoutesError {
 impl AddIpRoutesError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<AddIpRoutesError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ClientException" => {
                     return RusotoError::Service(AddIpRoutesError::Client(err.msg))
@@ -2440,6 +2441,7 @@ pub enum AddRegionError {
 impl AddRegionError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<AddRegionError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(AddRegionError::AccessDenied(err.msg))
@@ -2512,6 +2514,7 @@ pub enum AddTagsToResourceError {
 impl AddTagsToResourceError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<AddTagsToResourceError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ClientException" => {
                     return RusotoError::Service(AddTagsToResourceError::Client(err.msg))
@@ -2564,6 +2567,7 @@ pub enum CancelSchemaExtensionError {
 impl CancelSchemaExtensionError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CancelSchemaExtensionError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ClientException" => {
                     return RusotoError::Service(CancelSchemaExtensionError::Client(err.msg))
@@ -2610,6 +2614,7 @@ pub enum ConnectDirectoryError {
 impl ConnectDirectoryError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ConnectDirectoryError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ClientException" => {
                     return RusotoError::Service(ConnectDirectoryError::Client(err.msg))
@@ -2662,6 +2667,7 @@ pub enum CreateAliasError {
 impl CreateAliasError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateAliasError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ClientException" => {
                     return RusotoError::Service(CreateAliasError::Client(err.msg))
@@ -2722,6 +2728,7 @@ pub enum CreateComputerError {
 impl CreateComputerError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateComputerError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AuthenticationFailedException" => {
                     return RusotoError::Service(CreateComputerError::AuthenticationFailed(err.msg))
@@ -2794,6 +2801,7 @@ impl CreateConditionalForwarderError {
         res: BufferedHttpResponse,
     ) -> RusotoError<CreateConditionalForwarderError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ClientException" => {
                     return RusotoError::Service(CreateConditionalForwarderError::Client(err.msg))
@@ -2872,6 +2880,7 @@ pub enum CreateDirectoryError {
 impl CreateDirectoryError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateDirectoryError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ClientException" => {
                     return RusotoError::Service(CreateDirectoryError::Client(err.msg))
@@ -2926,6 +2935,7 @@ pub enum CreateLogSubscriptionError {
 impl CreateLogSubscriptionError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateLogSubscriptionError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ClientException" => {
                     return RusotoError::Service(CreateLogSubscriptionError::Client(err.msg))
@@ -2994,6 +3004,7 @@ pub enum CreateMicrosoftADError {
 impl CreateMicrosoftADError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateMicrosoftADError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ClientException" => {
                     return RusotoError::Service(CreateMicrosoftADError::Client(err.msg))
@@ -3052,6 +3063,7 @@ pub enum CreateSnapshotError {
 impl CreateSnapshotError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateSnapshotError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ClientException" => {
                     return RusotoError::Service(CreateSnapshotError::Client(err.msg))
@@ -3110,6 +3122,7 @@ pub enum CreateTrustError {
 impl CreateTrustError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateTrustError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ClientException" => {
                     return RusotoError::Service(CreateTrustError::Client(err.msg))
@@ -3172,6 +3185,7 @@ impl DeleteConditionalForwarderError {
         res: BufferedHttpResponse,
     ) -> RusotoError<DeleteConditionalForwarderError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ClientException" => {
                     return RusotoError::Service(DeleteConditionalForwarderError::Client(err.msg))
@@ -3240,6 +3254,7 @@ pub enum DeleteDirectoryError {
 impl DeleteDirectoryError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteDirectoryError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ClientException" => {
                     return RusotoError::Service(DeleteDirectoryError::Client(err.msg))
@@ -3284,6 +3299,7 @@ pub enum DeleteLogSubscriptionError {
 impl DeleteLogSubscriptionError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteLogSubscriptionError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ClientException" => {
                     return RusotoError::Service(DeleteLogSubscriptionError::Client(err.msg))
@@ -3336,6 +3352,7 @@ pub enum DeleteSnapshotError {
 impl DeleteSnapshotError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteSnapshotError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ClientException" => {
                     return RusotoError::Service(DeleteSnapshotError::Client(err.msg))
@@ -3386,6 +3403,7 @@ pub enum DeleteTrustError {
 impl DeleteTrustError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteTrustError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ClientException" => {
                     return RusotoError::Service(DeleteTrustError::Client(err.msg))
@@ -3446,6 +3464,7 @@ pub enum DeregisterCertificateError {
 impl DeregisterCertificateError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeregisterCertificateError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "CertificateDoesNotExistException" => {
                     return RusotoError::Service(
@@ -3524,6 +3543,7 @@ pub enum DeregisterEventTopicError {
 impl DeregisterEventTopicError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeregisterEventTopicError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ClientException" => {
                     return RusotoError::Service(DeregisterEventTopicError::Client(err.msg))
@@ -3580,6 +3600,7 @@ pub enum DescribeCertificateError {
 impl DescribeCertificateError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeCertificateError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "CertificateDoesNotExistException" => {
                     return RusotoError::Service(DescribeCertificateError::CertificateDoesNotExist(
@@ -3650,6 +3671,7 @@ impl DescribeConditionalForwardersError {
         res: BufferedHttpResponse,
     ) -> RusotoError<DescribeConditionalForwardersError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ClientException" => {
                     return RusotoError::Service(DescribeConditionalForwardersError::Client(
@@ -3728,6 +3750,7 @@ pub enum DescribeDirectoriesError {
 impl DescribeDirectoriesError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeDirectoriesError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ClientException" => {
                     return RusotoError::Service(DescribeDirectoriesError::Client(err.msg))
@@ -3790,6 +3813,7 @@ pub enum DescribeDomainControllersError {
 impl DescribeDomainControllersError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeDomainControllersError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ClientException" => {
                     return RusotoError::Service(DescribeDomainControllersError::Client(err.msg))
@@ -3856,6 +3880,7 @@ pub enum DescribeEventTopicsError {
 impl DescribeEventTopicsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeEventTopicsError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ClientException" => {
                     return RusotoError::Service(DescribeEventTopicsError::Client(err.msg))
@@ -3912,6 +3937,7 @@ pub enum DescribeLDAPSSettingsError {
 impl DescribeLDAPSSettingsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeLDAPSSettingsError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ClientException" => {
                     return RusotoError::Service(DescribeLDAPSSettingsError::Client(err.msg))
@@ -3982,6 +4008,7 @@ pub enum DescribeRegionsError {
 impl DescribeRegionsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeRegionsError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(DescribeRegionsError::AccessDenied(err.msg))
@@ -4050,6 +4077,7 @@ pub enum DescribeSharedDirectoriesError {
 impl DescribeSharedDirectoriesError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeSharedDirectoriesError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ClientException" => {
                     return RusotoError::Service(DescribeSharedDirectoriesError::Client(err.msg))
@@ -4118,6 +4146,7 @@ pub enum DescribeSnapshotsError {
 impl DescribeSnapshotsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeSnapshotsError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ClientException" => {
                     return RusotoError::Service(DescribeSnapshotsError::Client(err.msg))
@@ -4176,6 +4205,7 @@ pub enum DescribeTrustsError {
 impl DescribeTrustsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeTrustsError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ClientException" => {
                     return RusotoError::Service(DescribeTrustsError::Client(err.msg))
@@ -4238,6 +4268,7 @@ impl DisableClientAuthenticationError {
         res: BufferedHttpResponse,
     ) -> RusotoError<DisableClientAuthenticationError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(DisableClientAuthenticationError::AccessDenied(
@@ -4314,6 +4345,7 @@ pub enum DisableLDAPSError {
 impl DisableLDAPSError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DisableLDAPSError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ClientException" => {
                     return RusotoError::Service(DisableLDAPSError::Client(err.msg))
@@ -4372,6 +4404,7 @@ pub enum DisableRadiusError {
 impl DisableRadiusError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DisableRadiusError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ClientException" => {
                     return RusotoError::Service(DisableRadiusError::Client(err.msg))
@@ -4418,6 +4451,7 @@ pub enum DisableSsoError {
 impl DisableSsoError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DisableSsoError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AuthenticationFailedException" => {
                     return RusotoError::Service(DisableSsoError::AuthenticationFailed(err.msg))
@@ -4476,6 +4510,7 @@ impl EnableClientAuthenticationError {
         res: BufferedHttpResponse,
     ) -> RusotoError<EnableClientAuthenticationError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(EnableClientAuthenticationError::AccessDenied(
@@ -4562,6 +4597,7 @@ pub enum EnableLDAPSError {
 impl EnableLDAPSError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<EnableLDAPSError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ClientException" => {
                     return RusotoError::Service(EnableLDAPSError::Client(err.msg))
@@ -4628,6 +4664,7 @@ pub enum EnableRadiusError {
 impl EnableRadiusError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<EnableRadiusError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ClientException" => {
                     return RusotoError::Service(EnableRadiusError::Client(err.msg))
@@ -4682,6 +4719,7 @@ pub enum EnableSsoError {
 impl EnableSsoError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<EnableSsoError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AuthenticationFailedException" => {
                     return RusotoError::Service(EnableSsoError::AuthenticationFailed(err.msg))
@@ -4730,6 +4768,7 @@ pub enum GetDirectoryLimitsError {
 impl GetDirectoryLimitsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetDirectoryLimitsError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ClientException" => {
                     return RusotoError::Service(GetDirectoryLimitsError::Client(err.msg))
@@ -4774,6 +4813,7 @@ pub enum GetSnapshotLimitsError {
 impl GetSnapshotLimitsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetSnapshotLimitsError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ClientException" => {
                     return RusotoError::Service(GetSnapshotLimitsError::Client(err.msg))
@@ -4824,6 +4864,7 @@ pub enum ListCertificatesError {
 impl ListCertificatesError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListCertificatesError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ClientException" => {
                     return RusotoError::Service(ListCertificatesError::Client(err.msg))
@@ -4886,6 +4927,7 @@ pub enum ListIpRoutesError {
 impl ListIpRoutesError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListIpRoutesError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ClientException" => {
                     return RusotoError::Service(ListIpRoutesError::Client(err.msg))
@@ -4938,6 +4980,7 @@ pub enum ListLogSubscriptionsError {
 impl ListLogSubscriptionsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListLogSubscriptionsError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ClientException" => {
                     return RusotoError::Service(ListLogSubscriptionsError::Client(err.msg))
@@ -4990,6 +5033,7 @@ pub enum ListSchemaExtensionsError {
 impl ListSchemaExtensionsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListSchemaExtensionsError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ClientException" => {
                     return RusotoError::Service(ListSchemaExtensionsError::Client(err.msg))
@@ -5044,6 +5088,7 @@ pub enum ListTagsForResourceError {
 impl ListTagsForResourceError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListTagsForResourceError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ClientException" => {
                     return RusotoError::Service(ListTagsForResourceError::Client(err.msg))
@@ -5112,6 +5157,7 @@ pub enum RegisterCertificateError {
 impl RegisterCertificateError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<RegisterCertificateError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "CertificateAlreadyExistsException" => {
                     return RusotoError::Service(
@@ -5194,6 +5240,7 @@ pub enum RegisterEventTopicError {
 impl RegisterEventTopicError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<RegisterEventTopicError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ClientException" => {
                     return RusotoError::Service(RegisterEventTopicError::Client(err.msg))
@@ -5246,6 +5293,7 @@ pub enum RejectSharedDirectoryError {
 impl RejectSharedDirectoryError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<RejectSharedDirectoryError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ClientException" => {
                     return RusotoError::Service(RejectSharedDirectoryError::Client(err.msg))
@@ -5306,6 +5354,7 @@ pub enum RemoveIpRoutesError {
 impl RemoveIpRoutesError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<RemoveIpRoutesError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ClientException" => {
                     return RusotoError::Service(RemoveIpRoutesError::Client(err.msg))
@@ -5362,6 +5411,7 @@ pub enum RemoveRegionError {
 impl RemoveRegionError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<RemoveRegionError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(RemoveRegionError::AccessDenied(err.msg))
@@ -5418,6 +5468,7 @@ pub enum RemoveTagsFromResourceError {
 impl RemoveTagsFromResourceError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<RemoveTagsFromResourceError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ClientException" => {
                     return RusotoError::Service(RemoveTagsFromResourceError::Client(err.msg))
@@ -5476,6 +5527,7 @@ pub enum ResetUserPasswordError {
 impl ResetUserPasswordError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ResetUserPasswordError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ClientException" => {
                     return RusotoError::Service(ResetUserPasswordError::Client(err.msg))
@@ -5542,6 +5594,7 @@ pub enum RestoreFromSnapshotError {
 impl RestoreFromSnapshotError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<RestoreFromSnapshotError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ClientException" => {
                     return RusotoError::Service(RestoreFromSnapshotError::Client(err.msg))
@@ -5606,6 +5659,7 @@ pub enum ShareDirectoryError {
 impl ShareDirectoryError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ShareDirectoryError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(ShareDirectoryError::AccessDenied(err.msg))
@@ -5684,6 +5738,7 @@ pub enum StartSchemaExtensionError {
 impl StartSchemaExtensionError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<StartSchemaExtensionError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ClientException" => {
                     return RusotoError::Service(StartSchemaExtensionError::Client(err.msg))
@@ -5750,6 +5805,7 @@ pub enum UnshareDirectoryError {
 impl UnshareDirectoryError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UnshareDirectoryError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ClientException" => {
                     return RusotoError::Service(UnshareDirectoryError::Client(err.msg))
@@ -5808,6 +5864,7 @@ impl UpdateConditionalForwarderError {
         res: BufferedHttpResponse,
     ) -> RusotoError<UpdateConditionalForwarderError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ClientException" => {
                     return RusotoError::Service(UpdateConditionalForwarderError::Client(err.msg))
@@ -5886,6 +5943,7 @@ impl UpdateNumberOfDomainControllersError {
         res: BufferedHttpResponse,
     ) -> RusotoError<UpdateNumberOfDomainControllersError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ClientException" => {
                     return RusotoError::Service(UpdateNumberOfDomainControllersError::Client(
@@ -5972,6 +6030,7 @@ pub enum UpdateRadiusError {
 impl UpdateRadiusError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateRadiusError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ClientException" => {
                     return RusotoError::Service(UpdateRadiusError::Client(err.msg))
@@ -6020,6 +6079,7 @@ pub enum UpdateTrustError {
 impl UpdateTrustError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateTrustError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ClientException" => {
                     return RusotoError::Service(UpdateTrustError::Client(err.msg))
@@ -6070,6 +6130,7 @@ pub enum VerifyTrustError {
 impl VerifyTrustError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<VerifyTrustError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ClientException" => {
                     return RusotoError::Service(VerifyTrustError::Client(err.msg))

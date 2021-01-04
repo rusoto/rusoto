@@ -50,7 +50,6 @@ impl ComputeOptimizerClient {
     }
 }
 
-use serde_json;
 /// <p>Describes the configuration of an Auto Scaling group.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
@@ -918,6 +917,7 @@ impl DescribeRecommendationExportJobsError {
         res: BufferedHttpResponse,
     ) -> RusotoError<DescribeRecommendationExportJobsError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(
@@ -1022,6 +1022,7 @@ impl ExportAutoScalingGroupRecommendationsError {
         res: BufferedHttpResponse,
     ) -> RusotoError<ExportAutoScalingGroupRecommendationsError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(
@@ -1130,6 +1131,7 @@ impl ExportEC2InstanceRecommendationsError {
         res: BufferedHttpResponse,
     ) -> RusotoError<ExportEC2InstanceRecommendationsError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(
@@ -1234,6 +1236,7 @@ impl GetAutoScalingGroupRecommendationsError {
         res: BufferedHttpResponse,
     ) -> RusotoError<GetAutoScalingGroupRecommendationsError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(
@@ -1342,6 +1345,7 @@ impl GetEBSVolumeRecommendationsError {
         res: BufferedHttpResponse,
     ) -> RusotoError<GetEBSVolumeRecommendationsError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(GetEBSVolumeRecommendationsError::AccessDenied(
@@ -1438,6 +1442,7 @@ impl GetEC2InstanceRecommendationsError {
         res: BufferedHttpResponse,
     ) -> RusotoError<GetEC2InstanceRecommendationsError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(GetEC2InstanceRecommendationsError::AccessDenied(
@@ -1536,6 +1541,7 @@ impl GetEC2RecommendationProjectedMetricsError {
         res: BufferedHttpResponse,
     ) -> RusotoError<GetEC2RecommendationProjectedMetricsError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(
@@ -1638,6 +1644,7 @@ pub enum GetEnrollmentStatusError {
 impl GetEnrollmentStatusError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetEnrollmentStatusError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(GetEnrollmentStatusError::AccessDenied(err.msg))
@@ -1710,6 +1717,7 @@ impl GetRecommendationSummariesError {
         res: BufferedHttpResponse,
     ) -> RusotoError<GetRecommendationSummariesError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(GetRecommendationSummariesError::AccessDenied(
@@ -1794,6 +1802,7 @@ pub enum UpdateEnrollmentStatusError {
 impl UpdateEnrollmentStatusError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateEnrollmentStatusError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(UpdateEnrollmentStatusError::AccessDenied(err.msg))

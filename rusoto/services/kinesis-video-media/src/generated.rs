@@ -23,7 +23,6 @@ use rusoto_core::proto;
 use rusoto_core::signature::SignedRequest;
 #[allow(unused_imports)]
 use serde::{Deserialize, Serialize};
-use serde_json;
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetMediaInput {
@@ -89,6 +88,7 @@ pub enum GetMediaError {
 impl GetMediaError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetMediaError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ClientLimitExceededException" => {
                     return RusotoError::Service(GetMediaError::ClientLimitExceeded(err.msg))
@@ -184,6 +184,7 @@ impl KinesisVideoMedia for KinesisVideoMediaClient {
         &self,
         input: GetMediaInput,
     ) -> Result<GetMediaOutput, RusotoError<GetMediaError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/getMedia";
 
         let mut request = SignedRequest::new("POST", "kinesisvideo", &self.region, &request_uri);
@@ -200,8 +201,10 @@ impl KinesisVideoMedia for KinesisVideoMediaClient {
         if response.status.is_success() {
             let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
 
-            let mut result = GetMediaOutput::default();
-            result.payload = Some(response.body);
+            let mut result = GetMediaOutput {
+                payload: Some(response.body),
+                ..GetMediaOutput::default()
+            };
 
             result.content_type = response.headers.remove("Content-Type");
 

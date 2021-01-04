@@ -31,7 +31,6 @@ use rusoto_core::signature::SignedRequest;
 use serde::Deserialize;
 #[cfg(feature = "serialize_structs")]
 use serde::Serialize;
-use serde_urlencoded;
 use std::str::FromStr;
 use xml::EventReader;
 
@@ -63,32 +62,36 @@ impl StsClient {
 #[allow(dead_code)]
 struct AccessKeyIdTypeDeserializer;
 impl AccessKeyIdTypeDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 #[allow(dead_code)]
 struct AccessKeySecretTypeDeserializer;
 impl AccessKeySecretTypeDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 #[allow(dead_code)]
 struct AccountTypeDeserializer;
 impl AccountTypeDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 #[allow(dead_code)]
 struct ArnTypeDeserializer;
 impl ArnTypeDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
@@ -120,10 +123,11 @@ pub struct AssumeRoleRequest {
 /// Serialize `AssumeRoleRequest` contents to a `SignedRequest`.
 struct AssumeRoleRequestSerializer;
 impl AssumeRoleRequestSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &AssumeRoleRequest) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         if let Some(ref field_value) = obj.duration_seconds {
@@ -181,11 +185,12 @@ pub struct AssumeRoleResponse {
 #[allow(dead_code)]
 struct AssumeRoleResponseDeserializer;
 impl AssumeRoleResponseDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<AssumeRoleResponse, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, AssumeRoleResponse, _>(tag_name, stack, |name, stack, obj| {
             match name {
                 "AssumedRoleUser" => {
@@ -230,10 +235,11 @@ pub struct AssumeRoleWithSAMLRequest {
 /// Serialize `AssumeRoleWithSAMLRequest` contents to a `SignedRequest`.
 struct AssumeRoleWithSAMLRequestSerializer;
 impl AssumeRoleWithSAMLRequestSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &AssumeRoleWithSAMLRequest) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         if let Some(ref field_value) = obj.duration_seconds {
@@ -283,11 +289,12 @@ pub struct AssumeRoleWithSAMLResponse {
 #[allow(dead_code)]
 struct AssumeRoleWithSAMLResponseDeserializer;
 impl AssumeRoleWithSAMLResponseDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<AssumeRoleWithSAMLResponse, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, AssumeRoleWithSAMLResponse, _>(
             tag_name,
             stack,
@@ -358,10 +365,11 @@ pub struct AssumeRoleWithWebIdentityRequest {
 /// Serialize `AssumeRoleWithWebIdentityRequest` contents to a `SignedRequest`.
 struct AssumeRoleWithWebIdentityRequestSerializer;
 impl AssumeRoleWithWebIdentityRequestSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &AssumeRoleWithWebIdentityRequest) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         if let Some(ref field_value) = obj.duration_seconds {
@@ -413,11 +421,12 @@ pub struct AssumeRoleWithWebIdentityResponse {
 #[allow(dead_code)]
 struct AssumeRoleWithWebIdentityResponseDeserializer;
 impl AssumeRoleWithWebIdentityResponseDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<AssumeRoleWithWebIdentityResponse, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, AssumeRoleWithWebIdentityResponse, _>(
             tag_name,
             stack,
@@ -463,8 +472,9 @@ impl AssumeRoleWithWebIdentityResponseDeserializer {
 #[allow(dead_code)]
 struct AssumedRoleIdTypeDeserializer;
 impl AssumedRoleIdTypeDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
@@ -481,11 +491,12 @@ pub struct AssumedRoleUser {
 #[allow(dead_code)]
 struct AssumedRoleUserDeserializer;
 impl AssumedRoleUserDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<AssumedRoleUser, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, AssumedRoleUser, _>(tag_name, stack, |name, stack, obj| {
             match name {
                 "Arn" => {
@@ -504,8 +515,9 @@ impl AssumedRoleUserDeserializer {
 #[allow(dead_code)]
 struct AudienceDeserializer;
 impl AudienceDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
@@ -526,11 +538,12 @@ pub struct Credentials {
 #[allow(dead_code)]
 struct CredentialsDeserializer;
 impl CredentialsDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Credentials, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, Credentials, _>(tag_name, stack, |name, stack, obj| {
             match name {
                 "AccessKeyId" => {
@@ -556,8 +569,9 @@ impl CredentialsDeserializer {
 #[allow(dead_code)]
 struct DateTypeDeserializer;
 impl DateTypeDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
@@ -571,10 +585,11 @@ pub struct DecodeAuthorizationMessageRequest {
 /// Serialize `DecodeAuthorizationMessageRequest` contents to a `SignedRequest`.
 struct DecodeAuthorizationMessageRequestSerializer;
 impl DecodeAuthorizationMessageRequestSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &DecodeAuthorizationMessageRequest) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         params.put(
@@ -595,11 +610,12 @@ pub struct DecodeAuthorizationMessageResponse {
 #[allow(dead_code)]
 struct DecodeAuthorizationMessageResponseDeserializer;
 impl DecodeAuthorizationMessageResponseDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<DecodeAuthorizationMessageResponse, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, DecodeAuthorizationMessageResponse, _>(
             tag_name,
             stack,
@@ -621,16 +637,18 @@ impl DecodeAuthorizationMessageResponseDeserializer {
 #[allow(dead_code)]
 struct DecodedMessageTypeDeserializer;
 impl DecodedMessageTypeDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 #[allow(dead_code)]
 struct FederatedIdTypeDeserializer;
 impl FederatedIdTypeDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
@@ -647,11 +665,12 @@ pub struct FederatedUser {
 #[allow(dead_code)]
 struct FederatedUserDeserializer;
 impl FederatedUserDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<FederatedUser, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, FederatedUser, _>(tag_name, stack, |name, stack, obj| {
             match name {
                 "Arn" => {
@@ -677,10 +696,11 @@ pub struct GetAccessKeyInfoRequest {
 /// Serialize `GetAccessKeyInfoRequest` contents to a `SignedRequest`.
 struct GetAccessKeyInfoRequestSerializer;
 impl GetAccessKeyInfoRequestSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &GetAccessKeyInfoRequest) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         params.put(&format!("{}{}", prefix, "AccessKeyId"), &obj.access_key_id);
@@ -697,11 +717,12 @@ pub struct GetAccessKeyInfoResponse {
 #[allow(dead_code)]
 struct GetAccessKeyInfoResponseDeserializer;
 impl GetAccessKeyInfoResponseDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<GetAccessKeyInfoResponse, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, GetAccessKeyInfoResponse, _>(
             tag_name,
             stack,
@@ -726,8 +747,8 @@ struct GetCallerIdentityRequestSerializer;
 impl GetCallerIdentityRequestSerializer {
     fn serialize(_params: &mut Params, name: &str, _obj: &GetCallerIdentityRequest) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
     }
 }
@@ -747,11 +768,12 @@ pub struct GetCallerIdentityResponse {
 #[allow(dead_code)]
 struct GetCallerIdentityResponseDeserializer;
 impl GetCallerIdentityResponseDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<GetCallerIdentityResponse, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, GetCallerIdentityResponse, _>(
             tag_name,
             stack,
@@ -791,10 +813,11 @@ pub struct GetFederationTokenRequest {
 /// Serialize `GetFederationTokenRequest` contents to a `SignedRequest`.
 struct GetFederationTokenRequestSerializer;
 impl GetFederationTokenRequestSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &GetFederationTokenRequest) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         if let Some(ref field_value) = obj.duration_seconds {
@@ -832,11 +855,12 @@ pub struct GetFederationTokenResponse {
 #[allow(dead_code)]
 struct GetFederationTokenResponseDeserializer;
 impl GetFederationTokenResponseDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<GetFederationTokenResponse, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, GetFederationTokenResponse, _>(
             tag_name,
             stack,
@@ -880,10 +904,11 @@ pub struct GetSessionTokenRequest {
 /// Serialize `GetSessionTokenRequest` contents to a `SignedRequest`.
 struct GetSessionTokenRequestSerializer;
 impl GetSessionTokenRequestSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &GetSessionTokenRequest) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         if let Some(ref field_value) = obj.duration_seconds {
@@ -909,11 +934,12 @@ pub struct GetSessionTokenResponse {
 #[allow(dead_code)]
 struct GetSessionTokenResponseDeserializer;
 impl GetSessionTokenResponseDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<GetSessionTokenResponse, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, GetSessionTokenResponse, _>(
             tag_name,
             stack,
@@ -933,24 +959,27 @@ impl GetSessionTokenResponseDeserializer {
 #[allow(dead_code)]
 struct IssuerDeserializer;
 impl IssuerDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 #[allow(dead_code)]
 struct NameQualifierDeserializer;
 impl NameQualifierDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 #[allow(dead_code)]
 struct NonNegativeIntegerTypeDeserializer;
 impl NonNegativeIntegerTypeDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<i64, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::deserialize_primitive(tag_name, stack, |s| Ok(i64::from_str(&s).unwrap()))
     }
 }
@@ -958,6 +987,7 @@ impl NonNegativeIntegerTypeDeserializer {
 /// Serialize `PolicyDescriptorListType` contents to a `SignedRequest`.
 struct PolicyDescriptorListTypeSerializer;
 impl PolicyDescriptorListTypeSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &Vec<PolicyDescriptorType>) {
         for (index, obj) in obj.iter().enumerate() {
             let key = format!("{}.member.{}", name, index + 1);
@@ -977,10 +1007,11 @@ pub struct PolicyDescriptorType {
 /// Serialize `PolicyDescriptorType` contents to a `SignedRequest`.
 struct PolicyDescriptorTypeSerializer;
 impl PolicyDescriptorTypeSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &PolicyDescriptorType) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         if let Some(ref field_value) = obj.arn {
@@ -992,16 +1023,18 @@ impl PolicyDescriptorTypeSerializer {
 #[allow(dead_code)]
 struct SubjectDeserializer;
 impl SubjectDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 #[allow(dead_code)]
 struct SubjectTypeDeserializer;
 impl SubjectTypeDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
@@ -1018,10 +1051,11 @@ pub struct Tag {
 /// Serialize `Tag` contents to a `SignedRequest`.
 struct TagSerializer;
 impl TagSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &Tag) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         params.put(&format!("{}{}", prefix, "Key"), &obj.key);
@@ -1032,6 +1066,7 @@ impl TagSerializer {
 /// Serialize `TagKeyListType` contents to a `SignedRequest`.
 struct TagKeyListTypeSerializer;
 impl TagKeyListTypeSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &Vec<String>) {
         for (index, obj) in obj.iter().enumerate() {
             let key = format!("{}.member.{}", name, index + 1);
@@ -1043,6 +1078,7 @@ impl TagKeyListTypeSerializer {
 /// Serialize `TagListType` contents to a `SignedRequest`.
 struct TagListTypeSerializer;
 impl TagListTypeSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &Vec<Tag>) {
         for (index, obj) in obj.iter().enumerate() {
             let key = format!("{}.member.{}", name, index + 1);
@@ -1054,24 +1090,27 @@ impl TagListTypeSerializer {
 #[allow(dead_code)]
 struct TokenTypeDeserializer;
 impl TokenTypeDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 #[allow(dead_code)]
 struct UserIdTypeDeserializer;
 impl UserIdTypeDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 #[allow(dead_code)]
 struct WebIdentitySubjectTypeDeserializer;
 impl WebIdentitySubjectTypeDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
@@ -1094,29 +1133,32 @@ impl AssumeRoleError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    "ExpiredTokenException" => {
-                        return RusotoError::Service(AssumeRoleError::ExpiredToken(
-                            parsed_error.message,
-                        ))
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {
+                        "ExpiredTokenException" => {
+                            return RusotoError::Service(AssumeRoleError::ExpiredToken(
+                                parsed_error.message,
+                            ))
+                        }
+                        "MalformedPolicyDocument" => {
+                            return RusotoError::Service(AssumeRoleError::MalformedPolicyDocument(
+                                parsed_error.message,
+                            ))
+                        }
+                        "PackedPolicyTooLarge" => {
+                            return RusotoError::Service(AssumeRoleError::PackedPolicyTooLarge(
+                                parsed_error.message,
+                            ))
+                        }
+                        "RegionDisabledException" => {
+                            return RusotoError::Service(AssumeRoleError::RegionDisabled(
+                                parsed_error.message,
+                            ))
+                        }
+                        _ => {}
                     }
-                    "MalformedPolicyDocument" => {
-                        return RusotoError::Service(AssumeRoleError::MalformedPolicyDocument(
-                            parsed_error.message,
-                        ))
-                    }
-                    "PackedPolicyTooLarge" => {
-                        return RusotoError::Service(AssumeRoleError::PackedPolicyTooLarge(
-                            parsed_error.message,
-                        ))
-                    }
-                    "RegionDisabledException" => {
-                        return RusotoError::Service(AssumeRoleError::RegionDisabled(
-                            parsed_error.message,
-                        ))
-                    }
-                    _ => {}
                 }
             }
         }
@@ -1166,39 +1208,44 @@ impl AssumeRoleWithSAMLError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    "ExpiredTokenException" => {
-                        return RusotoError::Service(AssumeRoleWithSAMLError::ExpiredToken(
-                            parsed_error.message,
-                        ))
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {
+                        "ExpiredTokenException" => {
+                            return RusotoError::Service(AssumeRoleWithSAMLError::ExpiredToken(
+                                parsed_error.message,
+                            ))
+                        }
+                        "IDPRejectedClaim" => {
+                            return RusotoError::Service(AssumeRoleWithSAMLError::IDPRejectedClaim(
+                                parsed_error.message,
+                            ))
+                        }
+                        "InvalidIdentityToken" => {
+                            return RusotoError::Service(
+                                AssumeRoleWithSAMLError::InvalidIdentityToken(parsed_error.message),
+                            )
+                        }
+                        "MalformedPolicyDocument" => {
+                            return RusotoError::Service(
+                                AssumeRoleWithSAMLError::MalformedPolicyDocument(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "PackedPolicyTooLarge" => {
+                            return RusotoError::Service(
+                                AssumeRoleWithSAMLError::PackedPolicyTooLarge(parsed_error.message),
+                            )
+                        }
+                        "RegionDisabledException" => {
+                            return RusotoError::Service(AssumeRoleWithSAMLError::RegionDisabled(
+                                parsed_error.message,
+                            ))
+                        }
+                        _ => {}
                     }
-                    "IDPRejectedClaim" => {
-                        return RusotoError::Service(AssumeRoleWithSAMLError::IDPRejectedClaim(
-                            parsed_error.message,
-                        ))
-                    }
-                    "InvalidIdentityToken" => {
-                        return RusotoError::Service(AssumeRoleWithSAMLError::InvalidIdentityToken(
-                            parsed_error.message,
-                        ))
-                    }
-                    "MalformedPolicyDocument" => {
-                        return RusotoError::Service(
-                            AssumeRoleWithSAMLError::MalformedPolicyDocument(parsed_error.message),
-                        )
-                    }
-                    "PackedPolicyTooLarge" => {
-                        return RusotoError::Service(AssumeRoleWithSAMLError::PackedPolicyTooLarge(
-                            parsed_error.message,
-                        ))
-                    }
-                    "RegionDisabledException" => {
-                        return RusotoError::Service(AssumeRoleWithSAMLError::RegionDisabled(
-                            parsed_error.message,
-                        ))
-                    }
-                    _ => {}
                 }
             }
         }
@@ -1252,52 +1299,59 @@ impl AssumeRoleWithWebIdentityError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    "ExpiredTokenException" => {
-                        return RusotoError::Service(AssumeRoleWithWebIdentityError::ExpiredToken(
-                            parsed_error.message,
-                        ))
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {
+                        "ExpiredTokenException" => {
+                            return RusotoError::Service(
+                                AssumeRoleWithWebIdentityError::ExpiredToken(parsed_error.message),
+                            )
+                        }
+                        "IDPCommunicationError" => {
+                            return RusotoError::Service(
+                                AssumeRoleWithWebIdentityError::IDPCommunicationError(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "IDPRejectedClaim" => {
+                            return RusotoError::Service(
+                                AssumeRoleWithWebIdentityError::IDPRejectedClaim(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "InvalidIdentityToken" => {
+                            return RusotoError::Service(
+                                AssumeRoleWithWebIdentityError::InvalidIdentityToken(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "MalformedPolicyDocument" => {
+                            return RusotoError::Service(
+                                AssumeRoleWithWebIdentityError::MalformedPolicyDocument(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "PackedPolicyTooLarge" => {
+                            return RusotoError::Service(
+                                AssumeRoleWithWebIdentityError::PackedPolicyTooLarge(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "RegionDisabledException" => {
+                            return RusotoError::Service(
+                                AssumeRoleWithWebIdentityError::RegionDisabled(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        _ => {}
                     }
-                    "IDPCommunicationError" => {
-                        return RusotoError::Service(
-                            AssumeRoleWithWebIdentityError::IDPCommunicationError(
-                                parsed_error.message,
-                            ),
-                        )
-                    }
-                    "IDPRejectedClaim" => {
-                        return RusotoError::Service(
-                            AssumeRoleWithWebIdentityError::IDPRejectedClaim(parsed_error.message),
-                        )
-                    }
-                    "InvalidIdentityToken" => {
-                        return RusotoError::Service(
-                            AssumeRoleWithWebIdentityError::InvalidIdentityToken(
-                                parsed_error.message,
-                            ),
-                        )
-                    }
-                    "MalformedPolicyDocument" => {
-                        return RusotoError::Service(
-                            AssumeRoleWithWebIdentityError::MalformedPolicyDocument(
-                                parsed_error.message,
-                            ),
-                        )
-                    }
-                    "PackedPolicyTooLarge" => {
-                        return RusotoError::Service(
-                            AssumeRoleWithWebIdentityError::PackedPolicyTooLarge(
-                                parsed_error.message,
-                            ),
-                        )
-                    }
-                    "RegionDisabledException" => {
-                        return RusotoError::Service(
-                            AssumeRoleWithWebIdentityError::RegionDisabled(parsed_error.message),
-                        )
-                    }
-                    _ => {}
                 }
             }
         }
@@ -1350,16 +1404,19 @@ impl DecodeAuthorizationMessageError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    "InvalidAuthorizationMessageException" => {
-                        return RusotoError::Service(
-                            DecodeAuthorizationMessageError::InvalidAuthorizationMessage(
-                                parsed_error.message,
-                            ),
-                        )
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {
+                        "InvalidAuthorizationMessageException" => {
+                            return RusotoError::Service(
+                                DecodeAuthorizationMessageError::InvalidAuthorizationMessage(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        _ => {}
                     }
-                    _ => {}
                 }
             }
         }
@@ -1395,11 +1452,7 @@ impl GetAccessKeyInfoError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    _ => {}
-                }
-            }
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {}
         }
         RusotoError::Unknown(res)
     }
@@ -1429,11 +1482,7 @@ impl GetCallerIdentityError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    _ => {}
-                }
-            }
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {}
         }
         RusotoError::Unknown(res)
     }
@@ -1470,24 +1519,29 @@ impl GetFederationTokenError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    "MalformedPolicyDocument" => {
-                        return RusotoError::Service(
-                            GetFederationTokenError::MalformedPolicyDocument(parsed_error.message),
-                        )
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {
+                        "MalformedPolicyDocument" => {
+                            return RusotoError::Service(
+                                GetFederationTokenError::MalformedPolicyDocument(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "PackedPolicyTooLarge" => {
+                            return RusotoError::Service(
+                                GetFederationTokenError::PackedPolicyTooLarge(parsed_error.message),
+                            )
+                        }
+                        "RegionDisabledException" => {
+                            return RusotoError::Service(GetFederationTokenError::RegionDisabled(
+                                parsed_error.message,
+                            ))
+                        }
+                        _ => {}
                     }
-                    "PackedPolicyTooLarge" => {
-                        return RusotoError::Service(GetFederationTokenError::PackedPolicyTooLarge(
-                            parsed_error.message,
-                        ))
-                    }
-                    "RegionDisabledException" => {
-                        return RusotoError::Service(GetFederationTokenError::RegionDisabled(
-                            parsed_error.message,
-                        ))
-                    }
-                    _ => {}
                 }
             }
         }
@@ -1526,14 +1580,17 @@ impl GetSessionTokenError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    "RegionDisabledException" => {
-                        return RusotoError::Service(GetSessionTokenError::RegionDisabled(
-                            parsed_error.message,
-                        ))
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {
+                        "RegionDisabledException" => {
+                            return RusotoError::Service(GetSessionTokenError::RegionDisabled(
+                                parsed_error.message,
+                            ))
+                        }
+                        _ => {}
                     }
-                    _ => {}
                 }
             }
         }

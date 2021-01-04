@@ -54,7 +54,6 @@ impl ApplicationAutoScalingClient {
     }
 }
 
-use serde_json;
 /// <p>Represents a CloudWatch alarm associated with a scaling policy.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
@@ -706,6 +705,7 @@ pub enum DeleteScalingPolicyError {
 impl DeleteScalingPolicyError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteScalingPolicyError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ConcurrentUpdateException" => {
                     return RusotoError::Service(DeleteScalingPolicyError::ConcurrentUpdate(
@@ -750,6 +750,7 @@ pub enum DeleteScheduledActionError {
 impl DeleteScheduledActionError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteScheduledActionError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ConcurrentUpdateException" => {
                     return RusotoError::Service(DeleteScheduledActionError::ConcurrentUpdate(
@@ -798,6 +799,7 @@ pub enum DeregisterScalableTargetError {
 impl DeregisterScalableTargetError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeregisterScalableTargetError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ConcurrentUpdateException" => {
                     return RusotoError::Service(DeregisterScalableTargetError::ConcurrentUpdate(
@@ -846,6 +848,7 @@ pub enum DescribeScalableTargetsError {
 impl DescribeScalableTargetsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeScalableTargetsError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ConcurrentUpdateException" => {
                     return RusotoError::Service(DescribeScalableTargetsError::ConcurrentUpdate(
@@ -894,6 +897,7 @@ pub enum DescribeScalingActivitiesError {
 impl DescribeScalingActivitiesError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeScalingActivitiesError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ConcurrentUpdateException" => {
                     return RusotoError::Service(DescribeScalingActivitiesError::ConcurrentUpdate(
@@ -944,6 +948,7 @@ pub enum DescribeScalingPoliciesError {
 impl DescribeScalingPoliciesError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeScalingPoliciesError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ConcurrentUpdateException" => {
                     return RusotoError::Service(DescribeScalingPoliciesError::ConcurrentUpdate(
@@ -998,6 +1003,7 @@ pub enum DescribeScheduledActionsError {
 impl DescribeScheduledActionsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeScheduledActionsError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ConcurrentUpdateException" => {
                     return RusotoError::Service(DescribeScheduledActionsError::ConcurrentUpdate(
@@ -1050,6 +1056,7 @@ pub enum PutScalingPolicyError {
 impl PutScalingPolicyError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<PutScalingPolicyError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ConcurrentUpdateException" => {
                     return RusotoError::Service(PutScalingPolicyError::ConcurrentUpdate(err.msg))
@@ -1104,6 +1111,7 @@ pub enum PutScheduledActionError {
 impl PutScheduledActionError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<PutScheduledActionError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ConcurrentUpdateException" => {
                     return RusotoError::Service(PutScheduledActionError::ConcurrentUpdate(err.msg))
@@ -1150,6 +1158,7 @@ pub enum RegisterScalableTargetError {
 impl RegisterScalableTargetError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<RegisterScalableTargetError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ConcurrentUpdateException" => {
                     return RusotoError::Service(RegisterScalableTargetError::ConcurrentUpdate(

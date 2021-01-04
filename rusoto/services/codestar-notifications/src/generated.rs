@@ -23,7 +23,6 @@ use rusoto_core::proto;
 use rusoto_core::signature::SignedRequest;
 #[allow(unused_imports)]
 use serde::{Deserialize, Serialize};
-use serde_json;
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateNotificationRuleRequest {
@@ -492,6 +491,7 @@ pub enum CreateNotificationRuleError {
 impl CreateNotificationRuleError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateNotificationRuleError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(CreateNotificationRuleError::AccessDenied(err.msg))
@@ -550,6 +550,7 @@ pub enum DeleteNotificationRuleError {
 impl DeleteNotificationRuleError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteNotificationRuleError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ConcurrentModificationException" => {
                     return RusotoError::Service(
@@ -587,6 +588,7 @@ pub enum DeleteTargetError {}
 impl DeleteTargetError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteTargetError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
@@ -612,6 +614,7 @@ pub enum DescribeNotificationRuleError {
 impl DescribeNotificationRuleError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeNotificationRuleError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(DescribeNotificationRuleError::ResourceNotFound(
@@ -644,6 +647,7 @@ pub enum ListEventTypesError {
 impl ListEventTypesError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListEventTypesError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidNextTokenException" => {
                     return RusotoError::Service(ListEventTypesError::InvalidNextToken(err.msg))
@@ -674,6 +678,7 @@ pub enum ListNotificationRulesError {
 impl ListNotificationRulesError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListNotificationRulesError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidNextTokenException" => {
                     return RusotoError::Service(ListNotificationRulesError::InvalidNextToken(
@@ -706,6 +711,7 @@ pub enum ListTagsForResourceError {
 impl ListTagsForResourceError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListTagsForResourceError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(ListTagsForResourceError::ResourceNotFound(
@@ -738,6 +744,7 @@ pub enum ListTargetsError {
 impl ListTargetsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListTargetsError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidNextTokenException" => {
                     return RusotoError::Service(ListTargetsError::InvalidNextToken(err.msg))
@@ -768,6 +775,7 @@ pub enum SubscribeError {
 impl SubscribeError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<SubscribeError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(SubscribeError::ResourceNotFound(err.msg))
@@ -800,6 +808,7 @@ pub enum TagResourceError {
 impl TagResourceError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<TagResourceError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ConcurrentModificationException" => {
                     return RusotoError::Service(TagResourceError::ConcurrentModification(err.msg))
@@ -831,6 +840,7 @@ pub enum UnsubscribeError {}
 impl UnsubscribeError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UnsubscribeError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
@@ -858,6 +868,7 @@ pub enum UntagResourceError {
 impl UntagResourceError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UntagResourceError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ConcurrentModificationException" => {
                     return RusotoError::Service(UntagResourceError::ConcurrentModification(
@@ -894,6 +905,7 @@ pub enum UpdateNotificationRuleError {
 impl UpdateNotificationRuleError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateNotificationRuleError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(UpdateNotificationRuleError::ResourceNotFound(
@@ -1043,6 +1055,7 @@ impl CodeStarNotifications for CodeStarNotificationsClient {
         &self,
         input: CreateNotificationRuleRequest,
     ) -> Result<CreateNotificationRuleResult, RusotoError<CreateNotificationRuleError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/createNotificationRule";
 
         let mut request =
@@ -1075,6 +1088,7 @@ impl CodeStarNotifications for CodeStarNotificationsClient {
         &self,
         input: DeleteNotificationRuleRequest,
     ) -> Result<DeleteNotificationRuleResult, RusotoError<DeleteNotificationRuleError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/deleteNotificationRule";
 
         let mut request =
@@ -1107,6 +1121,7 @@ impl CodeStarNotifications for CodeStarNotificationsClient {
         &self,
         input: DeleteTargetRequest,
     ) -> Result<DeleteTargetResult, RusotoError<DeleteTargetError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/deleteTarget";
 
         let mut request =
@@ -1139,6 +1154,7 @@ impl CodeStarNotifications for CodeStarNotificationsClient {
         &self,
         input: DescribeNotificationRuleRequest,
     ) -> Result<DescribeNotificationRuleResult, RusotoError<DescribeNotificationRuleError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/describeNotificationRule";
 
         let mut request =
@@ -1171,6 +1187,7 @@ impl CodeStarNotifications for CodeStarNotificationsClient {
         &self,
         input: ListEventTypesRequest,
     ) -> Result<ListEventTypesResult, RusotoError<ListEventTypesError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/listEventTypes";
 
         let mut request =
@@ -1203,6 +1220,7 @@ impl CodeStarNotifications for CodeStarNotificationsClient {
         &self,
         input: ListNotificationRulesRequest,
     ) -> Result<ListNotificationRulesResult, RusotoError<ListNotificationRulesError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/listNotificationRules";
 
         let mut request =
@@ -1235,6 +1253,7 @@ impl CodeStarNotifications for CodeStarNotificationsClient {
         &self,
         input: ListTagsForResourceRequest,
     ) -> Result<ListTagsForResourceResult, RusotoError<ListTagsForResourceError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/listTagsForResource";
 
         let mut request =
@@ -1267,6 +1286,7 @@ impl CodeStarNotifications for CodeStarNotificationsClient {
         &self,
         input: ListTargetsRequest,
     ) -> Result<ListTargetsResult, RusotoError<ListTargetsError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/listTargets";
 
         let mut request =
@@ -1299,6 +1319,7 @@ impl CodeStarNotifications for CodeStarNotificationsClient {
         &self,
         input: SubscribeRequest,
     ) -> Result<SubscribeResult, RusotoError<SubscribeError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/subscribe";
 
         let mut request =
@@ -1331,6 +1352,7 @@ impl CodeStarNotifications for CodeStarNotificationsClient {
         &self,
         input: TagResourceRequest,
     ) -> Result<TagResourceResult, RusotoError<TagResourceError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/tagResource";
 
         let mut request =
@@ -1363,6 +1385,7 @@ impl CodeStarNotifications for CodeStarNotificationsClient {
         &self,
         input: UnsubscribeRequest,
     ) -> Result<UnsubscribeResult, RusotoError<UnsubscribeError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/unsubscribe";
 
         let mut request =
@@ -1395,6 +1418,7 @@ impl CodeStarNotifications for CodeStarNotificationsClient {
         &self,
         input: UntagResourceRequest,
     ) -> Result<UntagResourceResult, RusotoError<UntagResourceError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/untagResource";
 
         let mut request =
@@ -1427,6 +1451,7 @@ impl CodeStarNotifications for CodeStarNotificationsClient {
         &self,
         input: UpdateNotificationRuleRequest,
     ) -> Result<UpdateNotificationRuleResult, RusotoError<UpdateNotificationRuleError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/updateNotificationRule";
 
         let mut request =

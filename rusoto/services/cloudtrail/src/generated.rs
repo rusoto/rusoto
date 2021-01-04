@@ -49,7 +49,6 @@ impl CloudTrailClient {
     }
 }
 
-use serde_json;
 /// <p>Specifies the tags to add to a trail.</p>
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
@@ -1005,6 +1004,7 @@ pub enum AddTagsError {
 impl AddTagsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<AddTagsError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "CloudTrailARNInvalidException" => {
                     return RusotoError::Service(AddTagsError::CloudTrailARNInvalid(err.msg))
@@ -1123,6 +1123,7 @@ pub enum CreateTrailError {
 impl CreateTrailError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateTrailError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "CloudTrailAccessNotEnabledException" => {
                     return RusotoError::Service(CreateTrailError::CloudTrailAccessNotEnabled(
@@ -1301,6 +1302,7 @@ pub enum DeleteTrailError {
 impl DeleteTrailError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteTrailError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InsufficientDependencyServiceAccessPermissionException" => {
                     return RusotoError::Service(
@@ -1365,6 +1367,7 @@ pub enum DescribeTrailsError {
 impl DescribeTrailsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeTrailsError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidTrailNameException" => {
                     return RusotoError::Service(DescribeTrailsError::InvalidTrailName(err.msg))
@@ -1411,6 +1414,7 @@ pub enum GetEventSelectorsError {
 impl GetEventSelectorsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetEventSelectorsError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidTrailNameException" => {
                     return RusotoError::Service(GetEventSelectorsError::InvalidTrailName(err.msg))
@@ -1465,6 +1469,7 @@ pub enum GetInsightSelectorsError {
 impl GetInsightSelectorsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetInsightSelectorsError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InsightNotEnabledException" => {
                     return RusotoError::Service(GetInsightSelectorsError::InsightNotEnabled(
@@ -1525,6 +1530,7 @@ pub enum GetTrailError {
 impl GetTrailError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetTrailError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidTrailNameException" => {
                     return RusotoError::Service(GetTrailError::InvalidTrailName(err.msg))
@@ -1573,6 +1579,7 @@ pub enum GetTrailStatusError {
 impl GetTrailStatusError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetTrailStatusError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidTrailNameException" => {
                     return RusotoError::Service(GetTrailStatusError::InvalidTrailName(err.msg))
@@ -1623,6 +1630,7 @@ pub enum ListPublicKeysError {
 impl ListPublicKeysError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListPublicKeysError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidTimeRangeException" => {
                     return RusotoError::Service(ListPublicKeysError::InvalidTimeRange(err.msg))
@@ -1679,6 +1687,7 @@ pub enum ListTagsError {
 impl ListTagsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListTagsError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "CloudTrailARNInvalidException" => {
                     return RusotoError::Service(ListTagsError::CloudTrailARNInvalid(err.msg))
@@ -1735,6 +1744,7 @@ pub enum ListTrailsError {
 impl ListTrailsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListTrailsError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "OperationNotPermittedException" => {
                     return RusotoError::Service(ListTrailsError::OperationNotPermitted(err.msg))
@@ -1781,6 +1791,7 @@ pub enum LookupEventsError {
 impl LookupEventsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<LookupEventsError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidEventCategoryException" => {
                     return RusotoError::Service(LookupEventsError::InvalidEventCategory(err.msg))
@@ -1851,6 +1862,7 @@ pub enum PutEventSelectorsError {
 impl PutEventSelectorsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<PutEventSelectorsError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InsufficientDependencyServiceAccessPermissionException" => {
                     return RusotoError::Service(
@@ -1941,6 +1953,7 @@ pub enum PutInsightSelectorsError {
 impl PutInsightSelectorsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<PutInsightSelectorsError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InsufficientEncryptionPolicyException" => {
                     return RusotoError::Service(
@@ -2039,6 +2052,7 @@ pub enum RemoveTagsError {
 impl RemoveTagsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<RemoveTagsError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "CloudTrailARNInvalidException" => {
                     return RusotoError::Service(RemoveTagsError::CloudTrailARNInvalid(err.msg))
@@ -2111,6 +2125,7 @@ pub enum StartLoggingError {
 impl StartLoggingError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<StartLoggingError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InsufficientDependencyServiceAccessPermissionException" => {
                     return RusotoError::Service(
@@ -2183,6 +2198,7 @@ pub enum StopLoggingError {
 impl StopLoggingError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<StopLoggingError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InsufficientDependencyServiceAccessPermissionException" => {
                     return RusotoError::Service(
@@ -2297,6 +2313,7 @@ pub enum UpdateTrailError {
 impl UpdateTrailError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateTrailError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "CloudTrailAccessNotEnabledException" => {
                     return RusotoError::Service(UpdateTrailError::CloudTrailAccessNotEnabled(

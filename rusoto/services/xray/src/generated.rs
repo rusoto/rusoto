@@ -23,7 +23,6 @@ use rusoto_core::proto;
 use rusoto_core::signature::SignedRequest;
 #[allow(unused_imports)]
 use serde::{Deserialize, Serialize};
-use serde_json;
 /// <p>An alias for an edge.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
@@ -2044,6 +2043,7 @@ pub enum BatchGetTracesError {
 impl BatchGetTracesError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<BatchGetTracesError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidRequestException" => {
                     return RusotoError::Service(BatchGetTracesError::InvalidRequest(err.msg))
@@ -2080,6 +2080,7 @@ pub enum CreateGroupError {
 impl CreateGroupError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateGroupError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidRequestException" => {
                     return RusotoError::Service(CreateGroupError::InvalidRequest(err.msg))
@@ -2118,6 +2119,7 @@ pub enum CreateSamplingRuleError {
 impl CreateSamplingRuleError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateSamplingRuleError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidRequestException" => {
                     return RusotoError::Service(CreateSamplingRuleError::InvalidRequest(err.msg))
@@ -2160,6 +2162,7 @@ pub enum DeleteGroupError {
 impl DeleteGroupError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteGroupError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidRequestException" => {
                     return RusotoError::Service(DeleteGroupError::InvalidRequest(err.msg))
@@ -2196,6 +2199,7 @@ pub enum DeleteSamplingRuleError {
 impl DeleteSamplingRuleError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteSamplingRuleError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidRequestException" => {
                     return RusotoError::Service(DeleteSamplingRuleError::InvalidRequest(err.msg))
@@ -2232,6 +2236,7 @@ pub enum GetEncryptionConfigError {
 impl GetEncryptionConfigError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetEncryptionConfigError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidRequestException" => {
                     return RusotoError::Service(GetEncryptionConfigError::InvalidRequest(err.msg))
@@ -2268,6 +2273,7 @@ pub enum GetGroupError {
 impl GetGroupError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetGroupError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidRequestException" => {
                     return RusotoError::Service(GetGroupError::InvalidRequest(err.msg))
@@ -2304,6 +2310,7 @@ pub enum GetGroupsError {
 impl GetGroupsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetGroupsError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidRequestException" => {
                     return RusotoError::Service(GetGroupsError::InvalidRequest(err.msg))
@@ -2340,6 +2347,7 @@ pub enum GetInsightError {
 impl GetInsightError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetInsightError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidRequestException" => {
                     return RusotoError::Service(GetInsightError::InvalidRequest(err.msg))
@@ -2376,6 +2384,7 @@ pub enum GetInsightEventsError {
 impl GetInsightEventsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetInsightEventsError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidRequestException" => {
                     return RusotoError::Service(GetInsightEventsError::InvalidRequest(err.msg))
@@ -2412,6 +2421,7 @@ pub enum GetInsightImpactGraphError {
 impl GetInsightImpactGraphError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetInsightImpactGraphError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidRequestException" => {
                     return RusotoError::Service(GetInsightImpactGraphError::InvalidRequest(
@@ -2450,6 +2460,7 @@ pub enum GetInsightSummariesError {
 impl GetInsightSummariesError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetInsightSummariesError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidRequestException" => {
                     return RusotoError::Service(GetInsightSummariesError::InvalidRequest(err.msg))
@@ -2486,6 +2497,7 @@ pub enum GetSamplingRulesError {
 impl GetSamplingRulesError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetSamplingRulesError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidRequestException" => {
                     return RusotoError::Service(GetSamplingRulesError::InvalidRequest(err.msg))
@@ -2524,6 +2536,7 @@ impl GetSamplingStatisticSummariesError {
         res: BufferedHttpResponse,
     ) -> RusotoError<GetSamplingStatisticSummariesError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidRequestException" => {
                     return RusotoError::Service(
@@ -2564,6 +2577,7 @@ pub enum GetSamplingTargetsError {
 impl GetSamplingTargetsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetSamplingTargetsError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidRequestException" => {
                     return RusotoError::Service(GetSamplingTargetsError::InvalidRequest(err.msg))
@@ -2600,6 +2614,7 @@ pub enum GetServiceGraphError {
 impl GetServiceGraphError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetServiceGraphError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidRequestException" => {
                     return RusotoError::Service(GetServiceGraphError::InvalidRequest(err.msg))
@@ -2638,6 +2653,7 @@ impl GetTimeSeriesServiceStatisticsError {
         res: BufferedHttpResponse,
     ) -> RusotoError<GetTimeSeriesServiceStatisticsError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidRequestException" => {
                     return RusotoError::Service(
@@ -2680,6 +2696,7 @@ pub enum GetTraceGraphError {
 impl GetTraceGraphError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetTraceGraphError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidRequestException" => {
                     return RusotoError::Service(GetTraceGraphError::InvalidRequest(err.msg))
@@ -2716,6 +2733,7 @@ pub enum GetTraceSummariesError {
 impl GetTraceSummariesError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetTraceSummariesError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidRequestException" => {
                     return RusotoError::Service(GetTraceSummariesError::InvalidRequest(err.msg))
@@ -2754,6 +2772,7 @@ pub enum ListTagsForResourceError {
 impl ListTagsForResourceError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListTagsForResourceError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidRequestException" => {
                     return RusotoError::Service(ListTagsForResourceError::InvalidRequest(err.msg))
@@ -2796,6 +2815,7 @@ pub enum PutEncryptionConfigError {
 impl PutEncryptionConfigError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<PutEncryptionConfigError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidRequestException" => {
                     return RusotoError::Service(PutEncryptionConfigError::InvalidRequest(err.msg))
@@ -2832,6 +2852,7 @@ pub enum PutTelemetryRecordsError {
 impl PutTelemetryRecordsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<PutTelemetryRecordsError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidRequestException" => {
                     return RusotoError::Service(PutTelemetryRecordsError::InvalidRequest(err.msg))
@@ -2868,6 +2889,7 @@ pub enum PutTraceSegmentsError {
 impl PutTraceSegmentsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<PutTraceSegmentsError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidRequestException" => {
                     return RusotoError::Service(PutTraceSegmentsError::InvalidRequest(err.msg))
@@ -2908,6 +2930,7 @@ pub enum TagResourceError {
 impl TagResourceError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<TagResourceError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidRequestException" => {
                     return RusotoError::Service(TagResourceError::InvalidRequest(err.msg))
@@ -2954,6 +2977,7 @@ pub enum UntagResourceError {
 impl UntagResourceError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UntagResourceError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidRequestException" => {
                     return RusotoError::Service(UntagResourceError::InvalidRequest(err.msg))
@@ -2994,6 +3018,7 @@ pub enum UpdateGroupError {
 impl UpdateGroupError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateGroupError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidRequestException" => {
                     return RusotoError::Service(UpdateGroupError::InvalidRequest(err.msg))
@@ -3030,6 +3055,7 @@ pub enum UpdateSamplingRuleError {
 impl UpdateSamplingRuleError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateSamplingRuleError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidRequestException" => {
                     return RusotoError::Service(UpdateSamplingRuleError::InvalidRequest(err.msg))
@@ -3267,6 +3293,7 @@ impl XRay for XRayClient {
         &self,
         input: BatchGetTracesRequest,
     ) -> Result<BatchGetTracesResult, RusotoError<BatchGetTracesError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/Traces";
 
         let mut request = SignedRequest::new("POST", "xray", &self.region, &request_uri);
@@ -3298,6 +3325,7 @@ impl XRay for XRayClient {
         &self,
         input: CreateGroupRequest,
     ) -> Result<CreateGroupResult, RusotoError<CreateGroupError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/CreateGroup";
 
         let mut request = SignedRequest::new("POST", "xray", &self.region, &request_uri);
@@ -3329,6 +3357,7 @@ impl XRay for XRayClient {
         &self,
         input: CreateSamplingRuleRequest,
     ) -> Result<CreateSamplingRuleResult, RusotoError<CreateSamplingRuleError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/CreateSamplingRule";
 
         let mut request = SignedRequest::new("POST", "xray", &self.region, &request_uri);
@@ -3360,6 +3389,7 @@ impl XRay for XRayClient {
         &self,
         input: DeleteGroupRequest,
     ) -> Result<DeleteGroupResult, RusotoError<DeleteGroupError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/DeleteGroup";
 
         let mut request = SignedRequest::new("POST", "xray", &self.region, &request_uri);
@@ -3391,6 +3421,7 @@ impl XRay for XRayClient {
         &self,
         input: DeleteSamplingRuleRequest,
     ) -> Result<DeleteSamplingRuleResult, RusotoError<DeleteSamplingRuleError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/DeleteSamplingRule";
 
         let mut request = SignedRequest::new("POST", "xray", &self.region, &request_uri);
@@ -3421,6 +3452,7 @@ impl XRay for XRayClient {
     async fn get_encryption_config(
         &self,
     ) -> Result<GetEncryptionConfigResult, RusotoError<GetEncryptionConfigError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/EncryptionConfig";
 
         let mut request = SignedRequest::new("POST", "xray", &self.region, &request_uri);
@@ -3449,6 +3481,7 @@ impl XRay for XRayClient {
         &self,
         input: GetGroupRequest,
     ) -> Result<GetGroupResult, RusotoError<GetGroupError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/GetGroup";
 
         let mut request = SignedRequest::new("POST", "xray", &self.region, &request_uri);
@@ -3480,6 +3513,7 @@ impl XRay for XRayClient {
         &self,
         input: GetGroupsRequest,
     ) -> Result<GetGroupsResult, RusotoError<GetGroupsError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/Groups";
 
         let mut request = SignedRequest::new("POST", "xray", &self.region, &request_uri);
@@ -3511,6 +3545,7 @@ impl XRay for XRayClient {
         &self,
         input: GetInsightRequest,
     ) -> Result<GetInsightResult, RusotoError<GetInsightError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/Insight";
 
         let mut request = SignedRequest::new("POST", "xray", &self.region, &request_uri);
@@ -3542,6 +3577,7 @@ impl XRay for XRayClient {
         &self,
         input: GetInsightEventsRequest,
     ) -> Result<GetInsightEventsResult, RusotoError<GetInsightEventsError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/InsightEvents";
 
         let mut request = SignedRequest::new("POST", "xray", &self.region, &request_uri);
@@ -3573,6 +3609,7 @@ impl XRay for XRayClient {
         &self,
         input: GetInsightImpactGraphRequest,
     ) -> Result<GetInsightImpactGraphResult, RusotoError<GetInsightImpactGraphError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/InsightImpactGraph";
 
         let mut request = SignedRequest::new("POST", "xray", &self.region, &request_uri);
@@ -3604,6 +3641,7 @@ impl XRay for XRayClient {
         &self,
         input: GetInsightSummariesRequest,
     ) -> Result<GetInsightSummariesResult, RusotoError<GetInsightSummariesError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/InsightSummaries";
 
         let mut request = SignedRequest::new("POST", "xray", &self.region, &request_uri);
@@ -3635,6 +3673,7 @@ impl XRay for XRayClient {
         &self,
         input: GetSamplingRulesRequest,
     ) -> Result<GetSamplingRulesResult, RusotoError<GetSamplingRulesError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/GetSamplingRules";
 
         let mut request = SignedRequest::new("POST", "xray", &self.region, &request_uri);
@@ -3667,6 +3706,7 @@ impl XRay for XRayClient {
         input: GetSamplingStatisticSummariesRequest,
     ) -> Result<GetSamplingStatisticSummariesResult, RusotoError<GetSamplingStatisticSummariesError>>
     {
+        #![allow(clippy::needless_update)]
         let request_uri = "/SamplingStatisticSummaries";
 
         let mut request = SignedRequest::new("POST", "xray", &self.region, &request_uri);
@@ -3698,6 +3738,7 @@ impl XRay for XRayClient {
         &self,
         input: GetSamplingTargetsRequest,
     ) -> Result<GetSamplingTargetsResult, RusotoError<GetSamplingTargetsError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/SamplingTargets";
 
         let mut request = SignedRequest::new("POST", "xray", &self.region, &request_uri);
@@ -3729,6 +3770,7 @@ impl XRay for XRayClient {
         &self,
         input: GetServiceGraphRequest,
     ) -> Result<GetServiceGraphResult, RusotoError<GetServiceGraphError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/ServiceGraph";
 
         let mut request = SignedRequest::new("POST", "xray", &self.region, &request_uri);
@@ -3763,6 +3805,7 @@ impl XRay for XRayClient {
         GetTimeSeriesServiceStatisticsResult,
         RusotoError<GetTimeSeriesServiceStatisticsError>,
     > {
+        #![allow(clippy::needless_update)]
         let request_uri = "/TimeSeriesServiceStatistics";
 
         let mut request = SignedRequest::new("POST", "xray", &self.region, &request_uri);
@@ -3794,6 +3837,7 @@ impl XRay for XRayClient {
         &self,
         input: GetTraceGraphRequest,
     ) -> Result<GetTraceGraphResult, RusotoError<GetTraceGraphError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/TraceGraph";
 
         let mut request = SignedRequest::new("POST", "xray", &self.region, &request_uri);
@@ -3825,6 +3869,7 @@ impl XRay for XRayClient {
         &self,
         input: GetTraceSummariesRequest,
     ) -> Result<GetTraceSummariesResult, RusotoError<GetTraceSummariesError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/TraceSummaries";
 
         let mut request = SignedRequest::new("POST", "xray", &self.region, &request_uri);
@@ -3856,6 +3901,7 @@ impl XRay for XRayClient {
         &self,
         input: ListTagsForResourceRequest,
     ) -> Result<ListTagsForResourceResponse, RusotoError<ListTagsForResourceError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/ListTagsForResource";
 
         let mut request = SignedRequest::new("POST", "xray", &self.region, &request_uri);
@@ -3887,6 +3933,7 @@ impl XRay for XRayClient {
         &self,
         input: PutEncryptionConfigRequest,
     ) -> Result<PutEncryptionConfigResult, RusotoError<PutEncryptionConfigError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/PutEncryptionConfig";
 
         let mut request = SignedRequest::new("POST", "xray", &self.region, &request_uri);
@@ -3918,6 +3965,7 @@ impl XRay for XRayClient {
         &self,
         input: PutTelemetryRecordsRequest,
     ) -> Result<PutTelemetryRecordsResult, RusotoError<PutTelemetryRecordsError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/TelemetryRecords";
 
         let mut request = SignedRequest::new("POST", "xray", &self.region, &request_uri);
@@ -3949,6 +3997,7 @@ impl XRay for XRayClient {
         &self,
         input: PutTraceSegmentsRequest,
     ) -> Result<PutTraceSegmentsResult, RusotoError<PutTraceSegmentsError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/TraceSegments";
 
         let mut request = SignedRequest::new("POST", "xray", &self.region, &request_uri);
@@ -3980,6 +4029,7 @@ impl XRay for XRayClient {
         &self,
         input: TagResourceRequest,
     ) -> Result<TagResourceResponse, RusotoError<TagResourceError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/TagResource";
 
         let mut request = SignedRequest::new("POST", "xray", &self.region, &request_uri);
@@ -4011,6 +4061,7 @@ impl XRay for XRayClient {
         &self,
         input: UntagResourceRequest,
     ) -> Result<UntagResourceResponse, RusotoError<UntagResourceError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/UntagResource";
 
         let mut request = SignedRequest::new("POST", "xray", &self.region, &request_uri);
@@ -4042,6 +4093,7 @@ impl XRay for XRayClient {
         &self,
         input: UpdateGroupRequest,
     ) -> Result<UpdateGroupResult, RusotoError<UpdateGroupError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/UpdateGroup";
 
         let mut request = SignedRequest::new("POST", "xray", &self.region, &request_uri);
@@ -4073,6 +4125,7 @@ impl XRay for XRayClient {
         &self,
         input: UpdateSamplingRuleRequest,
     ) -> Result<UpdateSamplingRuleResult, RusotoError<UpdateSamplingRuleError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/UpdateSamplingRule";
 
         let mut request = SignedRequest::new("POST", "xray", &self.region, &request_uri);

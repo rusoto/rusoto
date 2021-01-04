@@ -50,7 +50,6 @@ impl CloudHsmv2Client {
     }
 }
 
-use serde_json;
 /// <p>Contains information about a backup of an AWS CloudHSM cluster. All backup objects contain the <code>BackupId</code>, <code>BackupState</code>, <code>ClusterId</code>, and <code>CreateTimestamp</code> parameters. Backups that were copied into a destination region additionally contain the <code>CopyTimestamp</code>, <code>SourceBackup</code>, <code>SourceCluster</code>, and <code>SourceRegion</code> parameters. A backup that is pending deletion will include the <code>DeleteTimestamp</code> parameter.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
@@ -642,6 +641,7 @@ pub enum CopyBackupToRegionError {
 impl CopyBackupToRegionError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CopyBackupToRegionError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "CloudHsmAccessDeniedException" => {
                     return RusotoError::Service(CopyBackupToRegionError::CloudHsmAccessDenied(
@@ -710,6 +710,7 @@ pub enum CreateClusterError {
 impl CreateClusterError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateClusterError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "CloudHsmAccessDeniedException" => {
                     return RusotoError::Service(CreateClusterError::CloudHsmAccessDenied(err.msg))
@@ -774,6 +775,7 @@ pub enum CreateHsmError {
 impl CreateHsmError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateHsmError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "CloudHsmAccessDeniedException" => {
                     return RusotoError::Service(CreateHsmError::CloudHsmAccessDenied(err.msg))
@@ -828,6 +830,7 @@ pub enum DeleteBackupError {
 impl DeleteBackupError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteBackupError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "CloudHsmAccessDeniedException" => {
                     return RusotoError::Service(DeleteBackupError::CloudHsmAccessDenied(err.msg))
@@ -888,6 +891,7 @@ pub enum DeleteClusterError {
 impl DeleteClusterError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteClusterError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "CloudHsmAccessDeniedException" => {
                     return RusotoError::Service(DeleteClusterError::CloudHsmAccessDenied(err.msg))
@@ -952,6 +956,7 @@ pub enum DeleteHsmError {
 impl DeleteHsmError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteHsmError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "CloudHsmAccessDeniedException" => {
                     return RusotoError::Service(DeleteHsmError::CloudHsmAccessDenied(err.msg))
@@ -1008,6 +1013,7 @@ pub enum DescribeBackupsError {
 impl DescribeBackupsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeBackupsError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "CloudHsmAccessDeniedException" => {
                     return RusotoError::Service(DescribeBackupsError::CloudHsmAccessDenied(
@@ -1074,6 +1080,7 @@ pub enum DescribeClustersError {
 impl DescribeClustersError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeClustersError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "CloudHsmAccessDeniedException" => {
                     return RusotoError::Service(DescribeClustersError::CloudHsmAccessDenied(
@@ -1134,6 +1141,7 @@ pub enum InitializeClusterError {
 impl InitializeClusterError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<InitializeClusterError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "CloudHsmAccessDeniedException" => {
                     return RusotoError::Service(InitializeClusterError::CloudHsmAccessDenied(
@@ -1198,6 +1206,7 @@ pub enum ListTagsError {
 impl ListTagsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListTagsError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "CloudHsmAccessDeniedException" => {
                     return RusotoError::Service(ListTagsError::CloudHsmAccessDenied(err.msg))
@@ -1256,6 +1265,7 @@ pub enum ModifyBackupAttributesError {
 impl ModifyBackupAttributesError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ModifyBackupAttributesError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "CloudHsmAccessDeniedException" => {
                     return RusotoError::Service(ModifyBackupAttributesError::CloudHsmAccessDenied(
@@ -1326,6 +1336,7 @@ pub enum ModifyClusterError {
 impl ModifyClusterError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ModifyClusterError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "CloudHsmAccessDeniedException" => {
                     return RusotoError::Service(ModifyClusterError::CloudHsmAccessDenied(err.msg))
@@ -1386,6 +1397,7 @@ pub enum RestoreBackupError {
 impl RestoreBackupError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<RestoreBackupError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "CloudHsmAccessDeniedException" => {
                     return RusotoError::Service(RestoreBackupError::CloudHsmAccessDenied(err.msg))
@@ -1448,6 +1460,7 @@ pub enum TagResourceError {
 impl TagResourceError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<TagResourceError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "CloudHsmAccessDeniedException" => {
                     return RusotoError::Service(TagResourceError::CloudHsmAccessDenied(err.msg))
@@ -1510,6 +1523,7 @@ pub enum UntagResourceError {
 impl UntagResourceError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UntagResourceError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "CloudHsmAccessDeniedException" => {
                     return RusotoError::Service(UntagResourceError::CloudHsmAccessDenied(err.msg))

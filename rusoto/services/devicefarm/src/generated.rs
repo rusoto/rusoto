@@ -49,7 +49,6 @@ impl DeviceFarmClient {
     }
 }
 
-use serde_json;
 /// <p>A container for account-level settings in AWS Device Farm.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
@@ -3444,6 +3443,7 @@ pub enum CreateDevicePoolError {
 impl CreateDevicePoolError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateDevicePoolError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ArgumentException" => {
                     return RusotoError::Service(CreateDevicePoolError::Argument(err.msg))
@@ -3492,6 +3492,7 @@ pub enum CreateInstanceProfileError {
 impl CreateInstanceProfileError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateInstanceProfileError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ArgumentException" => {
                     return RusotoError::Service(CreateInstanceProfileError::Argument(err.msg))
@@ -3542,6 +3543,7 @@ pub enum CreateNetworkProfileError {
 impl CreateNetworkProfileError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateNetworkProfileError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ArgumentException" => {
                     return RusotoError::Service(CreateNetworkProfileError::Argument(err.msg))
@@ -3592,6 +3594,7 @@ pub enum CreateProjectError {
 impl CreateProjectError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateProjectError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ArgumentException" => {
                     return RusotoError::Service(CreateProjectError::Argument(err.msg))
@@ -3644,6 +3647,7 @@ pub enum CreateRemoteAccessSessionError {
 impl CreateRemoteAccessSessionError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateRemoteAccessSessionError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ArgumentException" => {
                     return RusotoError::Service(CreateRemoteAccessSessionError::Argument(err.msg))
@@ -3690,6 +3694,7 @@ pub enum CreateTestGridProjectError {
 impl CreateTestGridProjectError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateTestGridProjectError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalServiceException" => {
                     return RusotoError::Service(CreateTestGridProjectError::InternalService(
@@ -3726,6 +3731,7 @@ pub enum CreateTestGridUrlError {
 impl CreateTestGridUrlError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateTestGridUrlError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ArgumentException" => {
                     return RusotoError::Service(CreateTestGridUrlError::Argument(err.msg))
@@ -3770,6 +3776,7 @@ pub enum CreateUploadError {
 impl CreateUploadError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateUploadError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ArgumentException" => {
                     return RusotoError::Service(CreateUploadError::Argument(err.msg))
@@ -3816,6 +3823,7 @@ pub enum CreateVPCEConfigurationError {
 impl CreateVPCEConfigurationError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateVPCEConfigurationError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ArgumentException" => {
                     return RusotoError::Service(CreateVPCEConfigurationError::Argument(err.msg))
@@ -3864,6 +3872,7 @@ pub enum DeleteDevicePoolError {
 impl DeleteDevicePoolError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteDevicePoolError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ArgumentException" => {
                     return RusotoError::Service(DeleteDevicePoolError::Argument(err.msg))
@@ -3912,6 +3921,7 @@ pub enum DeleteInstanceProfileError {
 impl DeleteInstanceProfileError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteInstanceProfileError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ArgumentException" => {
                     return RusotoError::Service(DeleteInstanceProfileError::Argument(err.msg))
@@ -3962,6 +3972,7 @@ pub enum DeleteNetworkProfileError {
 impl DeleteNetworkProfileError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteNetworkProfileError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ArgumentException" => {
                     return RusotoError::Service(DeleteNetworkProfileError::Argument(err.msg))
@@ -4010,6 +4021,7 @@ pub enum DeleteProjectError {
 impl DeleteProjectError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteProjectError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ArgumentException" => {
                     return RusotoError::Service(DeleteProjectError::Argument(err.msg))
@@ -4058,6 +4070,7 @@ pub enum DeleteRemoteAccessSessionError {
 impl DeleteRemoteAccessSessionError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteRemoteAccessSessionError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ArgumentException" => {
                     return RusotoError::Service(DeleteRemoteAccessSessionError::Argument(err.msg))
@@ -4110,6 +4123,7 @@ pub enum DeleteRunError {
 impl DeleteRunError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteRunError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ArgumentException" => {
                     return RusotoError::Service(DeleteRunError::Argument(err.msg))
@@ -4158,6 +4172,7 @@ pub enum DeleteTestGridProjectError {
 impl DeleteTestGridProjectError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteTestGridProjectError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ArgumentException" => {
                     return RusotoError::Service(DeleteTestGridProjectError::Argument(err.msg))
@@ -4208,6 +4223,7 @@ pub enum DeleteUploadError {
 impl DeleteUploadError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteUploadError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ArgumentException" => {
                     return RusotoError::Service(DeleteUploadError::Argument(err.msg))
@@ -4256,6 +4272,7 @@ pub enum DeleteVPCEConfigurationError {
 impl DeleteVPCEConfigurationError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteVPCEConfigurationError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ArgumentException" => {
                     return RusotoError::Service(DeleteVPCEConfigurationError::Argument(err.msg))
@@ -4308,6 +4325,7 @@ pub enum GetAccountSettingsError {
 impl GetAccountSettingsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetAccountSettingsError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ArgumentException" => {
                     return RusotoError::Service(GetAccountSettingsError::Argument(err.msg))
@@ -4356,6 +4374,7 @@ pub enum GetDeviceError {
 impl GetDeviceError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetDeviceError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ArgumentException" => {
                     return RusotoError::Service(GetDeviceError::Argument(err.msg))
@@ -4404,6 +4423,7 @@ pub enum GetDeviceInstanceError {
 impl GetDeviceInstanceError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetDeviceInstanceError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ArgumentException" => {
                     return RusotoError::Service(GetDeviceInstanceError::Argument(err.msg))
@@ -4452,6 +4472,7 @@ pub enum GetDevicePoolError {
 impl GetDevicePoolError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetDevicePoolError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ArgumentException" => {
                     return RusotoError::Service(GetDevicePoolError::Argument(err.msg))
@@ -4502,6 +4523,7 @@ impl GetDevicePoolCompatibilityError {
         res: BufferedHttpResponse,
     ) -> RusotoError<GetDevicePoolCompatibilityError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ArgumentException" => {
                     return RusotoError::Service(GetDevicePoolCompatibilityError::Argument(err.msg))
@@ -4554,6 +4576,7 @@ pub enum GetInstanceProfileError {
 impl GetInstanceProfileError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetInstanceProfileError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ArgumentException" => {
                     return RusotoError::Service(GetInstanceProfileError::Argument(err.msg))
@@ -4602,6 +4625,7 @@ pub enum GetJobError {
 impl GetJobError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetJobError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ArgumentException" => return RusotoError::Service(GetJobError::Argument(err.msg)),
                 "LimitExceededException" => {
@@ -4646,6 +4670,7 @@ pub enum GetNetworkProfileError {
 impl GetNetworkProfileError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetNetworkProfileError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ArgumentException" => {
                     return RusotoError::Service(GetNetworkProfileError::Argument(err.msg))
@@ -4696,6 +4721,7 @@ pub enum GetOfferingStatusError {
 impl GetOfferingStatusError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetOfferingStatusError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ArgumentException" => {
                     return RusotoError::Service(GetOfferingStatusError::Argument(err.msg))
@@ -4748,6 +4774,7 @@ pub enum GetProjectError {
 impl GetProjectError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetProjectError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ArgumentException" => {
                     return RusotoError::Service(GetProjectError::Argument(err.msg))
@@ -4796,6 +4823,7 @@ pub enum GetRemoteAccessSessionError {
 impl GetRemoteAccessSessionError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetRemoteAccessSessionError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ArgumentException" => {
                     return RusotoError::Service(GetRemoteAccessSessionError::Argument(err.msg))
@@ -4848,6 +4876,7 @@ pub enum GetRunError {
 impl GetRunError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetRunError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ArgumentException" => return RusotoError::Service(GetRunError::Argument(err.msg)),
                 "LimitExceededException" => {
@@ -4892,6 +4921,7 @@ pub enum GetSuiteError {
 impl GetSuiteError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetSuiteError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ArgumentException" => {
                     return RusotoError::Service(GetSuiteError::Argument(err.msg))
@@ -4940,6 +4970,7 @@ pub enum GetTestError {
 impl GetTestError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetTestError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ArgumentException" => {
                     return RusotoError::Service(GetTestError::Argument(err.msg))
@@ -4986,6 +5017,7 @@ pub enum GetTestGridProjectError {
 impl GetTestGridProjectError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetTestGridProjectError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ArgumentException" => {
                     return RusotoError::Service(GetTestGridProjectError::Argument(err.msg))
@@ -5028,6 +5060,7 @@ pub enum GetTestGridSessionError {
 impl GetTestGridSessionError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetTestGridSessionError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ArgumentException" => {
                     return RusotoError::Service(GetTestGridSessionError::Argument(err.msg))
@@ -5072,6 +5105,7 @@ pub enum GetUploadError {
 impl GetUploadError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetUploadError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ArgumentException" => {
                     return RusotoError::Service(GetUploadError::Argument(err.msg))
@@ -5118,6 +5152,7 @@ pub enum GetVPCEConfigurationError {
 impl GetVPCEConfigurationError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetVPCEConfigurationError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ArgumentException" => {
                     return RusotoError::Service(GetVPCEConfigurationError::Argument(err.msg))
@@ -5164,6 +5199,7 @@ impl InstallToRemoteAccessSessionError {
         res: BufferedHttpResponse,
     ) -> RusotoError<InstallToRemoteAccessSessionError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ArgumentException" => {
                     return RusotoError::Service(InstallToRemoteAccessSessionError::Argument(
@@ -5220,6 +5256,7 @@ pub enum ListArtifactsError {
 impl ListArtifactsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListArtifactsError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ArgumentException" => {
                     return RusotoError::Service(ListArtifactsError::Argument(err.msg))
@@ -5268,6 +5305,7 @@ pub enum ListDeviceInstancesError {
 impl ListDeviceInstancesError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListDeviceInstancesError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ArgumentException" => {
                     return RusotoError::Service(ListDeviceInstancesError::Argument(err.msg))
@@ -5316,6 +5354,7 @@ pub enum ListDevicePoolsError {
 impl ListDevicePoolsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListDevicePoolsError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ArgumentException" => {
                     return RusotoError::Service(ListDevicePoolsError::Argument(err.msg))
@@ -5364,6 +5403,7 @@ pub enum ListDevicesError {
 impl ListDevicesError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListDevicesError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ArgumentException" => {
                     return RusotoError::Service(ListDevicesError::Argument(err.msg))
@@ -5412,6 +5452,7 @@ pub enum ListInstanceProfilesError {
 impl ListInstanceProfilesError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListInstanceProfilesError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ArgumentException" => {
                     return RusotoError::Service(ListInstanceProfilesError::Argument(err.msg))
@@ -5460,6 +5501,7 @@ pub enum ListJobsError {
 impl ListJobsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListJobsError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ArgumentException" => {
                     return RusotoError::Service(ListJobsError::Argument(err.msg))
@@ -5508,6 +5550,7 @@ pub enum ListNetworkProfilesError {
 impl ListNetworkProfilesError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListNetworkProfilesError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ArgumentException" => {
                     return RusotoError::Service(ListNetworkProfilesError::Argument(err.msg))
@@ -5558,6 +5601,7 @@ pub enum ListOfferingPromotionsError {
 impl ListOfferingPromotionsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListOfferingPromotionsError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ArgumentException" => {
                     return RusotoError::Service(ListOfferingPromotionsError::Argument(err.msg))
@@ -5616,6 +5660,7 @@ pub enum ListOfferingTransactionsError {
 impl ListOfferingTransactionsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListOfferingTransactionsError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ArgumentException" => {
                     return RusotoError::Service(ListOfferingTransactionsError::Argument(err.msg))
@@ -5676,6 +5721,7 @@ pub enum ListOfferingsError {
 impl ListOfferingsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListOfferingsError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ArgumentException" => {
                     return RusotoError::Service(ListOfferingsError::Argument(err.msg))
@@ -5728,6 +5774,7 @@ pub enum ListProjectsError {
 impl ListProjectsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListProjectsError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ArgumentException" => {
                     return RusotoError::Service(ListProjectsError::Argument(err.msg))
@@ -5776,6 +5823,7 @@ pub enum ListRemoteAccessSessionsError {
 impl ListRemoteAccessSessionsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListRemoteAccessSessionsError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ArgumentException" => {
                     return RusotoError::Service(ListRemoteAccessSessionsError::Argument(err.msg))
@@ -5828,6 +5876,7 @@ pub enum ListRunsError {
 impl ListRunsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListRunsError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ArgumentException" => {
                     return RusotoError::Service(ListRunsError::Argument(err.msg))
@@ -5876,6 +5925,7 @@ pub enum ListSamplesError {
 impl ListSamplesError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListSamplesError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ArgumentException" => {
                     return RusotoError::Service(ListSamplesError::Argument(err.msg))
@@ -5924,6 +5974,7 @@ pub enum ListSuitesError {
 impl ListSuitesError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListSuitesError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ArgumentException" => {
                     return RusotoError::Service(ListSuitesError::Argument(err.msg))
@@ -5970,6 +6021,7 @@ pub enum ListTagsForResourceError {
 impl ListTagsForResourceError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListTagsForResourceError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ArgumentException" => {
                     return RusotoError::Service(ListTagsForResourceError::Argument(err.msg))
@@ -6010,6 +6062,7 @@ pub enum ListTestGridProjectsError {
 impl ListTestGridProjectsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListTestGridProjectsError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ArgumentException" => {
                     return RusotoError::Service(ListTestGridProjectsError::Argument(err.msg))
@@ -6052,6 +6105,7 @@ impl ListTestGridSessionActionsError {
         res: BufferedHttpResponse,
     ) -> RusotoError<ListTestGridSessionActionsError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ArgumentException" => {
                     return RusotoError::Service(ListTestGridSessionActionsError::Argument(err.msg))
@@ -6098,6 +6152,7 @@ impl ListTestGridSessionArtifactsError {
         res: BufferedHttpResponse,
     ) -> RusotoError<ListTestGridSessionArtifactsError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ArgumentException" => {
                     return RusotoError::Service(ListTestGridSessionArtifactsError::Argument(
@@ -6146,6 +6201,7 @@ pub enum ListTestGridSessionsError {
 impl ListTestGridSessionsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListTestGridSessionsError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ArgumentException" => {
                     return RusotoError::Service(ListTestGridSessionsError::Argument(err.msg))
@@ -6192,6 +6248,7 @@ pub enum ListTestsError {
 impl ListTestsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListTestsError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ArgumentException" => {
                     return RusotoError::Service(ListTestsError::Argument(err.msg))
@@ -6240,6 +6297,7 @@ pub enum ListUniqueProblemsError {
 impl ListUniqueProblemsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListUniqueProblemsError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ArgumentException" => {
                     return RusotoError::Service(ListUniqueProblemsError::Argument(err.msg))
@@ -6288,6 +6346,7 @@ pub enum ListUploadsError {
 impl ListUploadsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListUploadsError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ArgumentException" => {
                     return RusotoError::Service(ListUploadsError::Argument(err.msg))
@@ -6332,6 +6391,7 @@ pub enum ListVPCEConfigurationsError {
 impl ListVPCEConfigurationsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListVPCEConfigurationsError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ArgumentException" => {
                     return RusotoError::Service(ListVPCEConfigurationsError::Argument(err.msg))
@@ -6376,6 +6436,7 @@ pub enum PurchaseOfferingError {
 impl PurchaseOfferingError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<PurchaseOfferingError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ArgumentException" => {
                     return RusotoError::Service(PurchaseOfferingError::Argument(err.msg))
@@ -6430,6 +6491,7 @@ pub enum RenewOfferingError {
 impl RenewOfferingError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<RenewOfferingError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ArgumentException" => {
                     return RusotoError::Service(RenewOfferingError::Argument(err.msg))
@@ -6484,6 +6546,7 @@ pub enum ScheduleRunError {
 impl ScheduleRunError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ScheduleRunError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ArgumentException" => {
                     return RusotoError::Service(ScheduleRunError::Argument(err.msg))
@@ -6536,6 +6599,7 @@ pub enum StopJobError {
 impl StopJobError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<StopJobError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ArgumentException" => {
                     return RusotoError::Service(StopJobError::Argument(err.msg))
@@ -6584,6 +6648,7 @@ pub enum StopRemoteAccessSessionError {
 impl StopRemoteAccessSessionError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<StopRemoteAccessSessionError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ArgumentException" => {
                     return RusotoError::Service(StopRemoteAccessSessionError::Argument(err.msg))
@@ -6636,6 +6701,7 @@ pub enum StopRunError {
 impl StopRunError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<StopRunError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ArgumentException" => {
                     return RusotoError::Service(StopRunError::Argument(err.msg))
@@ -6686,6 +6752,7 @@ pub enum TagResourceError {
 impl TagResourceError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<TagResourceError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ArgumentException" => {
                     return RusotoError::Service(TagResourceError::Argument(err.msg))
@@ -6736,6 +6803,7 @@ pub enum UntagResourceError {
 impl UntagResourceError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UntagResourceError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ArgumentException" => {
                     return RusotoError::Service(UntagResourceError::Argument(err.msg))
@@ -6780,6 +6848,7 @@ pub enum UpdateDeviceInstanceError {
 impl UpdateDeviceInstanceError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateDeviceInstanceError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ArgumentException" => {
                     return RusotoError::Service(UpdateDeviceInstanceError::Argument(err.msg))
@@ -6828,6 +6897,7 @@ pub enum UpdateDevicePoolError {
 impl UpdateDevicePoolError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateDevicePoolError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ArgumentException" => {
                     return RusotoError::Service(UpdateDevicePoolError::Argument(err.msg))
@@ -6876,6 +6946,7 @@ pub enum UpdateInstanceProfileError {
 impl UpdateInstanceProfileError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateInstanceProfileError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ArgumentException" => {
                     return RusotoError::Service(UpdateInstanceProfileError::Argument(err.msg))
@@ -6926,6 +6997,7 @@ pub enum UpdateNetworkProfileError {
 impl UpdateNetworkProfileError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateNetworkProfileError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ArgumentException" => {
                     return RusotoError::Service(UpdateNetworkProfileError::Argument(err.msg))
@@ -6974,6 +7046,7 @@ pub enum UpdateProjectError {
 impl UpdateProjectError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateProjectError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ArgumentException" => {
                     return RusotoError::Service(UpdateProjectError::Argument(err.msg))
@@ -7020,6 +7093,7 @@ pub enum UpdateTestGridProjectError {
 impl UpdateTestGridProjectError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateTestGridProjectError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ArgumentException" => {
                     return RusotoError::Service(UpdateTestGridProjectError::Argument(err.msg))
@@ -7066,6 +7140,7 @@ pub enum UpdateUploadError {
 impl UpdateUploadError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateUploadError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ArgumentException" => {
                     return RusotoError::Service(UpdateUploadError::Argument(err.msg))
@@ -7114,6 +7189,7 @@ pub enum UpdateVPCEConfigurationError {
 impl UpdateVPCEConfigurationError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateVPCEConfigurationError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ArgumentException" => {
                     return RusotoError::Service(UpdateVPCEConfigurationError::Argument(err.msg))

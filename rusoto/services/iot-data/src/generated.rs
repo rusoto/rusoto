@@ -171,6 +171,7 @@ pub enum DeleteThingShadowError {
 impl DeleteThingShadowError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteThingShadowError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalFailureException" => {
                     return RusotoError::Service(DeleteThingShadowError::InternalFailure(err.msg))
@@ -249,6 +250,7 @@ pub enum GetThingShadowError {
 impl GetThingShadowError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetThingShadowError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalFailureException" => {
                     return RusotoError::Service(GetThingShadowError::InternalFailure(err.msg))
@@ -321,6 +323,7 @@ pub enum ListNamedShadowsForThingError {
 impl ListNamedShadowsForThingError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListNamedShadowsForThingError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalFailureException" => {
                     return RusotoError::Service(ListNamedShadowsForThingError::InternalFailure(
@@ -393,6 +396,7 @@ pub enum PublishError {
 impl PublishError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<PublishError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalFailureException" => {
                     return RusotoError::Service(PublishError::InternalFailure(err.msg))
@@ -451,6 +455,7 @@ pub enum UpdateThingShadowError {
 impl UpdateThingShadowError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateThingShadowError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ConflictException" => {
                     return RusotoError::Service(UpdateThingShadowError::Conflict(err.msg))
@@ -587,6 +592,7 @@ impl IotData for IotDataClient {
         &self,
         input: DeleteThingShadowRequest,
     ) -> Result<DeleteThingShadowResponse, RusotoError<DeleteThingShadowError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!("/things/{thing_name}/shadow", thing_name = input.thing_name);
 
         let mut request = SignedRequest::new("DELETE", "iotdata", &self.region, &request_uri);
@@ -608,8 +614,10 @@ impl IotData for IotDataClient {
         if response.status.is_success() {
             let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
 
-            let mut result = DeleteThingShadowResponse::default();
-            result.payload = response.body;
+            let mut result = DeleteThingShadowResponse {
+                payload: response.body,
+                ..DeleteThingShadowResponse::default()
+            };
 
             Ok(result)
         } else {
@@ -624,6 +632,7 @@ impl IotData for IotDataClient {
         &self,
         input: GetThingShadowRequest,
     ) -> Result<GetThingShadowResponse, RusotoError<GetThingShadowError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!("/things/{thing_name}/shadow", thing_name = input.thing_name);
 
         let mut request = SignedRequest::new("GET", "iotdata", &self.region, &request_uri);
@@ -645,8 +654,10 @@ impl IotData for IotDataClient {
         if response.status.is_success() {
             let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
 
-            let mut result = GetThingShadowResponse::default();
-            result.payload = Some(response.body);
+            let mut result = GetThingShadowResponse {
+                payload: Some(response.body),
+                ..GetThingShadowResponse::default()
+            };
 
             Ok(result)
         } else {
@@ -661,6 +672,7 @@ impl IotData for IotDataClient {
         &self,
         input: ListNamedShadowsForThingRequest,
     ) -> Result<ListNamedShadowsForThingResponse, RusotoError<ListNamedShadowsForThingError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/api/things/shadow/ListNamedShadowsForThing/{thing_name}",
             thing_name = input.thing_name
@@ -700,6 +712,7 @@ impl IotData for IotDataClient {
     /// <p>Publishes state information.</p> <p>For more information, see <a href="http://docs.aws.amazon.com/iot/latest/developerguide/protocols.html#http">HTTP Protocol</a> in the AWS IoT Developer Guide.</p>
     #[allow(unused_mut)]
     async fn publish(&self, input: PublishRequest) -> Result<(), RusotoError<PublishError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!("/topics/{topic}", topic = input.topic);
 
         let mut request = SignedRequest::new("POST", "iotdata", &self.region, &request_uri);
@@ -726,9 +739,9 @@ impl IotData for IotDataClient {
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
             let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = ::std::mem::drop(response);
+            let _result = ::std::mem::drop(response);
 
-            Ok(result)
+            Ok(())
         } else {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             Err(PublishError::from_response(response))
@@ -741,6 +754,7 @@ impl IotData for IotDataClient {
         &self,
         input: UpdateThingShadowRequest,
     ) -> Result<UpdateThingShadowResponse, RusotoError<UpdateThingShadowError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!("/things/{thing_name}/shadow", thing_name = input.thing_name);
 
         let mut request = SignedRequest::new("POST", "iotdata", &self.region, &request_uri);
@@ -764,8 +778,10 @@ impl IotData for IotDataClient {
         if response.status.is_success() {
             let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
 
-            let mut result = UpdateThingShadowResponse::default();
-            result.payload = Some(response.body);
+            let mut result = UpdateThingShadowResponse {
+                payload: Some(response.body),
+                ..UpdateThingShadowResponse::default()
+            };
 
             Ok(result)
         } else {

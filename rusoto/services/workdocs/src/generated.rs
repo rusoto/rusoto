@@ -24,7 +24,6 @@ use rusoto_core::proto;
 use rusoto_core::signature::SignedRequest;
 #[allow(unused_imports)]
 use serde::{Deserialize, Serialize};
-use serde_json;
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct AbortDocumentVersionUploadRequest {
@@ -1810,6 +1809,7 @@ impl AbortDocumentVersionUploadError {
         res: BufferedHttpResponse,
     ) -> RusotoError<AbortDocumentVersionUploadError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "EntityNotExistsException" => {
                     return RusotoError::Service(AbortDocumentVersionUploadError::EntityNotExists(
@@ -1886,6 +1886,7 @@ pub enum ActivateUserError {
 impl ActivateUserError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ActivateUserError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "EntityNotExistsException" => {
                     return RusotoError::Service(ActivateUserError::EntityNotExists(err.msg))
@@ -1940,6 +1941,7 @@ pub enum AddResourcePermissionsError {
 impl AddResourcePermissionsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<AddResourcePermissionsError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "FailedDependencyException" => {
                     return RusotoError::Service(AddResourcePermissionsError::FailedDependency(
@@ -2006,6 +2008,7 @@ pub enum CreateCommentError {
 impl CreateCommentError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateCommentError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "DocumentLockedForCommentsException" => {
                     return RusotoError::Service(CreateCommentError::DocumentLockedForComments(
@@ -2082,6 +2085,7 @@ pub enum CreateCustomMetadataError {
 impl CreateCustomMetadataError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateCustomMetadataError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "CustomMetadataLimitExceededException" => {
                     return RusotoError::Service(
@@ -2170,6 +2174,7 @@ pub enum CreateFolderError {
 impl CreateFolderError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateFolderError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ConflictingOperationException" => {
                     return RusotoError::Service(CreateFolderError::ConflictingOperation(err.msg))
@@ -2244,6 +2249,7 @@ pub enum CreateLabelsError {
 impl CreateLabelsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateLabelsError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "EntityNotExistsException" => {
                     return RusotoError::Service(CreateLabelsError::EntityNotExists(err.msg))
@@ -2302,6 +2308,7 @@ impl CreateNotificationSubscriptionError {
         res: BufferedHttpResponse,
     ) -> RusotoError<CreateNotificationSubscriptionError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ServiceUnavailableException" => {
                     return RusotoError::Service(
@@ -2360,6 +2367,7 @@ pub enum CreateUserError {
 impl CreateUserError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateUserError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "EntityAlreadyExistsException" => {
                     return RusotoError::Service(CreateUserError::EntityAlreadyExists(err.msg))
@@ -2416,6 +2424,7 @@ pub enum DeactivateUserError {
 impl DeactivateUserError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeactivateUserError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "EntityNotExistsException" => {
                     return RusotoError::Service(DeactivateUserError::EntityNotExists(err.msg))
@@ -2478,6 +2487,7 @@ pub enum DeleteCommentError {
 impl DeleteCommentError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteCommentError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "DocumentLockedForCommentsException" => {
                     return RusotoError::Service(DeleteCommentError::DocumentLockedForComments(
@@ -2546,6 +2556,7 @@ pub enum DeleteCustomMetadataError {
 impl DeleteCustomMetadataError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteCustomMetadataError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "EntityNotExistsException" => {
                     return RusotoError::Service(DeleteCustomMetadataError::EntityNotExists(
@@ -2624,6 +2635,7 @@ pub enum DeleteDocumentError {
 impl DeleteDocumentError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteDocumentError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ConcurrentModificationException" => {
                     return RusotoError::Service(DeleteDocumentError::ConcurrentModification(
@@ -2702,6 +2714,7 @@ pub enum DeleteFolderError {
 impl DeleteFolderError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteFolderError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ConcurrentModificationException" => {
                     return RusotoError::Service(DeleteFolderError::ConcurrentModification(err.msg))
@@ -2774,6 +2787,7 @@ pub enum DeleteFolderContentsError {
 impl DeleteFolderContentsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteFolderContentsError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ConflictingOperationException" => {
                     return RusotoError::Service(DeleteFolderContentsError::ConflictingOperation(
@@ -2852,6 +2866,7 @@ pub enum DeleteLabelsError {
 impl DeleteLabelsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteLabelsError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "EntityNotExistsException" => {
                     return RusotoError::Service(DeleteLabelsError::EntityNotExists(err.msg))
@@ -2908,6 +2923,7 @@ impl DeleteNotificationSubscriptionError {
         res: BufferedHttpResponse,
     ) -> RusotoError<DeleteNotificationSubscriptionError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "EntityNotExistsException" => {
                     return RusotoError::Service(
@@ -2974,6 +2990,7 @@ pub enum DeleteUserError {
 impl DeleteUserError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteUserError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "EntityNotExistsException" => {
                     return RusotoError::Service(DeleteUserError::EntityNotExists(err.msg))
@@ -3030,6 +3047,7 @@ pub enum DescribeActivitiesError {
 impl DescribeActivitiesError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeActivitiesError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "FailedDependencyException" => {
                     return RusotoError::Service(DescribeActivitiesError::FailedDependency(err.msg))
@@ -3094,6 +3112,7 @@ pub enum DescribeCommentsError {
 impl DescribeCommentsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeCommentsError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "EntityNotExistsException" => {
                     return RusotoError::Service(DescribeCommentsError::EntityNotExists(err.msg))
@@ -3160,6 +3179,7 @@ pub enum DescribeDocumentVersionsError {
 impl DescribeDocumentVersionsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeDocumentVersionsError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "EntityNotExistsException" => {
                     return RusotoError::Service(DescribeDocumentVersionsError::EntityNotExists(
@@ -3242,6 +3262,7 @@ pub enum DescribeFolderContentsError {
 impl DescribeFolderContentsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeFolderContentsError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "EntityNotExistsException" => {
                     return RusotoError::Service(DescribeFolderContentsError::EntityNotExists(
@@ -3312,6 +3333,7 @@ pub enum DescribeGroupsError {
 impl DescribeGroupsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeGroupsError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "FailedDependencyException" => {
                     return RusotoError::Service(DescribeGroupsError::FailedDependency(err.msg))
@@ -3364,6 +3386,7 @@ impl DescribeNotificationSubscriptionsError {
         res: BufferedHttpResponse,
     ) -> RusotoError<DescribeNotificationSubscriptionsError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "EntityNotExistsException" => {
                     return RusotoError::Service(
@@ -3422,6 +3445,7 @@ impl DescribeResourcePermissionsError {
         res: BufferedHttpResponse,
     ) -> RusotoError<DescribeResourcePermissionsError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "FailedDependencyException" => {
                     return RusotoError::Service(
@@ -3486,6 +3510,7 @@ pub enum DescribeRootFoldersError {
 impl DescribeRootFoldersError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeRootFoldersError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "FailedDependencyException" => {
                     return RusotoError::Service(DescribeRootFoldersError::FailedDependency(
@@ -3554,6 +3579,7 @@ pub enum DescribeUsersError {
 impl DescribeUsersError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeUsersError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "EntityNotExistsException" => {
                     return RusotoError::Service(DescribeUsersError::EntityNotExists(err.msg))
@@ -3620,6 +3646,7 @@ pub enum GetCurrentUserError {
 impl GetCurrentUserError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetCurrentUserError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "EntityNotExistsException" => {
                     return RusotoError::Service(GetCurrentUserError::EntityNotExists(err.msg))
@@ -3682,6 +3709,7 @@ pub enum GetDocumentError {
 impl GetDocumentError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetDocumentError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "EntityNotExistsException" => {
                     return RusotoError::Service(GetDocumentError::EntityNotExists(err.msg))
@@ -3746,6 +3774,7 @@ pub enum GetDocumentPathError {
 impl GetDocumentPathError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetDocumentPathError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "EntityNotExistsException" => {
                     return RusotoError::Service(GetDocumentPathError::EntityNotExists(err.msg))
@@ -3808,6 +3837,7 @@ pub enum GetDocumentVersionError {
 impl GetDocumentVersionError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetDocumentVersionError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "EntityNotExistsException" => {
                     return RusotoError::Service(GetDocumentVersionError::EntityNotExists(err.msg))
@@ -3882,6 +3912,7 @@ pub enum GetFolderError {
 impl GetFolderError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetFolderError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "EntityNotExistsException" => {
                     return RusotoError::Service(GetFolderError::EntityNotExists(err.msg))
@@ -3946,6 +3977,7 @@ pub enum GetFolderPathError {
 impl GetFolderPathError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetFolderPathError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "EntityNotExistsException" => {
                     return RusotoError::Service(GetFolderPathError::EntityNotExists(err.msg))
@@ -4002,6 +4034,7 @@ pub enum GetResourcesError {
 impl GetResourcesError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetResourcesError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "FailedDependencyException" => {
                     return RusotoError::Service(GetResourcesError::FailedDependency(err.msg))
@@ -4072,6 +4105,7 @@ impl InitiateDocumentVersionUploadError {
         res: BufferedHttpResponse,
     ) -> RusotoError<InitiateDocumentVersionUploadError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "DraftUploadOutOfSyncException" => {
                     return RusotoError::Service(
@@ -4194,6 +4228,7 @@ impl RemoveAllResourcePermissionsError {
         res: BufferedHttpResponse,
     ) -> RusotoError<RemoveAllResourcePermissionsError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "FailedDependencyException" => {
                     return RusotoError::Service(
@@ -4258,6 +4293,7 @@ pub enum RemoveResourcePermissionError {
 impl RemoveResourcePermissionError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<RemoveResourcePermissionError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "FailedDependencyException" => {
                     return RusotoError::Service(RemoveResourcePermissionError::FailedDependency(
@@ -4330,6 +4366,7 @@ pub enum UpdateDocumentError {
 impl UpdateDocumentError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateDocumentError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ConcurrentModificationException" => {
                     return RusotoError::Service(UpdateDocumentError::ConcurrentModification(
@@ -4416,6 +4453,7 @@ pub enum UpdateDocumentVersionError {
 impl UpdateDocumentVersionError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateDocumentVersionError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ConcurrentModificationException" => {
                     return RusotoError::Service(
@@ -4510,6 +4548,7 @@ pub enum UpdateFolderError {
 impl UpdateFolderError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateFolderError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ConcurrentModificationException" => {
                     return RusotoError::Service(UpdateFolderError::ConcurrentModification(err.msg))
@@ -4592,6 +4631,7 @@ pub enum UpdateUserError {
 impl UpdateUserError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateUserError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "DeactivatingLastSystemUserException" => {
                     return RusotoError::Service(UpdateUserError::DeactivatingLastSystemUser(
@@ -4948,6 +4988,7 @@ impl Workdocs for WorkdocsClient {
         &self,
         input: AbortDocumentVersionUploadRequest,
     ) -> Result<(), RusotoError<AbortDocumentVersionUploadError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/api/v1/documents/{document_id}/versions/{version_id}",
             document_id = input.document_id,
@@ -4966,9 +5007,9 @@ impl Workdocs for WorkdocsClient {
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 204 {
             let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = ::std::mem::drop(response);
+            let _result = ::std::mem::drop(response);
 
-            Ok(result)
+            Ok(())
         } else {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             Err(AbortDocumentVersionUploadError::from_response(response))
@@ -4981,6 +5022,7 @@ impl Workdocs for WorkdocsClient {
         &self,
         input: ActivateUserRequest,
     ) -> Result<ActivateUserResponse, RusotoError<ActivateUserError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/api/v1/users/{user_id}/activation",
             user_id = input.user_id
@@ -5014,6 +5056,7 @@ impl Workdocs for WorkdocsClient {
         &self,
         input: AddResourcePermissionsRequest,
     ) -> Result<AddResourcePermissionsResponse, RusotoError<AddResourcePermissionsError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/api/v1/resources/{resource_id}/permissions",
             resource_id = input.resource_id
@@ -5049,6 +5092,7 @@ impl Workdocs for WorkdocsClient {
         &self,
         input: CreateCommentRequest,
     ) -> Result<CreateCommentResponse, RusotoError<CreateCommentError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/api/v1/documents/{document_id}/versions/{version_id}/comment",
             document_id = input.document_id,
@@ -5085,6 +5129,7 @@ impl Workdocs for WorkdocsClient {
         &self,
         input: CreateCustomMetadataRequest,
     ) -> Result<CreateCustomMetadataResponse, RusotoError<CreateCustomMetadataError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/api/v1/resources/{resource_id}/customMetadata",
             resource_id = input.resource_id
@@ -5125,6 +5170,7 @@ impl Workdocs for WorkdocsClient {
         &self,
         input: CreateFolderRequest,
     ) -> Result<CreateFolderResponse, RusotoError<CreateFolderError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/api/v1/folders";
 
         let mut request = SignedRequest::new("POST", "workdocs", &self.region, &request_uri);
@@ -5157,6 +5203,7 @@ impl Workdocs for WorkdocsClient {
         &self,
         input: CreateLabelsRequest,
     ) -> Result<CreateLabelsResponse, RusotoError<CreateLabelsError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/api/v1/resources/{resource_id}/labels",
             resource_id = input.resource_id
@@ -5195,6 +5242,7 @@ impl Workdocs for WorkdocsClient {
         CreateNotificationSubscriptionResponse,
         RusotoError<CreateNotificationSubscriptionError>,
     > {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/api/v1/organizations/{organization_id}/subscriptions",
             organization_id = input.organization_id
@@ -5229,6 +5277,7 @@ impl Workdocs for WorkdocsClient {
         &self,
         input: CreateUserRequest,
     ) -> Result<CreateUserResponse, RusotoError<CreateUserError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/api/v1/users";
 
         let mut request = SignedRequest::new("POST", "workdocs", &self.region, &request_uri);
@@ -5261,6 +5310,7 @@ impl Workdocs for WorkdocsClient {
         &self,
         input: DeactivateUserRequest,
     ) -> Result<(), RusotoError<DeactivateUserError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/api/v1/users/{user_id}/activation",
             user_id = input.user_id
@@ -5278,9 +5328,9 @@ impl Workdocs for WorkdocsClient {
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 204 {
             let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = ::std::mem::drop(response);
+            let _result = ::std::mem::drop(response);
 
-            Ok(result)
+            Ok(())
         } else {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             Err(DeactivateUserError::from_response(response))
@@ -5293,6 +5343,7 @@ impl Workdocs for WorkdocsClient {
         &self,
         input: DeleteCommentRequest,
     ) -> Result<(), RusotoError<DeleteCommentError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/api/v1/documents/{document_id}/versions/{version_id}/comment/{comment_id}",
             comment_id = input.comment_id,
@@ -5312,9 +5363,9 @@ impl Workdocs for WorkdocsClient {
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 204 {
             let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = ::std::mem::drop(response);
+            let _result = ::std::mem::drop(response);
 
-            Ok(result)
+            Ok(())
         } else {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             Err(DeleteCommentError::from_response(response))
@@ -5327,6 +5378,7 @@ impl Workdocs for WorkdocsClient {
         &self,
         input: DeleteCustomMetadataRequest,
     ) -> Result<DeleteCustomMetadataResponse, RusotoError<DeleteCustomMetadataError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/api/v1/resources/{resource_id}/customMetadata",
             resource_id = input.resource_id
@@ -5373,6 +5425,7 @@ impl Workdocs for WorkdocsClient {
         &self,
         input: DeleteDocumentRequest,
     ) -> Result<(), RusotoError<DeleteDocumentError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/api/v1/documents/{document_id}",
             document_id = input.document_id
@@ -5390,9 +5443,9 @@ impl Workdocs for WorkdocsClient {
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 204 {
             let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = ::std::mem::drop(response);
+            let _result = ::std::mem::drop(response);
 
-            Ok(result)
+            Ok(())
         } else {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             Err(DeleteDocumentError::from_response(response))
@@ -5405,6 +5458,7 @@ impl Workdocs for WorkdocsClient {
         &self,
         input: DeleteFolderRequest,
     ) -> Result<(), RusotoError<DeleteFolderError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!("/api/v1/folders/{folder_id}", folder_id = input.folder_id);
 
         let mut request = SignedRequest::new("DELETE", "workdocs", &self.region, &request_uri);
@@ -5419,9 +5473,9 @@ impl Workdocs for WorkdocsClient {
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 204 {
             let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = ::std::mem::drop(response);
+            let _result = ::std::mem::drop(response);
 
-            Ok(result)
+            Ok(())
         } else {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             Err(DeleteFolderError::from_response(response))
@@ -5434,6 +5488,7 @@ impl Workdocs for WorkdocsClient {
         &self,
         input: DeleteFolderContentsRequest,
     ) -> Result<(), RusotoError<DeleteFolderContentsError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/api/v1/folders/{folder_id}/contents",
             folder_id = input.folder_id
@@ -5451,9 +5506,9 @@ impl Workdocs for WorkdocsClient {
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 204 {
             let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = ::std::mem::drop(response);
+            let _result = ::std::mem::drop(response);
 
-            Ok(result)
+            Ok(())
         } else {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             Err(DeleteFolderContentsError::from_response(response))
@@ -5466,6 +5521,7 @@ impl Workdocs for WorkdocsClient {
         &self,
         input: DeleteLabelsRequest,
     ) -> Result<DeleteLabelsResponse, RusotoError<DeleteLabelsError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/api/v1/resources/{resource_id}/labels",
             resource_id = input.resource_id
@@ -5509,6 +5565,7 @@ impl Workdocs for WorkdocsClient {
         &self,
         input: DeleteNotificationSubscriptionRequest,
     ) -> Result<(), RusotoError<DeleteNotificationSubscriptionError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/api/v1/organizations/{organization_id}/subscriptions/{subscription_id}",
             organization_id = input.organization_id,
@@ -5525,9 +5582,9 @@ impl Workdocs for WorkdocsClient {
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
             let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = ::std::mem::drop(response);
+            let _result = ::std::mem::drop(response);
 
-            Ok(result)
+            Ok(())
         } else {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             Err(DeleteNotificationSubscriptionError::from_response(response))
@@ -5540,6 +5597,7 @@ impl Workdocs for WorkdocsClient {
         &self,
         input: DeleteUserRequest,
     ) -> Result<(), RusotoError<DeleteUserError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!("/api/v1/users/{user_id}", user_id = input.user_id);
 
         let mut request = SignedRequest::new("DELETE", "workdocs", &self.region, &request_uri);
@@ -5554,9 +5612,9 @@ impl Workdocs for WorkdocsClient {
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 204 {
             let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = ::std::mem::drop(response);
+            let _result = ::std::mem::drop(response);
 
-            Ok(result)
+            Ok(())
         } else {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             Err(DeleteUserError::from_response(response))
@@ -5569,6 +5627,7 @@ impl Workdocs for WorkdocsClient {
         &self,
         input: DescribeActivitiesRequest,
     ) -> Result<DescribeActivitiesResponse, RusotoError<DescribeActivitiesError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/api/v1/activities";
 
         let mut request = SignedRequest::new("GET", "workdocs", &self.region, &request_uri);
@@ -5628,6 +5687,7 @@ impl Workdocs for WorkdocsClient {
         &self,
         input: DescribeCommentsRequest,
     ) -> Result<DescribeCommentsResponse, RusotoError<DescribeCommentsError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/api/v1/documents/{document_id}/versions/{version_id}/comments",
             document_id = input.document_id,
@@ -5670,6 +5730,7 @@ impl Workdocs for WorkdocsClient {
         &self,
         input: DescribeDocumentVersionsRequest,
     ) -> Result<DescribeDocumentVersionsResponse, RusotoError<DescribeDocumentVersionsError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/api/v1/documents/{document_id}/versions",
             document_id = input.document_id
@@ -5717,6 +5778,7 @@ impl Workdocs for WorkdocsClient {
         &self,
         input: DescribeFolderContentsRequest,
     ) -> Result<DescribeFolderContentsResponse, RusotoError<DescribeFolderContentsError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/api/v1/folders/{folder_id}/contents",
             folder_id = input.folder_id
@@ -5770,6 +5832,7 @@ impl Workdocs for WorkdocsClient {
         &self,
         input: DescribeGroupsRequest,
     ) -> Result<DescribeGroupsResponse, RusotoError<DescribeGroupsError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/api/v1/groups";
 
         let mut request = SignedRequest::new("GET", "workdocs", &self.region, &request_uri);
@@ -5815,6 +5878,7 @@ impl Workdocs for WorkdocsClient {
         DescribeNotificationSubscriptionsResponse,
         RusotoError<DescribeNotificationSubscriptionsError>,
     > {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/api/v1/organizations/{organization_id}/subscriptions",
             organization_id = input.organization_id
@@ -5858,6 +5922,7 @@ impl Workdocs for WorkdocsClient {
         input: DescribeResourcePermissionsRequest,
     ) -> Result<DescribeResourcePermissionsResponse, RusotoError<DescribeResourcePermissionsError>>
     {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/api/v1/resources/{resource_id}/permissions",
             resource_id = input.resource_id
@@ -5902,6 +5967,7 @@ impl Workdocs for WorkdocsClient {
         &self,
         input: DescribeRootFoldersRequest,
     ) -> Result<DescribeRootFoldersResponse, RusotoError<DescribeRootFoldersError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/api/v1/me/root";
 
         let mut request = SignedRequest::new("GET", "workdocs", &self.region, &request_uri);
@@ -5940,6 +6006,7 @@ impl Workdocs for WorkdocsClient {
         &self,
         input: DescribeUsersRequest,
     ) -> Result<DescribeUsersResponse, RusotoError<DescribeUsersError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/api/v1/users";
 
         let mut request = SignedRequest::new("GET", "workdocs", &self.region, &request_uri);
@@ -5999,6 +6066,7 @@ impl Workdocs for WorkdocsClient {
         &self,
         input: GetCurrentUserRequest,
     ) -> Result<GetCurrentUserResponse, RusotoError<GetCurrentUserError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/api/v1/me";
 
         let mut request = SignedRequest::new("GET", "workdocs", &self.region, &request_uri);
@@ -6029,6 +6097,7 @@ impl Workdocs for WorkdocsClient {
         &self,
         input: GetDocumentRequest,
     ) -> Result<GetDocumentResponse, RusotoError<GetDocumentError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/api/v1/documents/{document_id}",
             document_id = input.document_id
@@ -6067,6 +6136,7 @@ impl Workdocs for WorkdocsClient {
         &self,
         input: GetDocumentPathRequest,
     ) -> Result<GetDocumentPathResponse, RusotoError<GetDocumentPathError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/api/v1/documents/{document_id}/path",
             document_id = input.document_id
@@ -6111,6 +6181,7 @@ impl Workdocs for WorkdocsClient {
         &self,
         input: GetDocumentVersionRequest,
     ) -> Result<GetDocumentVersionResponse, RusotoError<GetDocumentVersionError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/api/v1/documents/{document_id}/versions/{version_id}",
             document_id = input.document_id,
@@ -6153,6 +6224,7 @@ impl Workdocs for WorkdocsClient {
         &self,
         input: GetFolderRequest,
     ) -> Result<GetFolderResponse, RusotoError<GetFolderError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!("/api/v1/folders/{folder_id}", folder_id = input.folder_id);
 
         let mut request = SignedRequest::new("GET", "workdocs", &self.region, &request_uri);
@@ -6188,6 +6260,7 @@ impl Workdocs for WorkdocsClient {
         &self,
         input: GetFolderPathRequest,
     ) -> Result<GetFolderPathResponse, RusotoError<GetFolderPathError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/api/v1/folders/{folder_id}/path",
             folder_id = input.folder_id
@@ -6232,6 +6305,7 @@ impl Workdocs for WorkdocsClient {
         &self,
         input: GetResourcesRequest,
     ) -> Result<GetResourcesResponse, RusotoError<GetResourcesError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/api/v1/resources";
 
         let mut request = SignedRequest::new("GET", "workdocs", &self.region, &request_uri);
@@ -6279,6 +6353,7 @@ impl Workdocs for WorkdocsClient {
         InitiateDocumentVersionUploadResponse,
         RusotoError<InitiateDocumentVersionUploadError>,
     > {
+        #![allow(clippy::needless_update)]
         let request_uri = "/api/v1/documents";
 
         let mut request = SignedRequest::new("POST", "workdocs", &self.region, &request_uri);
@@ -6311,6 +6386,7 @@ impl Workdocs for WorkdocsClient {
         &self,
         input: RemoveAllResourcePermissionsRequest,
     ) -> Result<(), RusotoError<RemoveAllResourcePermissionsError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/api/v1/resources/{resource_id}/permissions",
             resource_id = input.resource_id
@@ -6328,9 +6404,9 @@ impl Workdocs for WorkdocsClient {
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 204 {
             let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = ::std::mem::drop(response);
+            let _result = ::std::mem::drop(response);
 
-            Ok(result)
+            Ok(())
         } else {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             Err(RemoveAllResourcePermissionsError::from_response(response))
@@ -6343,6 +6419,7 @@ impl Workdocs for WorkdocsClient {
         &self,
         input: RemoveResourcePermissionRequest,
     ) -> Result<(), RusotoError<RemoveResourcePermissionError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/api/v1/resources/{resource_id}/permissions/{principal_id}",
             principal_id = input.principal_id,
@@ -6366,9 +6443,9 @@ impl Workdocs for WorkdocsClient {
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 204 {
             let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = ::std::mem::drop(response);
+            let _result = ::std::mem::drop(response);
 
-            Ok(result)
+            Ok(())
         } else {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             Err(RemoveResourcePermissionError::from_response(response))
@@ -6381,6 +6458,7 @@ impl Workdocs for WorkdocsClient {
         &self,
         input: UpdateDocumentRequest,
     ) -> Result<(), RusotoError<UpdateDocumentError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/api/v1/documents/{document_id}",
             document_id = input.document_id
@@ -6400,9 +6478,9 @@ impl Workdocs for WorkdocsClient {
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
             let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = ::std::mem::drop(response);
+            let _result = ::std::mem::drop(response);
 
-            Ok(result)
+            Ok(())
         } else {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             Err(UpdateDocumentError::from_response(response))
@@ -6415,6 +6493,7 @@ impl Workdocs for WorkdocsClient {
         &self,
         input: UpdateDocumentVersionRequest,
     ) -> Result<(), RusotoError<UpdateDocumentVersionError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/api/v1/documents/{document_id}/versions/{version_id}",
             document_id = input.document_id,
@@ -6435,9 +6514,9 @@ impl Workdocs for WorkdocsClient {
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
             let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = ::std::mem::drop(response);
+            let _result = ::std::mem::drop(response);
 
-            Ok(result)
+            Ok(())
         } else {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             Err(UpdateDocumentVersionError::from_response(response))
@@ -6450,6 +6529,7 @@ impl Workdocs for WorkdocsClient {
         &self,
         input: UpdateFolderRequest,
     ) -> Result<(), RusotoError<UpdateFolderError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!("/api/v1/folders/{folder_id}", folder_id = input.folder_id);
 
         let mut request = SignedRequest::new("PATCH", "workdocs", &self.region, &request_uri);
@@ -6466,9 +6546,9 @@ impl Workdocs for WorkdocsClient {
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
             let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = ::std::mem::drop(response);
+            let _result = ::std::mem::drop(response);
 
-            Ok(result)
+            Ok(())
         } else {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             Err(UpdateFolderError::from_response(response))
@@ -6481,6 +6561,7 @@ impl Workdocs for WorkdocsClient {
         &self,
         input: UpdateUserRequest,
     ) -> Result<UpdateUserResponse, RusotoError<UpdateUserError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!("/api/v1/users/{user_id}", user_id = input.user_id);
 
         let mut request = SignedRequest::new("PATCH", "workdocs", &self.region, &request_uri);

@@ -50,7 +50,6 @@ impl MigrationHubConfigClient {
     }
 }
 
-use serde_json;
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateHomeRegionControlRequest {
@@ -180,6 +179,7 @@ pub enum CreateHomeRegionControlError {
 impl CreateHomeRegionControlError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateHomeRegionControlError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(CreateHomeRegionControlError::AccessDenied(
@@ -250,6 +250,7 @@ impl DescribeHomeRegionControlsError {
         res: BufferedHttpResponse,
     ) -> RusotoError<DescribeHomeRegionControlsError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(DescribeHomeRegionControlsError::AccessDenied(
@@ -318,6 +319,7 @@ pub enum GetHomeRegionError {
 impl GetHomeRegionError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetHomeRegionError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(GetHomeRegionError::AccessDenied(err.msg))

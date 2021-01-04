@@ -49,7 +49,6 @@ impl EventBridgeClient {
     }
 }
 
-use serde_json;
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ActivateEventSourceRequest {
@@ -1807,6 +1806,7 @@ pub enum ActivateEventSourceError {
 impl ActivateEventSourceError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ActivateEventSourceError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ConcurrentModificationException" => {
                     return RusotoError::Service(ActivateEventSourceError::ConcurrentModification(
@@ -1865,6 +1865,7 @@ pub enum CancelReplayError {
 impl CancelReplayError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CancelReplayError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ConcurrentModificationException" => {
                     return RusotoError::Service(CancelReplayError::ConcurrentModification(err.msg))
@@ -1917,6 +1918,7 @@ pub enum CreateArchiveError {
 impl CreateArchiveError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateArchiveError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ConcurrentModificationException" => {
                     return RusotoError::Service(CreateArchiveError::ConcurrentModification(
@@ -1981,6 +1983,7 @@ pub enum CreateEventBusError {
 impl CreateEventBusError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateEventBusError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ConcurrentModificationException" => {
                     return RusotoError::Service(CreateEventBusError::ConcurrentModification(
@@ -2047,6 +2050,7 @@ pub enum CreatePartnerEventSourceError {
 impl CreatePartnerEventSourceError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreatePartnerEventSourceError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ConcurrentModificationException" => {
                     return RusotoError::Service(
@@ -2113,6 +2117,7 @@ pub enum DeactivateEventSourceError {
 impl DeactivateEventSourceError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeactivateEventSourceError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ConcurrentModificationException" => {
                     return RusotoError::Service(
@@ -2169,6 +2174,7 @@ pub enum DeleteArchiveError {
 impl DeleteArchiveError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteArchiveError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ConcurrentModificationException" => {
                     return RusotoError::Service(DeleteArchiveError::ConcurrentModification(
@@ -2211,6 +2217,7 @@ pub enum DeleteEventBusError {
 impl DeleteEventBusError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteEventBusError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ConcurrentModificationException" => {
                     return RusotoError::Service(DeleteEventBusError::ConcurrentModification(
@@ -2251,6 +2258,7 @@ pub enum DeletePartnerEventSourceError {
 impl DeletePartnerEventSourceError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeletePartnerEventSourceError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ConcurrentModificationException" => {
                     return RusotoError::Service(
@@ -2301,6 +2309,7 @@ pub enum DeleteRuleError {
 impl DeleteRuleError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteRuleError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ConcurrentModificationException" => {
                     return RusotoError::Service(DeleteRuleError::ConcurrentModification(err.msg))
@@ -2347,6 +2356,7 @@ pub enum DescribeArchiveError {
 impl DescribeArchiveError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeArchiveError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalException" => {
                     return RusotoError::Service(DescribeArchiveError::Internal(err.msg))
@@ -2389,6 +2399,7 @@ pub enum DescribeEventBusError {
 impl DescribeEventBusError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeEventBusError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalException" => {
                     return RusotoError::Service(DescribeEventBusError::Internal(err.msg))
@@ -2427,6 +2438,7 @@ pub enum DescribeEventSourceError {
 impl DescribeEventSourceError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeEventSourceError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalException" => {
                     return RusotoError::Service(DescribeEventSourceError::Internal(err.msg))
@@ -2475,6 +2487,7 @@ impl DescribePartnerEventSourceError {
         res: BufferedHttpResponse,
     ) -> RusotoError<DescribePartnerEventSourceError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalException" => {
                     return RusotoError::Service(DescribePartnerEventSourceError::Internal(err.msg))
@@ -2519,6 +2532,7 @@ pub enum DescribeReplayError {
 impl DescribeReplayError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeReplayError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalException" => {
                     return RusotoError::Service(DescribeReplayError::Internal(err.msg))
@@ -2555,6 +2569,7 @@ pub enum DescribeRuleError {
 impl DescribeRuleError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeRuleError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalException" => {
                     return RusotoError::Service(DescribeRuleError::Internal(err.msg))
@@ -2595,6 +2610,7 @@ pub enum DisableRuleError {
 impl DisableRuleError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DisableRuleError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ConcurrentModificationException" => {
                     return RusotoError::Service(DisableRuleError::ConcurrentModification(err.msg))
@@ -2643,6 +2659,7 @@ pub enum EnableRuleError {
 impl EnableRuleError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<EnableRuleError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ConcurrentModificationException" => {
                     return RusotoError::Service(EnableRuleError::ConcurrentModification(err.msg))
@@ -2687,6 +2704,7 @@ pub enum ListArchivesError {
 impl ListArchivesError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListArchivesError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalException" => {
                     return RusotoError::Service(ListArchivesError::Internal(err.msg))
@@ -2721,6 +2739,7 @@ pub enum ListEventBusesError {
 impl ListEventBusesError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListEventBusesError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalException" => {
                     return RusotoError::Service(ListEventBusesError::Internal(err.msg))
@@ -2753,6 +2772,7 @@ pub enum ListEventSourcesError {
 impl ListEventSourcesError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListEventSourcesError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalException" => {
                     return RusotoError::Service(ListEventSourcesError::Internal(err.msg))
@@ -2793,6 +2813,7 @@ impl ListPartnerEventSourceAccountsError {
         res: BufferedHttpResponse,
     ) -> RusotoError<ListPartnerEventSourceAccountsError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalException" => {
                     return RusotoError::Service(ListPartnerEventSourceAccountsError::Internal(
@@ -2843,6 +2864,7 @@ pub enum ListPartnerEventSourcesError {
 impl ListPartnerEventSourcesError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListPartnerEventSourcesError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalException" => {
                     return RusotoError::Service(ListPartnerEventSourcesError::Internal(err.msg))
@@ -2879,6 +2901,7 @@ pub enum ListReplaysError {
 impl ListReplaysError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListReplaysError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalException" => {
                     return RusotoError::Service(ListReplaysError::Internal(err.msg))
@@ -2911,6 +2934,7 @@ pub enum ListRuleNamesByTargetError {
 impl ListRuleNamesByTargetError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListRuleNamesByTargetError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalException" => {
                     return RusotoError::Service(ListRuleNamesByTargetError::Internal(err.msg))
@@ -2949,6 +2973,7 @@ pub enum ListRulesError {
 impl ListRulesError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListRulesError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalException" => {
                     return RusotoError::Service(ListRulesError::Internal(err.msg))
@@ -2985,6 +3010,7 @@ pub enum ListTagsForResourceError {
 impl ListTagsForResourceError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListTagsForResourceError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalException" => {
                     return RusotoError::Service(ListTagsForResourceError::Internal(err.msg))
@@ -3023,6 +3049,7 @@ pub enum ListTargetsByRuleError {
 impl ListTargetsByRuleError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListTargetsByRuleError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalException" => {
                     return RusotoError::Service(ListTargetsByRuleError::Internal(err.msg))
@@ -3057,6 +3084,7 @@ pub enum PutEventsError {
 impl PutEventsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<PutEventsError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalException" => {
                     return RusotoError::Service(PutEventsError::Internal(err.msg))
@@ -3089,6 +3117,7 @@ pub enum PutPartnerEventsError {
 impl PutPartnerEventsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<PutPartnerEventsError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalException" => {
                     return RusotoError::Service(PutPartnerEventsError::Internal(err.msg))
@@ -3131,6 +3160,7 @@ pub enum PutPermissionError {
 impl PutPermissionError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<PutPermissionError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ConcurrentModificationException" => {
                     return RusotoError::Service(PutPermissionError::ConcurrentModification(
@@ -3189,6 +3219,7 @@ pub enum PutRuleError {
 impl PutRuleError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<PutRuleError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ConcurrentModificationException" => {
                     return RusotoError::Service(PutRuleError::ConcurrentModification(err.msg))
@@ -3247,6 +3278,7 @@ pub enum PutTargetsError {
 impl PutTargetsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<PutTargetsError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ConcurrentModificationException" => {
                     return RusotoError::Service(PutTargetsError::ConcurrentModification(err.msg))
@@ -3299,6 +3331,7 @@ pub enum RemovePermissionError {
 impl RemovePermissionError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<RemovePermissionError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ConcurrentModificationException" => {
                     return RusotoError::Service(RemovePermissionError::ConcurrentModification(
@@ -3349,6 +3382,7 @@ pub enum RemoveTargetsError {
 impl RemoveTargetsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<RemoveTargetsError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ConcurrentModificationException" => {
                     return RusotoError::Service(RemoveTargetsError::ConcurrentModification(
@@ -3401,6 +3435,7 @@ pub enum StartReplayError {
 impl StartReplayError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<StartReplayError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalException" => {
                     return RusotoError::Service(StartReplayError::Internal(err.msg))
@@ -3453,6 +3488,7 @@ pub enum TagResourceError {
 impl TagResourceError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<TagResourceError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ConcurrentModificationException" => {
                     return RusotoError::Service(TagResourceError::ConcurrentModification(err.msg))
@@ -3497,6 +3533,7 @@ pub enum TestEventPatternError {
 impl TestEventPatternError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<TestEventPatternError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalException" => {
                     return RusotoError::Service(TestEventPatternError::Internal(err.msg))
@@ -3539,6 +3576,7 @@ pub enum UntagResourceError {
 impl UntagResourceError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UntagResourceError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ConcurrentModificationException" => {
                     return RusotoError::Service(UntagResourceError::ConcurrentModification(
@@ -3591,6 +3629,7 @@ pub enum UpdateArchiveError {
 impl UpdateArchiveError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateArchiveError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ConcurrentModificationException" => {
                     return RusotoError::Service(UpdateArchiveError::ConcurrentModification(

@@ -24,7 +24,6 @@ use rusoto_core::proto;
 use rusoto_core::signature::SignedRequest;
 #[allow(unused_imports)]
 use serde::{Deserialize, Serialize};
-use serde_json;
 /// <p>An object that contains information about a blacklisting event that impacts one of the dedicated IP addresses that is associated with your account.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
@@ -1646,6 +1645,7 @@ pub enum CreateConfigurationSetError {
 impl CreateConfigurationSetError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateConfigurationSetError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AlreadyExistsException" => {
                     return RusotoError::Service(CreateConfigurationSetError::AlreadyExists(
@@ -1716,6 +1716,7 @@ impl CreateConfigurationSetEventDestinationError {
         res: BufferedHttpResponse,
     ) -> RusotoError<CreateConfigurationSetEventDestinationError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AlreadyExistsException" => {
                     return RusotoError::Service(
@@ -1790,6 +1791,7 @@ pub enum CreateDedicatedIpPoolError {
 impl CreateDedicatedIpPoolError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateDedicatedIpPoolError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AlreadyExistsException" => {
                     return RusotoError::Service(CreateDedicatedIpPoolError::AlreadyExists(err.msg))
@@ -1858,6 +1860,7 @@ impl CreateDeliverabilityTestReportError {
         res: BufferedHttpResponse,
     ) -> RusotoError<CreateDeliverabilityTestReportError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AccountSuspendedException" => {
                     return RusotoError::Service(
@@ -1954,6 +1957,7 @@ pub enum CreateEmailIdentityError {
 impl CreateEmailIdentityError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateEmailIdentityError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(CreateEmailIdentityError::BadRequest(err.msg))
@@ -2004,6 +2008,7 @@ pub enum DeleteConfigurationSetError {
 impl DeleteConfigurationSetError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteConfigurationSetError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(DeleteConfigurationSetError::BadRequest(err.msg))
@@ -2058,6 +2063,7 @@ impl DeleteConfigurationSetEventDestinationError {
         res: BufferedHttpResponse,
     ) -> RusotoError<DeleteConfigurationSetEventDestinationError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(
@@ -2114,6 +2120,7 @@ pub enum DeleteDedicatedIpPoolError {
 impl DeleteDedicatedIpPoolError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteDedicatedIpPoolError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(DeleteDedicatedIpPoolError::BadRequest(err.msg))
@@ -2166,6 +2173,7 @@ pub enum DeleteEmailIdentityError {
 impl DeleteEmailIdentityError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteEmailIdentityError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(DeleteEmailIdentityError::BadRequest(err.msg))
@@ -2212,6 +2220,7 @@ pub enum GetAccountError {
 impl GetAccountError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetAccountError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(GetAccountError::BadRequest(err.msg))
@@ -2250,6 +2259,7 @@ pub enum GetBlacklistReportsError {
 impl GetBlacklistReportsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetBlacklistReportsError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(GetBlacklistReportsError::BadRequest(err.msg))
@@ -2292,6 +2302,7 @@ pub enum GetConfigurationSetError {
 impl GetConfigurationSetError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetConfigurationSetError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(GetConfigurationSetError::BadRequest(err.msg))
@@ -2336,6 +2347,7 @@ impl GetConfigurationSetEventDestinationsError {
         res: BufferedHttpResponse,
     ) -> RusotoError<GetConfigurationSetEventDestinationsError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(
@@ -2390,6 +2402,7 @@ pub enum GetDedicatedIpError {
 impl GetDedicatedIpError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetDedicatedIpError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(GetDedicatedIpError::BadRequest(err.msg))
@@ -2432,6 +2445,7 @@ pub enum GetDedicatedIpsError {
 impl GetDedicatedIpsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetDedicatedIpsError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(GetDedicatedIpsError::BadRequest(err.msg))
@@ -2476,6 +2490,7 @@ impl GetDeliverabilityDashboardOptionsError {
         res: BufferedHttpResponse,
     ) -> RusotoError<GetDeliverabilityDashboardOptionsError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(
@@ -2530,6 +2545,7 @@ impl GetDeliverabilityTestReportError {
         res: BufferedHttpResponse,
     ) -> RusotoError<GetDeliverabilityTestReportError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(GetDeliverabilityTestReportError::BadRequest(
@@ -2580,6 +2596,7 @@ impl GetDomainDeliverabilityCampaignError {
         res: BufferedHttpResponse,
     ) -> RusotoError<GetDomainDeliverabilityCampaignError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(GetDomainDeliverabilityCampaignError::BadRequest(
@@ -2630,6 +2647,7 @@ pub enum GetDomainStatisticsReportError {
 impl GetDomainStatisticsReportError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetDomainStatisticsReportError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(GetDomainStatisticsReportError::BadRequest(
@@ -2676,6 +2694,7 @@ pub enum GetEmailIdentityError {
 impl GetEmailIdentityError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetEmailIdentityError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(GetEmailIdentityError::BadRequest(err.msg))
@@ -2716,6 +2735,7 @@ pub enum ListConfigurationSetsError {
 impl ListConfigurationSetsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListConfigurationSetsError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(ListConfigurationSetsError::BadRequest(err.msg))
@@ -2754,6 +2774,7 @@ pub enum ListDedicatedIpPoolsError {
 impl ListDedicatedIpPoolsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListDedicatedIpPoolsError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(ListDedicatedIpPoolsError::BadRequest(err.msg))
@@ -2796,6 +2817,7 @@ impl ListDeliverabilityTestReportsError {
         res: BufferedHttpResponse,
     ) -> RusotoError<ListDeliverabilityTestReportsError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(ListDeliverabilityTestReportsError::BadRequest(
@@ -2848,6 +2870,7 @@ impl ListDomainDeliverabilityCampaignsError {
         res: BufferedHttpResponse,
     ) -> RusotoError<ListDomainDeliverabilityCampaignsError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(
@@ -2896,6 +2919,7 @@ pub enum ListEmailIdentitiesError {
 impl ListEmailIdentitiesError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListEmailIdentitiesError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(ListEmailIdentitiesError::BadRequest(err.msg))
@@ -2934,6 +2958,7 @@ pub enum ListTagsForResourceError {
 impl ListTagsForResourceError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListTagsForResourceError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(ListTagsForResourceError::BadRequest(err.msg))
@@ -2976,6 +3001,7 @@ impl PutAccountDedicatedIpWarmupAttributesError {
         res: BufferedHttpResponse,
     ) -> RusotoError<PutAccountDedicatedIpWarmupAttributesError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(
@@ -3022,6 +3048,7 @@ impl PutAccountSendingAttributesError {
         res: BufferedHttpResponse,
     ) -> RusotoError<PutAccountSendingAttributesError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(PutAccountSendingAttributesError::BadRequest(
@@ -3066,6 +3093,7 @@ impl PutConfigurationSetDeliveryOptionsError {
         res: BufferedHttpResponse,
     ) -> RusotoError<PutConfigurationSetDeliveryOptionsError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(
@@ -3120,6 +3148,7 @@ impl PutConfigurationSetReputationOptionsError {
         res: BufferedHttpResponse,
     ) -> RusotoError<PutConfigurationSetReputationOptionsError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(
@@ -3176,6 +3205,7 @@ impl PutConfigurationSetSendingOptionsError {
         res: BufferedHttpResponse,
     ) -> RusotoError<PutConfigurationSetSendingOptionsError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(
@@ -3228,6 +3258,7 @@ impl PutConfigurationSetTrackingOptionsError {
         res: BufferedHttpResponse,
     ) -> RusotoError<PutConfigurationSetTrackingOptionsError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(
@@ -3280,6 +3311,7 @@ pub enum PutDedicatedIpInPoolError {
 impl PutDedicatedIpInPoolError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<PutDedicatedIpInPoolError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(PutDedicatedIpInPoolError::BadRequest(err.msg))
@@ -3326,6 +3358,7 @@ impl PutDedicatedIpWarmupAttributesError {
         res: BufferedHttpResponse,
     ) -> RusotoError<PutDedicatedIpWarmupAttributesError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(PutDedicatedIpWarmupAttributesError::BadRequest(
@@ -3382,6 +3415,7 @@ impl PutDeliverabilityDashboardOptionError {
         res: BufferedHttpResponse,
     ) -> RusotoError<PutDeliverabilityDashboardOptionError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AlreadyExistsException" => {
                     return RusotoError::Service(
@@ -3450,6 +3484,7 @@ impl PutEmailIdentityDkimAttributesError {
         res: BufferedHttpResponse,
     ) -> RusotoError<PutEmailIdentityDkimAttributesError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(PutEmailIdentityDkimAttributesError::BadRequest(
@@ -3502,6 +3537,7 @@ impl PutEmailIdentityFeedbackAttributesError {
         res: BufferedHttpResponse,
     ) -> RusotoError<PutEmailIdentityFeedbackAttributesError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(
@@ -3556,6 +3592,7 @@ impl PutEmailIdentityMailFromAttributesError {
         res: BufferedHttpResponse,
     ) -> RusotoError<PutEmailIdentityMailFromAttributesError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(
@@ -3618,6 +3655,7 @@ pub enum SendEmailError {
 impl SendEmailError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<SendEmailError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AccountSuspendedException" => {
                     return RusotoError::Service(SendEmailError::AccountSuspended(err.msg))
@@ -3682,6 +3720,7 @@ pub enum TagResourceError {
 impl TagResourceError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<TagResourceError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(TagResourceError::BadRequest(err.msg))
@@ -3730,6 +3769,7 @@ pub enum UntagResourceError {
 impl UntagResourceError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UntagResourceError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(UntagResourceError::BadRequest(err.msg))
@@ -3780,6 +3820,7 @@ impl UpdateConfigurationSetEventDestinationError {
         res: BufferedHttpResponse,
     ) -> RusotoError<UpdateConfigurationSetEventDestinationError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(
@@ -4174,6 +4215,7 @@ impl PinpointEmail for PinpointEmailClient {
         &self,
         input: CreateConfigurationSetRequest,
     ) -> Result<CreateConfigurationSetResponse, RusotoError<CreateConfigurationSetError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/v1/email/configuration-sets";
 
         let mut request = SignedRequest::new("POST", "ses", &self.region, &request_uri);
@@ -4209,6 +4251,7 @@ impl PinpointEmail for PinpointEmailClient {
         CreateConfigurationSetEventDestinationResponse,
         RusotoError<CreateConfigurationSetEventDestinationError>,
     > {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/v1/email/configuration-sets/{configuration_set_name}/event-destinations",
             configuration_set_name = input.configuration_set_name
@@ -4246,6 +4289,7 @@ impl PinpointEmail for PinpointEmailClient {
         &self,
         input: CreateDedicatedIpPoolRequest,
     ) -> Result<CreateDedicatedIpPoolResponse, RusotoError<CreateDedicatedIpPoolError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/v1/email/dedicated-ip-pools";
 
         let mut request = SignedRequest::new("POST", "ses", &self.region, &request_uri);
@@ -4281,6 +4325,7 @@ impl PinpointEmail for PinpointEmailClient {
         CreateDeliverabilityTestReportResponse,
         RusotoError<CreateDeliverabilityTestReportError>,
     > {
+        #![allow(clippy::needless_update)]
         let request_uri = "/v1/email/deliverability-dashboard/test";
 
         let mut request = SignedRequest::new("POST", "ses", &self.region, &request_uri);
@@ -4313,6 +4358,7 @@ impl PinpointEmail for PinpointEmailClient {
         &self,
         input: CreateEmailIdentityRequest,
     ) -> Result<CreateEmailIdentityResponse, RusotoError<CreateEmailIdentityError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/v1/email/identities";
 
         let mut request = SignedRequest::new("POST", "ses", &self.region, &request_uri);
@@ -4345,6 +4391,7 @@ impl PinpointEmail for PinpointEmailClient {
         &self,
         input: DeleteConfigurationSetRequest,
     ) -> Result<DeleteConfigurationSetResponse, RusotoError<DeleteConfigurationSetError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/v1/email/configuration-sets/{configuration_set_name}",
             configuration_set_name = input.configuration_set_name
@@ -4381,6 +4428,7 @@ impl PinpointEmail for PinpointEmailClient {
         DeleteConfigurationSetEventDestinationResponse,
         RusotoError<DeleteConfigurationSetEventDestinationError>,
     > {
+        #![allow(clippy::needless_update)]
         let request_uri = format!("/v1/email/configuration-sets/{configuration_set_name}/event-destinations/{event_destination_name}", configuration_set_name = input.configuration_set_name, event_destination_name = input.event_destination_name);
 
         let mut request = SignedRequest::new("DELETE", "ses", &self.region, &request_uri);
@@ -4413,6 +4461,7 @@ impl PinpointEmail for PinpointEmailClient {
         &self,
         input: DeleteDedicatedIpPoolRequest,
     ) -> Result<DeleteDedicatedIpPoolResponse, RusotoError<DeleteDedicatedIpPoolError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/v1/email/dedicated-ip-pools/{pool_name}",
             pool_name = input.pool_name
@@ -4446,6 +4495,7 @@ impl PinpointEmail for PinpointEmailClient {
         &self,
         input: DeleteEmailIdentityRequest,
     ) -> Result<DeleteEmailIdentityResponse, RusotoError<DeleteEmailIdentityError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/v1/email/identities/{email_identity}",
             email_identity = input.email_identity
@@ -4476,6 +4526,7 @@ impl PinpointEmail for PinpointEmailClient {
     /// <p>Obtain information about the email-sending status and capabilities of your Amazon Pinpoint account in the current AWS Region.</p>
     #[allow(unused_mut)]
     async fn get_account(&self) -> Result<GetAccountResponse, RusotoError<GetAccountError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/v1/email/account";
 
         let mut request = SignedRequest::new("GET", "ses", &self.region, &request_uri);
@@ -4506,6 +4557,7 @@ impl PinpointEmail for PinpointEmailClient {
         &self,
         input: GetBlacklistReportsRequest,
     ) -> Result<GetBlacklistReportsResponse, RusotoError<GetBlacklistReportsError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/v1/email/deliverability-dashboard/blacklist-report";
 
         let mut request = SignedRequest::new("GET", "ses", &self.region, &request_uri);
@@ -4542,6 +4594,7 @@ impl PinpointEmail for PinpointEmailClient {
         &self,
         input: GetConfigurationSetRequest,
     ) -> Result<GetConfigurationSetResponse, RusotoError<GetConfigurationSetError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/v1/email/configuration-sets/{configuration_set_name}",
             configuration_set_name = input.configuration_set_name
@@ -4578,6 +4631,7 @@ impl PinpointEmail for PinpointEmailClient {
         GetConfigurationSetEventDestinationsResponse,
         RusotoError<GetConfigurationSetEventDestinationsError>,
     > {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/v1/email/configuration-sets/{configuration_set_name}/event-destinations",
             configuration_set_name = input.configuration_set_name
@@ -4613,6 +4667,7 @@ impl PinpointEmail for PinpointEmailClient {
         &self,
         input: GetDedicatedIpRequest,
     ) -> Result<GetDedicatedIpResponse, RusotoError<GetDedicatedIpError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!("/v1/email/dedicated-ips/{ip}", ip = input.ip);
 
         let mut request = SignedRequest::new("GET", "ses", &self.region, &request_uri);
@@ -4643,6 +4698,7 @@ impl PinpointEmail for PinpointEmailClient {
         &self,
         input: GetDedicatedIpsRequest,
     ) -> Result<GetDedicatedIpsResponse, RusotoError<GetDedicatedIpsError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/v1/email/dedicated-ips";
 
         let mut request = SignedRequest::new("GET", "ses", &self.region, &request_uri);
@@ -4687,6 +4743,7 @@ impl PinpointEmail for PinpointEmailClient {
         GetDeliverabilityDashboardOptionsResponse,
         RusotoError<GetDeliverabilityDashboardOptionsError>,
     > {
+        #![allow(clippy::needless_update)]
         let request_uri = "/v1/email/deliverability-dashboard";
 
         let mut request = SignedRequest::new("GET", "ses", &self.region, &request_uri);
@@ -4720,6 +4777,7 @@ impl PinpointEmail for PinpointEmailClient {
         input: GetDeliverabilityTestReportRequest,
     ) -> Result<GetDeliverabilityTestReportResponse, RusotoError<GetDeliverabilityTestReportError>>
     {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/v1/email/deliverability-dashboard/test-reports/{report_id}",
             report_id = input.report_id
@@ -4756,6 +4814,7 @@ impl PinpointEmail for PinpointEmailClient {
         GetDomainDeliverabilityCampaignResponse,
         RusotoError<GetDomainDeliverabilityCampaignError>,
     > {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/v1/email/deliverability-dashboard/campaigns/{campaign_id}",
             campaign_id = input.campaign_id
@@ -4792,6 +4851,7 @@ impl PinpointEmail for PinpointEmailClient {
         input: GetDomainStatisticsReportRequest,
     ) -> Result<GetDomainStatisticsReportResponse, RusotoError<GetDomainStatisticsReportError>>
     {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/v1/email/deliverability-dashboard/statistics-report/{domain}",
             domain = input.domain
@@ -4830,6 +4890,7 @@ impl PinpointEmail for PinpointEmailClient {
         &self,
         input: GetEmailIdentityRequest,
     ) -> Result<GetEmailIdentityResponse, RusotoError<GetEmailIdentityError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/v1/email/identities/{email_identity}",
             email_identity = input.email_identity
@@ -4863,6 +4924,7 @@ impl PinpointEmail for PinpointEmailClient {
         &self,
         input: ListConfigurationSetsRequest,
     ) -> Result<ListConfigurationSetsResponse, RusotoError<ListConfigurationSetsError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/v1/email/configuration-sets";
 
         let mut request = SignedRequest::new("GET", "ses", &self.region, &request_uri);
@@ -4902,6 +4964,7 @@ impl PinpointEmail for PinpointEmailClient {
         &self,
         input: ListDedicatedIpPoolsRequest,
     ) -> Result<ListDedicatedIpPoolsResponse, RusotoError<ListDedicatedIpPoolsError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/v1/email/dedicated-ip-pools";
 
         let mut request = SignedRequest::new("GET", "ses", &self.region, &request_uri);
@@ -4944,6 +5007,7 @@ impl PinpointEmail for PinpointEmailClient {
         ListDeliverabilityTestReportsResponse,
         RusotoError<ListDeliverabilityTestReportsError>,
     > {
+        #![allow(clippy::needless_update)]
         let request_uri = "/v1/email/deliverability-dashboard/test-reports";
 
         let mut request = SignedRequest::new("GET", "ses", &self.region, &request_uri);
@@ -4986,6 +5050,7 @@ impl PinpointEmail for PinpointEmailClient {
         ListDomainDeliverabilityCampaignsResponse,
         RusotoError<ListDomainDeliverabilityCampaignsError>,
     > {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/v1/email/deliverability-dashboard/domains/{subscribed_domain}/campaigns",
             subscribed_domain = input.subscribed_domain
@@ -5032,6 +5097,7 @@ impl PinpointEmail for PinpointEmailClient {
         &self,
         input: ListEmailIdentitiesRequest,
     ) -> Result<ListEmailIdentitiesResponse, RusotoError<ListEmailIdentitiesError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/v1/email/identities";
 
         let mut request = SignedRequest::new("GET", "ses", &self.region, &request_uri);
@@ -5071,6 +5137,7 @@ impl PinpointEmail for PinpointEmailClient {
         &self,
         input: ListTagsForResourceRequest,
     ) -> Result<ListTagsForResourceResponse, RusotoError<ListTagsForResourceError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/v1/email/tags";
 
         let mut request = SignedRequest::new("GET", "ses", &self.region, &request_uri);
@@ -5108,6 +5175,7 @@ impl PinpointEmail for PinpointEmailClient {
         PutAccountDedicatedIpWarmupAttributesResponse,
         RusotoError<PutAccountDedicatedIpWarmupAttributesError>,
     > {
+        #![allow(clippy::needless_update)]
         let request_uri = "/v1/email/account/dedicated-ips/warmup";
 
         let mut request = SignedRequest::new("PUT", "ses", &self.region, &request_uri);
@@ -5143,6 +5211,7 @@ impl PinpointEmail for PinpointEmailClient {
         input: PutAccountSendingAttributesRequest,
     ) -> Result<PutAccountSendingAttributesResponse, RusotoError<PutAccountSendingAttributesError>>
     {
+        #![allow(clippy::needless_update)]
         let request_uri = "/v1/email/account/sending";
 
         let mut request = SignedRequest::new("PUT", "ses", &self.region, &request_uri);
@@ -5178,6 +5247,7 @@ impl PinpointEmail for PinpointEmailClient {
         PutConfigurationSetDeliveryOptionsResponse,
         RusotoError<PutConfigurationSetDeliveryOptionsError>,
     > {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/v1/email/configuration-sets/{configuration_set_name}/delivery-options",
             configuration_set_name = input.configuration_set_name
@@ -5218,6 +5288,7 @@ impl PinpointEmail for PinpointEmailClient {
         PutConfigurationSetReputationOptionsResponse,
         RusotoError<PutConfigurationSetReputationOptionsError>,
     > {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/v1/email/configuration-sets/{configuration_set_name}/reputation-options",
             configuration_set_name = input.configuration_set_name
@@ -5258,6 +5329,7 @@ impl PinpointEmail for PinpointEmailClient {
         PutConfigurationSetSendingOptionsResponse,
         RusotoError<PutConfigurationSetSendingOptionsError>,
     > {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/v1/email/configuration-sets/{configuration_set_name}/sending",
             configuration_set_name = input.configuration_set_name
@@ -5298,6 +5370,7 @@ impl PinpointEmail for PinpointEmailClient {
         PutConfigurationSetTrackingOptionsResponse,
         RusotoError<PutConfigurationSetTrackingOptionsError>,
     > {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/v1/email/configuration-sets/{configuration_set_name}/tracking-options",
             configuration_set_name = input.configuration_set_name
@@ -5335,6 +5408,7 @@ impl PinpointEmail for PinpointEmailClient {
         &self,
         input: PutDedicatedIpInPoolRequest,
     ) -> Result<PutDedicatedIpInPoolResponse, RusotoError<PutDedicatedIpInPoolError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!("/v1/email/dedicated-ips/{ip}/pool", ip = input.ip);
 
         let mut request = SignedRequest::new("PUT", "ses", &self.region, &request_uri);
@@ -5370,6 +5444,7 @@ impl PinpointEmail for PinpointEmailClient {
         PutDedicatedIpWarmupAttributesResponse,
         RusotoError<PutDedicatedIpWarmupAttributesError>,
     > {
+        #![allow(clippy::needless_update)]
         let request_uri = format!("/v1/email/dedicated-ips/{ip}/warmup", ip = input.ip);
 
         let mut request = SignedRequest::new("PUT", "ses", &self.region, &request_uri);
@@ -5405,6 +5480,7 @@ impl PinpointEmail for PinpointEmailClient {
         PutDeliverabilityDashboardOptionResponse,
         RusotoError<PutDeliverabilityDashboardOptionError>,
     > {
+        #![allow(clippy::needless_update)]
         let request_uri = "/v1/email/deliverability-dashboard";
 
         let mut request = SignedRequest::new("PUT", "ses", &self.region, &request_uri);
@@ -5442,6 +5518,7 @@ impl PinpointEmail for PinpointEmailClient {
         PutEmailIdentityDkimAttributesResponse,
         RusotoError<PutEmailIdentityDkimAttributesError>,
     > {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/v1/email/identities/{email_identity}/dkim",
             email_identity = input.email_identity
@@ -5480,6 +5557,7 @@ impl PinpointEmail for PinpointEmailClient {
         PutEmailIdentityFeedbackAttributesResponse,
         RusotoError<PutEmailIdentityFeedbackAttributesError>,
     > {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/v1/email/identities/{email_identity}/feedback",
             email_identity = input.email_identity
@@ -5520,6 +5598,7 @@ impl PinpointEmail for PinpointEmailClient {
         PutEmailIdentityMailFromAttributesResponse,
         RusotoError<PutEmailIdentityMailFromAttributesError>,
     > {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/v1/email/identities/{email_identity}/mail-from",
             email_identity = input.email_identity
@@ -5557,6 +5636,7 @@ impl PinpointEmail for PinpointEmailClient {
         &self,
         input: SendEmailRequest,
     ) -> Result<SendEmailResponse, RusotoError<SendEmailError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/v1/email/outbound-emails";
 
         let mut request = SignedRequest::new("POST", "ses", &self.region, &request_uri);
@@ -5589,6 +5669,7 @@ impl PinpointEmail for PinpointEmailClient {
         &self,
         input: TagResourceRequest,
     ) -> Result<TagResourceResponse, RusotoError<TagResourceError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/v1/email/tags";
 
         let mut request = SignedRequest::new("POST", "ses", &self.region, &request_uri);
@@ -5621,6 +5702,7 @@ impl PinpointEmail for PinpointEmailClient {
         &self,
         input: UntagResourceRequest,
     ) -> Result<UntagResourceResponse, RusotoError<UntagResourceError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/v1/email/tags";
 
         let mut request = SignedRequest::new("DELETE", "ses", &self.region, &request_uri);
@@ -5661,6 +5743,7 @@ impl PinpointEmail for PinpointEmailClient {
         UpdateConfigurationSetEventDestinationResponse,
         RusotoError<UpdateConfigurationSetEventDestinationError>,
     > {
+        #![allow(clippy::needless_update)]
         let request_uri = format!("/v1/email/configuration-sets/{configuration_set_name}/event-destinations/{event_destination_name}", configuration_set_name = input.configuration_set_name, event_destination_name = input.event_destination_name);
 
         let mut request = SignedRequest::new("PUT", "ses", &self.region, &request_uri);

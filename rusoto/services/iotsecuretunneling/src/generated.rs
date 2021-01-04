@@ -55,7 +55,6 @@ impl IoTSecureTunnelingClient {
     }
 }
 
-use serde_json;
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CloseTunnelRequest {
@@ -344,6 +343,7 @@ pub enum CloseTunnelError {
 impl CloseTunnelError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CloseTunnelError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(CloseTunnelError::ResourceNotFound(err.msg))
@@ -374,6 +374,7 @@ pub enum DescribeTunnelError {
 impl DescribeTunnelError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeTunnelError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(DescribeTunnelError::ResourceNotFound(err.msg))
@@ -404,6 +405,7 @@ pub enum ListTagsForResourceError {
 impl ListTagsForResourceError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListTagsForResourceError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(ListTagsForResourceError::ResourceNotFound(
@@ -433,6 +435,7 @@ pub enum ListTunnelsError {}
 impl ListTunnelsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListTunnelsError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
@@ -458,6 +461,7 @@ pub enum OpenTunnelError {
 impl OpenTunnelError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<OpenTunnelError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "LimitExceededException" => {
                     return RusotoError::Service(OpenTunnelError::LimitExceeded(err.msg))
@@ -488,6 +492,7 @@ pub enum TagResourceError {
 impl TagResourceError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<TagResourceError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(TagResourceError::ResourceNotFound(err.msg))
@@ -518,6 +523,7 @@ pub enum UntagResourceError {
 impl UntagResourceError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UntagResourceError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(UntagResourceError::ResourceNotFound(err.msg))

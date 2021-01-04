@@ -24,7 +24,6 @@ use rusoto_core::proto;
 use rusoto_core::signature::SignedRequest;
 #[allow(unused_imports)]
 use serde::{Deserialize, Serialize};
-use serde_json;
 /// <p>An activity that adds other attributes based on existing attributes in the message.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct AddAttributesActivity {
@@ -1925,6 +1924,7 @@ pub enum BatchPutMessageError {
 impl BatchPutMessageError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<BatchPutMessageError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalFailureException" => {
                     return RusotoError::Service(BatchPutMessageError::InternalFailure(err.msg))
@@ -1981,6 +1981,7 @@ impl CancelPipelineReprocessingError {
         res: BufferedHttpResponse,
     ) -> RusotoError<CancelPipelineReprocessingError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalFailureException" => {
                     return RusotoError::Service(CancelPipelineReprocessingError::InternalFailure(
@@ -2049,6 +2050,7 @@ pub enum CreateChannelError {
 impl CreateChannelError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateChannelError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalFailureException" => {
                     return RusotoError::Service(CreateChannelError::InternalFailure(err.msg))
@@ -2109,6 +2111,7 @@ pub enum CreateDatasetError {
 impl CreateDatasetError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateDatasetError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalFailureException" => {
                     return RusotoError::Service(CreateDatasetError::InternalFailure(err.msg))
@@ -2167,6 +2170,7 @@ pub enum CreateDatasetContentError {
 impl CreateDatasetContentError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateDatasetContentError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalFailureException" => {
                     return RusotoError::Service(CreateDatasetContentError::InternalFailure(
@@ -2229,6 +2233,7 @@ pub enum CreateDatastoreError {
 impl CreateDatastoreError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateDatastoreError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalFailureException" => {
                     return RusotoError::Service(CreateDatastoreError::InternalFailure(err.msg))
@@ -2291,6 +2296,7 @@ pub enum CreatePipelineError {
 impl CreatePipelineError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreatePipelineError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalFailureException" => {
                     return RusotoError::Service(CreatePipelineError::InternalFailure(err.msg))
@@ -2351,6 +2357,7 @@ pub enum DeleteChannelError {
 impl DeleteChannelError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteChannelError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalFailureException" => {
                     return RusotoError::Service(DeleteChannelError::InternalFailure(err.msg))
@@ -2405,6 +2412,7 @@ pub enum DeleteDatasetError {
 impl DeleteDatasetError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteDatasetError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalFailureException" => {
                     return RusotoError::Service(DeleteDatasetError::InternalFailure(err.msg))
@@ -2459,6 +2467,7 @@ pub enum DeleteDatasetContentError {
 impl DeleteDatasetContentError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteDatasetContentError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalFailureException" => {
                     return RusotoError::Service(DeleteDatasetContentError::InternalFailure(
@@ -2519,6 +2528,7 @@ pub enum DeleteDatastoreError {
 impl DeleteDatastoreError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteDatastoreError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalFailureException" => {
                     return RusotoError::Service(DeleteDatastoreError::InternalFailure(err.msg))
@@ -2573,6 +2583,7 @@ pub enum DeletePipelineError {
 impl DeletePipelineError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeletePipelineError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalFailureException" => {
                     return RusotoError::Service(DeletePipelineError::InternalFailure(err.msg))
@@ -2627,6 +2638,7 @@ pub enum DescribeChannelError {
 impl DescribeChannelError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeChannelError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalFailureException" => {
                     return RusotoError::Service(DescribeChannelError::InternalFailure(err.msg))
@@ -2681,6 +2693,7 @@ pub enum DescribeDatasetError {
 impl DescribeDatasetError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeDatasetError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalFailureException" => {
                     return RusotoError::Service(DescribeDatasetError::InternalFailure(err.msg))
@@ -2735,6 +2748,7 @@ pub enum DescribeDatastoreError {
 impl DescribeDatastoreError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeDatastoreError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalFailureException" => {
                     return RusotoError::Service(DescribeDatastoreError::InternalFailure(err.msg))
@@ -2791,6 +2805,7 @@ pub enum DescribeLoggingOptionsError {
 impl DescribeLoggingOptionsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeLoggingOptionsError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalFailureException" => {
                     return RusotoError::Service(DescribeLoggingOptionsError::InternalFailure(
@@ -2853,6 +2868,7 @@ pub enum DescribePipelineError {
 impl DescribePipelineError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribePipelineError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalFailureException" => {
                     return RusotoError::Service(DescribePipelineError::InternalFailure(err.msg))
@@ -2907,6 +2923,7 @@ pub enum GetDatasetContentError {
 impl GetDatasetContentError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetDatasetContentError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalFailureException" => {
                     return RusotoError::Service(GetDatasetContentError::InternalFailure(err.msg))
@@ -2961,6 +2978,7 @@ pub enum ListChannelsError {
 impl ListChannelsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListChannelsError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalFailureException" => {
                     return RusotoError::Service(ListChannelsError::InternalFailure(err.msg))
@@ -3011,6 +3029,7 @@ pub enum ListDatasetContentsError {
 impl ListDatasetContentsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListDatasetContentsError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalFailureException" => {
                     return RusotoError::Service(ListDatasetContentsError::InternalFailure(err.msg))
@@ -3067,6 +3086,7 @@ pub enum ListDatasetsError {
 impl ListDatasetsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListDatasetsError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalFailureException" => {
                     return RusotoError::Service(ListDatasetsError::InternalFailure(err.msg))
@@ -3115,6 +3135,7 @@ pub enum ListDatastoresError {
 impl ListDatastoresError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListDatastoresError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalFailureException" => {
                     return RusotoError::Service(ListDatastoresError::InternalFailure(err.msg))
@@ -3163,6 +3184,7 @@ pub enum ListPipelinesError {
 impl ListPipelinesError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListPipelinesError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalFailureException" => {
                     return RusotoError::Service(ListPipelinesError::InternalFailure(err.msg))
@@ -3215,6 +3237,7 @@ pub enum ListTagsForResourceError {
 impl ListTagsForResourceError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListTagsForResourceError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalFailureException" => {
                     return RusotoError::Service(ListTagsForResourceError::InternalFailure(err.msg))
@@ -3275,6 +3298,7 @@ pub enum PutLoggingOptionsError {
 impl PutLoggingOptionsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<PutLoggingOptionsError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalFailureException" => {
                     return RusotoError::Service(PutLoggingOptionsError::InternalFailure(err.msg))
@@ -3325,6 +3349,7 @@ pub enum RunPipelineActivityError {
 impl RunPipelineActivityError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<RunPipelineActivityError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalFailureException" => {
                     return RusotoError::Service(RunPipelineActivityError::InternalFailure(err.msg))
@@ -3377,6 +3402,7 @@ pub enum SampleChannelDataError {
 impl SampleChannelDataError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<SampleChannelDataError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalFailureException" => {
                     return RusotoError::Service(SampleChannelDataError::InternalFailure(err.msg))
@@ -3435,6 +3461,7 @@ pub enum StartPipelineReprocessingError {
 impl StartPipelineReprocessingError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<StartPipelineReprocessingError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalFailureException" => {
                     return RusotoError::Service(StartPipelineReprocessingError::InternalFailure(
@@ -3509,6 +3536,7 @@ pub enum TagResourceError {
 impl TagResourceError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<TagResourceError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalFailureException" => {
                     return RusotoError::Service(TagResourceError::InternalFailure(err.msg))
@@ -3569,6 +3597,7 @@ pub enum UntagResourceError {
 impl UntagResourceError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UntagResourceError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalFailureException" => {
                     return RusotoError::Service(UntagResourceError::InternalFailure(err.msg))
@@ -3627,6 +3656,7 @@ pub enum UpdateChannelError {
 impl UpdateChannelError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateChannelError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalFailureException" => {
                     return RusotoError::Service(UpdateChannelError::InternalFailure(err.msg))
@@ -3681,6 +3711,7 @@ pub enum UpdateDatasetError {
 impl UpdateDatasetError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateDatasetError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalFailureException" => {
                     return RusotoError::Service(UpdateDatasetError::InternalFailure(err.msg))
@@ -3735,6 +3766,7 @@ pub enum UpdateDatastoreError {
 impl UpdateDatastoreError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateDatastoreError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalFailureException" => {
                     return RusotoError::Service(UpdateDatastoreError::InternalFailure(err.msg))
@@ -3791,6 +3823,7 @@ pub enum UpdatePipelineError {
 impl UpdatePipelineError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdatePipelineError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalFailureException" => {
                     return RusotoError::Service(UpdatePipelineError::InternalFailure(err.msg))
@@ -4083,6 +4116,7 @@ impl IotAnalytics for IotAnalyticsClient {
         &self,
         input: BatchPutMessageRequest,
     ) -> Result<BatchPutMessageResponse, RusotoError<BatchPutMessageError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/messages/batch";
 
         let mut request = SignedRequest::new("POST", "iotanalytics", &self.region, &request_uri);
@@ -4115,6 +4149,7 @@ impl IotAnalytics for IotAnalyticsClient {
         input: CancelPipelineReprocessingRequest,
     ) -> Result<CancelPipelineReprocessingResponse, RusotoError<CancelPipelineReprocessingError>>
     {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/pipelines/{pipeline_name}/reprocessing/{reprocessing_id}",
             pipeline_name = input.pipeline_name,
@@ -4147,6 +4182,7 @@ impl IotAnalytics for IotAnalyticsClient {
         &self,
         input: CreateChannelRequest,
     ) -> Result<CreateChannelResponse, RusotoError<CreateChannelError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/channels";
 
         let mut request = SignedRequest::new("POST", "iotanalytics", &self.region, &request_uri);
@@ -4178,6 +4214,7 @@ impl IotAnalytics for IotAnalyticsClient {
         &self,
         input: CreateDatasetRequest,
     ) -> Result<CreateDatasetResponse, RusotoError<CreateDatasetError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/datasets";
 
         let mut request = SignedRequest::new("POST", "iotanalytics", &self.region, &request_uri);
@@ -4209,6 +4246,7 @@ impl IotAnalytics for IotAnalyticsClient {
         &self,
         input: CreateDatasetContentRequest,
     ) -> Result<CreateDatasetContentResponse, RusotoError<CreateDatasetContentError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/datasets/{dataset_name}/content",
             dataset_name = input.dataset_name
@@ -4243,6 +4281,7 @@ impl IotAnalytics for IotAnalyticsClient {
         &self,
         input: CreateDatastoreRequest,
     ) -> Result<CreateDatastoreResponse, RusotoError<CreateDatastoreError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/datastores";
 
         let mut request = SignedRequest::new("POST", "iotanalytics", &self.region, &request_uri);
@@ -4274,6 +4313,7 @@ impl IotAnalytics for IotAnalyticsClient {
         &self,
         input: CreatePipelineRequest,
     ) -> Result<CreatePipelineResponse, RusotoError<CreatePipelineError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/pipelines";
 
         let mut request = SignedRequest::new("POST", "iotanalytics", &self.region, &request_uri);
@@ -4305,6 +4345,7 @@ impl IotAnalytics for IotAnalyticsClient {
         &self,
         input: DeleteChannelRequest,
     ) -> Result<(), RusotoError<DeleteChannelError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/channels/{channel_name}",
             channel_name = input.channel_name
@@ -4320,9 +4361,9 @@ impl IotAnalytics for IotAnalyticsClient {
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 204 {
             let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = ::std::mem::drop(response);
+            let _result = ::std::mem::drop(response);
 
-            Ok(result)
+            Ok(())
         } else {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             Err(DeleteChannelError::from_response(response))
@@ -4335,6 +4376,7 @@ impl IotAnalytics for IotAnalyticsClient {
         &self,
         input: DeleteDatasetRequest,
     ) -> Result<(), RusotoError<DeleteDatasetError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/datasets/{dataset_name}",
             dataset_name = input.dataset_name
@@ -4350,9 +4392,9 @@ impl IotAnalytics for IotAnalyticsClient {
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 204 {
             let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = ::std::mem::drop(response);
+            let _result = ::std::mem::drop(response);
 
-            Ok(result)
+            Ok(())
         } else {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             Err(DeleteDatasetError::from_response(response))
@@ -4365,6 +4407,7 @@ impl IotAnalytics for IotAnalyticsClient {
         &self,
         input: DeleteDatasetContentRequest,
     ) -> Result<(), RusotoError<DeleteDatasetContentError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/datasets/{dataset_name}/content",
             dataset_name = input.dataset_name
@@ -4386,9 +4429,9 @@ impl IotAnalytics for IotAnalyticsClient {
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 204 {
             let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = ::std::mem::drop(response);
+            let _result = ::std::mem::drop(response);
 
-            Ok(result)
+            Ok(())
         } else {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             Err(DeleteDatasetContentError::from_response(response))
@@ -4401,6 +4444,7 @@ impl IotAnalytics for IotAnalyticsClient {
         &self,
         input: DeleteDatastoreRequest,
     ) -> Result<(), RusotoError<DeleteDatastoreError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/datastores/{datastore_name}",
             datastore_name = input.datastore_name
@@ -4416,9 +4460,9 @@ impl IotAnalytics for IotAnalyticsClient {
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 204 {
             let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = ::std::mem::drop(response);
+            let _result = ::std::mem::drop(response);
 
-            Ok(result)
+            Ok(())
         } else {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             Err(DeleteDatastoreError::from_response(response))
@@ -4431,6 +4475,7 @@ impl IotAnalytics for IotAnalyticsClient {
         &self,
         input: DeletePipelineRequest,
     ) -> Result<(), RusotoError<DeletePipelineError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/pipelines/{pipeline_name}",
             pipeline_name = input.pipeline_name
@@ -4446,9 +4491,9 @@ impl IotAnalytics for IotAnalyticsClient {
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 204 {
             let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = ::std::mem::drop(response);
+            let _result = ::std::mem::drop(response);
 
-            Ok(result)
+            Ok(())
         } else {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             Err(DeletePipelineError::from_response(response))
@@ -4461,6 +4506,7 @@ impl IotAnalytics for IotAnalyticsClient {
         &self,
         input: DescribeChannelRequest,
     ) -> Result<DescribeChannelResponse, RusotoError<DescribeChannelError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/channels/{channel_name}",
             channel_name = input.channel_name
@@ -4498,6 +4544,7 @@ impl IotAnalytics for IotAnalyticsClient {
         &self,
         input: DescribeDatasetRequest,
     ) -> Result<DescribeDatasetResponse, RusotoError<DescribeDatasetError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/datasets/{dataset_name}",
             dataset_name = input.dataset_name
@@ -4529,6 +4576,7 @@ impl IotAnalytics for IotAnalyticsClient {
         &self,
         input: DescribeDatastoreRequest,
     ) -> Result<DescribeDatastoreResponse, RusotoError<DescribeDatastoreError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/datastores/{datastore_name}",
             datastore_name = input.datastore_name
@@ -4565,6 +4613,7 @@ impl IotAnalytics for IotAnalyticsClient {
     async fn describe_logging_options(
         &self,
     ) -> Result<DescribeLoggingOptionsResponse, RusotoError<DescribeLoggingOptionsError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/logging";
 
         let mut request = SignedRequest::new("GET", "iotanalytics", &self.region, &request_uri);
@@ -4593,6 +4642,7 @@ impl IotAnalytics for IotAnalyticsClient {
         &self,
         input: DescribePipelineRequest,
     ) -> Result<DescribePipelineResponse, RusotoError<DescribePipelineError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/pipelines/{pipeline_name}",
             pipeline_name = input.pipeline_name
@@ -4624,6 +4674,7 @@ impl IotAnalytics for IotAnalyticsClient {
         &self,
         input: GetDatasetContentRequest,
     ) -> Result<GetDatasetContentResponse, RusotoError<GetDatasetContentError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/datasets/{dataset_name}/content",
             dataset_name = input.dataset_name
@@ -4661,6 +4712,7 @@ impl IotAnalytics for IotAnalyticsClient {
         &self,
         input: ListChannelsRequest,
     ) -> Result<ListChannelsResponse, RusotoError<ListChannelsError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/channels";
 
         let mut request = SignedRequest::new("GET", "iotanalytics", &self.region, &request_uri);
@@ -4698,6 +4750,7 @@ impl IotAnalytics for IotAnalyticsClient {
         &self,
         input: ListDatasetContentsRequest,
     ) -> Result<ListDatasetContentsResponse, RusotoError<ListDatasetContentsError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/datasets/{dataset_name}/contents",
             dataset_name = input.dataset_name
@@ -4744,6 +4797,7 @@ impl IotAnalytics for IotAnalyticsClient {
         &self,
         input: ListDatasetsRequest,
     ) -> Result<ListDatasetsResponse, RusotoError<ListDatasetsError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/datasets";
 
         let mut request = SignedRequest::new("GET", "iotanalytics", &self.region, &request_uri);
@@ -4781,6 +4835,7 @@ impl IotAnalytics for IotAnalyticsClient {
         &self,
         input: ListDatastoresRequest,
     ) -> Result<ListDatastoresResponse, RusotoError<ListDatastoresError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/datastores";
 
         let mut request = SignedRequest::new("GET", "iotanalytics", &self.region, &request_uri);
@@ -4818,6 +4873,7 @@ impl IotAnalytics for IotAnalyticsClient {
         &self,
         input: ListPipelinesRequest,
     ) -> Result<ListPipelinesResponse, RusotoError<ListPipelinesError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/pipelines";
 
         let mut request = SignedRequest::new("GET", "iotanalytics", &self.region, &request_uri);
@@ -4855,6 +4911,7 @@ impl IotAnalytics for IotAnalyticsClient {
         &self,
         input: ListTagsForResourceRequest,
     ) -> Result<ListTagsForResourceResponse, RusotoError<ListTagsForResourceError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/tags";
 
         let mut request = SignedRequest::new("GET", "iotanalytics", &self.region, &request_uri);
@@ -4887,6 +4944,7 @@ impl IotAnalytics for IotAnalyticsClient {
         &self,
         input: PutLoggingOptionsRequest,
     ) -> Result<(), RusotoError<PutLoggingOptionsError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/logging";
 
         let mut request = SignedRequest::new("PUT", "iotanalytics", &self.region, &request_uri);
@@ -4902,9 +4960,9 @@ impl IotAnalytics for IotAnalyticsClient {
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
             let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = ::std::mem::drop(response);
+            let _result = ::std::mem::drop(response);
 
-            Ok(result)
+            Ok(())
         } else {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             Err(PutLoggingOptionsError::from_response(response))
@@ -4917,6 +4975,7 @@ impl IotAnalytics for IotAnalyticsClient {
         &self,
         input: RunPipelineActivityRequest,
     ) -> Result<RunPipelineActivityResponse, RusotoError<RunPipelineActivityError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/pipelineactivities/run";
 
         let mut request = SignedRequest::new("POST", "iotanalytics", &self.region, &request_uri);
@@ -4948,6 +5007,7 @@ impl IotAnalytics for IotAnalyticsClient {
         &self,
         input: SampleChannelDataRequest,
     ) -> Result<SampleChannelDataResponse, RusotoError<SampleChannelDataError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/channels/{channel_name}/sample",
             channel_name = input.channel_name
@@ -4992,6 +5052,7 @@ impl IotAnalytics for IotAnalyticsClient {
         input: StartPipelineReprocessingRequest,
     ) -> Result<StartPipelineReprocessingResponse, RusotoError<StartPipelineReprocessingError>>
     {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/pipelines/{pipeline_name}/reprocessing",
             pipeline_name = input.pipeline_name
@@ -5026,6 +5087,7 @@ impl IotAnalytics for IotAnalyticsClient {
         &self,
         input: TagResourceRequest,
     ) -> Result<TagResourceResponse, RusotoError<TagResourceError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/tags";
 
         let mut request = SignedRequest::new("POST", "iotanalytics", &self.region, &request_uri);
@@ -5061,6 +5123,7 @@ impl IotAnalytics for IotAnalyticsClient {
         &self,
         input: UntagResourceRequest,
     ) -> Result<UntagResourceResponse, RusotoError<UntagResourceError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/tags";
 
         let mut request = SignedRequest::new("DELETE", "iotanalytics", &self.region, &request_uri);
@@ -5096,6 +5159,7 @@ impl IotAnalytics for IotAnalyticsClient {
         &self,
         input: UpdateChannelRequest,
     ) -> Result<(), RusotoError<UpdateChannelError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/channels/{channel_name}",
             channel_name = input.channel_name
@@ -5114,9 +5178,9 @@ impl IotAnalytics for IotAnalyticsClient {
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
             let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = ::std::mem::drop(response);
+            let _result = ::std::mem::drop(response);
 
-            Ok(result)
+            Ok(())
         } else {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             Err(UpdateChannelError::from_response(response))
@@ -5129,6 +5193,7 @@ impl IotAnalytics for IotAnalyticsClient {
         &self,
         input: UpdateDatasetRequest,
     ) -> Result<(), RusotoError<UpdateDatasetError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/datasets/{dataset_name}",
             dataset_name = input.dataset_name
@@ -5147,9 +5212,9 @@ impl IotAnalytics for IotAnalyticsClient {
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
             let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = ::std::mem::drop(response);
+            let _result = ::std::mem::drop(response);
 
-            Ok(result)
+            Ok(())
         } else {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             Err(UpdateDatasetError::from_response(response))
@@ -5162,6 +5227,7 @@ impl IotAnalytics for IotAnalyticsClient {
         &self,
         input: UpdateDatastoreRequest,
     ) -> Result<(), RusotoError<UpdateDatastoreError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/datastores/{datastore_name}",
             datastore_name = input.datastore_name
@@ -5180,9 +5246,9 @@ impl IotAnalytics for IotAnalyticsClient {
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
             let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = ::std::mem::drop(response);
+            let _result = ::std::mem::drop(response);
 
-            Ok(result)
+            Ok(())
         } else {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             Err(UpdateDatastoreError::from_response(response))
@@ -5195,6 +5261,7 @@ impl IotAnalytics for IotAnalyticsClient {
         &self,
         input: UpdatePipelineRequest,
     ) -> Result<(), RusotoError<UpdatePipelineError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/pipelines/{pipeline_name}",
             pipeline_name = input.pipeline_name
@@ -5213,9 +5280,9 @@ impl IotAnalytics for IotAnalyticsClient {
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
             let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = ::std::mem::drop(response);
+            let _result = ::std::mem::drop(response);
 
-            Ok(result)
+            Ok(())
         } else {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             Err(UpdatePipelineError::from_response(response))

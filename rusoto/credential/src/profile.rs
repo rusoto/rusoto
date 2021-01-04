@@ -78,7 +78,7 @@ impl ProfileProvider {
     {
         let profile_location = ProfileProvider::default_profile_location()?;
         Ok(ProfileProvider {
-            file_path: profile_location.into(),
+            file_path: profile_location,
             profile: profile.into(),
         })
     }

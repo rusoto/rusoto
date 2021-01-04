@@ -375,6 +375,7 @@ pub enum CreateProjectError {
 impl CreateProjectError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateProjectError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(CreateProjectError::BadRequest(err.msg))
@@ -437,6 +438,7 @@ pub enum DeleteProjectError {
 impl DeleteProjectError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteProjectError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalFailureException" => {
                     return RusotoError::Service(DeleteProjectError::InternalFailure(err.msg))
@@ -493,6 +495,7 @@ pub enum DescribeBundleError {
 impl DescribeBundleError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeBundleError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(DescribeBundleError::BadRequest(err.msg))
@@ -553,6 +556,7 @@ pub enum DescribeProjectError {
 impl DescribeProjectError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeProjectError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(DescribeProjectError::BadRequest(err.msg))
@@ -613,6 +617,7 @@ pub enum ExportBundleError {
 impl ExportBundleError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ExportBundleError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(ExportBundleError::BadRequest(err.msg))
@@ -673,6 +678,7 @@ pub enum ExportProjectError {
 impl ExportProjectError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ExportProjectError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(ExportProjectError::BadRequest(err.msg))
@@ -731,6 +737,7 @@ pub enum ListBundlesError {
 impl ListBundlesError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListBundlesError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(ListBundlesError::BadRequest(err.msg))
@@ -785,6 +792,7 @@ pub enum ListProjectsError {
 impl ListProjectsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListProjectsError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(ListProjectsError::BadRequest(err.msg))
@@ -845,6 +853,7 @@ pub enum UpdateProjectError {
 impl UpdateProjectError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateProjectError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AccountActionRequiredException" => {
                     return RusotoError::Service(UpdateProjectError::AccountActionRequired(err.msg))
@@ -996,6 +1005,7 @@ impl Mobile for MobileClient {
         &self,
         input: CreateProjectRequest,
     ) -> Result<CreateProjectResult, RusotoError<CreateProjectError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/projects";
 
         let mut request =
@@ -1045,6 +1055,7 @@ impl Mobile for MobileClient {
         &self,
         input: DeleteProjectRequest,
     ) -> Result<DeleteProjectResult, RusotoError<DeleteProjectError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!("/projects/{project_id}", project_id = input.project_id);
 
         let mut request =
@@ -1076,6 +1087,7 @@ impl Mobile for MobileClient {
         &self,
         input: DescribeBundleRequest,
     ) -> Result<DescribeBundleResult, RusotoError<DescribeBundleError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!("/bundles/{bundle_id}", bundle_id = input.bundle_id);
 
         let mut request =
@@ -1107,6 +1119,7 @@ impl Mobile for MobileClient {
         &self,
         input: DescribeProjectRequest,
     ) -> Result<DescribeProjectResult, RusotoError<DescribeProjectError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/project";
 
         let mut request =
@@ -1145,6 +1158,7 @@ impl Mobile for MobileClient {
         &self,
         input: ExportBundleRequest,
     ) -> Result<ExportBundleResult, RusotoError<ExportBundleError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!("/bundles/{bundle_id}", bundle_id = input.bundle_id);
 
         let mut request =
@@ -1185,6 +1199,7 @@ impl Mobile for MobileClient {
         &self,
         input: ExportProjectRequest,
     ) -> Result<ExportProjectResult, RusotoError<ExportProjectError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!("/exports/{project_id}", project_id = input.project_id);
 
         let mut request =
@@ -1216,6 +1231,7 @@ impl Mobile for MobileClient {
         &self,
         input: ListBundlesRequest,
     ) -> Result<ListBundlesResult, RusotoError<ListBundlesError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/bundles";
 
         let mut request =
@@ -1256,6 +1272,7 @@ impl Mobile for MobileClient {
         &self,
         input: ListProjectsRequest,
     ) -> Result<ListProjectsResult, RusotoError<ListProjectsError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/projects";
 
         let mut request =
@@ -1296,6 +1313,7 @@ impl Mobile for MobileClient {
         &self,
         input: UpdateProjectRequest,
     ) -> Result<UpdateProjectResult, RusotoError<UpdateProjectError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/update";
 
         let mut request =

@@ -24,7 +24,6 @@ use rusoto_core::proto;
 use rusoto_core::signature::SignedRequest;
 #[allow(unused_imports)]
 use serde::{Deserialize, Serialize};
-use serde_json;
 /// <p>The file to be used as album art. There can be multiple artworks associated with an audio file, to a maximum of 20.</p> <p>To remove artwork or leave the artwork empty, you can either set <code>Artwork</code> to null, or set the <code>Merge Policy</code> to "Replace" and use an empty <code>Artwork</code> array.</p> <p>To pass through existing artwork unchanged, set the <code>Merge Policy</code> to "Prepend", "Append", or "Fallback", and use an empty <code>Artwork</code> array.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct Artwork {
@@ -1447,6 +1446,7 @@ pub enum CancelJobError {
 impl CancelJobError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CancelJobError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(CancelJobError::AccessDenied(err.msg))
@@ -1501,6 +1501,7 @@ pub enum CreateJobError {
 impl CreateJobError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateJobError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(CreateJobError::AccessDenied(err.msg))
@@ -1555,6 +1556,7 @@ pub enum CreatePipelineError {
 impl CreatePipelineError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreatePipelineError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(CreatePipelineError::AccessDenied(err.msg))
@@ -1607,6 +1609,7 @@ pub enum CreatePresetError {
 impl CreatePresetError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreatePresetError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(CreatePresetError::AccessDenied(err.msg))
@@ -1657,6 +1660,7 @@ pub enum DeletePipelineError {
 impl DeletePipelineError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeletePipelineError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(DeletePipelineError::AccessDenied(err.msg))
@@ -1709,6 +1713,7 @@ pub enum DeletePresetError {
 impl DeletePresetError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeletePresetError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(DeletePresetError::AccessDenied(err.msg))
@@ -1757,6 +1762,7 @@ pub enum ListJobsByPipelineError {
 impl ListJobsByPipelineError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListJobsByPipelineError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(ListJobsByPipelineError::AccessDenied(err.msg))
@@ -1807,6 +1813,7 @@ pub enum ListJobsByStatusError {
 impl ListJobsByStatusError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListJobsByStatusError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(ListJobsByStatusError::AccessDenied(err.msg))
@@ -1855,6 +1862,7 @@ pub enum ListPipelinesError {
 impl ListPipelinesError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListPipelinesError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(ListPipelinesError::AccessDenied(err.msg))
@@ -1897,6 +1905,7 @@ pub enum ListPresetsError {
 impl ListPresetsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListPresetsError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(ListPresetsError::AccessDenied(err.msg))
@@ -1941,6 +1950,7 @@ pub enum ReadJobError {
 impl ReadJobError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ReadJobError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(ReadJobError::AccessDenied(err.msg))
@@ -1989,6 +1999,7 @@ pub enum ReadPipelineError {
 impl ReadPipelineError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ReadPipelineError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(ReadPipelineError::AccessDenied(err.msg))
@@ -2037,6 +2048,7 @@ pub enum ReadPresetError {
 impl ReadPresetError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ReadPresetError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(ReadPresetError::AccessDenied(err.msg))
@@ -2085,6 +2097,7 @@ pub enum TestRoleError {
 impl TestRoleError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<TestRoleError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(TestRoleError::AccessDenied(err.msg))
@@ -2135,6 +2148,7 @@ pub enum UpdatePipelineError {
 impl UpdatePipelineError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdatePipelineError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(UpdatePipelineError::AccessDenied(err.msg))
@@ -2191,6 +2205,7 @@ impl UpdatePipelineNotificationsError {
         res: BufferedHttpResponse,
     ) -> RusotoError<UpdatePipelineNotificationsError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(UpdatePipelineNotificationsError::AccessDenied(
@@ -2257,6 +2272,7 @@ pub enum UpdatePipelineStatusError {
 impl UpdatePipelineStatusError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdatePipelineStatusError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(UpdatePipelineStatusError::AccessDenied(err.msg))
@@ -2450,6 +2466,7 @@ impl Ets for EtsClient {
         &self,
         input: CancelJobRequest,
     ) -> Result<CancelJobResponse, RusotoError<CancelJobError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!("/2012-09-25/jobs/{id}", id = input.id);
 
         let mut request =
@@ -2479,6 +2496,7 @@ impl Ets for EtsClient {
         &self,
         input: CreateJobRequest,
     ) -> Result<CreateJobResponse, RusotoError<CreateJobError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/2012-09-25/jobs";
 
         let mut request =
@@ -2511,6 +2529,7 @@ impl Ets for EtsClient {
         &self,
         input: CreatePipelineRequest,
     ) -> Result<CreatePipelineResponse, RusotoError<CreatePipelineError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/2012-09-25/pipelines";
 
         let mut request =
@@ -2543,6 +2562,7 @@ impl Ets for EtsClient {
         &self,
         input: CreatePresetRequest,
     ) -> Result<CreatePresetResponse, RusotoError<CreatePresetError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/2012-09-25/presets";
 
         let mut request =
@@ -2575,6 +2595,7 @@ impl Ets for EtsClient {
         &self,
         input: DeletePipelineRequest,
     ) -> Result<DeletePipelineResponse, RusotoError<DeletePipelineError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!("/2012-09-25/pipelines/{id}", id = input.id);
 
         let mut request =
@@ -2604,6 +2625,7 @@ impl Ets for EtsClient {
         &self,
         input: DeletePresetRequest,
     ) -> Result<DeletePresetResponse, RusotoError<DeletePresetError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!("/2012-09-25/presets/{id}", id = input.id);
 
         let mut request =
@@ -2633,6 +2655,7 @@ impl Ets for EtsClient {
         &self,
         input: ListJobsByPipelineRequest,
     ) -> Result<ListJobsByPipelineResponse, RusotoError<ListJobsByPipelineError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/2012-09-25/jobsByPipeline/{pipeline_id}",
             pipeline_id = input.pipeline_id
@@ -2674,6 +2697,7 @@ impl Ets for EtsClient {
         &self,
         input: ListJobsByStatusRequest,
     ) -> Result<ListJobsByStatusResponse, RusotoError<ListJobsByStatusError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!("/2012-09-25/jobsByStatus/{status}", status = input.status);
 
         let mut request =
@@ -2712,6 +2736,7 @@ impl Ets for EtsClient {
         &self,
         input: ListPipelinesRequest,
     ) -> Result<ListPipelinesResponse, RusotoError<ListPipelinesError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/2012-09-25/pipelines";
 
         let mut request =
@@ -2750,6 +2775,7 @@ impl Ets for EtsClient {
         &self,
         input: ListPresetsRequest,
     ) -> Result<ListPresetsResponse, RusotoError<ListPresetsError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/2012-09-25/presets";
 
         let mut request =
@@ -2788,6 +2814,7 @@ impl Ets for EtsClient {
         &self,
         input: ReadJobRequest,
     ) -> Result<ReadJobResponse, RusotoError<ReadJobError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!("/2012-09-25/jobs/{id}", id = input.id);
 
         let mut request =
@@ -2817,6 +2844,7 @@ impl Ets for EtsClient {
         &self,
         input: ReadPipelineRequest,
     ) -> Result<ReadPipelineResponse, RusotoError<ReadPipelineError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!("/2012-09-25/pipelines/{id}", id = input.id);
 
         let mut request =
@@ -2846,6 +2874,7 @@ impl Ets for EtsClient {
         &self,
         input: ReadPresetRequest,
     ) -> Result<ReadPresetResponse, RusotoError<ReadPresetError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!("/2012-09-25/presets/{id}", id = input.id);
 
         let mut request =
@@ -2875,6 +2904,7 @@ impl Ets for EtsClient {
         &self,
         input: TestRoleRequest,
     ) -> Result<TestRoleResponse, RusotoError<TestRoleError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/2012-09-25/roleTests";
 
         let mut request =
@@ -2907,6 +2937,7 @@ impl Ets for EtsClient {
         &self,
         input: UpdatePipelineRequest,
     ) -> Result<UpdatePipelineResponse, RusotoError<UpdatePipelineError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!("/2012-09-25/pipelines/{id}", id = input.id);
 
         let mut request =
@@ -2940,6 +2971,7 @@ impl Ets for EtsClient {
         input: UpdatePipelineNotificationsRequest,
     ) -> Result<UpdatePipelineNotificationsResponse, RusotoError<UpdatePipelineNotificationsError>>
     {
+        #![allow(clippy::needless_update)]
         let request_uri = format!("/2012-09-25/pipelines/{id}/notifications", id = input.id);
 
         let mut request =
@@ -2972,6 +3004,7 @@ impl Ets for EtsClient {
         &self,
         input: UpdatePipelineStatusRequest,
     ) -> Result<UpdatePipelineStatusResponse, RusotoError<UpdatePipelineStatusError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!("/2012-09-25/pipelines/{id}/status", id = input.id);
 
         let mut request =

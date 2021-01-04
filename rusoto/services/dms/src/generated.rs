@@ -49,7 +49,6 @@ impl DatabaseMigrationServiceClient {
     }
 }
 
-use serde_json;
 /// <p>Describes a quota for an AWS account, for example, the number of replication instances allowed.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
@@ -3840,6 +3839,7 @@ pub enum AddTagsToResourceError {
 impl AddTagsToResourceError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<AddTagsToResourceError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ResourceNotFoundFault" => {
                     return RusotoError::Service(AddTagsToResourceError::ResourceNotFoundFault(
@@ -3874,6 +3874,7 @@ impl ApplyPendingMaintenanceActionError {
         res: BufferedHttpResponse,
     ) -> RusotoError<ApplyPendingMaintenanceActionError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ResourceNotFoundFault" => {
                     return RusotoError::Service(
@@ -3914,6 +3915,7 @@ impl CancelReplicationTaskAssessmentRunError {
         res: BufferedHttpResponse,
     ) -> RusotoError<CancelReplicationTaskAssessmentRunError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AccessDeniedFault" => {
                     return RusotoError::Service(
@@ -3976,6 +3978,7 @@ pub enum CreateEndpointError {
 impl CreateEndpointError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateEndpointError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AccessDeniedFault" => {
                     return RusotoError::Service(CreateEndpointError::AccessDeniedFault(err.msg))
@@ -4058,6 +4061,7 @@ pub enum CreateEventSubscriptionError {
 impl CreateEventSubscriptionError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateEventSubscriptionError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "KMSAccessDeniedFault" => {
                     return RusotoError::Service(
@@ -4170,6 +4174,7 @@ pub enum CreateReplicationInstanceError {
 impl CreateReplicationInstanceError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateReplicationInstanceError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AccessDeniedFault" => {
                     return RusotoError::Service(CreateReplicationInstanceError::AccessDeniedFault(
@@ -4286,6 +4291,7 @@ impl CreateReplicationSubnetGroupError {
         res: BufferedHttpResponse,
     ) -> RusotoError<CreateReplicationSubnetGroupError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AccessDeniedFault" => {
                     return RusotoError::Service(
@@ -4368,6 +4374,7 @@ pub enum CreateReplicationTaskError {
 impl CreateReplicationTaskError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateReplicationTaskError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AccessDeniedFault" => {
                     return RusotoError::Service(CreateReplicationTaskError::AccessDeniedFault(
@@ -4440,6 +4447,7 @@ pub enum DeleteCertificateError {
 impl DeleteCertificateError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteCertificateError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidResourceStateFault" => {
                     return RusotoError::Service(DeleteCertificateError::InvalidResourceStateFault(
@@ -4482,6 +4490,7 @@ pub enum DeleteConnectionError {
 impl DeleteConnectionError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteConnectionError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AccessDeniedFault" => {
                     return RusotoError::Service(DeleteConnectionError::AccessDeniedFault(err.msg))
@@ -4526,6 +4535,7 @@ pub enum DeleteEndpointError {
 impl DeleteEndpointError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteEndpointError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidResourceStateFault" => {
                     return RusotoError::Service(DeleteEndpointError::InvalidResourceStateFault(
@@ -4566,6 +4576,7 @@ pub enum DeleteEventSubscriptionError {
 impl DeleteEventSubscriptionError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteEventSubscriptionError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidResourceStateFault" => {
                     return RusotoError::Service(
@@ -4610,6 +4621,7 @@ pub enum DeleteReplicationInstanceError {
 impl DeleteReplicationInstanceError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteReplicationInstanceError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidResourceStateFault" => {
                     return RusotoError::Service(
@@ -4656,6 +4668,7 @@ impl DeleteReplicationSubnetGroupError {
         res: BufferedHttpResponse,
     ) -> RusotoError<DeleteReplicationSubnetGroupError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidResourceStateFault" => {
                     return RusotoError::Service(
@@ -4700,6 +4713,7 @@ pub enum DeleteReplicationTaskError {
 impl DeleteReplicationTaskError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteReplicationTaskError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidResourceStateFault" => {
                     return RusotoError::Service(
@@ -4746,6 +4760,7 @@ impl DeleteReplicationTaskAssessmentRunError {
         res: BufferedHttpResponse,
     ) -> RusotoError<DeleteReplicationTaskAssessmentRunError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AccessDeniedFault" => {
                     return RusotoError::Service(
@@ -4793,6 +4808,7 @@ pub enum DescribeAccountAttributesError {}
 impl DescribeAccountAttributesError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeAccountAttributesError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
@@ -4824,6 +4840,7 @@ impl DescribeApplicableIndividualAssessmentsError {
         res: BufferedHttpResponse,
     ) -> RusotoError<DescribeApplicableIndividualAssessmentsError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AccessDeniedFault" => {
                     return RusotoError::Service(
@@ -4878,6 +4895,7 @@ pub enum DescribeCertificatesError {
 impl DescribeCertificatesError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeCertificatesError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ResourceNotFoundFault" => {
                     return RusotoError::Service(DescribeCertificatesError::ResourceNotFoundFault(
@@ -4910,6 +4928,7 @@ pub enum DescribeConnectionsError {
 impl DescribeConnectionsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeConnectionsError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ResourceNotFoundFault" => {
                     return RusotoError::Service(DescribeConnectionsError::ResourceNotFoundFault(
@@ -4939,6 +4958,7 @@ pub enum DescribeEndpointTypesError {}
 impl DescribeEndpointTypesError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeEndpointTypesError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
@@ -4964,6 +4984,7 @@ pub enum DescribeEndpointsError {
 impl DescribeEndpointsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeEndpointsError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ResourceNotFoundFault" => {
                     return RusotoError::Service(DescribeEndpointsError::ResourceNotFoundFault(
@@ -4993,6 +5014,7 @@ pub enum DescribeEventCategoriesError {}
 impl DescribeEventCategoriesError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeEventCategoriesError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
@@ -5020,6 +5042,7 @@ impl DescribeEventSubscriptionsError {
         res: BufferedHttpResponse,
     ) -> RusotoError<DescribeEventSubscriptionsError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ResourceNotFoundFault" => {
                     return RusotoError::Service(
@@ -5051,6 +5074,7 @@ pub enum DescribeEventsError {}
 impl DescribeEventsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeEventsError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
@@ -5075,6 +5099,7 @@ impl DescribeOrderableReplicationInstancesError {
         res: BufferedHttpResponse,
     ) -> RusotoError<DescribeOrderableReplicationInstancesError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
@@ -5102,6 +5127,7 @@ impl DescribePendingMaintenanceActionsError {
         res: BufferedHttpResponse,
     ) -> RusotoError<DescribePendingMaintenanceActionsError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ResourceNotFoundFault" => {
                     return RusotoError::Service(
@@ -5140,6 +5166,7 @@ impl DescribeRefreshSchemasStatusError {
         res: BufferedHttpResponse,
     ) -> RusotoError<DescribeRefreshSchemasStatusError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidResourceStateFault" => {
                     return RusotoError::Service(
@@ -5186,6 +5213,7 @@ impl DescribeReplicationInstanceTaskLogsError {
         res: BufferedHttpResponse,
     ) -> RusotoError<DescribeReplicationInstanceTaskLogsError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidResourceStateFault" => {
                     return RusotoError::Service(
@@ -5232,6 +5260,7 @@ impl DescribeReplicationInstancesError {
         res: BufferedHttpResponse,
     ) -> RusotoError<DescribeReplicationInstancesError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ResourceNotFoundFault" => {
                     return RusotoError::Service(
@@ -5268,6 +5297,7 @@ impl DescribeReplicationSubnetGroupsError {
         res: BufferedHttpResponse,
     ) -> RusotoError<DescribeReplicationSubnetGroupsError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ResourceNotFoundFault" => {
                     return RusotoError::Service(
@@ -5304,6 +5334,7 @@ impl DescribeReplicationTaskAssessmentResultsError {
         res: BufferedHttpResponse,
     ) -> RusotoError<DescribeReplicationTaskAssessmentResultsError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ResourceNotFoundFault" => {
                     return RusotoError::Service(
@@ -5342,6 +5373,7 @@ impl DescribeReplicationTaskAssessmentRunsError {
         res: BufferedHttpResponse,
     ) -> RusotoError<DescribeReplicationTaskAssessmentRunsError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ResourceNotFoundFault" => {
                     return RusotoError::Service(
@@ -5378,6 +5410,7 @@ impl DescribeReplicationTaskIndividualAssessmentsError {
         res: BufferedHttpResponse,
     ) -> RusotoError<DescribeReplicationTaskIndividualAssessmentsError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ResourceNotFoundFault" => {
                     return RusotoError::Service(
@@ -5414,6 +5447,7 @@ pub enum DescribeReplicationTasksError {
 impl DescribeReplicationTasksError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeReplicationTasksError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ResourceNotFoundFault" => {
                     return RusotoError::Service(
@@ -5450,6 +5484,7 @@ pub enum DescribeSchemasError {
 impl DescribeSchemasError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeSchemasError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidResourceStateFault" => {
                     return RusotoError::Service(DescribeSchemasError::InvalidResourceStateFault(
@@ -5490,6 +5525,7 @@ pub enum DescribeTableStatisticsError {
 impl DescribeTableStatisticsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeTableStatisticsError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidResourceStateFault" => {
                     return RusotoError::Service(
@@ -5536,6 +5572,7 @@ pub enum ImportCertificateError {
 impl ImportCertificateError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ImportCertificateError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidCertificateFault" => {
                     return RusotoError::Service(ImportCertificateError::InvalidCertificateFault(
@@ -5580,6 +5617,7 @@ pub enum ListTagsForResourceError {
 impl ListTagsForResourceError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListTagsForResourceError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ResourceNotFoundFault" => {
                     return RusotoError::Service(ListTagsForResourceError::ResourceNotFoundFault(
@@ -5620,6 +5658,7 @@ pub enum ModifyEndpointError {
 impl ModifyEndpointError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ModifyEndpointError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AccessDeniedFault" => {
                     return RusotoError::Service(ModifyEndpointError::AccessDeniedFault(err.msg))
@@ -5690,6 +5729,7 @@ pub enum ModifyEventSubscriptionError {
 impl ModifyEventSubscriptionError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ModifyEventSubscriptionError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "KMSAccessDeniedFault" => {
                     return RusotoError::Service(
@@ -5788,6 +5828,7 @@ pub enum ModifyReplicationInstanceError {
 impl ModifyReplicationInstanceError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ModifyReplicationInstanceError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AccessDeniedFault" => {
                     return RusotoError::Service(ModifyReplicationInstanceError::AccessDeniedFault(
@@ -5880,6 +5921,7 @@ impl ModifyReplicationSubnetGroupError {
         res: BufferedHttpResponse,
     ) -> RusotoError<ModifyReplicationSubnetGroupError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AccessDeniedFault" => {
                     return RusotoError::Service(
@@ -5958,6 +6000,7 @@ pub enum ModifyReplicationTaskError {
 impl ModifyReplicationTaskError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ModifyReplicationTaskError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidResourceStateFault" => {
                     return RusotoError::Service(
@@ -6018,6 +6061,7 @@ pub enum MoveReplicationTaskError {
 impl MoveReplicationTaskError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<MoveReplicationTaskError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AccessDeniedFault" => {
                     return RusotoError::Service(MoveReplicationTaskError::AccessDeniedFault(
@@ -6066,6 +6110,7 @@ pub enum RebootReplicationInstanceError {
 impl RebootReplicationInstanceError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<RebootReplicationInstanceError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidResourceStateFault" => {
                     return RusotoError::Service(
@@ -6114,6 +6159,7 @@ pub enum RefreshSchemasError {
 impl RefreshSchemasError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<RefreshSchemasError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidResourceStateFault" => {
                     return RusotoError::Service(RefreshSchemasError::InvalidResourceStateFault(
@@ -6166,6 +6212,7 @@ pub enum ReloadTablesError {
 impl ReloadTablesError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ReloadTablesError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidResourceStateFault" => {
                     return RusotoError::Service(ReloadTablesError::InvalidResourceStateFault(
@@ -6202,6 +6249,7 @@ pub enum RemoveTagsFromResourceError {
 impl RemoveTagsFromResourceError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<RemoveTagsFromResourceError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ResourceNotFoundFault" => {
                     return RusotoError::Service(
@@ -6238,6 +6286,7 @@ pub enum StartReplicationTaskError {
 impl StartReplicationTaskError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<StartReplicationTaskError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AccessDeniedFault" => {
                     return RusotoError::Service(StartReplicationTaskError::AccessDeniedFault(
@@ -6288,6 +6337,7 @@ impl StartReplicationTaskAssessmentError {
         res: BufferedHttpResponse,
     ) -> RusotoError<StartReplicationTaskAssessmentError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidResourceStateFault" => {
                     return RusotoError::Service(
@@ -6354,6 +6404,7 @@ impl StartReplicationTaskAssessmentRunError {
         res: BufferedHttpResponse,
     ) -> RusotoError<StartReplicationTaskAssessmentRunError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AccessDeniedFault" => {
                     return RusotoError::Service(
@@ -6476,6 +6527,7 @@ pub enum StopReplicationTaskError {
 impl StopReplicationTaskError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<StopReplicationTaskError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidResourceStateFault" => {
                     return RusotoError::Service(
@@ -6522,6 +6574,7 @@ pub enum TestConnectionError {
 impl TestConnectionError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<TestConnectionError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidResourceStateFault" => {
                     return RusotoError::Service(TestConnectionError::InvalidResourceStateFault(

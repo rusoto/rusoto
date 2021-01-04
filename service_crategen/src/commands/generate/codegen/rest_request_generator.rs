@@ -190,7 +190,7 @@ fn generate_snake_case_uri(request_uri: &str) -> String {
         static ref URI_ARGS_SNAKE_REGEX: Regex = Regex::new(r"\{([\w\d]+)\}").unwrap();
         static ref URI_ARGS_DASH_TO_UNDERSCORE_REGEX: Regex = Regex::new(r"\{\w+\-\w+\}").unwrap();
     }
-    let mut snake: String = request_uri.to_string().clone();
+    let mut snake: String = request_uri.to_string();
     // convert fooBar to foo_bar
     for caps in URI_ARGS_SNAKE_REGEX.captures_iter(request_uri) {
         let to_find = caps.get(0).expect("nothing captured").as_str();

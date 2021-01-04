@@ -94,6 +94,7 @@ pub enum DeleteConnectionError {
 impl DeleteConnectionError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteConnectionError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ForbiddenException" => {
                     return RusotoError::Service(DeleteConnectionError::Forbidden(err.msg))
@@ -136,6 +137,7 @@ pub enum GetConnectionError {
 impl GetConnectionError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetConnectionError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ForbiddenException" => {
                     return RusotoError::Service(GetConnectionError::Forbidden(err.msg))
@@ -178,6 +180,7 @@ pub enum PostToConnectionError {
 impl PostToConnectionError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<PostToConnectionError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ForbiddenException" => {
                     return RusotoError::Service(PostToConnectionError::Forbidden(err.msg))
@@ -280,6 +283,7 @@ impl ApiGatewayManagementApi for ApiGatewayManagementApiClient {
         &self,
         input: DeleteConnectionRequest,
     ) -> Result<(), RusotoError<DeleteConnectionError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/@connections/{connection_id}",
             connection_id = input.connection_id
@@ -295,9 +299,9 @@ impl ApiGatewayManagementApi for ApiGatewayManagementApiClient {
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 204 {
             let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = ::std::mem::drop(response);
+            let _result = ::std::mem::drop(response);
 
-            Ok(result)
+            Ok(())
         } else {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             Err(DeleteConnectionError::from_response(response))
@@ -310,6 +314,7 @@ impl ApiGatewayManagementApi for ApiGatewayManagementApiClient {
         &self,
         input: GetConnectionRequest,
     ) -> Result<GetConnectionResponse, RusotoError<GetConnectionError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/@connections/{connection_id}",
             connection_id = input.connection_id
@@ -341,6 +346,7 @@ impl ApiGatewayManagementApi for ApiGatewayManagementApiClient {
         &self,
         input: PostToConnectionRequest,
     ) -> Result<(), RusotoError<PostToConnectionError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/@connections/{connection_id}",
             connection_id = input.connection_id
@@ -359,9 +365,9 @@ impl ApiGatewayManagementApi for ApiGatewayManagementApiClient {
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
             let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = ::std::mem::drop(response);
+            let _result = ::std::mem::drop(response);
 
-            Ok(result)
+            Ok(())
         } else {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             Err(PostToConnectionError::from_response(response))

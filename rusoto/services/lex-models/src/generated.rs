@@ -24,7 +24,6 @@ use rusoto_core::proto;
 use rusoto_core::signature::SignedRequest;
 #[allow(unused_imports)]
 use serde::{Deserialize, Serialize};
-use serde_json;
 /// <p>Provides information about a bot alias.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
@@ -2267,6 +2266,7 @@ pub enum CreateBotVersionError {
 impl CreateBotVersionError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateBotVersionError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(CreateBotVersionError::BadRequest(err.msg))
@@ -2327,6 +2327,7 @@ pub enum CreateIntentVersionError {
 impl CreateIntentVersionError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateIntentVersionError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(CreateIntentVersionError::BadRequest(err.msg))
@@ -2389,6 +2390,7 @@ pub enum CreateSlotTypeVersionError {
 impl CreateSlotTypeVersionError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateSlotTypeVersionError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(CreateSlotTypeVersionError::BadRequest(err.msg))
@@ -2453,6 +2455,7 @@ pub enum DeleteBotError {
 impl DeleteBotError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteBotError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(DeleteBotError::BadRequest(err.msg))
@@ -2513,6 +2516,7 @@ pub enum DeleteBotAliasError {
 impl DeleteBotAliasError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteBotAliasError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(DeleteBotAliasError::BadRequest(err.msg))
@@ -2573,6 +2577,7 @@ impl DeleteBotChannelAssociationError {
         res: BufferedHttpResponse,
     ) -> RusotoError<DeleteBotChannelAssociationError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(DeleteBotChannelAssociationError::BadRequest(
@@ -2639,6 +2644,7 @@ pub enum DeleteBotVersionError {
 impl DeleteBotVersionError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteBotVersionError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(DeleteBotVersionError::BadRequest(err.msg))
@@ -2699,6 +2705,7 @@ pub enum DeleteIntentError {
 impl DeleteIntentError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteIntentError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(DeleteIntentError::BadRequest(err.msg))
@@ -2759,6 +2766,7 @@ pub enum DeleteIntentVersionError {
 impl DeleteIntentVersionError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteIntentVersionError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(DeleteIntentVersionError::BadRequest(err.msg))
@@ -2819,6 +2827,7 @@ pub enum DeleteSlotTypeError {
 impl DeleteSlotTypeError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteSlotTypeError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(DeleteSlotTypeError::BadRequest(err.msg))
@@ -2879,6 +2888,7 @@ pub enum DeleteSlotTypeVersionError {
 impl DeleteSlotTypeVersionError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteSlotTypeVersionError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(DeleteSlotTypeVersionError::BadRequest(err.msg))
@@ -2937,6 +2947,7 @@ pub enum DeleteUtterancesError {
 impl DeleteUtterancesError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteUtterancesError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(DeleteUtterancesError::BadRequest(err.msg))
@@ -2985,6 +2996,7 @@ pub enum GetBotError {
 impl GetBotError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetBotError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(GetBotError::BadRequest(err.msg))
@@ -3031,6 +3043,7 @@ pub enum GetBotAliasError {
 impl GetBotAliasError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetBotAliasError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(GetBotAliasError::BadRequest(err.msg))
@@ -3077,6 +3090,7 @@ pub enum GetBotAliasesError {
 impl GetBotAliasesError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetBotAliasesError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(GetBotAliasesError::BadRequest(err.msg))
@@ -3121,6 +3135,7 @@ pub enum GetBotChannelAssociationError {
 impl GetBotChannelAssociationError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetBotChannelAssociationError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(GetBotChannelAssociationError::BadRequest(err.msg))
@@ -3171,6 +3186,7 @@ pub enum GetBotChannelAssociationsError {
 impl GetBotChannelAssociationsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetBotChannelAssociationsError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(GetBotChannelAssociationsError::BadRequest(
@@ -3221,6 +3237,7 @@ pub enum GetBotVersionsError {
 impl GetBotVersionsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetBotVersionsError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(GetBotVersionsError::BadRequest(err.msg))
@@ -3269,6 +3286,7 @@ pub enum GetBotsError {
 impl GetBotsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetBotsError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(GetBotsError::BadRequest(err.msg))
@@ -3317,6 +3335,7 @@ pub enum GetBuiltinIntentError {
 impl GetBuiltinIntentError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetBuiltinIntentError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(GetBuiltinIntentError::BadRequest(err.msg))
@@ -3363,6 +3382,7 @@ pub enum GetBuiltinIntentsError {
 impl GetBuiltinIntentsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetBuiltinIntentsError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(GetBuiltinIntentsError::BadRequest(err.msg))
@@ -3405,6 +3425,7 @@ pub enum GetBuiltinSlotTypesError {
 impl GetBuiltinSlotTypesError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetBuiltinSlotTypesError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(GetBuiltinSlotTypesError::BadRequest(err.msg))
@@ -3449,6 +3470,7 @@ pub enum GetExportError {
 impl GetExportError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetExportError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(GetExportError::BadRequest(err.msg))
@@ -3497,6 +3519,7 @@ pub enum GetImportError {
 impl GetImportError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetImportError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(GetImportError::BadRequest(err.msg))
@@ -3545,6 +3568,7 @@ pub enum GetIntentError {
 impl GetIntentError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetIntentError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(GetIntentError::BadRequest(err.msg))
@@ -3593,6 +3617,7 @@ pub enum GetIntentVersionsError {
 impl GetIntentVersionsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetIntentVersionsError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(GetIntentVersionsError::BadRequest(err.msg))
@@ -3641,6 +3666,7 @@ pub enum GetIntentsError {
 impl GetIntentsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetIntentsError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(GetIntentsError::BadRequest(err.msg))
@@ -3689,6 +3715,7 @@ pub enum GetSlotTypeError {
 impl GetSlotTypeError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetSlotTypeError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(GetSlotTypeError::BadRequest(err.msg))
@@ -3737,6 +3764,7 @@ pub enum GetSlotTypeVersionsError {
 impl GetSlotTypeVersionsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetSlotTypeVersionsError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(GetSlotTypeVersionsError::BadRequest(err.msg))
@@ -3785,6 +3813,7 @@ pub enum GetSlotTypesError {
 impl GetSlotTypesError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetSlotTypesError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(GetSlotTypesError::BadRequest(err.msg))
@@ -3831,6 +3860,7 @@ pub enum GetUtterancesViewError {
 impl GetUtterancesViewError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetUtterancesViewError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(GetUtterancesViewError::BadRequest(err.msg))
@@ -3875,6 +3905,7 @@ pub enum ListTagsForResourceError {
 impl ListTagsForResourceError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListTagsForResourceError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(ListTagsForResourceError::BadRequest(err.msg))
@@ -3925,6 +3956,7 @@ pub enum PutBotError {
 impl PutBotError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<PutBotError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(PutBotError::BadRequest(err.msg))
@@ -3977,6 +4009,7 @@ pub enum PutBotAliasError {
 impl PutBotAliasError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<PutBotAliasError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(PutBotAliasError::BadRequest(err.msg))
@@ -4031,6 +4064,7 @@ pub enum PutIntentError {
 impl PutIntentError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<PutIntentError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(PutIntentError::BadRequest(err.msg))
@@ -4085,6 +4119,7 @@ pub enum PutSlotTypeError {
 impl PutSlotTypeError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<PutSlotTypeError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(PutSlotTypeError::BadRequest(err.msg))
@@ -4135,6 +4170,7 @@ pub enum StartImportError {
 impl StartImportError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<StartImportError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(StartImportError::BadRequest(err.msg))
@@ -4181,6 +4217,7 @@ pub enum TagResourceError {
 impl TagResourceError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<TagResourceError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(TagResourceError::BadRequest(err.msg))
@@ -4235,6 +4272,7 @@ pub enum UntagResourceError {
 impl UntagResourceError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UntagResourceError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(UntagResourceError::BadRequest(err.msg))
@@ -4551,6 +4589,7 @@ impl LexModels for LexModelsClient {
         &self,
         input: CreateBotVersionRequest,
     ) -> Result<CreateBotVersionResponse, RusotoError<CreateBotVersionError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!("/bots/{name}/versions", name = input.name);
 
         let mut request = SignedRequest::new("POST", "lex", &self.region, &request_uri);
@@ -4583,6 +4622,7 @@ impl LexModels for LexModelsClient {
         &self,
         input: CreateIntentVersionRequest,
     ) -> Result<CreateIntentVersionResponse, RusotoError<CreateIntentVersionError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!("/intents/{name}/versions", name = input.name);
 
         let mut request = SignedRequest::new("POST", "lex", &self.region, &request_uri);
@@ -4615,6 +4655,7 @@ impl LexModels for LexModelsClient {
         &self,
         input: CreateSlotTypeVersionRequest,
     ) -> Result<CreateSlotTypeVersionResponse, RusotoError<CreateSlotTypeVersionError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!("/slottypes/{name}/versions", name = input.name);
 
         let mut request = SignedRequest::new("POST", "lex", &self.region, &request_uri);
@@ -4644,6 +4685,7 @@ impl LexModels for LexModelsClient {
     /// <p>Deletes all versions of the bot, including the <code>$LATEST</code> version. To delete a specific version of the bot, use the <a>DeleteBotVersion</a> operation. The <code>DeleteBot</code> operation doesn't immediately remove the bot schema. Instead, it is marked for deletion and removed later.</p> <p>Amazon Lex stores utterances indefinitely for improving the ability of your bot to respond to user inputs. These utterances are not removed when the bot is deleted. To remove the utterances, use the <a>DeleteUtterances</a> operation.</p> <p>If a bot has an alias, you can't delete it. Instead, the <code>DeleteBot</code> operation returns a <code>ResourceInUseException</code> exception that includes a reference to the alias that refers to the bot. To remove the reference to the bot, delete the alias. If you get the same exception again, delete the referring alias until the <code>DeleteBot</code> operation is successful.</p> <p>This operation requires permissions for the <code>lex:DeleteBot</code> action.</p>
     #[allow(unused_mut)]
     async fn delete_bot(&self, input: DeleteBotRequest) -> Result<(), RusotoError<DeleteBotError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!("/bots/{name}", name = input.name);
 
         let mut request = SignedRequest::new("DELETE", "lex", &self.region, &request_uri);
@@ -4658,9 +4700,9 @@ impl LexModels for LexModelsClient {
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 204 {
             let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = ::std::mem::drop(response);
+            let _result = ::std::mem::drop(response);
 
-            Ok(result)
+            Ok(())
         } else {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             Err(DeleteBotError::from_response(response))
@@ -4673,6 +4715,7 @@ impl LexModels for LexModelsClient {
         &self,
         input: DeleteBotAliasRequest,
     ) -> Result<(), RusotoError<DeleteBotAliasError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/bots/{bot_name}/aliases/{name}",
             bot_name = input.bot_name,
@@ -4691,9 +4734,9 @@ impl LexModels for LexModelsClient {
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 204 {
             let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = ::std::mem::drop(response);
+            let _result = ::std::mem::drop(response);
 
-            Ok(result)
+            Ok(())
         } else {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             Err(DeleteBotAliasError::from_response(response))
@@ -4706,6 +4749,7 @@ impl LexModels for LexModelsClient {
         &self,
         input: DeleteBotChannelAssociationRequest,
     ) -> Result<(), RusotoError<DeleteBotChannelAssociationError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/bots/{bot_name}/aliases/{alias_name}/channels/{name}",
             alias_name = input.bot_alias,
@@ -4725,9 +4769,9 @@ impl LexModels for LexModelsClient {
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 204 {
             let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = ::std::mem::drop(response);
+            let _result = ::std::mem::drop(response);
 
-            Ok(result)
+            Ok(())
         } else {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             Err(DeleteBotChannelAssociationError::from_response(response))
@@ -4740,6 +4784,7 @@ impl LexModels for LexModelsClient {
         &self,
         input: DeleteBotVersionRequest,
     ) -> Result<(), RusotoError<DeleteBotVersionError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/bots/{name}/versions/{version}",
             name = input.name,
@@ -4758,9 +4803,9 @@ impl LexModels for LexModelsClient {
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 204 {
             let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = ::std::mem::drop(response);
+            let _result = ::std::mem::drop(response);
 
-            Ok(result)
+            Ok(())
         } else {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             Err(DeleteBotVersionError::from_response(response))
@@ -4773,6 +4818,7 @@ impl LexModels for LexModelsClient {
         &self,
         input: DeleteIntentRequest,
     ) -> Result<(), RusotoError<DeleteIntentError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!("/intents/{name}", name = input.name);
 
         let mut request = SignedRequest::new("DELETE", "lex", &self.region, &request_uri);
@@ -4787,9 +4833,9 @@ impl LexModels for LexModelsClient {
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 204 {
             let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = ::std::mem::drop(response);
+            let _result = ::std::mem::drop(response);
 
-            Ok(result)
+            Ok(())
         } else {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             Err(DeleteIntentError::from_response(response))
@@ -4802,6 +4848,7 @@ impl LexModels for LexModelsClient {
         &self,
         input: DeleteIntentVersionRequest,
     ) -> Result<(), RusotoError<DeleteIntentVersionError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/intents/{name}/versions/{version}",
             name = input.name,
@@ -4820,9 +4867,9 @@ impl LexModels for LexModelsClient {
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 204 {
             let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = ::std::mem::drop(response);
+            let _result = ::std::mem::drop(response);
 
-            Ok(result)
+            Ok(())
         } else {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             Err(DeleteIntentVersionError::from_response(response))
@@ -4835,6 +4882,7 @@ impl LexModels for LexModelsClient {
         &self,
         input: DeleteSlotTypeRequest,
     ) -> Result<(), RusotoError<DeleteSlotTypeError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!("/slottypes/{name}", name = input.name);
 
         let mut request = SignedRequest::new("DELETE", "lex", &self.region, &request_uri);
@@ -4849,9 +4897,9 @@ impl LexModels for LexModelsClient {
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 204 {
             let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = ::std::mem::drop(response);
+            let _result = ::std::mem::drop(response);
 
-            Ok(result)
+            Ok(())
         } else {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             Err(DeleteSlotTypeError::from_response(response))
@@ -4864,6 +4912,7 @@ impl LexModels for LexModelsClient {
         &self,
         input: DeleteSlotTypeVersionRequest,
     ) -> Result<(), RusotoError<DeleteSlotTypeVersionError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/slottypes/{name}/version/{version}",
             name = input.name,
@@ -4882,9 +4931,9 @@ impl LexModels for LexModelsClient {
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 204 {
             let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = ::std::mem::drop(response);
+            let _result = ::std::mem::drop(response);
 
-            Ok(result)
+            Ok(())
         } else {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             Err(DeleteSlotTypeVersionError::from_response(response))
@@ -4897,6 +4946,7 @@ impl LexModels for LexModelsClient {
         &self,
         input: DeleteUtterancesRequest,
     ) -> Result<(), RusotoError<DeleteUtterancesError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/bots/{bot_name}/utterances/{user_id}",
             bot_name = input.bot_name,
@@ -4915,9 +4965,9 @@ impl LexModels for LexModelsClient {
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 204 {
             let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = ::std::mem::drop(response);
+            let _result = ::std::mem::drop(response);
 
-            Ok(result)
+            Ok(())
         } else {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             Err(DeleteUtterancesError::from_response(response))
@@ -4930,6 +4980,7 @@ impl LexModels for LexModelsClient {
         &self,
         input: GetBotRequest,
     ) -> Result<GetBotResponse, RusotoError<GetBotError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/bots/{name}/versions/{versionoralias}",
             name = input.name,
@@ -4964,6 +5015,7 @@ impl LexModels for LexModelsClient {
         &self,
         input: GetBotAliasRequest,
     ) -> Result<GetBotAliasResponse, RusotoError<GetBotAliasError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/bots/{bot_name}/aliases/{name}",
             bot_name = input.bot_name,
@@ -4998,6 +5050,7 @@ impl LexModels for LexModelsClient {
         &self,
         input: GetBotAliasesRequest,
     ) -> Result<GetBotAliasesResponse, RusotoError<GetBotAliasesError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!("/bots/{bot_name}/aliases/", bot_name = input.bot_name);
 
         let mut request = SignedRequest::new("GET", "lex", &self.region, &request_uri);
@@ -5040,6 +5093,7 @@ impl LexModels for LexModelsClient {
         &self,
         input: GetBotChannelAssociationRequest,
     ) -> Result<GetBotChannelAssociationResponse, RusotoError<GetBotChannelAssociationError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/bots/{bot_name}/aliases/{alias_name}/channels/{name}",
             alias_name = input.bot_alias,
@@ -5076,6 +5130,7 @@ impl LexModels for LexModelsClient {
         input: GetBotChannelAssociationsRequest,
     ) -> Result<GetBotChannelAssociationsResponse, RusotoError<GetBotChannelAssociationsError>>
     {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/bots/{bot_name}/aliases/{alias_name}/channels/",
             alias_name = input.bot_alias,
@@ -5122,6 +5177,7 @@ impl LexModels for LexModelsClient {
         &self,
         input: GetBotVersionsRequest,
     ) -> Result<GetBotVersionsResponse, RusotoError<GetBotVersionsError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!("/bots/{name}/versions/", name = input.name);
 
         let mut request = SignedRequest::new("GET", "lex", &self.region, &request_uri);
@@ -5161,6 +5217,7 @@ impl LexModels for LexModelsClient {
         &self,
         input: GetBotsRequest,
     ) -> Result<GetBotsResponse, RusotoError<GetBotsError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/bots/";
 
         let mut request = SignedRequest::new("GET", "lex", &self.region, &request_uri);
@@ -5203,6 +5260,7 @@ impl LexModels for LexModelsClient {
         &self,
         input: GetBuiltinIntentRequest,
     ) -> Result<GetBuiltinIntentResponse, RusotoError<GetBuiltinIntentError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!("/builtins/intents/{signature}", signature = input.signature);
 
         let mut request = SignedRequest::new("GET", "lex", &self.region, &request_uri);
@@ -5233,6 +5291,7 @@ impl LexModels for LexModelsClient {
         &self,
         input: GetBuiltinIntentsRequest,
     ) -> Result<GetBuiltinIntentsResponse, RusotoError<GetBuiltinIntentsError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/builtins/intents/";
 
         let mut request = SignedRequest::new("GET", "lex", &self.region, &request_uri);
@@ -5278,6 +5337,7 @@ impl LexModels for LexModelsClient {
         &self,
         input: GetBuiltinSlotTypesRequest,
     ) -> Result<GetBuiltinSlotTypesResponse, RusotoError<GetBuiltinSlotTypesError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/builtins/slottypes/";
 
         let mut request = SignedRequest::new("GET", "lex", &self.region, &request_uri);
@@ -5323,6 +5383,7 @@ impl LexModels for LexModelsClient {
         &self,
         input: GetExportRequest,
     ) -> Result<GetExportResponse, RusotoError<GetExportError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/exports/";
 
         let mut request = SignedRequest::new("GET", "lex", &self.region, &request_uri);
@@ -5360,6 +5421,7 @@ impl LexModels for LexModelsClient {
         &self,
         input: GetImportRequest,
     ) -> Result<GetImportResponse, RusotoError<GetImportError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!("/imports/{import_id}", import_id = input.import_id);
 
         let mut request = SignedRequest::new("GET", "lex", &self.region, &request_uri);
@@ -5390,6 +5452,7 @@ impl LexModels for LexModelsClient {
         &self,
         input: GetIntentRequest,
     ) -> Result<GetIntentResponse, RusotoError<GetIntentError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/intents/{name}/versions/{version}",
             name = input.name,
@@ -5424,6 +5487,7 @@ impl LexModels for LexModelsClient {
         &self,
         input: GetIntentVersionsRequest,
     ) -> Result<GetIntentVersionsResponse, RusotoError<GetIntentVersionsError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!("/intents/{name}/versions/", name = input.name);
 
         let mut request = SignedRequest::new("GET", "lex", &self.region, &request_uri);
@@ -5463,6 +5527,7 @@ impl LexModels for LexModelsClient {
         &self,
         input: GetIntentsRequest,
     ) -> Result<GetIntentsResponse, RusotoError<GetIntentsError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/intents/";
 
         let mut request = SignedRequest::new("GET", "lex", &self.region, &request_uri);
@@ -5505,6 +5570,7 @@ impl LexModels for LexModelsClient {
         &self,
         input: GetSlotTypeRequest,
     ) -> Result<GetSlotTypeResponse, RusotoError<GetSlotTypeError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/slottypes/{name}/versions/{version}",
             name = input.name,
@@ -5539,6 +5605,7 @@ impl LexModels for LexModelsClient {
         &self,
         input: GetSlotTypeVersionsRequest,
     ) -> Result<GetSlotTypeVersionsResponse, RusotoError<GetSlotTypeVersionsError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!("/slottypes/{name}/versions/", name = input.name);
 
         let mut request = SignedRequest::new("GET", "lex", &self.region, &request_uri);
@@ -5578,6 +5645,7 @@ impl LexModels for LexModelsClient {
         &self,
         input: GetSlotTypesRequest,
     ) -> Result<GetSlotTypesResponse, RusotoError<GetSlotTypesError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/slottypes/";
 
         let mut request = SignedRequest::new("GET", "lex", &self.region, &request_uri);
@@ -5620,6 +5688,7 @@ impl LexModels for LexModelsClient {
         &self,
         input: GetUtterancesViewRequest,
     ) -> Result<GetUtterancesViewResponse, RusotoError<GetUtterancesViewError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!("/bots/{botname}/utterances", botname = input.bot_name);
 
         let mut request = SignedRequest::new("GET", "lex", &self.region, &request_uri);
@@ -5658,6 +5727,7 @@ impl LexModels for LexModelsClient {
         &self,
         input: ListTagsForResourceRequest,
     ) -> Result<ListTagsForResourceResponse, RusotoError<ListTagsForResourceError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!("/tags/{resource_arn}", resource_arn = input.resource_arn);
 
         let mut request = SignedRequest::new("GET", "lex", &self.region, &request_uri);
@@ -5688,6 +5758,7 @@ impl LexModels for LexModelsClient {
         &self,
         input: PutBotRequest,
     ) -> Result<PutBotResponse, RusotoError<PutBotError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!("/bots/{name}/versions/$LATEST", name = input.name);
 
         let mut request = SignedRequest::new("PUT", "lex", &self.region, &request_uri);
@@ -5720,6 +5791,7 @@ impl LexModels for LexModelsClient {
         &self,
         input: PutBotAliasRequest,
     ) -> Result<PutBotAliasResponse, RusotoError<PutBotAliasError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/bots/{bot_name}/aliases/{name}",
             bot_name = input.bot_name,
@@ -5756,6 +5828,7 @@ impl LexModels for LexModelsClient {
         &self,
         input: PutIntentRequest,
     ) -> Result<PutIntentResponse, RusotoError<PutIntentError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!("/intents/{name}/versions/$LATEST", name = input.name);
 
         let mut request = SignedRequest::new("PUT", "lex", &self.region, &request_uri);
@@ -5788,6 +5861,7 @@ impl LexModels for LexModelsClient {
         &self,
         input: PutSlotTypeRequest,
     ) -> Result<PutSlotTypeResponse, RusotoError<PutSlotTypeError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!("/slottypes/{name}/versions/$LATEST", name = input.name);
 
         let mut request = SignedRequest::new("PUT", "lex", &self.region, &request_uri);
@@ -5820,6 +5894,7 @@ impl LexModels for LexModelsClient {
         &self,
         input: StartImportRequest,
     ) -> Result<StartImportResponse, RusotoError<StartImportError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/imports/";
 
         let mut request = SignedRequest::new("POST", "lex", &self.region, &request_uri);
@@ -5852,6 +5927,7 @@ impl LexModels for LexModelsClient {
         &self,
         input: TagResourceRequest,
     ) -> Result<TagResourceResponse, RusotoError<TagResourceError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!("/tags/{resource_arn}", resource_arn = input.resource_arn);
 
         let mut request = SignedRequest::new("POST", "lex", &self.region, &request_uri);
@@ -5884,6 +5960,7 @@ impl LexModels for LexModelsClient {
         &self,
         input: UntagResourceRequest,
     ) -> Result<UntagResourceResponse, RusotoError<UntagResourceError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!("/tags/{resource_arn}", resource_arn = input.resource_arn);
 
         let mut request = SignedRequest::new("DELETE", "lex", &self.region, &request_uri);

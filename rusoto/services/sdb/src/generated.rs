@@ -31,7 +31,6 @@ use rusoto_core::signature::SignedRequest;
 use serde::Deserialize;
 #[cfg(feature = "serialize_structs")]
 use serde::Serialize;
-use serde_urlencoded;
 use std::str::FromStr;
 use xml::EventReader;
 
@@ -78,11 +77,12 @@ pub struct Attribute {
 #[allow(dead_code)]
 struct AttributeDeserializer;
 impl AttributeDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Attribute, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, Attribute, _>(tag_name, stack, |name, stack, obj| {
             match name {
                 "AlternateNameEncoding" => {
@@ -113,10 +113,11 @@ impl AttributeDeserializer {
 /// Serialize `Attribute` contents to a `SignedRequest`.
 struct AttributeSerializer;
 impl AttributeSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &Attribute) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         if let Some(ref field_value) = obj.alternate_name_encoding {
@@ -139,11 +140,13 @@ impl AttributeSerializer {
 #[allow(dead_code)]
 struct AttributeListDeserializer;
 impl AttributeListDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<Attribute>, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
+
         let mut obj = vec![];
 
         loop {
@@ -168,6 +171,7 @@ impl AttributeListDeserializer {
 /// Serialize `AttributeList` contents to a `SignedRequest`.
 struct AttributeListSerializer;
 impl AttributeListSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &Vec<Attribute>) {
         for (index, obj) in obj.iter().enumerate() {
             let key = format!("{}.{}", name, index + 1);
@@ -179,6 +183,7 @@ impl AttributeListSerializer {
 /// Serialize `AttributeNameList` contents to a `SignedRequest`.
 struct AttributeNameListSerializer;
 impl AttributeNameListSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &Vec<String>) {
         for (index, obj) in obj.iter().enumerate() {
             let key = format!("{}.{}", name, index + 1);
@@ -199,10 +204,11 @@ pub struct BatchDeleteAttributesRequest {
 /// Serialize `BatchDeleteAttributesRequest` contents to a `SignedRequest`.
 struct BatchDeleteAttributesRequestSerializer;
 impl BatchDeleteAttributesRequestSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &BatchDeleteAttributesRequest) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         params.put(&format!("{}{}", prefix, "DomainName"), &obj.domain_name);
@@ -226,10 +232,11 @@ pub struct BatchPutAttributesRequest {
 /// Serialize `BatchPutAttributesRequest` contents to a `SignedRequest`.
 struct BatchPutAttributesRequestSerializer;
 impl BatchPutAttributesRequestSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &BatchPutAttributesRequest) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         params.put(&format!("{}{}", prefix, "DomainName"), &obj.domain_name);
@@ -251,10 +258,11 @@ pub struct CreateDomainRequest {
 /// Serialize `CreateDomainRequest` contents to a `SignedRequest`.
 struct CreateDomainRequestSerializer;
 impl CreateDomainRequestSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &CreateDomainRequest) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         params.put(&format!("{}{}", prefix, "DomainName"), &obj.domain_name);
@@ -271,10 +279,11 @@ pub struct DeletableItem {
 /// Serialize `DeletableItem` contents to a `SignedRequest`.
 struct DeletableItemSerializer;
 impl DeletableItemSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &DeletableItem) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         if let Some(ref field_value) = obj.attributes {
@@ -291,6 +300,7 @@ impl DeletableItemSerializer {
 /// Serialize `DeletableItemList` contents to a `SignedRequest`.
 struct DeletableItemListSerializer;
 impl DeletableItemListSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &Vec<DeletableItem>) {
         for (index, obj) in obj.iter().enumerate() {
             let key = format!("{}.{}", name, index + 1);
@@ -315,10 +325,11 @@ pub struct DeleteAttributesRequest {
 /// Serialize `DeleteAttributesRequest` contents to a `SignedRequest`.
 struct DeleteAttributesRequestSerializer;
 impl DeleteAttributesRequestSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &DeleteAttributesRequest) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         if let Some(ref field_value) = obj.attributes {
@@ -350,10 +361,11 @@ pub struct DeleteDomainRequest {
 /// Serialize `DeleteDomainRequest` contents to a `SignedRequest`.
 struct DeleteDomainRequestSerializer;
 impl DeleteDomainRequestSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &DeleteDomainRequest) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         params.put(&format!("{}{}", prefix, "DomainName"), &obj.domain_name);
@@ -370,10 +382,11 @@ pub struct DomainMetadataRequest {
 /// Serialize `DomainMetadataRequest` contents to a `SignedRequest`.
 struct DomainMetadataRequestSerializer;
 impl DomainMetadataRequestSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &DomainMetadataRequest) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         params.put(&format!("{}{}", prefix, "DomainName"), &obj.domain_name);
@@ -402,11 +415,12 @@ pub struct DomainMetadataResult {
 #[allow(dead_code)]
 struct DomainMetadataResultDeserializer;
 impl DomainMetadataResultDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<DomainMetadataResult, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, DomainMetadataResult, _>(tag_name, stack, |name, stack, obj| {
             match name {
                 "AttributeNameCount" => {
@@ -452,11 +466,13 @@ impl DomainMetadataResultDeserializer {
 #[allow(dead_code)]
 struct DomainNameListDeserializer;
 impl DomainNameListDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<String>, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
+
         let mut obj = vec![];
 
         loop {
@@ -493,10 +509,11 @@ pub struct GetAttributesRequest {
 /// Serialize `GetAttributesRequest` contents to a `SignedRequest`.
 struct GetAttributesRequestSerializer;
 impl GetAttributesRequestSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &GetAttributesRequest) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         if let Some(ref field_value) = obj.attribute_names {
@@ -524,11 +541,12 @@ pub struct GetAttributesResult {
 #[allow(dead_code)]
 struct GetAttributesResultDeserializer;
 impl GetAttributesResultDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<GetAttributesResult, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, GetAttributesResult, _>(tag_name, stack, |name, stack, obj| {
             match name {
                 "Attribute" => {
@@ -545,8 +563,9 @@ impl GetAttributesResultDeserializer {
 #[allow(dead_code)]
 struct IntegerDeserializer;
 impl IntegerDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<i64, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::deserialize_primitive(tag_name, stack, |s| Ok(i64::from_str(&s).unwrap()))
     }
 }
@@ -565,8 +584,9 @@ pub struct Item {
 #[allow(dead_code)]
 struct ItemDeserializer;
 impl ItemDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<Item, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, Item, _>(tag_name, stack, |name, stack, obj| {
             match name {
                 "AlternateNameEncoding" => {
@@ -591,11 +611,13 @@ impl ItemDeserializer {
 #[allow(dead_code)]
 struct ItemListDeserializer;
 impl ItemListDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<Item>, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
+
         let mut obj = vec![];
 
         loop {
@@ -628,10 +650,11 @@ pub struct ListDomainsRequest {
 /// Serialize `ListDomainsRequest` contents to a `SignedRequest`.
 struct ListDomainsRequestSerializer;
 impl ListDomainsRequestSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &ListDomainsRequest) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         if let Some(ref field_value) = obj.max_number_of_domains {
@@ -655,11 +678,12 @@ pub struct ListDomainsResult {
 #[allow(dead_code)]
 struct ListDomainsResultDeserializer;
 impl ListDomainsResultDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<ListDomainsResult, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, ListDomainsResult, _>(tag_name, stack, |name, stack, obj| {
             match name {
                 "DomainName" => {
@@ -679,8 +703,9 @@ impl ListDomainsResultDeserializer {
 #[allow(dead_code)]
 struct LongDeserializer;
 impl LongDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<i64, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::deserialize_primitive(tag_name, stack, |s| Ok(i64::from_str(&s).unwrap()))
     }
 }
@@ -700,10 +725,11 @@ pub struct PutAttributesRequest {
 /// Serialize `PutAttributesRequest` contents to a `SignedRequest`.
 struct PutAttributesRequestSerializer;
 impl PutAttributesRequestSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &PutAttributesRequest) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         ReplaceableAttributeListSerializer::serialize(
@@ -738,10 +764,11 @@ pub struct ReplaceableAttribute {
 /// Serialize `ReplaceableAttribute` contents to a `SignedRequest`.
 struct ReplaceableAttributeSerializer;
 impl ReplaceableAttributeSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &ReplaceableAttribute) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         params.put(&format!("{}{}", prefix, "Name"), &obj.name);
@@ -755,6 +782,7 @@ impl ReplaceableAttributeSerializer {
 /// Serialize `ReplaceableAttributeList` contents to a `SignedRequest`.
 struct ReplaceableAttributeListSerializer;
 impl ReplaceableAttributeListSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &Vec<ReplaceableAttribute>) {
         for (index, obj) in obj.iter().enumerate() {
             let key = format!("{}.{}", name, index + 1);
@@ -776,10 +804,11 @@ pub struct ReplaceableItem {
 /// Serialize `ReplaceableItem` contents to a `SignedRequest`.
 struct ReplaceableItemSerializer;
 impl ReplaceableItemSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &ReplaceableItem) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         ReplaceableAttributeListSerializer::serialize(
@@ -794,6 +823,7 @@ impl ReplaceableItemSerializer {
 /// Serialize `ReplaceableItemList` contents to a `SignedRequest`.
 struct ReplaceableItemListSerializer;
 impl ReplaceableItemListSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &Vec<ReplaceableItem>) {
         for (index, obj) in obj.iter().enumerate() {
             let key = format!("{}.{}", name, index + 1);
@@ -816,10 +846,11 @@ pub struct SelectRequest {
 /// Serialize `SelectRequest` contents to a `SignedRequest`.
 struct SelectRequestSerializer;
 impl SelectRequestSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &SelectRequest) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         if let Some(ref field_value) = obj.consistent_read {
@@ -847,11 +878,12 @@ pub struct SelectResult {
 #[allow(dead_code)]
 struct SelectResultDeserializer;
 impl SelectResultDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<SelectResult, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, SelectResult, _>(tag_name, stack, |name, stack, obj| {
             match name {
                 "Item" => {
@@ -871,8 +903,9 @@ impl SelectResultDeserializer {
 #[allow(dead_code)]
 struct StringDeserializer;
 impl StringDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
@@ -891,10 +924,11 @@ pub struct UpdateCondition {
 /// Serialize `UpdateCondition` contents to a `SignedRequest`.
 struct UpdateConditionSerializer;
 impl UpdateConditionSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &UpdateCondition) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         if let Some(ref field_value) = obj.exists {
@@ -919,11 +953,7 @@ impl BatchDeleteAttributesError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    _ => {}
-                }
-            }
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {}
         }
         RusotoError::Unknown(res)
     }
@@ -972,64 +1002,69 @@ impl BatchPutAttributesError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    "DuplicateItemName" => {
-                        return RusotoError::Service(BatchPutAttributesError::DuplicateItemName(
-                            parsed_error.message,
-                        ))
-                    }
-                    "InvalidParameterValue" => {
-                        return RusotoError::Service(
-                            BatchPutAttributesError::InvalidParameterValue(parsed_error.message),
-                        )
-                    }
-                    "MissingParameter" => {
-                        return RusotoError::Service(BatchPutAttributesError::MissingParameter(
-                            parsed_error.message,
-                        ))
-                    }
-                    "NoSuchDomain" => {
-                        return RusotoError::Service(BatchPutAttributesError::NoSuchDomain(
-                            parsed_error.message,
-                        ))
-                    }
-                    "NumberDomainAttributesExceeded" => {
-                        return RusotoError::Service(
-                            BatchPutAttributesError::NumberDomainAttributesExceeded(
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {
+                        "DuplicateItemName" => {
+                            return RusotoError::Service(
+                                BatchPutAttributesError::DuplicateItemName(parsed_error.message),
+                            )
+                        }
+                        "InvalidParameterValue" => {
+                            return RusotoError::Service(
+                                BatchPutAttributesError::InvalidParameterValue(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "MissingParameter" => {
+                            return RusotoError::Service(BatchPutAttributesError::MissingParameter(
                                 parsed_error.message,
-                            ),
-                        )
-                    }
-                    "NumberDomainBytesExceeded" => {
-                        return RusotoError::Service(
-                            BatchPutAttributesError::NumberDomainBytesExceeded(
+                            ))
+                        }
+                        "NoSuchDomain" => {
+                            return RusotoError::Service(BatchPutAttributesError::NoSuchDomain(
                                 parsed_error.message,
-                            ),
-                        )
+                            ))
+                        }
+                        "NumberDomainAttributesExceeded" => {
+                            return RusotoError::Service(
+                                BatchPutAttributesError::NumberDomainAttributesExceeded(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "NumberDomainBytesExceeded" => {
+                            return RusotoError::Service(
+                                BatchPutAttributesError::NumberDomainBytesExceeded(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "NumberItemAttributesExceeded" => {
+                            return RusotoError::Service(
+                                BatchPutAttributesError::NumberItemAttributesExceeded(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "NumberSubmittedAttributesExceeded" => {
+                            return RusotoError::Service(
+                                BatchPutAttributesError::NumberSubmittedAttributesExceeded(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "NumberSubmittedItemsExceeded" => {
+                            return RusotoError::Service(
+                                BatchPutAttributesError::NumberSubmittedItemsExceeded(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        _ => {}
                     }
-                    "NumberItemAttributesExceeded" => {
-                        return RusotoError::Service(
-                            BatchPutAttributesError::NumberItemAttributesExceeded(
-                                parsed_error.message,
-                            ),
-                        )
-                    }
-                    "NumberSubmittedAttributesExceeded" => {
-                        return RusotoError::Service(
-                            BatchPutAttributesError::NumberSubmittedAttributesExceeded(
-                                parsed_error.message,
-                            ),
-                        )
-                    }
-                    "NumberSubmittedItemsExceeded" => {
-                        return RusotoError::Service(
-                            BatchPutAttributesError::NumberSubmittedItemsExceeded(
-                                parsed_error.message,
-                            ),
-                        )
-                    }
-                    _ => {}
                 }
             }
         }
@@ -1086,24 +1121,27 @@ impl CreateDomainError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    "InvalidParameterValue" => {
-                        return RusotoError::Service(CreateDomainError::InvalidParameterValue(
-                            parsed_error.message,
-                        ))
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {
+                        "InvalidParameterValue" => {
+                            return RusotoError::Service(CreateDomainError::InvalidParameterValue(
+                                parsed_error.message,
+                            ))
+                        }
+                        "MissingParameter" => {
+                            return RusotoError::Service(CreateDomainError::MissingParameter(
+                                parsed_error.message,
+                            ))
+                        }
+                        "NumberDomainsExceeded" => {
+                            return RusotoError::Service(CreateDomainError::NumberDomainsExceeded(
+                                parsed_error.message,
+                            ))
+                        }
+                        _ => {}
                     }
-                    "MissingParameter" => {
-                        return RusotoError::Service(CreateDomainError::MissingParameter(
-                            parsed_error.message,
-                        ))
-                    }
-                    "NumberDomainsExceeded" => {
-                        return RusotoError::Service(CreateDomainError::NumberDomainsExceeded(
-                            parsed_error.message,
-                        ))
-                    }
-                    _ => {}
                 }
             }
         }
@@ -1148,29 +1186,32 @@ impl DeleteAttributesError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    "AttributeDoesNotExist" => {
-                        return RusotoError::Service(DeleteAttributesError::AttributeDoesNotExist(
-                            parsed_error.message,
-                        ))
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {
+                        "AttributeDoesNotExist" => {
+                            return RusotoError::Service(
+                                DeleteAttributesError::AttributeDoesNotExist(parsed_error.message),
+                            )
+                        }
+                        "InvalidParameterValue" => {
+                            return RusotoError::Service(
+                                DeleteAttributesError::InvalidParameterValue(parsed_error.message),
+                            )
+                        }
+                        "MissingParameter" => {
+                            return RusotoError::Service(DeleteAttributesError::MissingParameter(
+                                parsed_error.message,
+                            ))
+                        }
+                        "NoSuchDomain" => {
+                            return RusotoError::Service(DeleteAttributesError::NoSuchDomain(
+                                parsed_error.message,
+                            ))
+                        }
+                        _ => {}
                     }
-                    "InvalidParameterValue" => {
-                        return RusotoError::Service(DeleteAttributesError::InvalidParameterValue(
-                            parsed_error.message,
-                        ))
-                    }
-                    "MissingParameter" => {
-                        return RusotoError::Service(DeleteAttributesError::MissingParameter(
-                            parsed_error.message,
-                        ))
-                    }
-                    "NoSuchDomain" => {
-                        return RusotoError::Service(DeleteAttributesError::NoSuchDomain(
-                            parsed_error.message,
-                        ))
-                    }
-                    _ => {}
                 }
             }
         }
@@ -1210,14 +1251,17 @@ impl DeleteDomainError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    "MissingParameter" => {
-                        return RusotoError::Service(DeleteDomainError::MissingParameter(
-                            parsed_error.message,
-                        ))
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {
+                        "MissingParameter" => {
+                            return RusotoError::Service(DeleteDomainError::MissingParameter(
+                                parsed_error.message,
+                            ))
+                        }
+                        _ => {}
                     }
-                    _ => {}
                 }
             }
         }
@@ -1256,19 +1300,22 @@ impl DomainMetadataError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    "MissingParameter" => {
-                        return RusotoError::Service(DomainMetadataError::MissingParameter(
-                            parsed_error.message,
-                        ))
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {
+                        "MissingParameter" => {
+                            return RusotoError::Service(DomainMetadataError::MissingParameter(
+                                parsed_error.message,
+                            ))
+                        }
+                        "NoSuchDomain" => {
+                            return RusotoError::Service(DomainMetadataError::NoSuchDomain(
+                                parsed_error.message,
+                            ))
+                        }
+                        _ => {}
                     }
-                    "NoSuchDomain" => {
-                        return RusotoError::Service(DomainMetadataError::NoSuchDomain(
-                            parsed_error.message,
-                        ))
-                    }
-                    _ => {}
                 }
             }
         }
@@ -1310,24 +1357,27 @@ impl GetAttributesError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    "InvalidParameterValue" => {
-                        return RusotoError::Service(GetAttributesError::InvalidParameterValue(
-                            parsed_error.message,
-                        ))
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {
+                        "InvalidParameterValue" => {
+                            return RusotoError::Service(GetAttributesError::InvalidParameterValue(
+                                parsed_error.message,
+                            ))
+                        }
+                        "MissingParameter" => {
+                            return RusotoError::Service(GetAttributesError::MissingParameter(
+                                parsed_error.message,
+                            ))
+                        }
+                        "NoSuchDomain" => {
+                            return RusotoError::Service(GetAttributesError::NoSuchDomain(
+                                parsed_error.message,
+                            ))
+                        }
+                        _ => {}
                     }
-                    "MissingParameter" => {
-                        return RusotoError::Service(GetAttributesError::MissingParameter(
-                            parsed_error.message,
-                        ))
-                    }
-                    "NoSuchDomain" => {
-                        return RusotoError::Service(GetAttributesError::NoSuchDomain(
-                            parsed_error.message,
-                        ))
-                    }
-                    _ => {}
                 }
             }
         }
@@ -1368,19 +1418,22 @@ impl ListDomainsError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    "InvalidNextToken" => {
-                        return RusotoError::Service(ListDomainsError::InvalidNextToken(
-                            parsed_error.message,
-                        ))
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {
+                        "InvalidNextToken" => {
+                            return RusotoError::Service(ListDomainsError::InvalidNextToken(
+                                parsed_error.message,
+                            ))
+                        }
+                        "InvalidParameterValue" => {
+                            return RusotoError::Service(ListDomainsError::InvalidParameterValue(
+                                parsed_error.message,
+                            ))
+                        }
+                        _ => {}
                     }
-                    "InvalidParameterValue" => {
-                        return RusotoError::Service(ListDomainsError::InvalidParameterValue(
-                            parsed_error.message,
-                        ))
-                    }
-                    _ => {}
                 }
             }
         }
@@ -1430,46 +1483,51 @@ impl PutAttributesError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    "AttributeDoesNotExist" => {
-                        return RusotoError::Service(PutAttributesError::AttributeDoesNotExist(
-                            parsed_error.message,
-                        ))
-                    }
-                    "InvalidParameterValue" => {
-                        return RusotoError::Service(PutAttributesError::InvalidParameterValue(
-                            parsed_error.message,
-                        ))
-                    }
-                    "MissingParameter" => {
-                        return RusotoError::Service(PutAttributesError::MissingParameter(
-                            parsed_error.message,
-                        ))
-                    }
-                    "NoSuchDomain" => {
-                        return RusotoError::Service(PutAttributesError::NoSuchDomain(
-                            parsed_error.message,
-                        ))
-                    }
-                    "NumberDomainAttributesExceeded" => {
-                        return RusotoError::Service(
-                            PutAttributesError::NumberDomainAttributesExceeded(
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {
+                        "AttributeDoesNotExist" => {
+                            return RusotoError::Service(PutAttributesError::AttributeDoesNotExist(
                                 parsed_error.message,
-                            ),
-                        )
+                            ))
+                        }
+                        "InvalidParameterValue" => {
+                            return RusotoError::Service(PutAttributesError::InvalidParameterValue(
+                                parsed_error.message,
+                            ))
+                        }
+                        "MissingParameter" => {
+                            return RusotoError::Service(PutAttributesError::MissingParameter(
+                                parsed_error.message,
+                            ))
+                        }
+                        "NoSuchDomain" => {
+                            return RusotoError::Service(PutAttributesError::NoSuchDomain(
+                                parsed_error.message,
+                            ))
+                        }
+                        "NumberDomainAttributesExceeded" => {
+                            return RusotoError::Service(
+                                PutAttributesError::NumberDomainAttributesExceeded(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "NumberDomainBytesExceeded" => {
+                            return RusotoError::Service(
+                                PutAttributesError::NumberDomainBytesExceeded(parsed_error.message),
+                            )
+                        }
+                        "NumberItemAttributesExceeded" => {
+                            return RusotoError::Service(
+                                PutAttributesError::NumberItemAttributesExceeded(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        _ => {}
                     }
-                    "NumberDomainBytesExceeded" => {
-                        return RusotoError::Service(PutAttributesError::NumberDomainBytesExceeded(
-                            parsed_error.message,
-                        ))
-                    }
-                    "NumberItemAttributesExceeded" => {
-                        return RusotoError::Service(
-                            PutAttributesError::NumberItemAttributesExceeded(parsed_error.message),
-                        )
-                    }
-                    _ => {}
                 }
             }
         }
@@ -1528,54 +1586,57 @@ impl SelectError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    "InvalidNextToken" => {
-                        return RusotoError::Service(SelectError::InvalidNextToken(
-                            parsed_error.message,
-                        ))
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {
+                        "InvalidNextToken" => {
+                            return RusotoError::Service(SelectError::InvalidNextToken(
+                                parsed_error.message,
+                            ))
+                        }
+                        "InvalidNumberPredicates" => {
+                            return RusotoError::Service(SelectError::InvalidNumberPredicates(
+                                parsed_error.message,
+                            ))
+                        }
+                        "InvalidNumberValueTests" => {
+                            return RusotoError::Service(SelectError::InvalidNumberValueTests(
+                                parsed_error.message,
+                            ))
+                        }
+                        "InvalidParameterValue" => {
+                            return RusotoError::Service(SelectError::InvalidParameterValue(
+                                parsed_error.message,
+                            ))
+                        }
+                        "InvalidQueryExpression" => {
+                            return RusotoError::Service(SelectError::InvalidQueryExpression(
+                                parsed_error.message,
+                            ))
+                        }
+                        "MissingParameter" => {
+                            return RusotoError::Service(SelectError::MissingParameter(
+                                parsed_error.message,
+                            ))
+                        }
+                        "NoSuchDomain" => {
+                            return RusotoError::Service(SelectError::NoSuchDomain(
+                                parsed_error.message,
+                            ))
+                        }
+                        "RequestTimeout" => {
+                            return RusotoError::Service(SelectError::RequestTimeout(
+                                parsed_error.message,
+                            ))
+                        }
+                        "TooManyRequestedAttributes" => {
+                            return RusotoError::Service(SelectError::TooManyRequestedAttributes(
+                                parsed_error.message,
+                            ))
+                        }
+                        _ => {}
                     }
-                    "InvalidNumberPredicates" => {
-                        return RusotoError::Service(SelectError::InvalidNumberPredicates(
-                            parsed_error.message,
-                        ))
-                    }
-                    "InvalidNumberValueTests" => {
-                        return RusotoError::Service(SelectError::InvalidNumberValueTests(
-                            parsed_error.message,
-                        ))
-                    }
-                    "InvalidParameterValue" => {
-                        return RusotoError::Service(SelectError::InvalidParameterValue(
-                            parsed_error.message,
-                        ))
-                    }
-                    "InvalidQueryExpression" => {
-                        return RusotoError::Service(SelectError::InvalidQueryExpression(
-                            parsed_error.message,
-                        ))
-                    }
-                    "MissingParameter" => {
-                        return RusotoError::Service(SelectError::MissingParameter(
-                            parsed_error.message,
-                        ))
-                    }
-                    "NoSuchDomain" => {
-                        return RusotoError::Service(SelectError::NoSuchDomain(
-                            parsed_error.message,
-                        ))
-                    }
-                    "RequestTimeout" => {
-                        return RusotoError::Service(SelectError::RequestTimeout(
-                            parsed_error.message,
-                        ))
-                    }
-                    "TooManyRequestedAttributes" => {
-                        return RusotoError::Service(SelectError::TooManyRequestedAttributes(
-                            parsed_error.message,
-                        ))
-                    }
-                    _ => {}
                 }
             }
         }

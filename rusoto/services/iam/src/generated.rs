@@ -31,7 +31,6 @@ use rusoto_core::signature::SignedRequest;
 use serde::Deserialize;
 #[cfg(feature = "serialize_structs")]
 use serde::Serialize;
-use serde_urlencoded;
 use std::str::FromStr;
 use xml::EventReader;
 
@@ -63,8 +62,9 @@ impl IamClient {
 #[allow(dead_code)]
 struct AccessAdvisorUsageGranularityTypeDeserializer;
 impl AccessAdvisorUsageGranularityTypeDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
@@ -89,11 +89,12 @@ pub struct AccessDetail {
 #[allow(dead_code)]
 struct AccessDetailDeserializer;
 impl AccessDetailDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<AccessDetail, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, AccessDetail, _>(tag_name, stack, |name, stack, obj| {
             match name {
                 "EntityPath" => {
@@ -134,11 +135,13 @@ impl AccessDetailDeserializer {
 #[allow(dead_code)]
 struct AccessDetailsDeserializer;
 impl AccessDetailsDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<AccessDetail>, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
+
         deserialize_elements::<_, Vec<_>, _>(tag_name, stack, |name, stack, obj| {
             if name == "member" {
                 obj.push(AccessDetailDeserializer::deserialize("member", stack)?);
@@ -168,11 +171,12 @@ pub struct AccessKey {
 #[allow(dead_code)]
 struct AccessKeyDeserializer;
 impl AccessKeyDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<AccessKey, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, AccessKey, _>(tag_name, stack, |name, stack, obj| {
             match name {
                 "AccessKeyId" => {
@@ -201,8 +205,9 @@ impl AccessKeyDeserializer {
 #[allow(dead_code)]
 struct AccessKeyIdTypeDeserializer;
 impl AccessKeyIdTypeDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
@@ -221,11 +226,12 @@ pub struct AccessKeyLastUsed {
 #[allow(dead_code)]
 struct AccessKeyLastUsedDeserializer;
 impl AccessKeyLastUsedDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<AccessKeyLastUsed, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, AccessKeyLastUsed, _>(tag_name, stack, |name, stack, obj| {
             match name {
                 "LastUsedDate" => {
@@ -260,11 +266,12 @@ pub struct AccessKeyMetadata {
 #[allow(dead_code)]
 struct AccessKeyMetadataDeserializer;
 impl AccessKeyMetadataDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<AccessKeyMetadata, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, AccessKeyMetadata, _>(tag_name, stack, |name, stack, obj| {
             match name {
                 "AccessKeyId" => {
@@ -291,11 +298,13 @@ impl AccessKeyMetadataDeserializer {
 #[allow(dead_code)]
 struct AccessKeyMetadataListTypeDeserializer;
 impl AccessKeyMetadataListTypeDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<AccessKeyMetadata>, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
+
         deserialize_elements::<_, Vec<_>, _>(tag_name, stack, |name, stack, obj| {
             if name == "member" {
                 obj.push(AccessKeyMetadataDeserializer::deserialize("member", stack)?);
@@ -309,19 +318,22 @@ impl AccessKeyMetadataListTypeDeserializer {
 #[allow(dead_code)]
 struct AccessKeySecretTypeDeserializer;
 impl AccessKeySecretTypeDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 #[allow(dead_code)]
 struct AccountAliasListTypeDeserializer;
 impl AccountAliasListTypeDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<String>, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
+
         deserialize_elements::<_, Vec<_>, _>(tag_name, stack, |name, stack, obj| {
             if name == "member" {
                 obj.push(AccountAliasTypeDeserializer::deserialize("member", stack)?);
@@ -335,8 +347,9 @@ impl AccountAliasListTypeDeserializer {
 #[allow(dead_code)]
 struct AccountAliasTypeDeserializer;
 impl AccountAliasTypeDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
@@ -344,6 +357,7 @@ impl AccountAliasTypeDeserializer {
 /// Serialize `ActionNameListType` contents to a `SignedRequest`.
 struct ActionNameListTypeSerializer;
 impl ActionNameListTypeSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &Vec<String>) {
         for (index, obj) in obj.iter().enumerate() {
             let key = format!("{}.member.{}", name, index + 1);
@@ -355,8 +369,9 @@ impl ActionNameListTypeSerializer {
 #[allow(dead_code)]
 struct ActionNameTypeDeserializer;
 impl ActionNameTypeDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
@@ -372,10 +387,11 @@ pub struct AddClientIDToOpenIDConnectProviderRequest {
 /// Serialize `AddClientIDToOpenIDConnectProviderRequest` contents to a `SignedRequest`.
 struct AddClientIDToOpenIDConnectProviderRequestSerializer;
 impl AddClientIDToOpenIDConnectProviderRequestSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &AddClientIDToOpenIDConnectProviderRequest) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         params.put(&format!("{}{}", prefix, "ClientID"), &obj.client_id);
@@ -398,10 +414,11 @@ pub struct AddRoleToInstanceProfileRequest {
 /// Serialize `AddRoleToInstanceProfileRequest` contents to a `SignedRequest`.
 struct AddRoleToInstanceProfileRequestSerializer;
 impl AddRoleToInstanceProfileRequestSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &AddRoleToInstanceProfileRequest) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         params.put(
@@ -424,10 +441,11 @@ pub struct AddUserToGroupRequest {
 /// Serialize `AddUserToGroupRequest` contents to a `SignedRequest`.
 struct AddUserToGroupRequestSerializer;
 impl AddUserToGroupRequestSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &AddUserToGroupRequest) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         params.put(&format!("{}{}", prefix, "GroupName"), &obj.group_name);
@@ -438,11 +456,13 @@ impl AddUserToGroupRequestSerializer {
 #[allow(dead_code)]
 struct ArnListTypeDeserializer;
 impl ArnListTypeDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<String>, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
+
         deserialize_elements::<_, Vec<_>, _>(tag_name, stack, |name, stack, obj| {
             if name == "member" {
                 obj.push(ArnTypeDeserializer::deserialize("member", stack)?);
@@ -456,8 +476,9 @@ impl ArnListTypeDeserializer {
 #[allow(dead_code)]
 struct ArnTypeDeserializer;
 impl ArnTypeDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
@@ -473,10 +494,11 @@ pub struct AttachGroupPolicyRequest {
 /// Serialize `AttachGroupPolicyRequest` contents to a `SignedRequest`.
 struct AttachGroupPolicyRequestSerializer;
 impl AttachGroupPolicyRequestSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &AttachGroupPolicyRequest) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         params.put(&format!("{}{}", prefix, "GroupName"), &obj.group_name);
@@ -496,10 +518,11 @@ pub struct AttachRolePolicyRequest {
 /// Serialize `AttachRolePolicyRequest` contents to a `SignedRequest`.
 struct AttachRolePolicyRequestSerializer;
 impl AttachRolePolicyRequestSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &AttachRolePolicyRequest) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         params.put(&format!("{}{}", prefix, "PolicyArn"), &obj.policy_arn);
@@ -519,10 +542,11 @@ pub struct AttachUserPolicyRequest {
 /// Serialize `AttachUserPolicyRequest` contents to a `SignedRequest`.
 struct AttachUserPolicyRequestSerializer;
 impl AttachUserPolicyRequestSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &AttachUserPolicyRequest) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         params.put(&format!("{}{}", prefix, "PolicyArn"), &obj.policy_arn);
@@ -543,11 +567,12 @@ pub struct AttachedPermissionsBoundary {
 #[allow(dead_code)]
 struct AttachedPermissionsBoundaryDeserializer;
 impl AttachedPermissionsBoundaryDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<AttachedPermissionsBoundary, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, AttachedPermissionsBoundary, _>(
             tag_name,
             stack,
@@ -576,11 +601,13 @@ impl AttachedPermissionsBoundaryDeserializer {
 #[allow(dead_code)]
 struct AttachedPoliciesListTypeDeserializer;
 impl AttachedPoliciesListTypeDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<AttachedPolicy>, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
+
         deserialize_elements::<_, Vec<_>, _>(tag_name, stack, |name, stack, obj| {
             if name == "member" {
                 obj.push(AttachedPolicyDeserializer::deserialize("member", stack)?);
@@ -603,11 +630,12 @@ pub struct AttachedPolicy {
 #[allow(dead_code)]
 struct AttachedPolicyDeserializer;
 impl AttachedPolicyDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<AttachedPolicy, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, AttachedPolicy, _>(tag_name, stack, |name, stack, obj| {
             match name {
                 "PolicyArn" => {
@@ -628,70 +656,79 @@ impl AttachedPolicyDeserializer {
 #[allow(dead_code)]
 struct AttachmentCountTypeDeserializer;
 impl AttachmentCountTypeDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<i64, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::deserialize_primitive(tag_name, stack, |s| Ok(i64::from_str(&s).unwrap()))
     }
 }
 #[allow(dead_code)]
 struct BooleanObjectTypeDeserializer;
 impl BooleanObjectTypeDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<bool, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::deserialize_primitive(tag_name, stack, |s| Ok(bool::from_str(&s).unwrap()))
     }
 }
 #[allow(dead_code)]
 struct BooleanTypeDeserializer;
 impl BooleanTypeDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<bool, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::deserialize_primitive(tag_name, stack, |s| Ok(bool::from_str(&s).unwrap()))
     }
 }
 #[allow(dead_code)]
 struct BootstrapDatumDeserializer;
 impl BootstrapDatumDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<bytes::Bytes, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::deserialize_primitive(tag_name, stack, |s| Ok(s.into()))
     }
 }
 #[allow(dead_code)]
 struct CertificateBodyTypeDeserializer;
 impl CertificateBodyTypeDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 #[allow(dead_code)]
 struct CertificateChainTypeDeserializer;
 impl CertificateChainTypeDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 #[allow(dead_code)]
 struct CertificateIdTypeDeserializer;
 impl CertificateIdTypeDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 #[allow(dead_code)]
 struct CertificateListTypeDeserializer;
 impl CertificateListTypeDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<SigningCertificate>, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
+
         deserialize_elements::<_, Vec<_>, _>(tag_name, stack, |name, stack, obj| {
             if name == "member" {
                 obj.push(SigningCertificateDeserializer::deserialize(
@@ -716,10 +753,11 @@ pub struct ChangePasswordRequest {
 /// Serialize `ChangePasswordRequest` contents to a `SignedRequest`.
 struct ChangePasswordRequestSerializer;
 impl ChangePasswordRequestSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &ChangePasswordRequest) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         params.put(&format!("{}{}", prefix, "NewPassword"), &obj.new_password);
@@ -730,11 +768,13 @@ impl ChangePasswordRequestSerializer {
 #[allow(dead_code)]
 struct ClientIDListTypeDeserializer;
 impl ClientIDListTypeDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<String>, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
+
         deserialize_elements::<_, Vec<_>, _>(tag_name, stack, |name, stack, obj| {
             if name == "member" {
                 obj.push(ClientIDTypeDeserializer::deserialize("member", stack)?);
@@ -749,6 +789,7 @@ impl ClientIDListTypeDeserializer {
 /// Serialize `ClientIDListType` contents to a `SignedRequest`.
 struct ClientIDListTypeSerializer;
 impl ClientIDListTypeSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &Vec<String>) {
         for (index, obj) in obj.iter().enumerate() {
             let key = format!("{}.member.{}", name, index + 1);
@@ -760,16 +801,18 @@ impl ClientIDListTypeSerializer {
 #[allow(dead_code)]
 struct ClientIDTypeDeserializer;
 impl ClientIDTypeDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 #[allow(dead_code)]
 struct ColumnNumberDeserializer;
 impl ColumnNumberDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<i64, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::deserialize_primitive(tag_name, stack, |s| Ok(i64::from_str(&s).unwrap()))
     }
 }
@@ -788,10 +831,11 @@ pub struct ContextEntry {
 /// Serialize `ContextEntry` contents to a `SignedRequest`.
 struct ContextEntrySerializer;
 impl ContextEntrySerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &ContextEntry) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         if let Some(ref field_value) = obj.context_key_name {
@@ -813,6 +857,7 @@ impl ContextEntrySerializer {
 /// Serialize `ContextEntryListType` contents to a `SignedRequest`.
 struct ContextEntryListTypeSerializer;
 impl ContextEntryListTypeSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &Vec<ContextEntry>) {
         for (index, obj) in obj.iter().enumerate() {
             let key = format!("{}.member.{}", name, index + 1);
@@ -824,19 +869,22 @@ impl ContextEntryListTypeSerializer {
 #[allow(dead_code)]
 struct ContextKeyNameTypeDeserializer;
 impl ContextKeyNameTypeDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 #[allow(dead_code)]
 struct ContextKeyNamesResultListTypeDeserializer;
 impl ContextKeyNamesResultListTypeDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<String>, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
+
         deserialize_elements::<_, Vec<_>, _>(tag_name, stack, |name, stack, obj| {
             if name == "member" {
                 obj.push(ContextKeyNameTypeDeserializer::deserialize(
@@ -853,6 +901,7 @@ impl ContextKeyNamesResultListTypeDeserializer {
 /// Serialize `ContextKeyValueListType` contents to a `SignedRequest`.
 struct ContextKeyValueListTypeSerializer;
 impl ContextKeyValueListTypeSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &Vec<String>) {
         for (index, obj) in obj.iter().enumerate() {
             let key = format!("{}.member.{}", name, index + 1);
@@ -871,10 +920,11 @@ pub struct CreateAccessKeyRequest {
 /// Serialize `CreateAccessKeyRequest` contents to a `SignedRequest`.
 struct CreateAccessKeyRequestSerializer;
 impl CreateAccessKeyRequestSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &CreateAccessKeyRequest) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         if let Some(ref field_value) = obj.user_name {
@@ -894,11 +944,12 @@ pub struct CreateAccessKeyResponse {
 #[allow(dead_code)]
 struct CreateAccessKeyResponseDeserializer;
 impl CreateAccessKeyResponseDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<CreateAccessKeyResponse, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, CreateAccessKeyResponse, _>(
             tag_name,
             stack,
@@ -924,10 +975,11 @@ pub struct CreateAccountAliasRequest {
 /// Serialize `CreateAccountAliasRequest` contents to a `SignedRequest`.
 struct CreateAccountAliasRequestSerializer;
 impl CreateAccountAliasRequestSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &CreateAccountAliasRequest) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         params.put(&format!("{}{}", prefix, "AccountAlias"), &obj.account_alias);
@@ -946,10 +998,11 @@ pub struct CreateGroupRequest {
 /// Serialize `CreateGroupRequest` contents to a `SignedRequest`.
 struct CreateGroupRequestSerializer;
 impl CreateGroupRequestSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &CreateGroupRequest) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         params.put(&format!("{}{}", prefix, "GroupName"), &obj.group_name);
@@ -970,11 +1023,12 @@ pub struct CreateGroupResponse {
 #[allow(dead_code)]
 struct CreateGroupResponseDeserializer;
 impl CreateGroupResponseDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<CreateGroupResponse, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, CreateGroupResponse, _>(tag_name, stack, |name, stack, obj| {
             match name {
                 "Group" => {
@@ -998,10 +1052,11 @@ pub struct CreateInstanceProfileRequest {
 /// Serialize `CreateInstanceProfileRequest` contents to a `SignedRequest`.
 struct CreateInstanceProfileRequestSerializer;
 impl CreateInstanceProfileRequestSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &CreateInstanceProfileRequest) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         params.put(
@@ -1025,11 +1080,12 @@ pub struct CreateInstanceProfileResponse {
 #[allow(dead_code)]
 struct CreateInstanceProfileResponseDeserializer;
 impl CreateInstanceProfileResponseDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<CreateInstanceProfileResponse, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, CreateInstanceProfileResponse, _>(
             tag_name,
             stack,
@@ -1060,10 +1116,11 @@ pub struct CreateLoginProfileRequest {
 /// Serialize `CreateLoginProfileRequest` contents to a `SignedRequest`.
 struct CreateLoginProfileRequestSerializer;
 impl CreateLoginProfileRequestSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &CreateLoginProfileRequest) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         params.put(&format!("{}{}", prefix, "Password"), &obj.password);
@@ -1088,11 +1145,12 @@ pub struct CreateLoginProfileResponse {
 #[allow(dead_code)]
 struct CreateLoginProfileResponseDeserializer;
 impl CreateLoginProfileResponseDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<CreateLoginProfileResponse, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, CreateLoginProfileResponse, _>(
             tag_name,
             stack,
@@ -1123,10 +1181,11 @@ pub struct CreateOpenIDConnectProviderRequest {
 /// Serialize `CreateOpenIDConnectProviderRequest` contents to a `SignedRequest`.
 struct CreateOpenIDConnectProviderRequestSerializer;
 impl CreateOpenIDConnectProviderRequestSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &CreateOpenIDConnectProviderRequest) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         if let Some(ref field_value) = obj.client_id_list {
@@ -1156,11 +1215,12 @@ pub struct CreateOpenIDConnectProviderResponse {
 #[allow(dead_code)]
 struct CreateOpenIDConnectProviderResponseDeserializer;
 impl CreateOpenIDConnectProviderResponseDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<CreateOpenIDConnectProviderResponse, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, CreateOpenIDConnectProviderResponse, _>(
             tag_name,
             stack,
@@ -1195,10 +1255,11 @@ pub struct CreatePolicyRequest {
 /// Serialize `CreatePolicyRequest` contents to a `SignedRequest`.
 struct CreatePolicyRequestSerializer;
 impl CreatePolicyRequestSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &CreatePolicyRequest) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         if let Some(ref field_value) = obj.description {
@@ -1226,11 +1287,12 @@ pub struct CreatePolicyResponse {
 #[allow(dead_code)]
 struct CreatePolicyResponseDeserializer;
 impl CreatePolicyResponseDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<CreatePolicyResponse, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, CreatePolicyResponse, _>(tag_name, stack, |name, stack, obj| {
             match name {
                 "Policy" => {
@@ -1256,10 +1318,11 @@ pub struct CreatePolicyVersionRequest {
 /// Serialize `CreatePolicyVersionRequest` contents to a `SignedRequest`.
 struct CreatePolicyVersionRequestSerializer;
 impl CreatePolicyVersionRequestSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &CreatePolicyVersionRequest) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         params.put(&format!("{}{}", prefix, "PolicyArn"), &obj.policy_arn);
@@ -1284,11 +1347,12 @@ pub struct CreatePolicyVersionResponse {
 #[allow(dead_code)]
 struct CreatePolicyVersionResponseDeserializer;
 impl CreatePolicyVersionResponseDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<CreatePolicyVersionResponse, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, CreatePolicyVersionResponse, _>(
             tag_name,
             stack,
@@ -1329,10 +1393,11 @@ pub struct CreateRoleRequest {
 /// Serialize `CreateRoleRequest` contents to a `SignedRequest`.
 struct CreateRoleRequestSerializer;
 impl CreateRoleRequestSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &CreateRoleRequest) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         params.put(
@@ -1372,11 +1437,12 @@ pub struct CreateRoleResponse {
 #[allow(dead_code)]
 struct CreateRoleResponseDeserializer;
 impl CreateRoleResponseDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<CreateRoleResponse, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, CreateRoleResponse, _>(tag_name, stack, |name, stack, obj| {
             match name {
                 "Role" => {
@@ -1400,10 +1466,11 @@ pub struct CreateSAMLProviderRequest {
 /// Serialize `CreateSAMLProviderRequest` contents to a `SignedRequest`.
 struct CreateSAMLProviderRequestSerializer;
 impl CreateSAMLProviderRequestSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &CreateSAMLProviderRequest) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         params.put(&format!("{}{}", prefix, "Name"), &obj.name);
@@ -1425,11 +1492,12 @@ pub struct CreateSAMLProviderResponse {
 #[allow(dead_code)]
 struct CreateSAMLProviderResponseDeserializer;
 impl CreateSAMLProviderResponseDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<CreateSAMLProviderResponse, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, CreateSAMLProviderResponse, _>(
             tag_name,
             stack,
@@ -1460,10 +1528,11 @@ pub struct CreateServiceLinkedRoleRequest {
 /// Serialize `CreateServiceLinkedRoleRequest` contents to a `SignedRequest`.
 struct CreateServiceLinkedRoleRequestSerializer;
 impl CreateServiceLinkedRoleRequestSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &CreateServiceLinkedRoleRequest) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         params.put(
@@ -1489,11 +1558,12 @@ pub struct CreateServiceLinkedRoleResponse {
 #[allow(dead_code)]
 struct CreateServiceLinkedRoleResponseDeserializer;
 impl CreateServiceLinkedRoleResponseDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<CreateServiceLinkedRoleResponse, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, CreateServiceLinkedRoleResponse, _>(
             tag_name,
             stack,
@@ -1521,10 +1591,11 @@ pub struct CreateServiceSpecificCredentialRequest {
 /// Serialize `CreateServiceSpecificCredentialRequest` contents to a `SignedRequest`.
 struct CreateServiceSpecificCredentialRequestSerializer;
 impl CreateServiceSpecificCredentialRequestSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &CreateServiceSpecificCredentialRequest) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         params.put(&format!("{}{}", prefix, "ServiceName"), &obj.service_name);
@@ -1542,11 +1613,12 @@ pub struct CreateServiceSpecificCredentialResponse {
 #[allow(dead_code)]
 struct CreateServiceSpecificCredentialResponseDeserializer;
 impl CreateServiceSpecificCredentialResponseDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<CreateServiceSpecificCredentialResponse, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, CreateServiceSpecificCredentialResponse, _>(
             tag_name,
             stack,
@@ -1582,10 +1654,11 @@ pub struct CreateUserRequest {
 /// Serialize `CreateUserRequest` contents to a `SignedRequest`.
 struct CreateUserRequestSerializer;
 impl CreateUserRequestSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &CreateUserRequest) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         if let Some(ref field_value) = obj.path {
@@ -1615,11 +1688,12 @@ pub struct CreateUserResponse {
 #[allow(dead_code)]
 struct CreateUserResponseDeserializer;
 impl CreateUserResponseDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<CreateUserResponse, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, CreateUserResponse, _>(tag_name, stack, |name, stack, obj| {
             match name {
                 "User" => {
@@ -1643,10 +1717,11 @@ pub struct CreateVirtualMFADeviceRequest {
 /// Serialize `CreateVirtualMFADeviceRequest` contents to a `SignedRequest`.
 struct CreateVirtualMFADeviceRequestSerializer;
 impl CreateVirtualMFADeviceRequestSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &CreateVirtualMFADeviceRequest) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         if let Some(ref field_value) = obj.path {
@@ -1670,11 +1745,12 @@ pub struct CreateVirtualMFADeviceResponse {
 #[allow(dead_code)]
 struct CreateVirtualMFADeviceResponseDeserializer;
 impl CreateVirtualMFADeviceResponseDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<CreateVirtualMFADeviceResponse, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, CreateVirtualMFADeviceResponse, _>(
             tag_name,
             stack,
@@ -1694,8 +1770,9 @@ impl CreateVirtualMFADeviceResponseDeserializer {
 #[allow(dead_code)]
 struct DateTypeDeserializer;
 impl DateTypeDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
@@ -1711,10 +1788,11 @@ pub struct DeactivateMFADeviceRequest {
 /// Serialize `DeactivateMFADeviceRequest` contents to a `SignedRequest`.
 struct DeactivateMFADeviceRequestSerializer;
 impl DeactivateMFADeviceRequestSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &DeactivateMFADeviceRequest) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         params.put(&format!("{}{}", prefix, "SerialNumber"), &obj.serial_number);
@@ -1734,10 +1812,11 @@ pub struct DeleteAccessKeyRequest {
 /// Serialize `DeleteAccessKeyRequest` contents to a `SignedRequest`.
 struct DeleteAccessKeyRequestSerializer;
 impl DeleteAccessKeyRequestSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &DeleteAccessKeyRequest) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         params.put(&format!("{}{}", prefix, "AccessKeyId"), &obj.access_key_id);
@@ -1757,10 +1836,11 @@ pub struct DeleteAccountAliasRequest {
 /// Serialize `DeleteAccountAliasRequest` contents to a `SignedRequest`.
 struct DeleteAccountAliasRequestSerializer;
 impl DeleteAccountAliasRequestSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &DeleteAccountAliasRequest) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         params.put(&format!("{}{}", prefix, "AccountAlias"), &obj.account_alias);
@@ -1779,10 +1859,11 @@ pub struct DeleteGroupPolicyRequest {
 /// Serialize `DeleteGroupPolicyRequest` contents to a `SignedRequest`.
 struct DeleteGroupPolicyRequestSerializer;
 impl DeleteGroupPolicyRequestSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &DeleteGroupPolicyRequest) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         params.put(&format!("{}{}", prefix, "GroupName"), &obj.group_name);
@@ -1800,10 +1881,11 @@ pub struct DeleteGroupRequest {
 /// Serialize `DeleteGroupRequest` contents to a `SignedRequest`.
 struct DeleteGroupRequestSerializer;
 impl DeleteGroupRequestSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &DeleteGroupRequest) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         params.put(&format!("{}{}", prefix, "GroupName"), &obj.group_name);
@@ -1820,10 +1902,11 @@ pub struct DeleteInstanceProfileRequest {
 /// Serialize `DeleteInstanceProfileRequest` contents to a `SignedRequest`.
 struct DeleteInstanceProfileRequestSerializer;
 impl DeleteInstanceProfileRequestSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &DeleteInstanceProfileRequest) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         params.put(
@@ -1843,10 +1926,11 @@ pub struct DeleteLoginProfileRequest {
 /// Serialize `DeleteLoginProfileRequest` contents to a `SignedRequest`.
 struct DeleteLoginProfileRequestSerializer;
 impl DeleteLoginProfileRequestSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &DeleteLoginProfileRequest) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         params.put(&format!("{}{}", prefix, "UserName"), &obj.user_name);
@@ -1863,10 +1947,11 @@ pub struct DeleteOpenIDConnectProviderRequest {
 /// Serialize `DeleteOpenIDConnectProviderRequest` contents to a `SignedRequest`.
 struct DeleteOpenIDConnectProviderRequestSerializer;
 impl DeleteOpenIDConnectProviderRequestSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &DeleteOpenIDConnectProviderRequest) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         params.put(
@@ -1886,10 +1971,11 @@ pub struct DeletePolicyRequest {
 /// Serialize `DeletePolicyRequest` contents to a `SignedRequest`.
 struct DeletePolicyRequestSerializer;
 impl DeletePolicyRequestSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &DeletePolicyRequest) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         params.put(&format!("{}{}", prefix, "PolicyArn"), &obj.policy_arn);
@@ -1908,10 +1994,11 @@ pub struct DeletePolicyVersionRequest {
 /// Serialize `DeletePolicyVersionRequest` contents to a `SignedRequest`.
 struct DeletePolicyVersionRequestSerializer;
 impl DeletePolicyVersionRequestSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &DeletePolicyVersionRequest) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         params.put(&format!("{}{}", prefix, "PolicyArn"), &obj.policy_arn);
@@ -1929,10 +2016,11 @@ pub struct DeleteRolePermissionsBoundaryRequest {
 /// Serialize `DeleteRolePermissionsBoundaryRequest` contents to a `SignedRequest`.
 struct DeleteRolePermissionsBoundaryRequestSerializer;
 impl DeleteRolePermissionsBoundaryRequestSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &DeleteRolePermissionsBoundaryRequest) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         params.put(&format!("{}{}", prefix, "RoleName"), &obj.role_name);
@@ -1951,10 +2039,11 @@ pub struct DeleteRolePolicyRequest {
 /// Serialize `DeleteRolePolicyRequest` contents to a `SignedRequest`.
 struct DeleteRolePolicyRequestSerializer;
 impl DeleteRolePolicyRequestSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &DeleteRolePolicyRequest) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         params.put(&format!("{}{}", prefix, "PolicyName"), &obj.policy_name);
@@ -1972,10 +2061,11 @@ pub struct DeleteRoleRequest {
 /// Serialize `DeleteRoleRequest` contents to a `SignedRequest`.
 struct DeleteRoleRequestSerializer;
 impl DeleteRoleRequestSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &DeleteRoleRequest) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         params.put(&format!("{}{}", prefix, "RoleName"), &obj.role_name);
@@ -1992,10 +2082,11 @@ pub struct DeleteSAMLProviderRequest {
 /// Serialize `DeleteSAMLProviderRequest` contents to a `SignedRequest`.
 struct DeleteSAMLProviderRequestSerializer;
 impl DeleteSAMLProviderRequestSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &DeleteSAMLProviderRequest) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         params.put(
@@ -2017,10 +2108,11 @@ pub struct DeleteSSHPublicKeyRequest {
 /// Serialize `DeleteSSHPublicKeyRequest` contents to a `SignedRequest`.
 struct DeleteSSHPublicKeyRequestSerializer;
 impl DeleteSSHPublicKeyRequestSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &DeleteSSHPublicKeyRequest) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         params.put(
@@ -2041,10 +2133,11 @@ pub struct DeleteServerCertificateRequest {
 /// Serialize `DeleteServerCertificateRequest` contents to a `SignedRequest`.
 struct DeleteServerCertificateRequestSerializer;
 impl DeleteServerCertificateRequestSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &DeleteServerCertificateRequest) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         params.put(
@@ -2064,10 +2157,11 @@ pub struct DeleteServiceLinkedRoleRequest {
 /// Serialize `DeleteServiceLinkedRoleRequest` contents to a `SignedRequest`.
 struct DeleteServiceLinkedRoleRequestSerializer;
 impl DeleteServiceLinkedRoleRequestSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &DeleteServiceLinkedRoleRequest) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         params.put(&format!("{}{}", prefix, "RoleName"), &obj.role_name);
@@ -2084,11 +2178,12 @@ pub struct DeleteServiceLinkedRoleResponse {
 #[allow(dead_code)]
 struct DeleteServiceLinkedRoleResponseDeserializer;
 impl DeleteServiceLinkedRoleResponseDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<DeleteServiceLinkedRoleResponse, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, DeleteServiceLinkedRoleResponse, _>(
             tag_name,
             stack,
@@ -2117,10 +2212,11 @@ pub struct DeleteServiceSpecificCredentialRequest {
 /// Serialize `DeleteServiceSpecificCredentialRequest` contents to a `SignedRequest`.
 struct DeleteServiceSpecificCredentialRequestSerializer;
 impl DeleteServiceSpecificCredentialRequestSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &DeleteServiceSpecificCredentialRequest) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         params.put(
@@ -2145,10 +2241,11 @@ pub struct DeleteSigningCertificateRequest {
 /// Serialize `DeleteSigningCertificateRequest` contents to a `SignedRequest`.
 struct DeleteSigningCertificateRequestSerializer;
 impl DeleteSigningCertificateRequestSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &DeleteSigningCertificateRequest) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         params.put(
@@ -2171,10 +2268,11 @@ pub struct DeleteUserPermissionsBoundaryRequest {
 /// Serialize `DeleteUserPermissionsBoundaryRequest` contents to a `SignedRequest`.
 struct DeleteUserPermissionsBoundaryRequestSerializer;
 impl DeleteUserPermissionsBoundaryRequestSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &DeleteUserPermissionsBoundaryRequest) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         params.put(&format!("{}{}", prefix, "UserName"), &obj.user_name);
@@ -2193,10 +2291,11 @@ pub struct DeleteUserPolicyRequest {
 /// Serialize `DeleteUserPolicyRequest` contents to a `SignedRequest`.
 struct DeleteUserPolicyRequestSerializer;
 impl DeleteUserPolicyRequestSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &DeleteUserPolicyRequest) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         params.put(&format!("{}{}", prefix, "PolicyName"), &obj.policy_name);
@@ -2214,10 +2313,11 @@ pub struct DeleteUserRequest {
 /// Serialize `DeleteUserRequest` contents to a `SignedRequest`.
 struct DeleteUserRequestSerializer;
 impl DeleteUserRequestSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &DeleteUserRequest) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         params.put(&format!("{}{}", prefix, "UserName"), &obj.user_name);
@@ -2234,10 +2334,11 @@ pub struct DeleteVirtualMFADeviceRequest {
 /// Serialize `DeleteVirtualMFADeviceRequest` contents to a `SignedRequest`.
 struct DeleteVirtualMFADeviceRequestSerializer;
 impl DeleteVirtualMFADeviceRequestSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &DeleteVirtualMFADeviceRequest) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         params.put(&format!("{}{}", prefix, "SerialNumber"), &obj.serial_number);
@@ -2257,11 +2358,12 @@ pub struct DeletionTaskFailureReasonType {
 #[allow(dead_code)]
 struct DeletionTaskFailureReasonTypeDeserializer;
 impl DeletionTaskFailureReasonTypeDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<DeletionTaskFailureReasonType, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, DeletionTaskFailureReasonType, _>(
             tag_name,
             stack,
@@ -2285,16 +2387,18 @@ impl DeletionTaskFailureReasonTypeDeserializer {
 #[allow(dead_code)]
 struct DeletionTaskIdTypeDeserializer;
 impl DeletionTaskIdTypeDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 #[allow(dead_code)]
 struct DeletionTaskStatusTypeDeserializer;
 impl DeletionTaskStatusTypeDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
@@ -2310,10 +2414,11 @@ pub struct DetachGroupPolicyRequest {
 /// Serialize `DetachGroupPolicyRequest` contents to a `SignedRequest`.
 struct DetachGroupPolicyRequestSerializer;
 impl DetachGroupPolicyRequestSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &DetachGroupPolicyRequest) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         params.put(&format!("{}{}", prefix, "GroupName"), &obj.group_name);
@@ -2333,10 +2438,11 @@ pub struct DetachRolePolicyRequest {
 /// Serialize `DetachRolePolicyRequest` contents to a `SignedRequest`.
 struct DetachRolePolicyRequestSerializer;
 impl DetachRolePolicyRequestSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &DetachRolePolicyRequest) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         params.put(&format!("{}{}", prefix, "PolicyArn"), &obj.policy_arn);
@@ -2356,10 +2462,11 @@ pub struct DetachUserPolicyRequest {
 /// Serialize `DetachUserPolicyRequest` contents to a `SignedRequest`.
 struct DetachUserPolicyRequestSerializer;
 impl DetachUserPolicyRequestSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &DetachUserPolicyRequest) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         params.put(&format!("{}{}", prefix, "PolicyArn"), &obj.policy_arn);
@@ -2383,10 +2490,11 @@ pub struct EnableMFADeviceRequest {
 /// Serialize `EnableMFADeviceRequest` contents to a `SignedRequest`.
 struct EnableMFADeviceRequestSerializer;
 impl EnableMFADeviceRequestSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &EnableMFADeviceRequest) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         params.put(
@@ -2415,11 +2523,12 @@ pub struct EntityDetails {
 #[allow(dead_code)]
 struct EntityDetailsDeserializer;
 impl EntityDetailsDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<EntityDetails, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, EntityDetails, _>(tag_name, stack, |name, stack, obj| {
             match name {
                 "EntityInfo" => {
@@ -2440,11 +2549,13 @@ impl EntityDetailsDeserializer {
 #[allow(dead_code)]
 struct EntityDetailsListTypeDeserializer;
 impl EntityDetailsListTypeDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<EntityDetails>, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
+
         deserialize_elements::<_, Vec<_>, _>(tag_name, stack, |name, stack, obj| {
             if name == "member" {
                 obj.push(EntityDetailsDeserializer::deserialize("member", stack)?);
@@ -2473,11 +2584,12 @@ pub struct EntityInfo {
 #[allow(dead_code)]
 struct EntityInfoDeserializer;
 impl EntityInfoDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<EntityInfo, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, EntityInfo, _>(tag_name, stack, |name, stack, obj| {
             match name {
                 "Arn" => {
@@ -2505,6 +2617,7 @@ impl EntityInfoDeserializer {
 /// Serialize `EntityListType` contents to a `SignedRequest`.
 struct EntityListTypeSerializer;
 impl EntityListTypeSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &Vec<String>) {
         for (index, obj) in obj.iter().enumerate() {
             let key = format!("{}.member.{}", name, index + 1);
@@ -2516,8 +2629,9 @@ impl EntityListTypeSerializer {
 #[allow(dead_code)]
 struct EntityNameTypeDeserializer;
 impl EntityNameTypeDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
@@ -2534,11 +2648,12 @@ pub struct ErrorDetails {
 #[allow(dead_code)]
 struct ErrorDetailsDeserializer;
 impl ErrorDetailsDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<ErrorDetails, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, ErrorDetails, _>(tag_name, stack, |name, stack, obj| {
             match name {
                 "Code" => {
@@ -2556,11 +2671,12 @@ impl ErrorDetailsDeserializer {
 #[allow(dead_code)]
 struct EvalDecisionDetailsTypeDeserializer;
 impl EvalDecisionDetailsTypeDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<::std::collections::HashMap<String, String>, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::start_element(tag_name, stack)?;
 
         let mut obj = ::std::collections::HashMap::new();
@@ -2580,8 +2696,9 @@ impl EvalDecisionDetailsTypeDeserializer {
 #[allow(dead_code)]
 struct EvalDecisionSourceTypeDeserializer;
 impl EvalDecisionSourceTypeDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
@@ -2612,11 +2729,12 @@ pub struct EvaluationResult {
 #[allow(dead_code)]
 struct EvaluationResultDeserializer;
 impl EvaluationResultDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<EvaluationResult, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, EvaluationResult, _>(tag_name, stack, |name, stack, obj| {
             match name {
                 "EvalActionName" => {
@@ -2686,11 +2804,13 @@ impl EvaluationResultDeserializer {
 #[allow(dead_code)]
 struct EvaluationResultsListTypeDeserializer;
 impl EvaluationResultsListTypeDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<EvaluationResult>, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
+
         deserialize_elements::<_, Vec<_>, _>(tag_name, stack, |name, stack, obj| {
             if name == "member" {
                 obj.push(EvaluationResultDeserializer::deserialize("member", stack)?);
@@ -2704,8 +2824,9 @@ impl EvaluationResultsListTypeDeserializer {
 #[allow(dead_code)]
 struct ExistingUserNameTypeDeserializer;
 impl ExistingUserNameTypeDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
@@ -2722,11 +2843,12 @@ pub struct GenerateCredentialReportResponse {
 #[allow(dead_code)]
 struct GenerateCredentialReportResponseDeserializer;
 impl GenerateCredentialReportResponseDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<GenerateCredentialReportResponse, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, GenerateCredentialReportResponse, _>(
             tag_name,
             stack,
@@ -2761,10 +2883,11 @@ pub struct GenerateOrganizationsAccessReportRequest {
 /// Serialize `GenerateOrganizationsAccessReportRequest` contents to a `SignedRequest`.
 struct GenerateOrganizationsAccessReportRequestSerializer;
 impl GenerateOrganizationsAccessReportRequestSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &GenerateOrganizationsAccessReportRequest) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         params.put(&format!("{}{}", prefix, "EntityPath"), &obj.entity_path);
@@ -2787,11 +2910,12 @@ pub struct GenerateOrganizationsAccessReportResponse {
 #[allow(dead_code)]
 struct GenerateOrganizationsAccessReportResponseDeserializer;
 impl GenerateOrganizationsAccessReportResponseDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<GenerateOrganizationsAccessReportResponse, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, GenerateOrganizationsAccessReportResponse, _>(
             tag_name,
             stack,
@@ -2819,10 +2943,11 @@ pub struct GenerateServiceLastAccessedDetailsRequest {
 /// Serialize `GenerateServiceLastAccessedDetailsRequest` contents to a `SignedRequest`.
 struct GenerateServiceLastAccessedDetailsRequestSerializer;
 impl GenerateServiceLastAccessedDetailsRequestSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &GenerateServiceLastAccessedDetailsRequest) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         params.put(&format!("{}{}", prefix, "Arn"), &obj.arn);
@@ -2842,11 +2967,12 @@ pub struct GenerateServiceLastAccessedDetailsResponse {
 #[allow(dead_code)]
 struct GenerateServiceLastAccessedDetailsResponseDeserializer;
 impl GenerateServiceLastAccessedDetailsResponseDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<GenerateServiceLastAccessedDetailsResponse, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, GenerateServiceLastAccessedDetailsResponse, _>(
             tag_name,
             stack,
@@ -2872,10 +2998,11 @@ pub struct GetAccessKeyLastUsedRequest {
 /// Serialize `GetAccessKeyLastUsedRequest` contents to a `SignedRequest`.
 struct GetAccessKeyLastUsedRequestSerializer;
 impl GetAccessKeyLastUsedRequestSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &GetAccessKeyLastUsedRequest) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         params.put(&format!("{}{}", prefix, "AccessKeyId"), &obj.access_key_id);
@@ -2895,11 +3022,12 @@ pub struct GetAccessKeyLastUsedResponse {
 #[allow(dead_code)]
 struct GetAccessKeyLastUsedResponseDeserializer;
 impl GetAccessKeyLastUsedResponseDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<GetAccessKeyLastUsedResponse, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, GetAccessKeyLastUsedResponse, _>(
             tag_name,
             stack,
@@ -2936,10 +3064,11 @@ pub struct GetAccountAuthorizationDetailsRequest {
 /// Serialize `GetAccountAuthorizationDetailsRequest` contents to a `SignedRequest`.
 struct GetAccountAuthorizationDetailsRequestSerializer;
 impl GetAccountAuthorizationDetailsRequestSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &GetAccountAuthorizationDetailsRequest) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         if let Some(ref field_value) = obj.filter {
@@ -2979,11 +3108,12 @@ pub struct GetAccountAuthorizationDetailsResponse {
 #[allow(dead_code)]
 struct GetAccountAuthorizationDetailsResponseDeserializer;
 impl GetAccountAuthorizationDetailsResponseDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<GetAccountAuthorizationDetailsResponse, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, GetAccountAuthorizationDetailsResponse, _>(
             tag_name,
             stack,
@@ -3038,11 +3168,12 @@ pub struct GetAccountPasswordPolicyResponse {
 #[allow(dead_code)]
 struct GetAccountPasswordPolicyResponseDeserializer;
 impl GetAccountPasswordPolicyResponseDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<GetAccountPasswordPolicyResponse, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, GetAccountPasswordPolicyResponse, _>(
             tag_name,
             stack,
@@ -3070,11 +3201,12 @@ pub struct GetAccountSummaryResponse {
 #[allow(dead_code)]
 struct GetAccountSummaryResponseDeserializer;
 impl GetAccountSummaryResponseDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<GetAccountSummaryResponse, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, GetAccountSummaryResponse, _>(
             tag_name,
             stack,
@@ -3103,10 +3235,11 @@ pub struct GetContextKeysForCustomPolicyRequest {
 /// Serialize `GetContextKeysForCustomPolicyRequest` contents to a `SignedRequest`.
 struct GetContextKeysForCustomPolicyRequestSerializer;
 impl GetContextKeysForCustomPolicyRequestSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &GetContextKeysForCustomPolicyRequest) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         SimulationPolicyListTypeSerializer::serialize(
@@ -3128,11 +3261,12 @@ pub struct GetContextKeysForPolicyResponse {
 #[allow(dead_code)]
 struct GetContextKeysForPolicyResponseDeserializer;
 impl GetContextKeysForPolicyResponseDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<GetContextKeysForPolicyResponse, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, GetContextKeysForPolicyResponse, _>(
             tag_name,
             stack,
@@ -3165,10 +3299,11 @@ pub struct GetContextKeysForPrincipalPolicyRequest {
 /// Serialize `GetContextKeysForPrincipalPolicyRequest` contents to a `SignedRequest`.
 struct GetContextKeysForPrincipalPolicyRequestSerializer;
 impl GetContextKeysForPrincipalPolicyRequestSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &GetContextKeysForPrincipalPolicyRequest) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         if let Some(ref field_value) = obj.policy_input_list {
@@ -3200,11 +3335,12 @@ pub struct GetCredentialReportResponse {
 #[allow(dead_code)]
 struct GetCredentialReportResponseDeserializer;
 impl GetCredentialReportResponseDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<GetCredentialReportResponse, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, GetCredentialReportResponse, _>(
             tag_name,
             stack,
@@ -3244,10 +3380,11 @@ pub struct GetGroupPolicyRequest {
 /// Serialize `GetGroupPolicyRequest` contents to a `SignedRequest`.
 struct GetGroupPolicyRequestSerializer;
 impl GetGroupPolicyRequestSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &GetGroupPolicyRequest) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         params.put(&format!("{}{}", prefix, "GroupName"), &obj.group_name);
@@ -3270,11 +3407,12 @@ pub struct GetGroupPolicyResponse {
 #[allow(dead_code)]
 struct GetGroupPolicyResponseDeserializer;
 impl GetGroupPolicyResponseDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<GetGroupPolicyResponse, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, GetGroupPolicyResponse, _>(tag_name, stack, |name, stack, obj| {
             match name {
                 "GroupName" => {
@@ -3307,10 +3445,11 @@ pub struct GetGroupRequest {
 /// Serialize `GetGroupRequest` contents to a `SignedRequest`.
 struct GetGroupRequestSerializer;
 impl GetGroupRequestSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &GetGroupRequest) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         params.put(&format!("{}{}", prefix, "GroupName"), &obj.group_name);
@@ -3340,11 +3479,12 @@ pub struct GetGroupResponse {
 #[allow(dead_code)]
 struct GetGroupResponseDeserializer;
 impl GetGroupResponseDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<GetGroupResponse, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, GetGroupResponse, _>(tag_name, stack, |name, stack, obj| {
             match name {
                 "Group" => {
@@ -3379,10 +3519,11 @@ pub struct GetInstanceProfileRequest {
 /// Serialize `GetInstanceProfileRequest` contents to a `SignedRequest`.
 struct GetInstanceProfileRequestSerializer;
 impl GetInstanceProfileRequestSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &GetInstanceProfileRequest) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         params.put(
@@ -3403,11 +3544,12 @@ pub struct GetInstanceProfileResponse {
 #[allow(dead_code)]
 struct GetInstanceProfileResponseDeserializer;
 impl GetInstanceProfileResponseDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<GetInstanceProfileResponse, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, GetInstanceProfileResponse, _>(
             tag_name,
             stack,
@@ -3434,10 +3576,11 @@ pub struct GetLoginProfileRequest {
 /// Serialize `GetLoginProfileRequest` contents to a `SignedRequest`.
 struct GetLoginProfileRequestSerializer;
 impl GetLoginProfileRequestSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &GetLoginProfileRequest) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         params.put(&format!("{}{}", prefix, "UserName"), &obj.user_name);
@@ -3455,11 +3598,12 @@ pub struct GetLoginProfileResponse {
 #[allow(dead_code)]
 struct GetLoginProfileResponseDeserializer;
 impl GetLoginProfileResponseDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<GetLoginProfileResponse, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, GetLoginProfileResponse, _>(
             tag_name,
             stack,
@@ -3486,10 +3630,11 @@ pub struct GetOpenIDConnectProviderRequest {
 /// Serialize `GetOpenIDConnectProviderRequest` contents to a `SignedRequest`.
 struct GetOpenIDConnectProviderRequestSerializer;
 impl GetOpenIDConnectProviderRequestSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &GetOpenIDConnectProviderRequest) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         params.put(
@@ -3516,11 +3661,12 @@ pub struct GetOpenIDConnectProviderResponse {
 #[allow(dead_code)]
 struct GetOpenIDConnectProviderResponseDeserializer;
 impl GetOpenIDConnectProviderResponseDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<GetOpenIDConnectProviderResponse, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, GetOpenIDConnectProviderResponse, _>(
             tag_name,
             stack,
@@ -3568,10 +3714,11 @@ pub struct GetOrganizationsAccessReportRequest {
 /// Serialize `GetOrganizationsAccessReportRequest` contents to a `SignedRequest`.
 struct GetOrganizationsAccessReportRequestSerializer;
 impl GetOrganizationsAccessReportRequestSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &GetOrganizationsAccessReportRequest) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         params.put(&format!("{}{}", prefix, "JobId"), &obj.job_id);
@@ -3612,11 +3759,12 @@ pub struct GetOrganizationsAccessReportResponse {
 #[allow(dead_code)]
 struct GetOrganizationsAccessReportResponseDeserializer;
 impl GetOrganizationsAccessReportResponseDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<GetOrganizationsAccessReportResponse, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, GetOrganizationsAccessReportResponse, _>(
             tag_name,
             stack,
@@ -3685,10 +3833,11 @@ pub struct GetPolicyRequest {
 /// Serialize `GetPolicyRequest` contents to a `SignedRequest`.
 struct GetPolicyRequestSerializer;
 impl GetPolicyRequestSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &GetPolicyRequest) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         params.put(&format!("{}{}", prefix, "PolicyArn"), &obj.policy_arn);
@@ -3706,11 +3855,12 @@ pub struct GetPolicyResponse {
 #[allow(dead_code)]
 struct GetPolicyResponseDeserializer;
 impl GetPolicyResponseDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<GetPolicyResponse, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, GetPolicyResponse, _>(tag_name, stack, |name, stack, obj| {
             match name {
                 "Policy" => {
@@ -3734,10 +3884,11 @@ pub struct GetPolicyVersionRequest {
 /// Serialize `GetPolicyVersionRequest` contents to a `SignedRequest`.
 struct GetPolicyVersionRequestSerializer;
 impl GetPolicyVersionRequestSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &GetPolicyVersionRequest) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         params.put(&format!("{}{}", prefix, "PolicyArn"), &obj.policy_arn);
@@ -3756,11 +3907,12 @@ pub struct GetPolicyVersionResponse {
 #[allow(dead_code)]
 struct GetPolicyVersionResponseDeserializer;
 impl GetPolicyVersionResponseDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<GetPolicyVersionResponse, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, GetPolicyVersionResponse, _>(
             tag_name,
             stack,
@@ -3791,10 +3943,11 @@ pub struct GetRolePolicyRequest {
 /// Serialize `GetRolePolicyRequest` contents to a `SignedRequest`.
 struct GetRolePolicyRequestSerializer;
 impl GetRolePolicyRequestSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &GetRolePolicyRequest) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         params.put(&format!("{}{}", prefix, "PolicyName"), &obj.policy_name);
@@ -3817,11 +3970,12 @@ pub struct GetRolePolicyResponse {
 #[allow(dead_code)]
 struct GetRolePolicyResponseDeserializer;
 impl GetRolePolicyResponseDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<GetRolePolicyResponse, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, GetRolePolicyResponse, _>(tag_name, stack, |name, stack, obj| {
             match name {
                 "PolicyDocument" => {
@@ -3850,10 +4004,11 @@ pub struct GetRoleRequest {
 /// Serialize `GetRoleRequest` contents to a `SignedRequest`.
 struct GetRoleRequestSerializer;
 impl GetRoleRequestSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &GetRoleRequest) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         params.put(&format!("{}{}", prefix, "RoleName"), &obj.role_name);
@@ -3871,11 +4026,12 @@ pub struct GetRoleResponse {
 #[allow(dead_code)]
 struct GetRoleResponseDeserializer;
 impl GetRoleResponseDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<GetRoleResponse, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, GetRoleResponse, _>(tag_name, stack, |name, stack, obj| {
             match name {
                 "Role" => {
@@ -3897,10 +4053,11 @@ pub struct GetSAMLProviderRequest {
 /// Serialize `GetSAMLProviderRequest` contents to a `SignedRequest`.
 struct GetSAMLProviderRequestSerializer;
 impl GetSAMLProviderRequestSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &GetSAMLProviderRequest) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         params.put(
@@ -3925,11 +4082,12 @@ pub struct GetSAMLProviderResponse {
 #[allow(dead_code)]
 struct GetSAMLProviderResponseDeserializer;
 impl GetSAMLProviderResponseDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<GetSAMLProviderResponse, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, GetSAMLProviderResponse, _>(
             tag_name,
             stack,
@@ -3971,10 +4129,11 @@ pub struct GetSSHPublicKeyRequest {
 /// Serialize `GetSSHPublicKeyRequest` contents to a `SignedRequest`.
 struct GetSSHPublicKeyRequestSerializer;
 impl GetSSHPublicKeyRequestSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &GetSSHPublicKeyRequest) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         params.put(&format!("{}{}", prefix, "Encoding"), &obj.encoding);
@@ -3997,11 +4156,12 @@ pub struct GetSSHPublicKeyResponse {
 #[allow(dead_code)]
 struct GetSSHPublicKeyResponseDeserializer;
 impl GetSSHPublicKeyResponseDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<GetSSHPublicKeyResponse, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, GetSSHPublicKeyResponse, _>(
             tag_name,
             stack,
@@ -4030,10 +4190,11 @@ pub struct GetServerCertificateRequest {
 /// Serialize `GetServerCertificateRequest` contents to a `SignedRequest`.
 struct GetServerCertificateRequestSerializer;
 impl GetServerCertificateRequestSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &GetServerCertificateRequest) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         params.put(
@@ -4054,11 +4215,12 @@ pub struct GetServerCertificateResponse {
 #[allow(dead_code)]
 struct GetServerCertificateResponseDeserializer;
 impl GetServerCertificateResponseDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<GetServerCertificateResponse, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, GetServerCertificateResponse, _>(
             tag_name,
             stack,
@@ -4089,10 +4251,11 @@ pub struct GetServiceLastAccessedDetailsRequest {
 /// Serialize `GetServiceLastAccessedDetailsRequest` contents to a `SignedRequest`.
 struct GetServiceLastAccessedDetailsRequestSerializer;
 impl GetServiceLastAccessedDetailsRequestSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &GetServiceLastAccessedDetailsRequest) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         params.put(&format!("{}{}", prefix, "JobId"), &obj.job_id);
@@ -4129,11 +4292,12 @@ pub struct GetServiceLastAccessedDetailsResponse {
 #[allow(dead_code)]
 struct GetServiceLastAccessedDetailsResponseDeserializer;
 impl GetServiceLastAccessedDetailsResponseDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<GetServiceLastAccessedDetailsResponse, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, GetServiceLastAccessedDetailsResponse, _>(
             tag_name,
             stack,
@@ -4200,14 +4364,15 @@ pub struct GetServiceLastAccessedDetailsWithEntitiesRequest {
 /// Serialize `GetServiceLastAccessedDetailsWithEntitiesRequest` contents to a `SignedRequest`.
 struct GetServiceLastAccessedDetailsWithEntitiesRequestSerializer;
 impl GetServiceLastAccessedDetailsWithEntitiesRequestSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(
         params: &mut Params,
         name: &str,
         obj: &GetServiceLastAccessedDetailsWithEntitiesRequest,
     ) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         params.put(&format!("{}{}", prefix, "JobId"), &obj.job_id);
@@ -4246,11 +4411,12 @@ pub struct GetServiceLastAccessedDetailsWithEntitiesResponse {
 #[allow(dead_code)]
 struct GetServiceLastAccessedDetailsWithEntitiesResponseDeserializer;
 impl GetServiceLastAccessedDetailsWithEntitiesResponseDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<GetServiceLastAccessedDetailsWithEntitiesResponse, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, GetServiceLastAccessedDetailsWithEntitiesResponse, _>(
             tag_name,
             stack,
@@ -4305,10 +4471,11 @@ pub struct GetServiceLinkedRoleDeletionStatusRequest {
 /// Serialize `GetServiceLinkedRoleDeletionStatusRequest` contents to a `SignedRequest`.
 struct GetServiceLinkedRoleDeletionStatusRequestSerializer;
 impl GetServiceLinkedRoleDeletionStatusRequestSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &GetServiceLinkedRoleDeletionStatusRequest) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         params.put(
@@ -4330,11 +4497,12 @@ pub struct GetServiceLinkedRoleDeletionStatusResponse {
 #[allow(dead_code)]
 struct GetServiceLinkedRoleDeletionStatusResponseDeserializer;
 impl GetServiceLinkedRoleDeletionStatusResponseDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<GetServiceLinkedRoleDeletionStatusResponse, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, GetServiceLinkedRoleDeletionStatusResponse, _>(
             tag_name,
             stack,
@@ -4368,10 +4536,11 @@ pub struct GetUserPolicyRequest {
 /// Serialize `GetUserPolicyRequest` contents to a `SignedRequest`.
 struct GetUserPolicyRequestSerializer;
 impl GetUserPolicyRequestSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &GetUserPolicyRequest) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         params.put(&format!("{}{}", prefix, "PolicyName"), &obj.policy_name);
@@ -4394,11 +4563,12 @@ pub struct GetUserPolicyResponse {
 #[allow(dead_code)]
 struct GetUserPolicyResponseDeserializer;
 impl GetUserPolicyResponseDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<GetUserPolicyResponse, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, GetUserPolicyResponse, _>(tag_name, stack, |name, stack, obj| {
             match name {
                 "PolicyDocument" => {
@@ -4428,10 +4598,11 @@ pub struct GetUserRequest {
 /// Serialize `GetUserRequest` contents to a `SignedRequest`.
 struct GetUserRequestSerializer;
 impl GetUserRequestSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &GetUserRequest) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         if let Some(ref field_value) = obj.user_name {
@@ -4451,11 +4622,12 @@ pub struct GetUserResponse {
 #[allow(dead_code)]
 struct GetUserResponseDeserializer;
 impl GetUserResponseDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<GetUserResponse, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, GetUserResponse, _>(tag_name, stack, |name, stack, obj| {
             match name {
                 "User" => {
@@ -4486,8 +4658,9 @@ pub struct Group {
 #[allow(dead_code)]
 struct GroupDeserializer;
 impl GroupDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<Group, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, Group, _>(tag_name, stack, |name, stack, obj| {
             match name {
                 "Arn" => {
@@ -4533,11 +4706,12 @@ pub struct GroupDetail {
 #[allow(dead_code)]
 struct GroupDetailDeserializer;
 impl GroupDetailDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<GroupDetail, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, GroupDetail, _>(tag_name, stack, |name, stack, obj| {
             match name {
                 "Arn" => {
@@ -4578,11 +4752,13 @@ impl GroupDetailDeserializer {
 #[allow(dead_code)]
 struct GroupDetailListTypeDeserializer;
 impl GroupDetailListTypeDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<GroupDetail>, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
+
         deserialize_elements::<_, Vec<_>, _>(tag_name, stack, |name, stack, obj| {
             if name == "member" {
                 obj.push(GroupDetailDeserializer::deserialize("member", stack)?);
@@ -4596,11 +4772,13 @@ impl GroupDetailListTypeDeserializer {
 #[allow(dead_code)]
 struct GroupListTypeDeserializer;
 impl GroupListTypeDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<Group>, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
+
         deserialize_elements::<_, Vec<_>, _>(tag_name, stack, |name, stack, obj| {
             if name == "member" {
                 obj.push(GroupDeserializer::deserialize("member", stack)?);
@@ -4614,11 +4792,13 @@ impl GroupListTypeDeserializer {
 #[allow(dead_code)]
 struct GroupNameListTypeDeserializer;
 impl GroupNameListTypeDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<String>, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
+
         deserialize_elements::<_, Vec<_>, _>(tag_name, stack, |name, stack, obj| {
             if name == "member" {
                 obj.push(GroupNameTypeDeserializer::deserialize("member", stack)?);
@@ -4632,16 +4812,18 @@ impl GroupNameListTypeDeserializer {
 #[allow(dead_code)]
 struct GroupNameTypeDeserializer;
 impl GroupNameTypeDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 #[allow(dead_code)]
 struct IdTypeDeserializer;
 impl IdTypeDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
@@ -4666,11 +4848,12 @@ pub struct InstanceProfile {
 #[allow(dead_code)]
 struct InstanceProfileDeserializer;
 impl InstanceProfileDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<InstanceProfile, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, InstanceProfile, _>(tag_name, stack, |name, stack, obj| {
             match name {
                 "Arn" => {
@@ -4705,11 +4888,13 @@ impl InstanceProfileDeserializer {
 #[allow(dead_code)]
 struct InstanceProfileListTypeDeserializer;
 impl InstanceProfileListTypeDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<InstanceProfile>, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
+
         deserialize_elements::<_, Vec<_>, _>(tag_name, stack, |name, stack, obj| {
             if name == "member" {
                 obj.push(InstanceProfileDeserializer::deserialize("member", stack)?);
@@ -4723,40 +4908,45 @@ impl InstanceProfileListTypeDeserializer {
 #[allow(dead_code)]
 struct InstanceProfileNameTypeDeserializer;
 impl InstanceProfileNameTypeDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 #[allow(dead_code)]
 struct IntegerTypeDeserializer;
 impl IntegerTypeDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<i64, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::deserialize_primitive(tag_name, stack, |s| Ok(i64::from_str(&s).unwrap()))
     }
 }
 #[allow(dead_code)]
 struct JobIDTypeDeserializer;
 impl JobIDTypeDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 #[allow(dead_code)]
 struct JobStatusTypeDeserializer;
 impl JobStatusTypeDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 #[allow(dead_code)]
 struct LineNumberDeserializer;
 impl LineNumberDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<i64, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::deserialize_primitive(tag_name, stack, |s| Ok(i64::from_str(&s).unwrap()))
     }
 }
@@ -4774,10 +4964,11 @@ pub struct ListAccessKeysRequest {
 /// Serialize `ListAccessKeysRequest` contents to a `SignedRequest`.
 struct ListAccessKeysRequestSerializer;
 impl ListAccessKeysRequestSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &ListAccessKeysRequest) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         if let Some(ref field_value) = obj.marker {
@@ -4807,11 +4998,12 @@ pub struct ListAccessKeysResponse {
 #[allow(dead_code)]
 struct ListAccessKeysResponseDeserializer;
 impl ListAccessKeysResponseDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<ListAccessKeysResponse, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, ListAccessKeysResponse, _>(tag_name, stack, |name, stack, obj| {
             match name {
                 "AccessKeyMetadata" => {
@@ -4849,10 +5041,11 @@ pub struct ListAccountAliasesRequest {
 /// Serialize `ListAccountAliasesRequest` contents to a `SignedRequest`.
 struct ListAccountAliasesRequestSerializer;
 impl ListAccountAliasesRequestSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &ListAccountAliasesRequest) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         if let Some(ref field_value) = obj.marker {
@@ -4879,11 +5072,12 @@ pub struct ListAccountAliasesResponse {
 #[allow(dead_code)]
 struct ListAccountAliasesResponseDeserializer;
 impl ListAccountAliasesResponseDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<ListAccountAliasesResponse, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, ListAccountAliasesResponse, _>(
             tag_name,
             stack,
@@ -4928,10 +5122,11 @@ pub struct ListAttachedGroupPoliciesRequest {
 /// Serialize `ListAttachedGroupPoliciesRequest` contents to a `SignedRequest`.
 struct ListAttachedGroupPoliciesRequestSerializer;
 impl ListAttachedGroupPoliciesRequestSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &ListAttachedGroupPoliciesRequest) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         params.put(&format!("{}{}", prefix, "GroupName"), &obj.group_name);
@@ -4962,11 +5157,12 @@ pub struct ListAttachedGroupPoliciesResponse {
 #[allow(dead_code)]
 struct ListAttachedGroupPoliciesResponseDeserializer;
 impl ListAttachedGroupPoliciesResponseDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<ListAttachedGroupPoliciesResponse, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, ListAttachedGroupPoliciesResponse, _>(
             tag_name,
             stack,
@@ -5012,10 +5208,11 @@ pub struct ListAttachedRolePoliciesRequest {
 /// Serialize `ListAttachedRolePoliciesRequest` contents to a `SignedRequest`.
 struct ListAttachedRolePoliciesRequestSerializer;
 impl ListAttachedRolePoliciesRequestSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &ListAttachedRolePoliciesRequest) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         if let Some(ref field_value) = obj.marker {
@@ -5046,11 +5243,12 @@ pub struct ListAttachedRolePoliciesResponse {
 #[allow(dead_code)]
 struct ListAttachedRolePoliciesResponseDeserializer;
 impl ListAttachedRolePoliciesResponseDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<ListAttachedRolePoliciesResponse, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, ListAttachedRolePoliciesResponse, _>(
             tag_name,
             stack,
@@ -5096,10 +5294,11 @@ pub struct ListAttachedUserPoliciesRequest {
 /// Serialize `ListAttachedUserPoliciesRequest` contents to a `SignedRequest`.
 struct ListAttachedUserPoliciesRequestSerializer;
 impl ListAttachedUserPoliciesRequestSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &ListAttachedUserPoliciesRequest) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         if let Some(ref field_value) = obj.marker {
@@ -5130,11 +5329,12 @@ pub struct ListAttachedUserPoliciesResponse {
 #[allow(dead_code)]
 struct ListAttachedUserPoliciesResponseDeserializer;
 impl ListAttachedUserPoliciesResponseDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<ListAttachedUserPoliciesResponse, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, ListAttachedUserPoliciesResponse, _>(
             tag_name,
             stack,
@@ -5184,10 +5384,11 @@ pub struct ListEntitiesForPolicyRequest {
 /// Serialize `ListEntitiesForPolicyRequest` contents to a `SignedRequest`.
 struct ListEntitiesForPolicyRequestSerializer;
 impl ListEntitiesForPolicyRequestSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &ListEntitiesForPolicyRequest) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         if let Some(ref field_value) = obj.entity_filter {
@@ -5228,11 +5429,12 @@ pub struct ListEntitiesForPolicyResponse {
 #[allow(dead_code)]
 struct ListEntitiesForPolicyResponseDeserializer;
 impl ListEntitiesForPolicyResponseDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<ListEntitiesForPolicyResponse, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, ListEntitiesForPolicyResponse, _>(
             tag_name,
             stack,
@@ -5283,10 +5485,11 @@ pub struct ListGroupPoliciesRequest {
 /// Serialize `ListGroupPoliciesRequest` contents to a `SignedRequest`.
 struct ListGroupPoliciesRequestSerializer;
 impl ListGroupPoliciesRequestSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &ListGroupPoliciesRequest) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         params.put(&format!("{}{}", prefix, "GroupName"), &obj.group_name);
@@ -5314,11 +5517,12 @@ pub struct ListGroupPoliciesResponse {
 #[allow(dead_code)]
 struct ListGroupPoliciesResponseDeserializer;
 impl ListGroupPoliciesResponseDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<ListGroupPoliciesResponse, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, ListGroupPoliciesResponse, _>(
             tag_name,
             stack,
@@ -5361,10 +5565,11 @@ pub struct ListGroupsForUserRequest {
 /// Serialize `ListGroupsForUserRequest` contents to a `SignedRequest`.
 struct ListGroupsForUserRequestSerializer;
 impl ListGroupsForUserRequestSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &ListGroupsForUserRequest) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         if let Some(ref field_value) = obj.marker {
@@ -5392,11 +5597,12 @@ pub struct ListGroupsForUserResponse {
 #[allow(dead_code)]
 struct ListGroupsForUserResponseDeserializer;
 impl ListGroupsForUserResponseDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<ListGroupsForUserResponse, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, ListGroupsForUserResponse, _>(
             tag_name,
             stack,
@@ -5436,10 +5642,11 @@ pub struct ListGroupsRequest {
 /// Serialize `ListGroupsRequest` contents to a `SignedRequest`.
 struct ListGroupsRequestSerializer;
 impl ListGroupsRequestSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &ListGroupsRequest) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         if let Some(ref field_value) = obj.marker {
@@ -5469,11 +5676,12 @@ pub struct ListGroupsResponse {
 #[allow(dead_code)]
 struct ListGroupsResponseDeserializer;
 impl ListGroupsResponseDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<ListGroupsResponse, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, ListGroupsResponse, _>(tag_name, stack, |name, stack, obj| {
             match name {
                 "Groups" => {
@@ -5509,10 +5717,11 @@ pub struct ListInstanceProfilesForRoleRequest {
 /// Serialize `ListInstanceProfilesForRoleRequest` contents to a `SignedRequest`.
 struct ListInstanceProfilesForRoleRequestSerializer;
 impl ListInstanceProfilesForRoleRequestSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &ListInstanceProfilesForRoleRequest) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         if let Some(ref field_value) = obj.marker {
@@ -5540,11 +5749,12 @@ pub struct ListInstanceProfilesForRoleResponse {
 #[allow(dead_code)]
 struct ListInstanceProfilesForRoleResponseDeserializer;
 impl ListInstanceProfilesForRoleResponseDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<ListInstanceProfilesForRoleResponse, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, ListInstanceProfilesForRoleResponse, _>(
             tag_name,
             stack,
@@ -5588,10 +5798,11 @@ pub struct ListInstanceProfilesRequest {
 /// Serialize `ListInstanceProfilesRequest` contents to a `SignedRequest`.
 struct ListInstanceProfilesRequestSerializer;
 impl ListInstanceProfilesRequestSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &ListInstanceProfilesRequest) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         if let Some(ref field_value) = obj.marker {
@@ -5621,11 +5832,12 @@ pub struct ListInstanceProfilesResponse {
 #[allow(dead_code)]
 struct ListInstanceProfilesResponseDeserializer;
 impl ListInstanceProfilesResponseDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<ListInstanceProfilesResponse, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, ListInstanceProfilesResponse, _>(
             tag_name,
             stack,
@@ -5669,10 +5881,11 @@ pub struct ListMFADevicesRequest {
 /// Serialize `ListMFADevicesRequest` contents to a `SignedRequest`.
 struct ListMFADevicesRequestSerializer;
 impl ListMFADevicesRequestSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &ListMFADevicesRequest) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         if let Some(ref field_value) = obj.marker {
@@ -5702,11 +5915,12 @@ pub struct ListMFADevicesResponse {
 #[allow(dead_code)]
 struct ListMFADevicesResponseDeserializer;
 impl ListMFADevicesResponseDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<ListMFADevicesResponse, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, ListMFADevicesResponse, _>(tag_name, stack, |name, stack, obj| {
             match name {
                 "IsTruncated" => {
@@ -5740,8 +5954,8 @@ struct ListOpenIDConnectProvidersRequestSerializer;
 impl ListOpenIDConnectProvidersRequestSerializer {
     fn serialize(_params: &mut Params, name: &str, _obj: &ListOpenIDConnectProvidersRequest) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
     }
 }
@@ -5757,11 +5971,12 @@ pub struct ListOpenIDConnectProvidersResponse {
 #[allow(dead_code)]
 struct ListOpenIDConnectProvidersResponseDeserializer;
 impl ListOpenIDConnectProvidersResponseDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<ListOpenIDConnectProvidersResponse, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, ListOpenIDConnectProvidersResponse, _>(
             tag_name,
             stack,
@@ -5795,11 +6010,12 @@ pub struct ListPoliciesGrantingServiceAccessEntry {
 #[allow(dead_code)]
 struct ListPoliciesGrantingServiceAccessEntryDeserializer;
 impl ListPoliciesGrantingServiceAccessEntryDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<ListPoliciesGrantingServiceAccessEntry, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, ListPoliciesGrantingServiceAccessEntry, _>(
             tag_name,
             stack,
@@ -5840,10 +6056,11 @@ pub struct ListPoliciesGrantingServiceAccessRequest {
 /// Serialize `ListPoliciesGrantingServiceAccessRequest` contents to a `SignedRequest`.
 struct ListPoliciesGrantingServiceAccessRequestSerializer;
 impl ListPoliciesGrantingServiceAccessRequestSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &ListPoliciesGrantingServiceAccessRequest) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         params.put(&format!("{}{}", prefix, "Arn"), &obj.arn);
@@ -5872,11 +6089,12 @@ pub struct ListPoliciesGrantingServiceAccessResponse {
 #[allow(dead_code)]
 struct ListPoliciesGrantingServiceAccessResponseDeserializer;
 impl ListPoliciesGrantingServiceAccessResponseDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<ListPoliciesGrantingServiceAccessResponse, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, ListPoliciesGrantingServiceAccessResponse, _>(
             tag_name,
             stack,
@@ -5921,10 +6139,11 @@ pub struct ListPoliciesRequest {
 /// Serialize `ListPoliciesRequest` contents to a `SignedRequest`.
 struct ListPoliciesRequestSerializer;
 impl ListPoliciesRequestSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &ListPoliciesRequest) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         if let Some(ref field_value) = obj.marker {
@@ -5963,11 +6182,12 @@ pub struct ListPoliciesResponse {
 #[allow(dead_code)]
 struct ListPoliciesResponseDeserializer;
 impl ListPoliciesResponseDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<ListPoliciesResponse, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, ListPoliciesResponse, _>(tag_name, stack, |name, stack, obj| {
             match name {
                 "IsTruncated" => {
@@ -5993,11 +6213,13 @@ impl ListPoliciesResponseDeserializer {
 #[allow(dead_code)]
 struct ListPolicyGrantingServiceAccessResponseListTypeDeserializer;
 impl ListPolicyGrantingServiceAccessResponseListTypeDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<ListPoliciesGrantingServiceAccessEntry>, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
+
         deserialize_elements::<_, Vec<_>, _>(tag_name, stack, |name, stack, obj| {
             if name == "member" {
                 obj.push(
@@ -6026,10 +6248,11 @@ pub struct ListPolicyVersionsRequest {
 /// Serialize `ListPolicyVersionsRequest` contents to a `SignedRequest`.
 struct ListPolicyVersionsRequestSerializer;
 impl ListPolicyVersionsRequestSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &ListPolicyVersionsRequest) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         if let Some(ref field_value) = obj.marker {
@@ -6057,11 +6280,12 @@ pub struct ListPolicyVersionsResponse {
 #[allow(dead_code)]
 struct ListPolicyVersionsResponseDeserializer;
 impl ListPolicyVersionsResponseDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<ListPolicyVersionsResponse, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, ListPolicyVersionsResponse, _>(
             tag_name,
             stack,
@@ -6104,10 +6328,11 @@ pub struct ListRolePoliciesRequest {
 /// Serialize `ListRolePoliciesRequest` contents to a `SignedRequest`.
 struct ListRolePoliciesRequestSerializer;
 impl ListRolePoliciesRequestSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &ListRolePoliciesRequest) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         if let Some(ref field_value) = obj.marker {
@@ -6135,11 +6360,12 @@ pub struct ListRolePoliciesResponse {
 #[allow(dead_code)]
 struct ListRolePoliciesResponseDeserializer;
 impl ListRolePoliciesResponseDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<ListRolePoliciesResponse, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, ListRolePoliciesResponse, _>(
             tag_name,
             stack,
@@ -6182,10 +6408,11 @@ pub struct ListRoleTagsRequest {
 /// Serialize `ListRoleTagsRequest` contents to a `SignedRequest`.
 struct ListRoleTagsRequestSerializer;
 impl ListRoleTagsRequestSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &ListRoleTagsRequest) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         if let Some(ref field_value) = obj.marker {
@@ -6212,11 +6439,12 @@ pub struct ListRoleTagsResponse {
 #[allow(dead_code)]
 struct ListRoleTagsResponseDeserializer;
 impl ListRoleTagsResponseDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<ListRoleTagsResponse, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, ListRoleTagsResponse, _>(tag_name, stack, |name, stack, obj| {
             match name {
                 "IsTruncated" => {
@@ -6252,10 +6480,11 @@ pub struct ListRolesRequest {
 /// Serialize `ListRolesRequest` contents to a `SignedRequest`.
 struct ListRolesRequestSerializer;
 impl ListRolesRequestSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &ListRolesRequest) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         if let Some(ref field_value) = obj.marker {
@@ -6285,11 +6514,12 @@ pub struct ListRolesResponse {
 #[allow(dead_code)]
 struct ListRolesResponseDeserializer;
 impl ListRolesResponseDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<ListRolesResponse, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, ListRolesResponse, _>(tag_name, stack, |name, stack, obj| {
             match name {
                 "IsTruncated" => {
@@ -6320,8 +6550,8 @@ struct ListSAMLProvidersRequestSerializer;
 impl ListSAMLProvidersRequestSerializer {
     fn serialize(_params: &mut Params, name: &str, _obj: &ListSAMLProvidersRequest) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
     }
 }
@@ -6337,11 +6567,12 @@ pub struct ListSAMLProvidersResponse {
 #[allow(dead_code)]
 struct ListSAMLProvidersResponseDeserializer;
 impl ListSAMLProvidersResponseDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<ListSAMLProvidersResponse, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, ListSAMLProvidersResponse, _>(
             tag_name,
             stack,
@@ -6376,10 +6607,11 @@ pub struct ListSSHPublicKeysRequest {
 /// Serialize `ListSSHPublicKeysRequest` contents to a `SignedRequest`.
 struct ListSSHPublicKeysRequestSerializer;
 impl ListSSHPublicKeysRequestSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &ListSSHPublicKeysRequest) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         if let Some(ref field_value) = obj.marker {
@@ -6409,11 +6641,12 @@ pub struct ListSSHPublicKeysResponse {
 #[allow(dead_code)]
 struct ListSSHPublicKeysResponseDeserializer;
 impl ListSSHPublicKeysResponseDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<ListSSHPublicKeysResponse, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, ListSSHPublicKeysResponse, _>(
             tag_name,
             stack,
@@ -6454,10 +6687,11 @@ pub struct ListServerCertificatesRequest {
 /// Serialize `ListServerCertificatesRequest` contents to a `SignedRequest`.
 struct ListServerCertificatesRequestSerializer;
 impl ListServerCertificatesRequestSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &ListServerCertificatesRequest) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         if let Some(ref field_value) = obj.marker {
@@ -6487,11 +6721,12 @@ pub struct ListServerCertificatesResponse {
 #[allow(dead_code)]
 struct ListServerCertificatesResponseDeserializer;
 impl ListServerCertificatesResponseDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<ListServerCertificatesResponse, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, ListServerCertificatesResponse, _>(
             tag_name,
             stack,
@@ -6533,10 +6768,11 @@ pub struct ListServiceSpecificCredentialsRequest {
 /// Serialize `ListServiceSpecificCredentialsRequest` contents to a `SignedRequest`.
 struct ListServiceSpecificCredentialsRequestSerializer;
 impl ListServiceSpecificCredentialsRequestSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &ListServiceSpecificCredentialsRequest) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         if let Some(ref field_value) = obj.service_name {
@@ -6558,11 +6794,12 @@ pub struct ListServiceSpecificCredentialsResponse {
 #[allow(dead_code)]
 struct ListServiceSpecificCredentialsResponseDeserializer;
 impl ListServiceSpecificCredentialsResponseDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<ListServiceSpecificCredentialsResponse, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, ListServiceSpecificCredentialsResponse, _>(
             tag_name,
             stack,
@@ -6597,10 +6834,11 @@ pub struct ListSigningCertificatesRequest {
 /// Serialize `ListSigningCertificatesRequest` contents to a `SignedRequest`.
 struct ListSigningCertificatesRequestSerializer;
 impl ListSigningCertificatesRequestSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &ListSigningCertificatesRequest) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         if let Some(ref field_value) = obj.marker {
@@ -6630,11 +6868,12 @@ pub struct ListSigningCertificatesResponse {
 #[allow(dead_code)]
 struct ListSigningCertificatesResponseDeserializer;
 impl ListSigningCertificatesResponseDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<ListSigningCertificatesResponse, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, ListSigningCertificatesResponse, _>(
             tag_name,
             stack,
@@ -6677,10 +6916,11 @@ pub struct ListUserPoliciesRequest {
 /// Serialize `ListUserPoliciesRequest` contents to a `SignedRequest`.
 struct ListUserPoliciesRequestSerializer;
 impl ListUserPoliciesRequestSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &ListUserPoliciesRequest) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         if let Some(ref field_value) = obj.marker {
@@ -6708,11 +6948,12 @@ pub struct ListUserPoliciesResponse {
 #[allow(dead_code)]
 struct ListUserPoliciesResponseDeserializer;
 impl ListUserPoliciesResponseDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<ListUserPoliciesResponse, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, ListUserPoliciesResponse, _>(
             tag_name,
             stack,
@@ -6755,10 +6996,11 @@ pub struct ListUserTagsRequest {
 /// Serialize `ListUserTagsRequest` contents to a `SignedRequest`.
 struct ListUserTagsRequestSerializer;
 impl ListUserTagsRequestSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &ListUserTagsRequest) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         if let Some(ref field_value) = obj.marker {
@@ -6785,11 +7027,12 @@ pub struct ListUserTagsResponse {
 #[allow(dead_code)]
 struct ListUserTagsResponseDeserializer;
 impl ListUserTagsResponseDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<ListUserTagsResponse, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, ListUserTagsResponse, _>(tag_name, stack, |name, stack, obj| {
             match name {
                 "IsTruncated" => {
@@ -6825,10 +7068,11 @@ pub struct ListUsersRequest {
 /// Serialize `ListUsersRequest` contents to a `SignedRequest`.
 struct ListUsersRequestSerializer;
 impl ListUsersRequestSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &ListUsersRequest) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         if let Some(ref field_value) = obj.marker {
@@ -6858,11 +7102,12 @@ pub struct ListUsersResponse {
 #[allow(dead_code)]
 struct ListUsersResponseDeserializer;
 impl ListUsersResponseDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<ListUsersResponse, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, ListUsersResponse, _>(tag_name, stack, |name, stack, obj| {
             match name {
                 "IsTruncated" => {
@@ -6898,10 +7143,11 @@ pub struct ListVirtualMFADevicesRequest {
 /// Serialize `ListVirtualMFADevicesRequest` contents to a `SignedRequest`.
 struct ListVirtualMFADevicesRequestSerializer;
 impl ListVirtualMFADevicesRequestSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &ListVirtualMFADevicesRequest) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         if let Some(ref field_value) = obj.assignment_status {
@@ -6931,11 +7177,12 @@ pub struct ListVirtualMFADevicesResponse {
 #[allow(dead_code)]
 struct ListVirtualMFADevicesResponseDeserializer;
 impl ListVirtualMFADevicesResponseDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<ListVirtualMFADevicesResponse, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, ListVirtualMFADevicesResponse, _>(
             tag_name,
             stack,
@@ -6980,11 +7227,12 @@ pub struct LoginProfile {
 #[allow(dead_code)]
 struct LoginProfileDeserializer;
 impl LoginProfileDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<LoginProfile, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, LoginProfile, _>(tag_name, stack, |name, stack, obj| {
             match name {
                 "CreateDate" => {
@@ -7020,11 +7268,12 @@ pub struct MFADevice {
 #[allow(dead_code)]
 struct MFADeviceDeserializer;
 impl MFADeviceDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<MFADevice, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, MFADevice, _>(tag_name, stack, |name, stack, obj| {
             match name {
                 "EnableDate" => {
@@ -7075,11 +7324,12 @@ pub struct ManagedPolicyDetail {
 #[allow(dead_code)]
 struct ManagedPolicyDetailDeserializer;
 impl ManagedPolicyDetailDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<ManagedPolicyDetail, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, ManagedPolicyDetail, _>(tag_name, stack, |name, stack, obj| {
             match name {
                 "Arn" => {
@@ -7149,11 +7399,13 @@ impl ManagedPolicyDetailDeserializer {
 #[allow(dead_code)]
 struct ManagedPolicyDetailListTypeDeserializer;
 impl ManagedPolicyDetailListTypeDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<ManagedPolicyDetail>, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
+
         deserialize_elements::<_, Vec<_>, _>(tag_name, stack, |name, stack, obj| {
             if name == "member" {
                 obj.push(ManagedPolicyDetailDeserializer::deserialize(
@@ -7169,27 +7421,31 @@ impl ManagedPolicyDetailListTypeDeserializer {
 #[allow(dead_code)]
 struct MarkerTypeDeserializer;
 impl MarkerTypeDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 #[allow(dead_code)]
 struct MaxPasswordAgeTypeDeserializer;
 impl MaxPasswordAgeTypeDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<i64, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::deserialize_primitive(tag_name, stack, |s| Ok(i64::from_str(&s).unwrap()))
     }
 }
 #[allow(dead_code)]
 struct MfaDeviceListTypeDeserializer;
 impl MfaDeviceListTypeDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<MFADevice>, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
+
         deserialize_elements::<_, Vec<_>, _>(tag_name, stack, |name, stack, obj| {
             if name == "member" {
                 obj.push(MFADeviceDeserializer::deserialize("member", stack)?);
@@ -7203,8 +7459,9 @@ impl MfaDeviceListTypeDeserializer {
 #[allow(dead_code)]
 struct MinimumPasswordLengthTypeDeserializer;
 impl MinimumPasswordLengthTypeDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<i64, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::deserialize_primitive(tag_name, stack, |s| Ok(i64::from_str(&s).unwrap()))
     }
 }
@@ -7218,11 +7475,12 @@ pub struct OpenIDConnectProviderListEntry {
 #[allow(dead_code)]
 struct OpenIDConnectProviderListEntryDeserializer;
 impl OpenIDConnectProviderListEntryDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<OpenIDConnectProviderListEntry, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, OpenIDConnectProviderListEntry, _>(
             tag_name,
             stack,
@@ -7241,11 +7499,13 @@ impl OpenIDConnectProviderListEntryDeserializer {
 #[allow(dead_code)]
 struct OpenIDConnectProviderListTypeDeserializer;
 impl OpenIDConnectProviderListTypeDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<OpenIDConnectProviderListEntry>, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
+
         deserialize_elements::<_, Vec<_>, _>(tag_name, stack, |name, stack, obj| {
             if name == "member" {
                 obj.push(OpenIDConnectProviderListEntryDeserializer::deserialize(
@@ -7261,8 +7521,9 @@ impl OpenIDConnectProviderListTypeDeserializer {
 #[allow(dead_code)]
 struct OpenIDConnectProviderUrlTypeDeserializer;
 impl OpenIDConnectProviderUrlTypeDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
@@ -7277,11 +7538,12 @@ pub struct OrganizationsDecisionDetail {
 #[allow(dead_code)]
 struct OrganizationsDecisionDetailDeserializer;
 impl OrganizationsDecisionDetailDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<OrganizationsDecisionDetail, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, OrganizationsDecisionDetail, _>(
             tag_name,
             stack,
@@ -7303,8 +7565,9 @@ impl OrganizationsDecisionDetailDeserializer {
 #[allow(dead_code)]
 struct OrganizationsEntityPathTypeDeserializer;
 impl OrganizationsEntityPathTypeDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
@@ -7337,11 +7600,12 @@ pub struct PasswordPolicy {
 #[allow(dead_code)]
 struct PasswordPolicyDeserializer;
 impl PasswordPolicyDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<PasswordPolicy, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, PasswordPolicy, _>(tag_name, stack, |name, stack, obj| {
             match name {
                 "AllowUsersToChangePassword" => {
@@ -7414,24 +7678,27 @@ impl PasswordPolicyDeserializer {
 #[allow(dead_code)]
 struct PasswordReusePreventionTypeDeserializer;
 impl PasswordReusePreventionTypeDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<i64, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::deserialize_primitive(tag_name, stack, |s| Ok(i64::from_str(&s).unwrap()))
     }
 }
 #[allow(dead_code)]
 struct PathTypeDeserializer;
 impl PathTypeDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 #[allow(dead_code)]
 struct PermissionsBoundaryAttachmentTypeDeserializer;
 impl PermissionsBoundaryAttachmentTypeDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
@@ -7446,11 +7713,12 @@ pub struct PermissionsBoundaryDecisionDetail {
 #[allow(dead_code)]
 struct PermissionsBoundaryDecisionDetailDeserializer;
 impl PermissionsBoundaryDecisionDetailDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<PermissionsBoundaryDecisionDetail, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, PermissionsBoundaryDecisionDetail, _>(
             tag_name,
             stack,
@@ -7500,8 +7768,9 @@ pub struct Policy {
 #[allow(dead_code)]
 struct PolicyDeserializer;
 impl PolicyDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<Policy, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, Policy, _>(tag_name, stack, |name, stack, obj| {
             match name {
                 "Arn" => {
@@ -7563,8 +7832,9 @@ impl PolicyDeserializer {
 #[allow(dead_code)]
 struct PolicyDescriptionTypeDeserializer;
 impl PolicyDescriptionTypeDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
@@ -7581,11 +7851,12 @@ pub struct PolicyDetail {
 #[allow(dead_code)]
 struct PolicyDetailDeserializer;
 impl PolicyDetailDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<PolicyDetail, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, PolicyDetail, _>(tag_name, stack, |name, stack, obj| {
             match name {
                 "PolicyDocument" => {
@@ -7609,11 +7880,13 @@ impl PolicyDetailDeserializer {
 #[allow(dead_code)]
 struct PolicyDetailListTypeDeserializer;
 impl PolicyDetailListTypeDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<PolicyDetail>, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
+
         deserialize_elements::<_, Vec<_>, _>(tag_name, stack, |name, stack, obj| {
             if name == "member" {
                 obj.push(PolicyDetailDeserializer::deserialize("member", stack)?);
@@ -7627,8 +7900,9 @@ impl PolicyDetailListTypeDeserializer {
 #[allow(dead_code)]
 struct PolicyDocumentTypeDeserializer;
 impl PolicyDocumentTypeDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::deserialize_primitive(tag_name, stack, |s| {
             Ok(rusoto_core::signature::decode_uri(&s))
         })
@@ -7637,11 +7911,13 @@ impl PolicyDocumentTypeDeserializer {
 #[allow(dead_code)]
 struct PolicyDocumentVersionListTypeDeserializer;
 impl PolicyDocumentVersionListTypeDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<PolicyVersion>, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
+
         deserialize_elements::<_, Vec<_>, _>(tag_name, stack, |name, stack, obj| {
             if name == "member" {
                 obj.push(PolicyVersionDeserializer::deserialize("member", stack)?);
@@ -7655,8 +7931,9 @@ impl PolicyDocumentVersionListTypeDeserializer {
 #[allow(dead_code)]
 struct PolicyEvaluationDecisionTypeDeserializer;
 impl PolicyEvaluationDecisionTypeDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
@@ -7678,11 +7955,12 @@ pub struct PolicyGrantingServiceAccess {
 #[allow(dead_code)]
 struct PolicyGrantingServiceAccessDeserializer;
 impl PolicyGrantingServiceAccessDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<PolicyGrantingServiceAccess, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, PolicyGrantingServiceAccess, _>(
             tag_name,
             stack,
@@ -7721,11 +7999,13 @@ impl PolicyGrantingServiceAccessDeserializer {
 #[allow(dead_code)]
 struct PolicyGrantingServiceAccessListTypeDeserializer;
 impl PolicyGrantingServiceAccessListTypeDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<PolicyGrantingServiceAccess>, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
+
         deserialize_elements::<_, Vec<_>, _>(tag_name, stack, |name, stack, obj| {
             if name == "member" {
                 obj.push(PolicyGrantingServiceAccessDeserializer::deserialize(
@@ -7751,11 +8031,12 @@ pub struct PolicyGroup {
 #[allow(dead_code)]
 struct PolicyGroupDeserializer;
 impl PolicyGroupDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<PolicyGroup, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, PolicyGroup, _>(tag_name, stack, |name, stack, obj| {
             match name {
                 "GroupId" => {
@@ -7774,11 +8055,13 @@ impl PolicyGroupDeserializer {
 #[allow(dead_code)]
 struct PolicyGroupListTypeDeserializer;
 impl PolicyGroupListTypeDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<PolicyGroup>, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
+
         deserialize_elements::<_, Vec<_>, _>(tag_name, stack, |name, stack, obj| {
             if name == "member" {
                 obj.push(PolicyGroupDeserializer::deserialize("member", stack)?);
@@ -7792,19 +8075,22 @@ impl PolicyGroupListTypeDeserializer {
 #[allow(dead_code)]
 struct PolicyIdentifierTypeDeserializer;
 impl PolicyIdentifierTypeDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 #[allow(dead_code)]
 struct PolicyListTypeDeserializer;
 impl PolicyListTypeDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<Policy>, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
+
         deserialize_elements::<_, Vec<_>, _>(tag_name, stack, |name, stack, obj| {
             if name == "member" {
                 obj.push(PolicyDeserializer::deserialize("member", stack)?);
@@ -7818,11 +8104,13 @@ impl PolicyListTypeDeserializer {
 #[allow(dead_code)]
 struct PolicyNameListTypeDeserializer;
 impl PolicyNameListTypeDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<String>, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
+
         deserialize_elements::<_, Vec<_>, _>(tag_name, stack, |name, stack, obj| {
             if name == "member" {
                 obj.push(PolicyNameTypeDeserializer::deserialize("member", stack)?);
@@ -7836,24 +8124,27 @@ impl PolicyNameListTypeDeserializer {
 #[allow(dead_code)]
 struct PolicyNameTypeDeserializer;
 impl PolicyNameTypeDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 #[allow(dead_code)]
 struct PolicyOwnerEntityTypeDeserializer;
 impl PolicyOwnerEntityTypeDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 #[allow(dead_code)]
 struct PolicyPathTypeDeserializer;
 impl PolicyPathTypeDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
@@ -7870,11 +8161,12 @@ pub struct PolicyRole {
 #[allow(dead_code)]
 struct PolicyRoleDeserializer;
 impl PolicyRoleDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<PolicyRole, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, PolicyRole, _>(tag_name, stack, |name, stack, obj| {
             match name {
                 "RoleId" => {
@@ -7892,11 +8184,13 @@ impl PolicyRoleDeserializer {
 #[allow(dead_code)]
 struct PolicyRoleListTypeDeserializer;
 impl PolicyRoleListTypeDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<PolicyRole>, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
+
         deserialize_elements::<_, Vec<_>, _>(tag_name, stack, |name, stack, obj| {
             if name == "member" {
                 obj.push(PolicyRoleDeserializer::deserialize("member", stack)?);
@@ -7910,16 +8204,18 @@ impl PolicyRoleListTypeDeserializer {
 #[allow(dead_code)]
 struct PolicySourceTypeDeserializer;
 impl PolicySourceTypeDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 #[allow(dead_code)]
 struct PolicyTypeDeserializer;
 impl PolicyTypeDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
@@ -7936,11 +8232,12 @@ pub struct PolicyUser {
 #[allow(dead_code)]
 struct PolicyUserDeserializer;
 impl PolicyUserDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<PolicyUser, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, PolicyUser, _>(tag_name, stack, |name, stack, obj| {
             match name {
                 "UserId" => {
@@ -7958,11 +8255,13 @@ impl PolicyUserDeserializer {
 #[allow(dead_code)]
 struct PolicyUserListTypeDeserializer;
 impl PolicyUserListTypeDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<PolicyUser>, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
+
         deserialize_elements::<_, Vec<_>, _>(tag_name, stack, |name, stack, obj| {
             if name == "member" {
                 obj.push(PolicyUserDeserializer::deserialize("member", stack)?);
@@ -7990,11 +8289,12 @@ pub struct PolicyVersion {
 #[allow(dead_code)]
 struct PolicyVersionDeserializer;
 impl PolicyVersionDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<PolicyVersion, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, PolicyVersion, _>(tag_name, stack, |name, stack, obj| {
             match name {
                 "CreateDate" => {
@@ -8026,8 +8326,9 @@ impl PolicyVersionDeserializer {
 #[allow(dead_code)]
 struct PolicyVersionIdTypeDeserializer;
 impl PolicyVersionIdTypeDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
@@ -8044,11 +8345,12 @@ pub struct Position {
 #[allow(dead_code)]
 struct PositionDeserializer;
 impl PositionDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Position, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, Position, _>(tag_name, stack, |name, stack, obj| {
             match name {
                 "Column" => {
@@ -8066,24 +8368,27 @@ impl PositionDeserializer {
 #[allow(dead_code)]
 struct PublicKeyFingerprintTypeDeserializer;
 impl PublicKeyFingerprintTypeDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 #[allow(dead_code)]
 struct PublicKeyIdTypeDeserializer;
 impl PublicKeyIdTypeDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 #[allow(dead_code)]
 struct PublicKeyMaterialTypeDeserializer;
 impl PublicKeyMaterialTypeDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
@@ -8101,10 +8406,11 @@ pub struct PutGroupPolicyRequest {
 /// Serialize `PutGroupPolicyRequest` contents to a `SignedRequest`.
 struct PutGroupPolicyRequestSerializer;
 impl PutGroupPolicyRequestSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &PutGroupPolicyRequest) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         params.put(&format!("{}{}", prefix, "GroupName"), &obj.group_name);
@@ -8128,10 +8434,11 @@ pub struct PutRolePermissionsBoundaryRequest {
 /// Serialize `PutRolePermissionsBoundaryRequest` contents to a `SignedRequest`.
 struct PutRolePermissionsBoundaryRequestSerializer;
 impl PutRolePermissionsBoundaryRequestSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &PutRolePermissionsBoundaryRequest) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         params.put(
@@ -8156,10 +8463,11 @@ pub struct PutRolePolicyRequest {
 /// Serialize `PutRolePolicyRequest` contents to a `SignedRequest`.
 struct PutRolePolicyRequestSerializer;
 impl PutRolePolicyRequestSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &PutRolePolicyRequest) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         params.put(
@@ -8183,10 +8491,11 @@ pub struct PutUserPermissionsBoundaryRequest {
 /// Serialize `PutUserPermissionsBoundaryRequest` contents to a `SignedRequest`.
 struct PutUserPermissionsBoundaryRequestSerializer;
 impl PutUserPermissionsBoundaryRequestSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &PutUserPermissionsBoundaryRequest) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         params.put(
@@ -8211,10 +8520,11 @@ pub struct PutUserPolicyRequest {
 /// Serialize `PutUserPolicyRequest` contents to a `SignedRequest`.
 struct PutUserPolicyRequestSerializer;
 impl PutUserPolicyRequestSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &PutUserPolicyRequest) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         params.put(
@@ -8229,16 +8539,18 @@ impl PutUserPolicyRequestSerializer {
 #[allow(dead_code)]
 struct ReasonTypeDeserializer;
 impl ReasonTypeDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 #[allow(dead_code)]
 struct RegionNameTypeDeserializer;
 impl RegionNameTypeDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
@@ -8254,14 +8566,15 @@ pub struct RemoveClientIDFromOpenIDConnectProviderRequest {
 /// Serialize `RemoveClientIDFromOpenIDConnectProviderRequest` contents to a `SignedRequest`.
 struct RemoveClientIDFromOpenIDConnectProviderRequestSerializer;
 impl RemoveClientIDFromOpenIDConnectProviderRequestSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(
         params: &mut Params,
         name: &str,
         obj: &RemoveClientIDFromOpenIDConnectProviderRequest,
     ) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         params.put(&format!("{}{}", prefix, "ClientID"), &obj.client_id);
@@ -8284,10 +8597,11 @@ pub struct RemoveRoleFromInstanceProfileRequest {
 /// Serialize `RemoveRoleFromInstanceProfileRequest` contents to a `SignedRequest`.
 struct RemoveRoleFromInstanceProfileRequestSerializer;
 impl RemoveRoleFromInstanceProfileRequestSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &RemoveRoleFromInstanceProfileRequest) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         params.put(
@@ -8310,10 +8624,11 @@ pub struct RemoveUserFromGroupRequest {
 /// Serialize `RemoveUserFromGroupRequest` contents to a `SignedRequest`.
 struct RemoveUserFromGroupRequestSerializer;
 impl RemoveUserFromGroupRequestSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &RemoveUserFromGroupRequest) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         params.put(&format!("{}{}", prefix, "GroupName"), &obj.group_name);
@@ -8324,35 +8639,39 @@ impl RemoveUserFromGroupRequestSerializer {
 #[allow(dead_code)]
 struct ReportContentTypeDeserializer;
 impl ReportContentTypeDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<bytes::Bytes, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::deserialize_primitive(tag_name, stack, |s| Ok(s.into()))
     }
 }
 #[allow(dead_code)]
 struct ReportFormatTypeDeserializer;
 impl ReportFormatTypeDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 #[allow(dead_code)]
 struct ReportStateDescriptionTypeDeserializer;
 impl ReportStateDescriptionTypeDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 #[allow(dead_code)]
 struct ReportStateTypeDeserializer;
 impl ReportStateTypeDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
@@ -8368,10 +8687,11 @@ pub struct ResetServiceSpecificCredentialRequest {
 /// Serialize `ResetServiceSpecificCredentialRequest` contents to a `SignedRequest`.
 struct ResetServiceSpecificCredentialRequestSerializer;
 impl ResetServiceSpecificCredentialRequestSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &ResetServiceSpecificCredentialRequest) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         params.put(
@@ -8394,11 +8714,12 @@ pub struct ResetServiceSpecificCredentialResponse {
 #[allow(dead_code)]
 struct ResetServiceSpecificCredentialResponseDeserializer;
 impl ResetServiceSpecificCredentialResponseDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<ResetServiceSpecificCredentialResponse, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, ResetServiceSpecificCredentialResponse, _>(
             tag_name,
             stack,
@@ -8422,6 +8743,7 @@ impl ResetServiceSpecificCredentialResponseDeserializer {
 /// Serialize `ResourceNameListType` contents to a `SignedRequest`.
 struct ResourceNameListTypeSerializer;
 impl ResourceNameListTypeSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &Vec<String>) {
         for (index, obj) in obj.iter().enumerate() {
             let key = format!("{}.member.{}", name, index + 1);
@@ -8433,8 +8755,9 @@ impl ResourceNameListTypeSerializer {
 #[allow(dead_code)]
 struct ResourceNameTypeDeserializer;
 impl ResourceNameTypeDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
@@ -8459,11 +8782,12 @@ pub struct ResourceSpecificResult {
 #[allow(dead_code)]
 struct ResourceSpecificResultDeserializer;
 impl ResourceSpecificResultDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<ResourceSpecificResult, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, ResourceSpecificResult, _>(tag_name, stack, |name, stack, obj| {
             match name {
                 "EvalDecisionDetails" => {
@@ -8513,11 +8837,13 @@ impl ResourceSpecificResultDeserializer {
 #[allow(dead_code)]
 struct ResourceSpecificResultListTypeDeserializer;
 impl ResourceSpecificResultListTypeDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<ResourceSpecificResult>, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
+
         deserialize_elements::<_, Vec<_>, _>(tag_name, stack, |name, stack, obj| {
             if name == "member" {
                 obj.push(ResourceSpecificResultDeserializer::deserialize(
@@ -8533,8 +8859,9 @@ impl ResourceSpecificResultListTypeDeserializer {
 #[allow(dead_code)]
 struct ResponseMarkerTypeDeserializer;
 impl ResponseMarkerTypeDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
@@ -8554,10 +8881,11 @@ pub struct ResyncMFADeviceRequest {
 /// Serialize `ResyncMFADeviceRequest` contents to a `SignedRequest`.
 struct ResyncMFADeviceRequestSerializer;
 impl ResyncMFADeviceRequestSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &ResyncMFADeviceRequest) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         params.put(
@@ -8604,8 +8932,9 @@ pub struct Role {
 #[allow(dead_code)]
 struct RoleDeserializer;
 impl RoleDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<Role, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, Role, _>(tag_name, stack, |name, stack, obj| {
             match name {
                 "Arn" => {
@@ -8670,8 +8999,9 @@ impl RoleDeserializer {
 #[allow(dead_code)]
 struct RoleDescriptionTypeDeserializer;
 impl RoleDescriptionTypeDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
@@ -8707,11 +9037,12 @@ pub struct RoleDetail {
 #[allow(dead_code)]
 struct RoleDetailDeserializer;
 impl RoleDetailDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<RoleDetail, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, RoleDetail, _>(tag_name, stack, |name, stack, obj| {
             match name {
                 "Arn" => {
@@ -8784,11 +9115,13 @@ impl RoleDetailDeserializer {
 #[allow(dead_code)]
 struct RoleDetailListTypeDeserializer;
 impl RoleDetailListTypeDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<RoleDetail>, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
+
         deserialize_elements::<_, Vec<_>, _>(tag_name, stack, |name, stack, obj| {
             if name == "member" {
                 obj.push(RoleDetailDeserializer::deserialize("member", stack)?);
@@ -8812,11 +9145,12 @@ pub struct RoleLastUsed {
 #[allow(dead_code)]
 struct RoleLastUsedDeserializer;
 impl RoleLastUsedDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<RoleLastUsed, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, RoleLastUsed, _>(tag_name, stack, |name, stack, obj| {
             match name {
                 "LastUsedDate" => {
@@ -8835,11 +9169,13 @@ impl RoleLastUsedDeserializer {
 #[allow(dead_code)]
 struct RoleListTypeDeserializer;
 impl RoleListTypeDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<Role>, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
+
         deserialize_elements::<_, Vec<_>, _>(tag_name, stack, |name, stack, obj| {
             if name == "member" {
                 obj.push(RoleDeserializer::deserialize("member", stack)?);
@@ -8853,27 +9189,31 @@ impl RoleListTypeDeserializer {
 #[allow(dead_code)]
 struct RoleMaxSessionDurationTypeDeserializer;
 impl RoleMaxSessionDurationTypeDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<i64, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::deserialize_primitive(tag_name, stack, |s| Ok(i64::from_str(&s).unwrap()))
     }
 }
 #[allow(dead_code)]
 struct RoleNameTypeDeserializer;
 impl RoleNameTypeDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 #[allow(dead_code)]
 struct RoleUsageListTypeDeserializer;
 impl RoleUsageListTypeDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<RoleUsageType>, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
+
         deserialize_elements::<_, Vec<_>, _>(tag_name, stack, |name, stack, obj| {
             if name == "member" {
                 obj.push(RoleUsageTypeDeserializer::deserialize("member", stack)?);
@@ -8897,11 +9237,12 @@ pub struct RoleUsageType {
 #[allow(dead_code)]
 struct RoleUsageTypeDeserializer;
 impl RoleUsageTypeDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<RoleUsageType, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, RoleUsageType, _>(tag_name, stack, |name, stack, obj| {
             match name {
                 "Region" => {
@@ -8921,8 +9262,9 @@ impl RoleUsageTypeDeserializer {
 #[allow(dead_code)]
 struct SAMLMetadataDocumentTypeDeserializer;
 impl SAMLMetadataDocumentTypeDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
@@ -8941,11 +9283,12 @@ pub struct SAMLProviderListEntry {
 #[allow(dead_code)]
 struct SAMLProviderListEntryDeserializer;
 impl SAMLProviderListEntryDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<SAMLProviderListEntry, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, SAMLProviderListEntry, _>(tag_name, stack, |name, stack, obj| {
             match name {
                 "Arn" => {
@@ -8966,11 +9309,13 @@ impl SAMLProviderListEntryDeserializer {
 #[allow(dead_code)]
 struct SAMLProviderListTypeDeserializer;
 impl SAMLProviderListTypeDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<SAMLProviderListEntry>, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
+
         deserialize_elements::<_, Vec<_>, _>(tag_name, stack, |name, stack, obj| {
             if name == "member" {
                 obj.push(SAMLProviderListEntryDeserializer::deserialize(
@@ -9004,11 +9349,12 @@ pub struct SSHPublicKey {
 #[allow(dead_code)]
 struct SSHPublicKeyDeserializer;
 impl SSHPublicKeyDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<SSHPublicKey, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, SSHPublicKey, _>(tag_name, stack, |name, stack, obj| {
             match name {
                 "Fingerprint" => {
@@ -9041,11 +9387,13 @@ impl SSHPublicKeyDeserializer {
 #[allow(dead_code)]
 struct SSHPublicKeyListTypeDeserializer;
 impl SSHPublicKeyListTypeDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<SSHPublicKeyMetadata>, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
+
         deserialize_elements::<_, Vec<_>, _>(tag_name, stack, |name, stack, obj| {
             if name == "member" {
                 obj.push(SSHPublicKeyMetadataDeserializer::deserialize(
@@ -9075,11 +9423,12 @@ pub struct SSHPublicKeyMetadata {
 #[allow(dead_code)]
 struct SSHPublicKeyMetadataDeserializer;
 impl SSHPublicKeyMetadataDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<SSHPublicKeyMetadata, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, SSHPublicKeyMetadata, _>(tag_name, stack, |name, stack, obj| {
             match name {
                 "SSHPublicKeyId" => {
@@ -9104,8 +9453,9 @@ impl SSHPublicKeyMetadataDeserializer {
 #[allow(dead_code)]
 struct SerialNumberTypeDeserializer;
 impl SerialNumberTypeDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
@@ -9124,11 +9474,12 @@ pub struct ServerCertificate {
 #[allow(dead_code)]
 struct ServerCertificateDeserializer;
 impl ServerCertificateDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<ServerCertificate, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, ServerCertificate, _>(tag_name, stack, |name, stack, obj| {
             match name {
                 "CertificateBody" => {
@@ -9175,11 +9526,12 @@ pub struct ServerCertificateMetadata {
 #[allow(dead_code)]
 struct ServerCertificateMetadataDeserializer;
 impl ServerCertificateMetadataDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<ServerCertificateMetadata, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, ServerCertificateMetadata, _>(
             tag_name,
             stack,
@@ -9220,11 +9572,13 @@ impl ServerCertificateMetadataDeserializer {
 #[allow(dead_code)]
 struct ServerCertificateMetadataListTypeDeserializer;
 impl ServerCertificateMetadataListTypeDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<ServerCertificateMetadata>, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
+
         deserialize_elements::<_, Vec<_>, _>(tag_name, stack, |name, stack, obj| {
             if name == "member" {
                 obj.push(ServerCertificateMetadataDeserializer::deserialize(
@@ -9240,8 +9594,9 @@ impl ServerCertificateMetadataListTypeDeserializer {
 #[allow(dead_code)]
 struct ServerCertificateNameTypeDeserializer;
 impl ServerCertificateNameTypeDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
@@ -9268,11 +9623,12 @@ pub struct ServiceLastAccessed {
 #[allow(dead_code)]
 struct ServiceLastAccessedDeserializer;
 impl ServiceLastAccessedDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<ServiceLastAccessed, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, ServiceLastAccessed, _>(tag_name, stack, |name, stack, obj| {
             match name {
                 "LastAuthenticated" => {
@@ -9324,16 +9680,18 @@ impl ServiceLastAccessedDeserializer {
 #[allow(dead_code)]
 struct ServiceNameDeserializer;
 impl ServiceNameDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 #[allow(dead_code)]
 struct ServiceNameTypeDeserializer;
 impl ServiceNameTypeDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
@@ -9341,6 +9699,7 @@ impl ServiceNameTypeDeserializer {
 /// Serialize `ServiceNamespaceListType` contents to a `SignedRequest`.
 struct ServiceNamespaceListTypeSerializer;
 impl ServiceNamespaceListTypeSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &Vec<String>) {
         for (index, obj) in obj.iter().enumerate() {
             let key = format!("{}.member.{}", name, index + 1);
@@ -9352,16 +9711,18 @@ impl ServiceNamespaceListTypeSerializer {
 #[allow(dead_code)]
 struct ServiceNamespaceTypeDeserializer;
 impl ServiceNamespaceTypeDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 #[allow(dead_code)]
 struct ServicePasswordDeserializer;
 impl ServicePasswordDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
@@ -9388,11 +9749,12 @@ pub struct ServiceSpecificCredential {
 #[allow(dead_code)]
 struct ServiceSpecificCredentialDeserializer;
 impl ServiceSpecificCredentialDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<ServiceSpecificCredential, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, ServiceSpecificCredential, _>(
             tag_name,
             stack,
@@ -9436,8 +9798,9 @@ impl ServiceSpecificCredentialDeserializer {
 #[allow(dead_code)]
 struct ServiceSpecificCredentialIdDeserializer;
 impl ServiceSpecificCredentialIdDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
@@ -9462,11 +9825,12 @@ pub struct ServiceSpecificCredentialMetadata {
 #[allow(dead_code)]
 struct ServiceSpecificCredentialMetadataDeserializer;
 impl ServiceSpecificCredentialMetadataDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<ServiceSpecificCredentialMetadata, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, ServiceSpecificCredentialMetadata, _>(
             tag_name,
             stack,
@@ -9506,11 +9870,13 @@ impl ServiceSpecificCredentialMetadataDeserializer {
 #[allow(dead_code)]
 struct ServiceSpecificCredentialsListTypeDeserializer;
 impl ServiceSpecificCredentialsListTypeDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<ServiceSpecificCredentialMetadata>, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
+
         deserialize_elements::<_, Vec<_>, _>(tag_name, stack, |name, stack, obj| {
             if name == "member" {
                 obj.push(ServiceSpecificCredentialMetadataDeserializer::deserialize(
@@ -9526,19 +9892,22 @@ impl ServiceSpecificCredentialsListTypeDeserializer {
 #[allow(dead_code)]
 struct ServiceUserNameDeserializer;
 impl ServiceUserNameDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 #[allow(dead_code)]
 struct ServicesLastAccessedDeserializer;
 impl ServicesLastAccessedDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<ServiceLastAccessed>, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
+
         deserialize_elements::<_, Vec<_>, _>(tag_name, stack, |name, stack, obj| {
             if name == "member" {
                 obj.push(ServiceLastAccessedDeserializer::deserialize(
@@ -9563,10 +9932,11 @@ pub struct SetDefaultPolicyVersionRequest {
 /// Serialize `SetDefaultPolicyVersionRequest` contents to a `SignedRequest`.
 struct SetDefaultPolicyVersionRequestSerializer;
 impl SetDefaultPolicyVersionRequestSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &SetDefaultPolicyVersionRequest) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         params.put(&format!("{}{}", prefix, "PolicyArn"), &obj.policy_arn);
@@ -9584,10 +9954,11 @@ pub struct SetSecurityTokenServicePreferencesRequest {
 /// Serialize `SetSecurityTokenServicePreferencesRequest` contents to a `SignedRequest`.
 struct SetSecurityTokenServicePreferencesRequestSerializer;
 impl SetSecurityTokenServicePreferencesRequestSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &SetSecurityTokenServicePreferencesRequest) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         params.put(
@@ -9616,11 +9987,12 @@ pub struct SigningCertificate {
 #[allow(dead_code)]
 struct SigningCertificateDeserializer;
 impl SigningCertificateDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<SigningCertificate, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, SigningCertificate, _>(tag_name, stack, |name, stack, obj| {
             match name {
                 "CertificateBody" => {
@@ -9676,10 +10048,11 @@ pub struct SimulateCustomPolicyRequest {
 /// Serialize `SimulateCustomPolicyRequest` contents to a `SignedRequest`.
 struct SimulateCustomPolicyRequestSerializer;
 impl SimulateCustomPolicyRequestSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &SimulateCustomPolicyRequest) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         ActionNameListTypeSerializer::serialize(
@@ -9752,11 +10125,12 @@ pub struct SimulatePolicyResponse {
 #[allow(dead_code)]
 struct SimulatePolicyResponseDeserializer;
 impl SimulatePolicyResponseDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<SimulatePolicyResponse, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, SimulatePolicyResponse, _>(tag_name, stack, |name, stack, obj| {
             match name {
                 "EvaluationResults" => {
@@ -9814,10 +10188,11 @@ pub struct SimulatePrincipalPolicyRequest {
 /// Serialize `SimulatePrincipalPolicyRequest` contents to a `SignedRequest`.
 struct SimulatePrincipalPolicyRequestSerializer;
 impl SimulatePrincipalPolicyRequestSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &SimulatePrincipalPolicyRequest) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         ActionNameListTypeSerializer::serialize(
@@ -9884,6 +10259,7 @@ impl SimulatePrincipalPolicyRequestSerializer {
 /// Serialize `SimulationPolicyListType` contents to a `SignedRequest`.
 struct SimulationPolicyListTypeSerializer;
 impl SimulationPolicyListTypeSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &Vec<String>) {
         for (index, obj) in obj.iter().enumerate() {
             let key = format!("{}.member.{}", name, index + 1);
@@ -9909,11 +10285,12 @@ pub struct Statement {
 #[allow(dead_code)]
 struct StatementDeserializer;
 impl StatementDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Statement, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, Statement, _>(tag_name, stack, |name, stack, obj| {
             match name {
                 "EndPosition" => {
@@ -9945,11 +10322,13 @@ impl StatementDeserializer {
 #[allow(dead_code)]
 struct StatementListTypeDeserializer;
 impl StatementListTypeDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<Statement>, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
+
         deserialize_elements::<_, Vec<_>, _>(tag_name, stack, |name, stack, obj| {
             if name == "member" {
                 obj.push(StatementDeserializer::deserialize("member", stack)?);
@@ -9963,35 +10342,39 @@ impl StatementListTypeDeserializer {
 #[allow(dead_code)]
 struct StatusTypeDeserializer;
 impl StatusTypeDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 #[allow(dead_code)]
 struct StringTypeDeserializer;
 impl StringTypeDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 #[allow(dead_code)]
 struct SummaryKeyTypeDeserializer;
 impl SummaryKeyTypeDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 #[allow(dead_code)]
 struct SummaryMapTypeDeserializer;
 impl SummaryMapTypeDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<::std::collections::HashMap<String, i64>, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::start_element(tag_name, stack)?;
 
         let mut obj = ::std::collections::HashMap::new();
@@ -10011,8 +10394,9 @@ impl SummaryMapTypeDeserializer {
 #[allow(dead_code)]
 struct SummaryValueTypeDeserializer;
 impl SummaryValueTypeDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<i64, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::deserialize_primitive(tag_name, stack, |s| Ok(i64::from_str(&s).unwrap()))
     }
 }
@@ -10030,8 +10414,9 @@ pub struct Tag {
 #[allow(dead_code)]
 struct TagDeserializer;
 impl TagDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<Tag, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, Tag, _>(tag_name, stack, |name, stack, obj| {
             match name {
                 "Key" => {
@@ -10050,10 +10435,11 @@ impl TagDeserializer {
 /// Serialize `Tag` contents to a `SignedRequest`.
 struct TagSerializer;
 impl TagSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &Tag) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         params.put(&format!("{}{}", prefix, "Key"), &obj.key);
@@ -10064,6 +10450,7 @@ impl TagSerializer {
 /// Serialize `TagKeyListType` contents to a `SignedRequest`.
 struct TagKeyListTypeSerializer;
 impl TagKeyListTypeSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &Vec<String>) {
         for (index, obj) in obj.iter().enumerate() {
             let key = format!("{}.member.{}", name, index + 1);
@@ -10075,19 +10462,22 @@ impl TagKeyListTypeSerializer {
 #[allow(dead_code)]
 struct TagKeyTypeDeserializer;
 impl TagKeyTypeDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 #[allow(dead_code)]
 struct TagListTypeDeserializer;
 impl TagListTypeDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<Tag>, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
+
         deserialize_elements::<_, Vec<_>, _>(tag_name, stack, |name, stack, obj| {
             if name == "member" {
                 obj.push(TagDeserializer::deserialize("member", stack)?);
@@ -10102,6 +10492,7 @@ impl TagListTypeDeserializer {
 /// Serialize `TagListType` contents to a `SignedRequest`.
 struct TagListTypeSerializer;
 impl TagListTypeSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &Vec<Tag>) {
         for (index, obj) in obj.iter().enumerate() {
             let key = format!("{}.member.{}", name, index + 1);
@@ -10122,10 +10513,11 @@ pub struct TagRoleRequest {
 /// Serialize `TagRoleRequest` contents to a `SignedRequest`.
 struct TagRoleRequestSerializer;
 impl TagRoleRequestSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &TagRoleRequest) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         params.put(&format!("{}{}", prefix, "RoleName"), &obj.role_name);
@@ -10145,10 +10537,11 @@ pub struct TagUserRequest {
 /// Serialize `TagUserRequest` contents to a `SignedRequest`.
 struct TagUserRequestSerializer;
 impl TagUserRequestSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &TagUserRequest) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         TagListTypeSerializer::serialize(params, &format!("{}{}", prefix, "Tags"), &obj.tags);
@@ -10159,19 +10552,22 @@ impl TagUserRequestSerializer {
 #[allow(dead_code)]
 struct TagValueTypeDeserializer;
 impl TagValueTypeDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 #[allow(dead_code)]
 struct ThumbprintListTypeDeserializer;
 impl ThumbprintListTypeDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<String>, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
+
         deserialize_elements::<_, Vec<_>, _>(tag_name, stack, |name, stack, obj| {
             if name == "member" {
                 obj.push(ThumbprintTypeDeserializer::deserialize("member", stack)?);
@@ -10186,6 +10582,7 @@ impl ThumbprintListTypeDeserializer {
 /// Serialize `ThumbprintListType` contents to a `SignedRequest`.
 struct ThumbprintListTypeSerializer;
 impl ThumbprintListTypeSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &Vec<String>) {
         for (index, obj) in obj.iter().enumerate() {
             let key = format!("{}.member.{}", name, index + 1);
@@ -10197,8 +10594,9 @@ impl ThumbprintListTypeSerializer {
 #[allow(dead_code)]
 struct ThumbprintTypeDeserializer;
 impl ThumbprintTypeDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
@@ -10218,11 +10616,12 @@ pub struct TrackedActionLastAccessed {
 #[allow(dead_code)]
 struct TrackedActionLastAccessedDeserializer;
 impl TrackedActionLastAccessedDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<TrackedActionLastAccessed, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, TrackedActionLastAccessed, _>(
             tag_name,
             stack,
@@ -10260,11 +10659,13 @@ impl TrackedActionLastAccessedDeserializer {
 #[allow(dead_code)]
 struct TrackedActionsLastAccessedDeserializer;
 impl TrackedActionsLastAccessedDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<TrackedActionLastAccessed>, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
+
         deserialize_elements::<_, Vec<_>, _>(tag_name, stack, |name, stack, obj| {
             if name == "member" {
                 obj.push(TrackedActionLastAccessedDeserializer::deserialize(
@@ -10289,10 +10690,11 @@ pub struct UntagRoleRequest {
 /// Serialize `UntagRoleRequest` contents to a `SignedRequest`.
 struct UntagRoleRequestSerializer;
 impl UntagRoleRequestSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &UntagRoleRequest) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         params.put(&format!("{}{}", prefix, "RoleName"), &obj.role_name);
@@ -10316,10 +10718,11 @@ pub struct UntagUserRequest {
 /// Serialize `UntagUserRequest` contents to a `SignedRequest`.
 struct UntagUserRequestSerializer;
 impl UntagUserRequestSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &UntagUserRequest) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         TagKeyListTypeSerializer::serialize(
@@ -10345,10 +10748,11 @@ pub struct UpdateAccessKeyRequest {
 /// Serialize `UpdateAccessKeyRequest` contents to a `SignedRequest`.
 struct UpdateAccessKeyRequestSerializer;
 impl UpdateAccessKeyRequestSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &UpdateAccessKeyRequest) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         params.put(&format!("{}{}", prefix, "AccessKeyId"), &obj.access_key_id);
@@ -10385,10 +10789,11 @@ pub struct UpdateAccountPasswordPolicyRequest {
 /// Serialize `UpdateAccountPasswordPolicyRequest` contents to a `SignedRequest`.
 struct UpdateAccountPasswordPolicyRequestSerializer;
 impl UpdateAccountPasswordPolicyRequestSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &UpdateAccountPasswordPolicyRequest) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         if let Some(ref field_value) = obj.allow_users_to_change_password {
@@ -10448,10 +10853,11 @@ pub struct UpdateAssumeRolePolicyRequest {
 /// Serialize `UpdateAssumeRolePolicyRequest` contents to a `SignedRequest`.
 struct UpdateAssumeRolePolicyRequestSerializer;
 impl UpdateAssumeRolePolicyRequestSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &UpdateAssumeRolePolicyRequest) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         params.put(
@@ -10476,10 +10882,11 @@ pub struct UpdateGroupRequest {
 /// Serialize `UpdateGroupRequest` contents to a `SignedRequest`.
 struct UpdateGroupRequestSerializer;
 impl UpdateGroupRequestSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &UpdateGroupRequest) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         params.put(&format!("{}{}", prefix, "GroupName"), &obj.group_name);
@@ -10506,10 +10913,11 @@ pub struct UpdateLoginProfileRequest {
 /// Serialize `UpdateLoginProfileRequest` contents to a `SignedRequest`.
 struct UpdateLoginProfileRequestSerializer;
 impl UpdateLoginProfileRequestSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &UpdateLoginProfileRequest) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         if let Some(ref field_value) = obj.password {
@@ -10537,14 +10945,15 @@ pub struct UpdateOpenIDConnectProviderThumbprintRequest {
 /// Serialize `UpdateOpenIDConnectProviderThumbprintRequest` contents to a `SignedRequest`.
 struct UpdateOpenIDConnectProviderThumbprintRequestSerializer;
 impl UpdateOpenIDConnectProviderThumbprintRequestSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(
         params: &mut Params,
         name: &str,
         obj: &UpdateOpenIDConnectProviderThumbprintRequest,
     ) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         params.put(
@@ -10571,10 +10980,11 @@ pub struct UpdateRoleDescriptionRequest {
 /// Serialize `UpdateRoleDescriptionRequest` contents to a `SignedRequest`.
 struct UpdateRoleDescriptionRequestSerializer;
 impl UpdateRoleDescriptionRequestSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &UpdateRoleDescriptionRequest) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         params.put(&format!("{}{}", prefix, "Description"), &obj.description);
@@ -10592,11 +11002,12 @@ pub struct UpdateRoleDescriptionResponse {
 #[allow(dead_code)]
 struct UpdateRoleDescriptionResponseDeserializer;
 impl UpdateRoleDescriptionResponseDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<UpdateRoleDescriptionResponse, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, UpdateRoleDescriptionResponse, _>(
             tag_name,
             stack,
@@ -10626,10 +11037,11 @@ pub struct UpdateRoleRequest {
 /// Serialize `UpdateRoleRequest` contents to a `SignedRequest`.
 struct UpdateRoleRequestSerializer;
 impl UpdateRoleRequestSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &UpdateRoleRequest) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         if let Some(ref field_value) = obj.description {
@@ -10649,11 +11061,12 @@ pub struct UpdateRoleResponse {}
 #[allow(dead_code)]
 struct UpdateRoleResponseDeserializer;
 impl UpdateRoleResponseDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<UpdateRoleResponse, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::start_element(tag_name, stack)?;
 
         let obj = UpdateRoleResponse::default();
@@ -10675,10 +11088,11 @@ pub struct UpdateSAMLProviderRequest {
 /// Serialize `UpdateSAMLProviderRequest` contents to a `SignedRequest`.
 struct UpdateSAMLProviderRequestSerializer;
 impl UpdateSAMLProviderRequestSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &UpdateSAMLProviderRequest) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         params.put(
@@ -10703,11 +11117,12 @@ pub struct UpdateSAMLProviderResponse {
 #[allow(dead_code)]
 struct UpdateSAMLProviderResponseDeserializer;
 impl UpdateSAMLProviderResponseDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<UpdateSAMLProviderResponse, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, UpdateSAMLProviderResponse, _>(
             tag_name,
             stack,
@@ -10738,10 +11153,11 @@ pub struct UpdateSSHPublicKeyRequest {
 /// Serialize `UpdateSSHPublicKeyRequest` contents to a `SignedRequest`.
 struct UpdateSSHPublicKeyRequestSerializer;
 impl UpdateSSHPublicKeyRequestSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &UpdateSSHPublicKeyRequest) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         params.put(
@@ -10767,10 +11183,11 @@ pub struct UpdateServerCertificateRequest {
 /// Serialize `UpdateServerCertificateRequest` contents to a `SignedRequest`.
 struct UpdateServerCertificateRequestSerializer;
 impl UpdateServerCertificateRequestSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &UpdateServerCertificateRequest) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         if let Some(ref field_value) = obj.new_path {
@@ -10803,10 +11220,11 @@ pub struct UpdateServiceSpecificCredentialRequest {
 /// Serialize `UpdateServiceSpecificCredentialRequest` contents to a `SignedRequest`.
 struct UpdateServiceSpecificCredentialRequestSerializer;
 impl UpdateServiceSpecificCredentialRequestSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &UpdateServiceSpecificCredentialRequest) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         params.put(
@@ -10834,10 +11252,11 @@ pub struct UpdateSigningCertificateRequest {
 /// Serialize `UpdateSigningCertificateRequest` contents to a `SignedRequest`.
 struct UpdateSigningCertificateRequestSerializer;
 impl UpdateSigningCertificateRequestSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &UpdateSigningCertificateRequest) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         params.put(
@@ -10865,10 +11284,11 @@ pub struct UpdateUserRequest {
 /// Serialize `UpdateUserRequest` contents to a `SignedRequest`.
 struct UpdateUserRequestSerializer;
 impl UpdateUserRequestSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &UpdateUserRequest) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         if let Some(ref field_value) = obj.new_path {
@@ -10893,10 +11313,11 @@ pub struct UploadSSHPublicKeyRequest {
 /// Serialize `UploadSSHPublicKeyRequest` contents to a `SignedRequest`.
 struct UploadSSHPublicKeyRequestSerializer;
 impl UploadSSHPublicKeyRequestSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &UploadSSHPublicKeyRequest) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         params.put(
@@ -10918,11 +11339,12 @@ pub struct UploadSSHPublicKeyResponse {
 #[allow(dead_code)]
 struct UploadSSHPublicKeyResponseDeserializer;
 impl UploadSSHPublicKeyResponseDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<UploadSSHPublicKeyResponse, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, UploadSSHPublicKeyResponse, _>(
             tag_name,
             stack,
@@ -10959,10 +11381,11 @@ pub struct UploadServerCertificateRequest {
 /// Serialize `UploadServerCertificateRequest` contents to a `SignedRequest`.
 struct UploadServerCertificateRequestSerializer;
 impl UploadServerCertificateRequestSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &UploadServerCertificateRequest) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         params.put(
@@ -10994,11 +11417,12 @@ pub struct UploadServerCertificateResponse {
 #[allow(dead_code)]
 struct UploadServerCertificateResponseDeserializer;
 impl UploadServerCertificateResponseDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<UploadServerCertificateResponse, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, UploadServerCertificateResponse, _>(
             tag_name,
             stack,
@@ -11030,10 +11454,11 @@ pub struct UploadSigningCertificateRequest {
 /// Serialize `UploadSigningCertificateRequest` contents to a `SignedRequest`.
 struct UploadSigningCertificateRequestSerializer;
 impl UploadSigningCertificateRequestSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &UploadSigningCertificateRequest) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         params.put(
@@ -11057,11 +11482,12 @@ pub struct UploadSigningCertificateResponse {
 #[allow(dead_code)]
 struct UploadSigningCertificateResponseDeserializer;
 impl UploadSigningCertificateResponseDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<UploadSigningCertificateResponse, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, UploadSigningCertificateResponse, _>(
             tag_name,
             stack,
@@ -11103,8 +11529,9 @@ pub struct User {
 #[allow(dead_code)]
 struct UserDeserializer;
 impl UserDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<User, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, User, _>(tag_name, stack, |name, stack, obj| {
             match name {
                 "Arn" => {
@@ -11174,11 +11601,12 @@ pub struct UserDetail {
 #[allow(dead_code)]
 struct UserDetailDeserializer;
 impl UserDetailDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<UserDetail, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, UserDetail, _>(tag_name, stack, |name, stack, obj| {
             match name {
                 "Arn" => {
@@ -11235,11 +11663,13 @@ impl UserDetailDeserializer {
 #[allow(dead_code)]
 struct UserDetailListTypeDeserializer;
 impl UserDetailListTypeDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<UserDetail>, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
+
         deserialize_elements::<_, Vec<_>, _>(tag_name, stack, |name, stack, obj| {
             if name == "member" {
                 obj.push(UserDetailDeserializer::deserialize("member", stack)?);
@@ -11253,11 +11683,13 @@ impl UserDetailListTypeDeserializer {
 #[allow(dead_code)]
 struct UserListTypeDeserializer;
 impl UserListTypeDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<User>, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
+
         deserialize_elements::<_, Vec<_>, _>(tag_name, stack, |name, stack, obj| {
             if name == "member" {
                 obj.push(UserDeserializer::deserialize("member", stack)?);
@@ -11271,8 +11703,9 @@ impl UserListTypeDeserializer {
 #[allow(dead_code)]
 struct UserNameTypeDeserializer;
 impl UserNameTypeDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
@@ -11295,11 +11728,12 @@ pub struct VirtualMFADevice {
 #[allow(dead_code)]
 struct VirtualMFADeviceDeserializer;
 impl VirtualMFADeviceDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<VirtualMFADevice, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, VirtualMFADevice, _>(tag_name, stack, |name, stack, obj| {
             match name {
                 "Base32StringSeed" => {
@@ -11331,11 +11765,13 @@ impl VirtualMFADeviceDeserializer {
 #[allow(dead_code)]
 struct VirtualMFADeviceListTypeDeserializer;
 impl VirtualMFADeviceListTypeDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<VirtualMFADevice>, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
+
         deserialize_elements::<_, Vec<_>, _>(tag_name, stack, |name, stack, obj| {
             if name == "member" {
                 obj.push(VirtualMFADeviceDeserializer::deserialize("member", stack)?);
@@ -11367,37 +11803,40 @@ impl AddClientIDToOpenIDConnectProviderError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    "InvalidInput" => {
-                        return RusotoError::Service(
-                            AddClientIDToOpenIDConnectProviderError::InvalidInput(
-                                parsed_error.message,
-                            ),
-                        )
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {
+                        "InvalidInput" => {
+                            return RusotoError::Service(
+                                AddClientIDToOpenIDConnectProviderError::InvalidInput(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "LimitExceeded" => {
+                            return RusotoError::Service(
+                                AddClientIDToOpenIDConnectProviderError::LimitExceeded(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "NoSuchEntity" => {
+                            return RusotoError::Service(
+                                AddClientIDToOpenIDConnectProviderError::NoSuchEntity(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "ServiceFailure" => {
+                            return RusotoError::Service(
+                                AddClientIDToOpenIDConnectProviderError::ServiceFailure(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        _ => {}
                     }
-                    "LimitExceeded" => {
-                        return RusotoError::Service(
-                            AddClientIDToOpenIDConnectProviderError::LimitExceeded(
-                                parsed_error.message,
-                            ),
-                        )
-                    }
-                    "NoSuchEntity" => {
-                        return RusotoError::Service(
-                            AddClientIDToOpenIDConnectProviderError::NoSuchEntity(
-                                parsed_error.message,
-                            ),
-                        )
-                    }
-                    "ServiceFailure" => {
-                        return RusotoError::Service(
-                            AddClientIDToOpenIDConnectProviderError::ServiceFailure(
-                                parsed_error.message,
-                            ),
-                        )
-                    }
-                    _ => {}
                 }
             }
         }
@@ -11453,36 +11892,41 @@ impl AddRoleToInstanceProfileError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    "EntityAlreadyExists" => {
-                        return RusotoError::Service(
-                            AddRoleToInstanceProfileError::EntityAlreadyExists(
-                                parsed_error.message,
-                            ),
-                        )
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {
+                        "EntityAlreadyExists" => {
+                            return RusotoError::Service(
+                                AddRoleToInstanceProfileError::EntityAlreadyExists(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "LimitExceeded" => {
+                            return RusotoError::Service(
+                                AddRoleToInstanceProfileError::LimitExceeded(parsed_error.message),
+                            )
+                        }
+                        "NoSuchEntity" => {
+                            return RusotoError::Service(
+                                AddRoleToInstanceProfileError::NoSuchEntity(parsed_error.message),
+                            )
+                        }
+                        "ServiceFailure" => {
+                            return RusotoError::Service(
+                                AddRoleToInstanceProfileError::ServiceFailure(parsed_error.message),
+                            )
+                        }
+                        "UnmodifiableEntity" => {
+                            return RusotoError::Service(
+                                AddRoleToInstanceProfileError::UnmodifiableEntity(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        _ => {}
                     }
-                    "LimitExceeded" => {
-                        return RusotoError::Service(AddRoleToInstanceProfileError::LimitExceeded(
-                            parsed_error.message,
-                        ))
-                    }
-                    "NoSuchEntity" => {
-                        return RusotoError::Service(AddRoleToInstanceProfileError::NoSuchEntity(
-                            parsed_error.message,
-                        ))
-                    }
-                    "ServiceFailure" => {
-                        return RusotoError::Service(AddRoleToInstanceProfileError::ServiceFailure(
-                            parsed_error.message,
-                        ))
-                    }
-                    "UnmodifiableEntity" => {
-                        return RusotoError::Service(
-                            AddRoleToInstanceProfileError::UnmodifiableEntity(parsed_error.message),
-                        )
-                    }
-                    _ => {}
                 }
             }
         }
@@ -11527,24 +11971,27 @@ impl AddUserToGroupError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    "LimitExceeded" => {
-                        return RusotoError::Service(AddUserToGroupError::LimitExceeded(
-                            parsed_error.message,
-                        ))
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {
+                        "LimitExceeded" => {
+                            return RusotoError::Service(AddUserToGroupError::LimitExceeded(
+                                parsed_error.message,
+                            ))
+                        }
+                        "NoSuchEntity" => {
+                            return RusotoError::Service(AddUserToGroupError::NoSuchEntity(
+                                parsed_error.message,
+                            ))
+                        }
+                        "ServiceFailure" => {
+                            return RusotoError::Service(AddUserToGroupError::ServiceFailure(
+                                parsed_error.message,
+                            ))
+                        }
+                        _ => {}
                     }
-                    "NoSuchEntity" => {
-                        return RusotoError::Service(AddUserToGroupError::NoSuchEntity(
-                            parsed_error.message,
-                        ))
-                    }
-                    "ServiceFailure" => {
-                        return RusotoError::Service(AddUserToGroupError::ServiceFailure(
-                            parsed_error.message,
-                        ))
-                    }
-                    _ => {}
                 }
             }
         }
@@ -11591,34 +12038,37 @@ impl AttachGroupPolicyError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    "InvalidInput" => {
-                        return RusotoError::Service(AttachGroupPolicyError::InvalidInput(
-                            parsed_error.message,
-                        ))
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {
+                        "InvalidInput" => {
+                            return RusotoError::Service(AttachGroupPolicyError::InvalidInput(
+                                parsed_error.message,
+                            ))
+                        }
+                        "LimitExceeded" => {
+                            return RusotoError::Service(AttachGroupPolicyError::LimitExceeded(
+                                parsed_error.message,
+                            ))
+                        }
+                        "NoSuchEntity" => {
+                            return RusotoError::Service(AttachGroupPolicyError::NoSuchEntity(
+                                parsed_error.message,
+                            ))
+                        }
+                        "PolicyNotAttachable" => {
+                            return RusotoError::Service(
+                                AttachGroupPolicyError::PolicyNotAttachable(parsed_error.message),
+                            )
+                        }
+                        "ServiceFailure" => {
+                            return RusotoError::Service(AttachGroupPolicyError::ServiceFailure(
+                                parsed_error.message,
+                            ))
+                        }
+                        _ => {}
                     }
-                    "LimitExceeded" => {
-                        return RusotoError::Service(AttachGroupPolicyError::LimitExceeded(
-                            parsed_error.message,
-                        ))
-                    }
-                    "NoSuchEntity" => {
-                        return RusotoError::Service(AttachGroupPolicyError::NoSuchEntity(
-                            parsed_error.message,
-                        ))
-                    }
-                    "PolicyNotAttachable" => {
-                        return RusotoError::Service(AttachGroupPolicyError::PolicyNotAttachable(
-                            parsed_error.message,
-                        ))
-                    }
-                    "ServiceFailure" => {
-                        return RusotoError::Service(AttachGroupPolicyError::ServiceFailure(
-                            parsed_error.message,
-                        ))
-                    }
-                    _ => {}
                 }
             }
         }
@@ -11669,39 +12119,42 @@ impl AttachRolePolicyError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    "InvalidInput" => {
-                        return RusotoError::Service(AttachRolePolicyError::InvalidInput(
-                            parsed_error.message,
-                        ))
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {
+                        "InvalidInput" => {
+                            return RusotoError::Service(AttachRolePolicyError::InvalidInput(
+                                parsed_error.message,
+                            ))
+                        }
+                        "LimitExceeded" => {
+                            return RusotoError::Service(AttachRolePolicyError::LimitExceeded(
+                                parsed_error.message,
+                            ))
+                        }
+                        "NoSuchEntity" => {
+                            return RusotoError::Service(AttachRolePolicyError::NoSuchEntity(
+                                parsed_error.message,
+                            ))
+                        }
+                        "PolicyNotAttachable" => {
+                            return RusotoError::Service(
+                                AttachRolePolicyError::PolicyNotAttachable(parsed_error.message),
+                            )
+                        }
+                        "ServiceFailure" => {
+                            return RusotoError::Service(AttachRolePolicyError::ServiceFailure(
+                                parsed_error.message,
+                            ))
+                        }
+                        "UnmodifiableEntity" => {
+                            return RusotoError::Service(AttachRolePolicyError::UnmodifiableEntity(
+                                parsed_error.message,
+                            ))
+                        }
+                        _ => {}
                     }
-                    "LimitExceeded" => {
-                        return RusotoError::Service(AttachRolePolicyError::LimitExceeded(
-                            parsed_error.message,
-                        ))
-                    }
-                    "NoSuchEntity" => {
-                        return RusotoError::Service(AttachRolePolicyError::NoSuchEntity(
-                            parsed_error.message,
-                        ))
-                    }
-                    "PolicyNotAttachable" => {
-                        return RusotoError::Service(AttachRolePolicyError::PolicyNotAttachable(
-                            parsed_error.message,
-                        ))
-                    }
-                    "ServiceFailure" => {
-                        return RusotoError::Service(AttachRolePolicyError::ServiceFailure(
-                            parsed_error.message,
-                        ))
-                    }
-                    "UnmodifiableEntity" => {
-                        return RusotoError::Service(AttachRolePolicyError::UnmodifiableEntity(
-                            parsed_error.message,
-                        ))
-                    }
-                    _ => {}
                 }
             }
         }
@@ -11751,34 +12204,37 @@ impl AttachUserPolicyError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    "InvalidInput" => {
-                        return RusotoError::Service(AttachUserPolicyError::InvalidInput(
-                            parsed_error.message,
-                        ))
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {
+                        "InvalidInput" => {
+                            return RusotoError::Service(AttachUserPolicyError::InvalidInput(
+                                parsed_error.message,
+                            ))
+                        }
+                        "LimitExceeded" => {
+                            return RusotoError::Service(AttachUserPolicyError::LimitExceeded(
+                                parsed_error.message,
+                            ))
+                        }
+                        "NoSuchEntity" => {
+                            return RusotoError::Service(AttachUserPolicyError::NoSuchEntity(
+                                parsed_error.message,
+                            ))
+                        }
+                        "PolicyNotAttachable" => {
+                            return RusotoError::Service(
+                                AttachUserPolicyError::PolicyNotAttachable(parsed_error.message),
+                            )
+                        }
+                        "ServiceFailure" => {
+                            return RusotoError::Service(AttachUserPolicyError::ServiceFailure(
+                                parsed_error.message,
+                            ))
+                        }
+                        _ => {}
                     }
-                    "LimitExceeded" => {
-                        return RusotoError::Service(AttachUserPolicyError::LimitExceeded(
-                            parsed_error.message,
-                        ))
-                    }
-                    "NoSuchEntity" => {
-                        return RusotoError::Service(AttachUserPolicyError::NoSuchEntity(
-                            parsed_error.message,
-                        ))
-                    }
-                    "PolicyNotAttachable" => {
-                        return RusotoError::Service(AttachUserPolicyError::PolicyNotAttachable(
-                            parsed_error.message,
-                        ))
-                    }
-                    "ServiceFailure" => {
-                        return RusotoError::Service(AttachUserPolicyError::ServiceFailure(
-                            parsed_error.message,
-                        ))
-                    }
-                    _ => {}
                 }
             }
         }
@@ -11829,41 +12285,44 @@ impl ChangePasswordError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    "EntityTemporarilyUnmodifiable" => {
-                        return RusotoError::Service(
-                            ChangePasswordError::EntityTemporarilyUnmodifiable(
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {
+                        "EntityTemporarilyUnmodifiable" => {
+                            return RusotoError::Service(
+                                ChangePasswordError::EntityTemporarilyUnmodifiable(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "InvalidUserType" => {
+                            return RusotoError::Service(ChangePasswordError::InvalidUserType(
                                 parsed_error.message,
-                            ),
-                        )
+                            ))
+                        }
+                        "LimitExceeded" => {
+                            return RusotoError::Service(ChangePasswordError::LimitExceeded(
+                                parsed_error.message,
+                            ))
+                        }
+                        "NoSuchEntity" => {
+                            return RusotoError::Service(ChangePasswordError::NoSuchEntity(
+                                parsed_error.message,
+                            ))
+                        }
+                        "PasswordPolicyViolation" => {
+                            return RusotoError::Service(
+                                ChangePasswordError::PasswordPolicyViolation(parsed_error.message),
+                            )
+                        }
+                        "ServiceFailure" => {
+                            return RusotoError::Service(ChangePasswordError::ServiceFailure(
+                                parsed_error.message,
+                            ))
+                        }
+                        _ => {}
                     }
-                    "InvalidUserType" => {
-                        return RusotoError::Service(ChangePasswordError::InvalidUserType(
-                            parsed_error.message,
-                        ))
-                    }
-                    "LimitExceeded" => {
-                        return RusotoError::Service(ChangePasswordError::LimitExceeded(
-                            parsed_error.message,
-                        ))
-                    }
-                    "NoSuchEntity" => {
-                        return RusotoError::Service(ChangePasswordError::NoSuchEntity(
-                            parsed_error.message,
-                        ))
-                    }
-                    "PasswordPolicyViolation" => {
-                        return RusotoError::Service(ChangePasswordError::PasswordPolicyViolation(
-                            parsed_error.message,
-                        ))
-                    }
-                    "ServiceFailure" => {
-                        return RusotoError::Service(ChangePasswordError::ServiceFailure(
-                            parsed_error.message,
-                        ))
-                    }
-                    _ => {}
                 }
             }
         }
@@ -11909,24 +12368,27 @@ impl CreateAccessKeyError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    "LimitExceeded" => {
-                        return RusotoError::Service(CreateAccessKeyError::LimitExceeded(
-                            parsed_error.message,
-                        ))
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {
+                        "LimitExceeded" => {
+                            return RusotoError::Service(CreateAccessKeyError::LimitExceeded(
+                                parsed_error.message,
+                            ))
+                        }
+                        "NoSuchEntity" => {
+                            return RusotoError::Service(CreateAccessKeyError::NoSuchEntity(
+                                parsed_error.message,
+                            ))
+                        }
+                        "ServiceFailure" => {
+                            return RusotoError::Service(CreateAccessKeyError::ServiceFailure(
+                                parsed_error.message,
+                            ))
+                        }
+                        _ => {}
                     }
-                    "NoSuchEntity" => {
-                        return RusotoError::Service(CreateAccessKeyError::NoSuchEntity(
-                            parsed_error.message,
-                        ))
-                    }
-                    "ServiceFailure" => {
-                        return RusotoError::Service(CreateAccessKeyError::ServiceFailure(
-                            parsed_error.message,
-                        ))
-                    }
-                    _ => {}
                 }
             }
         }
@@ -11969,24 +12431,27 @@ impl CreateAccountAliasError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    "EntityAlreadyExists" => {
-                        return RusotoError::Service(CreateAccountAliasError::EntityAlreadyExists(
-                            parsed_error.message,
-                        ))
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {
+                        "EntityAlreadyExists" => {
+                            return RusotoError::Service(
+                                CreateAccountAliasError::EntityAlreadyExists(parsed_error.message),
+                            )
+                        }
+                        "LimitExceeded" => {
+                            return RusotoError::Service(CreateAccountAliasError::LimitExceeded(
+                                parsed_error.message,
+                            ))
+                        }
+                        "ServiceFailure" => {
+                            return RusotoError::Service(CreateAccountAliasError::ServiceFailure(
+                                parsed_error.message,
+                            ))
+                        }
+                        _ => {}
                     }
-                    "LimitExceeded" => {
-                        return RusotoError::Service(CreateAccountAliasError::LimitExceeded(
-                            parsed_error.message,
-                        ))
-                    }
-                    "ServiceFailure" => {
-                        return RusotoError::Service(CreateAccountAliasError::ServiceFailure(
-                            parsed_error.message,
-                        ))
-                    }
-                    _ => {}
                 }
             }
         }
@@ -12031,29 +12496,32 @@ impl CreateGroupError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    "EntityAlreadyExists" => {
-                        return RusotoError::Service(CreateGroupError::EntityAlreadyExists(
-                            parsed_error.message,
-                        ))
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {
+                        "EntityAlreadyExists" => {
+                            return RusotoError::Service(CreateGroupError::EntityAlreadyExists(
+                                parsed_error.message,
+                            ))
+                        }
+                        "LimitExceeded" => {
+                            return RusotoError::Service(CreateGroupError::LimitExceeded(
+                                parsed_error.message,
+                            ))
+                        }
+                        "NoSuchEntity" => {
+                            return RusotoError::Service(CreateGroupError::NoSuchEntity(
+                                parsed_error.message,
+                            ))
+                        }
+                        "ServiceFailure" => {
+                            return RusotoError::Service(CreateGroupError::ServiceFailure(
+                                parsed_error.message,
+                            ))
+                        }
+                        _ => {}
                     }
-                    "LimitExceeded" => {
-                        return RusotoError::Service(CreateGroupError::LimitExceeded(
-                            parsed_error.message,
-                        ))
-                    }
-                    "NoSuchEntity" => {
-                        return RusotoError::Service(CreateGroupError::NoSuchEntity(
-                            parsed_error.message,
-                        ))
-                    }
-                    "ServiceFailure" => {
-                        return RusotoError::Service(CreateGroupError::ServiceFailure(
-                            parsed_error.message,
-                        ))
-                    }
-                    _ => {}
                 }
             }
         }
@@ -12097,24 +12565,29 @@ impl CreateInstanceProfileError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    "EntityAlreadyExists" => {
-                        return RusotoError::Service(
-                            CreateInstanceProfileError::EntityAlreadyExists(parsed_error.message),
-                        )
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {
+                        "EntityAlreadyExists" => {
+                            return RusotoError::Service(
+                                CreateInstanceProfileError::EntityAlreadyExists(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "LimitExceeded" => {
+                            return RusotoError::Service(CreateInstanceProfileError::LimitExceeded(
+                                parsed_error.message,
+                            ))
+                        }
+                        "ServiceFailure" => {
+                            return RusotoError::Service(
+                                CreateInstanceProfileError::ServiceFailure(parsed_error.message),
+                            )
+                        }
+                        _ => {}
                     }
-                    "LimitExceeded" => {
-                        return RusotoError::Service(CreateInstanceProfileError::LimitExceeded(
-                            parsed_error.message,
-                        ))
-                    }
-                    "ServiceFailure" => {
-                        return RusotoError::Service(CreateInstanceProfileError::ServiceFailure(
-                            parsed_error.message,
-                        ))
-                    }
-                    _ => {}
                 }
             }
         }
@@ -12161,34 +12634,39 @@ impl CreateLoginProfileError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    "EntityAlreadyExists" => {
-                        return RusotoError::Service(CreateLoginProfileError::EntityAlreadyExists(
-                            parsed_error.message,
-                        ))
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {
+                        "EntityAlreadyExists" => {
+                            return RusotoError::Service(
+                                CreateLoginProfileError::EntityAlreadyExists(parsed_error.message),
+                            )
+                        }
+                        "LimitExceeded" => {
+                            return RusotoError::Service(CreateLoginProfileError::LimitExceeded(
+                                parsed_error.message,
+                            ))
+                        }
+                        "NoSuchEntity" => {
+                            return RusotoError::Service(CreateLoginProfileError::NoSuchEntity(
+                                parsed_error.message,
+                            ))
+                        }
+                        "PasswordPolicyViolation" => {
+                            return RusotoError::Service(
+                                CreateLoginProfileError::PasswordPolicyViolation(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "ServiceFailure" => {
+                            return RusotoError::Service(CreateLoginProfileError::ServiceFailure(
+                                parsed_error.message,
+                            ))
+                        }
+                        _ => {}
                     }
-                    "LimitExceeded" => {
-                        return RusotoError::Service(CreateLoginProfileError::LimitExceeded(
-                            parsed_error.message,
-                        ))
-                    }
-                    "NoSuchEntity" => {
-                        return RusotoError::Service(CreateLoginProfileError::NoSuchEntity(
-                            parsed_error.message,
-                        ))
-                    }
-                    "PasswordPolicyViolation" => {
-                        return RusotoError::Service(
-                            CreateLoginProfileError::PasswordPolicyViolation(parsed_error.message),
-                        )
-                    }
-                    "ServiceFailure" => {
-                        return RusotoError::Service(CreateLoginProfileError::ServiceFailure(
-                            parsed_error.message,
-                        ))
-                    }
-                    _ => {}
                 }
             }
         }
@@ -12237,31 +12715,40 @@ impl CreateOpenIDConnectProviderError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    "EntityAlreadyExists" => {
-                        return RusotoError::Service(
-                            CreateOpenIDConnectProviderError::EntityAlreadyExists(
-                                parsed_error.message,
-                            ),
-                        )
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {
+                        "EntityAlreadyExists" => {
+                            return RusotoError::Service(
+                                CreateOpenIDConnectProviderError::EntityAlreadyExists(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "InvalidInput" => {
+                            return RusotoError::Service(
+                                CreateOpenIDConnectProviderError::InvalidInput(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "LimitExceeded" => {
+                            return RusotoError::Service(
+                                CreateOpenIDConnectProviderError::LimitExceeded(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "ServiceFailure" => {
+                            return RusotoError::Service(
+                                CreateOpenIDConnectProviderError::ServiceFailure(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        _ => {}
                     }
-                    "InvalidInput" => {
-                        return RusotoError::Service(
-                            CreateOpenIDConnectProviderError::InvalidInput(parsed_error.message),
-                        )
-                    }
-                    "LimitExceeded" => {
-                        return RusotoError::Service(
-                            CreateOpenIDConnectProviderError::LimitExceeded(parsed_error.message),
-                        )
-                    }
-                    "ServiceFailure" => {
-                        return RusotoError::Service(
-                            CreateOpenIDConnectProviderError::ServiceFailure(parsed_error.message),
-                        )
-                    }
-                    _ => {}
                 }
             }
         }
@@ -12311,34 +12798,37 @@ impl CreatePolicyError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    "EntityAlreadyExists" => {
-                        return RusotoError::Service(CreatePolicyError::EntityAlreadyExists(
-                            parsed_error.message,
-                        ))
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {
+                        "EntityAlreadyExists" => {
+                            return RusotoError::Service(CreatePolicyError::EntityAlreadyExists(
+                                parsed_error.message,
+                            ))
+                        }
+                        "InvalidInput" => {
+                            return RusotoError::Service(CreatePolicyError::InvalidInput(
+                                parsed_error.message,
+                            ))
+                        }
+                        "LimitExceeded" => {
+                            return RusotoError::Service(CreatePolicyError::LimitExceeded(
+                                parsed_error.message,
+                            ))
+                        }
+                        "MalformedPolicyDocument" => {
+                            return RusotoError::Service(
+                                CreatePolicyError::MalformedPolicyDocument(parsed_error.message),
+                            )
+                        }
+                        "ServiceFailure" => {
+                            return RusotoError::Service(CreatePolicyError::ServiceFailure(
+                                parsed_error.message,
+                            ))
+                        }
+                        _ => {}
                     }
-                    "InvalidInput" => {
-                        return RusotoError::Service(CreatePolicyError::InvalidInput(
-                            parsed_error.message,
-                        ))
-                    }
-                    "LimitExceeded" => {
-                        return RusotoError::Service(CreatePolicyError::LimitExceeded(
-                            parsed_error.message,
-                        ))
-                    }
-                    "MalformedPolicyDocument" => {
-                        return RusotoError::Service(CreatePolicyError::MalformedPolicyDocument(
-                            parsed_error.message,
-                        ))
-                    }
-                    "ServiceFailure" => {
-                        return RusotoError::Service(CreatePolicyError::ServiceFailure(
-                            parsed_error.message,
-                        ))
-                    }
-                    _ => {}
                 }
             }
         }
@@ -12387,34 +12877,39 @@ impl CreatePolicyVersionError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    "InvalidInput" => {
-                        return RusotoError::Service(CreatePolicyVersionError::InvalidInput(
-                            parsed_error.message,
-                        ))
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {
+                        "InvalidInput" => {
+                            return RusotoError::Service(CreatePolicyVersionError::InvalidInput(
+                                parsed_error.message,
+                            ))
+                        }
+                        "LimitExceeded" => {
+                            return RusotoError::Service(CreatePolicyVersionError::LimitExceeded(
+                                parsed_error.message,
+                            ))
+                        }
+                        "MalformedPolicyDocument" => {
+                            return RusotoError::Service(
+                                CreatePolicyVersionError::MalformedPolicyDocument(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "NoSuchEntity" => {
+                            return RusotoError::Service(CreatePolicyVersionError::NoSuchEntity(
+                                parsed_error.message,
+                            ))
+                        }
+                        "ServiceFailure" => {
+                            return RusotoError::Service(CreatePolicyVersionError::ServiceFailure(
+                                parsed_error.message,
+                            ))
+                        }
+                        _ => {}
                     }
-                    "LimitExceeded" => {
-                        return RusotoError::Service(CreatePolicyVersionError::LimitExceeded(
-                            parsed_error.message,
-                        ))
-                    }
-                    "MalformedPolicyDocument" => {
-                        return RusotoError::Service(
-                            CreatePolicyVersionError::MalformedPolicyDocument(parsed_error.message),
-                        )
-                    }
-                    "NoSuchEntity" => {
-                        return RusotoError::Service(CreatePolicyVersionError::NoSuchEntity(
-                            parsed_error.message,
-                        ))
-                    }
-                    "ServiceFailure" => {
-                        return RusotoError::Service(CreatePolicyVersionError::ServiceFailure(
-                            parsed_error.message,
-                        ))
-                    }
-                    _ => {}
                 }
             }
         }
@@ -12465,39 +12960,42 @@ impl CreateRoleError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    "ConcurrentModification" => {
-                        return RusotoError::Service(CreateRoleError::ConcurrentModification(
-                            parsed_error.message,
-                        ))
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {
+                        "ConcurrentModification" => {
+                            return RusotoError::Service(CreateRoleError::ConcurrentModification(
+                                parsed_error.message,
+                            ))
+                        }
+                        "EntityAlreadyExists" => {
+                            return RusotoError::Service(CreateRoleError::EntityAlreadyExists(
+                                parsed_error.message,
+                            ))
+                        }
+                        "InvalidInput" => {
+                            return RusotoError::Service(CreateRoleError::InvalidInput(
+                                parsed_error.message,
+                            ))
+                        }
+                        "LimitExceeded" => {
+                            return RusotoError::Service(CreateRoleError::LimitExceeded(
+                                parsed_error.message,
+                            ))
+                        }
+                        "MalformedPolicyDocument" => {
+                            return RusotoError::Service(CreateRoleError::MalformedPolicyDocument(
+                                parsed_error.message,
+                            ))
+                        }
+                        "ServiceFailure" => {
+                            return RusotoError::Service(CreateRoleError::ServiceFailure(
+                                parsed_error.message,
+                            ))
+                        }
+                        _ => {}
                     }
-                    "EntityAlreadyExists" => {
-                        return RusotoError::Service(CreateRoleError::EntityAlreadyExists(
-                            parsed_error.message,
-                        ))
-                    }
-                    "InvalidInput" => {
-                        return RusotoError::Service(CreateRoleError::InvalidInput(
-                            parsed_error.message,
-                        ))
-                    }
-                    "LimitExceeded" => {
-                        return RusotoError::Service(CreateRoleError::LimitExceeded(
-                            parsed_error.message,
-                        ))
-                    }
-                    "MalformedPolicyDocument" => {
-                        return RusotoError::Service(CreateRoleError::MalformedPolicyDocument(
-                            parsed_error.message,
-                        ))
-                    }
-                    "ServiceFailure" => {
-                        return RusotoError::Service(CreateRoleError::ServiceFailure(
-                            parsed_error.message,
-                        ))
-                    }
-                    _ => {}
                 }
             }
         }
@@ -12545,29 +13043,32 @@ impl CreateSAMLProviderError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    "EntityAlreadyExists" => {
-                        return RusotoError::Service(CreateSAMLProviderError::EntityAlreadyExists(
-                            parsed_error.message,
-                        ))
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {
+                        "EntityAlreadyExists" => {
+                            return RusotoError::Service(
+                                CreateSAMLProviderError::EntityAlreadyExists(parsed_error.message),
+                            )
+                        }
+                        "InvalidInput" => {
+                            return RusotoError::Service(CreateSAMLProviderError::InvalidInput(
+                                parsed_error.message,
+                            ))
+                        }
+                        "LimitExceeded" => {
+                            return RusotoError::Service(CreateSAMLProviderError::LimitExceeded(
+                                parsed_error.message,
+                            ))
+                        }
+                        "ServiceFailure" => {
+                            return RusotoError::Service(CreateSAMLProviderError::ServiceFailure(
+                                parsed_error.message,
+                            ))
+                        }
+                        _ => {}
                     }
-                    "InvalidInput" => {
-                        return RusotoError::Service(CreateSAMLProviderError::InvalidInput(
-                            parsed_error.message,
-                        ))
-                    }
-                    "LimitExceeded" => {
-                        return RusotoError::Service(CreateSAMLProviderError::LimitExceeded(
-                            parsed_error.message,
-                        ))
-                    }
-                    "ServiceFailure" => {
-                        return RusotoError::Service(CreateSAMLProviderError::ServiceFailure(
-                            parsed_error.message,
-                        ))
-                    }
-                    _ => {}
                 }
             }
         }
@@ -12613,29 +13114,32 @@ impl CreateServiceLinkedRoleError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    "InvalidInput" => {
-                        return RusotoError::Service(CreateServiceLinkedRoleError::InvalidInput(
-                            parsed_error.message,
-                        ))
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {
+                        "InvalidInput" => {
+                            return RusotoError::Service(
+                                CreateServiceLinkedRoleError::InvalidInput(parsed_error.message),
+                            )
+                        }
+                        "LimitExceeded" => {
+                            return RusotoError::Service(
+                                CreateServiceLinkedRoleError::LimitExceeded(parsed_error.message),
+                            )
+                        }
+                        "NoSuchEntity" => {
+                            return RusotoError::Service(
+                                CreateServiceLinkedRoleError::NoSuchEntity(parsed_error.message),
+                            )
+                        }
+                        "ServiceFailure" => {
+                            return RusotoError::Service(
+                                CreateServiceLinkedRoleError::ServiceFailure(parsed_error.message),
+                            )
+                        }
+                        _ => {}
                     }
-                    "LimitExceeded" => {
-                        return RusotoError::Service(CreateServiceLinkedRoleError::LimitExceeded(
-                            parsed_error.message,
-                        ))
-                    }
-                    "NoSuchEntity" => {
-                        return RusotoError::Service(CreateServiceLinkedRoleError::NoSuchEntity(
-                            parsed_error.message,
-                        ))
-                    }
-                    "ServiceFailure" => {
-                        return RusotoError::Service(CreateServiceLinkedRoleError::ServiceFailure(
-                            parsed_error.message,
-                        ))
-                    }
-                    _ => {}
                 }
             }
         }
@@ -12681,30 +13185,33 @@ impl CreateServiceSpecificCredentialError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    "LimitExceeded" => {
-                        return RusotoError::Service(
-                            CreateServiceSpecificCredentialError::LimitExceeded(
-                                parsed_error.message,
-                            ),
-                        )
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {
+                        "LimitExceeded" => {
+                            return RusotoError::Service(
+                                CreateServiceSpecificCredentialError::LimitExceeded(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "NoSuchEntity" => {
+                            return RusotoError::Service(
+                                CreateServiceSpecificCredentialError::NoSuchEntity(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "NotSupportedService" => {
+                            return RusotoError::Service(
+                                CreateServiceSpecificCredentialError::ServiceNotSupported(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        _ => {}
                     }
-                    "NoSuchEntity" => {
-                        return RusotoError::Service(
-                            CreateServiceSpecificCredentialError::NoSuchEntity(
-                                parsed_error.message,
-                            ),
-                        )
-                    }
-                    "NotSupportedService" => {
-                        return RusotoError::Service(
-                            CreateServiceSpecificCredentialError::ServiceNotSupported(
-                                parsed_error.message,
-                            ),
-                        )
-                    }
-                    _ => {}
                 }
             }
         }
@@ -12757,39 +13264,42 @@ impl CreateUserError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    "ConcurrentModification" => {
-                        return RusotoError::Service(CreateUserError::ConcurrentModification(
-                            parsed_error.message,
-                        ))
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {
+                        "ConcurrentModification" => {
+                            return RusotoError::Service(CreateUserError::ConcurrentModification(
+                                parsed_error.message,
+                            ))
+                        }
+                        "EntityAlreadyExists" => {
+                            return RusotoError::Service(CreateUserError::EntityAlreadyExists(
+                                parsed_error.message,
+                            ))
+                        }
+                        "InvalidInput" => {
+                            return RusotoError::Service(CreateUserError::InvalidInput(
+                                parsed_error.message,
+                            ))
+                        }
+                        "LimitExceeded" => {
+                            return RusotoError::Service(CreateUserError::LimitExceeded(
+                                parsed_error.message,
+                            ))
+                        }
+                        "NoSuchEntity" => {
+                            return RusotoError::Service(CreateUserError::NoSuchEntity(
+                                parsed_error.message,
+                            ))
+                        }
+                        "ServiceFailure" => {
+                            return RusotoError::Service(CreateUserError::ServiceFailure(
+                                parsed_error.message,
+                            ))
+                        }
+                        _ => {}
                     }
-                    "EntityAlreadyExists" => {
-                        return RusotoError::Service(CreateUserError::EntityAlreadyExists(
-                            parsed_error.message,
-                        ))
-                    }
-                    "InvalidInput" => {
-                        return RusotoError::Service(CreateUserError::InvalidInput(
-                            parsed_error.message,
-                        ))
-                    }
-                    "LimitExceeded" => {
-                        return RusotoError::Service(CreateUserError::LimitExceeded(
-                            parsed_error.message,
-                        ))
-                    }
-                    "NoSuchEntity" => {
-                        return RusotoError::Service(CreateUserError::NoSuchEntity(
-                            parsed_error.message,
-                        ))
-                    }
-                    "ServiceFailure" => {
-                        return RusotoError::Service(CreateUserError::ServiceFailure(
-                            parsed_error.message,
-                        ))
-                    }
-                    _ => {}
                 }
             }
         }
@@ -12835,24 +13345,29 @@ impl CreateVirtualMFADeviceError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    "EntityAlreadyExists" => {
-                        return RusotoError::Service(
-                            CreateVirtualMFADeviceError::EntityAlreadyExists(parsed_error.message),
-                        )
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {
+                        "EntityAlreadyExists" => {
+                            return RusotoError::Service(
+                                CreateVirtualMFADeviceError::EntityAlreadyExists(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "LimitExceeded" => {
+                            return RusotoError::Service(
+                                CreateVirtualMFADeviceError::LimitExceeded(parsed_error.message),
+                            )
+                        }
+                        "ServiceFailure" => {
+                            return RusotoError::Service(
+                                CreateVirtualMFADeviceError::ServiceFailure(parsed_error.message),
+                            )
+                        }
+                        _ => {}
                     }
-                    "LimitExceeded" => {
-                        return RusotoError::Service(CreateVirtualMFADeviceError::LimitExceeded(
-                            parsed_error.message,
-                        ))
-                    }
-                    "ServiceFailure" => {
-                        return RusotoError::Service(CreateVirtualMFADeviceError::ServiceFailure(
-                            parsed_error.message,
-                        ))
-                    }
-                    _ => {}
                 }
             }
         }
@@ -12897,31 +13412,34 @@ impl DeactivateMFADeviceError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    "EntityTemporarilyUnmodifiable" => {
-                        return RusotoError::Service(
-                            DeactivateMFADeviceError::EntityTemporarilyUnmodifiable(
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {
+                        "EntityTemporarilyUnmodifiable" => {
+                            return RusotoError::Service(
+                                DeactivateMFADeviceError::EntityTemporarilyUnmodifiable(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "LimitExceeded" => {
+                            return RusotoError::Service(DeactivateMFADeviceError::LimitExceeded(
                                 parsed_error.message,
-                            ),
-                        )
+                            ))
+                        }
+                        "NoSuchEntity" => {
+                            return RusotoError::Service(DeactivateMFADeviceError::NoSuchEntity(
+                                parsed_error.message,
+                            ))
+                        }
+                        "ServiceFailure" => {
+                            return RusotoError::Service(DeactivateMFADeviceError::ServiceFailure(
+                                parsed_error.message,
+                            ))
+                        }
+                        _ => {}
                     }
-                    "LimitExceeded" => {
-                        return RusotoError::Service(DeactivateMFADeviceError::LimitExceeded(
-                            parsed_error.message,
-                        ))
-                    }
-                    "NoSuchEntity" => {
-                        return RusotoError::Service(DeactivateMFADeviceError::NoSuchEntity(
-                            parsed_error.message,
-                        ))
-                    }
-                    "ServiceFailure" => {
-                        return RusotoError::Service(DeactivateMFADeviceError::ServiceFailure(
-                            parsed_error.message,
-                        ))
-                    }
-                    _ => {}
                 }
             }
         }
@@ -12967,24 +13485,27 @@ impl DeleteAccessKeyError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    "LimitExceeded" => {
-                        return RusotoError::Service(DeleteAccessKeyError::LimitExceeded(
-                            parsed_error.message,
-                        ))
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {
+                        "LimitExceeded" => {
+                            return RusotoError::Service(DeleteAccessKeyError::LimitExceeded(
+                                parsed_error.message,
+                            ))
+                        }
+                        "NoSuchEntity" => {
+                            return RusotoError::Service(DeleteAccessKeyError::NoSuchEntity(
+                                parsed_error.message,
+                            ))
+                        }
+                        "ServiceFailure" => {
+                            return RusotoError::Service(DeleteAccessKeyError::ServiceFailure(
+                                parsed_error.message,
+                            ))
+                        }
+                        _ => {}
                     }
-                    "NoSuchEntity" => {
-                        return RusotoError::Service(DeleteAccessKeyError::NoSuchEntity(
-                            parsed_error.message,
-                        ))
-                    }
-                    "ServiceFailure" => {
-                        return RusotoError::Service(DeleteAccessKeyError::ServiceFailure(
-                            parsed_error.message,
-                        ))
-                    }
-                    _ => {}
                 }
             }
         }
@@ -13027,24 +13548,27 @@ impl DeleteAccountAliasError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    "LimitExceeded" => {
-                        return RusotoError::Service(DeleteAccountAliasError::LimitExceeded(
-                            parsed_error.message,
-                        ))
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {
+                        "LimitExceeded" => {
+                            return RusotoError::Service(DeleteAccountAliasError::LimitExceeded(
+                                parsed_error.message,
+                            ))
+                        }
+                        "NoSuchEntity" => {
+                            return RusotoError::Service(DeleteAccountAliasError::NoSuchEntity(
+                                parsed_error.message,
+                            ))
+                        }
+                        "ServiceFailure" => {
+                            return RusotoError::Service(DeleteAccountAliasError::ServiceFailure(
+                                parsed_error.message,
+                            ))
+                        }
+                        _ => {}
                     }
-                    "NoSuchEntity" => {
-                        return RusotoError::Service(DeleteAccountAliasError::NoSuchEntity(
-                            parsed_error.message,
-                        ))
-                    }
-                    "ServiceFailure" => {
-                        return RusotoError::Service(DeleteAccountAliasError::ServiceFailure(
-                            parsed_error.message,
-                        ))
-                    }
-                    _ => {}
                 }
             }
         }
@@ -13089,24 +13613,33 @@ impl DeleteAccountPasswordPolicyError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    "LimitExceeded" => {
-                        return RusotoError::Service(
-                            DeleteAccountPasswordPolicyError::LimitExceeded(parsed_error.message),
-                        )
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {
+                        "LimitExceeded" => {
+                            return RusotoError::Service(
+                                DeleteAccountPasswordPolicyError::LimitExceeded(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "NoSuchEntity" => {
+                            return RusotoError::Service(
+                                DeleteAccountPasswordPolicyError::NoSuchEntity(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "ServiceFailure" => {
+                            return RusotoError::Service(
+                                DeleteAccountPasswordPolicyError::ServiceFailure(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        _ => {}
                     }
-                    "NoSuchEntity" => {
-                        return RusotoError::Service(
-                            DeleteAccountPasswordPolicyError::NoSuchEntity(parsed_error.message),
-                        )
-                    }
-                    "ServiceFailure" => {
-                        return RusotoError::Service(
-                            DeleteAccountPasswordPolicyError::ServiceFailure(parsed_error.message),
-                        )
-                    }
-                    _ => {}
                 }
             }
         }
@@ -13151,29 +13684,32 @@ impl DeleteGroupError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    "DeleteConflict" => {
-                        return RusotoError::Service(DeleteGroupError::DeleteConflict(
-                            parsed_error.message,
-                        ))
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {
+                        "DeleteConflict" => {
+                            return RusotoError::Service(DeleteGroupError::DeleteConflict(
+                                parsed_error.message,
+                            ))
+                        }
+                        "LimitExceeded" => {
+                            return RusotoError::Service(DeleteGroupError::LimitExceeded(
+                                parsed_error.message,
+                            ))
+                        }
+                        "NoSuchEntity" => {
+                            return RusotoError::Service(DeleteGroupError::NoSuchEntity(
+                                parsed_error.message,
+                            ))
+                        }
+                        "ServiceFailure" => {
+                            return RusotoError::Service(DeleteGroupError::ServiceFailure(
+                                parsed_error.message,
+                            ))
+                        }
+                        _ => {}
                     }
-                    "LimitExceeded" => {
-                        return RusotoError::Service(DeleteGroupError::LimitExceeded(
-                            parsed_error.message,
-                        ))
-                    }
-                    "NoSuchEntity" => {
-                        return RusotoError::Service(DeleteGroupError::NoSuchEntity(
-                            parsed_error.message,
-                        ))
-                    }
-                    "ServiceFailure" => {
-                        return RusotoError::Service(DeleteGroupError::ServiceFailure(
-                            parsed_error.message,
-                        ))
-                    }
-                    _ => {}
                 }
             }
         }
@@ -13217,24 +13753,27 @@ impl DeleteGroupPolicyError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    "LimitExceeded" => {
-                        return RusotoError::Service(DeleteGroupPolicyError::LimitExceeded(
-                            parsed_error.message,
-                        ))
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {
+                        "LimitExceeded" => {
+                            return RusotoError::Service(DeleteGroupPolicyError::LimitExceeded(
+                                parsed_error.message,
+                            ))
+                        }
+                        "NoSuchEntity" => {
+                            return RusotoError::Service(DeleteGroupPolicyError::NoSuchEntity(
+                                parsed_error.message,
+                            ))
+                        }
+                        "ServiceFailure" => {
+                            return RusotoError::Service(DeleteGroupPolicyError::ServiceFailure(
+                                parsed_error.message,
+                            ))
+                        }
+                        _ => {}
                     }
-                    "NoSuchEntity" => {
-                        return RusotoError::Service(DeleteGroupPolicyError::NoSuchEntity(
-                            parsed_error.message,
-                        ))
-                    }
-                    "ServiceFailure" => {
-                        return RusotoError::Service(DeleteGroupPolicyError::ServiceFailure(
-                            parsed_error.message,
-                        ))
-                    }
-                    _ => {}
                 }
             }
         }
@@ -13279,29 +13818,32 @@ impl DeleteInstanceProfileError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    "DeleteConflict" => {
-                        return RusotoError::Service(DeleteInstanceProfileError::DeleteConflict(
-                            parsed_error.message,
-                        ))
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {
+                        "DeleteConflict" => {
+                            return RusotoError::Service(
+                                DeleteInstanceProfileError::DeleteConflict(parsed_error.message),
+                            )
+                        }
+                        "LimitExceeded" => {
+                            return RusotoError::Service(DeleteInstanceProfileError::LimitExceeded(
+                                parsed_error.message,
+                            ))
+                        }
+                        "NoSuchEntity" => {
+                            return RusotoError::Service(DeleteInstanceProfileError::NoSuchEntity(
+                                parsed_error.message,
+                            ))
+                        }
+                        "ServiceFailure" => {
+                            return RusotoError::Service(
+                                DeleteInstanceProfileError::ServiceFailure(parsed_error.message),
+                            )
+                        }
+                        _ => {}
                     }
-                    "LimitExceeded" => {
-                        return RusotoError::Service(DeleteInstanceProfileError::LimitExceeded(
-                            parsed_error.message,
-                        ))
-                    }
-                    "NoSuchEntity" => {
-                        return RusotoError::Service(DeleteInstanceProfileError::NoSuchEntity(
-                            parsed_error.message,
-                        ))
-                    }
-                    "ServiceFailure" => {
-                        return RusotoError::Service(DeleteInstanceProfileError::ServiceFailure(
-                            parsed_error.message,
-                        ))
-                    }
-                    _ => {}
                 }
             }
         }
@@ -13347,31 +13889,34 @@ impl DeleteLoginProfileError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    "EntityTemporarilyUnmodifiable" => {
-                        return RusotoError::Service(
-                            DeleteLoginProfileError::EntityTemporarilyUnmodifiable(
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {
+                        "EntityTemporarilyUnmodifiable" => {
+                            return RusotoError::Service(
+                                DeleteLoginProfileError::EntityTemporarilyUnmodifiable(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "LimitExceeded" => {
+                            return RusotoError::Service(DeleteLoginProfileError::LimitExceeded(
                                 parsed_error.message,
-                            ),
-                        )
+                            ))
+                        }
+                        "NoSuchEntity" => {
+                            return RusotoError::Service(DeleteLoginProfileError::NoSuchEntity(
+                                parsed_error.message,
+                            ))
+                        }
+                        "ServiceFailure" => {
+                            return RusotoError::Service(DeleteLoginProfileError::ServiceFailure(
+                                parsed_error.message,
+                            ))
+                        }
+                        _ => {}
                     }
-                    "LimitExceeded" => {
-                        return RusotoError::Service(DeleteLoginProfileError::LimitExceeded(
-                            parsed_error.message,
-                        ))
-                    }
-                    "NoSuchEntity" => {
-                        return RusotoError::Service(DeleteLoginProfileError::NoSuchEntity(
-                            parsed_error.message,
-                        ))
-                    }
-                    "ServiceFailure" => {
-                        return RusotoError::Service(DeleteLoginProfileError::ServiceFailure(
-                            parsed_error.message,
-                        ))
-                    }
-                    _ => {}
                 }
             }
         }
@@ -13419,24 +13964,33 @@ impl DeleteOpenIDConnectProviderError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    "InvalidInput" => {
-                        return RusotoError::Service(
-                            DeleteOpenIDConnectProviderError::InvalidInput(parsed_error.message),
-                        )
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {
+                        "InvalidInput" => {
+                            return RusotoError::Service(
+                                DeleteOpenIDConnectProviderError::InvalidInput(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "NoSuchEntity" => {
+                            return RusotoError::Service(
+                                DeleteOpenIDConnectProviderError::NoSuchEntity(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "ServiceFailure" => {
+                            return RusotoError::Service(
+                                DeleteOpenIDConnectProviderError::ServiceFailure(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        _ => {}
                     }
-                    "NoSuchEntity" => {
-                        return RusotoError::Service(
-                            DeleteOpenIDConnectProviderError::NoSuchEntity(parsed_error.message),
-                        )
-                    }
-                    "ServiceFailure" => {
-                        return RusotoError::Service(
-                            DeleteOpenIDConnectProviderError::ServiceFailure(parsed_error.message),
-                        )
-                    }
-                    _ => {}
                 }
             }
         }
@@ -13483,34 +14037,37 @@ impl DeletePolicyError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    "DeleteConflict" => {
-                        return RusotoError::Service(DeletePolicyError::DeleteConflict(
-                            parsed_error.message,
-                        ))
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {
+                        "DeleteConflict" => {
+                            return RusotoError::Service(DeletePolicyError::DeleteConflict(
+                                parsed_error.message,
+                            ))
+                        }
+                        "InvalidInput" => {
+                            return RusotoError::Service(DeletePolicyError::InvalidInput(
+                                parsed_error.message,
+                            ))
+                        }
+                        "LimitExceeded" => {
+                            return RusotoError::Service(DeletePolicyError::LimitExceeded(
+                                parsed_error.message,
+                            ))
+                        }
+                        "NoSuchEntity" => {
+                            return RusotoError::Service(DeletePolicyError::NoSuchEntity(
+                                parsed_error.message,
+                            ))
+                        }
+                        "ServiceFailure" => {
+                            return RusotoError::Service(DeletePolicyError::ServiceFailure(
+                                parsed_error.message,
+                            ))
+                        }
+                        _ => {}
                     }
-                    "InvalidInput" => {
-                        return RusotoError::Service(DeletePolicyError::InvalidInput(
-                            parsed_error.message,
-                        ))
-                    }
-                    "LimitExceeded" => {
-                        return RusotoError::Service(DeletePolicyError::LimitExceeded(
-                            parsed_error.message,
-                        ))
-                    }
-                    "NoSuchEntity" => {
-                        return RusotoError::Service(DeletePolicyError::NoSuchEntity(
-                            parsed_error.message,
-                        ))
-                    }
-                    "ServiceFailure" => {
-                        return RusotoError::Service(DeletePolicyError::ServiceFailure(
-                            parsed_error.message,
-                        ))
-                    }
-                    _ => {}
                 }
             }
         }
@@ -13559,34 +14116,37 @@ impl DeletePolicyVersionError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    "DeleteConflict" => {
-                        return RusotoError::Service(DeletePolicyVersionError::DeleteConflict(
-                            parsed_error.message,
-                        ))
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {
+                        "DeleteConflict" => {
+                            return RusotoError::Service(DeletePolicyVersionError::DeleteConflict(
+                                parsed_error.message,
+                            ))
+                        }
+                        "InvalidInput" => {
+                            return RusotoError::Service(DeletePolicyVersionError::InvalidInput(
+                                parsed_error.message,
+                            ))
+                        }
+                        "LimitExceeded" => {
+                            return RusotoError::Service(DeletePolicyVersionError::LimitExceeded(
+                                parsed_error.message,
+                            ))
+                        }
+                        "NoSuchEntity" => {
+                            return RusotoError::Service(DeletePolicyVersionError::NoSuchEntity(
+                                parsed_error.message,
+                            ))
+                        }
+                        "ServiceFailure" => {
+                            return RusotoError::Service(DeletePolicyVersionError::ServiceFailure(
+                                parsed_error.message,
+                            ))
+                        }
+                        _ => {}
                     }
-                    "InvalidInput" => {
-                        return RusotoError::Service(DeletePolicyVersionError::InvalidInput(
-                            parsed_error.message,
-                        ))
-                    }
-                    "LimitExceeded" => {
-                        return RusotoError::Service(DeletePolicyVersionError::LimitExceeded(
-                            parsed_error.message,
-                        ))
-                    }
-                    "NoSuchEntity" => {
-                        return RusotoError::Service(DeletePolicyVersionError::NoSuchEntity(
-                            parsed_error.message,
-                        ))
-                    }
-                    "ServiceFailure" => {
-                        return RusotoError::Service(DeletePolicyVersionError::ServiceFailure(
-                            parsed_error.message,
-                        ))
-                    }
-                    _ => {}
                 }
             }
         }
@@ -13637,39 +14197,42 @@ impl DeleteRoleError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    "ConcurrentModification" => {
-                        return RusotoError::Service(DeleteRoleError::ConcurrentModification(
-                            parsed_error.message,
-                        ))
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {
+                        "ConcurrentModification" => {
+                            return RusotoError::Service(DeleteRoleError::ConcurrentModification(
+                                parsed_error.message,
+                            ))
+                        }
+                        "DeleteConflict" => {
+                            return RusotoError::Service(DeleteRoleError::DeleteConflict(
+                                parsed_error.message,
+                            ))
+                        }
+                        "LimitExceeded" => {
+                            return RusotoError::Service(DeleteRoleError::LimitExceeded(
+                                parsed_error.message,
+                            ))
+                        }
+                        "NoSuchEntity" => {
+                            return RusotoError::Service(DeleteRoleError::NoSuchEntity(
+                                parsed_error.message,
+                            ))
+                        }
+                        "ServiceFailure" => {
+                            return RusotoError::Service(DeleteRoleError::ServiceFailure(
+                                parsed_error.message,
+                            ))
+                        }
+                        "UnmodifiableEntity" => {
+                            return RusotoError::Service(DeleteRoleError::UnmodifiableEntity(
+                                parsed_error.message,
+                            ))
+                        }
+                        _ => {}
                     }
-                    "DeleteConflict" => {
-                        return RusotoError::Service(DeleteRoleError::DeleteConflict(
-                            parsed_error.message,
-                        ))
-                    }
-                    "LimitExceeded" => {
-                        return RusotoError::Service(DeleteRoleError::LimitExceeded(
-                            parsed_error.message,
-                        ))
-                    }
-                    "NoSuchEntity" => {
-                        return RusotoError::Service(DeleteRoleError::NoSuchEntity(
-                            parsed_error.message,
-                        ))
-                    }
-                    "ServiceFailure" => {
-                        return RusotoError::Service(DeleteRoleError::ServiceFailure(
-                            parsed_error.message,
-                        ))
-                    }
-                    "UnmodifiableEntity" => {
-                        return RusotoError::Service(DeleteRoleError::UnmodifiableEntity(
-                            parsed_error.message,
-                        ))
-                    }
-                    _ => {}
                 }
             }
         }
@@ -13717,28 +14280,33 @@ impl DeleteRolePermissionsBoundaryError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    "NoSuchEntity" => {
-                        return RusotoError::Service(
-                            DeleteRolePermissionsBoundaryError::NoSuchEntity(parsed_error.message),
-                        )
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {
+                        "NoSuchEntity" => {
+                            return RusotoError::Service(
+                                DeleteRolePermissionsBoundaryError::NoSuchEntity(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "ServiceFailure" => {
+                            return RusotoError::Service(
+                                DeleteRolePermissionsBoundaryError::ServiceFailure(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "UnmodifiableEntity" => {
+                            return RusotoError::Service(
+                                DeleteRolePermissionsBoundaryError::UnmodifiableEntity(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        _ => {}
                     }
-                    "ServiceFailure" => {
-                        return RusotoError::Service(
-                            DeleteRolePermissionsBoundaryError::ServiceFailure(
-                                parsed_error.message,
-                            ),
-                        )
-                    }
-                    "UnmodifiableEntity" => {
-                        return RusotoError::Service(
-                            DeleteRolePermissionsBoundaryError::UnmodifiableEntity(
-                                parsed_error.message,
-                            ),
-                        )
-                    }
-                    _ => {}
                 }
             }
         }
@@ -13785,29 +14353,32 @@ impl DeleteRolePolicyError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    "LimitExceeded" => {
-                        return RusotoError::Service(DeleteRolePolicyError::LimitExceeded(
-                            parsed_error.message,
-                        ))
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {
+                        "LimitExceeded" => {
+                            return RusotoError::Service(DeleteRolePolicyError::LimitExceeded(
+                                parsed_error.message,
+                            ))
+                        }
+                        "NoSuchEntity" => {
+                            return RusotoError::Service(DeleteRolePolicyError::NoSuchEntity(
+                                parsed_error.message,
+                            ))
+                        }
+                        "ServiceFailure" => {
+                            return RusotoError::Service(DeleteRolePolicyError::ServiceFailure(
+                                parsed_error.message,
+                            ))
+                        }
+                        "UnmodifiableEntity" => {
+                            return RusotoError::Service(DeleteRolePolicyError::UnmodifiableEntity(
+                                parsed_error.message,
+                            ))
+                        }
+                        _ => {}
                     }
-                    "NoSuchEntity" => {
-                        return RusotoError::Service(DeleteRolePolicyError::NoSuchEntity(
-                            parsed_error.message,
-                        ))
-                    }
-                    "ServiceFailure" => {
-                        return RusotoError::Service(DeleteRolePolicyError::ServiceFailure(
-                            parsed_error.message,
-                        ))
-                    }
-                    "UnmodifiableEntity" => {
-                        return RusotoError::Service(DeleteRolePolicyError::UnmodifiableEntity(
-                            parsed_error.message,
-                        ))
-                    }
-                    _ => {}
                 }
             }
         }
@@ -13853,29 +14424,32 @@ impl DeleteSAMLProviderError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    "InvalidInput" => {
-                        return RusotoError::Service(DeleteSAMLProviderError::InvalidInput(
-                            parsed_error.message,
-                        ))
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {
+                        "InvalidInput" => {
+                            return RusotoError::Service(DeleteSAMLProviderError::InvalidInput(
+                                parsed_error.message,
+                            ))
+                        }
+                        "LimitExceeded" => {
+                            return RusotoError::Service(DeleteSAMLProviderError::LimitExceeded(
+                                parsed_error.message,
+                            ))
+                        }
+                        "NoSuchEntity" => {
+                            return RusotoError::Service(DeleteSAMLProviderError::NoSuchEntity(
+                                parsed_error.message,
+                            ))
+                        }
+                        "ServiceFailure" => {
+                            return RusotoError::Service(DeleteSAMLProviderError::ServiceFailure(
+                                parsed_error.message,
+                            ))
+                        }
+                        _ => {}
                     }
-                    "LimitExceeded" => {
-                        return RusotoError::Service(DeleteSAMLProviderError::LimitExceeded(
-                            parsed_error.message,
-                        ))
-                    }
-                    "NoSuchEntity" => {
-                        return RusotoError::Service(DeleteSAMLProviderError::NoSuchEntity(
-                            parsed_error.message,
-                        ))
-                    }
-                    "ServiceFailure" => {
-                        return RusotoError::Service(DeleteSAMLProviderError::ServiceFailure(
-                            parsed_error.message,
-                        ))
-                    }
-                    _ => {}
                 }
             }
         }
@@ -13915,14 +14489,17 @@ impl DeleteSSHPublicKeyError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    "NoSuchEntity" => {
-                        return RusotoError::Service(DeleteSSHPublicKeyError::NoSuchEntity(
-                            parsed_error.message,
-                        ))
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {
+                        "NoSuchEntity" => {
+                            return RusotoError::Service(DeleteSSHPublicKeyError::NoSuchEntity(
+                                parsed_error.message,
+                            ))
+                        }
+                        _ => {}
                     }
-                    _ => {}
                 }
             }
         }
@@ -13965,29 +14542,32 @@ impl DeleteServerCertificateError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    "DeleteConflict" => {
-                        return RusotoError::Service(DeleteServerCertificateError::DeleteConflict(
-                            parsed_error.message,
-                        ))
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {
+                        "DeleteConflict" => {
+                            return RusotoError::Service(
+                                DeleteServerCertificateError::DeleteConflict(parsed_error.message),
+                            )
+                        }
+                        "LimitExceeded" => {
+                            return RusotoError::Service(
+                                DeleteServerCertificateError::LimitExceeded(parsed_error.message),
+                            )
+                        }
+                        "NoSuchEntity" => {
+                            return RusotoError::Service(
+                                DeleteServerCertificateError::NoSuchEntity(parsed_error.message),
+                            )
+                        }
+                        "ServiceFailure" => {
+                            return RusotoError::Service(
+                                DeleteServerCertificateError::ServiceFailure(parsed_error.message),
+                            )
+                        }
+                        _ => {}
                     }
-                    "LimitExceeded" => {
-                        return RusotoError::Service(DeleteServerCertificateError::LimitExceeded(
-                            parsed_error.message,
-                        ))
-                    }
-                    "NoSuchEntity" => {
-                        return RusotoError::Service(DeleteServerCertificateError::NoSuchEntity(
-                            parsed_error.message,
-                        ))
-                    }
-                    "ServiceFailure" => {
-                        return RusotoError::Service(DeleteServerCertificateError::ServiceFailure(
-                            parsed_error.message,
-                        ))
-                    }
-                    _ => {}
                 }
             }
         }
@@ -14031,24 +14611,27 @@ impl DeleteServiceLinkedRoleError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    "LimitExceeded" => {
-                        return RusotoError::Service(DeleteServiceLinkedRoleError::LimitExceeded(
-                            parsed_error.message,
-                        ))
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {
+                        "LimitExceeded" => {
+                            return RusotoError::Service(
+                                DeleteServiceLinkedRoleError::LimitExceeded(parsed_error.message),
+                            )
+                        }
+                        "NoSuchEntity" => {
+                            return RusotoError::Service(
+                                DeleteServiceLinkedRoleError::NoSuchEntity(parsed_error.message),
+                            )
+                        }
+                        "ServiceFailure" => {
+                            return RusotoError::Service(
+                                DeleteServiceLinkedRoleError::ServiceFailure(parsed_error.message),
+                            )
+                        }
+                        _ => {}
                     }
-                    "NoSuchEntity" => {
-                        return RusotoError::Service(DeleteServiceLinkedRoleError::NoSuchEntity(
-                            parsed_error.message,
-                        ))
-                    }
-                    "ServiceFailure" => {
-                        return RusotoError::Service(DeleteServiceLinkedRoleError::ServiceFailure(
-                            parsed_error.message,
-                        ))
-                    }
-                    _ => {}
                 }
             }
         }
@@ -14089,16 +14672,19 @@ impl DeleteServiceSpecificCredentialError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    "NoSuchEntity" => {
-                        return RusotoError::Service(
-                            DeleteServiceSpecificCredentialError::NoSuchEntity(
-                                parsed_error.message,
-                            ),
-                        )
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {
+                        "NoSuchEntity" => {
+                            return RusotoError::Service(
+                                DeleteServiceSpecificCredentialError::NoSuchEntity(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        _ => {}
                     }
-                    _ => {}
                 }
             }
         }
@@ -14139,24 +14725,27 @@ impl DeleteSigningCertificateError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    "LimitExceeded" => {
-                        return RusotoError::Service(DeleteSigningCertificateError::LimitExceeded(
-                            parsed_error.message,
-                        ))
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {
+                        "LimitExceeded" => {
+                            return RusotoError::Service(
+                                DeleteSigningCertificateError::LimitExceeded(parsed_error.message),
+                            )
+                        }
+                        "NoSuchEntity" => {
+                            return RusotoError::Service(
+                                DeleteSigningCertificateError::NoSuchEntity(parsed_error.message),
+                            )
+                        }
+                        "ServiceFailure" => {
+                            return RusotoError::Service(
+                                DeleteSigningCertificateError::ServiceFailure(parsed_error.message),
+                            )
+                        }
+                        _ => {}
                     }
-                    "NoSuchEntity" => {
-                        return RusotoError::Service(DeleteSigningCertificateError::NoSuchEntity(
-                            parsed_error.message,
-                        ))
-                    }
-                    "ServiceFailure" => {
-                        return RusotoError::Service(DeleteSigningCertificateError::ServiceFailure(
-                            parsed_error.message,
-                        ))
-                    }
-                    _ => {}
                 }
             }
         }
@@ -14203,34 +14792,37 @@ impl DeleteUserError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    "ConcurrentModification" => {
-                        return RusotoError::Service(DeleteUserError::ConcurrentModification(
-                            parsed_error.message,
-                        ))
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {
+                        "ConcurrentModification" => {
+                            return RusotoError::Service(DeleteUserError::ConcurrentModification(
+                                parsed_error.message,
+                            ))
+                        }
+                        "DeleteConflict" => {
+                            return RusotoError::Service(DeleteUserError::DeleteConflict(
+                                parsed_error.message,
+                            ))
+                        }
+                        "LimitExceeded" => {
+                            return RusotoError::Service(DeleteUserError::LimitExceeded(
+                                parsed_error.message,
+                            ))
+                        }
+                        "NoSuchEntity" => {
+                            return RusotoError::Service(DeleteUserError::NoSuchEntity(
+                                parsed_error.message,
+                            ))
+                        }
+                        "ServiceFailure" => {
+                            return RusotoError::Service(DeleteUserError::ServiceFailure(
+                                parsed_error.message,
+                            ))
+                        }
+                        _ => {}
                     }
-                    "DeleteConflict" => {
-                        return RusotoError::Service(DeleteUserError::DeleteConflict(
-                            parsed_error.message,
-                        ))
-                    }
-                    "LimitExceeded" => {
-                        return RusotoError::Service(DeleteUserError::LimitExceeded(
-                            parsed_error.message,
-                        ))
-                    }
-                    "NoSuchEntity" => {
-                        return RusotoError::Service(DeleteUserError::NoSuchEntity(
-                            parsed_error.message,
-                        ))
-                    }
-                    "ServiceFailure" => {
-                        return RusotoError::Service(DeleteUserError::ServiceFailure(
-                            parsed_error.message,
-                        ))
-                    }
-                    _ => {}
                 }
             }
         }
@@ -14275,21 +14867,26 @@ impl DeleteUserPermissionsBoundaryError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    "NoSuchEntity" => {
-                        return RusotoError::Service(
-                            DeleteUserPermissionsBoundaryError::NoSuchEntity(parsed_error.message),
-                        )
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {
+                        "NoSuchEntity" => {
+                            return RusotoError::Service(
+                                DeleteUserPermissionsBoundaryError::NoSuchEntity(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "ServiceFailure" => {
+                            return RusotoError::Service(
+                                DeleteUserPermissionsBoundaryError::ServiceFailure(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        _ => {}
                     }
-                    "ServiceFailure" => {
-                        return RusotoError::Service(
-                            DeleteUserPermissionsBoundaryError::ServiceFailure(
-                                parsed_error.message,
-                            ),
-                        )
-                    }
-                    _ => {}
                 }
             }
         }
@@ -14331,24 +14928,27 @@ impl DeleteUserPolicyError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    "LimitExceeded" => {
-                        return RusotoError::Service(DeleteUserPolicyError::LimitExceeded(
-                            parsed_error.message,
-                        ))
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {
+                        "LimitExceeded" => {
+                            return RusotoError::Service(DeleteUserPolicyError::LimitExceeded(
+                                parsed_error.message,
+                            ))
+                        }
+                        "NoSuchEntity" => {
+                            return RusotoError::Service(DeleteUserPolicyError::NoSuchEntity(
+                                parsed_error.message,
+                            ))
+                        }
+                        "ServiceFailure" => {
+                            return RusotoError::Service(DeleteUserPolicyError::ServiceFailure(
+                                parsed_error.message,
+                            ))
+                        }
+                        _ => {}
                     }
-                    "NoSuchEntity" => {
-                        return RusotoError::Service(DeleteUserPolicyError::NoSuchEntity(
-                            parsed_error.message,
-                        ))
-                    }
-                    "ServiceFailure" => {
-                        return RusotoError::Service(DeleteUserPolicyError::ServiceFailure(
-                            parsed_error.message,
-                        ))
-                    }
-                    _ => {}
                 }
             }
         }
@@ -14393,29 +14993,32 @@ impl DeleteVirtualMFADeviceError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    "DeleteConflict" => {
-                        return RusotoError::Service(DeleteVirtualMFADeviceError::DeleteConflict(
-                            parsed_error.message,
-                        ))
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {
+                        "DeleteConflict" => {
+                            return RusotoError::Service(
+                                DeleteVirtualMFADeviceError::DeleteConflict(parsed_error.message),
+                            )
+                        }
+                        "LimitExceeded" => {
+                            return RusotoError::Service(
+                                DeleteVirtualMFADeviceError::LimitExceeded(parsed_error.message),
+                            )
+                        }
+                        "NoSuchEntity" => {
+                            return RusotoError::Service(DeleteVirtualMFADeviceError::NoSuchEntity(
+                                parsed_error.message,
+                            ))
+                        }
+                        "ServiceFailure" => {
+                            return RusotoError::Service(
+                                DeleteVirtualMFADeviceError::ServiceFailure(parsed_error.message),
+                            )
+                        }
+                        _ => {}
                     }
-                    "LimitExceeded" => {
-                        return RusotoError::Service(DeleteVirtualMFADeviceError::LimitExceeded(
-                            parsed_error.message,
-                        ))
-                    }
-                    "NoSuchEntity" => {
-                        return RusotoError::Service(DeleteVirtualMFADeviceError::NoSuchEntity(
-                            parsed_error.message,
-                        ))
-                    }
-                    "ServiceFailure" => {
-                        return RusotoError::Service(DeleteVirtualMFADeviceError::ServiceFailure(
-                            parsed_error.message,
-                        ))
-                    }
-                    _ => {}
                 }
             }
         }
@@ -14461,29 +15064,32 @@ impl DetachGroupPolicyError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    "InvalidInput" => {
-                        return RusotoError::Service(DetachGroupPolicyError::InvalidInput(
-                            parsed_error.message,
-                        ))
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {
+                        "InvalidInput" => {
+                            return RusotoError::Service(DetachGroupPolicyError::InvalidInput(
+                                parsed_error.message,
+                            ))
+                        }
+                        "LimitExceeded" => {
+                            return RusotoError::Service(DetachGroupPolicyError::LimitExceeded(
+                                parsed_error.message,
+                            ))
+                        }
+                        "NoSuchEntity" => {
+                            return RusotoError::Service(DetachGroupPolicyError::NoSuchEntity(
+                                parsed_error.message,
+                            ))
+                        }
+                        "ServiceFailure" => {
+                            return RusotoError::Service(DetachGroupPolicyError::ServiceFailure(
+                                parsed_error.message,
+                            ))
+                        }
+                        _ => {}
                     }
-                    "LimitExceeded" => {
-                        return RusotoError::Service(DetachGroupPolicyError::LimitExceeded(
-                            parsed_error.message,
-                        ))
-                    }
-                    "NoSuchEntity" => {
-                        return RusotoError::Service(DetachGroupPolicyError::NoSuchEntity(
-                            parsed_error.message,
-                        ))
-                    }
-                    "ServiceFailure" => {
-                        return RusotoError::Service(DetachGroupPolicyError::ServiceFailure(
-                            parsed_error.message,
-                        ))
-                    }
-                    _ => {}
                 }
             }
         }
@@ -14531,34 +15137,37 @@ impl DetachRolePolicyError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    "InvalidInput" => {
-                        return RusotoError::Service(DetachRolePolicyError::InvalidInput(
-                            parsed_error.message,
-                        ))
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {
+                        "InvalidInput" => {
+                            return RusotoError::Service(DetachRolePolicyError::InvalidInput(
+                                parsed_error.message,
+                            ))
+                        }
+                        "LimitExceeded" => {
+                            return RusotoError::Service(DetachRolePolicyError::LimitExceeded(
+                                parsed_error.message,
+                            ))
+                        }
+                        "NoSuchEntity" => {
+                            return RusotoError::Service(DetachRolePolicyError::NoSuchEntity(
+                                parsed_error.message,
+                            ))
+                        }
+                        "ServiceFailure" => {
+                            return RusotoError::Service(DetachRolePolicyError::ServiceFailure(
+                                parsed_error.message,
+                            ))
+                        }
+                        "UnmodifiableEntity" => {
+                            return RusotoError::Service(DetachRolePolicyError::UnmodifiableEntity(
+                                parsed_error.message,
+                            ))
+                        }
+                        _ => {}
                     }
-                    "LimitExceeded" => {
-                        return RusotoError::Service(DetachRolePolicyError::LimitExceeded(
-                            parsed_error.message,
-                        ))
-                    }
-                    "NoSuchEntity" => {
-                        return RusotoError::Service(DetachRolePolicyError::NoSuchEntity(
-                            parsed_error.message,
-                        ))
-                    }
-                    "ServiceFailure" => {
-                        return RusotoError::Service(DetachRolePolicyError::ServiceFailure(
-                            parsed_error.message,
-                        ))
-                    }
-                    "UnmodifiableEntity" => {
-                        return RusotoError::Service(DetachRolePolicyError::UnmodifiableEntity(
-                            parsed_error.message,
-                        ))
-                    }
-                    _ => {}
                 }
             }
         }
@@ -14605,29 +15214,32 @@ impl DetachUserPolicyError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    "InvalidInput" => {
-                        return RusotoError::Service(DetachUserPolicyError::InvalidInput(
-                            parsed_error.message,
-                        ))
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {
+                        "InvalidInput" => {
+                            return RusotoError::Service(DetachUserPolicyError::InvalidInput(
+                                parsed_error.message,
+                            ))
+                        }
+                        "LimitExceeded" => {
+                            return RusotoError::Service(DetachUserPolicyError::LimitExceeded(
+                                parsed_error.message,
+                            ))
+                        }
+                        "NoSuchEntity" => {
+                            return RusotoError::Service(DetachUserPolicyError::NoSuchEntity(
+                                parsed_error.message,
+                            ))
+                        }
+                        "ServiceFailure" => {
+                            return RusotoError::Service(DetachUserPolicyError::ServiceFailure(
+                                parsed_error.message,
+                            ))
+                        }
+                        _ => {}
                     }
-                    "LimitExceeded" => {
-                        return RusotoError::Service(DetachUserPolicyError::LimitExceeded(
-                            parsed_error.message,
-                        ))
-                    }
-                    "NoSuchEntity" => {
-                        return RusotoError::Service(DetachUserPolicyError::NoSuchEntity(
-                            parsed_error.message,
-                        ))
-                    }
-                    "ServiceFailure" => {
-                        return RusotoError::Service(DetachUserPolicyError::ServiceFailure(
-                            parsed_error.message,
-                        ))
-                    }
-                    _ => {}
                 }
             }
         }
@@ -14677,41 +15289,46 @@ impl EnableMFADeviceError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    "EntityAlreadyExists" => {
-                        return RusotoError::Service(EnableMFADeviceError::EntityAlreadyExists(
-                            parsed_error.message,
-                        ))
-                    }
-                    "EntityTemporarilyUnmodifiable" => {
-                        return RusotoError::Service(
-                            EnableMFADeviceError::EntityTemporarilyUnmodifiable(
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {
+                        "EntityAlreadyExists" => {
+                            return RusotoError::Service(EnableMFADeviceError::EntityAlreadyExists(
                                 parsed_error.message,
-                            ),
-                        )
+                            ))
+                        }
+                        "EntityTemporarilyUnmodifiable" => {
+                            return RusotoError::Service(
+                                EnableMFADeviceError::EntityTemporarilyUnmodifiable(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "InvalidAuthenticationCode" => {
+                            return RusotoError::Service(
+                                EnableMFADeviceError::InvalidAuthenticationCode(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "LimitExceeded" => {
+                            return RusotoError::Service(EnableMFADeviceError::LimitExceeded(
+                                parsed_error.message,
+                            ))
+                        }
+                        "NoSuchEntity" => {
+                            return RusotoError::Service(EnableMFADeviceError::NoSuchEntity(
+                                parsed_error.message,
+                            ))
+                        }
+                        "ServiceFailure" => {
+                            return RusotoError::Service(EnableMFADeviceError::ServiceFailure(
+                                parsed_error.message,
+                            ))
+                        }
+                        _ => {}
                     }
-                    "InvalidAuthenticationCode" => {
-                        return RusotoError::Service(
-                            EnableMFADeviceError::InvalidAuthenticationCode(parsed_error.message),
-                        )
-                    }
-                    "LimitExceeded" => {
-                        return RusotoError::Service(EnableMFADeviceError::LimitExceeded(
-                            parsed_error.message,
-                        ))
-                    }
-                    "NoSuchEntity" => {
-                        return RusotoError::Service(EnableMFADeviceError::NoSuchEntity(
-                            parsed_error.message,
-                        ))
-                    }
-                    "ServiceFailure" => {
-                        return RusotoError::Service(EnableMFADeviceError::ServiceFailure(
-                            parsed_error.message,
-                        ))
-                    }
-                    _ => {}
                 }
             }
         }
@@ -14757,19 +15374,22 @@ impl GenerateCredentialReportError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    "LimitExceeded" => {
-                        return RusotoError::Service(GenerateCredentialReportError::LimitExceeded(
-                            parsed_error.message,
-                        ))
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {
+                        "LimitExceeded" => {
+                            return RusotoError::Service(
+                                GenerateCredentialReportError::LimitExceeded(parsed_error.message),
+                            )
+                        }
+                        "ServiceFailure" => {
+                            return RusotoError::Service(
+                                GenerateCredentialReportError::ServiceFailure(parsed_error.message),
+                            )
+                        }
+                        _ => {}
                     }
-                    "ServiceFailure" => {
-                        return RusotoError::Service(GenerateCredentialReportError::ServiceFailure(
-                            parsed_error.message,
-                        ))
-                    }
-                    _ => {}
                 }
             }
         }
@@ -14809,16 +15429,17 @@ impl GenerateOrganizationsAccessReportError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    "ReportGenerationLimitExceeded" => {
-                        return RusotoError::Service(
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {
+                        "ReportGenerationLimitExceeded" => return RusotoError::Service(
                             GenerateOrganizationsAccessReportError::ReportGenerationLimitExceeded(
                                 parsed_error.message,
                             ),
-                        )
+                        ),
+                        _ => {}
                     }
-                    _ => {}
                 }
             }
         }
@@ -14861,23 +15482,26 @@ impl GenerateServiceLastAccessedDetailsError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    "InvalidInput" => {
-                        return RusotoError::Service(
-                            GenerateServiceLastAccessedDetailsError::InvalidInput(
-                                parsed_error.message,
-                            ),
-                        )
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {
+                        "InvalidInput" => {
+                            return RusotoError::Service(
+                                GenerateServiceLastAccessedDetailsError::InvalidInput(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "NoSuchEntity" => {
+                            return RusotoError::Service(
+                                GenerateServiceLastAccessedDetailsError::NoSuchEntity(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        _ => {}
                     }
-                    "NoSuchEntity" => {
-                        return RusotoError::Service(
-                            GenerateServiceLastAccessedDetailsError::NoSuchEntity(
-                                parsed_error.message,
-                            ),
-                        )
-                    }
-                    _ => {}
                 }
             }
         }
@@ -14916,11 +15540,7 @@ impl GetAccessKeyLastUsedError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    _ => {}
-                }
-            }
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {}
         }
         RusotoError::Unknown(res)
     }
@@ -14955,16 +15575,19 @@ impl GetAccountAuthorizationDetailsError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    "ServiceFailure" => {
-                        return RusotoError::Service(
-                            GetAccountAuthorizationDetailsError::ServiceFailure(
-                                parsed_error.message,
-                            ),
-                        )
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {
+                        "ServiceFailure" => {
+                            return RusotoError::Service(
+                                GetAccountAuthorizationDetailsError::ServiceFailure(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        _ => {}
                     }
-                    _ => {}
                 }
             }
         }
@@ -15005,19 +15628,22 @@ impl GetAccountPasswordPolicyError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    "NoSuchEntity" => {
-                        return RusotoError::Service(GetAccountPasswordPolicyError::NoSuchEntity(
-                            parsed_error.message,
-                        ))
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {
+                        "NoSuchEntity" => {
+                            return RusotoError::Service(
+                                GetAccountPasswordPolicyError::NoSuchEntity(parsed_error.message),
+                            )
+                        }
+                        "ServiceFailure" => {
+                            return RusotoError::Service(
+                                GetAccountPasswordPolicyError::ServiceFailure(parsed_error.message),
+                            )
+                        }
+                        _ => {}
                     }
-                    "ServiceFailure" => {
-                        return RusotoError::Service(GetAccountPasswordPolicyError::ServiceFailure(
-                            parsed_error.message,
-                        ))
-                    }
-                    _ => {}
                 }
             }
         }
@@ -15055,14 +15681,17 @@ impl GetAccountSummaryError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    "ServiceFailure" => {
-                        return RusotoError::Service(GetAccountSummaryError::ServiceFailure(
-                            parsed_error.message,
-                        ))
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {
+                        "ServiceFailure" => {
+                            return RusotoError::Service(GetAccountSummaryError::ServiceFailure(
+                                parsed_error.message,
+                            ))
+                        }
+                        _ => {}
                     }
-                    _ => {}
                 }
             }
         }
@@ -15101,14 +15730,19 @@ impl GetContextKeysForCustomPolicyError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    "InvalidInput" => {
-                        return RusotoError::Service(
-                            GetContextKeysForCustomPolicyError::InvalidInput(parsed_error.message),
-                        )
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {
+                        "InvalidInput" => {
+                            return RusotoError::Service(
+                                GetContextKeysForCustomPolicyError::InvalidInput(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        _ => {}
                     }
-                    _ => {}
                 }
             }
         }
@@ -15149,23 +15783,26 @@ impl GetContextKeysForPrincipalPolicyError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    "InvalidInput" => {
-                        return RusotoError::Service(
-                            GetContextKeysForPrincipalPolicyError::InvalidInput(
-                                parsed_error.message,
-                            ),
-                        )
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {
+                        "InvalidInput" => {
+                            return RusotoError::Service(
+                                GetContextKeysForPrincipalPolicyError::InvalidInput(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "NoSuchEntity" => {
+                            return RusotoError::Service(
+                                GetContextKeysForPrincipalPolicyError::NoSuchEntity(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        _ => {}
                     }
-                    "NoSuchEntity" => {
-                        return RusotoError::Service(
-                            GetContextKeysForPrincipalPolicyError::NoSuchEntity(
-                                parsed_error.message,
-                            ),
-                        )
-                    }
-                    _ => {}
                 }
             }
         }
@@ -15213,33 +15850,38 @@ impl GetCredentialReportError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    "ReportExpired" => {
-                        return RusotoError::Service(
-                            GetCredentialReportError::CredentialReportExpired(parsed_error.message),
-                        )
-                    }
-                    "ReportNotPresent" => {
-                        return RusotoError::Service(
-                            GetCredentialReportError::CredentialReportNotPresent(
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {
+                        "ReportExpired" => {
+                            return RusotoError::Service(
+                                GetCredentialReportError::CredentialReportExpired(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "ReportNotPresent" => {
+                            return RusotoError::Service(
+                                GetCredentialReportError::CredentialReportNotPresent(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "ReportInProgress" => {
+                            return RusotoError::Service(
+                                GetCredentialReportError::CredentialReportNotReady(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "ServiceFailure" => {
+                            return RusotoError::Service(GetCredentialReportError::ServiceFailure(
                                 parsed_error.message,
-                            ),
-                        )
+                            ))
+                        }
+                        _ => {}
                     }
-                    "ReportInProgress" => {
-                        return RusotoError::Service(
-                            GetCredentialReportError::CredentialReportNotReady(
-                                parsed_error.message,
-                            ),
-                        )
-                    }
-                    "ServiceFailure" => {
-                        return RusotoError::Service(GetCredentialReportError::ServiceFailure(
-                            parsed_error.message,
-                        ))
-                    }
-                    _ => {}
                 }
             }
         }
@@ -15283,19 +15925,22 @@ impl GetGroupError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    "NoSuchEntity" => {
-                        return RusotoError::Service(GetGroupError::NoSuchEntity(
-                            parsed_error.message,
-                        ))
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {
+                        "NoSuchEntity" => {
+                            return RusotoError::Service(GetGroupError::NoSuchEntity(
+                                parsed_error.message,
+                            ))
+                        }
+                        "ServiceFailure" => {
+                            return RusotoError::Service(GetGroupError::ServiceFailure(
+                                parsed_error.message,
+                            ))
+                        }
+                        _ => {}
                     }
-                    "ServiceFailure" => {
-                        return RusotoError::Service(GetGroupError::ServiceFailure(
-                            parsed_error.message,
-                        ))
-                    }
-                    _ => {}
                 }
             }
         }
@@ -15335,19 +15980,22 @@ impl GetGroupPolicyError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    "NoSuchEntity" => {
-                        return RusotoError::Service(GetGroupPolicyError::NoSuchEntity(
-                            parsed_error.message,
-                        ))
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {
+                        "NoSuchEntity" => {
+                            return RusotoError::Service(GetGroupPolicyError::NoSuchEntity(
+                                parsed_error.message,
+                            ))
+                        }
+                        "ServiceFailure" => {
+                            return RusotoError::Service(GetGroupPolicyError::ServiceFailure(
+                                parsed_error.message,
+                            ))
+                        }
+                        _ => {}
                     }
-                    "ServiceFailure" => {
-                        return RusotoError::Service(GetGroupPolicyError::ServiceFailure(
-                            parsed_error.message,
-                        ))
-                    }
-                    _ => {}
                 }
             }
         }
@@ -15387,19 +16035,22 @@ impl GetInstanceProfileError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    "NoSuchEntity" => {
-                        return RusotoError::Service(GetInstanceProfileError::NoSuchEntity(
-                            parsed_error.message,
-                        ))
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {
+                        "NoSuchEntity" => {
+                            return RusotoError::Service(GetInstanceProfileError::NoSuchEntity(
+                                parsed_error.message,
+                            ))
+                        }
+                        "ServiceFailure" => {
+                            return RusotoError::Service(GetInstanceProfileError::ServiceFailure(
+                                parsed_error.message,
+                            ))
+                        }
+                        _ => {}
                     }
-                    "ServiceFailure" => {
-                        return RusotoError::Service(GetInstanceProfileError::ServiceFailure(
-                            parsed_error.message,
-                        ))
-                    }
-                    _ => {}
                 }
             }
         }
@@ -15439,19 +16090,22 @@ impl GetLoginProfileError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    "NoSuchEntity" => {
-                        return RusotoError::Service(GetLoginProfileError::NoSuchEntity(
-                            parsed_error.message,
-                        ))
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {
+                        "NoSuchEntity" => {
+                            return RusotoError::Service(GetLoginProfileError::NoSuchEntity(
+                                parsed_error.message,
+                            ))
+                        }
+                        "ServiceFailure" => {
+                            return RusotoError::Service(GetLoginProfileError::ServiceFailure(
+                                parsed_error.message,
+                            ))
+                        }
+                        _ => {}
                     }
-                    "ServiceFailure" => {
-                        return RusotoError::Service(GetLoginProfileError::ServiceFailure(
-                            parsed_error.message,
-                        ))
-                    }
-                    _ => {}
                 }
             }
         }
@@ -15493,24 +16147,27 @@ impl GetOpenIDConnectProviderError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    "InvalidInput" => {
-                        return RusotoError::Service(GetOpenIDConnectProviderError::InvalidInput(
-                            parsed_error.message,
-                        ))
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {
+                        "InvalidInput" => {
+                            return RusotoError::Service(
+                                GetOpenIDConnectProviderError::InvalidInput(parsed_error.message),
+                            )
+                        }
+                        "NoSuchEntity" => {
+                            return RusotoError::Service(
+                                GetOpenIDConnectProviderError::NoSuchEntity(parsed_error.message),
+                            )
+                        }
+                        "ServiceFailure" => {
+                            return RusotoError::Service(
+                                GetOpenIDConnectProviderError::ServiceFailure(parsed_error.message),
+                            )
+                        }
+                        _ => {}
                     }
-                    "NoSuchEntity" => {
-                        return RusotoError::Service(GetOpenIDConnectProviderError::NoSuchEntity(
-                            parsed_error.message,
-                        ))
-                    }
-                    "ServiceFailure" => {
-                        return RusotoError::Service(GetOpenIDConnectProviderError::ServiceFailure(
-                            parsed_error.message,
-                        ))
-                    }
-                    _ => {}
                 }
             }
         }
@@ -15551,14 +16208,19 @@ impl GetOrganizationsAccessReportError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    "NoSuchEntity" => {
-                        return RusotoError::Service(
-                            GetOrganizationsAccessReportError::NoSuchEntity(parsed_error.message),
-                        )
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {
+                        "NoSuchEntity" => {
+                            return RusotoError::Service(
+                                GetOrganizationsAccessReportError::NoSuchEntity(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        _ => {}
                     }
-                    _ => {}
                 }
             }
         }
@@ -15599,24 +16261,27 @@ impl GetPolicyError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    "InvalidInput" => {
-                        return RusotoError::Service(GetPolicyError::InvalidInput(
-                            parsed_error.message,
-                        ))
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {
+                        "InvalidInput" => {
+                            return RusotoError::Service(GetPolicyError::InvalidInput(
+                                parsed_error.message,
+                            ))
+                        }
+                        "NoSuchEntity" => {
+                            return RusotoError::Service(GetPolicyError::NoSuchEntity(
+                                parsed_error.message,
+                            ))
+                        }
+                        "ServiceFailure" => {
+                            return RusotoError::Service(GetPolicyError::ServiceFailure(
+                                parsed_error.message,
+                            ))
+                        }
+                        _ => {}
                     }
-                    "NoSuchEntity" => {
-                        return RusotoError::Service(GetPolicyError::NoSuchEntity(
-                            parsed_error.message,
-                        ))
-                    }
-                    "ServiceFailure" => {
-                        return RusotoError::Service(GetPolicyError::ServiceFailure(
-                            parsed_error.message,
-                        ))
-                    }
-                    _ => {}
                 }
             }
         }
@@ -15659,24 +16324,27 @@ impl GetPolicyVersionError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    "InvalidInput" => {
-                        return RusotoError::Service(GetPolicyVersionError::InvalidInput(
-                            parsed_error.message,
-                        ))
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {
+                        "InvalidInput" => {
+                            return RusotoError::Service(GetPolicyVersionError::InvalidInput(
+                                parsed_error.message,
+                            ))
+                        }
+                        "NoSuchEntity" => {
+                            return RusotoError::Service(GetPolicyVersionError::NoSuchEntity(
+                                parsed_error.message,
+                            ))
+                        }
+                        "ServiceFailure" => {
+                            return RusotoError::Service(GetPolicyVersionError::ServiceFailure(
+                                parsed_error.message,
+                            ))
+                        }
+                        _ => {}
                     }
-                    "NoSuchEntity" => {
-                        return RusotoError::Service(GetPolicyVersionError::NoSuchEntity(
-                            parsed_error.message,
-                        ))
-                    }
-                    "ServiceFailure" => {
-                        return RusotoError::Service(GetPolicyVersionError::ServiceFailure(
-                            parsed_error.message,
-                        ))
-                    }
-                    _ => {}
                 }
             }
         }
@@ -15717,19 +16385,22 @@ impl GetRoleError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    "NoSuchEntity" => {
-                        return RusotoError::Service(GetRoleError::NoSuchEntity(
-                            parsed_error.message,
-                        ))
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {
+                        "NoSuchEntity" => {
+                            return RusotoError::Service(GetRoleError::NoSuchEntity(
+                                parsed_error.message,
+                            ))
+                        }
+                        "ServiceFailure" => {
+                            return RusotoError::Service(GetRoleError::ServiceFailure(
+                                parsed_error.message,
+                            ))
+                        }
+                        _ => {}
                     }
-                    "ServiceFailure" => {
-                        return RusotoError::Service(GetRoleError::ServiceFailure(
-                            parsed_error.message,
-                        ))
-                    }
-                    _ => {}
                 }
             }
         }
@@ -15769,19 +16440,22 @@ impl GetRolePolicyError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    "NoSuchEntity" => {
-                        return RusotoError::Service(GetRolePolicyError::NoSuchEntity(
-                            parsed_error.message,
-                        ))
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {
+                        "NoSuchEntity" => {
+                            return RusotoError::Service(GetRolePolicyError::NoSuchEntity(
+                                parsed_error.message,
+                            ))
+                        }
+                        "ServiceFailure" => {
+                            return RusotoError::Service(GetRolePolicyError::ServiceFailure(
+                                parsed_error.message,
+                            ))
+                        }
+                        _ => {}
                     }
-                    "ServiceFailure" => {
-                        return RusotoError::Service(GetRolePolicyError::ServiceFailure(
-                            parsed_error.message,
-                        ))
-                    }
-                    _ => {}
                 }
             }
         }
@@ -15823,24 +16497,27 @@ impl GetSAMLProviderError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    "InvalidInput" => {
-                        return RusotoError::Service(GetSAMLProviderError::InvalidInput(
-                            parsed_error.message,
-                        ))
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {
+                        "InvalidInput" => {
+                            return RusotoError::Service(GetSAMLProviderError::InvalidInput(
+                                parsed_error.message,
+                            ))
+                        }
+                        "NoSuchEntity" => {
+                            return RusotoError::Service(GetSAMLProviderError::NoSuchEntity(
+                                parsed_error.message,
+                            ))
+                        }
+                        "ServiceFailure" => {
+                            return RusotoError::Service(GetSAMLProviderError::ServiceFailure(
+                                parsed_error.message,
+                            ))
+                        }
+                        _ => {}
                     }
-                    "NoSuchEntity" => {
-                        return RusotoError::Service(GetSAMLProviderError::NoSuchEntity(
-                            parsed_error.message,
-                        ))
-                    }
-                    "ServiceFailure" => {
-                        return RusotoError::Service(GetSAMLProviderError::ServiceFailure(
-                            parsed_error.message,
-                        ))
-                    }
-                    _ => {}
                 }
             }
         }
@@ -15881,21 +16558,24 @@ impl GetSSHPublicKeyError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    "NoSuchEntity" => {
-                        return RusotoError::Service(GetSSHPublicKeyError::NoSuchEntity(
-                            parsed_error.message,
-                        ))
-                    }
-                    "UnrecognizedPublicKeyEncoding" => {
-                        return RusotoError::Service(
-                            GetSSHPublicKeyError::UnrecognizedPublicKeyEncoding(
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {
+                        "NoSuchEntity" => {
+                            return RusotoError::Service(GetSSHPublicKeyError::NoSuchEntity(
                                 parsed_error.message,
-                            ),
-                        )
+                            ))
+                        }
+                        "UnrecognizedPublicKeyEncoding" => {
+                            return RusotoError::Service(
+                                GetSSHPublicKeyError::UnrecognizedPublicKeyEncoding(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        _ => {}
                     }
-                    _ => {}
                 }
             }
         }
@@ -15937,19 +16617,22 @@ impl GetServerCertificateError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    "NoSuchEntity" => {
-                        return RusotoError::Service(GetServerCertificateError::NoSuchEntity(
-                            parsed_error.message,
-                        ))
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {
+                        "NoSuchEntity" => {
+                            return RusotoError::Service(GetServerCertificateError::NoSuchEntity(
+                                parsed_error.message,
+                            ))
+                        }
+                        "ServiceFailure" => {
+                            return RusotoError::Service(GetServerCertificateError::ServiceFailure(
+                                parsed_error.message,
+                            ))
+                        }
+                        _ => {}
                     }
-                    "ServiceFailure" => {
-                        return RusotoError::Service(GetServerCertificateError::ServiceFailure(
-                            parsed_error.message,
-                        ))
-                    }
-                    _ => {}
                 }
             }
         }
@@ -15991,19 +16674,26 @@ impl GetServiceLastAccessedDetailsError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    "InvalidInput" => {
-                        return RusotoError::Service(
-                            GetServiceLastAccessedDetailsError::InvalidInput(parsed_error.message),
-                        )
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {
+                        "InvalidInput" => {
+                            return RusotoError::Service(
+                                GetServiceLastAccessedDetailsError::InvalidInput(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "NoSuchEntity" => {
+                            return RusotoError::Service(
+                                GetServiceLastAccessedDetailsError::NoSuchEntity(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        _ => {}
                     }
-                    "NoSuchEntity" => {
-                        return RusotoError::Service(
-                            GetServiceLastAccessedDetailsError::NoSuchEntity(parsed_error.message),
-                        )
-                    }
-                    _ => {}
                 }
             }
         }
@@ -16045,23 +16735,26 @@ impl GetServiceLastAccessedDetailsWithEntitiesError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    "InvalidInput" => {
-                        return RusotoError::Service(
-                            GetServiceLastAccessedDetailsWithEntitiesError::InvalidInput(
-                                parsed_error.message,
-                            ),
-                        )
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {
+                        "InvalidInput" => {
+                            return RusotoError::Service(
+                                GetServiceLastAccessedDetailsWithEntitiesError::InvalidInput(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "NoSuchEntity" => {
+                            return RusotoError::Service(
+                                GetServiceLastAccessedDetailsWithEntitiesError::NoSuchEntity(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        _ => {}
                     }
-                    "NoSuchEntity" => {
-                        return RusotoError::Service(
-                            GetServiceLastAccessedDetailsWithEntitiesError::NoSuchEntity(
-                                parsed_error.message,
-                            ),
-                        )
-                    }
-                    _ => {}
                 }
             }
         }
@@ -16109,30 +16802,33 @@ impl GetServiceLinkedRoleDeletionStatusError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    "InvalidInput" => {
-                        return RusotoError::Service(
-                            GetServiceLinkedRoleDeletionStatusError::InvalidInput(
-                                parsed_error.message,
-                            ),
-                        )
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {
+                        "InvalidInput" => {
+                            return RusotoError::Service(
+                                GetServiceLinkedRoleDeletionStatusError::InvalidInput(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "NoSuchEntity" => {
+                            return RusotoError::Service(
+                                GetServiceLinkedRoleDeletionStatusError::NoSuchEntity(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "ServiceFailure" => {
+                            return RusotoError::Service(
+                                GetServiceLinkedRoleDeletionStatusError::ServiceFailure(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        _ => {}
                     }
-                    "NoSuchEntity" => {
-                        return RusotoError::Service(
-                            GetServiceLinkedRoleDeletionStatusError::NoSuchEntity(
-                                parsed_error.message,
-                            ),
-                        )
-                    }
-                    "ServiceFailure" => {
-                        return RusotoError::Service(
-                            GetServiceLinkedRoleDeletionStatusError::ServiceFailure(
-                                parsed_error.message,
-                            ),
-                        )
-                    }
-                    _ => {}
                 }
             }
         }
@@ -16179,19 +16875,22 @@ impl GetUserError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    "NoSuchEntity" => {
-                        return RusotoError::Service(GetUserError::NoSuchEntity(
-                            parsed_error.message,
-                        ))
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {
+                        "NoSuchEntity" => {
+                            return RusotoError::Service(GetUserError::NoSuchEntity(
+                                parsed_error.message,
+                            ))
+                        }
+                        "ServiceFailure" => {
+                            return RusotoError::Service(GetUserError::ServiceFailure(
+                                parsed_error.message,
+                            ))
+                        }
+                        _ => {}
                     }
-                    "ServiceFailure" => {
-                        return RusotoError::Service(GetUserError::ServiceFailure(
-                            parsed_error.message,
-                        ))
-                    }
-                    _ => {}
                 }
             }
         }
@@ -16231,19 +16930,22 @@ impl GetUserPolicyError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    "NoSuchEntity" => {
-                        return RusotoError::Service(GetUserPolicyError::NoSuchEntity(
-                            parsed_error.message,
-                        ))
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {
+                        "NoSuchEntity" => {
+                            return RusotoError::Service(GetUserPolicyError::NoSuchEntity(
+                                parsed_error.message,
+                            ))
+                        }
+                        "ServiceFailure" => {
+                            return RusotoError::Service(GetUserPolicyError::ServiceFailure(
+                                parsed_error.message,
+                            ))
+                        }
+                        _ => {}
                     }
-                    "ServiceFailure" => {
-                        return RusotoError::Service(GetUserPolicyError::ServiceFailure(
-                            parsed_error.message,
-                        ))
-                    }
-                    _ => {}
                 }
             }
         }
@@ -16283,19 +16985,22 @@ impl ListAccessKeysError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    "NoSuchEntity" => {
-                        return RusotoError::Service(ListAccessKeysError::NoSuchEntity(
-                            parsed_error.message,
-                        ))
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {
+                        "NoSuchEntity" => {
+                            return RusotoError::Service(ListAccessKeysError::NoSuchEntity(
+                                parsed_error.message,
+                            ))
+                        }
+                        "ServiceFailure" => {
+                            return RusotoError::Service(ListAccessKeysError::ServiceFailure(
+                                parsed_error.message,
+                            ))
+                        }
+                        _ => {}
                     }
-                    "ServiceFailure" => {
-                        return RusotoError::Service(ListAccessKeysError::ServiceFailure(
-                            parsed_error.message,
-                        ))
-                    }
-                    _ => {}
                 }
             }
         }
@@ -16333,14 +17038,17 @@ impl ListAccountAliasesError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    "ServiceFailure" => {
-                        return RusotoError::Service(ListAccountAliasesError::ServiceFailure(
-                            parsed_error.message,
-                        ))
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {
+                        "ServiceFailure" => {
+                            return RusotoError::Service(ListAccountAliasesError::ServiceFailure(
+                                parsed_error.message,
+                            ))
+                        }
+                        _ => {}
                     }
-                    _ => {}
                 }
             }
         }
@@ -16381,24 +17089,29 @@ impl ListAttachedGroupPoliciesError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    "InvalidInput" => {
-                        return RusotoError::Service(ListAttachedGroupPoliciesError::InvalidInput(
-                            parsed_error.message,
-                        ))
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {
+                        "InvalidInput" => {
+                            return RusotoError::Service(
+                                ListAttachedGroupPoliciesError::InvalidInput(parsed_error.message),
+                            )
+                        }
+                        "NoSuchEntity" => {
+                            return RusotoError::Service(
+                                ListAttachedGroupPoliciesError::NoSuchEntity(parsed_error.message),
+                            )
+                        }
+                        "ServiceFailure" => {
+                            return RusotoError::Service(
+                                ListAttachedGroupPoliciesError::ServiceFailure(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        _ => {}
                     }
-                    "NoSuchEntity" => {
-                        return RusotoError::Service(ListAttachedGroupPoliciesError::NoSuchEntity(
-                            parsed_error.message,
-                        ))
-                    }
-                    "ServiceFailure" => {
-                        return RusotoError::Service(
-                            ListAttachedGroupPoliciesError::ServiceFailure(parsed_error.message),
-                        )
-                    }
-                    _ => {}
                 }
             }
         }
@@ -16441,24 +17154,27 @@ impl ListAttachedRolePoliciesError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    "InvalidInput" => {
-                        return RusotoError::Service(ListAttachedRolePoliciesError::InvalidInput(
-                            parsed_error.message,
-                        ))
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {
+                        "InvalidInput" => {
+                            return RusotoError::Service(
+                                ListAttachedRolePoliciesError::InvalidInput(parsed_error.message),
+                            )
+                        }
+                        "NoSuchEntity" => {
+                            return RusotoError::Service(
+                                ListAttachedRolePoliciesError::NoSuchEntity(parsed_error.message),
+                            )
+                        }
+                        "ServiceFailure" => {
+                            return RusotoError::Service(
+                                ListAttachedRolePoliciesError::ServiceFailure(parsed_error.message),
+                            )
+                        }
+                        _ => {}
                     }
-                    "NoSuchEntity" => {
-                        return RusotoError::Service(ListAttachedRolePoliciesError::NoSuchEntity(
-                            parsed_error.message,
-                        ))
-                    }
-                    "ServiceFailure" => {
-                        return RusotoError::Service(ListAttachedRolePoliciesError::ServiceFailure(
-                            parsed_error.message,
-                        ))
-                    }
-                    _ => {}
                 }
             }
         }
@@ -16501,24 +17217,27 @@ impl ListAttachedUserPoliciesError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    "InvalidInput" => {
-                        return RusotoError::Service(ListAttachedUserPoliciesError::InvalidInput(
-                            parsed_error.message,
-                        ))
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {
+                        "InvalidInput" => {
+                            return RusotoError::Service(
+                                ListAttachedUserPoliciesError::InvalidInput(parsed_error.message),
+                            )
+                        }
+                        "NoSuchEntity" => {
+                            return RusotoError::Service(
+                                ListAttachedUserPoliciesError::NoSuchEntity(parsed_error.message),
+                            )
+                        }
+                        "ServiceFailure" => {
+                            return RusotoError::Service(
+                                ListAttachedUserPoliciesError::ServiceFailure(parsed_error.message),
+                            )
+                        }
+                        _ => {}
                     }
-                    "NoSuchEntity" => {
-                        return RusotoError::Service(ListAttachedUserPoliciesError::NoSuchEntity(
-                            parsed_error.message,
-                        ))
-                    }
-                    "ServiceFailure" => {
-                        return RusotoError::Service(ListAttachedUserPoliciesError::ServiceFailure(
-                            parsed_error.message,
-                        ))
-                    }
-                    _ => {}
                 }
             }
         }
@@ -16561,24 +17280,27 @@ impl ListEntitiesForPolicyError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    "InvalidInput" => {
-                        return RusotoError::Service(ListEntitiesForPolicyError::InvalidInput(
-                            parsed_error.message,
-                        ))
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {
+                        "InvalidInput" => {
+                            return RusotoError::Service(ListEntitiesForPolicyError::InvalidInput(
+                                parsed_error.message,
+                            ))
+                        }
+                        "NoSuchEntity" => {
+                            return RusotoError::Service(ListEntitiesForPolicyError::NoSuchEntity(
+                                parsed_error.message,
+                            ))
+                        }
+                        "ServiceFailure" => {
+                            return RusotoError::Service(
+                                ListEntitiesForPolicyError::ServiceFailure(parsed_error.message),
+                            )
+                        }
+                        _ => {}
                     }
-                    "NoSuchEntity" => {
-                        return RusotoError::Service(ListEntitiesForPolicyError::NoSuchEntity(
-                            parsed_error.message,
-                        ))
-                    }
-                    "ServiceFailure" => {
-                        return RusotoError::Service(ListEntitiesForPolicyError::ServiceFailure(
-                            parsed_error.message,
-                        ))
-                    }
-                    _ => {}
                 }
             }
         }
@@ -16619,19 +17341,22 @@ impl ListGroupPoliciesError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    "NoSuchEntity" => {
-                        return RusotoError::Service(ListGroupPoliciesError::NoSuchEntity(
-                            parsed_error.message,
-                        ))
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {
+                        "NoSuchEntity" => {
+                            return RusotoError::Service(ListGroupPoliciesError::NoSuchEntity(
+                                parsed_error.message,
+                            ))
+                        }
+                        "ServiceFailure" => {
+                            return RusotoError::Service(ListGroupPoliciesError::ServiceFailure(
+                                parsed_error.message,
+                            ))
+                        }
+                        _ => {}
                     }
-                    "ServiceFailure" => {
-                        return RusotoError::Service(ListGroupPoliciesError::ServiceFailure(
-                            parsed_error.message,
-                        ))
-                    }
-                    _ => {}
                 }
             }
         }
@@ -16669,14 +17394,17 @@ impl ListGroupsError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    "ServiceFailure" => {
-                        return RusotoError::Service(ListGroupsError::ServiceFailure(
-                            parsed_error.message,
-                        ))
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {
+                        "ServiceFailure" => {
+                            return RusotoError::Service(ListGroupsError::ServiceFailure(
+                                parsed_error.message,
+                            ))
+                        }
+                        _ => {}
                     }
-                    _ => {}
                 }
             }
         }
@@ -16715,19 +17443,22 @@ impl ListGroupsForUserError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    "NoSuchEntity" => {
-                        return RusotoError::Service(ListGroupsForUserError::NoSuchEntity(
-                            parsed_error.message,
-                        ))
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {
+                        "NoSuchEntity" => {
+                            return RusotoError::Service(ListGroupsForUserError::NoSuchEntity(
+                                parsed_error.message,
+                            ))
+                        }
+                        "ServiceFailure" => {
+                            return RusotoError::Service(ListGroupsForUserError::ServiceFailure(
+                                parsed_error.message,
+                            ))
+                        }
+                        _ => {}
                     }
-                    "ServiceFailure" => {
-                        return RusotoError::Service(ListGroupsForUserError::ServiceFailure(
-                            parsed_error.message,
-                        ))
-                    }
-                    _ => {}
                 }
             }
         }
@@ -16765,14 +17496,17 @@ impl ListInstanceProfilesError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    "ServiceFailure" => {
-                        return RusotoError::Service(ListInstanceProfilesError::ServiceFailure(
-                            parsed_error.message,
-                        ))
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {
+                        "ServiceFailure" => {
+                            return RusotoError::Service(ListInstanceProfilesError::ServiceFailure(
+                                parsed_error.message,
+                            ))
+                        }
+                        _ => {}
                     }
-                    _ => {}
                 }
             }
         }
@@ -16813,19 +17547,26 @@ impl ListInstanceProfilesForRoleError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    "NoSuchEntity" => {
-                        return RusotoError::Service(
-                            ListInstanceProfilesForRoleError::NoSuchEntity(parsed_error.message),
-                        )
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {
+                        "NoSuchEntity" => {
+                            return RusotoError::Service(
+                                ListInstanceProfilesForRoleError::NoSuchEntity(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "ServiceFailure" => {
+                            return RusotoError::Service(
+                                ListInstanceProfilesForRoleError::ServiceFailure(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        _ => {}
                     }
-                    "ServiceFailure" => {
-                        return RusotoError::Service(
-                            ListInstanceProfilesForRoleError::ServiceFailure(parsed_error.message),
-                        )
-                    }
-                    _ => {}
                 }
             }
         }
@@ -16865,19 +17606,22 @@ impl ListMFADevicesError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    "NoSuchEntity" => {
-                        return RusotoError::Service(ListMFADevicesError::NoSuchEntity(
-                            parsed_error.message,
-                        ))
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {
+                        "NoSuchEntity" => {
+                            return RusotoError::Service(ListMFADevicesError::NoSuchEntity(
+                                parsed_error.message,
+                            ))
+                        }
+                        "ServiceFailure" => {
+                            return RusotoError::Service(ListMFADevicesError::ServiceFailure(
+                                parsed_error.message,
+                            ))
+                        }
+                        _ => {}
                     }
-                    "ServiceFailure" => {
-                        return RusotoError::Service(ListMFADevicesError::ServiceFailure(
-                            parsed_error.message,
-                        ))
-                    }
-                    _ => {}
                 }
             }
         }
@@ -16917,14 +17661,19 @@ impl ListOpenIDConnectProvidersError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    "ServiceFailure" => {
-                        return RusotoError::Service(
-                            ListOpenIDConnectProvidersError::ServiceFailure(parsed_error.message),
-                        )
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {
+                        "ServiceFailure" => {
+                            return RusotoError::Service(
+                                ListOpenIDConnectProvidersError::ServiceFailure(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        _ => {}
                     }
-                    _ => {}
                 }
             }
         }
@@ -16961,14 +17710,17 @@ impl ListPoliciesError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    "ServiceFailure" => {
-                        return RusotoError::Service(ListPoliciesError::ServiceFailure(
-                            parsed_error.message,
-                        ))
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {
+                        "ServiceFailure" => {
+                            return RusotoError::Service(ListPoliciesError::ServiceFailure(
+                                parsed_error.message,
+                            ))
+                        }
+                        _ => {}
                     }
-                    _ => {}
                 }
             }
         }
@@ -17009,23 +17761,26 @@ impl ListPoliciesGrantingServiceAccessError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    "InvalidInput" => {
-                        return RusotoError::Service(
-                            ListPoliciesGrantingServiceAccessError::InvalidInput(
-                                parsed_error.message,
-                            ),
-                        )
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {
+                        "InvalidInput" => {
+                            return RusotoError::Service(
+                                ListPoliciesGrantingServiceAccessError::InvalidInput(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "NoSuchEntity" => {
+                            return RusotoError::Service(
+                                ListPoliciesGrantingServiceAccessError::NoSuchEntity(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        _ => {}
                     }
-                    "NoSuchEntity" => {
-                        return RusotoError::Service(
-                            ListPoliciesGrantingServiceAccessError::NoSuchEntity(
-                                parsed_error.message,
-                            ),
-                        )
-                    }
-                    _ => {}
                 }
             }
         }
@@ -17071,24 +17826,27 @@ impl ListPolicyVersionsError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    "InvalidInput" => {
-                        return RusotoError::Service(ListPolicyVersionsError::InvalidInput(
-                            parsed_error.message,
-                        ))
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {
+                        "InvalidInput" => {
+                            return RusotoError::Service(ListPolicyVersionsError::InvalidInput(
+                                parsed_error.message,
+                            ))
+                        }
+                        "NoSuchEntity" => {
+                            return RusotoError::Service(ListPolicyVersionsError::NoSuchEntity(
+                                parsed_error.message,
+                            ))
+                        }
+                        "ServiceFailure" => {
+                            return RusotoError::Service(ListPolicyVersionsError::ServiceFailure(
+                                parsed_error.message,
+                            ))
+                        }
+                        _ => {}
                     }
-                    "NoSuchEntity" => {
-                        return RusotoError::Service(ListPolicyVersionsError::NoSuchEntity(
-                            parsed_error.message,
-                        ))
-                    }
-                    "ServiceFailure" => {
-                        return RusotoError::Service(ListPolicyVersionsError::ServiceFailure(
-                            parsed_error.message,
-                        ))
-                    }
-                    _ => {}
                 }
             }
         }
@@ -17129,19 +17887,22 @@ impl ListRolePoliciesError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    "NoSuchEntity" => {
-                        return RusotoError::Service(ListRolePoliciesError::NoSuchEntity(
-                            parsed_error.message,
-                        ))
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {
+                        "NoSuchEntity" => {
+                            return RusotoError::Service(ListRolePoliciesError::NoSuchEntity(
+                                parsed_error.message,
+                            ))
+                        }
+                        "ServiceFailure" => {
+                            return RusotoError::Service(ListRolePoliciesError::ServiceFailure(
+                                parsed_error.message,
+                            ))
+                        }
+                        _ => {}
                     }
-                    "ServiceFailure" => {
-                        return RusotoError::Service(ListRolePoliciesError::ServiceFailure(
-                            parsed_error.message,
-                        ))
-                    }
-                    _ => {}
                 }
             }
         }
@@ -17181,19 +17942,22 @@ impl ListRoleTagsError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    "NoSuchEntity" => {
-                        return RusotoError::Service(ListRoleTagsError::NoSuchEntity(
-                            parsed_error.message,
-                        ))
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {
+                        "NoSuchEntity" => {
+                            return RusotoError::Service(ListRoleTagsError::NoSuchEntity(
+                                parsed_error.message,
+                            ))
+                        }
+                        "ServiceFailure" => {
+                            return RusotoError::Service(ListRoleTagsError::ServiceFailure(
+                                parsed_error.message,
+                            ))
+                        }
+                        _ => {}
                     }
-                    "ServiceFailure" => {
-                        return RusotoError::Service(ListRoleTagsError::ServiceFailure(
-                            parsed_error.message,
-                        ))
-                    }
-                    _ => {}
                 }
             }
         }
@@ -17231,14 +17995,17 @@ impl ListRolesError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    "ServiceFailure" => {
-                        return RusotoError::Service(ListRolesError::ServiceFailure(
-                            parsed_error.message,
-                        ))
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {
+                        "ServiceFailure" => {
+                            return RusotoError::Service(ListRolesError::ServiceFailure(
+                                parsed_error.message,
+                            ))
+                        }
+                        _ => {}
                     }
-                    _ => {}
                 }
             }
         }
@@ -17275,14 +18042,17 @@ impl ListSAMLProvidersError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    "ServiceFailure" => {
-                        return RusotoError::Service(ListSAMLProvidersError::ServiceFailure(
-                            parsed_error.message,
-                        ))
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {
+                        "ServiceFailure" => {
+                            return RusotoError::Service(ListSAMLProvidersError::ServiceFailure(
+                                parsed_error.message,
+                            ))
+                        }
+                        _ => {}
                     }
-                    _ => {}
                 }
             }
         }
@@ -17319,14 +18089,17 @@ impl ListSSHPublicKeysError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    "NoSuchEntity" => {
-                        return RusotoError::Service(ListSSHPublicKeysError::NoSuchEntity(
-                            parsed_error.message,
-                        ))
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {
+                        "NoSuchEntity" => {
+                            return RusotoError::Service(ListSSHPublicKeysError::NoSuchEntity(
+                                parsed_error.message,
+                            ))
+                        }
+                        _ => {}
                     }
-                    _ => {}
                 }
             }
         }
@@ -17363,14 +18136,17 @@ impl ListServerCertificatesError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    "ServiceFailure" => {
-                        return RusotoError::Service(ListServerCertificatesError::ServiceFailure(
-                            parsed_error.message,
-                        ))
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {
+                        "ServiceFailure" => {
+                            return RusotoError::Service(
+                                ListServerCertificatesError::ServiceFailure(parsed_error.message),
+                            )
+                        }
+                        _ => {}
                     }
-                    _ => {}
                 }
             }
         }
@@ -17411,21 +18187,26 @@ impl ListServiceSpecificCredentialsError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    "NoSuchEntity" => {
-                        return RusotoError::Service(
-                            ListServiceSpecificCredentialsError::NoSuchEntity(parsed_error.message),
-                        )
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {
+                        "NoSuchEntity" => {
+                            return RusotoError::Service(
+                                ListServiceSpecificCredentialsError::NoSuchEntity(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "NotSupportedService" => {
+                            return RusotoError::Service(
+                                ListServiceSpecificCredentialsError::ServiceNotSupported(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        _ => {}
                     }
-                    "NotSupportedService" => {
-                        return RusotoError::Service(
-                            ListServiceSpecificCredentialsError::ServiceNotSupported(
-                                parsed_error.message,
-                            ),
-                        )
-                    }
-                    _ => {}
                 }
             }
         }
@@ -17467,19 +18248,22 @@ impl ListSigningCertificatesError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    "NoSuchEntity" => {
-                        return RusotoError::Service(ListSigningCertificatesError::NoSuchEntity(
-                            parsed_error.message,
-                        ))
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {
+                        "NoSuchEntity" => {
+                            return RusotoError::Service(
+                                ListSigningCertificatesError::NoSuchEntity(parsed_error.message),
+                            )
+                        }
+                        "ServiceFailure" => {
+                            return RusotoError::Service(
+                                ListSigningCertificatesError::ServiceFailure(parsed_error.message),
+                            )
+                        }
+                        _ => {}
                     }
-                    "ServiceFailure" => {
-                        return RusotoError::Service(ListSigningCertificatesError::ServiceFailure(
-                            parsed_error.message,
-                        ))
-                    }
-                    _ => {}
                 }
             }
         }
@@ -17519,19 +18303,22 @@ impl ListUserPoliciesError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    "NoSuchEntity" => {
-                        return RusotoError::Service(ListUserPoliciesError::NoSuchEntity(
-                            parsed_error.message,
-                        ))
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {
+                        "NoSuchEntity" => {
+                            return RusotoError::Service(ListUserPoliciesError::NoSuchEntity(
+                                parsed_error.message,
+                            ))
+                        }
+                        "ServiceFailure" => {
+                            return RusotoError::Service(ListUserPoliciesError::ServiceFailure(
+                                parsed_error.message,
+                            ))
+                        }
+                        _ => {}
                     }
-                    "ServiceFailure" => {
-                        return RusotoError::Service(ListUserPoliciesError::ServiceFailure(
-                            parsed_error.message,
-                        ))
-                    }
-                    _ => {}
                 }
             }
         }
@@ -17571,19 +18358,22 @@ impl ListUserTagsError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    "NoSuchEntity" => {
-                        return RusotoError::Service(ListUserTagsError::NoSuchEntity(
-                            parsed_error.message,
-                        ))
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {
+                        "NoSuchEntity" => {
+                            return RusotoError::Service(ListUserTagsError::NoSuchEntity(
+                                parsed_error.message,
+                            ))
+                        }
+                        "ServiceFailure" => {
+                            return RusotoError::Service(ListUserTagsError::ServiceFailure(
+                                parsed_error.message,
+                            ))
+                        }
+                        _ => {}
                     }
-                    "ServiceFailure" => {
-                        return RusotoError::Service(ListUserTagsError::ServiceFailure(
-                            parsed_error.message,
-                        ))
-                    }
-                    _ => {}
                 }
             }
         }
@@ -17621,14 +18411,17 @@ impl ListUsersError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    "ServiceFailure" => {
-                        return RusotoError::Service(ListUsersError::ServiceFailure(
-                            parsed_error.message,
-                        ))
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {
+                        "ServiceFailure" => {
+                            return RusotoError::Service(ListUsersError::ServiceFailure(
+                                parsed_error.message,
+                            ))
+                        }
+                        _ => {}
                     }
-                    _ => {}
                 }
             }
         }
@@ -17662,11 +18455,7 @@ impl ListVirtualMFADevicesError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    _ => {}
-                }
-            }
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {}
         }
         RusotoError::Unknown(res)
     }
@@ -17705,29 +18494,32 @@ impl PutGroupPolicyError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    "LimitExceeded" => {
-                        return RusotoError::Service(PutGroupPolicyError::LimitExceeded(
-                            parsed_error.message,
-                        ))
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {
+                        "LimitExceeded" => {
+                            return RusotoError::Service(PutGroupPolicyError::LimitExceeded(
+                                parsed_error.message,
+                            ))
+                        }
+                        "MalformedPolicyDocument" => {
+                            return RusotoError::Service(
+                                PutGroupPolicyError::MalformedPolicyDocument(parsed_error.message),
+                            )
+                        }
+                        "NoSuchEntity" => {
+                            return RusotoError::Service(PutGroupPolicyError::NoSuchEntity(
+                                parsed_error.message,
+                            ))
+                        }
+                        "ServiceFailure" => {
+                            return RusotoError::Service(PutGroupPolicyError::ServiceFailure(
+                                parsed_error.message,
+                            ))
+                        }
+                        _ => {}
                     }
-                    "MalformedPolicyDocument" => {
-                        return RusotoError::Service(PutGroupPolicyError::MalformedPolicyDocument(
-                            parsed_error.message,
-                        ))
-                    }
-                    "NoSuchEntity" => {
-                        return RusotoError::Service(PutGroupPolicyError::NoSuchEntity(
-                            parsed_error.message,
-                        ))
-                    }
-                    "ServiceFailure" => {
-                        return RusotoError::Service(PutGroupPolicyError::ServiceFailure(
-                            parsed_error.message,
-                        ))
-                    }
-                    _ => {}
                 }
             }
         }
@@ -17777,38 +18569,43 @@ impl PutRolePermissionsBoundaryError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    "InvalidInput" => {
-                        return RusotoError::Service(PutRolePermissionsBoundaryError::InvalidInput(
-                            parsed_error.message,
-                        ))
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {
+                        "InvalidInput" => {
+                            return RusotoError::Service(
+                                PutRolePermissionsBoundaryError::InvalidInput(parsed_error.message),
+                            )
+                        }
+                        "NoSuchEntity" => {
+                            return RusotoError::Service(
+                                PutRolePermissionsBoundaryError::NoSuchEntity(parsed_error.message),
+                            )
+                        }
+                        "PolicyNotAttachable" => {
+                            return RusotoError::Service(
+                                PutRolePermissionsBoundaryError::PolicyNotAttachable(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "ServiceFailure" => {
+                            return RusotoError::Service(
+                                PutRolePermissionsBoundaryError::ServiceFailure(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "UnmodifiableEntity" => {
+                            return RusotoError::Service(
+                                PutRolePermissionsBoundaryError::UnmodifiableEntity(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        _ => {}
                     }
-                    "NoSuchEntity" => {
-                        return RusotoError::Service(PutRolePermissionsBoundaryError::NoSuchEntity(
-                            parsed_error.message,
-                        ))
-                    }
-                    "PolicyNotAttachable" => {
-                        return RusotoError::Service(
-                            PutRolePermissionsBoundaryError::PolicyNotAttachable(
-                                parsed_error.message,
-                            ),
-                        )
-                    }
-                    "ServiceFailure" => {
-                        return RusotoError::Service(
-                            PutRolePermissionsBoundaryError::ServiceFailure(parsed_error.message),
-                        )
-                    }
-                    "UnmodifiableEntity" => {
-                        return RusotoError::Service(
-                            PutRolePermissionsBoundaryError::UnmodifiableEntity(
-                                parsed_error.message,
-                            ),
-                        )
-                    }
-                    _ => {}
                 }
             }
         }
@@ -17861,34 +18658,37 @@ impl PutRolePolicyError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    "LimitExceeded" => {
-                        return RusotoError::Service(PutRolePolicyError::LimitExceeded(
-                            parsed_error.message,
-                        ))
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {
+                        "LimitExceeded" => {
+                            return RusotoError::Service(PutRolePolicyError::LimitExceeded(
+                                parsed_error.message,
+                            ))
+                        }
+                        "MalformedPolicyDocument" => {
+                            return RusotoError::Service(
+                                PutRolePolicyError::MalformedPolicyDocument(parsed_error.message),
+                            )
+                        }
+                        "NoSuchEntity" => {
+                            return RusotoError::Service(PutRolePolicyError::NoSuchEntity(
+                                parsed_error.message,
+                            ))
+                        }
+                        "ServiceFailure" => {
+                            return RusotoError::Service(PutRolePolicyError::ServiceFailure(
+                                parsed_error.message,
+                            ))
+                        }
+                        "UnmodifiableEntity" => {
+                            return RusotoError::Service(PutRolePolicyError::UnmodifiableEntity(
+                                parsed_error.message,
+                            ))
+                        }
+                        _ => {}
                     }
-                    "MalformedPolicyDocument" => {
-                        return RusotoError::Service(PutRolePolicyError::MalformedPolicyDocument(
-                            parsed_error.message,
-                        ))
-                    }
-                    "NoSuchEntity" => {
-                        return RusotoError::Service(PutRolePolicyError::NoSuchEntity(
-                            parsed_error.message,
-                        ))
-                    }
-                    "ServiceFailure" => {
-                        return RusotoError::Service(PutRolePolicyError::ServiceFailure(
-                            parsed_error.message,
-                        ))
-                    }
-                    "UnmodifiableEntity" => {
-                        return RusotoError::Service(PutRolePolicyError::UnmodifiableEntity(
-                            parsed_error.message,
-                        ))
-                    }
-                    _ => {}
                 }
             }
         }
@@ -17937,31 +18737,36 @@ impl PutUserPermissionsBoundaryError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    "InvalidInput" => {
-                        return RusotoError::Service(PutUserPermissionsBoundaryError::InvalidInput(
-                            parsed_error.message,
-                        ))
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {
+                        "InvalidInput" => {
+                            return RusotoError::Service(
+                                PutUserPermissionsBoundaryError::InvalidInput(parsed_error.message),
+                            )
+                        }
+                        "NoSuchEntity" => {
+                            return RusotoError::Service(
+                                PutUserPermissionsBoundaryError::NoSuchEntity(parsed_error.message),
+                            )
+                        }
+                        "PolicyNotAttachable" => {
+                            return RusotoError::Service(
+                                PutUserPermissionsBoundaryError::PolicyNotAttachable(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "ServiceFailure" => {
+                            return RusotoError::Service(
+                                PutUserPermissionsBoundaryError::ServiceFailure(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        _ => {}
                     }
-                    "NoSuchEntity" => {
-                        return RusotoError::Service(PutUserPermissionsBoundaryError::NoSuchEntity(
-                            parsed_error.message,
-                        ))
-                    }
-                    "PolicyNotAttachable" => {
-                        return RusotoError::Service(
-                            PutUserPermissionsBoundaryError::PolicyNotAttachable(
-                                parsed_error.message,
-                            ),
-                        )
-                    }
-                    "ServiceFailure" => {
-                        return RusotoError::Service(
-                            PutUserPermissionsBoundaryError::ServiceFailure(parsed_error.message),
-                        )
-                    }
-                    _ => {}
                 }
             }
         }
@@ -18009,29 +18814,32 @@ impl PutUserPolicyError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    "LimitExceeded" => {
-                        return RusotoError::Service(PutUserPolicyError::LimitExceeded(
-                            parsed_error.message,
-                        ))
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {
+                        "LimitExceeded" => {
+                            return RusotoError::Service(PutUserPolicyError::LimitExceeded(
+                                parsed_error.message,
+                            ))
+                        }
+                        "MalformedPolicyDocument" => {
+                            return RusotoError::Service(
+                                PutUserPolicyError::MalformedPolicyDocument(parsed_error.message),
+                            )
+                        }
+                        "NoSuchEntity" => {
+                            return RusotoError::Service(PutUserPolicyError::NoSuchEntity(
+                                parsed_error.message,
+                            ))
+                        }
+                        "ServiceFailure" => {
+                            return RusotoError::Service(PutUserPolicyError::ServiceFailure(
+                                parsed_error.message,
+                            ))
+                        }
+                        _ => {}
                     }
-                    "MalformedPolicyDocument" => {
-                        return RusotoError::Service(PutUserPolicyError::MalformedPolicyDocument(
-                            parsed_error.message,
-                        ))
-                    }
-                    "NoSuchEntity" => {
-                        return RusotoError::Service(PutUserPolicyError::NoSuchEntity(
-                            parsed_error.message,
-                        ))
-                    }
-                    "ServiceFailure" => {
-                        return RusotoError::Service(PutUserPolicyError::ServiceFailure(
-                            parsed_error.message,
-                        ))
-                    }
-                    _ => {}
                 }
             }
         }
@@ -18077,30 +18885,33 @@ impl RemoveClientIDFromOpenIDConnectProviderError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    "InvalidInput" => {
-                        return RusotoError::Service(
-                            RemoveClientIDFromOpenIDConnectProviderError::InvalidInput(
-                                parsed_error.message,
-                            ),
-                        )
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {
+                        "InvalidInput" => {
+                            return RusotoError::Service(
+                                RemoveClientIDFromOpenIDConnectProviderError::InvalidInput(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "NoSuchEntity" => {
+                            return RusotoError::Service(
+                                RemoveClientIDFromOpenIDConnectProviderError::NoSuchEntity(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "ServiceFailure" => {
+                            return RusotoError::Service(
+                                RemoveClientIDFromOpenIDConnectProviderError::ServiceFailure(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        _ => {}
                     }
-                    "NoSuchEntity" => {
-                        return RusotoError::Service(
-                            RemoveClientIDFromOpenIDConnectProviderError::NoSuchEntity(
-                                parsed_error.message,
-                            ),
-                        )
-                    }
-                    "ServiceFailure" => {
-                        return RusotoError::Service(
-                            RemoveClientIDFromOpenIDConnectProviderError::ServiceFailure(
-                                parsed_error.message,
-                            ),
-                        )
-                    }
-                    _ => {}
                 }
             }
         }
@@ -18153,33 +18964,40 @@ impl RemoveRoleFromInstanceProfileError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    "LimitExceeded" => {
-                        return RusotoError::Service(
-                            RemoveRoleFromInstanceProfileError::LimitExceeded(parsed_error.message),
-                        )
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {
+                        "LimitExceeded" => {
+                            return RusotoError::Service(
+                                RemoveRoleFromInstanceProfileError::LimitExceeded(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "NoSuchEntity" => {
+                            return RusotoError::Service(
+                                RemoveRoleFromInstanceProfileError::NoSuchEntity(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "ServiceFailure" => {
+                            return RusotoError::Service(
+                                RemoveRoleFromInstanceProfileError::ServiceFailure(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "UnmodifiableEntity" => {
+                            return RusotoError::Service(
+                                RemoveRoleFromInstanceProfileError::UnmodifiableEntity(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        _ => {}
                     }
-                    "NoSuchEntity" => {
-                        return RusotoError::Service(
-                            RemoveRoleFromInstanceProfileError::NoSuchEntity(parsed_error.message),
-                        )
-                    }
-                    "ServiceFailure" => {
-                        return RusotoError::Service(
-                            RemoveRoleFromInstanceProfileError::ServiceFailure(
-                                parsed_error.message,
-                            ),
-                        )
-                    }
-                    "UnmodifiableEntity" => {
-                        return RusotoError::Service(
-                            RemoveRoleFromInstanceProfileError::UnmodifiableEntity(
-                                parsed_error.message,
-                            ),
-                        )
-                    }
-                    _ => {}
                 }
             }
         }
@@ -18225,24 +19043,27 @@ impl RemoveUserFromGroupError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    "LimitExceeded" => {
-                        return RusotoError::Service(RemoveUserFromGroupError::LimitExceeded(
-                            parsed_error.message,
-                        ))
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {
+                        "LimitExceeded" => {
+                            return RusotoError::Service(RemoveUserFromGroupError::LimitExceeded(
+                                parsed_error.message,
+                            ))
+                        }
+                        "NoSuchEntity" => {
+                            return RusotoError::Service(RemoveUserFromGroupError::NoSuchEntity(
+                                parsed_error.message,
+                            ))
+                        }
+                        "ServiceFailure" => {
+                            return RusotoError::Service(RemoveUserFromGroupError::ServiceFailure(
+                                parsed_error.message,
+                            ))
+                        }
+                        _ => {}
                     }
-                    "NoSuchEntity" => {
-                        return RusotoError::Service(RemoveUserFromGroupError::NoSuchEntity(
-                            parsed_error.message,
-                        ))
-                    }
-                    "ServiceFailure" => {
-                        return RusotoError::Service(RemoveUserFromGroupError::ServiceFailure(
-                            parsed_error.message,
-                        ))
-                    }
-                    _ => {}
                 }
             }
         }
@@ -18283,14 +19104,19 @@ impl ResetServiceSpecificCredentialError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    "NoSuchEntity" => {
-                        return RusotoError::Service(
-                            ResetServiceSpecificCredentialError::NoSuchEntity(parsed_error.message),
-                        )
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {
+                        "NoSuchEntity" => {
+                            return RusotoError::Service(
+                                ResetServiceSpecificCredentialError::NoSuchEntity(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        _ => {}
                     }
-                    _ => {}
                 }
             }
         }
@@ -18333,29 +19159,34 @@ impl ResyncMFADeviceError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    "InvalidAuthenticationCode" => {
-                        return RusotoError::Service(
-                            ResyncMFADeviceError::InvalidAuthenticationCode(parsed_error.message),
-                        )
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {
+                        "InvalidAuthenticationCode" => {
+                            return RusotoError::Service(
+                                ResyncMFADeviceError::InvalidAuthenticationCode(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "LimitExceeded" => {
+                            return RusotoError::Service(ResyncMFADeviceError::LimitExceeded(
+                                parsed_error.message,
+                            ))
+                        }
+                        "NoSuchEntity" => {
+                            return RusotoError::Service(ResyncMFADeviceError::NoSuchEntity(
+                                parsed_error.message,
+                            ))
+                        }
+                        "ServiceFailure" => {
+                            return RusotoError::Service(ResyncMFADeviceError::ServiceFailure(
+                                parsed_error.message,
+                            ))
+                        }
+                        _ => {}
                     }
-                    "LimitExceeded" => {
-                        return RusotoError::Service(ResyncMFADeviceError::LimitExceeded(
-                            parsed_error.message,
-                        ))
-                    }
-                    "NoSuchEntity" => {
-                        return RusotoError::Service(ResyncMFADeviceError::NoSuchEntity(
-                            parsed_error.message,
-                        ))
-                    }
-                    "ServiceFailure" => {
-                        return RusotoError::Service(ResyncMFADeviceError::ServiceFailure(
-                            parsed_error.message,
-                        ))
-                    }
-                    _ => {}
                 }
             }
         }
@@ -18401,29 +19232,32 @@ impl SetDefaultPolicyVersionError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    "InvalidInput" => {
-                        return RusotoError::Service(SetDefaultPolicyVersionError::InvalidInput(
-                            parsed_error.message,
-                        ))
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {
+                        "InvalidInput" => {
+                            return RusotoError::Service(
+                                SetDefaultPolicyVersionError::InvalidInput(parsed_error.message),
+                            )
+                        }
+                        "LimitExceeded" => {
+                            return RusotoError::Service(
+                                SetDefaultPolicyVersionError::LimitExceeded(parsed_error.message),
+                            )
+                        }
+                        "NoSuchEntity" => {
+                            return RusotoError::Service(
+                                SetDefaultPolicyVersionError::NoSuchEntity(parsed_error.message),
+                            )
+                        }
+                        "ServiceFailure" => {
+                            return RusotoError::Service(
+                                SetDefaultPolicyVersionError::ServiceFailure(parsed_error.message),
+                            )
+                        }
+                        _ => {}
                     }
-                    "LimitExceeded" => {
-                        return RusotoError::Service(SetDefaultPolicyVersionError::LimitExceeded(
-                            parsed_error.message,
-                        ))
-                    }
-                    "NoSuchEntity" => {
-                        return RusotoError::Service(SetDefaultPolicyVersionError::NoSuchEntity(
-                            parsed_error.message,
-                        ))
-                    }
-                    "ServiceFailure" => {
-                        return RusotoError::Service(SetDefaultPolicyVersionError::ServiceFailure(
-                            parsed_error.message,
-                        ))
-                    }
-                    _ => {}
                 }
             }
         }
@@ -18465,16 +19299,19 @@ impl SetSecurityTokenServicePreferencesError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    "ServiceFailure" => {
-                        return RusotoError::Service(
-                            SetSecurityTokenServicePreferencesError::ServiceFailure(
-                                parsed_error.message,
-                            ),
-                        )
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {
+                        "ServiceFailure" => {
+                            return RusotoError::Service(
+                                SetSecurityTokenServicePreferencesError::ServiceFailure(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        _ => {}
                     }
-                    _ => {}
                 }
             }
         }
@@ -18515,19 +19352,22 @@ impl SimulateCustomPolicyError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    "InvalidInput" => {
-                        return RusotoError::Service(SimulateCustomPolicyError::InvalidInput(
-                            parsed_error.message,
-                        ))
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {
+                        "InvalidInput" => {
+                            return RusotoError::Service(SimulateCustomPolicyError::InvalidInput(
+                                parsed_error.message,
+                            ))
+                        }
+                        "PolicyEvaluation" => {
+                            return RusotoError::Service(
+                                SimulateCustomPolicyError::PolicyEvaluation(parsed_error.message),
+                            )
+                        }
+                        _ => {}
                     }
-                    "PolicyEvaluation" => {
-                        return RusotoError::Service(SimulateCustomPolicyError::PolicyEvaluation(
-                            parsed_error.message,
-                        ))
-                    }
-                    _ => {}
                 }
             }
         }
@@ -18569,24 +19409,29 @@ impl SimulatePrincipalPolicyError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    "InvalidInput" => {
-                        return RusotoError::Service(SimulatePrincipalPolicyError::InvalidInput(
-                            parsed_error.message,
-                        ))
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {
+                        "InvalidInput" => {
+                            return RusotoError::Service(
+                                SimulatePrincipalPolicyError::InvalidInput(parsed_error.message),
+                            )
+                        }
+                        "NoSuchEntity" => {
+                            return RusotoError::Service(
+                                SimulatePrincipalPolicyError::NoSuchEntity(parsed_error.message),
+                            )
+                        }
+                        "PolicyEvaluation" => {
+                            return RusotoError::Service(
+                                SimulatePrincipalPolicyError::PolicyEvaluation(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        _ => {}
                     }
-                    "NoSuchEntity" => {
-                        return RusotoError::Service(SimulatePrincipalPolicyError::NoSuchEntity(
-                            parsed_error.message,
-                        ))
-                    }
-                    "PolicyEvaluation" => {
-                        return RusotoError::Service(
-                            SimulatePrincipalPolicyError::PolicyEvaluation(parsed_error.message),
-                        )
-                    }
-                    _ => {}
                 }
             }
         }
@@ -18633,34 +19478,37 @@ impl TagRoleError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    "ConcurrentModification" => {
-                        return RusotoError::Service(TagRoleError::ConcurrentModification(
-                            parsed_error.message,
-                        ))
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {
+                        "ConcurrentModification" => {
+                            return RusotoError::Service(TagRoleError::ConcurrentModification(
+                                parsed_error.message,
+                            ))
+                        }
+                        "InvalidInput" => {
+                            return RusotoError::Service(TagRoleError::InvalidInput(
+                                parsed_error.message,
+                            ))
+                        }
+                        "LimitExceeded" => {
+                            return RusotoError::Service(TagRoleError::LimitExceeded(
+                                parsed_error.message,
+                            ))
+                        }
+                        "NoSuchEntity" => {
+                            return RusotoError::Service(TagRoleError::NoSuchEntity(
+                                parsed_error.message,
+                            ))
+                        }
+                        "ServiceFailure" => {
+                            return RusotoError::Service(TagRoleError::ServiceFailure(
+                                parsed_error.message,
+                            ))
+                        }
+                        _ => {}
                     }
-                    "InvalidInput" => {
-                        return RusotoError::Service(TagRoleError::InvalidInput(
-                            parsed_error.message,
-                        ))
-                    }
-                    "LimitExceeded" => {
-                        return RusotoError::Service(TagRoleError::LimitExceeded(
-                            parsed_error.message,
-                        ))
-                    }
-                    "NoSuchEntity" => {
-                        return RusotoError::Service(TagRoleError::NoSuchEntity(
-                            parsed_error.message,
-                        ))
-                    }
-                    "ServiceFailure" => {
-                        return RusotoError::Service(TagRoleError::ServiceFailure(
-                            parsed_error.message,
-                        ))
-                    }
-                    _ => {}
                 }
             }
         }
@@ -18709,34 +19557,37 @@ impl TagUserError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    "ConcurrentModification" => {
-                        return RusotoError::Service(TagUserError::ConcurrentModification(
-                            parsed_error.message,
-                        ))
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {
+                        "ConcurrentModification" => {
+                            return RusotoError::Service(TagUserError::ConcurrentModification(
+                                parsed_error.message,
+                            ))
+                        }
+                        "InvalidInput" => {
+                            return RusotoError::Service(TagUserError::InvalidInput(
+                                parsed_error.message,
+                            ))
+                        }
+                        "LimitExceeded" => {
+                            return RusotoError::Service(TagUserError::LimitExceeded(
+                                parsed_error.message,
+                            ))
+                        }
+                        "NoSuchEntity" => {
+                            return RusotoError::Service(TagUserError::NoSuchEntity(
+                                parsed_error.message,
+                            ))
+                        }
+                        "ServiceFailure" => {
+                            return RusotoError::Service(TagUserError::ServiceFailure(
+                                parsed_error.message,
+                            ))
+                        }
+                        _ => {}
                     }
-                    "InvalidInput" => {
-                        return RusotoError::Service(TagUserError::InvalidInput(
-                            parsed_error.message,
-                        ))
-                    }
-                    "LimitExceeded" => {
-                        return RusotoError::Service(TagUserError::LimitExceeded(
-                            parsed_error.message,
-                        ))
-                    }
-                    "NoSuchEntity" => {
-                        return RusotoError::Service(TagUserError::NoSuchEntity(
-                            parsed_error.message,
-                        ))
-                    }
-                    "ServiceFailure" => {
-                        return RusotoError::Service(TagUserError::ServiceFailure(
-                            parsed_error.message,
-                        ))
-                    }
-                    _ => {}
                 }
             }
         }
@@ -18781,24 +19632,27 @@ impl UntagRoleError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    "ConcurrentModification" => {
-                        return RusotoError::Service(UntagRoleError::ConcurrentModification(
-                            parsed_error.message,
-                        ))
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {
+                        "ConcurrentModification" => {
+                            return RusotoError::Service(UntagRoleError::ConcurrentModification(
+                                parsed_error.message,
+                            ))
+                        }
+                        "NoSuchEntity" => {
+                            return RusotoError::Service(UntagRoleError::NoSuchEntity(
+                                parsed_error.message,
+                            ))
+                        }
+                        "ServiceFailure" => {
+                            return RusotoError::Service(UntagRoleError::ServiceFailure(
+                                parsed_error.message,
+                            ))
+                        }
+                        _ => {}
                     }
-                    "NoSuchEntity" => {
-                        return RusotoError::Service(UntagRoleError::NoSuchEntity(
-                            parsed_error.message,
-                        ))
-                    }
-                    "ServiceFailure" => {
-                        return RusotoError::Service(UntagRoleError::ServiceFailure(
-                            parsed_error.message,
-                        ))
-                    }
-                    _ => {}
                 }
             }
         }
@@ -18841,24 +19695,27 @@ impl UntagUserError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    "ConcurrentModification" => {
-                        return RusotoError::Service(UntagUserError::ConcurrentModification(
-                            parsed_error.message,
-                        ))
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {
+                        "ConcurrentModification" => {
+                            return RusotoError::Service(UntagUserError::ConcurrentModification(
+                                parsed_error.message,
+                            ))
+                        }
+                        "NoSuchEntity" => {
+                            return RusotoError::Service(UntagUserError::NoSuchEntity(
+                                parsed_error.message,
+                            ))
+                        }
+                        "ServiceFailure" => {
+                            return RusotoError::Service(UntagUserError::ServiceFailure(
+                                parsed_error.message,
+                            ))
+                        }
+                        _ => {}
                     }
-                    "NoSuchEntity" => {
-                        return RusotoError::Service(UntagUserError::NoSuchEntity(
-                            parsed_error.message,
-                        ))
-                    }
-                    "ServiceFailure" => {
-                        return RusotoError::Service(UntagUserError::ServiceFailure(
-                            parsed_error.message,
-                        ))
-                    }
-                    _ => {}
                 }
             }
         }
@@ -18901,24 +19758,27 @@ impl UpdateAccessKeyError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    "LimitExceeded" => {
-                        return RusotoError::Service(UpdateAccessKeyError::LimitExceeded(
-                            parsed_error.message,
-                        ))
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {
+                        "LimitExceeded" => {
+                            return RusotoError::Service(UpdateAccessKeyError::LimitExceeded(
+                                parsed_error.message,
+                            ))
+                        }
+                        "NoSuchEntity" => {
+                            return RusotoError::Service(UpdateAccessKeyError::NoSuchEntity(
+                                parsed_error.message,
+                            ))
+                        }
+                        "ServiceFailure" => {
+                            return RusotoError::Service(UpdateAccessKeyError::ServiceFailure(
+                                parsed_error.message,
+                            ))
+                        }
+                        _ => {}
                     }
-                    "NoSuchEntity" => {
-                        return RusotoError::Service(UpdateAccessKeyError::NoSuchEntity(
-                            parsed_error.message,
-                        ))
-                    }
-                    "ServiceFailure" => {
-                        return RusotoError::Service(UpdateAccessKeyError::ServiceFailure(
-                            parsed_error.message,
-                        ))
-                    }
-                    _ => {}
                 }
             }
         }
@@ -18965,31 +19825,40 @@ impl UpdateAccountPasswordPolicyError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    "LimitExceeded" => {
-                        return RusotoError::Service(
-                            UpdateAccountPasswordPolicyError::LimitExceeded(parsed_error.message),
-                        )
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {
+                        "LimitExceeded" => {
+                            return RusotoError::Service(
+                                UpdateAccountPasswordPolicyError::LimitExceeded(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "MalformedPolicyDocument" => {
+                            return RusotoError::Service(
+                                UpdateAccountPasswordPolicyError::MalformedPolicyDocument(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "NoSuchEntity" => {
+                            return RusotoError::Service(
+                                UpdateAccountPasswordPolicyError::NoSuchEntity(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "ServiceFailure" => {
+                            return RusotoError::Service(
+                                UpdateAccountPasswordPolicyError::ServiceFailure(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        _ => {}
                     }
-                    "MalformedPolicyDocument" => {
-                        return RusotoError::Service(
-                            UpdateAccountPasswordPolicyError::MalformedPolicyDocument(
-                                parsed_error.message,
-                            ),
-                        )
-                    }
-                    "NoSuchEntity" => {
-                        return RusotoError::Service(
-                            UpdateAccountPasswordPolicyError::NoSuchEntity(parsed_error.message),
-                        )
-                    }
-                    "ServiceFailure" => {
-                        return RusotoError::Service(
-                            UpdateAccountPasswordPolicyError::ServiceFailure(parsed_error.message),
-                        )
-                    }
-                    _ => {}
                 }
             }
         }
@@ -19039,36 +19908,41 @@ impl UpdateAssumeRolePolicyError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    "LimitExceeded" => {
-                        return RusotoError::Service(UpdateAssumeRolePolicyError::LimitExceeded(
-                            parsed_error.message,
-                        ))
-                    }
-                    "MalformedPolicyDocument" => {
-                        return RusotoError::Service(
-                            UpdateAssumeRolePolicyError::MalformedPolicyDocument(
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {
+                        "LimitExceeded" => {
+                            return RusotoError::Service(
+                                UpdateAssumeRolePolicyError::LimitExceeded(parsed_error.message),
+                            )
+                        }
+                        "MalformedPolicyDocument" => {
+                            return RusotoError::Service(
+                                UpdateAssumeRolePolicyError::MalformedPolicyDocument(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "NoSuchEntity" => {
+                            return RusotoError::Service(UpdateAssumeRolePolicyError::NoSuchEntity(
                                 parsed_error.message,
-                            ),
-                        )
+                            ))
+                        }
+                        "ServiceFailure" => {
+                            return RusotoError::Service(
+                                UpdateAssumeRolePolicyError::ServiceFailure(parsed_error.message),
+                            )
+                        }
+                        "UnmodifiableEntity" => {
+                            return RusotoError::Service(
+                                UpdateAssumeRolePolicyError::UnmodifiableEntity(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        _ => {}
                     }
-                    "NoSuchEntity" => {
-                        return RusotoError::Service(UpdateAssumeRolePolicyError::NoSuchEntity(
-                            parsed_error.message,
-                        ))
-                    }
-                    "ServiceFailure" => {
-                        return RusotoError::Service(UpdateAssumeRolePolicyError::ServiceFailure(
-                            parsed_error.message,
-                        ))
-                    }
-                    "UnmodifiableEntity" => {
-                        return RusotoError::Service(
-                            UpdateAssumeRolePolicyError::UnmodifiableEntity(parsed_error.message),
-                        )
-                    }
-                    _ => {}
                 }
             }
         }
@@ -19117,29 +19991,32 @@ impl UpdateGroupError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    "EntityAlreadyExists" => {
-                        return RusotoError::Service(UpdateGroupError::EntityAlreadyExists(
-                            parsed_error.message,
-                        ))
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {
+                        "EntityAlreadyExists" => {
+                            return RusotoError::Service(UpdateGroupError::EntityAlreadyExists(
+                                parsed_error.message,
+                            ))
+                        }
+                        "LimitExceeded" => {
+                            return RusotoError::Service(UpdateGroupError::LimitExceeded(
+                                parsed_error.message,
+                            ))
+                        }
+                        "NoSuchEntity" => {
+                            return RusotoError::Service(UpdateGroupError::NoSuchEntity(
+                                parsed_error.message,
+                            ))
+                        }
+                        "ServiceFailure" => {
+                            return RusotoError::Service(UpdateGroupError::ServiceFailure(
+                                parsed_error.message,
+                            ))
+                        }
+                        _ => {}
                     }
-                    "LimitExceeded" => {
-                        return RusotoError::Service(UpdateGroupError::LimitExceeded(
-                            parsed_error.message,
-                        ))
-                    }
-                    "NoSuchEntity" => {
-                        return RusotoError::Service(UpdateGroupError::NoSuchEntity(
-                            parsed_error.message,
-                        ))
-                    }
-                    "ServiceFailure" => {
-                        return RusotoError::Service(UpdateGroupError::ServiceFailure(
-                            parsed_error.message,
-                        ))
-                    }
-                    _ => {}
                 }
             }
         }
@@ -19187,36 +20064,41 @@ impl UpdateLoginProfileError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    "EntityTemporarilyUnmodifiable" => {
-                        return RusotoError::Service(
-                            UpdateLoginProfileError::EntityTemporarilyUnmodifiable(
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {
+                        "EntityTemporarilyUnmodifiable" => {
+                            return RusotoError::Service(
+                                UpdateLoginProfileError::EntityTemporarilyUnmodifiable(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "LimitExceeded" => {
+                            return RusotoError::Service(UpdateLoginProfileError::LimitExceeded(
                                 parsed_error.message,
-                            ),
-                        )
+                            ))
+                        }
+                        "NoSuchEntity" => {
+                            return RusotoError::Service(UpdateLoginProfileError::NoSuchEntity(
+                                parsed_error.message,
+                            ))
+                        }
+                        "PasswordPolicyViolation" => {
+                            return RusotoError::Service(
+                                UpdateLoginProfileError::PasswordPolicyViolation(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "ServiceFailure" => {
+                            return RusotoError::Service(UpdateLoginProfileError::ServiceFailure(
+                                parsed_error.message,
+                            ))
+                        }
+                        _ => {}
                     }
-                    "LimitExceeded" => {
-                        return RusotoError::Service(UpdateLoginProfileError::LimitExceeded(
-                            parsed_error.message,
-                        ))
-                    }
-                    "NoSuchEntity" => {
-                        return RusotoError::Service(UpdateLoginProfileError::NoSuchEntity(
-                            parsed_error.message,
-                        ))
-                    }
-                    "PasswordPolicyViolation" => {
-                        return RusotoError::Service(
-                            UpdateLoginProfileError::PasswordPolicyViolation(parsed_error.message),
-                        )
-                    }
-                    "ServiceFailure" => {
-                        return RusotoError::Service(UpdateLoginProfileError::ServiceFailure(
-                            parsed_error.message,
-                        ))
-                    }
-                    _ => {}
                 }
             }
         }
@@ -19265,30 +20147,33 @@ impl UpdateOpenIDConnectProviderThumbprintError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    "InvalidInput" => {
-                        return RusotoError::Service(
-                            UpdateOpenIDConnectProviderThumbprintError::InvalidInput(
-                                parsed_error.message,
-                            ),
-                        )
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {
+                        "InvalidInput" => {
+                            return RusotoError::Service(
+                                UpdateOpenIDConnectProviderThumbprintError::InvalidInput(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "NoSuchEntity" => {
+                            return RusotoError::Service(
+                                UpdateOpenIDConnectProviderThumbprintError::NoSuchEntity(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "ServiceFailure" => {
+                            return RusotoError::Service(
+                                UpdateOpenIDConnectProviderThumbprintError::ServiceFailure(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        _ => {}
                     }
-                    "NoSuchEntity" => {
-                        return RusotoError::Service(
-                            UpdateOpenIDConnectProviderThumbprintError::NoSuchEntity(
-                                parsed_error.message,
-                            ),
-                        )
-                    }
-                    "ServiceFailure" => {
-                        return RusotoError::Service(
-                            UpdateOpenIDConnectProviderThumbprintError::ServiceFailure(
-                                parsed_error.message,
-                            ),
-                        )
-                    }
-                    _ => {}
                 }
             }
         }
@@ -19337,24 +20222,27 @@ impl UpdateRoleError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    "NoSuchEntity" => {
-                        return RusotoError::Service(UpdateRoleError::NoSuchEntity(
-                            parsed_error.message,
-                        ))
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {
+                        "NoSuchEntity" => {
+                            return RusotoError::Service(UpdateRoleError::NoSuchEntity(
+                                parsed_error.message,
+                            ))
+                        }
+                        "ServiceFailure" => {
+                            return RusotoError::Service(UpdateRoleError::ServiceFailure(
+                                parsed_error.message,
+                            ))
+                        }
+                        "UnmodifiableEntity" => {
+                            return RusotoError::Service(UpdateRoleError::UnmodifiableEntity(
+                                parsed_error.message,
+                            ))
+                        }
+                        _ => {}
                     }
-                    "ServiceFailure" => {
-                        return RusotoError::Service(UpdateRoleError::ServiceFailure(
-                            parsed_error.message,
-                        ))
-                    }
-                    "UnmodifiableEntity" => {
-                        return RusotoError::Service(UpdateRoleError::UnmodifiableEntity(
-                            parsed_error.message,
-                        ))
-                    }
-                    _ => {}
                 }
             }
         }
@@ -19397,24 +20285,29 @@ impl UpdateRoleDescriptionError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    "NoSuchEntity" => {
-                        return RusotoError::Service(UpdateRoleDescriptionError::NoSuchEntity(
-                            parsed_error.message,
-                        ))
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {
+                        "NoSuchEntity" => {
+                            return RusotoError::Service(UpdateRoleDescriptionError::NoSuchEntity(
+                                parsed_error.message,
+                            ))
+                        }
+                        "ServiceFailure" => {
+                            return RusotoError::Service(
+                                UpdateRoleDescriptionError::ServiceFailure(parsed_error.message),
+                            )
+                        }
+                        "UnmodifiableEntity" => {
+                            return RusotoError::Service(
+                                UpdateRoleDescriptionError::UnmodifiableEntity(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        _ => {}
                     }
-                    "ServiceFailure" => {
-                        return RusotoError::Service(UpdateRoleDescriptionError::ServiceFailure(
-                            parsed_error.message,
-                        ))
-                    }
-                    "UnmodifiableEntity" => {
-                        return RusotoError::Service(
-                            UpdateRoleDescriptionError::UnmodifiableEntity(parsed_error.message),
-                        )
-                    }
-                    _ => {}
                 }
             }
         }
@@ -19459,29 +20352,32 @@ impl UpdateSAMLProviderError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    "InvalidInput" => {
-                        return RusotoError::Service(UpdateSAMLProviderError::InvalidInput(
-                            parsed_error.message,
-                        ))
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {
+                        "InvalidInput" => {
+                            return RusotoError::Service(UpdateSAMLProviderError::InvalidInput(
+                                parsed_error.message,
+                            ))
+                        }
+                        "LimitExceeded" => {
+                            return RusotoError::Service(UpdateSAMLProviderError::LimitExceeded(
+                                parsed_error.message,
+                            ))
+                        }
+                        "NoSuchEntity" => {
+                            return RusotoError::Service(UpdateSAMLProviderError::NoSuchEntity(
+                                parsed_error.message,
+                            ))
+                        }
+                        "ServiceFailure" => {
+                            return RusotoError::Service(UpdateSAMLProviderError::ServiceFailure(
+                                parsed_error.message,
+                            ))
+                        }
+                        _ => {}
                     }
-                    "LimitExceeded" => {
-                        return RusotoError::Service(UpdateSAMLProviderError::LimitExceeded(
-                            parsed_error.message,
-                        ))
-                    }
-                    "NoSuchEntity" => {
-                        return RusotoError::Service(UpdateSAMLProviderError::NoSuchEntity(
-                            parsed_error.message,
-                        ))
-                    }
-                    "ServiceFailure" => {
-                        return RusotoError::Service(UpdateSAMLProviderError::ServiceFailure(
-                            parsed_error.message,
-                        ))
-                    }
-                    _ => {}
                 }
             }
         }
@@ -19521,14 +20417,17 @@ impl UpdateSSHPublicKeyError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    "NoSuchEntity" => {
-                        return RusotoError::Service(UpdateSSHPublicKeyError::NoSuchEntity(
-                            parsed_error.message,
-                        ))
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {
+                        "NoSuchEntity" => {
+                            return RusotoError::Service(UpdateSSHPublicKeyError::NoSuchEntity(
+                                parsed_error.message,
+                            ))
+                        }
+                        _ => {}
                     }
-                    _ => {}
                 }
             }
         }
@@ -19571,29 +20470,34 @@ impl UpdateServerCertificateError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    "EntityAlreadyExists" => {
-                        return RusotoError::Service(
-                            UpdateServerCertificateError::EntityAlreadyExists(parsed_error.message),
-                        )
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {
+                        "EntityAlreadyExists" => {
+                            return RusotoError::Service(
+                                UpdateServerCertificateError::EntityAlreadyExists(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "LimitExceeded" => {
+                            return RusotoError::Service(
+                                UpdateServerCertificateError::LimitExceeded(parsed_error.message),
+                            )
+                        }
+                        "NoSuchEntity" => {
+                            return RusotoError::Service(
+                                UpdateServerCertificateError::NoSuchEntity(parsed_error.message),
+                            )
+                        }
+                        "ServiceFailure" => {
+                            return RusotoError::Service(
+                                UpdateServerCertificateError::ServiceFailure(parsed_error.message),
+                            )
+                        }
+                        _ => {}
                     }
-                    "LimitExceeded" => {
-                        return RusotoError::Service(UpdateServerCertificateError::LimitExceeded(
-                            parsed_error.message,
-                        ))
-                    }
-                    "NoSuchEntity" => {
-                        return RusotoError::Service(UpdateServerCertificateError::NoSuchEntity(
-                            parsed_error.message,
-                        ))
-                    }
-                    "ServiceFailure" => {
-                        return RusotoError::Service(UpdateServerCertificateError::ServiceFailure(
-                            parsed_error.message,
-                        ))
-                    }
-                    _ => {}
                 }
             }
         }
@@ -19635,16 +20539,19 @@ impl UpdateServiceSpecificCredentialError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    "NoSuchEntity" => {
-                        return RusotoError::Service(
-                            UpdateServiceSpecificCredentialError::NoSuchEntity(
-                                parsed_error.message,
-                            ),
-                        )
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {
+                        "NoSuchEntity" => {
+                            return RusotoError::Service(
+                                UpdateServiceSpecificCredentialError::NoSuchEntity(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        _ => {}
                     }
-                    _ => {}
                 }
             }
         }
@@ -19685,24 +20592,27 @@ impl UpdateSigningCertificateError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    "LimitExceeded" => {
-                        return RusotoError::Service(UpdateSigningCertificateError::LimitExceeded(
-                            parsed_error.message,
-                        ))
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {
+                        "LimitExceeded" => {
+                            return RusotoError::Service(
+                                UpdateSigningCertificateError::LimitExceeded(parsed_error.message),
+                            )
+                        }
+                        "NoSuchEntity" => {
+                            return RusotoError::Service(
+                                UpdateSigningCertificateError::NoSuchEntity(parsed_error.message),
+                            )
+                        }
+                        "ServiceFailure" => {
+                            return RusotoError::Service(
+                                UpdateSigningCertificateError::ServiceFailure(parsed_error.message),
+                            )
+                        }
+                        _ => {}
                     }
-                    "NoSuchEntity" => {
-                        return RusotoError::Service(UpdateSigningCertificateError::NoSuchEntity(
-                            parsed_error.message,
-                        ))
-                    }
-                    "ServiceFailure" => {
-                        return RusotoError::Service(UpdateSigningCertificateError::ServiceFailure(
-                            parsed_error.message,
-                        ))
-                    }
-                    _ => {}
                 }
             }
         }
@@ -19751,39 +20661,44 @@ impl UpdateUserError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    "ConcurrentModification" => {
-                        return RusotoError::Service(UpdateUserError::ConcurrentModification(
-                            parsed_error.message,
-                        ))
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {
+                        "ConcurrentModification" => {
+                            return RusotoError::Service(UpdateUserError::ConcurrentModification(
+                                parsed_error.message,
+                            ))
+                        }
+                        "EntityAlreadyExists" => {
+                            return RusotoError::Service(UpdateUserError::EntityAlreadyExists(
+                                parsed_error.message,
+                            ))
+                        }
+                        "EntityTemporarilyUnmodifiable" => {
+                            return RusotoError::Service(
+                                UpdateUserError::EntityTemporarilyUnmodifiable(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "LimitExceeded" => {
+                            return RusotoError::Service(UpdateUserError::LimitExceeded(
+                                parsed_error.message,
+                            ))
+                        }
+                        "NoSuchEntity" => {
+                            return RusotoError::Service(UpdateUserError::NoSuchEntity(
+                                parsed_error.message,
+                            ))
+                        }
+                        "ServiceFailure" => {
+                            return RusotoError::Service(UpdateUserError::ServiceFailure(
+                                parsed_error.message,
+                            ))
+                        }
+                        _ => {}
                     }
-                    "EntityAlreadyExists" => {
-                        return RusotoError::Service(UpdateUserError::EntityAlreadyExists(
-                            parsed_error.message,
-                        ))
-                    }
-                    "EntityTemporarilyUnmodifiable" => {
-                        return RusotoError::Service(
-                            UpdateUserError::EntityTemporarilyUnmodifiable(parsed_error.message),
-                        )
-                    }
-                    "LimitExceeded" => {
-                        return RusotoError::Service(UpdateUserError::LimitExceeded(
-                            parsed_error.message,
-                        ))
-                    }
-                    "NoSuchEntity" => {
-                        return RusotoError::Service(UpdateUserError::NoSuchEntity(
-                            parsed_error.message,
-                        ))
-                    }
-                    "ServiceFailure" => {
-                        return RusotoError::Service(UpdateUserError::ServiceFailure(
-                            parsed_error.message,
-                        ))
-                    }
-                    _ => {}
                 }
             }
         }
@@ -19833,36 +20748,41 @@ impl UploadSSHPublicKeyError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    "DuplicateSSHPublicKey" => {
-                        return RusotoError::Service(
-                            UploadSSHPublicKeyError::DuplicateSSHPublicKey(parsed_error.message),
-                        )
-                    }
-                    "InvalidPublicKey" => {
-                        return RusotoError::Service(UploadSSHPublicKeyError::InvalidPublicKey(
-                            parsed_error.message,
-                        ))
-                    }
-                    "LimitExceeded" => {
-                        return RusotoError::Service(UploadSSHPublicKeyError::LimitExceeded(
-                            parsed_error.message,
-                        ))
-                    }
-                    "NoSuchEntity" => {
-                        return RusotoError::Service(UploadSSHPublicKeyError::NoSuchEntity(
-                            parsed_error.message,
-                        ))
-                    }
-                    "UnrecognizedPublicKeyEncoding" => {
-                        return RusotoError::Service(
-                            UploadSSHPublicKeyError::UnrecognizedPublicKeyEncoding(
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {
+                        "DuplicateSSHPublicKey" => {
+                            return RusotoError::Service(
+                                UploadSSHPublicKeyError::DuplicateSSHPublicKey(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "InvalidPublicKey" => {
+                            return RusotoError::Service(UploadSSHPublicKeyError::InvalidPublicKey(
                                 parsed_error.message,
-                            ),
-                        )
+                            ))
+                        }
+                        "LimitExceeded" => {
+                            return RusotoError::Service(UploadSSHPublicKeyError::LimitExceeded(
+                                parsed_error.message,
+                            ))
+                        }
+                        "NoSuchEntity" => {
+                            return RusotoError::Service(UploadSSHPublicKeyError::NoSuchEntity(
+                                parsed_error.message,
+                            ))
+                        }
+                        "UnrecognizedPublicKeyEncoding" => {
+                            return RusotoError::Service(
+                                UploadSSHPublicKeyError::UnrecognizedPublicKeyEncoding(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        _ => {}
                     }
-                    _ => {}
                 }
             }
         }
@@ -19913,36 +20833,41 @@ impl UploadServerCertificateError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    "EntityAlreadyExists" => {
-                        return RusotoError::Service(
-                            UploadServerCertificateError::EntityAlreadyExists(parsed_error.message),
-                        )
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {
+                        "EntityAlreadyExists" => {
+                            return RusotoError::Service(
+                                UploadServerCertificateError::EntityAlreadyExists(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "KeyPairMismatch" => {
+                            return RusotoError::Service(
+                                UploadServerCertificateError::KeyPairMismatch(parsed_error.message),
+                            )
+                        }
+                        "LimitExceeded" => {
+                            return RusotoError::Service(
+                                UploadServerCertificateError::LimitExceeded(parsed_error.message),
+                            )
+                        }
+                        "MalformedCertificate" => {
+                            return RusotoError::Service(
+                                UploadServerCertificateError::MalformedCertificate(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "ServiceFailure" => {
+                            return RusotoError::Service(
+                                UploadServerCertificateError::ServiceFailure(parsed_error.message),
+                            )
+                        }
+                        _ => {}
                     }
-                    "KeyPairMismatch" => {
-                        return RusotoError::Service(UploadServerCertificateError::KeyPairMismatch(
-                            parsed_error.message,
-                        ))
-                    }
-                    "LimitExceeded" => {
-                        return RusotoError::Service(UploadServerCertificateError::LimitExceeded(
-                            parsed_error.message,
-                        ))
-                    }
-                    "MalformedCertificate" => {
-                        return RusotoError::Service(
-                            UploadServerCertificateError::MalformedCertificate(
-                                parsed_error.message,
-                            ),
-                        )
-                    }
-                    "ServiceFailure" => {
-                        return RusotoError::Service(UploadServerCertificateError::ServiceFailure(
-                            parsed_error.message,
-                        ))
-                    }
-                    _ => {}
                 }
             }
         }
@@ -19995,50 +20920,55 @@ impl UploadSigningCertificateError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    "DuplicateCertificate" => {
-                        return RusotoError::Service(
-                            UploadSigningCertificateError::DuplicateCertificate(
-                                parsed_error.message,
-                            ),
-                        )
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {
+                        "DuplicateCertificate" => {
+                            return RusotoError::Service(
+                                UploadSigningCertificateError::DuplicateCertificate(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "EntityAlreadyExists" => {
+                            return RusotoError::Service(
+                                UploadSigningCertificateError::EntityAlreadyExists(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "InvalidCertificate" => {
+                            return RusotoError::Service(
+                                UploadSigningCertificateError::InvalidCertificate(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "LimitExceeded" => {
+                            return RusotoError::Service(
+                                UploadSigningCertificateError::LimitExceeded(parsed_error.message),
+                            )
+                        }
+                        "MalformedCertificate" => {
+                            return RusotoError::Service(
+                                UploadSigningCertificateError::MalformedCertificate(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "NoSuchEntity" => {
+                            return RusotoError::Service(
+                                UploadSigningCertificateError::NoSuchEntity(parsed_error.message),
+                            )
+                        }
+                        "ServiceFailure" => {
+                            return RusotoError::Service(
+                                UploadSigningCertificateError::ServiceFailure(parsed_error.message),
+                            )
+                        }
+                        _ => {}
                     }
-                    "EntityAlreadyExists" => {
-                        return RusotoError::Service(
-                            UploadSigningCertificateError::EntityAlreadyExists(
-                                parsed_error.message,
-                            ),
-                        )
-                    }
-                    "InvalidCertificate" => {
-                        return RusotoError::Service(
-                            UploadSigningCertificateError::InvalidCertificate(parsed_error.message),
-                        )
-                    }
-                    "LimitExceeded" => {
-                        return RusotoError::Service(UploadSigningCertificateError::LimitExceeded(
-                            parsed_error.message,
-                        ))
-                    }
-                    "MalformedCertificate" => {
-                        return RusotoError::Service(
-                            UploadSigningCertificateError::MalformedCertificate(
-                                parsed_error.message,
-                            ),
-                        )
-                    }
-                    "NoSuchEntity" => {
-                        return RusotoError::Service(UploadSigningCertificateError::NoSuchEntity(
-                            parsed_error.message,
-                        ))
-                    }
-                    "ServiceFailure" => {
-                        return RusotoError::Service(UploadSigningCertificateError::ServiceFailure(
-                            parsed_error.message,
-                        ))
-                    }
-                    _ => {}
                 }
             }
         }

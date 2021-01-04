@@ -50,7 +50,6 @@ impl KinesisClient {
 }
 
 use rusoto_core::event_stream::{DeserializeEvent, EventStream};
-use serde_json;
 /// <p>Represents the input for <code>AddTagsToStream</code>.</p>
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
@@ -1097,10 +1096,12 @@ impl DeserializeEvent for SubscribeToShardEventStreamItem {
             "SubscribeToShardEvent" => SubscribeToShardEventStreamItem::SubscribeToShardEvent(
                 SubscribeToShardEvent::deserialize(deserializer)?,
             ),
-            _ => Err(RusotoError::ParseError(format!(
-                "Invalid event type: {}",
-                event_type
-            )))?,
+            _ => {
+                return Err(RusotoError::ParseError(format!(
+                    "Invalid event type: {}",
+                    event_type
+                )))
+            }
         };
         Ok(deserialized)
     }
@@ -1186,6 +1187,7 @@ pub enum AddTagsToStreamError {
 impl AddTagsToStreamError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<AddTagsToStreamError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidArgumentException" => {
                     return RusotoError::Service(AddTagsToStreamError::InvalidArgument(err.msg))
@@ -1232,6 +1234,7 @@ pub enum CreateStreamError {
 impl CreateStreamError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateStreamError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidArgumentException" => {
                     return RusotoError::Service(CreateStreamError::InvalidArgument(err.msg))
@@ -1278,6 +1281,7 @@ impl DecreaseStreamRetentionPeriodError {
         res: BufferedHttpResponse,
     ) -> RusotoError<DecreaseStreamRetentionPeriodError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidArgumentException" => {
                     return RusotoError::Service(
@@ -1336,6 +1340,7 @@ pub enum DeleteStreamError {
 impl DeleteStreamError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteStreamError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "LimitExceededException" => {
                     return RusotoError::Service(DeleteStreamError::LimitExceeded(err.msg))
@@ -1378,6 +1383,7 @@ pub enum DeregisterStreamConsumerError {
 impl DeregisterStreamConsumerError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeregisterStreamConsumerError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidArgumentException" => {
                     return RusotoError::Service(DeregisterStreamConsumerError::InvalidArgument(
@@ -1422,6 +1428,7 @@ pub enum DescribeLimitsError {
 impl DescribeLimitsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeLimitsError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "LimitExceededException" => {
                     return RusotoError::Service(DescribeLimitsError::LimitExceeded(err.msg))
@@ -1454,6 +1461,7 @@ pub enum DescribeStreamError {
 impl DescribeStreamError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeStreamError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "LimitExceededException" => {
                     return RusotoError::Service(DescribeStreamError::LimitExceeded(err.msg))
@@ -1492,6 +1500,7 @@ pub enum DescribeStreamConsumerError {
 impl DescribeStreamConsumerError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeStreamConsumerError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidArgumentException" => {
                     return RusotoError::Service(DescribeStreamConsumerError::InvalidArgument(
@@ -1538,6 +1547,7 @@ pub enum DescribeStreamSummaryError {
 impl DescribeStreamSummaryError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeStreamSummaryError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "LimitExceededException" => {
                     return RusotoError::Service(DescribeStreamSummaryError::LimitExceeded(err.msg))
@@ -1580,6 +1590,7 @@ pub enum DisableEnhancedMonitoringError {
 impl DisableEnhancedMonitoringError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DisableEnhancedMonitoringError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidArgumentException" => {
                     return RusotoError::Service(DisableEnhancedMonitoringError::InvalidArgument(
@@ -1636,6 +1647,7 @@ pub enum EnableEnhancedMonitoringError {
 impl EnableEnhancedMonitoringError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<EnableEnhancedMonitoringError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidArgumentException" => {
                     return RusotoError::Service(EnableEnhancedMonitoringError::InvalidArgument(
@@ -1704,6 +1716,7 @@ pub enum GetRecordsError {
 impl GetRecordsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetRecordsError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ExpiredIteratorException" => {
                     return RusotoError::Service(GetRecordsError::ExpiredIterator(err.msg))
@@ -1776,6 +1789,7 @@ pub enum GetShardIteratorError {
 impl GetShardIteratorError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetShardIteratorError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidArgumentException" => {
                     return RusotoError::Service(GetShardIteratorError::InvalidArgument(err.msg))
@@ -1826,6 +1840,7 @@ impl IncreaseStreamRetentionPeriodError {
         res: BufferedHttpResponse,
     ) -> RusotoError<IncreaseStreamRetentionPeriodError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidArgumentException" => {
                     return RusotoError::Service(
@@ -1888,6 +1903,7 @@ pub enum ListShardsError {
 impl ListShardsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListShardsError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ExpiredNextTokenException" => {
                     return RusotoError::Service(ListShardsError::ExpiredNextToken(err.msg))
@@ -1942,6 +1958,7 @@ pub enum ListStreamConsumersError {
 impl ListStreamConsumersError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListStreamConsumersError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ExpiredNextTokenException" => {
                     return RusotoError::Service(ListStreamConsumersError::ExpiredNextToken(
@@ -1992,6 +2009,7 @@ pub enum ListStreamsError {
 impl ListStreamsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListStreamsError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "LimitExceededException" => {
                     return RusotoError::Service(ListStreamsError::LimitExceeded(err.msg))
@@ -2026,6 +2044,7 @@ pub enum ListTagsForStreamError {
 impl ListTagsForStreamError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListTagsForStreamError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidArgumentException" => {
                     return RusotoError::Service(ListTagsForStreamError::InvalidArgument(err.msg))
@@ -2070,6 +2089,7 @@ pub enum MergeShardsError {
 impl MergeShardsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<MergeShardsError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidArgumentException" => {
                     return RusotoError::Service(MergeShardsError::InvalidArgument(err.msg))
@@ -2128,6 +2148,7 @@ pub enum PutRecordError {
 impl PutRecordError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<PutRecordError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidArgumentException" => {
                     return RusotoError::Service(PutRecordError::InvalidArgument(err.msg))
@@ -2208,6 +2229,7 @@ pub enum PutRecordsError {
 impl PutRecordsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<PutRecordsError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidArgumentException" => {
                     return RusotoError::Service(PutRecordsError::InvalidArgument(err.msg))
@@ -2278,6 +2300,7 @@ pub enum RegisterStreamConsumerError {
 impl RegisterStreamConsumerError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<RegisterStreamConsumerError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidArgumentException" => {
                     return RusotoError::Service(RegisterStreamConsumerError::InvalidArgument(
@@ -2334,6 +2357,7 @@ pub enum RemoveTagsFromStreamError {
 impl RemoveTagsFromStreamError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<RemoveTagsFromStreamError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidArgumentException" => {
                     return RusotoError::Service(RemoveTagsFromStreamError::InvalidArgument(
@@ -2386,6 +2410,7 @@ pub enum SplitShardError {
 impl SplitShardError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<SplitShardError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidArgumentException" => {
                     return RusotoError::Service(SplitShardError::InvalidArgument(err.msg))
@@ -2446,6 +2471,7 @@ pub enum StartStreamEncryptionError {
 impl StartStreamEncryptionError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<StartStreamEncryptionError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidArgumentException" => {
                     return RusotoError::Service(StartStreamEncryptionError::InvalidArgument(
@@ -2528,6 +2554,7 @@ pub enum StopStreamEncryptionError {
 impl StopStreamEncryptionError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<StopStreamEncryptionError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidArgumentException" => {
                     return RusotoError::Service(StopStreamEncryptionError::InvalidArgument(
@@ -2580,6 +2607,7 @@ pub enum SubscribeToShardError {
 impl SubscribeToShardError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<SubscribeToShardError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidArgumentException" => {
                     return RusotoError::Service(SubscribeToShardError::InvalidArgument(err.msg))
@@ -2628,6 +2656,7 @@ pub enum UpdateShardCountError {
 impl UpdateShardCountError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateShardCountError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidArgumentException" => {
                     return RusotoError::Service(UpdateShardCountError::InvalidArgument(err.msg))

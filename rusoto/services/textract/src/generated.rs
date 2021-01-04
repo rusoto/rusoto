@@ -49,7 +49,6 @@ impl TextractClient {
     }
 }
 
-use serde_json;
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct AnalyzeDocumentRequest {
@@ -580,6 +579,7 @@ pub enum AnalyzeDocumentError {
 impl AnalyzeDocumentError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<AnalyzeDocumentError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(AnalyzeDocumentError::AccessDenied(err.msg))
@@ -668,6 +668,7 @@ pub enum DetectDocumentTextError {
 impl DetectDocumentTextError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DetectDocumentTextError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(DetectDocumentTextError::AccessDenied(err.msg))
@@ -750,6 +751,7 @@ pub enum GetDocumentAnalysisError {
 impl GetDocumentAnalysisError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetDocumentAnalysisError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(GetDocumentAnalysisError::AccessDenied(err.msg))
@@ -824,6 +826,7 @@ pub enum GetDocumentTextDetectionError {
 impl GetDocumentTextDetectionError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetDocumentTextDetectionError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(GetDocumentTextDetectionError::AccessDenied(
@@ -914,6 +917,7 @@ pub enum StartDocumentAnalysisError {
 impl StartDocumentAnalysisError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<StartDocumentAnalysisError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(StartDocumentAnalysisError::AccessDenied(err.msg))
@@ -1030,6 +1034,7 @@ impl StartDocumentTextDetectionError {
         res: BufferedHttpResponse,
     ) -> RusotoError<StartDocumentTextDetectionError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(StartDocumentTextDetectionError::AccessDenied(

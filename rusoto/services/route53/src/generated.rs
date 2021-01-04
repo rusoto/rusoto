@@ -33,7 +33,6 @@ use serde::Deserialize;
 use serde::Serialize;
 use std::io::Write;
 use std::str::FromStr;
-use xml;
 use xml::EventReader;
 use xml::EventWriter;
 
@@ -55,8 +54,9 @@ impl Route53Client {
 #[allow(dead_code)]
 struct AWSAccountIDDeserializer;
 impl AWSAccountIDDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
@@ -73,11 +73,12 @@ pub struct AccountLimit {
 #[allow(dead_code)]
 struct AccountLimitDeserializer;
 impl AccountLimitDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<AccountLimit, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, AccountLimit, _>(tag_name, stack, |name, stack, obj| {
             match name {
                 "Type" => {
@@ -95,8 +96,9 @@ impl AccountLimitDeserializer {
 #[allow(dead_code)]
 struct AccountLimitTypeDeserializer;
 impl AccountLimitTypeDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
@@ -134,11 +136,12 @@ pub struct ActivateKeySigningKeyResponse {
 #[allow(dead_code)]
 struct ActivateKeySigningKeyResponseDeserializer;
 impl ActivateKeySigningKeyResponseDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<ActivateKeySigningKeyResponse, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, ActivateKeySigningKeyResponse, _>(
             tag_name,
             stack,
@@ -168,11 +171,12 @@ pub struct AlarmIdentifier {
 #[allow(dead_code)]
 struct AlarmIdentifierDeserializer;
 impl AlarmIdentifierDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<AlarmIdentifier, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, AlarmIdentifier, _>(tag_name, stack, |name, stack, obj| {
             match name {
                 "Name" => {
@@ -209,8 +213,9 @@ impl AlarmIdentifierSerializer {
 #[allow(dead_code)]
 struct AlarmNameDeserializer;
 impl AlarmNameDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
@@ -233,8 +238,9 @@ impl AlarmNameSerializer {
 #[allow(dead_code)]
 struct AliasHealthEnabledDeserializer;
 impl AliasHealthEnabledDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<bool, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::deserialize_primitive(tag_name, stack, |s| Ok(bool::from_str(&s).unwrap()))
     }
 }
@@ -270,11 +276,12 @@ pub struct AliasTarget {
 #[allow(dead_code)]
 struct AliasTargetDeserializer;
 impl AliasTargetDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<AliasTarget, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, AliasTarget, _>(tag_name, stack, |name, stack, obj| {
             match name {
                 "DNSName" => {
@@ -376,11 +383,12 @@ pub struct AssociateVPCWithHostedZoneResponse {
 #[allow(dead_code)]
 struct AssociateVPCWithHostedZoneResponseDeserializer;
 impl AssociateVPCWithHostedZoneResponseDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<AssociateVPCWithHostedZoneResponse, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, AssociateVPCWithHostedZoneResponse, _>(
             tag_name,
             stack,
@@ -490,11 +498,12 @@ pub struct ChangeInfo {
 #[allow(dead_code)]
 struct ChangeInfoDeserializer;
 impl ChangeInfoDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<ChangeInfo, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, ChangeInfo, _>(tag_name, stack, |name, stack, obj| {
             match name {
                 "Comment" => {
@@ -555,11 +564,12 @@ pub struct ChangeResourceRecordSetsResponse {
 #[allow(dead_code)]
 struct ChangeResourceRecordSetsResponseDeserializer;
 impl ChangeResourceRecordSetsResponseDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<ChangeResourceRecordSetsResponse, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, ChangeResourceRecordSetsResponse, _>(
             tag_name,
             stack,
@@ -578,8 +588,9 @@ impl ChangeResourceRecordSetsResponseDeserializer {
 #[allow(dead_code)]
 struct ChangeStatusDeserializer;
 impl ChangeStatusDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
@@ -627,11 +638,12 @@ pub struct ChangeTagsForResourceResponse {}
 #[allow(dead_code)]
 struct ChangeTagsForResourceResponseDeserializer;
 impl ChangeTagsForResourceResponseDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<ChangeTagsForResourceResponse, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::start_element(tag_name, stack)?;
 
         let obj = ChangeTagsForResourceResponse::default();
@@ -665,11 +677,13 @@ impl ChangesSerializer {
 #[allow(dead_code)]
 struct CheckerIpRangesDeserializer;
 impl CheckerIpRangesDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<String>, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
+
         deserialize_elements::<_, Vec<_>, _>(tag_name, stack, |name, stack, obj| {
             if name == "member" {
                 obj.push(IPAddressCidrDeserializer::deserialize("member", stack)?);
@@ -683,11 +697,13 @@ impl CheckerIpRangesDeserializer {
 #[allow(dead_code)]
 struct ChildHealthCheckListDeserializer;
 impl ChildHealthCheckListDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<String>, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
+
         deserialize_elements::<_, Vec<_>, _>(tag_name, stack, |name, stack, obj| {
             if name == "ChildHealthCheck" {
                 obj.push(HealthCheckIdDeserializer::deserialize(
@@ -747,11 +763,12 @@ pub struct CloudWatchAlarmConfiguration {
 #[allow(dead_code)]
 struct CloudWatchAlarmConfigurationDeserializer;
 impl CloudWatchAlarmConfigurationDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<CloudWatchAlarmConfiguration, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, CloudWatchAlarmConfiguration, _>(
             tag_name,
             stack,
@@ -797,8 +814,9 @@ impl CloudWatchAlarmConfigurationDeserializer {
 #[allow(dead_code)]
 struct CloudWatchLogsLogGroupArnDeserializer;
 impl CloudWatchLogsLogGroupArnDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
@@ -821,8 +839,9 @@ impl CloudWatchLogsLogGroupArnSerializer {
 #[allow(dead_code)]
 struct CloudWatchRegionDeserializer;
 impl CloudWatchRegionDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
@@ -845,8 +864,9 @@ impl CloudWatchRegionSerializer {
 #[allow(dead_code)]
 struct ComparisonOperatorDeserializer;
 impl ComparisonOperatorDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
@@ -899,11 +919,12 @@ pub struct CreateHealthCheckResponse {
 #[allow(dead_code)]
 struct CreateHealthCheckResponseDeserializer;
 impl CreateHealthCheckResponseDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<CreateHealthCheckResponse, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, CreateHealthCheckResponse, _>(
             tag_name,
             stack,
@@ -982,11 +1003,12 @@ pub struct CreateHostedZoneResponse {
 #[allow(dead_code)]
 struct CreateHostedZoneResponseDeserializer;
 impl CreateHostedZoneResponseDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<CreateHostedZoneResponse, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, CreateHostedZoneResponse, _>(
             tag_name,
             stack,
@@ -1065,11 +1087,12 @@ pub struct CreateKeySigningKeyResponse {
 #[allow(dead_code)]
 struct CreateKeySigningKeyResponseDeserializer;
 impl CreateKeySigningKeyResponseDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<CreateKeySigningKeyResponse, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, CreateKeySigningKeyResponse, _>(
             tag_name,
             stack,
@@ -1132,11 +1155,12 @@ pub struct CreateQueryLoggingConfigResponse {
 #[allow(dead_code)]
 struct CreateQueryLoggingConfigResponseDeserializer;
 impl CreateQueryLoggingConfigResponseDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<CreateQueryLoggingConfigResponse, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, CreateQueryLoggingConfigResponse, _>(
             tag_name,
             stack,
@@ -1196,11 +1220,12 @@ pub struct CreateReusableDelegationSetResponse {
 #[allow(dead_code)]
 struct CreateReusableDelegationSetResponseDeserializer;
 impl CreateReusableDelegationSetResponseDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<CreateReusableDelegationSetResponse, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, CreateReusableDelegationSetResponse, _>(
             tag_name,
             stack,
@@ -1275,11 +1300,12 @@ pub struct CreateTrafficPolicyInstanceResponse {
 #[allow(dead_code)]
 struct CreateTrafficPolicyInstanceResponseDeserializer;
 impl CreateTrafficPolicyInstanceResponseDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<CreateTrafficPolicyInstanceResponse, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, CreateTrafficPolicyInstanceResponse, _>(
             tag_name,
             stack,
@@ -1345,11 +1371,12 @@ pub struct CreateTrafficPolicyResponse {
 #[allow(dead_code)]
 struct CreateTrafficPolicyResponseDeserializer;
 impl CreateTrafficPolicyResponseDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<CreateTrafficPolicyResponse, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, CreateTrafficPolicyResponse, _>(
             tag_name,
             stack,
@@ -1411,11 +1438,12 @@ pub struct CreateTrafficPolicyVersionResponse {
 #[allow(dead_code)]
 struct CreateTrafficPolicyVersionResponseDeserializer;
 impl CreateTrafficPolicyVersionResponseDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<CreateTrafficPolicyVersionResponse, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, CreateTrafficPolicyVersionResponse, _>(
             tag_name,
             stack,
@@ -1472,11 +1500,12 @@ pub struct CreateVPCAssociationAuthorizationResponse {
 #[allow(dead_code)]
 struct CreateVPCAssociationAuthorizationResponseDeserializer;
 impl CreateVPCAssociationAuthorizationResponseDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<CreateVPCAssociationAuthorizationResponse, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, CreateVPCAssociationAuthorizationResponse, _>(
             tag_name,
             stack,
@@ -1499,8 +1528,9 @@ impl CreateVPCAssociationAuthorizationResponseDeserializer {
 #[allow(dead_code)]
 struct DNSNameDeserializer;
 impl DNSNameDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
@@ -1523,8 +1553,9 @@ impl DNSNameSerializer {
 #[allow(dead_code)]
 struct DNSRCodeDeserializer;
 impl DNSRCodeDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
@@ -1541,11 +1572,12 @@ pub struct DNSSECStatus {
 #[allow(dead_code)]
 struct DNSSECStatusDeserializer;
 impl DNSSECStatusDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<DNSSECStatus, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, DNSSECStatus, _>(tag_name, stack, |name, stack, obj| {
             match name {
                 "ServeSignature" => {
@@ -1584,11 +1616,12 @@ pub struct DeactivateKeySigningKeyResponse {
 #[allow(dead_code)]
 struct DeactivateKeySigningKeyResponseDeserializer;
 impl DeactivateKeySigningKeyResponseDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<DeactivateKeySigningKeyResponse, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, DeactivateKeySigningKeyResponse, _>(
             tag_name,
             stack,
@@ -1619,11 +1652,12 @@ pub struct DelegationSet {
 #[allow(dead_code)]
 struct DelegationSetDeserializer;
 impl DelegationSetDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<DelegationSet, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, DelegationSet, _>(tag_name, stack, |name, stack, obj| {
             match name {
                 "CallerReference" => {
@@ -1649,11 +1683,13 @@ impl DelegationSetDeserializer {
 #[allow(dead_code)]
 struct DelegationSetNameServersDeserializer;
 impl DelegationSetNameServersDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<String>, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
+
         deserialize_elements::<_, Vec<_>, _>(tag_name, stack, |name, stack, obj| {
             if name == "NameServer" {
                 obj.push(DNSNameDeserializer::deserialize("NameServer", stack)?);
@@ -1667,11 +1703,13 @@ impl DelegationSetNameServersDeserializer {
 #[allow(dead_code)]
 struct DelegationSetsDeserializer;
 impl DelegationSetsDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<DelegationSet>, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
+
         deserialize_elements::<_, Vec<_>, _>(tag_name, stack, |name, stack, obj| {
             if name == "DelegationSet" {
                 obj.push(DelegationSetDeserializer::deserialize(
@@ -1701,11 +1739,12 @@ pub struct DeleteHealthCheckResponse {}
 #[allow(dead_code)]
 struct DeleteHealthCheckResponseDeserializer;
 impl DeleteHealthCheckResponseDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<DeleteHealthCheckResponse, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::start_element(tag_name, stack)?;
 
         let obj = DeleteHealthCheckResponse::default();
@@ -1734,11 +1773,12 @@ pub struct DeleteHostedZoneResponse {
 #[allow(dead_code)]
 struct DeleteHostedZoneResponseDeserializer;
 impl DeleteHostedZoneResponseDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<DeleteHostedZoneResponse, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, DeleteHostedZoneResponse, _>(
             tag_name,
             stack,
@@ -1772,11 +1812,12 @@ pub struct DeleteKeySigningKeyResponse {
 #[allow(dead_code)]
 struct DeleteKeySigningKeyResponseDeserializer;
 impl DeleteKeySigningKeyResponseDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<DeleteKeySigningKeyResponse, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, DeleteKeySigningKeyResponse, _>(
             tag_name,
             stack,
@@ -1806,11 +1847,12 @@ pub struct DeleteQueryLoggingConfigResponse {}
 #[allow(dead_code)]
 struct DeleteQueryLoggingConfigResponseDeserializer;
 impl DeleteQueryLoggingConfigResponseDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<DeleteQueryLoggingConfigResponse, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::start_element(tag_name, stack)?;
 
         let obj = DeleteQueryLoggingConfigResponse::default();
@@ -1836,11 +1878,12 @@ pub struct DeleteReusableDelegationSetResponse {}
 #[allow(dead_code)]
 struct DeleteReusableDelegationSetResponseDeserializer;
 impl DeleteReusableDelegationSetResponseDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<DeleteReusableDelegationSetResponse, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::start_element(tag_name, stack)?;
 
         let obj = DeleteReusableDelegationSetResponse::default();
@@ -1866,11 +1909,12 @@ pub struct DeleteTrafficPolicyInstanceResponse {}
 #[allow(dead_code)]
 struct DeleteTrafficPolicyInstanceResponseDeserializer;
 impl DeleteTrafficPolicyInstanceResponseDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<DeleteTrafficPolicyInstanceResponse, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::start_element(tag_name, stack)?;
 
         let obj = DeleteTrafficPolicyInstanceResponse::default();
@@ -1898,11 +1942,12 @@ pub struct DeleteTrafficPolicyResponse {}
 #[allow(dead_code)]
 struct DeleteTrafficPolicyResponseDeserializer;
 impl DeleteTrafficPolicyResponseDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<DeleteTrafficPolicyResponse, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::start_element(tag_name, stack)?;
 
         let obj = DeleteTrafficPolicyResponse::default();
@@ -1947,11 +1992,12 @@ pub struct DeleteVPCAssociationAuthorizationResponse {}
 #[allow(dead_code)]
 struct DeleteVPCAssociationAuthorizationResponseDeserializer;
 impl DeleteVPCAssociationAuthorizationResponseDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<DeleteVPCAssociationAuthorizationResponse, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::start_element(tag_name, stack)?;
 
         let obj = DeleteVPCAssociationAuthorizationResponse::default();
@@ -1974,11 +2020,12 @@ pub struct Dimension {
 #[allow(dead_code)]
 struct DimensionDeserializer;
 impl DimensionDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Dimension, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, Dimension, _>(tag_name, stack, |name, stack, obj| {
             match name {
                 "Name" => {
@@ -1996,19 +2043,22 @@ impl DimensionDeserializer {
 #[allow(dead_code)]
 struct DimensionFieldDeserializer;
 impl DimensionFieldDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 #[allow(dead_code)]
 struct DimensionListDeserializer;
 impl DimensionListDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<Dimension>, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
+
         deserialize_elements::<_, Vec<_>, _>(tag_name, stack, |name, stack, obj| {
             if name == "Dimension" {
                 obj.push(DimensionDeserializer::deserialize("Dimension", stack)?);
@@ -2035,11 +2085,12 @@ pub struct DisableHostedZoneDNSSECResponse {
 #[allow(dead_code)]
 struct DisableHostedZoneDNSSECResponseDeserializer;
 impl DisableHostedZoneDNSSECResponseDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<DisableHostedZoneDNSSECResponse, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, DisableHostedZoneDNSSECResponse, _>(
             tag_name,
             stack,
@@ -2058,8 +2109,9 @@ impl DisableHostedZoneDNSSECResponseDeserializer {
 #[allow(dead_code)]
 struct DisabledDeserializer;
 impl DisabledDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<bool, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::deserialize_primitive(tag_name, stack, |s| Ok(bool::from_str(&s).unwrap()))
     }
 }
@@ -2137,11 +2189,12 @@ pub struct DisassociateVPCFromHostedZoneResponse {
 #[allow(dead_code)]
 struct DisassociateVPCFromHostedZoneResponseDeserializer;
 impl DisassociateVPCFromHostedZoneResponseDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<DisassociateVPCFromHostedZoneResponse, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, DisassociateVPCFromHostedZoneResponse, _>(
             tag_name,
             stack,
@@ -2173,11 +2226,12 @@ pub struct EnableHostedZoneDNSSECResponse {
 #[allow(dead_code)]
 struct EnableHostedZoneDNSSECResponseDeserializer;
 impl EnableHostedZoneDNSSECResponseDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<EnableHostedZoneDNSSECResponse, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, EnableHostedZoneDNSSECResponse, _>(
             tag_name,
             stack,
@@ -2196,8 +2250,9 @@ impl EnableHostedZoneDNSSECResponseDeserializer {
 #[allow(dead_code)]
 struct EnableSNIDeserializer;
 impl EnableSNIDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<bool, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::deserialize_primitive(tag_name, stack, |s| Ok(bool::from_str(&s).unwrap()))
     }
 }
@@ -2220,16 +2275,18 @@ impl EnableSNISerializer {
 #[allow(dead_code)]
 struct EvaluationPeriodsDeserializer;
 impl EvaluationPeriodsDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<i64, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::deserialize_primitive(tag_name, stack, |s| Ok(i64::from_str(&s).unwrap()))
     }
 }
 #[allow(dead_code)]
 struct FailureThresholdDeserializer;
 impl FailureThresholdDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<i64, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::deserialize_primitive(tag_name, stack, |s| Ok(i64::from_str(&s).unwrap()))
     }
 }
@@ -2252,8 +2309,9 @@ impl FailureThresholdSerializer {
 #[allow(dead_code)]
 struct FullyQualifiedDomainNameDeserializer;
 impl FullyQualifiedDomainNameDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
@@ -2289,11 +2347,12 @@ pub struct GeoLocation {
 #[allow(dead_code)]
 struct GeoLocationDeserializer;
 impl GeoLocationDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<GeoLocation, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, GeoLocation, _>(tag_name, stack, |name, stack, obj| {
             match name {
                 "ContinentCode" => {
@@ -2350,8 +2409,9 @@ impl GeoLocationSerializer {
 #[allow(dead_code)]
 struct GeoLocationContinentCodeDeserializer;
 impl GeoLocationContinentCodeDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
@@ -2374,16 +2434,18 @@ impl GeoLocationContinentCodeSerializer {
 #[allow(dead_code)]
 struct GeoLocationContinentNameDeserializer;
 impl GeoLocationContinentNameDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 #[allow(dead_code)]
 struct GeoLocationCountryCodeDeserializer;
 impl GeoLocationCountryCodeDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
@@ -2406,8 +2468,9 @@ impl GeoLocationCountryCodeSerializer {
 #[allow(dead_code)]
 struct GeoLocationCountryNameDeserializer;
 impl GeoLocationCountryNameDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
@@ -2432,11 +2495,12 @@ pub struct GeoLocationDetails {
 #[allow(dead_code)]
 struct GeoLocationDetailsDeserializer;
 impl GeoLocationDetailsDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<GeoLocationDetails, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, GeoLocationDetails, _>(tag_name, stack, |name, stack, obj| {
             match name {
                 "ContinentCode" => {
@@ -2486,11 +2550,13 @@ impl GeoLocationDetailsDeserializer {
 #[allow(dead_code)]
 struct GeoLocationDetailsListDeserializer;
 impl GeoLocationDetailsListDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<GeoLocationDetails>, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
+
         deserialize_elements::<_, Vec<_>, _>(tag_name, stack, |name, stack, obj| {
             if name == "GeoLocationDetails" {
                 obj.push(GeoLocationDetailsDeserializer::deserialize(
@@ -2507,8 +2573,9 @@ impl GeoLocationDetailsListDeserializer {
 #[allow(dead_code)]
 struct GeoLocationSubdivisionCodeDeserializer;
 impl GeoLocationSubdivisionCodeDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
@@ -2531,8 +2598,9 @@ impl GeoLocationSubdivisionCodeSerializer {
 #[allow(dead_code)]
 struct GeoLocationSubdivisionNameDeserializer;
 impl GeoLocationSubdivisionNameDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
@@ -2557,11 +2625,12 @@ pub struct GetAccountLimitResponse {
 #[allow(dead_code)]
 struct GetAccountLimitResponseDeserializer;
 impl GetAccountLimitResponseDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<GetAccountLimitResponse, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, GetAccountLimitResponse, _>(
             tag_name,
             stack,
@@ -2599,11 +2668,12 @@ pub struct GetChangeResponse {
 #[allow(dead_code)]
 struct GetChangeResponseDeserializer;
 impl GetChangeResponseDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<GetChangeResponse, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, GetChangeResponse, _>(tag_name, stack, |name, stack, obj| {
             match name {
                 "ChangeInfo" => {
@@ -2631,11 +2701,12 @@ pub struct GetCheckerIpRangesResponse {
 #[allow(dead_code)]
 struct GetCheckerIpRangesResponseDeserializer;
 impl GetCheckerIpRangesResponseDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<GetCheckerIpRangesResponse, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, GetCheckerIpRangesResponse, _>(
             tag_name,
             stack,
@@ -2674,11 +2745,12 @@ pub struct GetDNSSECResponse {
 #[allow(dead_code)]
 struct GetDNSSECResponseDeserializer;
 impl GetDNSSECResponseDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<GetDNSSECResponse, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, GetDNSSECResponse, _>(tag_name, stack, |name, stack, obj| {
             match name {
                 "KeySigningKeys" => {
@@ -2720,11 +2792,12 @@ pub struct GetGeoLocationResponse {
 #[allow(dead_code)]
 struct GetGeoLocationResponseDeserializer;
 impl GetGeoLocationResponseDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<GetGeoLocationResponse, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, GetGeoLocationResponse, _>(tag_name, stack, |name, stack, obj| {
             match name {
                 "GeoLocationDetails" => {
@@ -2753,11 +2826,12 @@ pub struct GetHealthCheckCountResponse {
 #[allow(dead_code)]
 struct GetHealthCheckCountResponseDeserializer;
 impl GetHealthCheckCountResponseDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<GetHealthCheckCountResponse, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, GetHealthCheckCountResponse, _>(
             tag_name,
             stack,
@@ -2793,11 +2867,12 @@ pub struct GetHealthCheckLastFailureReasonResponse {
 #[allow(dead_code)]
 struct GetHealthCheckLastFailureReasonResponseDeserializer;
 impl GetHealthCheckLastFailureReasonResponseDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<GetHealthCheckLastFailureReasonResponse, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, GetHealthCheckLastFailureReasonResponse, _>(
             tag_name,
             stack,
@@ -2837,11 +2912,12 @@ pub struct GetHealthCheckResponse {
 #[allow(dead_code)]
 struct GetHealthCheckResponseDeserializer;
 impl GetHealthCheckResponseDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<GetHealthCheckResponse, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, GetHealthCheckResponse, _>(tag_name, stack, |name, stack, obj| {
             match name {
                 "HealthCheck" => {
@@ -2872,11 +2948,12 @@ pub struct GetHealthCheckStatusResponse {
 #[allow(dead_code)]
 struct GetHealthCheckStatusResponseDeserializer;
 impl GetHealthCheckStatusResponseDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<GetHealthCheckStatusResponse, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, GetHealthCheckStatusResponse, _>(
             tag_name,
             stack,
@@ -2913,11 +2990,12 @@ pub struct GetHostedZoneCountResponse {
 #[allow(dead_code)]
 struct GetHostedZoneCountResponseDeserializer;
 impl GetHostedZoneCountResponseDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<GetHostedZoneCountResponse, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, GetHostedZoneCountResponse, _>(
             tag_name,
             stack,
@@ -2957,11 +3035,12 @@ pub struct GetHostedZoneLimitResponse {
 #[allow(dead_code)]
 struct GetHostedZoneLimitResponseDeserializer;
 impl GetHostedZoneLimitResponseDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<GetHostedZoneLimitResponse, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, GetHostedZoneLimitResponse, _>(
             tag_name,
             stack,
@@ -3003,11 +3082,12 @@ pub struct GetHostedZoneResponse {
 #[allow(dead_code)]
 struct GetHostedZoneResponseDeserializer;
 impl GetHostedZoneResponseDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<GetHostedZoneResponse, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, GetHostedZoneResponse, _>(tag_name, stack, |name, stack, obj| {
             match name {
                 "DelegationSet" => {
@@ -3047,11 +3127,12 @@ pub struct GetQueryLoggingConfigResponse {
 #[allow(dead_code)]
 struct GetQueryLoggingConfigResponseDeserializer;
 impl GetQueryLoggingConfigResponseDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<GetQueryLoggingConfigResponse, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, GetQueryLoggingConfigResponse, _>(
             tag_name,
             stack,
@@ -3093,11 +3174,12 @@ pub struct GetReusableDelegationSetLimitResponse {
 #[allow(dead_code)]
 struct GetReusableDelegationSetLimitResponseDeserializer;
 impl GetReusableDelegationSetLimitResponseDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<GetReusableDelegationSetLimitResponse, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, GetReusableDelegationSetLimitResponse, _>(
             tag_name,
             stack,
@@ -3136,11 +3218,12 @@ pub struct GetReusableDelegationSetResponse {
 #[allow(dead_code)]
 struct GetReusableDelegationSetResponseDeserializer;
 impl GetReusableDelegationSetResponseDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<GetReusableDelegationSetResponse, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, GetReusableDelegationSetResponse, _>(
             tag_name,
             stack,
@@ -3173,11 +3256,12 @@ pub struct GetTrafficPolicyInstanceCountResponse {
 #[allow(dead_code)]
 struct GetTrafficPolicyInstanceCountResponseDeserializer;
 impl GetTrafficPolicyInstanceCountResponseDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<GetTrafficPolicyInstanceCountResponse, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, GetTrafficPolicyInstanceCountResponse, _>(
             tag_name,
             stack,
@@ -3216,11 +3300,12 @@ pub struct GetTrafficPolicyInstanceResponse {
 #[allow(dead_code)]
 struct GetTrafficPolicyInstanceResponseDeserializer;
 impl GetTrafficPolicyInstanceResponseDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<GetTrafficPolicyInstanceResponse, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, GetTrafficPolicyInstanceResponse, _>(
             tag_name,
             stack,
@@ -3261,11 +3346,12 @@ pub struct GetTrafficPolicyResponse {
 #[allow(dead_code)]
 struct GetTrafficPolicyResponseDeserializer;
 impl GetTrafficPolicyResponseDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<GetTrafficPolicyResponse, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, GetTrafficPolicyResponse, _>(
             tag_name,
             stack,
@@ -3303,11 +3389,12 @@ pub struct HealthCheck {
 #[allow(dead_code)]
 struct HealthCheckDeserializer;
 impl HealthCheckDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<HealthCheck, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, HealthCheck, _>(tag_name, stack, |name, stack, obj| {
             match name {
                 "CallerReference" => {
@@ -3388,11 +3475,12 @@ pub struct HealthCheckConfig {
 #[allow(dead_code)]
 struct HealthCheckConfigDeserializer;
 impl HealthCheckConfigDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<HealthCheckConfig, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, HealthCheckConfig, _>(tag_name, stack, |name, stack, obj| {
             match name {
                 "AlarmIdentifier" => {
@@ -3554,16 +3642,18 @@ impl HealthCheckConfigSerializer {
 #[allow(dead_code)]
 struct HealthCheckCountDeserializer;
 impl HealthCheckCountDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<i64, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::deserialize_primitive(tag_name, stack, |s| Ok(i64::from_str(&s).unwrap()))
     }
 }
 #[allow(dead_code)]
 struct HealthCheckIdDeserializer;
 impl HealthCheckIdDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
@@ -3586,8 +3676,9 @@ impl HealthCheckIdSerializer {
 #[allow(dead_code)]
 struct HealthCheckNonceDeserializer;
 impl HealthCheckNonceDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
@@ -3622,11 +3713,12 @@ pub struct HealthCheckObservation {
 #[allow(dead_code)]
 struct HealthCheckObservationDeserializer;
 impl HealthCheckObservationDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<HealthCheckObservation, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, HealthCheckObservation, _>(tag_name, stack, |name, stack, obj| {
             match name {
                 "IPAddress" => {
@@ -3650,11 +3742,13 @@ impl HealthCheckObservationDeserializer {
 #[allow(dead_code)]
 struct HealthCheckObservationsDeserializer;
 impl HealthCheckObservationsDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<HealthCheckObservation>, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
+
         deserialize_elements::<_, Vec<_>, _>(tag_name, stack, |name, stack, obj| {
             if name == "HealthCheckObservation" {
                 obj.push(HealthCheckObservationDeserializer::deserialize(
@@ -3671,8 +3765,9 @@ impl HealthCheckObservationsDeserializer {
 #[allow(dead_code)]
 struct HealthCheckRegionDeserializer;
 impl HealthCheckRegionDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
@@ -3695,11 +3790,13 @@ impl HealthCheckRegionSerializer {
 #[allow(dead_code)]
 struct HealthCheckRegionListDeserializer;
 impl HealthCheckRegionListDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<String>, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
+
         deserialize_elements::<_, Vec<_>, _>(tag_name, stack, |name, stack, obj| {
             if name == "Region" {
                 obj.push(HealthCheckRegionDeserializer::deserialize("Region", stack)?);
@@ -3734,8 +3831,9 @@ impl HealthCheckRegionListSerializer {
 #[allow(dead_code)]
 struct HealthCheckTypeDeserializer;
 impl HealthCheckTypeDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
@@ -3758,8 +3856,9 @@ impl HealthCheckTypeSerializer {
 #[allow(dead_code)]
 struct HealthCheckVersionDeserializer;
 impl HealthCheckVersionDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<i64, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::deserialize_primitive(tag_name, stack, |s| Ok(i64::from_str(&s).unwrap()))
     }
 }
@@ -3782,11 +3881,13 @@ impl HealthCheckVersionSerializer {
 #[allow(dead_code)]
 struct HealthChecksDeserializer;
 impl HealthChecksDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<HealthCheck>, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
+
         deserialize_elements::<_, Vec<_>, _>(tag_name, stack, |name, stack, obj| {
             if name == "HealthCheck" {
                 obj.push(HealthCheckDeserializer::deserialize("HealthCheck", stack)?);
@@ -3800,8 +3901,9 @@ impl HealthChecksDeserializer {
 #[allow(dead_code)]
 struct HealthThresholdDeserializer;
 impl HealthThresholdDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<i64, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::deserialize_primitive(tag_name, stack, |s| Ok(i64::from_str(&s).unwrap()))
     }
 }
@@ -3842,11 +3944,12 @@ pub struct HostedZone {
 #[allow(dead_code)]
 struct HostedZoneDeserializer;
 impl HostedZoneDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<HostedZone, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, HostedZone, _>(tag_name, stack, |name, stack, obj| {
             match name {
                 "CallerReference" => {
@@ -3895,11 +3998,12 @@ pub struct HostedZoneConfig {
 #[allow(dead_code)]
 struct HostedZoneConfigDeserializer;
 impl HostedZoneConfigDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<HostedZoneConfig, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, HostedZoneConfig, _>(tag_name, stack, |name, stack, obj| {
             match name {
                 "Comment" => {
@@ -3945,8 +4049,9 @@ impl HostedZoneConfigSerializer {
 #[allow(dead_code)]
 struct HostedZoneCountDeserializer;
 impl HostedZoneCountDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<i64, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::deserialize_primitive(tag_name, stack, |s| Ok(i64::from_str(&s).unwrap()))
     }
 }
@@ -3963,11 +4068,12 @@ pub struct HostedZoneLimit {
 #[allow(dead_code)]
 struct HostedZoneLimitDeserializer;
 impl HostedZoneLimitDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<HostedZoneLimit, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, HostedZoneLimit, _>(tag_name, stack, |name, stack, obj| {
             match name {
                 "Type" => {
@@ -3985,8 +4091,9 @@ impl HostedZoneLimitDeserializer {
 #[allow(dead_code)]
 struct HostedZoneLimitTypeDeserializer;
 impl HostedZoneLimitTypeDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
@@ -4019,11 +4126,12 @@ pub struct HostedZoneOwner {
 #[allow(dead_code)]
 struct HostedZoneOwnerDeserializer;
 impl HostedZoneOwnerDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<HostedZoneOwner, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, HostedZoneOwner, _>(tag_name, stack, |name, stack, obj| {
             match name {
                 "OwningAccount" => {
@@ -4047,27 +4155,31 @@ impl HostedZoneOwnerDeserializer {
 #[allow(dead_code)]
 struct HostedZoneOwningServiceDeserializer;
 impl HostedZoneOwningServiceDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 #[allow(dead_code)]
 struct HostedZoneRRSetCountDeserializer;
 impl HostedZoneRRSetCountDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<i64, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::deserialize_primitive(tag_name, stack, |s| Ok(i64::from_str(&s).unwrap()))
     }
 }
 #[allow(dead_code)]
 struct HostedZoneSummariesDeserializer;
 impl HostedZoneSummariesDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<HostedZoneSummary>, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
+
         deserialize_elements::<_, Vec<_>, _>(tag_name, stack, |name, stack, obj| {
             if name == "HostedZoneSummary" {
                 obj.push(HostedZoneSummaryDeserializer::deserialize(
@@ -4096,11 +4208,12 @@ pub struct HostedZoneSummary {
 #[allow(dead_code)]
 struct HostedZoneSummaryDeserializer;
 impl HostedZoneSummaryDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<HostedZoneSummary, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, HostedZoneSummary, _>(tag_name, stack, |name, stack, obj| {
             match name {
                 "HostedZoneId" => {
@@ -4122,11 +4235,13 @@ impl HostedZoneSummaryDeserializer {
 #[allow(dead_code)]
 struct HostedZonesDeserializer;
 impl HostedZonesDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<HostedZone>, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
+
         deserialize_elements::<_, Vec<_>, _>(tag_name, stack, |name, stack, obj| {
             if name == "HostedZone" {
                 obj.push(HostedZoneDeserializer::deserialize("HostedZone", stack)?);
@@ -4140,8 +4255,9 @@ impl HostedZonesDeserializer {
 #[allow(dead_code)]
 struct IPAddressDeserializer;
 impl IPAddressDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
@@ -4164,16 +4280,18 @@ impl IPAddressSerializer {
 #[allow(dead_code)]
 struct IPAddressCidrDeserializer;
 impl IPAddressCidrDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 #[allow(dead_code)]
 struct InsufficientDataHealthStatusDeserializer;
 impl InsufficientDataHealthStatusDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
@@ -4196,8 +4314,9 @@ impl InsufficientDataHealthStatusSerializer {
 #[allow(dead_code)]
 struct InvertedDeserializer;
 impl InvertedDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<bool, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::deserialize_primitive(tag_name, stack, |s| Ok(bool::from_str(&s).unwrap()))
     }
 }
@@ -4220,8 +4339,9 @@ impl InvertedSerializer {
 #[allow(dead_code)]
 struct IsPrivateZoneDeserializer;
 impl IsPrivateZoneDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<bool, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::deserialize_primitive(tag_name, stack, |s| Ok(bool::from_str(&s).unwrap()))
     }
 }
@@ -4282,11 +4402,12 @@ pub struct KeySigningKey {
 #[allow(dead_code)]
 struct KeySigningKeyDeserializer;
 impl KeySigningKeyDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<KeySigningKey, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, KeySigningKey, _>(tag_name, stack, |name, stack, obj| {
             match name {
                 "CreatedDate" => {
@@ -4378,11 +4499,13 @@ impl KeySigningKeyDeserializer {
 #[allow(dead_code)]
 struct KeySigningKeysDeserializer;
 impl KeySigningKeysDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<KeySigningKey>, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
+
         deserialize_elements::<_, Vec<_>, _>(tag_name, stack, |name, stack, obj| {
             if name == "member" {
                 obj.push(KeySigningKeyDeserializer::deserialize("member", stack)?);
@@ -4396,8 +4519,9 @@ impl KeySigningKeysDeserializer {
 #[allow(dead_code)]
 struct LimitValueDeserializer;
 impl LimitValueDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<i64, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::deserialize_primitive(tag_name, stack, |s| Ok(i64::from_str(&s).unwrap()))
     }
 }
@@ -4414,11 +4538,12 @@ pub struct LinkedService {
 #[allow(dead_code)]
 struct LinkedServiceDeserializer;
 impl LinkedServiceDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<LinkedService, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, LinkedService, _>(tag_name, stack, |name, stack, obj| {
             match name {
                 "Description" => {
@@ -4474,11 +4599,12 @@ pub struct ListGeoLocationsResponse {
 #[allow(dead_code)]
 struct ListGeoLocationsResponseDeserializer;
 impl ListGeoLocationsResponseDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<ListGeoLocationsResponse, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, ListGeoLocationsResponse, _>(
             tag_name,
             stack,
@@ -4556,11 +4682,12 @@ pub struct ListHealthChecksResponse {
 #[allow(dead_code)]
 struct ListHealthChecksResponseDeserializer;
 impl ListHealthChecksResponseDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<ListHealthChecksResponse, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, ListHealthChecksResponse, _>(
             tag_name,
             stack,
@@ -4629,11 +4756,12 @@ pub struct ListHostedZonesByNameResponse {
 #[allow(dead_code)]
 struct ListHostedZonesByNameResponseDeserializer;
 impl ListHostedZonesByNameResponseDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<ListHostedZonesByNameResponse, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, ListHostedZonesByNameResponse, _>(
             tag_name,
             stack,
@@ -4702,11 +4830,12 @@ pub struct ListHostedZonesByVPCResponse {
 #[allow(dead_code)]
 struct ListHostedZonesByVPCResponseDeserializer;
 impl ListHostedZonesByVPCResponseDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<ListHostedZonesByVPCResponse, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, ListHostedZonesByVPCResponse, _>(
             tag_name,
             stack,
@@ -4766,11 +4895,12 @@ pub struct ListHostedZonesResponse {
 #[allow(dead_code)]
 struct ListHostedZonesResponseDeserializer;
 impl ListHostedZonesResponseDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<ListHostedZonesResponse, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, ListHostedZonesResponse, _>(
             tag_name,
             stack,
@@ -4824,11 +4954,12 @@ pub struct ListQueryLoggingConfigsResponse {
 #[allow(dead_code)]
 struct ListQueryLoggingConfigsResponseDeserializer;
 impl ListQueryLoggingConfigsResponseDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<ListQueryLoggingConfigsResponse, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, ListQueryLoggingConfigsResponse, _>(
             tag_name,
             stack,
@@ -4892,11 +5023,12 @@ pub struct ListResourceRecordSetsResponse {
 #[allow(dead_code)]
 struct ListResourceRecordSetsResponseDeserializer;
 impl ListResourceRecordSetsResponseDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<ListResourceRecordSetsResponse, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, ListResourceRecordSetsResponse, _>(
             tag_name,
             stack,
@@ -4968,11 +5100,12 @@ pub struct ListReusableDelegationSetsResponse {
 #[allow(dead_code)]
 struct ListReusableDelegationSetsResponseDeserializer;
 impl ListReusableDelegationSetsResponseDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<ListReusableDelegationSetsResponse, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, ListReusableDelegationSetsResponse, _>(
             tag_name,
             stack,
@@ -5027,11 +5160,12 @@ pub struct ListTagsForResourceResponse {
 #[allow(dead_code)]
 struct ListTagsForResourceResponseDeserializer;
 impl ListTagsForResourceResponseDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<ListTagsForResourceResponse, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, ListTagsForResourceResponse, _>(
             tag_name,
             stack,
@@ -5086,11 +5220,12 @@ pub struct ListTagsForResourcesResponse {
 #[allow(dead_code)]
 struct ListTagsForResourcesResponseDeserializer;
 impl ListTagsForResourcesResponseDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<ListTagsForResourcesResponse, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, ListTagsForResourcesResponse, _>(
             tag_name,
             stack,
@@ -5137,11 +5272,12 @@ pub struct ListTrafficPoliciesResponse {
 #[allow(dead_code)]
 struct ListTrafficPoliciesResponseDeserializer;
 impl ListTrafficPoliciesResponseDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<ListTrafficPoliciesResponse, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, ListTrafficPoliciesResponse, _>(
             tag_name,
             stack,
@@ -5208,11 +5344,12 @@ pub struct ListTrafficPolicyInstancesByHostedZoneResponse {
 #[allow(dead_code)]
 struct ListTrafficPolicyInstancesByHostedZoneResponseDeserializer;
 impl ListTrafficPolicyInstancesByHostedZoneResponseDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<ListTrafficPolicyInstancesByHostedZoneResponse, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, ListTrafficPolicyInstancesByHostedZoneResponse, _>(
             tag_name,
             stack,
@@ -5293,11 +5430,12 @@ pub struct ListTrafficPolicyInstancesByPolicyResponse {
 #[allow(dead_code)]
 struct ListTrafficPolicyInstancesByPolicyResponseDeserializer;
 impl ListTrafficPolicyInstancesByPolicyResponseDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<ListTrafficPolicyInstancesByPolicyResponse, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, ListTrafficPolicyInstancesByPolicyResponse, _>(
             tag_name,
             stack,
@@ -5380,11 +5518,12 @@ pub struct ListTrafficPolicyInstancesResponse {
 #[allow(dead_code)]
 struct ListTrafficPolicyInstancesResponseDeserializer;
 impl ListTrafficPolicyInstancesResponseDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<ListTrafficPolicyInstancesResponse, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, ListTrafficPolicyInstancesResponse, _>(
             tag_name,
             stack,
@@ -5461,11 +5600,12 @@ pub struct ListTrafficPolicyVersionsResponse {
 #[allow(dead_code)]
 struct ListTrafficPolicyVersionsResponseDeserializer;
 impl ListTrafficPolicyVersionsResponseDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<ListTrafficPolicyVersionsResponse, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, ListTrafficPolicyVersionsResponse, _>(
             tag_name,
             stack,
@@ -5526,11 +5666,12 @@ pub struct ListVPCAssociationAuthorizationsResponse {
 #[allow(dead_code)]
 struct ListVPCAssociationAuthorizationsResponseDeserializer;
 impl ListVPCAssociationAuthorizationsResponseDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<ListVPCAssociationAuthorizationsResponse, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, ListVPCAssociationAuthorizationsResponse, _>(
             tag_name,
             stack,
@@ -5576,8 +5717,9 @@ impl MaxResultsSerializer {
 #[allow(dead_code)]
 struct MeasureLatencyDeserializer;
 impl MeasureLatencyDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<bool, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::deserialize_primitive(tag_name, stack, |s| Ok(bool::from_str(&s).unwrap()))
     }
 }
@@ -5600,40 +5742,45 @@ impl MeasureLatencySerializer {
 #[allow(dead_code)]
 struct MessageDeserializer;
 impl MessageDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 #[allow(dead_code)]
 struct MetricNameDeserializer;
 impl MetricNameDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 #[allow(dead_code)]
 struct NameserverDeserializer;
 impl NameserverDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 #[allow(dead_code)]
 struct NamespaceDeserializer;
 impl NamespaceDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 #[allow(dead_code)]
 struct NonceDeserializer;
 impl NonceDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
@@ -5656,8 +5803,9 @@ impl NonceSerializer {
 #[allow(dead_code)]
 struct PageMarkerDeserializer;
 impl PageMarkerDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
@@ -5680,8 +5828,9 @@ impl PageMarkerSerializer {
 #[allow(dead_code)]
 struct PageMaxItemsDeserializer;
 impl PageMaxItemsDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
@@ -5704,16 +5853,18 @@ impl PageMaxItemsSerializer {
 #[allow(dead_code)]
 struct PageTruncatedDeserializer;
 impl PageTruncatedDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<bool, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::deserialize_primitive(tag_name, stack, |s| Ok(bool::from_str(&s).unwrap()))
     }
 }
 #[allow(dead_code)]
 struct PaginationTokenDeserializer;
 impl PaginationTokenDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
@@ -5736,16 +5887,18 @@ impl PaginationTokenSerializer {
 #[allow(dead_code)]
 struct PeriodDeserializer;
 impl PeriodDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<i64, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::deserialize_primitive(tag_name, stack, |s| Ok(i64::from_str(&s).unwrap()))
     }
 }
 #[allow(dead_code)]
 struct PortDeserializer;
 impl PortDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<i64, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::deserialize_primitive(tag_name, stack, |s| Ok(i64::from_str(&s).unwrap()))
     }
 }
@@ -5780,11 +5933,12 @@ pub struct QueryLoggingConfig {
 #[allow(dead_code)]
 struct QueryLoggingConfigDeserializer;
 impl QueryLoggingConfigDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<QueryLoggingConfig, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, QueryLoggingConfig, _>(tag_name, stack, |name, stack, obj| {
             match name {
                 "CloudWatchLogsLogGroupArn" => {
@@ -5810,8 +5964,9 @@ impl QueryLoggingConfigDeserializer {
 #[allow(dead_code)]
 struct QueryLoggingConfigIdDeserializer;
 impl QueryLoggingConfigIdDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
@@ -5834,11 +5989,13 @@ impl QueryLoggingConfigIdSerializer {
 #[allow(dead_code)]
 struct QueryLoggingConfigsDeserializer;
 impl QueryLoggingConfigsDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<QueryLoggingConfig>, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
+
         deserialize_elements::<_, Vec<_>, _>(tag_name, stack, |name, stack, obj| {
             if name == "QueryLoggingConfig" {
                 obj.push(QueryLoggingConfigDeserializer::deserialize(
@@ -5855,8 +6012,9 @@ impl QueryLoggingConfigsDeserializer {
 #[allow(dead_code)]
 struct RDataDeserializer;
 impl RDataDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
@@ -5879,8 +6037,9 @@ impl RDataSerializer {
 #[allow(dead_code)]
 struct RRTypeDeserializer;
 impl RRTypeDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
@@ -5903,11 +6062,13 @@ impl RRTypeSerializer {
 #[allow(dead_code)]
 struct RecordDataDeserializer;
 impl RecordDataDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<String>, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
+
         deserialize_elements::<_, Vec<_>, _>(tag_name, stack, |name, stack, obj| {
             if name == "RecordDataEntry" {
                 obj.push(RecordDataEntryDeserializer::deserialize(
@@ -5924,16 +6085,18 @@ impl RecordDataDeserializer {
 #[allow(dead_code)]
 struct RecordDataEntryDeserializer;
 impl RecordDataEntryDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 #[allow(dead_code)]
 struct RequestIntervalDeserializer;
 impl RequestIntervalDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<i64, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::deserialize_primitive(tag_name, stack, |s| Ok(i64::from_str(&s).unwrap()))
     }
 }
@@ -5991,8 +6154,9 @@ impl ResettableElementNameListSerializer {
 #[allow(dead_code)]
 struct ResourceDescriptionDeserializer;
 impl ResourceDescriptionDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
@@ -6015,8 +6179,9 @@ impl ResourceDescriptionSerializer {
 #[allow(dead_code)]
 struct ResourceIdDeserializer;
 impl ResourceIdDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
@@ -6039,8 +6204,9 @@ impl ResourceIdSerializer {
 #[allow(dead_code)]
 struct ResourcePathDeserializer;
 impl ResourcePathDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
@@ -6072,11 +6238,12 @@ pub struct ResourceRecord {
 #[allow(dead_code)]
 struct ResourceRecordDeserializer;
 impl ResourceRecordDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<ResourceRecord, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, ResourceRecord, _>(tag_name, stack, |name, stack, obj| {
             match name {
                 "Value" => {
@@ -6142,11 +6309,12 @@ pub struct ResourceRecordSet {
 #[allow(dead_code)]
 struct ResourceRecordSetDeserializer;
 impl ResourceRecordSetDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<ResourceRecordSet, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, ResourceRecordSet, _>(tag_name, stack, |name, stack, obj| {
             match name {
                 "AliasTarget" => {
@@ -6274,8 +6442,9 @@ impl ResourceRecordSetSerializer {
 #[allow(dead_code)]
 struct ResourceRecordSetFailoverDeserializer;
 impl ResourceRecordSetFailoverDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
@@ -6298,8 +6467,9 @@ impl ResourceRecordSetFailoverSerializer {
 #[allow(dead_code)]
 struct ResourceRecordSetIdentifierDeserializer;
 impl ResourceRecordSetIdentifierDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
@@ -6322,8 +6492,9 @@ impl ResourceRecordSetIdentifierSerializer {
 #[allow(dead_code)]
 struct ResourceRecordSetMultiValueAnswerDeserializer;
 impl ResourceRecordSetMultiValueAnswerDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<bool, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::deserialize_primitive(tag_name, stack, |s| Ok(bool::from_str(&s).unwrap()))
     }
 }
@@ -6346,8 +6517,9 @@ impl ResourceRecordSetMultiValueAnswerSerializer {
 #[allow(dead_code)]
 struct ResourceRecordSetRegionDeserializer;
 impl ResourceRecordSetRegionDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
@@ -6370,8 +6542,9 @@ impl ResourceRecordSetRegionSerializer {
 #[allow(dead_code)]
 struct ResourceRecordSetWeightDeserializer;
 impl ResourceRecordSetWeightDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<i64, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::deserialize_primitive(tag_name, stack, |s| Ok(i64::from_str(&s).unwrap()))
     }
 }
@@ -6394,11 +6567,13 @@ impl ResourceRecordSetWeightSerializer {
 #[allow(dead_code)]
 struct ResourceRecordSetsDeserializer;
 impl ResourceRecordSetsDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<ResourceRecordSet>, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
+
         deserialize_elements::<_, Vec<_>, _>(tag_name, stack, |name, stack, obj| {
             if name == "ResourceRecordSet" {
                 obj.push(ResourceRecordSetDeserializer::deserialize(
@@ -6415,11 +6590,13 @@ impl ResourceRecordSetsDeserializer {
 #[allow(dead_code)]
 struct ResourceRecordsDeserializer;
 impl ResourceRecordsDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<ResourceRecord>, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
+
         deserialize_elements::<_, Vec<_>, _>(tag_name, stack, |name, stack, obj| {
             if name == "ResourceRecord" {
                 obj.push(ResourceRecordDeserializer::deserialize(
@@ -6469,11 +6646,12 @@ pub struct ResourceTagSet {
 #[allow(dead_code)]
 struct ResourceTagSetDeserializer;
 impl ResourceTagSetDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<ResourceTagSet, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, ResourceTagSet, _>(tag_name, stack, |name, stack, obj| {
             match name {
                 "ResourceId" => {
@@ -6500,11 +6678,13 @@ impl ResourceTagSetDeserializer {
 #[allow(dead_code)]
 struct ResourceTagSetListDeserializer;
 impl ResourceTagSetListDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<ResourceTagSet>, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
+
         deserialize_elements::<_, Vec<_>, _>(tag_name, stack, |name, stack, obj| {
             if name == "ResourceTagSet" {
                 obj.push(ResourceTagSetDeserializer::deserialize(
@@ -6531,11 +6711,12 @@ pub struct ReusableDelegationSetLimit {
 #[allow(dead_code)]
 struct ReusableDelegationSetLimitDeserializer;
 impl ReusableDelegationSetLimitDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<ReusableDelegationSetLimit, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, ReusableDelegationSetLimit, _>(
             tag_name,
             stack,
@@ -6558,8 +6739,9 @@ impl ReusableDelegationSetLimitDeserializer {
 #[allow(dead_code)]
 struct ReusableDelegationSetLimitTypeDeserializer;
 impl ReusableDelegationSetLimitTypeDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
@@ -6582,8 +6764,9 @@ impl ReusableDelegationSetLimitTypeSerializer {
 #[allow(dead_code)]
 struct SearchStringDeserializer;
 impl SearchStringDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
@@ -6606,32 +6789,36 @@ impl SearchStringSerializer {
 #[allow(dead_code)]
 struct ServeSignatureDeserializer;
 impl ServeSignatureDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 #[allow(dead_code)]
 struct ServicePrincipalDeserializer;
 impl ServicePrincipalDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 #[allow(dead_code)]
 struct SigningKeyIntegerDeserializer;
 impl SigningKeyIntegerDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<i64, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::deserialize_primitive(tag_name, stack, |s| Ok(i64::from_str(&s).unwrap()))
     }
 }
 #[allow(dead_code)]
 struct SigningKeyNameDeserializer;
 impl SigningKeyNameDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
@@ -6654,8 +6841,9 @@ impl SigningKeyNameSerializer {
 #[allow(dead_code)]
 struct SigningKeyStatusDeserializer;
 impl SigningKeyStatusDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
@@ -6678,16 +6866,18 @@ impl SigningKeyStatusSerializer {
 #[allow(dead_code)]
 struct SigningKeyStatusMessageDeserializer;
 impl SigningKeyStatusMessageDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 #[allow(dead_code)]
 struct SigningKeyStringDeserializer;
 impl SigningKeyStringDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
@@ -6710,24 +6900,27 @@ impl SigningKeyStringSerializer {
 #[allow(dead_code)]
 struct SigningKeyTagDeserializer;
 impl SigningKeyTagDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<i64, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::deserialize_primitive(tag_name, stack, |s| Ok(i64::from_str(&s).unwrap()))
     }
 }
 #[allow(dead_code)]
 struct StatisticDeserializer;
 impl StatisticDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 #[allow(dead_code)]
 struct StatusDeserializer;
 impl StatusDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
@@ -6744,11 +6937,12 @@ pub struct StatusReport {
 #[allow(dead_code)]
 struct StatusReportDeserializer;
 impl StatusReportDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<StatusReport, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, StatusReport, _>(tag_name, stack, |name, stack, obj| {
             match name {
                 "CheckedTime" => {
@@ -6783,8 +6977,9 @@ impl SubnetMaskSerializer {
 #[allow(dead_code)]
 struct TTLDeserializer;
 impl TTLDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<i64, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::deserialize_primitive(tag_name, stack, |s| Ok(i64::from_str(&s).unwrap()))
     }
 }
@@ -6818,8 +7013,9 @@ pub struct Tag {
 #[allow(dead_code)]
 struct TagDeserializer;
 impl TagDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<Tag, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, Tag, _>(tag_name, stack, |name, stack, obj| {
             match name {
                 "Key" => {
@@ -6860,8 +7056,9 @@ impl TagSerializer {
 #[allow(dead_code)]
 struct TagKeyDeserializer;
 impl TagKeyDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
@@ -6904,11 +7101,13 @@ impl TagKeyListSerializer {
 #[allow(dead_code)]
 struct TagListDeserializer;
 impl TagListDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<Tag>, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
+
         deserialize_elements::<_, Vec<_>, _>(tag_name, stack, |name, stack, obj| {
             if name == "Tag" {
                 obj.push(TagDeserializer::deserialize("Tag", stack)?);
@@ -6943,8 +7142,9 @@ impl TagListSerializer {
 #[allow(dead_code)]
 struct TagResourceIdDeserializer;
 impl TagResourceIdDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
@@ -6987,8 +7187,9 @@ impl TagResourceIdListSerializer {
 #[allow(dead_code)]
 struct TagResourceTypeDeserializer;
 impl TagResourceTypeDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
@@ -7011,8 +7212,9 @@ impl TagResourceTypeSerializer {
 #[allow(dead_code)]
 struct TagValueDeserializer;
 impl TagValueDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
@@ -7071,11 +7273,12 @@ pub struct TestDNSAnswerResponse {
 #[allow(dead_code)]
 struct TestDNSAnswerResponseDeserializer;
 impl TestDNSAnswerResponseDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<TestDNSAnswerResponse, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, TestDNSAnswerResponse, _>(tag_name, stack, |name, stack, obj| {
             match name {
                 "Nameserver" => {
@@ -7106,27 +7309,31 @@ impl TestDNSAnswerResponseDeserializer {
 #[allow(dead_code)]
 struct ThresholdDeserializer;
 impl ThresholdDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<f64, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::deserialize_primitive(tag_name, stack, |s| Ok(f64::from_str(&s).unwrap()))
     }
 }
 #[allow(dead_code)]
 struct TimeStampDeserializer;
 impl TimeStampDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 #[allow(dead_code)]
 struct TrafficPoliciesDeserializer;
 impl TrafficPoliciesDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<TrafficPolicy>, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
+
         deserialize_elements::<_, Vec<_>, _>(tag_name, stack, |name, stack, obj| {
             if name == "TrafficPolicy" {
                 obj.push(TrafficPolicyDeserializer::deserialize(
@@ -7161,11 +7368,12 @@ pub struct TrafficPolicy {
 #[allow(dead_code)]
 struct TrafficPolicyDeserializer;
 impl TrafficPolicyDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<TrafficPolicy, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, TrafficPolicy, _>(tag_name, stack, |name, stack, obj| {
             match name {
                 "Comment" => {
@@ -7198,8 +7406,9 @@ impl TrafficPolicyDeserializer {
 #[allow(dead_code)]
 struct TrafficPolicyCommentDeserializer;
 impl TrafficPolicyCommentDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
@@ -7222,8 +7431,9 @@ impl TrafficPolicyCommentSerializer {
 #[allow(dead_code)]
 struct TrafficPolicyDocumentDeserializer;
 impl TrafficPolicyDocumentDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
@@ -7246,8 +7456,9 @@ impl TrafficPolicyDocumentSerializer {
 #[allow(dead_code)]
 struct TrafficPolicyIdDeserializer;
 impl TrafficPolicyIdDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
@@ -7294,11 +7505,12 @@ pub struct TrafficPolicyInstance {
 #[allow(dead_code)]
 struct TrafficPolicyInstanceDeserializer;
 impl TrafficPolicyInstanceDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<TrafficPolicyInstance, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, TrafficPolicyInstance, _>(tag_name, stack, |name, stack, obj| {
             match name {
                 "HostedZoneId" => {
@@ -7344,16 +7556,18 @@ impl TrafficPolicyInstanceDeserializer {
 #[allow(dead_code)]
 struct TrafficPolicyInstanceCountDeserializer;
 impl TrafficPolicyInstanceCountDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<i64, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::deserialize_primitive(tag_name, stack, |s| Ok(i64::from_str(&s).unwrap()))
     }
 }
 #[allow(dead_code)]
 struct TrafficPolicyInstanceIdDeserializer;
 impl TrafficPolicyInstanceIdDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
@@ -7376,19 +7590,22 @@ impl TrafficPolicyInstanceIdSerializer {
 #[allow(dead_code)]
 struct TrafficPolicyInstanceStateDeserializer;
 impl TrafficPolicyInstanceStateDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 #[allow(dead_code)]
 struct TrafficPolicyInstancesDeserializer;
 impl TrafficPolicyInstancesDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<TrafficPolicyInstance>, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
+
         deserialize_elements::<_, Vec<_>, _>(tag_name, stack, |name, stack, obj| {
             if name == "TrafficPolicyInstance" {
                 obj.push(TrafficPolicyInstanceDeserializer::deserialize(
@@ -7405,8 +7622,9 @@ impl TrafficPolicyInstancesDeserializer {
 #[allow(dead_code)]
 struct TrafficPolicyNameDeserializer;
 impl TrafficPolicyNameDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
@@ -7429,11 +7647,13 @@ impl TrafficPolicyNameSerializer {
 #[allow(dead_code)]
 struct TrafficPolicySummariesDeserializer;
 impl TrafficPolicySummariesDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<TrafficPolicySummary>, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
+
         deserialize_elements::<_, Vec<_>, _>(tag_name, stack, |name, stack, obj| {
             if name == "TrafficPolicySummary" {
                 obj.push(TrafficPolicySummaryDeserializer::deserialize(
@@ -7466,11 +7686,12 @@ pub struct TrafficPolicySummary {
 #[allow(dead_code)]
 struct TrafficPolicySummaryDeserializer;
 impl TrafficPolicySummaryDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<TrafficPolicySummary, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, TrafficPolicySummary, _>(tag_name, stack, |name, stack, obj| {
             match name {
                 "Id" => {
@@ -7499,8 +7720,9 @@ impl TrafficPolicySummaryDeserializer {
 #[allow(dead_code)]
 struct TrafficPolicyVersionDeserializer;
 impl TrafficPolicyVersionDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<i64, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::deserialize_primitive(tag_name, stack, |s| Ok(i64::from_str(&s).unwrap()))
     }
 }
@@ -7523,8 +7745,9 @@ impl TrafficPolicyVersionSerializer {
 #[allow(dead_code)]
 struct TrafficPolicyVersionMarkerDeserializer;
 impl TrafficPolicyVersionMarkerDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
@@ -7547,8 +7770,9 @@ impl TrafficPolicyVersionMarkerSerializer {
 #[allow(dead_code)]
 struct TransportProtocolDeserializer;
 impl TransportProtocolDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
@@ -7675,11 +7899,12 @@ pub struct UpdateHealthCheckResponse {
 #[allow(dead_code)]
 struct UpdateHealthCheckResponseDeserializer;
 impl UpdateHealthCheckResponseDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<UpdateHealthCheckResponse, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, UpdateHealthCheckResponse, _>(
             tag_name,
             stack,
@@ -7736,11 +7961,12 @@ pub struct UpdateHostedZoneCommentResponse {
 #[allow(dead_code)]
 struct UpdateHostedZoneCommentResponseDeserializer;
 impl UpdateHostedZoneCommentResponseDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<UpdateHostedZoneCommentResponse, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, UpdateHostedZoneCommentResponse, _>(
             tag_name,
             stack,
@@ -7796,11 +8022,12 @@ pub struct UpdateTrafficPolicyCommentResponse {
 #[allow(dead_code)]
 struct UpdateTrafficPolicyCommentResponseDeserializer;
 impl UpdateTrafficPolicyCommentResponseDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<UpdateTrafficPolicyCommentResponse, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, UpdateTrafficPolicyCommentResponse, _>(
             tag_name,
             stack,
@@ -7869,11 +8096,12 @@ pub struct UpdateTrafficPolicyInstanceResponse {
 #[allow(dead_code)]
 struct UpdateTrafficPolicyInstanceResponseDeserializer;
 impl UpdateTrafficPolicyInstanceResponseDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<UpdateTrafficPolicyInstanceResponse, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, UpdateTrafficPolicyInstanceResponse, _>(
             tag_name,
             stack,
@@ -7896,8 +8124,9 @@ impl UpdateTrafficPolicyInstanceResponseDeserializer {
 #[allow(dead_code)]
 struct UsageCountDeserializer;
 impl UsageCountDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<i64, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::deserialize_primitive(tag_name, stack, |s| Ok(i64::from_str(&s).unwrap()))
     }
 }
@@ -7914,8 +8143,9 @@ pub struct VPC {
 #[allow(dead_code)]
 struct VPCDeserializer;
 impl VPCDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<VPC, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, VPC, _>(tag_name, stack, |name, stack, obj| {
             match name {
                 "VPCId" => {
@@ -7956,8 +8186,9 @@ impl VPCSerializer {
 #[allow(dead_code)]
 struct VPCIdDeserializer;
 impl VPCIdDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
@@ -7980,8 +8211,9 @@ impl VPCIdSerializer {
 #[allow(dead_code)]
 struct VPCRegionDeserializer;
 impl VPCRegionDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
@@ -8004,11 +8236,13 @@ impl VPCRegionSerializer {
 #[allow(dead_code)]
 struct VPCsDeserializer;
 impl VPCsDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<VPC>, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
+
         deserialize_elements::<_, Vec<_>, _>(tag_name, stack, |name, stack, obj| {
             if name == "VPC" {
                 obj.push(VPCDeserializer::deserialize("VPC", stack)?);
@@ -8040,38 +8274,45 @@ impl ActivateKeySigningKeyError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    "ConcurrentModification" => {
-                        return RusotoError::Service(
-                            ActivateKeySigningKeyError::ConcurrentModification(
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {
+                        "ConcurrentModification" => {
+                            return RusotoError::Service(
+                                ActivateKeySigningKeyError::ConcurrentModification(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "InvalidKMSArn" => {
+                            return RusotoError::Service(ActivateKeySigningKeyError::InvalidKMSArn(
                                 parsed_error.message,
-                            ),
-                        )
+                            ))
+                        }
+                        "InvalidKeySigningKeyStatus" => {
+                            return RusotoError::Service(
+                                ActivateKeySigningKeyError::InvalidKeySigningKeyStatus(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "InvalidSigningStatus" => {
+                            return RusotoError::Service(
+                                ActivateKeySigningKeyError::InvalidSigningStatus(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "NoSuchKeySigningKey" => {
+                            return RusotoError::Service(
+                                ActivateKeySigningKeyError::NoSuchKeySigningKey(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        _ => {}
                     }
-                    "InvalidKMSArn" => {
-                        return RusotoError::Service(ActivateKeySigningKeyError::InvalidKMSArn(
-                            parsed_error.message,
-                        ))
-                    }
-                    "InvalidKeySigningKeyStatus" => {
-                        return RusotoError::Service(
-                            ActivateKeySigningKeyError::InvalidKeySigningKeyStatus(
-                                parsed_error.message,
-                            ),
-                        )
-                    }
-                    "InvalidSigningStatus" => {
-                        return RusotoError::Service(
-                            ActivateKeySigningKeyError::InvalidSigningStatus(parsed_error.message),
-                        )
-                    }
-                    "NoSuchKeySigningKey" => {
-                        return RusotoError::Service(
-                            ActivateKeySigningKeyError::NoSuchKeySigningKey(parsed_error.message),
-                        )
-                    }
-                    _ => {}
                 }
             }
         }
@@ -8130,55 +8371,64 @@ impl AssociateVPCWithHostedZoneError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    "ConflictingDomainExists" => {
-                        return RusotoError::Service(
-                            AssociateVPCWithHostedZoneError::ConflictingDomainExists(
-                                parsed_error.message,
-                            ),
-                        )
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {
+                        "ConflictingDomainExists" => {
+                            return RusotoError::Service(
+                                AssociateVPCWithHostedZoneError::ConflictingDomainExists(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "InvalidInput" => {
+                            return RusotoError::Service(
+                                AssociateVPCWithHostedZoneError::InvalidInput(parsed_error.message),
+                            )
+                        }
+                        "InvalidVPCId" => {
+                            return RusotoError::Service(
+                                AssociateVPCWithHostedZoneError::InvalidVPCId(parsed_error.message),
+                            )
+                        }
+                        "LimitsExceeded" => {
+                            return RusotoError::Service(
+                                AssociateVPCWithHostedZoneError::LimitsExceeded(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "NoSuchHostedZone" => {
+                            return RusotoError::Service(
+                                AssociateVPCWithHostedZoneError::NoSuchHostedZone(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "NotAuthorizedException" => {
+                            return RusotoError::Service(
+                                AssociateVPCWithHostedZoneError::NotAuthorized(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "PriorRequestNotComplete" => {
+                            return RusotoError::Service(
+                                AssociateVPCWithHostedZoneError::PriorRequestNotComplete(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "PublicZoneVPCAssociation" => {
+                            return RusotoError::Service(
+                                AssociateVPCWithHostedZoneError::PublicZoneVPCAssociation(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        _ => {}
                     }
-                    "InvalidInput" => {
-                        return RusotoError::Service(AssociateVPCWithHostedZoneError::InvalidInput(
-                            parsed_error.message,
-                        ))
-                    }
-                    "InvalidVPCId" => {
-                        return RusotoError::Service(AssociateVPCWithHostedZoneError::InvalidVPCId(
-                            parsed_error.message,
-                        ))
-                    }
-                    "LimitsExceeded" => {
-                        return RusotoError::Service(
-                            AssociateVPCWithHostedZoneError::LimitsExceeded(parsed_error.message),
-                        )
-                    }
-                    "NoSuchHostedZone" => {
-                        return RusotoError::Service(
-                            AssociateVPCWithHostedZoneError::NoSuchHostedZone(parsed_error.message),
-                        )
-                    }
-                    "NotAuthorizedException" => {
-                        return RusotoError::Service(
-                            AssociateVPCWithHostedZoneError::NotAuthorized(parsed_error.message),
-                        )
-                    }
-                    "PriorRequestNotComplete" => {
-                        return RusotoError::Service(
-                            AssociateVPCWithHostedZoneError::PriorRequestNotComplete(
-                                parsed_error.message,
-                            ),
-                        )
-                    }
-                    "PublicZoneVPCAssociation" => {
-                        return RusotoError::Service(
-                            AssociateVPCWithHostedZoneError::PublicZoneVPCAssociation(
-                                parsed_error.message,
-                            ),
-                        )
-                    }
-                    _ => {}
                 }
             }
         }
@@ -8236,36 +8486,45 @@ impl ChangeResourceRecordSetsError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    "InvalidChangeBatch" => {
-                        return RusotoError::Service(
-                            ChangeResourceRecordSetsError::InvalidChangeBatch(parsed_error.message),
-                        )
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {
+                        "InvalidChangeBatch" => {
+                            return RusotoError::Service(
+                                ChangeResourceRecordSetsError::InvalidChangeBatch(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "InvalidInput" => {
+                            return RusotoError::Service(
+                                ChangeResourceRecordSetsError::InvalidInput(parsed_error.message),
+                            )
+                        }
+                        "NoSuchHealthCheck" => {
+                            return RusotoError::Service(
+                                ChangeResourceRecordSetsError::NoSuchHealthCheck(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "NoSuchHostedZone" => {
+                            return RusotoError::Service(
+                                ChangeResourceRecordSetsError::NoSuchHostedZone(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "PriorRequestNotComplete" => {
+                            return RusotoError::Service(
+                                ChangeResourceRecordSetsError::PriorRequestNotComplete(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        _ => {}
                     }
-                    "InvalidInput" => {
-                        return RusotoError::Service(ChangeResourceRecordSetsError::InvalidInput(
-                            parsed_error.message,
-                        ))
-                    }
-                    "NoSuchHealthCheck" => {
-                        return RusotoError::Service(
-                            ChangeResourceRecordSetsError::NoSuchHealthCheck(parsed_error.message),
-                        )
-                    }
-                    "NoSuchHostedZone" => {
-                        return RusotoError::Service(
-                            ChangeResourceRecordSetsError::NoSuchHostedZone(parsed_error.message),
-                        )
-                    }
-                    "PriorRequestNotComplete" => {
-                        return RusotoError::Service(
-                            ChangeResourceRecordSetsError::PriorRequestNotComplete(
-                                parsed_error.message,
-                            ),
-                        )
-                    }
-                    _ => {}
                 }
             }
         }
@@ -8316,36 +8575,39 @@ impl ChangeTagsForResourceError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    "InvalidInput" => {
-                        return RusotoError::Service(ChangeTagsForResourceError::InvalidInput(
-                            parsed_error.message,
-                        ))
-                    }
-                    "NoSuchHealthCheck" => {
-                        return RusotoError::Service(ChangeTagsForResourceError::NoSuchHealthCheck(
-                            parsed_error.message,
-                        ))
-                    }
-                    "NoSuchHostedZone" => {
-                        return RusotoError::Service(ChangeTagsForResourceError::NoSuchHostedZone(
-                            parsed_error.message,
-                        ))
-                    }
-                    "PriorRequestNotComplete" => {
-                        return RusotoError::Service(
-                            ChangeTagsForResourceError::PriorRequestNotComplete(
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {
+                        "InvalidInput" => {
+                            return RusotoError::Service(ChangeTagsForResourceError::InvalidInput(
                                 parsed_error.message,
-                            ),
-                        )
+                            ))
+                        }
+                        "NoSuchHealthCheck" => {
+                            return RusotoError::Service(
+                                ChangeTagsForResourceError::NoSuchHealthCheck(parsed_error.message),
+                            )
+                        }
+                        "NoSuchHostedZone" => {
+                            return RusotoError::Service(
+                                ChangeTagsForResourceError::NoSuchHostedZone(parsed_error.message),
+                            )
+                        }
+                        "PriorRequestNotComplete" => {
+                            return RusotoError::Service(
+                                ChangeTagsForResourceError::PriorRequestNotComplete(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "ThrottlingException" => {
+                            return RusotoError::Service(ChangeTagsForResourceError::Throttling(
+                                parsed_error.message,
+                            ))
+                        }
+                        _ => {}
                     }
-                    "ThrottlingException" => {
-                        return RusotoError::Service(ChangeTagsForResourceError::Throttling(
-                            parsed_error.message,
-                        ))
-                    }
-                    _ => {}
                 }
             }
         }
@@ -8392,24 +8654,29 @@ impl CreateHealthCheckError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    "HealthCheckAlreadyExists" => {
-                        return RusotoError::Service(
-                            CreateHealthCheckError::HealthCheckAlreadyExists(parsed_error.message),
-                        )
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {
+                        "HealthCheckAlreadyExists" => {
+                            return RusotoError::Service(
+                                CreateHealthCheckError::HealthCheckAlreadyExists(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "InvalidInput" => {
+                            return RusotoError::Service(CreateHealthCheckError::InvalidInput(
+                                parsed_error.message,
+                            ))
+                        }
+                        "TooManyHealthChecks" => {
+                            return RusotoError::Service(
+                                CreateHealthCheckError::TooManyHealthChecks(parsed_error.message),
+                            )
+                        }
+                        _ => {}
                     }
-                    "InvalidInput" => {
-                        return RusotoError::Service(CreateHealthCheckError::InvalidInput(
-                            parsed_error.message,
-                        ))
-                    }
-                    "TooManyHealthChecks" => {
-                        return RusotoError::Service(CreateHealthCheckError::TooManyHealthChecks(
-                            parsed_error.message,
-                        ))
-                    }
-                    _ => {}
                 }
             }
         }
@@ -8464,54 +8731,65 @@ impl CreateHostedZoneError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    "ConflictingDomainExists" => {
-                        return RusotoError::Service(
-                            CreateHostedZoneError::ConflictingDomainExists(parsed_error.message),
-                        )
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {
+                        "ConflictingDomainExists" => {
+                            return RusotoError::Service(
+                                CreateHostedZoneError::ConflictingDomainExists(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "DelegationSetNotAvailable" => {
+                            return RusotoError::Service(
+                                CreateHostedZoneError::DelegationSetNotAvailable(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "DelegationSetNotReusable" => {
+                            return RusotoError::Service(
+                                CreateHostedZoneError::DelegationSetNotReusable(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "HostedZoneAlreadyExists" => {
+                            return RusotoError::Service(
+                                CreateHostedZoneError::HostedZoneAlreadyExists(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "InvalidDomainName" => {
+                            return RusotoError::Service(CreateHostedZoneError::InvalidDomainName(
+                                parsed_error.message,
+                            ))
+                        }
+                        "InvalidInput" => {
+                            return RusotoError::Service(CreateHostedZoneError::InvalidInput(
+                                parsed_error.message,
+                            ))
+                        }
+                        "InvalidVPCId" => {
+                            return RusotoError::Service(CreateHostedZoneError::InvalidVPCId(
+                                parsed_error.message,
+                            ))
+                        }
+                        "NoSuchDelegationSet" => {
+                            return RusotoError::Service(
+                                CreateHostedZoneError::NoSuchDelegationSet(parsed_error.message),
+                            )
+                        }
+                        "TooManyHostedZones" => {
+                            return RusotoError::Service(CreateHostedZoneError::TooManyHostedZones(
+                                parsed_error.message,
+                            ))
+                        }
+                        _ => {}
                     }
-                    "DelegationSetNotAvailable" => {
-                        return RusotoError::Service(
-                            CreateHostedZoneError::DelegationSetNotAvailable(parsed_error.message),
-                        )
-                    }
-                    "DelegationSetNotReusable" => {
-                        return RusotoError::Service(
-                            CreateHostedZoneError::DelegationSetNotReusable(parsed_error.message),
-                        )
-                    }
-                    "HostedZoneAlreadyExists" => {
-                        return RusotoError::Service(
-                            CreateHostedZoneError::HostedZoneAlreadyExists(parsed_error.message),
-                        )
-                    }
-                    "InvalidDomainName" => {
-                        return RusotoError::Service(CreateHostedZoneError::InvalidDomainName(
-                            parsed_error.message,
-                        ))
-                    }
-                    "InvalidInput" => {
-                        return RusotoError::Service(CreateHostedZoneError::InvalidInput(
-                            parsed_error.message,
-                        ))
-                    }
-                    "InvalidVPCId" => {
-                        return RusotoError::Service(CreateHostedZoneError::InvalidVPCId(
-                            parsed_error.message,
-                        ))
-                    }
-                    "NoSuchDelegationSet" => {
-                        return RusotoError::Service(CreateHostedZoneError::NoSuchDelegationSet(
-                            parsed_error.message,
-                        ))
-                    }
-                    "TooManyHostedZones" => {
-                        return RusotoError::Service(CreateHostedZoneError::TooManyHostedZones(
-                            parsed_error.message,
-                        ))
-                    }
-                    _ => {}
                 }
             }
         }
@@ -8574,65 +8852,74 @@ impl CreateKeySigningKeyError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    "ConcurrentModification" => {
-                        return RusotoError::Service(
-                            CreateKeySigningKeyError::ConcurrentModification(parsed_error.message),
-                        )
-                    }
-                    "InvalidArgument" => {
-                        return RusotoError::Service(CreateKeySigningKeyError::InvalidArgument(
-                            parsed_error.message,
-                        ))
-                    }
-                    "InvalidInput" => {
-                        return RusotoError::Service(CreateKeySigningKeyError::InvalidInput(
-                            parsed_error.message,
-                        ))
-                    }
-                    "InvalidKMSArn" => {
-                        return RusotoError::Service(CreateKeySigningKeyError::InvalidKMSArn(
-                            parsed_error.message,
-                        ))
-                    }
-                    "InvalidKeySigningKeyName" => {
-                        return RusotoError::Service(
-                            CreateKeySigningKeyError::InvalidKeySigningKeyName(
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {
+                        "ConcurrentModification" => {
+                            return RusotoError::Service(
+                                CreateKeySigningKeyError::ConcurrentModification(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "InvalidArgument" => {
+                            return RusotoError::Service(CreateKeySigningKeyError::InvalidArgument(
                                 parsed_error.message,
-                            ),
-                        )
-                    }
-                    "InvalidKeySigningKeyStatus" => {
-                        return RusotoError::Service(
-                            CreateKeySigningKeyError::InvalidKeySigningKeyStatus(
+                            ))
+                        }
+                        "InvalidInput" => {
+                            return RusotoError::Service(CreateKeySigningKeyError::InvalidInput(
                                 parsed_error.message,
-                            ),
-                        )
-                    }
-                    "InvalidSigningStatus" => {
-                        return RusotoError::Service(
-                            CreateKeySigningKeyError::InvalidSigningStatus(parsed_error.message),
-                        )
-                    }
-                    "KeySigningKeyAlreadyExists" => {
-                        return RusotoError::Service(
-                            CreateKeySigningKeyError::KeySigningKeyAlreadyExists(
+                            ))
+                        }
+                        "InvalidKMSArn" => {
+                            return RusotoError::Service(CreateKeySigningKeyError::InvalidKMSArn(
                                 parsed_error.message,
-                            ),
-                        )
+                            ))
+                        }
+                        "InvalidKeySigningKeyName" => {
+                            return RusotoError::Service(
+                                CreateKeySigningKeyError::InvalidKeySigningKeyName(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "InvalidKeySigningKeyStatus" => {
+                            return RusotoError::Service(
+                                CreateKeySigningKeyError::InvalidKeySigningKeyStatus(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "InvalidSigningStatus" => {
+                            return RusotoError::Service(
+                                CreateKeySigningKeyError::InvalidSigningStatus(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "KeySigningKeyAlreadyExists" => {
+                            return RusotoError::Service(
+                                CreateKeySigningKeyError::KeySigningKeyAlreadyExists(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "NoSuchHostedZone" => {
+                            return RusotoError::Service(
+                                CreateKeySigningKeyError::NoSuchHostedZone(parsed_error.message),
+                            )
+                        }
+                        "TooManyKeySigningKeys" => {
+                            return RusotoError::Service(
+                                CreateKeySigningKeyError::TooManyKeySigningKeys(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        _ => {}
                     }
-                    "NoSuchHostedZone" => {
-                        return RusotoError::Service(CreateKeySigningKeyError::NoSuchHostedZone(
-                            parsed_error.message,
-                        ))
-                    }
-                    "TooManyKeySigningKeys" => {
-                        return RusotoError::Service(
-                            CreateKeySigningKeyError::TooManyKeySigningKeys(parsed_error.message),
-                        )
-                    }
-                    _ => {}
                 }
             }
         }
@@ -8692,47 +8979,50 @@ impl CreateQueryLoggingConfigError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    "ConcurrentModification" => {
-                        return RusotoError::Service(
-                            CreateQueryLoggingConfigError::ConcurrentModification(
-                                parsed_error.message,
-                            ),
-                        )
-                    }
-                    "InsufficientCloudWatchLogsResourcePolicy" => {
-                        return RusotoError::Service(
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {
+                        "ConcurrentModification" => {
+                            return RusotoError::Service(
+                                CreateQueryLoggingConfigError::ConcurrentModification(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "InsufficientCloudWatchLogsResourcePolicy" => return RusotoError::Service(
                             CreateQueryLoggingConfigError::InsufficientCloudWatchLogsResourcePolicy(
                                 parsed_error.message,
                             ),
-                        )
+                        ),
+                        "InvalidInput" => {
+                            return RusotoError::Service(
+                                CreateQueryLoggingConfigError::InvalidInput(parsed_error.message),
+                            )
+                        }
+                        "NoSuchCloudWatchLogsLogGroup" => {
+                            return RusotoError::Service(
+                                CreateQueryLoggingConfigError::NoSuchCloudWatchLogsLogGroup(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "NoSuchHostedZone" => {
+                            return RusotoError::Service(
+                                CreateQueryLoggingConfigError::NoSuchHostedZone(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "QueryLoggingConfigAlreadyExists" => {
+                            return RusotoError::Service(
+                                CreateQueryLoggingConfigError::QueryLoggingConfigAlreadyExists(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        _ => {}
                     }
-                    "InvalidInput" => {
-                        return RusotoError::Service(CreateQueryLoggingConfigError::InvalidInput(
-                            parsed_error.message,
-                        ))
-                    }
-                    "NoSuchCloudWatchLogsLogGroup" => {
-                        return RusotoError::Service(
-                            CreateQueryLoggingConfigError::NoSuchCloudWatchLogsLogGroup(
-                                parsed_error.message,
-                            ),
-                        )
-                    }
-                    "NoSuchHostedZone" => {
-                        return RusotoError::Service(
-                            CreateQueryLoggingConfigError::NoSuchHostedZone(parsed_error.message),
-                        )
-                    }
-                    "QueryLoggingConfigAlreadyExists" => {
-                        return RusotoError::Service(
-                            CreateQueryLoggingConfigError::QueryLoggingConfigAlreadyExists(
-                                parsed_error.message,
-                            ),
-                        )
-                    }
-                    _ => {}
                 }
             }
         }
@@ -8796,52 +9086,61 @@ impl CreateReusableDelegationSetError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    "DelegationSetAlreadyCreated" => {
-                        return RusotoError::Service(
-                            CreateReusableDelegationSetError::DelegationSetAlreadyCreated(
-                                parsed_error.message,
-                            ),
-                        )
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {
+                        "DelegationSetAlreadyCreated" => {
+                            return RusotoError::Service(
+                                CreateReusableDelegationSetError::DelegationSetAlreadyCreated(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "DelegationSetAlreadyReusable" => {
+                            return RusotoError::Service(
+                                CreateReusableDelegationSetError::DelegationSetAlreadyReusable(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "DelegationSetNotAvailable" => {
+                            return RusotoError::Service(
+                                CreateReusableDelegationSetError::DelegationSetNotAvailable(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "HostedZoneNotFound" => {
+                            return RusotoError::Service(
+                                CreateReusableDelegationSetError::HostedZoneNotFound(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "InvalidArgument" => {
+                            return RusotoError::Service(
+                                CreateReusableDelegationSetError::InvalidArgument(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "InvalidInput" => {
+                            return RusotoError::Service(
+                                CreateReusableDelegationSetError::InvalidInput(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "LimitsExceeded" => {
+                            return RusotoError::Service(
+                                CreateReusableDelegationSetError::LimitsExceeded(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        _ => {}
                     }
-                    "DelegationSetAlreadyReusable" => {
-                        return RusotoError::Service(
-                            CreateReusableDelegationSetError::DelegationSetAlreadyReusable(
-                                parsed_error.message,
-                            ),
-                        )
-                    }
-                    "DelegationSetNotAvailable" => {
-                        return RusotoError::Service(
-                            CreateReusableDelegationSetError::DelegationSetNotAvailable(
-                                parsed_error.message,
-                            ),
-                        )
-                    }
-                    "HostedZoneNotFound" => {
-                        return RusotoError::Service(
-                            CreateReusableDelegationSetError::HostedZoneNotFound(
-                                parsed_error.message,
-                            ),
-                        )
-                    }
-                    "InvalidArgument" => {
-                        return RusotoError::Service(
-                            CreateReusableDelegationSetError::InvalidArgument(parsed_error.message),
-                        )
-                    }
-                    "InvalidInput" => {
-                        return RusotoError::Service(
-                            CreateReusableDelegationSetError::InvalidInput(parsed_error.message),
-                        )
-                    }
-                    "LimitsExceeded" => {
-                        return RusotoError::Service(
-                            CreateReusableDelegationSetError::LimitsExceeded(parsed_error.message),
-                        )
-                    }
-                    _ => {}
                 }
             }
         }
@@ -8898,33 +9197,38 @@ impl CreateTrafficPolicyError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    "InvalidInput" => {
-                        return RusotoError::Service(CreateTrafficPolicyError::InvalidInput(
-                            parsed_error.message,
-                        ))
-                    }
-                    "InvalidTrafficPolicyDocument" => {
-                        return RusotoError::Service(
-                            CreateTrafficPolicyError::InvalidTrafficPolicyDocument(
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {
+                        "InvalidInput" => {
+                            return RusotoError::Service(CreateTrafficPolicyError::InvalidInput(
                                 parsed_error.message,
-                            ),
-                        )
+                            ))
+                        }
+                        "InvalidTrafficPolicyDocument" => {
+                            return RusotoError::Service(
+                                CreateTrafficPolicyError::InvalidTrafficPolicyDocument(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "TooManyTrafficPolicies" => {
+                            return RusotoError::Service(
+                                CreateTrafficPolicyError::TooManyTrafficPolicies(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "TrafficPolicyAlreadyExists" => {
+                            return RusotoError::Service(
+                                CreateTrafficPolicyError::TrafficPolicyAlreadyExists(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        _ => {}
                     }
-                    "TooManyTrafficPolicies" => {
-                        return RusotoError::Service(
-                            CreateTrafficPolicyError::TooManyTrafficPolicies(parsed_error.message),
-                        )
-                    }
-                    "TrafficPolicyAlreadyExists" => {
-                        return RusotoError::Service(
-                            CreateTrafficPolicyError::TrafficPolicyAlreadyExists(
-                                parsed_error.message,
-                            ),
-                        )
-                    }
-                    _ => {}
                 }
             }
         }
@@ -8978,42 +9282,45 @@ impl CreateTrafficPolicyInstanceError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    "InvalidInput" => {
-                        return RusotoError::Service(
-                            CreateTrafficPolicyInstanceError::InvalidInput(parsed_error.message),
-                        )
-                    }
-                    "NoSuchHostedZone" => {
-                        return RusotoError::Service(
-                            CreateTrafficPolicyInstanceError::NoSuchHostedZone(
-                                parsed_error.message,
-                            ),
-                        )
-                    }
-                    "NoSuchTrafficPolicy" => {
-                        return RusotoError::Service(
-                            CreateTrafficPolicyInstanceError::NoSuchTrafficPolicy(
-                                parsed_error.message,
-                            ),
-                        )
-                    }
-                    "TooManyTrafficPolicyInstances" => {
-                        return RusotoError::Service(
-                            CreateTrafficPolicyInstanceError::TooManyTrafficPolicyInstances(
-                                parsed_error.message,
-                            ),
-                        )
-                    }
-                    "TrafficPolicyInstanceAlreadyExists" => {
-                        return RusotoError::Service(
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {
+                        "InvalidInput" => {
+                            return RusotoError::Service(
+                                CreateTrafficPolicyInstanceError::InvalidInput(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "NoSuchHostedZone" => {
+                            return RusotoError::Service(
+                                CreateTrafficPolicyInstanceError::NoSuchHostedZone(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "NoSuchTrafficPolicy" => {
+                            return RusotoError::Service(
+                                CreateTrafficPolicyInstanceError::NoSuchTrafficPolicy(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "TooManyTrafficPolicyInstances" => {
+                            return RusotoError::Service(
+                                CreateTrafficPolicyInstanceError::TooManyTrafficPolicyInstances(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "TrafficPolicyInstanceAlreadyExists" => return RusotoError::Service(
                             CreateTrafficPolicyInstanceError::TrafficPolicyInstanceAlreadyExists(
                                 parsed_error.message,
                             ),
-                        )
+                        ),
+                        _ => {}
                     }
-                    _ => {}
                 }
             }
         }
@@ -9070,10 +9377,13 @@ impl CreateTrafficPolicyVersionError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                                    "ConcurrentModification" => return RusotoError::Service(CreateTrafficPolicyVersionError::ConcurrentModification(parsed_error.message)),"InvalidInput" => return RusotoError::Service(CreateTrafficPolicyVersionError::InvalidInput(parsed_error.message)),"InvalidTrafficPolicyDocument" => return RusotoError::Service(CreateTrafficPolicyVersionError::InvalidTrafficPolicyDocument(parsed_error.message)),"NoSuchTrafficPolicy" => return RusotoError::Service(CreateTrafficPolicyVersionError::NoSuchTrafficPolicy(parsed_error.message)),"TooManyTrafficPolicyVersionsForCurrentPolicy" => return RusotoError::Service(CreateTrafficPolicyVersionError::TooManyTrafficPolicyVersionsForCurrentPolicy(parsed_error.message)),_ => {}
-                                }
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {
+                        "ConcurrentModification" => return RusotoError::Service(CreateTrafficPolicyVersionError::ConcurrentModification(parsed_error.message)),"InvalidInput" => return RusotoError::Service(CreateTrafficPolicyVersionError::InvalidInput(parsed_error.message)),"InvalidTrafficPolicyDocument" => return RusotoError::Service(CreateTrafficPolicyVersionError::InvalidTrafficPolicyDocument(parsed_error.message)),"NoSuchTrafficPolicy" => return RusotoError::Service(CreateTrafficPolicyVersionError::NoSuchTrafficPolicy(parsed_error.message)),"TooManyTrafficPolicyVersionsForCurrentPolicy" => return RusotoError::Service(CreateTrafficPolicyVersionError::TooManyTrafficPolicyVersionsForCurrentPolicy(parsed_error.message)),_ => {}
+                    }
+                }
             }
         }
         RusotoError::Unknown(res)
@@ -9131,42 +9441,12 @@ impl CreateVPCAssociationAuthorizationError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    "ConcurrentModification" => {
-                        return RusotoError::Service(
-                            CreateVPCAssociationAuthorizationError::ConcurrentModification(
-                                parsed_error.message,
-                            ),
-                        )
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {
+                        "ConcurrentModification" => return RusotoError::Service(CreateVPCAssociationAuthorizationError::ConcurrentModification(parsed_error.message)),"InvalidInput" => return RusotoError::Service(CreateVPCAssociationAuthorizationError::InvalidInput(parsed_error.message)),"InvalidVPCId" => return RusotoError::Service(CreateVPCAssociationAuthorizationError::InvalidVPCId(parsed_error.message)),"NoSuchHostedZone" => return RusotoError::Service(CreateVPCAssociationAuthorizationError::NoSuchHostedZone(parsed_error.message)),"TooManyVPCAssociationAuthorizations" => return RusotoError::Service(CreateVPCAssociationAuthorizationError::TooManyVPCAssociationAuthorizations(parsed_error.message)),_ => {}
                     }
-                    "InvalidInput" => {
-                        return RusotoError::Service(
-                            CreateVPCAssociationAuthorizationError::InvalidInput(
-                                parsed_error.message,
-                            ),
-                        )
-                    }
-                    "InvalidVPCId" => {
-                        return RusotoError::Service(
-                            CreateVPCAssociationAuthorizationError::InvalidVPCId(
-                                parsed_error.message,
-                            ),
-                        )
-                    }
-                    "NoSuchHostedZone" => {
-                        return RusotoError::Service(
-                            CreateVPCAssociationAuthorizationError::NoSuchHostedZone(
-                                parsed_error.message,
-                            ),
-                        )
-                    }
-                    "TooManyVPCAssociationAuthorizations" => return RusotoError::Service(
-                        CreateVPCAssociationAuthorizationError::TooManyVPCAssociationAuthorizations(
-                            parsed_error.message,
-                        ),
-                    ),
-                    _ => {}
                 }
             }
         }
@@ -9227,47 +9507,54 @@ impl DeactivateKeySigningKeyError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    "ConcurrentModification" => {
-                        return RusotoError::Service(
-                            DeactivateKeySigningKeyError::ConcurrentModification(
-                                parsed_error.message,
-                            ),
-                        )
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {
+                        "ConcurrentModification" => {
+                            return RusotoError::Service(
+                                DeactivateKeySigningKeyError::ConcurrentModification(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "InvalidKeySigningKeyStatus" => {
+                            return RusotoError::Service(
+                                DeactivateKeySigningKeyError::InvalidKeySigningKeyStatus(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "InvalidSigningStatus" => {
+                            return RusotoError::Service(
+                                DeactivateKeySigningKeyError::InvalidSigningStatus(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "KeySigningKeyInParentDSRecord" => {
+                            return RusotoError::Service(
+                                DeactivateKeySigningKeyError::KeySigningKeyInParentDSRecord(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "KeySigningKeyInUse" => {
+                            return RusotoError::Service(
+                                DeactivateKeySigningKeyError::KeySigningKeyInUse(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "NoSuchKeySigningKey" => {
+                            return RusotoError::Service(
+                                DeactivateKeySigningKeyError::NoSuchKeySigningKey(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        _ => {}
                     }
-                    "InvalidKeySigningKeyStatus" => {
-                        return RusotoError::Service(
-                            DeactivateKeySigningKeyError::InvalidKeySigningKeyStatus(
-                                parsed_error.message,
-                            ),
-                        )
-                    }
-                    "InvalidSigningStatus" => {
-                        return RusotoError::Service(
-                            DeactivateKeySigningKeyError::InvalidSigningStatus(
-                                parsed_error.message,
-                            ),
-                        )
-                    }
-                    "KeySigningKeyInParentDSRecord" => {
-                        return RusotoError::Service(
-                            DeactivateKeySigningKeyError::KeySigningKeyInParentDSRecord(
-                                parsed_error.message,
-                            ),
-                        )
-                    }
-                    "KeySigningKeyInUse" => {
-                        return RusotoError::Service(
-                            DeactivateKeySigningKeyError::KeySigningKeyInUse(parsed_error.message),
-                        )
-                    }
-                    "NoSuchKeySigningKey" => {
-                        return RusotoError::Service(
-                            DeactivateKeySigningKeyError::NoSuchKeySigningKey(parsed_error.message),
-                        )
-                    }
-                    _ => {}
                 }
             }
         }
@@ -9319,24 +9606,27 @@ impl DeleteHealthCheckError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    "HealthCheckInUse" => {
-                        return RusotoError::Service(DeleteHealthCheckError::HealthCheckInUse(
-                            parsed_error.message,
-                        ))
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {
+                        "HealthCheckInUse" => {
+                            return RusotoError::Service(DeleteHealthCheckError::HealthCheckInUse(
+                                parsed_error.message,
+                            ))
+                        }
+                        "InvalidInput" => {
+                            return RusotoError::Service(DeleteHealthCheckError::InvalidInput(
+                                parsed_error.message,
+                            ))
+                        }
+                        "NoSuchHealthCheck" => {
+                            return RusotoError::Service(DeleteHealthCheckError::NoSuchHealthCheck(
+                                parsed_error.message,
+                            ))
+                        }
+                        _ => {}
                     }
-                    "InvalidInput" => {
-                        return RusotoError::Service(DeleteHealthCheckError::InvalidInput(
-                            parsed_error.message,
-                        ))
-                    }
-                    "NoSuchHealthCheck" => {
-                        return RusotoError::Service(DeleteHealthCheckError::NoSuchHealthCheck(
-                            parsed_error.message,
-                        ))
-                    }
-                    _ => {}
                 }
             }
         }
@@ -9383,34 +9673,39 @@ impl DeleteHostedZoneError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    "HostedZoneNotEmpty" => {
-                        return RusotoError::Service(DeleteHostedZoneError::HostedZoneNotEmpty(
-                            parsed_error.message,
-                        ))
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {
+                        "HostedZoneNotEmpty" => {
+                            return RusotoError::Service(DeleteHostedZoneError::HostedZoneNotEmpty(
+                                parsed_error.message,
+                            ))
+                        }
+                        "InvalidDomainName" => {
+                            return RusotoError::Service(DeleteHostedZoneError::InvalidDomainName(
+                                parsed_error.message,
+                            ))
+                        }
+                        "InvalidInput" => {
+                            return RusotoError::Service(DeleteHostedZoneError::InvalidInput(
+                                parsed_error.message,
+                            ))
+                        }
+                        "NoSuchHostedZone" => {
+                            return RusotoError::Service(DeleteHostedZoneError::NoSuchHostedZone(
+                                parsed_error.message,
+                            ))
+                        }
+                        "PriorRequestNotComplete" => {
+                            return RusotoError::Service(
+                                DeleteHostedZoneError::PriorRequestNotComplete(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        _ => {}
                     }
-                    "InvalidDomainName" => {
-                        return RusotoError::Service(DeleteHostedZoneError::InvalidDomainName(
-                            parsed_error.message,
-                        ))
-                    }
-                    "InvalidInput" => {
-                        return RusotoError::Service(DeleteHostedZoneError::InvalidInput(
-                            parsed_error.message,
-                        ))
-                    }
-                    "NoSuchHostedZone" => {
-                        return RusotoError::Service(DeleteHostedZoneError::NoSuchHostedZone(
-                            parsed_error.message,
-                        ))
-                    }
-                    "PriorRequestNotComplete" => {
-                        return RusotoError::Service(
-                            DeleteHostedZoneError::PriorRequestNotComplete(parsed_error.message),
-                        )
-                    }
-                    _ => {}
                 }
             }
         }
@@ -9459,36 +9754,43 @@ impl DeleteKeySigningKeyError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    "ConcurrentModification" => {
-                        return RusotoError::Service(
-                            DeleteKeySigningKeyError::ConcurrentModification(parsed_error.message),
-                        )
-                    }
-                    "InvalidKMSArn" => {
-                        return RusotoError::Service(DeleteKeySigningKeyError::InvalidKMSArn(
-                            parsed_error.message,
-                        ))
-                    }
-                    "InvalidKeySigningKeyStatus" => {
-                        return RusotoError::Service(
-                            DeleteKeySigningKeyError::InvalidKeySigningKeyStatus(
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {
+                        "ConcurrentModification" => {
+                            return RusotoError::Service(
+                                DeleteKeySigningKeyError::ConcurrentModification(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "InvalidKMSArn" => {
+                            return RusotoError::Service(DeleteKeySigningKeyError::InvalidKMSArn(
                                 parsed_error.message,
-                            ),
-                        )
+                            ))
+                        }
+                        "InvalidKeySigningKeyStatus" => {
+                            return RusotoError::Service(
+                                DeleteKeySigningKeyError::InvalidKeySigningKeyStatus(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "InvalidSigningStatus" => {
+                            return RusotoError::Service(
+                                DeleteKeySigningKeyError::InvalidSigningStatus(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "NoSuchKeySigningKey" => {
+                            return RusotoError::Service(
+                                DeleteKeySigningKeyError::NoSuchKeySigningKey(parsed_error.message),
+                            )
+                        }
+                        _ => {}
                     }
-                    "InvalidSigningStatus" => {
-                        return RusotoError::Service(
-                            DeleteKeySigningKeyError::InvalidSigningStatus(parsed_error.message),
-                        )
-                    }
-                    "NoSuchKeySigningKey" => {
-                        return RusotoError::Service(DeleteKeySigningKeyError::NoSuchKeySigningKey(
-                            parsed_error.message,
-                        ))
-                    }
-                    _ => {}
                 }
             }
         }
@@ -9535,28 +9837,31 @@ impl DeleteQueryLoggingConfigError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    "ConcurrentModification" => {
-                        return RusotoError::Service(
-                            DeleteQueryLoggingConfigError::ConcurrentModification(
-                                parsed_error.message,
-                            ),
-                        )
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {
+                        "ConcurrentModification" => {
+                            return RusotoError::Service(
+                                DeleteQueryLoggingConfigError::ConcurrentModification(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "InvalidInput" => {
+                            return RusotoError::Service(
+                                DeleteQueryLoggingConfigError::InvalidInput(parsed_error.message),
+                            )
+                        }
+                        "NoSuchQueryLoggingConfig" => {
+                            return RusotoError::Service(
+                                DeleteQueryLoggingConfigError::NoSuchQueryLoggingConfig(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        _ => {}
                     }
-                    "InvalidInput" => {
-                        return RusotoError::Service(DeleteQueryLoggingConfigError::InvalidInput(
-                            parsed_error.message,
-                        ))
-                    }
-                    "NoSuchQueryLoggingConfig" => {
-                        return RusotoError::Service(
-                            DeleteQueryLoggingConfigError::NoSuchQueryLoggingConfig(
-                                parsed_error.message,
-                            ),
-                        )
-                    }
-                    _ => {}
                 }
             }
         }
@@ -9607,35 +9912,40 @@ impl DeleteReusableDelegationSetError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    "DelegationSetInUse" => {
-                        return RusotoError::Service(
-                            DeleteReusableDelegationSetError::DelegationSetInUse(
-                                parsed_error.message,
-                            ),
-                        )
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {
+                        "DelegationSetInUse" => {
+                            return RusotoError::Service(
+                                DeleteReusableDelegationSetError::DelegationSetInUse(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "DelegationSetNotReusable" => {
+                            return RusotoError::Service(
+                                DeleteReusableDelegationSetError::DelegationSetNotReusable(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "InvalidInput" => {
+                            return RusotoError::Service(
+                                DeleteReusableDelegationSetError::InvalidInput(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "NoSuchDelegationSet" => {
+                            return RusotoError::Service(
+                                DeleteReusableDelegationSetError::NoSuchDelegationSet(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        _ => {}
                     }
-                    "DelegationSetNotReusable" => {
-                        return RusotoError::Service(
-                            DeleteReusableDelegationSetError::DelegationSetNotReusable(
-                                parsed_error.message,
-                            ),
-                        )
-                    }
-                    "InvalidInput" => {
-                        return RusotoError::Service(
-                            DeleteReusableDelegationSetError::InvalidInput(parsed_error.message),
-                        )
-                    }
-                    "NoSuchDelegationSet" => {
-                        return RusotoError::Service(
-                            DeleteReusableDelegationSetError::NoSuchDelegationSet(
-                                parsed_error.message,
-                            ),
-                        )
-                    }
-                    _ => {}
                 }
             }
         }
@@ -9687,29 +9997,34 @@ impl DeleteTrafficPolicyError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    "ConcurrentModification" => {
-                        return RusotoError::Service(
-                            DeleteTrafficPolicyError::ConcurrentModification(parsed_error.message),
-                        )
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {
+                        "ConcurrentModification" => {
+                            return RusotoError::Service(
+                                DeleteTrafficPolicyError::ConcurrentModification(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "InvalidInput" => {
+                            return RusotoError::Service(DeleteTrafficPolicyError::InvalidInput(
+                                parsed_error.message,
+                            ))
+                        }
+                        "NoSuchTrafficPolicy" => {
+                            return RusotoError::Service(
+                                DeleteTrafficPolicyError::NoSuchTrafficPolicy(parsed_error.message),
+                            )
+                        }
+                        "TrafficPolicyInUse" => {
+                            return RusotoError::Service(
+                                DeleteTrafficPolicyError::TrafficPolicyInUse(parsed_error.message),
+                            )
+                        }
+                        _ => {}
                     }
-                    "InvalidInput" => {
-                        return RusotoError::Service(DeleteTrafficPolicyError::InvalidInput(
-                            parsed_error.message,
-                        ))
-                    }
-                    "NoSuchTrafficPolicy" => {
-                        return RusotoError::Service(DeleteTrafficPolicyError::NoSuchTrafficPolicy(
-                            parsed_error.message,
-                        ))
-                    }
-                    "TrafficPolicyInUse" => {
-                        return RusotoError::Service(DeleteTrafficPolicyError::TrafficPolicyInUse(
-                            parsed_error.message,
-                        ))
-                    }
-                    _ => {}
                 }
             }
         }
@@ -9755,28 +10070,33 @@ impl DeleteTrafficPolicyInstanceError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    "InvalidInput" => {
-                        return RusotoError::Service(
-                            DeleteTrafficPolicyInstanceError::InvalidInput(parsed_error.message),
-                        )
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {
+                        "InvalidInput" => {
+                            return RusotoError::Service(
+                                DeleteTrafficPolicyInstanceError::InvalidInput(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "NoSuchTrafficPolicyInstance" => {
+                            return RusotoError::Service(
+                                DeleteTrafficPolicyInstanceError::NoSuchTrafficPolicyInstance(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "PriorRequestNotComplete" => {
+                            return RusotoError::Service(
+                                DeleteTrafficPolicyInstanceError::PriorRequestNotComplete(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        _ => {}
                     }
-                    "NoSuchTrafficPolicyInstance" => {
-                        return RusotoError::Service(
-                            DeleteTrafficPolicyInstanceError::NoSuchTrafficPolicyInstance(
-                                parsed_error.message,
-                            ),
-                        )
-                    }
-                    "PriorRequestNotComplete" => {
-                        return RusotoError::Service(
-                            DeleteTrafficPolicyInstanceError::PriorRequestNotComplete(
-                                parsed_error.message,
-                            ),
-                        )
-                    }
-                    _ => {}
                 }
             }
         }
@@ -9829,42 +10149,12 @@ impl DeleteVPCAssociationAuthorizationError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    "ConcurrentModification" => {
-                        return RusotoError::Service(
-                            DeleteVPCAssociationAuthorizationError::ConcurrentModification(
-                                parsed_error.message,
-                            ),
-                        )
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {
+                        "ConcurrentModification" => return RusotoError::Service(DeleteVPCAssociationAuthorizationError::ConcurrentModification(parsed_error.message)),"InvalidInput" => return RusotoError::Service(DeleteVPCAssociationAuthorizationError::InvalidInput(parsed_error.message)),"InvalidVPCId" => return RusotoError::Service(DeleteVPCAssociationAuthorizationError::InvalidVPCId(parsed_error.message)),"NoSuchHostedZone" => return RusotoError::Service(DeleteVPCAssociationAuthorizationError::NoSuchHostedZone(parsed_error.message)),"VPCAssociationAuthorizationNotFound" => return RusotoError::Service(DeleteVPCAssociationAuthorizationError::VPCAssociationAuthorizationNotFound(parsed_error.message)),_ => {}
                     }
-                    "InvalidInput" => {
-                        return RusotoError::Service(
-                            DeleteVPCAssociationAuthorizationError::InvalidInput(
-                                parsed_error.message,
-                            ),
-                        )
-                    }
-                    "InvalidVPCId" => {
-                        return RusotoError::Service(
-                            DeleteVPCAssociationAuthorizationError::InvalidVPCId(
-                                parsed_error.message,
-                            ),
-                        )
-                    }
-                    "NoSuchHostedZone" => {
-                        return RusotoError::Service(
-                            DeleteVPCAssociationAuthorizationError::NoSuchHostedZone(
-                                parsed_error.message,
-                            ),
-                        )
-                    }
-                    "VPCAssociationAuthorizationNotFound" => return RusotoError::Service(
-                        DeleteVPCAssociationAuthorizationError::VPCAssociationAuthorizationNotFound(
-                            parsed_error.message,
-                        ),
-                    ),
-                    _ => {}
                 }
             }
         }
@@ -9927,50 +10217,55 @@ impl DisableHostedZoneDNSSECError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    "ConcurrentModification" => {
-                        return RusotoError::Service(
-                            DisableHostedZoneDNSSECError::ConcurrentModification(
-                                parsed_error.message,
-                            ),
-                        )
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {
+                        "ConcurrentModification" => {
+                            return RusotoError::Service(
+                                DisableHostedZoneDNSSECError::ConcurrentModification(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "DNSSECNotFound" => {
+                            return RusotoError::Service(
+                                DisableHostedZoneDNSSECError::DNSSECNotFound(parsed_error.message),
+                            )
+                        }
+                        "InvalidArgument" => {
+                            return RusotoError::Service(
+                                DisableHostedZoneDNSSECError::InvalidArgument(parsed_error.message),
+                            )
+                        }
+                        "InvalidKMSArn" => {
+                            return RusotoError::Service(
+                                DisableHostedZoneDNSSECError::InvalidKMSArn(parsed_error.message),
+                            )
+                        }
+                        "InvalidKeySigningKeyStatus" => {
+                            return RusotoError::Service(
+                                DisableHostedZoneDNSSECError::InvalidKeySigningKeyStatus(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "KeySigningKeyInParentDSRecord" => {
+                            return RusotoError::Service(
+                                DisableHostedZoneDNSSECError::KeySigningKeyInParentDSRecord(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "NoSuchHostedZone" => {
+                            return RusotoError::Service(
+                                DisableHostedZoneDNSSECError::NoSuchHostedZone(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        _ => {}
                     }
-                    "DNSSECNotFound" => {
-                        return RusotoError::Service(DisableHostedZoneDNSSECError::DNSSECNotFound(
-                            parsed_error.message,
-                        ))
-                    }
-                    "InvalidArgument" => {
-                        return RusotoError::Service(DisableHostedZoneDNSSECError::InvalidArgument(
-                            parsed_error.message,
-                        ))
-                    }
-                    "InvalidKMSArn" => {
-                        return RusotoError::Service(DisableHostedZoneDNSSECError::InvalidKMSArn(
-                            parsed_error.message,
-                        ))
-                    }
-                    "InvalidKeySigningKeyStatus" => {
-                        return RusotoError::Service(
-                            DisableHostedZoneDNSSECError::InvalidKeySigningKeyStatus(
-                                parsed_error.message,
-                            ),
-                        )
-                    }
-                    "KeySigningKeyInParentDSRecord" => {
-                        return RusotoError::Service(
-                            DisableHostedZoneDNSSECError::KeySigningKeyInParentDSRecord(
-                                parsed_error.message,
-                            ),
-                        )
-                    }
-                    "NoSuchHostedZone" => {
-                        return RusotoError::Service(
-                            DisableHostedZoneDNSSECError::NoSuchHostedZone(parsed_error.message),
-                        )
-                    }
-                    _ => {}
                 }
             }
         }
@@ -10029,40 +10324,47 @@ impl DisassociateVPCFromHostedZoneError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    "InvalidInput" => {
-                        return RusotoError::Service(
-                            DisassociateVPCFromHostedZoneError::InvalidInput(parsed_error.message),
-                        )
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {
+                        "InvalidInput" => {
+                            return RusotoError::Service(
+                                DisassociateVPCFromHostedZoneError::InvalidInput(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "InvalidVPCId" => {
+                            return RusotoError::Service(
+                                DisassociateVPCFromHostedZoneError::InvalidVPCId(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "LastVPCAssociation" => {
+                            return RusotoError::Service(
+                                DisassociateVPCFromHostedZoneError::LastVPCAssociation(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "NoSuchHostedZone" => {
+                            return RusotoError::Service(
+                                DisassociateVPCFromHostedZoneError::NoSuchHostedZone(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "VPCAssociationNotFound" => {
+                            return RusotoError::Service(
+                                DisassociateVPCFromHostedZoneError::VPCAssociationNotFound(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        _ => {}
                     }
-                    "InvalidVPCId" => {
-                        return RusotoError::Service(
-                            DisassociateVPCFromHostedZoneError::InvalidVPCId(parsed_error.message),
-                        )
-                    }
-                    "LastVPCAssociation" => {
-                        return RusotoError::Service(
-                            DisassociateVPCFromHostedZoneError::LastVPCAssociation(
-                                parsed_error.message,
-                            ),
-                        )
-                    }
-                    "NoSuchHostedZone" => {
-                        return RusotoError::Service(
-                            DisassociateVPCFromHostedZoneError::NoSuchHostedZone(
-                                parsed_error.message,
-                            ),
-                        )
-                    }
-                    "VPCAssociationNotFound" => {
-                        return RusotoError::Service(
-                            DisassociateVPCFromHostedZoneError::VPCAssociationNotFound(
-                                parsed_error.message,
-                            ),
-                        )
-                    }
-                    _ => {}
                 }
             }
         }
@@ -10123,57 +10425,60 @@ impl EnableHostedZoneDNSSECError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    "ConcurrentModification" => {
-                        return RusotoError::Service(
-                            EnableHostedZoneDNSSECError::ConcurrentModification(
-                                parsed_error.message,
-                            ),
-                        )
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {
+                        "ConcurrentModification" => {
+                            return RusotoError::Service(
+                                EnableHostedZoneDNSSECError::ConcurrentModification(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "DNSSECNotFound" => {
+                            return RusotoError::Service(
+                                EnableHostedZoneDNSSECError::DNSSECNotFound(parsed_error.message),
+                            )
+                        }
+                        "HostedZonePartiallyDelegated" => {
+                            return RusotoError::Service(
+                                EnableHostedZoneDNSSECError::HostedZonePartiallyDelegated(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "InvalidArgument" => {
+                            return RusotoError::Service(
+                                EnableHostedZoneDNSSECError::InvalidArgument(parsed_error.message),
+                            )
+                        }
+                        "InvalidKMSArn" => {
+                            return RusotoError::Service(
+                                EnableHostedZoneDNSSECError::InvalidKMSArn(parsed_error.message),
+                            )
+                        }
+                        "InvalidKeySigningKeyStatus" => {
+                            return RusotoError::Service(
+                                EnableHostedZoneDNSSECError::InvalidKeySigningKeyStatus(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "KeySigningKeyWithActiveStatusNotFound" => {
+                            return RusotoError::Service(
+                                EnableHostedZoneDNSSECError::KeySigningKeyWithActiveStatusNotFound(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "NoSuchHostedZone" => {
+                            return RusotoError::Service(
+                                EnableHostedZoneDNSSECError::NoSuchHostedZone(parsed_error.message),
+                            )
+                        }
+                        _ => {}
                     }
-                    "DNSSECNotFound" => {
-                        return RusotoError::Service(EnableHostedZoneDNSSECError::DNSSECNotFound(
-                            parsed_error.message,
-                        ))
-                    }
-                    "HostedZonePartiallyDelegated" => {
-                        return RusotoError::Service(
-                            EnableHostedZoneDNSSECError::HostedZonePartiallyDelegated(
-                                parsed_error.message,
-                            ),
-                        )
-                    }
-                    "InvalidArgument" => {
-                        return RusotoError::Service(EnableHostedZoneDNSSECError::InvalidArgument(
-                            parsed_error.message,
-                        ))
-                    }
-                    "InvalidKMSArn" => {
-                        return RusotoError::Service(EnableHostedZoneDNSSECError::InvalidKMSArn(
-                            parsed_error.message,
-                        ))
-                    }
-                    "InvalidKeySigningKeyStatus" => {
-                        return RusotoError::Service(
-                            EnableHostedZoneDNSSECError::InvalidKeySigningKeyStatus(
-                                parsed_error.message,
-                            ),
-                        )
-                    }
-                    "KeySigningKeyWithActiveStatusNotFound" => {
-                        return RusotoError::Service(
-                            EnableHostedZoneDNSSECError::KeySigningKeyWithActiveStatusNotFound(
-                                parsed_error.message,
-                            ),
-                        )
-                    }
-                    "NoSuchHostedZone" => {
-                        return RusotoError::Service(EnableHostedZoneDNSSECError::NoSuchHostedZone(
-                            parsed_error.message,
-                        ))
-                    }
-                    _ => {}
                 }
             }
         }
@@ -10225,14 +10530,17 @@ impl GetAccountLimitError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    "InvalidInput" => {
-                        return RusotoError::Service(GetAccountLimitError::InvalidInput(
-                            parsed_error.message,
-                        ))
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {
+                        "InvalidInput" => {
+                            return RusotoError::Service(GetAccountLimitError::InvalidInput(
+                                parsed_error.message,
+                            ))
+                        }
+                        _ => {}
                     }
-                    _ => {}
                 }
             }
         }
@@ -10271,19 +10579,22 @@ impl GetChangeError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    "InvalidInput" => {
-                        return RusotoError::Service(GetChangeError::InvalidInput(
-                            parsed_error.message,
-                        ))
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {
+                        "InvalidInput" => {
+                            return RusotoError::Service(GetChangeError::InvalidInput(
+                                parsed_error.message,
+                            ))
+                        }
+                        "NoSuchChange" => {
+                            return RusotoError::Service(GetChangeError::NoSuchChange(
+                                parsed_error.message,
+                            ))
+                        }
+                        _ => {}
                     }
-                    "NoSuchChange" => {
-                        return RusotoError::Service(GetChangeError::NoSuchChange(
-                            parsed_error.message,
-                        ))
-                    }
-                    _ => {}
                 }
             }
         }
@@ -10318,11 +10629,7 @@ impl GetCheckerIpRangesError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    _ => {}
-                }
-            }
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {}
         }
         RusotoError::Unknown(res)
     }
@@ -10357,19 +10664,22 @@ impl GetDNSSECError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    "InvalidArgument" => {
-                        return RusotoError::Service(GetDNSSECError::InvalidArgument(
-                            parsed_error.message,
-                        ))
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {
+                        "InvalidArgument" => {
+                            return RusotoError::Service(GetDNSSECError::InvalidArgument(
+                                parsed_error.message,
+                            ))
+                        }
+                        "NoSuchHostedZone" => {
+                            return RusotoError::Service(GetDNSSECError::NoSuchHostedZone(
+                                parsed_error.message,
+                            ))
+                        }
+                        _ => {}
                     }
-                    "NoSuchHostedZone" => {
-                        return RusotoError::Service(GetDNSSECError::NoSuchHostedZone(
-                            parsed_error.message,
-                        ))
-                    }
-                    _ => {}
                 }
             }
         }
@@ -10409,19 +10719,22 @@ impl GetGeoLocationError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    "InvalidInput" => {
-                        return RusotoError::Service(GetGeoLocationError::InvalidInput(
-                            parsed_error.message,
-                        ))
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {
+                        "InvalidInput" => {
+                            return RusotoError::Service(GetGeoLocationError::InvalidInput(
+                                parsed_error.message,
+                            ))
+                        }
+                        "NoSuchGeoLocation" => {
+                            return RusotoError::Service(GetGeoLocationError::NoSuchGeoLocation(
+                                parsed_error.message,
+                            ))
+                        }
+                        _ => {}
                     }
-                    "NoSuchGeoLocation" => {
-                        return RusotoError::Service(GetGeoLocationError::NoSuchGeoLocation(
-                            parsed_error.message,
-                        ))
-                    }
-                    _ => {}
                 }
             }
         }
@@ -10463,24 +10776,27 @@ impl GetHealthCheckError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    "IncompatibleVersion" => {
-                        return RusotoError::Service(GetHealthCheckError::IncompatibleVersion(
-                            parsed_error.message,
-                        ))
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {
+                        "IncompatibleVersion" => {
+                            return RusotoError::Service(GetHealthCheckError::IncompatibleVersion(
+                                parsed_error.message,
+                            ))
+                        }
+                        "InvalidInput" => {
+                            return RusotoError::Service(GetHealthCheckError::InvalidInput(
+                                parsed_error.message,
+                            ))
+                        }
+                        "NoSuchHealthCheck" => {
+                            return RusotoError::Service(GetHealthCheckError::NoSuchHealthCheck(
+                                parsed_error.message,
+                            ))
+                        }
+                        _ => {}
                     }
-                    "InvalidInput" => {
-                        return RusotoError::Service(GetHealthCheckError::InvalidInput(
-                            parsed_error.message,
-                        ))
-                    }
-                    "NoSuchHealthCheck" => {
-                        return RusotoError::Service(GetHealthCheckError::NoSuchHealthCheck(
-                            parsed_error.message,
-                        ))
-                    }
-                    _ => {}
                 }
             }
         }
@@ -10516,11 +10832,7 @@ impl GetHealthCheckCountError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    _ => {}
-                }
-            }
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {}
         }
         RusotoError::Unknown(res)
     }
@@ -10557,23 +10869,26 @@ impl GetHealthCheckLastFailureReasonError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    "InvalidInput" => {
-                        return RusotoError::Service(
-                            GetHealthCheckLastFailureReasonError::InvalidInput(
-                                parsed_error.message,
-                            ),
-                        )
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {
+                        "InvalidInput" => {
+                            return RusotoError::Service(
+                                GetHealthCheckLastFailureReasonError::InvalidInput(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "NoSuchHealthCheck" => {
+                            return RusotoError::Service(
+                                GetHealthCheckLastFailureReasonError::NoSuchHealthCheck(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        _ => {}
                     }
-                    "NoSuchHealthCheck" => {
-                        return RusotoError::Service(
-                            GetHealthCheckLastFailureReasonError::NoSuchHealthCheck(
-                                parsed_error.message,
-                            ),
-                        )
-                    }
-                    _ => {}
                 }
             }
         }
@@ -10615,19 +10930,22 @@ impl GetHealthCheckStatusError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    "InvalidInput" => {
-                        return RusotoError::Service(GetHealthCheckStatusError::InvalidInput(
-                            parsed_error.message,
-                        ))
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {
+                        "InvalidInput" => {
+                            return RusotoError::Service(GetHealthCheckStatusError::InvalidInput(
+                                parsed_error.message,
+                            ))
+                        }
+                        "NoSuchHealthCheck" => {
+                            return RusotoError::Service(
+                                GetHealthCheckStatusError::NoSuchHealthCheck(parsed_error.message),
+                            )
+                        }
+                        _ => {}
                     }
-                    "NoSuchHealthCheck" => {
-                        return RusotoError::Service(GetHealthCheckStatusError::NoSuchHealthCheck(
-                            parsed_error.message,
-                        ))
-                    }
-                    _ => {}
                 }
             }
         }
@@ -10667,19 +10985,22 @@ impl GetHostedZoneError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    "InvalidInput" => {
-                        return RusotoError::Service(GetHostedZoneError::InvalidInput(
-                            parsed_error.message,
-                        ))
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {
+                        "InvalidInput" => {
+                            return RusotoError::Service(GetHostedZoneError::InvalidInput(
+                                parsed_error.message,
+                            ))
+                        }
+                        "NoSuchHostedZone" => {
+                            return RusotoError::Service(GetHostedZoneError::NoSuchHostedZone(
+                                parsed_error.message,
+                            ))
+                        }
+                        _ => {}
                     }
-                    "NoSuchHostedZone" => {
-                        return RusotoError::Service(GetHostedZoneError::NoSuchHostedZone(
-                            parsed_error.message,
-                        ))
-                    }
-                    _ => {}
                 }
             }
         }
@@ -10717,14 +11038,17 @@ impl GetHostedZoneCountError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    "InvalidInput" => {
-                        return RusotoError::Service(GetHostedZoneCountError::InvalidInput(
-                            parsed_error.message,
-                        ))
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {
+                        "InvalidInput" => {
+                            return RusotoError::Service(GetHostedZoneCountError::InvalidInput(
+                                parsed_error.message,
+                            ))
+                        }
+                        _ => {}
                     }
-                    _ => {}
                 }
             }
         }
@@ -10765,24 +11089,27 @@ impl GetHostedZoneLimitError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    "HostedZoneNotPrivate" => {
-                        return RusotoError::Service(GetHostedZoneLimitError::HostedZoneNotPrivate(
-                            parsed_error.message,
-                        ))
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {
+                        "HostedZoneNotPrivate" => {
+                            return RusotoError::Service(
+                                GetHostedZoneLimitError::HostedZoneNotPrivate(parsed_error.message),
+                            )
+                        }
+                        "InvalidInput" => {
+                            return RusotoError::Service(GetHostedZoneLimitError::InvalidInput(
+                                parsed_error.message,
+                            ))
+                        }
+                        "NoSuchHostedZone" => {
+                            return RusotoError::Service(GetHostedZoneLimitError::NoSuchHostedZone(
+                                parsed_error.message,
+                            ))
+                        }
+                        _ => {}
                     }
-                    "InvalidInput" => {
-                        return RusotoError::Service(GetHostedZoneLimitError::InvalidInput(
-                            parsed_error.message,
-                        ))
-                    }
-                    "NoSuchHostedZone" => {
-                        return RusotoError::Service(GetHostedZoneLimitError::NoSuchHostedZone(
-                            parsed_error.message,
-                        ))
-                    }
-                    _ => {}
                 }
             }
         }
@@ -10823,21 +11150,24 @@ impl GetQueryLoggingConfigError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    "InvalidInput" => {
-                        return RusotoError::Service(GetQueryLoggingConfigError::InvalidInput(
-                            parsed_error.message,
-                        ))
-                    }
-                    "NoSuchQueryLoggingConfig" => {
-                        return RusotoError::Service(
-                            GetQueryLoggingConfigError::NoSuchQueryLoggingConfig(
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {
+                        "InvalidInput" => {
+                            return RusotoError::Service(GetQueryLoggingConfigError::InvalidInput(
                                 parsed_error.message,
-                            ),
-                        )
+                            ))
+                        }
+                        "NoSuchQueryLoggingConfig" => {
+                            return RusotoError::Service(
+                                GetQueryLoggingConfigError::NoSuchQueryLoggingConfig(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        _ => {}
                     }
-                    _ => {}
                 }
             }
         }
@@ -10881,28 +11211,31 @@ impl GetReusableDelegationSetError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    "DelegationSetNotReusable" => {
-                        return RusotoError::Service(
-                            GetReusableDelegationSetError::DelegationSetNotReusable(
-                                parsed_error.message,
-                            ),
-                        )
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {
+                        "DelegationSetNotReusable" => {
+                            return RusotoError::Service(
+                                GetReusableDelegationSetError::DelegationSetNotReusable(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "InvalidInput" => {
+                            return RusotoError::Service(
+                                GetReusableDelegationSetError::InvalidInput(parsed_error.message),
+                            )
+                        }
+                        "NoSuchDelegationSet" => {
+                            return RusotoError::Service(
+                                GetReusableDelegationSetError::NoSuchDelegationSet(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        _ => {}
                     }
-                    "InvalidInput" => {
-                        return RusotoError::Service(GetReusableDelegationSetError::InvalidInput(
-                            parsed_error.message,
-                        ))
-                    }
-                    "NoSuchDelegationSet" => {
-                        return RusotoError::Service(
-                            GetReusableDelegationSetError::NoSuchDelegationSet(
-                                parsed_error.message,
-                            ),
-                        )
-                    }
-                    _ => {}
                 }
             }
         }
@@ -10947,21 +11280,26 @@ impl GetReusableDelegationSetLimitError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    "InvalidInput" => {
-                        return RusotoError::Service(
-                            GetReusableDelegationSetLimitError::InvalidInput(parsed_error.message),
-                        )
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {
+                        "InvalidInput" => {
+                            return RusotoError::Service(
+                                GetReusableDelegationSetLimitError::InvalidInput(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "NoSuchDelegationSet" => {
+                            return RusotoError::Service(
+                                GetReusableDelegationSetLimitError::NoSuchDelegationSet(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        _ => {}
                     }
-                    "NoSuchDelegationSet" => {
-                        return RusotoError::Service(
-                            GetReusableDelegationSetLimitError::NoSuchDelegationSet(
-                                parsed_error.message,
-                            ),
-                        )
-                    }
-                    _ => {}
                 }
             }
         }
@@ -11003,19 +11341,22 @@ impl GetTrafficPolicyError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    "InvalidInput" => {
-                        return RusotoError::Service(GetTrafficPolicyError::InvalidInput(
-                            parsed_error.message,
-                        ))
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {
+                        "InvalidInput" => {
+                            return RusotoError::Service(GetTrafficPolicyError::InvalidInput(
+                                parsed_error.message,
+                            ))
+                        }
+                        "NoSuchTrafficPolicy" => {
+                            return RusotoError::Service(
+                                GetTrafficPolicyError::NoSuchTrafficPolicy(parsed_error.message),
+                            )
+                        }
+                        _ => {}
                     }
-                    "NoSuchTrafficPolicy" => {
-                        return RusotoError::Service(GetTrafficPolicyError::NoSuchTrafficPolicy(
-                            parsed_error.message,
-                        ))
-                    }
-                    _ => {}
                 }
             }
         }
@@ -11055,21 +11396,24 @@ impl GetTrafficPolicyInstanceError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    "InvalidInput" => {
-                        return RusotoError::Service(GetTrafficPolicyInstanceError::InvalidInput(
-                            parsed_error.message,
-                        ))
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {
+                        "InvalidInput" => {
+                            return RusotoError::Service(
+                                GetTrafficPolicyInstanceError::InvalidInput(parsed_error.message),
+                            )
+                        }
+                        "NoSuchTrafficPolicyInstance" => {
+                            return RusotoError::Service(
+                                GetTrafficPolicyInstanceError::NoSuchTrafficPolicyInstance(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        _ => {}
                     }
-                    "NoSuchTrafficPolicyInstance" => {
-                        return RusotoError::Service(
-                            GetTrafficPolicyInstanceError::NoSuchTrafficPolicyInstance(
-                                parsed_error.message,
-                            ),
-                        )
-                    }
-                    _ => {}
                 }
             }
         }
@@ -11108,11 +11452,7 @@ impl GetTrafficPolicyInstanceCountError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    _ => {}
-                }
-            }
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {}
         }
         RusotoError::Unknown(res)
     }
@@ -11145,14 +11485,17 @@ impl ListGeoLocationsError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    "InvalidInput" => {
-                        return RusotoError::Service(ListGeoLocationsError::InvalidInput(
-                            parsed_error.message,
-                        ))
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {
+                        "InvalidInput" => {
+                            return RusotoError::Service(ListGeoLocationsError::InvalidInput(
+                                parsed_error.message,
+                            ))
+                        }
+                        _ => {}
                     }
-                    _ => {}
                 }
             }
         }
@@ -11191,19 +11534,22 @@ impl ListHealthChecksError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    "IncompatibleVersion" => {
-                        return RusotoError::Service(ListHealthChecksError::IncompatibleVersion(
-                            parsed_error.message,
-                        ))
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {
+                        "IncompatibleVersion" => {
+                            return RusotoError::Service(
+                                ListHealthChecksError::IncompatibleVersion(parsed_error.message),
+                            )
+                        }
+                        "InvalidInput" => {
+                            return RusotoError::Service(ListHealthChecksError::InvalidInput(
+                                parsed_error.message,
+                            ))
+                        }
+                        _ => {}
                     }
-                    "InvalidInput" => {
-                        return RusotoError::Service(ListHealthChecksError::InvalidInput(
-                            parsed_error.message,
-                        ))
-                    }
-                    _ => {}
                 }
             }
         }
@@ -11245,24 +11591,29 @@ impl ListHostedZonesError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    "DelegationSetNotReusable" => {
-                        return RusotoError::Service(
-                            ListHostedZonesError::DelegationSetNotReusable(parsed_error.message),
-                        )
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {
+                        "DelegationSetNotReusable" => {
+                            return RusotoError::Service(
+                                ListHostedZonesError::DelegationSetNotReusable(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "InvalidInput" => {
+                            return RusotoError::Service(ListHostedZonesError::InvalidInput(
+                                parsed_error.message,
+                            ))
+                        }
+                        "NoSuchDelegationSet" => {
+                            return RusotoError::Service(ListHostedZonesError::NoSuchDelegationSet(
+                                parsed_error.message,
+                            ))
+                        }
+                        _ => {}
                     }
-                    "InvalidInput" => {
-                        return RusotoError::Service(ListHostedZonesError::InvalidInput(
-                            parsed_error.message,
-                        ))
-                    }
-                    "NoSuchDelegationSet" => {
-                        return RusotoError::Service(ListHostedZonesError::NoSuchDelegationSet(
-                            parsed_error.message,
-                        ))
-                    }
-                    _ => {}
                 }
             }
         }
@@ -11303,19 +11654,22 @@ impl ListHostedZonesByNameError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    "InvalidDomainName" => {
-                        return RusotoError::Service(ListHostedZonesByNameError::InvalidDomainName(
-                            parsed_error.message,
-                        ))
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {
+                        "InvalidDomainName" => {
+                            return RusotoError::Service(
+                                ListHostedZonesByNameError::InvalidDomainName(parsed_error.message),
+                            )
+                        }
+                        "InvalidInput" => {
+                            return RusotoError::Service(ListHostedZonesByNameError::InvalidInput(
+                                parsed_error.message,
+                            ))
+                        }
+                        _ => {}
                     }
-                    "InvalidInput" => {
-                        return RusotoError::Service(ListHostedZonesByNameError::InvalidInput(
-                            parsed_error.message,
-                        ))
-                    }
-                    _ => {}
                 }
             }
         }
@@ -11355,19 +11709,24 @@ impl ListHostedZonesByVPCError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    "InvalidInput" => {
-                        return RusotoError::Service(ListHostedZonesByVPCError::InvalidInput(
-                            parsed_error.message,
-                        ))
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {
+                        "InvalidInput" => {
+                            return RusotoError::Service(ListHostedZonesByVPCError::InvalidInput(
+                                parsed_error.message,
+                            ))
+                        }
+                        "InvalidPaginationToken" => {
+                            return RusotoError::Service(
+                                ListHostedZonesByVPCError::InvalidPaginationToken(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        _ => {}
                     }
-                    "InvalidPaginationToken" => {
-                        return RusotoError::Service(
-                            ListHostedZonesByVPCError::InvalidPaginationToken(parsed_error.message),
-                        )
-                    }
-                    _ => {}
                 }
             }
         }
@@ -11409,26 +11768,31 @@ impl ListQueryLoggingConfigsError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    "InvalidInput" => {
-                        return RusotoError::Service(ListQueryLoggingConfigsError::InvalidInput(
-                            parsed_error.message,
-                        ))
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {
+                        "InvalidInput" => {
+                            return RusotoError::Service(
+                                ListQueryLoggingConfigsError::InvalidInput(parsed_error.message),
+                            )
+                        }
+                        "InvalidPaginationToken" => {
+                            return RusotoError::Service(
+                                ListQueryLoggingConfigsError::InvalidPaginationToken(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "NoSuchHostedZone" => {
+                            return RusotoError::Service(
+                                ListQueryLoggingConfigsError::NoSuchHostedZone(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        _ => {}
                     }
-                    "InvalidPaginationToken" => {
-                        return RusotoError::Service(
-                            ListQueryLoggingConfigsError::InvalidPaginationToken(
-                                parsed_error.message,
-                            ),
-                        )
-                    }
-                    "NoSuchHostedZone" => {
-                        return RusotoError::Service(
-                            ListQueryLoggingConfigsError::NoSuchHostedZone(parsed_error.message),
-                        )
-                    }
-                    _ => {}
                 }
             }
         }
@@ -11471,19 +11835,22 @@ impl ListResourceRecordSetsError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    "InvalidInput" => {
-                        return RusotoError::Service(ListResourceRecordSetsError::InvalidInput(
-                            parsed_error.message,
-                        ))
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {
+                        "InvalidInput" => {
+                            return RusotoError::Service(ListResourceRecordSetsError::InvalidInput(
+                                parsed_error.message,
+                            ))
+                        }
+                        "NoSuchHostedZone" => {
+                            return RusotoError::Service(
+                                ListResourceRecordSetsError::NoSuchHostedZone(parsed_error.message),
+                            )
+                        }
+                        _ => {}
                     }
-                    "NoSuchHostedZone" => {
-                        return RusotoError::Service(ListResourceRecordSetsError::NoSuchHostedZone(
-                            parsed_error.message,
-                        ))
-                    }
-                    _ => {}
                 }
             }
         }
@@ -11523,14 +11890,17 @@ impl ListReusableDelegationSetsError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    "InvalidInput" => {
-                        return RusotoError::Service(ListReusableDelegationSetsError::InvalidInput(
-                            parsed_error.message,
-                        ))
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {
+                        "InvalidInput" => {
+                            return RusotoError::Service(
+                                ListReusableDelegationSetsError::InvalidInput(parsed_error.message),
+                            )
+                        }
+                        _ => {}
                     }
-                    _ => {}
                 }
             }
         }
@@ -11575,34 +11945,39 @@ impl ListTagsForResourceError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    "InvalidInput" => {
-                        return RusotoError::Service(ListTagsForResourceError::InvalidInput(
-                            parsed_error.message,
-                        ))
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {
+                        "InvalidInput" => {
+                            return RusotoError::Service(ListTagsForResourceError::InvalidInput(
+                                parsed_error.message,
+                            ))
+                        }
+                        "NoSuchHealthCheck" => {
+                            return RusotoError::Service(
+                                ListTagsForResourceError::NoSuchHealthCheck(parsed_error.message),
+                            )
+                        }
+                        "NoSuchHostedZone" => {
+                            return RusotoError::Service(
+                                ListTagsForResourceError::NoSuchHostedZone(parsed_error.message),
+                            )
+                        }
+                        "PriorRequestNotComplete" => {
+                            return RusotoError::Service(
+                                ListTagsForResourceError::PriorRequestNotComplete(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "ThrottlingException" => {
+                            return RusotoError::Service(ListTagsForResourceError::Throttling(
+                                parsed_error.message,
+                            ))
+                        }
+                        _ => {}
                     }
-                    "NoSuchHealthCheck" => {
-                        return RusotoError::Service(ListTagsForResourceError::NoSuchHealthCheck(
-                            parsed_error.message,
-                        ))
-                    }
-                    "NoSuchHostedZone" => {
-                        return RusotoError::Service(ListTagsForResourceError::NoSuchHostedZone(
-                            parsed_error.message,
-                        ))
-                    }
-                    "PriorRequestNotComplete" => {
-                        return RusotoError::Service(
-                            ListTagsForResourceError::PriorRequestNotComplete(parsed_error.message),
-                        )
-                    }
-                    "ThrottlingException" => {
-                        return RusotoError::Service(ListTagsForResourceError::Throttling(
-                            parsed_error.message,
-                        ))
-                    }
-                    _ => {}
                 }
             }
         }
@@ -11651,36 +12026,39 @@ impl ListTagsForResourcesError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    "InvalidInput" => {
-                        return RusotoError::Service(ListTagsForResourcesError::InvalidInput(
-                            parsed_error.message,
-                        ))
-                    }
-                    "NoSuchHealthCheck" => {
-                        return RusotoError::Service(ListTagsForResourcesError::NoSuchHealthCheck(
-                            parsed_error.message,
-                        ))
-                    }
-                    "NoSuchHostedZone" => {
-                        return RusotoError::Service(ListTagsForResourcesError::NoSuchHostedZone(
-                            parsed_error.message,
-                        ))
-                    }
-                    "PriorRequestNotComplete" => {
-                        return RusotoError::Service(
-                            ListTagsForResourcesError::PriorRequestNotComplete(
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {
+                        "InvalidInput" => {
+                            return RusotoError::Service(ListTagsForResourcesError::InvalidInput(
                                 parsed_error.message,
-                            ),
-                        )
+                            ))
+                        }
+                        "NoSuchHealthCheck" => {
+                            return RusotoError::Service(
+                                ListTagsForResourcesError::NoSuchHealthCheck(parsed_error.message),
+                            )
+                        }
+                        "NoSuchHostedZone" => {
+                            return RusotoError::Service(
+                                ListTagsForResourcesError::NoSuchHostedZone(parsed_error.message),
+                            )
+                        }
+                        "PriorRequestNotComplete" => {
+                            return RusotoError::Service(
+                                ListTagsForResourcesError::PriorRequestNotComplete(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "ThrottlingException" => {
+                            return RusotoError::Service(ListTagsForResourcesError::Throttling(
+                                parsed_error.message,
+                            ))
+                        }
+                        _ => {}
                     }
-                    "ThrottlingException" => {
-                        return RusotoError::Service(ListTagsForResourcesError::Throttling(
-                            parsed_error.message,
-                        ))
-                    }
-                    _ => {}
                 }
             }
         }
@@ -11721,14 +12099,17 @@ impl ListTrafficPoliciesError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    "InvalidInput" => {
-                        return RusotoError::Service(ListTrafficPoliciesError::InvalidInput(
-                            parsed_error.message,
-                        ))
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {
+                        "InvalidInput" => {
+                            return RusotoError::Service(ListTrafficPoliciesError::InvalidInput(
+                                parsed_error.message,
+                            ))
+                        }
+                        _ => {}
                     }
-                    _ => {}
                 }
             }
         }
@@ -11769,21 +12150,24 @@ impl ListTrafficPolicyInstancesError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    "InvalidInput" => {
-                        return RusotoError::Service(ListTrafficPolicyInstancesError::InvalidInput(
-                            parsed_error.message,
-                        ))
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {
+                        "InvalidInput" => {
+                            return RusotoError::Service(
+                                ListTrafficPolicyInstancesError::InvalidInput(parsed_error.message),
+                            )
+                        }
+                        "NoSuchTrafficPolicyInstance" => {
+                            return RusotoError::Service(
+                                ListTrafficPolicyInstancesError::NoSuchTrafficPolicyInstance(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        _ => {}
                     }
-                    "NoSuchTrafficPolicyInstance" => {
-                        return RusotoError::Service(
-                            ListTrafficPolicyInstancesError::NoSuchTrafficPolicyInstance(
-                                parsed_error.message,
-                            ),
-                        )
-                    }
-                    _ => {}
                 }
             }
         }
@@ -11829,28 +12213,12 @@ impl ListTrafficPolicyInstancesByHostedZoneError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    "InvalidInput" => {
-                        return RusotoError::Service(
-                            ListTrafficPolicyInstancesByHostedZoneError::InvalidInput(
-                                parsed_error.message,
-                            ),
-                        )
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {
+                        "InvalidInput" => return RusotoError::Service(ListTrafficPolicyInstancesByHostedZoneError::InvalidInput(parsed_error.message)),"NoSuchHostedZone" => return RusotoError::Service(ListTrafficPolicyInstancesByHostedZoneError::NoSuchHostedZone(parsed_error.message)),"NoSuchTrafficPolicyInstance" => return RusotoError::Service(ListTrafficPolicyInstancesByHostedZoneError::NoSuchTrafficPolicyInstance(parsed_error.message)),_ => {}
                     }
-                    "NoSuchHostedZone" => {
-                        return RusotoError::Service(
-                            ListTrafficPolicyInstancesByHostedZoneError::NoSuchHostedZone(
-                                parsed_error.message,
-                            ),
-                        )
-                    }
-                    "NoSuchTrafficPolicyInstance" => return RusotoError::Service(
-                        ListTrafficPolicyInstancesByHostedZoneError::NoSuchTrafficPolicyInstance(
-                            parsed_error.message,
-                        ),
-                    ),
-                    _ => {}
                 }
             }
         }
@@ -11901,30 +12269,31 @@ impl ListTrafficPolicyInstancesByPolicyError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    "InvalidInput" => {
-                        return RusotoError::Service(
-                            ListTrafficPolicyInstancesByPolicyError::InvalidInput(
-                                parsed_error.message,
-                            ),
-                        )
-                    }
-                    "NoSuchTrafficPolicy" => {
-                        return RusotoError::Service(
-                            ListTrafficPolicyInstancesByPolicyError::NoSuchTrafficPolicy(
-                                parsed_error.message,
-                            ),
-                        )
-                    }
-                    "NoSuchTrafficPolicyInstance" => {
-                        return RusotoError::Service(
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {
+                        "InvalidInput" => {
+                            return RusotoError::Service(
+                                ListTrafficPolicyInstancesByPolicyError::InvalidInput(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "NoSuchTrafficPolicy" => {
+                            return RusotoError::Service(
+                                ListTrafficPolicyInstancesByPolicyError::NoSuchTrafficPolicy(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "NoSuchTrafficPolicyInstance" => return RusotoError::Service(
                             ListTrafficPolicyInstancesByPolicyError::NoSuchTrafficPolicyInstance(
                                 parsed_error.message,
                             ),
-                        )
+                        ),
+                        _ => {}
                     }
-                    _ => {}
                 }
             }
         }
@@ -11971,21 +12340,24 @@ impl ListTrafficPolicyVersionsError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    "InvalidInput" => {
-                        return RusotoError::Service(ListTrafficPolicyVersionsError::InvalidInput(
-                            parsed_error.message,
-                        ))
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {
+                        "InvalidInput" => {
+                            return RusotoError::Service(
+                                ListTrafficPolicyVersionsError::InvalidInput(parsed_error.message),
+                            )
+                        }
+                        "NoSuchTrafficPolicy" => {
+                            return RusotoError::Service(
+                                ListTrafficPolicyVersionsError::NoSuchTrafficPolicy(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        _ => {}
                     }
-                    "NoSuchTrafficPolicy" => {
-                        return RusotoError::Service(
-                            ListTrafficPolicyVersionsError::NoSuchTrafficPolicy(
-                                parsed_error.message,
-                            ),
-                        )
-                    }
-                    _ => {}
                 }
             }
         }
@@ -12031,30 +12403,33 @@ impl ListVPCAssociationAuthorizationsError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    "InvalidInput" => {
-                        return RusotoError::Service(
-                            ListVPCAssociationAuthorizationsError::InvalidInput(
-                                parsed_error.message,
-                            ),
-                        )
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {
+                        "InvalidInput" => {
+                            return RusotoError::Service(
+                                ListVPCAssociationAuthorizationsError::InvalidInput(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "InvalidPaginationToken" => {
+                            return RusotoError::Service(
+                                ListVPCAssociationAuthorizationsError::InvalidPaginationToken(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "NoSuchHostedZone" => {
+                            return RusotoError::Service(
+                                ListVPCAssociationAuthorizationsError::NoSuchHostedZone(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        _ => {}
                     }
-                    "InvalidPaginationToken" => {
-                        return RusotoError::Service(
-                            ListVPCAssociationAuthorizationsError::InvalidPaginationToken(
-                                parsed_error.message,
-                            ),
-                        )
-                    }
-                    "NoSuchHostedZone" => {
-                        return RusotoError::Service(
-                            ListVPCAssociationAuthorizationsError::NoSuchHostedZone(
-                                parsed_error.message,
-                            ),
-                        )
-                    }
-                    _ => {}
                 }
             }
         }
@@ -12101,19 +12476,22 @@ impl TestDNSAnswerError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    "InvalidInput" => {
-                        return RusotoError::Service(TestDNSAnswerError::InvalidInput(
-                            parsed_error.message,
-                        ))
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {
+                        "InvalidInput" => {
+                            return RusotoError::Service(TestDNSAnswerError::InvalidInput(
+                                parsed_error.message,
+                            ))
+                        }
+                        "NoSuchHostedZone" => {
+                            return RusotoError::Service(TestDNSAnswerError::NoSuchHostedZone(
+                                parsed_error.message,
+                            ))
+                        }
+                        _ => {}
                     }
-                    "NoSuchHostedZone" => {
-                        return RusotoError::Service(TestDNSAnswerError::NoSuchHostedZone(
-                            parsed_error.message,
-                        ))
-                    }
-                    _ => {}
                 }
             }
         }
@@ -12155,26 +12533,29 @@ impl UpdateHealthCheckError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    "HealthCheckVersionMismatch" => {
-                        return RusotoError::Service(
-                            UpdateHealthCheckError::HealthCheckVersionMismatch(
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {
+                        "HealthCheckVersionMismatch" => {
+                            return RusotoError::Service(
+                                UpdateHealthCheckError::HealthCheckVersionMismatch(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "InvalidInput" => {
+                            return RusotoError::Service(UpdateHealthCheckError::InvalidInput(
                                 parsed_error.message,
-                            ),
-                        )
+                            ))
+                        }
+                        "NoSuchHealthCheck" => {
+                            return RusotoError::Service(UpdateHealthCheckError::NoSuchHealthCheck(
+                                parsed_error.message,
+                            ))
+                        }
+                        _ => {}
                     }
-                    "InvalidInput" => {
-                        return RusotoError::Service(UpdateHealthCheckError::InvalidInput(
-                            parsed_error.message,
-                        ))
-                    }
-                    "NoSuchHealthCheck" => {
-                        return RusotoError::Service(UpdateHealthCheckError::NoSuchHealthCheck(
-                            parsed_error.message,
-                        ))
-                    }
-                    _ => {}
                 }
             }
         }
@@ -12215,19 +12596,24 @@ impl UpdateHostedZoneCommentError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    "InvalidInput" => {
-                        return RusotoError::Service(UpdateHostedZoneCommentError::InvalidInput(
-                            parsed_error.message,
-                        ))
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {
+                        "InvalidInput" => {
+                            return RusotoError::Service(
+                                UpdateHostedZoneCommentError::InvalidInput(parsed_error.message),
+                            )
+                        }
+                        "NoSuchHostedZone" => {
+                            return RusotoError::Service(
+                                UpdateHostedZoneCommentError::NoSuchHostedZone(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        _ => {}
                     }
-                    "NoSuchHostedZone" => {
-                        return RusotoError::Service(
-                            UpdateHostedZoneCommentError::NoSuchHostedZone(parsed_error.message),
-                        )
-                    }
-                    _ => {}
                 }
             }
         }
@@ -12271,28 +12657,31 @@ impl UpdateTrafficPolicyCommentError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    "ConcurrentModification" => {
-                        return RusotoError::Service(
-                            UpdateTrafficPolicyCommentError::ConcurrentModification(
-                                parsed_error.message,
-                            ),
-                        )
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {
+                        "ConcurrentModification" => {
+                            return RusotoError::Service(
+                                UpdateTrafficPolicyCommentError::ConcurrentModification(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "InvalidInput" => {
+                            return RusotoError::Service(
+                                UpdateTrafficPolicyCommentError::InvalidInput(parsed_error.message),
+                            )
+                        }
+                        "NoSuchTrafficPolicy" => {
+                            return RusotoError::Service(
+                                UpdateTrafficPolicyCommentError::NoSuchTrafficPolicy(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        _ => {}
                     }
-                    "InvalidInput" => {
-                        return RusotoError::Service(UpdateTrafficPolicyCommentError::InvalidInput(
-                            parsed_error.message,
-                        ))
-                    }
-                    "NoSuchTrafficPolicy" => {
-                        return RusotoError::Service(
-                            UpdateTrafficPolicyCommentError::NoSuchTrafficPolicy(
-                                parsed_error.message,
-                            ),
-                        )
-                    }
-                    _ => {}
                 }
             }
         }
@@ -12345,42 +12734,47 @@ impl UpdateTrafficPolicyInstanceError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    "ConflictingTypes" => {
-                        return RusotoError::Service(
-                            UpdateTrafficPolicyInstanceError::ConflictingTypes(
-                                parsed_error.message,
-                            ),
-                        )
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {
+                        "ConflictingTypes" => {
+                            return RusotoError::Service(
+                                UpdateTrafficPolicyInstanceError::ConflictingTypes(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "InvalidInput" => {
+                            return RusotoError::Service(
+                                UpdateTrafficPolicyInstanceError::InvalidInput(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "NoSuchTrafficPolicy" => {
+                            return RusotoError::Service(
+                                UpdateTrafficPolicyInstanceError::NoSuchTrafficPolicy(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "NoSuchTrafficPolicyInstance" => {
+                            return RusotoError::Service(
+                                UpdateTrafficPolicyInstanceError::NoSuchTrafficPolicyInstance(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "PriorRequestNotComplete" => {
+                            return RusotoError::Service(
+                                UpdateTrafficPolicyInstanceError::PriorRequestNotComplete(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        _ => {}
                     }
-                    "InvalidInput" => {
-                        return RusotoError::Service(
-                            UpdateTrafficPolicyInstanceError::InvalidInput(parsed_error.message),
-                        )
-                    }
-                    "NoSuchTrafficPolicy" => {
-                        return RusotoError::Service(
-                            UpdateTrafficPolicyInstanceError::NoSuchTrafficPolicy(
-                                parsed_error.message,
-                            ),
-                        )
-                    }
-                    "NoSuchTrafficPolicyInstance" => {
-                        return RusotoError::Service(
-                            UpdateTrafficPolicyInstanceError::NoSuchTrafficPolicyInstance(
-                                parsed_error.message,
-                            ),
-                        )
-                    }
-                    "PriorRequestNotComplete" => {
-                        return RusotoError::Service(
-                            UpdateTrafficPolicyInstanceError::PriorRequestNotComplete(
-                                parsed_error.message,
-                            ),
-                        )
-                    }
-                    _ => {}
                 }
             }
         }

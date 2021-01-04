@@ -24,7 +24,6 @@ use rusoto_core::proto;
 use rusoto_core::signature::SignedRequest;
 #[allow(unused_imports)]
 use serde::{Deserialize, Serialize};
-use serde_json;
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CancelJournalKinesisStreamRequest {
@@ -663,6 +662,7 @@ impl CancelJournalKinesisStreamError {
         res: BufferedHttpResponse,
     ) -> RusotoError<CancelJournalKinesisStreamError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidParameterException" => {
                     return RusotoError::Service(CancelJournalKinesisStreamError::InvalidParameter(
@@ -715,6 +715,7 @@ pub enum CreateLedgerError {
 impl CreateLedgerError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateLedgerError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidParameterException" => {
                     return RusotoError::Service(CreateLedgerError::InvalidParameter(err.msg))
@@ -763,6 +764,7 @@ pub enum DeleteLedgerError {
 impl DeleteLedgerError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteLedgerError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidParameterException" => {
                     return RusotoError::Service(DeleteLedgerError::InvalidParameter(err.msg))
@@ -813,6 +815,7 @@ impl DescribeJournalKinesisStreamError {
         res: BufferedHttpResponse,
     ) -> RusotoError<DescribeJournalKinesisStreamError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidParameterException" => {
                     return RusotoError::Service(
@@ -863,6 +866,7 @@ pub enum DescribeJournalS3ExportError {
 impl DescribeJournalS3ExportError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeJournalS3ExportError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(DescribeJournalS3ExportError::ResourceNotFound(
@@ -897,6 +901,7 @@ pub enum DescribeLedgerError {
 impl DescribeLedgerError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeLedgerError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidParameterException" => {
                     return RusotoError::Service(DescribeLedgerError::InvalidParameter(err.msg))
@@ -933,6 +938,7 @@ pub enum ExportJournalToS3Error {
 impl ExportJournalToS3Error {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ExportJournalToS3Error> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(ExportJournalToS3Error::ResourceNotFound(err.msg))
@@ -973,6 +979,7 @@ pub enum GetBlockError {
 impl GetBlockError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetBlockError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidParameterException" => {
                     return RusotoError::Service(GetBlockError::InvalidParameter(err.msg))
@@ -1015,6 +1022,7 @@ pub enum GetDigestError {
 impl GetDigestError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetDigestError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidParameterException" => {
                     return RusotoError::Service(GetDigestError::InvalidParameter(err.msg))
@@ -1059,6 +1067,7 @@ pub enum GetRevisionError {
 impl GetRevisionError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetRevisionError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidParameterException" => {
                     return RusotoError::Service(GetRevisionError::InvalidParameter(err.msg))
@@ -1105,6 +1114,7 @@ impl ListJournalKinesisStreamsForLedgerError {
         res: BufferedHttpResponse,
     ) -> RusotoError<ListJournalKinesisStreamsForLedgerError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidParameterException" => {
                     return RusotoError::Service(
@@ -1154,6 +1164,7 @@ pub enum ListJournalS3ExportsError {}
 impl ListJournalS3ExportsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListJournalS3ExportsError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
@@ -1178,6 +1189,7 @@ impl ListJournalS3ExportsForLedgerError {
         res: BufferedHttpResponse,
     ) -> RusotoError<ListJournalS3ExportsForLedgerError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
@@ -1200,6 +1212,7 @@ pub enum ListLedgersError {}
 impl ListLedgersError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListLedgersError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
@@ -1227,6 +1240,7 @@ pub enum ListTagsForResourceError {
 impl ListTagsForResourceError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListTagsForResourceError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidParameterException" => {
                     return RusotoError::Service(ListTagsForResourceError::InvalidParameter(
@@ -1269,6 +1283,7 @@ pub enum StreamJournalToKinesisError {
 impl StreamJournalToKinesisError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<StreamJournalToKinesisError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidParameterException" => {
                     return RusotoError::Service(StreamJournalToKinesisError::InvalidParameter(
@@ -1317,6 +1332,7 @@ pub enum TagResourceError {
 impl TagResourceError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<TagResourceError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidParameterException" => {
                     return RusotoError::Service(TagResourceError::InvalidParameter(err.msg))
@@ -1353,6 +1369,7 @@ pub enum UntagResourceError {
 impl UntagResourceError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UntagResourceError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidParameterException" => {
                     return RusotoError::Service(UntagResourceError::InvalidParameter(err.msg))
@@ -1389,6 +1406,7 @@ pub enum UpdateLedgerError {
 impl UpdateLedgerError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateLedgerError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidParameterException" => {
                     return RusotoError::Service(UpdateLedgerError::InvalidParameter(err.msg))
@@ -1583,6 +1601,7 @@ impl Qldb for QldbClient {
         input: CancelJournalKinesisStreamRequest,
     ) -> Result<CancelJournalKinesisStreamResponse, RusotoError<CancelJournalKinesisStreamError>>
     {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/ledgers/{name}/journal-kinesis-streams/{stream_id}",
             name = input.ledger_name,
@@ -1615,6 +1634,7 @@ impl Qldb for QldbClient {
         &self,
         input: CreateLedgerRequest,
     ) -> Result<CreateLedgerResponse, RusotoError<CreateLedgerError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/ledgers";
 
         let mut request = SignedRequest::new("POST", "qldb", &self.region, &request_uri);
@@ -1646,6 +1666,7 @@ impl Qldb for QldbClient {
         &self,
         input: DeleteLedgerRequest,
     ) -> Result<(), RusotoError<DeleteLedgerError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!("/ledgers/{name}", name = input.name);
 
         let mut request = SignedRequest::new("DELETE", "qldb", &self.region, &request_uri);
@@ -1658,9 +1679,9 @@ impl Qldb for QldbClient {
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
             let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = ::std::mem::drop(response);
+            let _result = ::std::mem::drop(response);
 
-            Ok(result)
+            Ok(())
         } else {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             Err(DeleteLedgerError::from_response(response))
@@ -1674,6 +1695,7 @@ impl Qldb for QldbClient {
         input: DescribeJournalKinesisStreamRequest,
     ) -> Result<DescribeJournalKinesisStreamResponse, RusotoError<DescribeJournalKinesisStreamError>>
     {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/ledgers/{name}/journal-kinesis-streams/{stream_id}",
             name = input.ledger_name,
@@ -1706,6 +1728,7 @@ impl Qldb for QldbClient {
         &self,
         input: DescribeJournalS3ExportRequest,
     ) -> Result<DescribeJournalS3ExportResponse, RusotoError<DescribeJournalS3ExportError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/ledgers/{name}/journal-s3-exports/{export_id}",
             export_id = input.export_id,
@@ -1738,6 +1761,7 @@ impl Qldb for QldbClient {
         &self,
         input: DescribeLedgerRequest,
     ) -> Result<DescribeLedgerResponse, RusotoError<DescribeLedgerError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!("/ledgers/{name}", name = input.name);
 
         let mut request = SignedRequest::new("GET", "qldb", &self.region, &request_uri);
@@ -1766,6 +1790,7 @@ impl Qldb for QldbClient {
         &self,
         input: ExportJournalToS3Request,
     ) -> Result<ExportJournalToS3Response, RusotoError<ExportJournalToS3Error>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!("/ledgers/{name}/journal-s3-exports", name = input.name);
 
         let mut request = SignedRequest::new("POST", "qldb", &self.region, &request_uri);
@@ -1797,6 +1822,7 @@ impl Qldb for QldbClient {
         &self,
         input: GetBlockRequest,
     ) -> Result<GetBlockResponse, RusotoError<GetBlockError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!("/ledgers/{name}/block", name = input.name);
 
         let mut request = SignedRequest::new("POST", "qldb", &self.region, &request_uri);
@@ -1828,6 +1854,7 @@ impl Qldb for QldbClient {
         &self,
         input: GetDigestRequest,
     ) -> Result<GetDigestResponse, RusotoError<GetDigestError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!("/ledgers/{name}/digest", name = input.name);
 
         let mut request = SignedRequest::new("POST", "qldb", &self.region, &request_uri);
@@ -1856,6 +1883,7 @@ impl Qldb for QldbClient {
         &self,
         input: GetRevisionRequest,
     ) -> Result<GetRevisionResponse, RusotoError<GetRevisionError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!("/ledgers/{name}/revision", name = input.name);
 
         let mut request = SignedRequest::new("POST", "qldb", &self.region, &request_uri);
@@ -1890,6 +1918,7 @@ impl Qldb for QldbClient {
         ListJournalKinesisStreamsForLedgerResponse,
         RusotoError<ListJournalKinesisStreamsForLedgerError>,
     > {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/ledgers/{name}/journal-kinesis-streams",
             name = input.ledger_name
@@ -1932,6 +1961,7 @@ impl Qldb for QldbClient {
         &self,
         input: ListJournalS3ExportsRequest,
     ) -> Result<ListJournalS3ExportsResponse, RusotoError<ListJournalS3ExportsError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/journal-s3-exports";
 
         let mut request = SignedRequest::new("GET", "qldb", &self.region, &request_uri);
@@ -1972,6 +2002,7 @@ impl Qldb for QldbClient {
         ListJournalS3ExportsForLedgerResponse,
         RusotoError<ListJournalS3ExportsForLedgerError>,
     > {
+        #![allow(clippy::needless_update)]
         let request_uri = format!("/ledgers/{name}/journal-s3-exports", name = input.name);
 
         let mut request = SignedRequest::new("GET", "qldb", &self.region, &request_uri);
@@ -2009,6 +2040,7 @@ impl Qldb for QldbClient {
         &self,
         input: ListLedgersRequest,
     ) -> Result<ListLedgersResponse, RusotoError<ListLedgersError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/ledgers";
 
         let mut request = SignedRequest::new("GET", "qldb", &self.region, &request_uri);
@@ -2046,6 +2078,7 @@ impl Qldb for QldbClient {
         &self,
         input: ListTagsForResourceRequest,
     ) -> Result<ListTagsForResourceResponse, RusotoError<ListTagsForResourceError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!("/tags/{resource_arn}", resource_arn = input.resource_arn);
 
         let mut request = SignedRequest::new("GET", "qldb", &self.region, &request_uri);
@@ -2074,6 +2107,7 @@ impl Qldb for QldbClient {
         &self,
         input: StreamJournalToKinesisRequest,
     ) -> Result<StreamJournalToKinesisResponse, RusotoError<StreamJournalToKinesisError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/ledgers/{name}/journal-kinesis-streams",
             name = input.ledger_name
@@ -2108,6 +2142,7 @@ impl Qldb for QldbClient {
         &self,
         input: TagResourceRequest,
     ) -> Result<TagResourceResponse, RusotoError<TagResourceError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!("/tags/{resource_arn}", resource_arn = input.resource_arn);
 
         let mut request = SignedRequest::new("POST", "qldb", &self.region, &request_uri);
@@ -2139,6 +2174,7 @@ impl Qldb for QldbClient {
         &self,
         input: UntagResourceRequest,
     ) -> Result<UntagResourceResponse, RusotoError<UntagResourceError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!("/tags/{resource_arn}", resource_arn = input.resource_arn);
 
         let mut request = SignedRequest::new("DELETE", "qldb", &self.region, &request_uri);
@@ -2173,6 +2209,7 @@ impl Qldb for QldbClient {
         &self,
         input: UpdateLedgerRequest,
     ) -> Result<UpdateLedgerResponse, RusotoError<UpdateLedgerError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!("/ledgers/{name}", name = input.name);
 
         let mut request = SignedRequest::new("PATCH", "qldb", &self.region, &request_uri);

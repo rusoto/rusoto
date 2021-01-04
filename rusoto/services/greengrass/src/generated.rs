@@ -24,7 +24,6 @@ use rusoto_core::proto;
 use rusoto_core::signature::SignedRequest;
 #[allow(unused_imports)]
 use serde::{Deserialize, Serialize};
-use serde_json;
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct AssociateRoleToGroupRequest {
@@ -3525,6 +3524,7 @@ pub enum AssociateRoleToGroupError {
 impl AssociateRoleToGroupError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<AssociateRoleToGroupError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(AssociateRoleToGroupError::BadRequest(err.msg))
@@ -3565,6 +3565,7 @@ impl AssociateServiceRoleToAccountError {
         res: BufferedHttpResponse,
     ) -> RusotoError<AssociateServiceRoleToAccountError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(AssociateServiceRoleToAccountError::BadRequest(
@@ -3605,6 +3606,7 @@ pub enum CreateConnectorDefinitionError {
 impl CreateConnectorDefinitionError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateConnectorDefinitionError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(CreateConnectorDefinitionError::BadRequest(
@@ -3639,6 +3641,7 @@ impl CreateConnectorDefinitionVersionError {
         res: BufferedHttpResponse,
     ) -> RusotoError<CreateConnectorDefinitionVersionError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(CreateConnectorDefinitionVersionError::BadRequest(
@@ -3671,6 +3674,7 @@ pub enum CreateCoreDefinitionError {
 impl CreateCoreDefinitionError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateCoreDefinitionError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(CreateCoreDefinitionError::BadRequest(err.msg))
@@ -3703,6 +3707,7 @@ impl CreateCoreDefinitionVersionError {
         res: BufferedHttpResponse,
     ) -> RusotoError<CreateCoreDefinitionVersionError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(CreateCoreDefinitionVersionError::BadRequest(
@@ -3735,6 +3740,7 @@ pub enum CreateDeploymentError {
 impl CreateDeploymentError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateDeploymentError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(CreateDeploymentError::BadRequest(err.msg))
@@ -3765,6 +3771,7 @@ pub enum CreateDeviceDefinitionError {
 impl CreateDeviceDefinitionError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateDeviceDefinitionError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(CreateDeviceDefinitionError::BadRequest(err.msg))
@@ -3797,6 +3804,7 @@ impl CreateDeviceDefinitionVersionError {
         res: BufferedHttpResponse,
     ) -> RusotoError<CreateDeviceDefinitionVersionError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(CreateDeviceDefinitionVersionError::BadRequest(
@@ -3829,6 +3837,7 @@ pub enum CreateFunctionDefinitionError {
 impl CreateFunctionDefinitionError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateFunctionDefinitionError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(CreateFunctionDefinitionError::BadRequest(err.msg))
@@ -3861,6 +3870,7 @@ impl CreateFunctionDefinitionVersionError {
         res: BufferedHttpResponse,
     ) -> RusotoError<CreateFunctionDefinitionVersionError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(CreateFunctionDefinitionVersionError::BadRequest(
@@ -3893,6 +3903,7 @@ pub enum CreateGroupError {
 impl CreateGroupError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateGroupError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(CreateGroupError::BadRequest(err.msg))
@@ -3927,6 +3938,7 @@ impl CreateGroupCertificateAuthorityError {
         res: BufferedHttpResponse,
     ) -> RusotoError<CreateGroupCertificateAuthorityError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(CreateGroupCertificateAuthorityError::BadRequest(
@@ -3967,6 +3979,7 @@ pub enum CreateGroupVersionError {
 impl CreateGroupVersionError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateGroupVersionError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(CreateGroupVersionError::BadRequest(err.msg))
@@ -3997,6 +4010,7 @@ pub enum CreateLoggerDefinitionError {
 impl CreateLoggerDefinitionError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateLoggerDefinitionError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(CreateLoggerDefinitionError::BadRequest(err.msg))
@@ -4029,6 +4043,7 @@ impl CreateLoggerDefinitionVersionError {
         res: BufferedHttpResponse,
     ) -> RusotoError<CreateLoggerDefinitionVersionError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(CreateLoggerDefinitionVersionError::BadRequest(
@@ -4061,6 +4076,7 @@ pub enum CreateResourceDefinitionError {
 impl CreateResourceDefinitionError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateResourceDefinitionError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(CreateResourceDefinitionError::BadRequest(err.msg))
@@ -4093,6 +4109,7 @@ impl CreateResourceDefinitionVersionError {
         res: BufferedHttpResponse,
     ) -> RusotoError<CreateResourceDefinitionVersionError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(CreateResourceDefinitionVersionError::BadRequest(
@@ -4127,6 +4144,7 @@ pub enum CreateSoftwareUpdateJobError {
 impl CreateSoftwareUpdateJobError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateSoftwareUpdateJobError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(CreateSoftwareUpdateJobError::BadRequest(err.msg))
@@ -4165,6 +4183,7 @@ impl CreateSubscriptionDefinitionError {
         res: BufferedHttpResponse,
     ) -> RusotoError<CreateSubscriptionDefinitionError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(CreateSubscriptionDefinitionError::BadRequest(
@@ -4199,6 +4218,7 @@ impl CreateSubscriptionDefinitionVersionError {
         res: BufferedHttpResponse,
     ) -> RusotoError<CreateSubscriptionDefinitionVersionError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(
@@ -4233,6 +4253,7 @@ pub enum DeleteConnectorDefinitionError {
 impl DeleteConnectorDefinitionError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteConnectorDefinitionError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(DeleteConnectorDefinitionError::BadRequest(
@@ -4265,6 +4286,7 @@ pub enum DeleteCoreDefinitionError {
 impl DeleteCoreDefinitionError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteCoreDefinitionError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(DeleteCoreDefinitionError::BadRequest(err.msg))
@@ -4295,6 +4317,7 @@ pub enum DeleteDeviceDefinitionError {
 impl DeleteDeviceDefinitionError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteDeviceDefinitionError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(DeleteDeviceDefinitionError::BadRequest(err.msg))
@@ -4325,6 +4348,7 @@ pub enum DeleteFunctionDefinitionError {
 impl DeleteFunctionDefinitionError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteFunctionDefinitionError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(DeleteFunctionDefinitionError::BadRequest(err.msg))
@@ -4355,6 +4379,7 @@ pub enum DeleteGroupError {
 impl DeleteGroupError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteGroupError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(DeleteGroupError::BadRequest(err.msg))
@@ -4385,6 +4410,7 @@ pub enum DeleteLoggerDefinitionError {
 impl DeleteLoggerDefinitionError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteLoggerDefinitionError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(DeleteLoggerDefinitionError::BadRequest(err.msg))
@@ -4415,6 +4441,7 @@ pub enum DeleteResourceDefinitionError {
 impl DeleteResourceDefinitionError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteResourceDefinitionError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(DeleteResourceDefinitionError::BadRequest(err.msg))
@@ -4447,6 +4474,7 @@ impl DeleteSubscriptionDefinitionError {
         res: BufferedHttpResponse,
     ) -> RusotoError<DeleteSubscriptionDefinitionError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(DeleteSubscriptionDefinitionError::BadRequest(
@@ -4481,6 +4509,7 @@ pub enum DisassociateRoleFromGroupError {
 impl DisassociateRoleFromGroupError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DisassociateRoleFromGroupError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(DisassociateRoleFromGroupError::BadRequest(
@@ -4523,6 +4552,7 @@ impl DisassociateServiceRoleFromAccountError {
         res: BufferedHttpResponse,
     ) -> RusotoError<DisassociateServiceRoleFromAccountError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalServerErrorException" => {
                     return RusotoError::Service(
@@ -4559,6 +4589,7 @@ pub enum GetAssociatedRoleError {
 impl GetAssociatedRoleError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetAssociatedRoleError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(GetAssociatedRoleError::BadRequest(err.msg))
@@ -4595,6 +4626,7 @@ pub enum GetBulkDeploymentStatusError {
 impl GetBulkDeploymentStatusError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetBulkDeploymentStatusError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(GetBulkDeploymentStatusError::BadRequest(err.msg))
@@ -4627,6 +4659,7 @@ pub enum GetConnectivityInfoError {
 impl GetConnectivityInfoError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetConnectivityInfoError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(GetConnectivityInfoError::BadRequest(err.msg))
@@ -4663,6 +4696,7 @@ pub enum GetConnectorDefinitionError {
 impl GetConnectorDefinitionError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetConnectorDefinitionError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(GetConnectorDefinitionError::BadRequest(err.msg))
@@ -4695,6 +4729,7 @@ impl GetConnectorDefinitionVersionError {
         res: BufferedHttpResponse,
     ) -> RusotoError<GetConnectorDefinitionVersionError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(GetConnectorDefinitionVersionError::BadRequest(
@@ -4727,6 +4762,7 @@ pub enum GetCoreDefinitionError {
 impl GetCoreDefinitionError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetCoreDefinitionError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(GetCoreDefinitionError::BadRequest(err.msg))
@@ -4757,6 +4793,7 @@ pub enum GetCoreDefinitionVersionError {
 impl GetCoreDefinitionVersionError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetCoreDefinitionVersionError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(GetCoreDefinitionVersionError::BadRequest(err.msg))
@@ -4787,6 +4824,7 @@ pub enum GetDeploymentStatusError {
 impl GetDeploymentStatusError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetDeploymentStatusError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(GetDeploymentStatusError::BadRequest(err.msg))
@@ -4817,6 +4855,7 @@ pub enum GetDeviceDefinitionError {
 impl GetDeviceDefinitionError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetDeviceDefinitionError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(GetDeviceDefinitionError::BadRequest(err.msg))
@@ -4849,6 +4888,7 @@ impl GetDeviceDefinitionVersionError {
         res: BufferedHttpResponse,
     ) -> RusotoError<GetDeviceDefinitionVersionError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(GetDeviceDefinitionVersionError::BadRequest(
@@ -4881,6 +4921,7 @@ pub enum GetFunctionDefinitionError {
 impl GetFunctionDefinitionError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetFunctionDefinitionError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(GetFunctionDefinitionError::BadRequest(err.msg))
@@ -4913,6 +4954,7 @@ impl GetFunctionDefinitionVersionError {
         res: BufferedHttpResponse,
     ) -> RusotoError<GetFunctionDefinitionVersionError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(GetFunctionDefinitionVersionError::BadRequest(
@@ -4945,6 +4987,7 @@ pub enum GetGroupError {
 impl GetGroupError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetGroupError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(GetGroupError::BadRequest(err.msg))
@@ -4979,6 +5022,7 @@ impl GetGroupCertificateAuthorityError {
         res: BufferedHttpResponse,
     ) -> RusotoError<GetGroupCertificateAuthorityError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(GetGroupCertificateAuthorityError::BadRequest(
@@ -5023,6 +5067,7 @@ impl GetGroupCertificateConfigurationError {
         res: BufferedHttpResponse,
     ) -> RusotoError<GetGroupCertificateConfigurationError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(GetGroupCertificateConfigurationError::BadRequest(
@@ -5063,6 +5108,7 @@ pub enum GetGroupVersionError {
 impl GetGroupVersionError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetGroupVersionError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(GetGroupVersionError::BadRequest(err.msg))
@@ -5093,6 +5139,7 @@ pub enum GetLoggerDefinitionError {
 impl GetLoggerDefinitionError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetLoggerDefinitionError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(GetLoggerDefinitionError::BadRequest(err.msg))
@@ -5125,6 +5172,7 @@ impl GetLoggerDefinitionVersionError {
         res: BufferedHttpResponse,
     ) -> RusotoError<GetLoggerDefinitionVersionError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(GetLoggerDefinitionVersionError::BadRequest(
@@ -5157,6 +5205,7 @@ pub enum GetResourceDefinitionError {
 impl GetResourceDefinitionError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetResourceDefinitionError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(GetResourceDefinitionError::BadRequest(err.msg))
@@ -5189,6 +5238,7 @@ impl GetResourceDefinitionVersionError {
         res: BufferedHttpResponse,
     ) -> RusotoError<GetResourceDefinitionVersionError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(GetResourceDefinitionVersionError::BadRequest(
@@ -5221,6 +5271,7 @@ pub enum GetServiceRoleForAccountError {
 impl GetServiceRoleForAccountError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetServiceRoleForAccountError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalServerErrorException" => {
                     return RusotoError::Service(
@@ -5253,6 +5304,7 @@ pub enum GetSubscriptionDefinitionError {
 impl GetSubscriptionDefinitionError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetSubscriptionDefinitionError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(GetSubscriptionDefinitionError::BadRequest(
@@ -5287,6 +5339,7 @@ impl GetSubscriptionDefinitionVersionError {
         res: BufferedHttpResponse,
     ) -> RusotoError<GetSubscriptionDefinitionVersionError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(GetSubscriptionDefinitionVersionError::BadRequest(
@@ -5323,6 +5376,7 @@ impl GetThingRuntimeConfigurationError {
         res: BufferedHttpResponse,
     ) -> RusotoError<GetThingRuntimeConfigurationError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(GetThingRuntimeConfigurationError::BadRequest(
@@ -5365,6 +5419,7 @@ impl ListBulkDeploymentDetailedReportsError {
         res: BufferedHttpResponse,
     ) -> RusotoError<ListBulkDeploymentDetailedReportsError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(
@@ -5397,6 +5452,7 @@ pub enum ListBulkDeploymentsError {
 impl ListBulkDeploymentsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListBulkDeploymentsError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(ListBulkDeploymentsError::BadRequest(err.msg))
@@ -5429,6 +5485,7 @@ impl ListConnectorDefinitionVersionsError {
         res: BufferedHttpResponse,
     ) -> RusotoError<ListConnectorDefinitionVersionsError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(ListConnectorDefinitionVersionsError::BadRequest(
@@ -5458,6 +5515,7 @@ pub enum ListConnectorDefinitionsError {}
 impl ListConnectorDefinitionsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListConnectorDefinitionsError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
@@ -5485,6 +5543,7 @@ impl ListCoreDefinitionVersionsError {
         res: BufferedHttpResponse,
     ) -> RusotoError<ListCoreDefinitionVersionsError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(ListCoreDefinitionVersionsError::BadRequest(
@@ -5514,6 +5573,7 @@ pub enum ListCoreDefinitionsError {}
 impl ListCoreDefinitionsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListCoreDefinitionsError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
@@ -5539,6 +5599,7 @@ pub enum ListDeploymentsError {
 impl ListDeploymentsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListDeploymentsError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(ListDeploymentsError::BadRequest(err.msg))
@@ -5571,6 +5632,7 @@ impl ListDeviceDefinitionVersionsError {
         res: BufferedHttpResponse,
     ) -> RusotoError<ListDeviceDefinitionVersionsError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(ListDeviceDefinitionVersionsError::BadRequest(
@@ -5600,6 +5662,7 @@ pub enum ListDeviceDefinitionsError {}
 impl ListDeviceDefinitionsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListDeviceDefinitionsError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
@@ -5627,6 +5690,7 @@ impl ListFunctionDefinitionVersionsError {
         res: BufferedHttpResponse,
     ) -> RusotoError<ListFunctionDefinitionVersionsError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(ListFunctionDefinitionVersionsError::BadRequest(
@@ -5656,6 +5720,7 @@ pub enum ListFunctionDefinitionsError {}
 impl ListFunctionDefinitionsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListFunctionDefinitionsError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
@@ -5685,6 +5750,7 @@ impl ListGroupCertificateAuthoritiesError {
         res: BufferedHttpResponse,
     ) -> RusotoError<ListGroupCertificateAuthoritiesError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(ListGroupCertificateAuthoritiesError::BadRequest(
@@ -5725,6 +5791,7 @@ pub enum ListGroupVersionsError {
 impl ListGroupVersionsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListGroupVersionsError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(ListGroupVersionsError::BadRequest(err.msg))
@@ -5752,6 +5819,7 @@ pub enum ListGroupsError {}
 impl ListGroupsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListGroupsError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
@@ -5779,6 +5847,7 @@ impl ListLoggerDefinitionVersionsError {
         res: BufferedHttpResponse,
     ) -> RusotoError<ListLoggerDefinitionVersionsError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(ListLoggerDefinitionVersionsError::BadRequest(
@@ -5808,6 +5877,7 @@ pub enum ListLoggerDefinitionsError {}
 impl ListLoggerDefinitionsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListLoggerDefinitionsError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
@@ -5835,6 +5905,7 @@ impl ListResourceDefinitionVersionsError {
         res: BufferedHttpResponse,
     ) -> RusotoError<ListResourceDefinitionVersionsError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(ListResourceDefinitionVersionsError::BadRequest(
@@ -5864,6 +5935,7 @@ pub enum ListResourceDefinitionsError {}
 impl ListResourceDefinitionsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListResourceDefinitionsError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
@@ -5891,6 +5963,7 @@ impl ListSubscriptionDefinitionVersionsError {
         res: BufferedHttpResponse,
     ) -> RusotoError<ListSubscriptionDefinitionVersionsError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(
@@ -5924,6 +5997,7 @@ impl ListSubscriptionDefinitionsError {
         res: BufferedHttpResponse,
     ) -> RusotoError<ListSubscriptionDefinitionsError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
@@ -5949,6 +6023,7 @@ pub enum ListTagsForResourceError {
 impl ListTagsForResourceError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListTagsForResourceError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(ListTagsForResourceError::BadRequest(err.msg))
@@ -5979,6 +6054,7 @@ pub enum ResetDeploymentsError {
 impl ResetDeploymentsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ResetDeploymentsError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(ResetDeploymentsError::BadRequest(err.msg))
@@ -6009,6 +6085,7 @@ pub enum StartBulkDeploymentError {
 impl StartBulkDeploymentError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<StartBulkDeploymentError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(StartBulkDeploymentError::BadRequest(err.msg))
@@ -6039,6 +6116,7 @@ pub enum StopBulkDeploymentError {
 impl StopBulkDeploymentError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<StopBulkDeploymentError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(StopBulkDeploymentError::BadRequest(err.msg))
@@ -6069,6 +6147,7 @@ pub enum TagResourceError {
 impl TagResourceError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<TagResourceError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(TagResourceError::BadRequest(err.msg))
@@ -6099,6 +6178,7 @@ pub enum UntagResourceError {
 impl UntagResourceError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UntagResourceError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(UntagResourceError::BadRequest(err.msg))
@@ -6131,6 +6211,7 @@ pub enum UpdateConnectivityInfoError {
 impl UpdateConnectivityInfoError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateConnectivityInfoError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(UpdateConnectivityInfoError::BadRequest(err.msg))
@@ -6167,6 +6248,7 @@ pub enum UpdateConnectorDefinitionError {
 impl UpdateConnectorDefinitionError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateConnectorDefinitionError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(UpdateConnectorDefinitionError::BadRequest(
@@ -6199,6 +6281,7 @@ pub enum UpdateCoreDefinitionError {
 impl UpdateCoreDefinitionError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateCoreDefinitionError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(UpdateCoreDefinitionError::BadRequest(err.msg))
@@ -6229,6 +6312,7 @@ pub enum UpdateDeviceDefinitionError {
 impl UpdateDeviceDefinitionError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateDeviceDefinitionError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(UpdateDeviceDefinitionError::BadRequest(err.msg))
@@ -6259,6 +6343,7 @@ pub enum UpdateFunctionDefinitionError {
 impl UpdateFunctionDefinitionError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateFunctionDefinitionError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(UpdateFunctionDefinitionError::BadRequest(err.msg))
@@ -6289,6 +6374,7 @@ pub enum UpdateGroupError {
 impl UpdateGroupError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateGroupError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(UpdateGroupError::BadRequest(err.msg))
@@ -6323,6 +6409,7 @@ impl UpdateGroupCertificateConfigurationError {
         res: BufferedHttpResponse,
     ) -> RusotoError<UpdateGroupCertificateConfigurationError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(
@@ -6365,6 +6452,7 @@ pub enum UpdateLoggerDefinitionError {
 impl UpdateLoggerDefinitionError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateLoggerDefinitionError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(UpdateLoggerDefinitionError::BadRequest(err.msg))
@@ -6395,6 +6483,7 @@ pub enum UpdateResourceDefinitionError {
 impl UpdateResourceDefinitionError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateResourceDefinitionError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(UpdateResourceDefinitionError::BadRequest(err.msg))
@@ -6427,6 +6516,7 @@ impl UpdateSubscriptionDefinitionError {
         res: BufferedHttpResponse,
     ) -> RusotoError<UpdateSubscriptionDefinitionError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(UpdateSubscriptionDefinitionError::BadRequest(
@@ -6463,6 +6553,7 @@ impl UpdateThingRuntimeConfigurationError {
         res: BufferedHttpResponse,
     ) -> RusotoError<UpdateThingRuntimeConfigurationError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(UpdateThingRuntimeConfigurationError::BadRequest(
@@ -7152,6 +7243,7 @@ impl GreenGrass for GreenGrassClient {
         &self,
         input: AssociateRoleToGroupRequest,
     ) -> Result<AssociateRoleToGroupResponse, RusotoError<AssociateRoleToGroupError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/greengrass/groups/{group_id}/role",
             group_id = input.group_id
@@ -7189,6 +7281,7 @@ impl GreenGrass for GreenGrassClient {
         AssociateServiceRoleToAccountResponse,
         RusotoError<AssociateServiceRoleToAccountError>,
     > {
+        #![allow(clippy::needless_update)]
         let request_uri = "/greengrass/servicerole";
 
         let mut request = SignedRequest::new("PUT", "greengrass", &self.region, &request_uri);
@@ -7221,6 +7314,7 @@ impl GreenGrass for GreenGrassClient {
         input: CreateConnectorDefinitionRequest,
     ) -> Result<CreateConnectorDefinitionResponse, RusotoError<CreateConnectorDefinitionError>>
     {
+        #![allow(clippy::needless_update)]
         let request_uri = "/greengrass/definition/connectors";
 
         let mut request = SignedRequest::new("POST", "greengrass", &self.region, &request_uri);
@@ -7256,6 +7350,7 @@ impl GreenGrass for GreenGrassClient {
         CreateConnectorDefinitionVersionResponse,
         RusotoError<CreateConnectorDefinitionVersionError>,
     > {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/greengrass/definition/connectors/{connector_definition_id}/versions",
             connector_definition_id = input.connector_definition_id
@@ -7293,6 +7388,7 @@ impl GreenGrass for GreenGrassClient {
         &self,
         input: CreateCoreDefinitionRequest,
     ) -> Result<CreateCoreDefinitionResponse, RusotoError<CreateCoreDefinitionError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/greengrass/definition/cores";
 
         let mut request = SignedRequest::new("POST", "greengrass", &self.region, &request_uri);
@@ -7326,6 +7422,7 @@ impl GreenGrass for GreenGrassClient {
         input: CreateCoreDefinitionVersionRequest,
     ) -> Result<CreateCoreDefinitionVersionResponse, RusotoError<CreateCoreDefinitionVersionError>>
     {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/greengrass/definition/cores/{core_definition_id}/versions",
             core_definition_id = input.core_definition_id
@@ -7361,6 +7458,7 @@ impl GreenGrass for GreenGrassClient {
         &self,
         input: CreateDeploymentRequest,
     ) -> Result<CreateDeploymentResponse, RusotoError<CreateDeploymentError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/greengrass/groups/{group_id}/deployments",
             group_id = input.group_id
@@ -7396,6 +7494,7 @@ impl GreenGrass for GreenGrassClient {
         &self,
         input: CreateDeviceDefinitionRequest,
     ) -> Result<CreateDeviceDefinitionResponse, RusotoError<CreateDeviceDefinitionError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/greengrass/definition/devices";
 
         let mut request = SignedRequest::new("POST", "greengrass", &self.region, &request_uri);
@@ -7431,6 +7530,7 @@ impl GreenGrass for GreenGrassClient {
         CreateDeviceDefinitionVersionResponse,
         RusotoError<CreateDeviceDefinitionVersionError>,
     > {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/greengrass/definition/devices/{device_definition_id}/versions",
             device_definition_id = input.device_definition_id
@@ -7466,6 +7566,7 @@ impl GreenGrass for GreenGrassClient {
         &self,
         input: CreateFunctionDefinitionRequest,
     ) -> Result<CreateFunctionDefinitionResponse, RusotoError<CreateFunctionDefinitionError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/greengrass/definition/functions";
 
         let mut request = SignedRequest::new("POST", "greengrass", &self.region, &request_uri);
@@ -7501,6 +7602,7 @@ impl GreenGrass for GreenGrassClient {
         CreateFunctionDefinitionVersionResponse,
         RusotoError<CreateFunctionDefinitionVersionError>,
     > {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/greengrass/definition/functions/{function_definition_id}/versions",
             function_definition_id = input.function_definition_id
@@ -7538,6 +7640,7 @@ impl GreenGrass for GreenGrassClient {
         &self,
         input: CreateGroupRequest,
     ) -> Result<CreateGroupResponse, RusotoError<CreateGroupError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/greengrass/groups";
 
         let mut request = SignedRequest::new("POST", "greengrass", &self.region, &request_uri);
@@ -7573,6 +7676,7 @@ impl GreenGrass for GreenGrassClient {
         CreateGroupCertificateAuthorityResponse,
         RusotoError<CreateGroupCertificateAuthorityError>,
     > {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/greengrass/groups/{group_id}/certificateauthorities",
             group_id = input.group_id
@@ -7608,6 +7712,7 @@ impl GreenGrass for GreenGrassClient {
         &self,
         input: CreateGroupVersionRequest,
     ) -> Result<CreateGroupVersionResponse, RusotoError<CreateGroupVersionError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/greengrass/groups/{group_id}/versions",
             group_id = input.group_id
@@ -7643,6 +7748,7 @@ impl GreenGrass for GreenGrassClient {
         &self,
         input: CreateLoggerDefinitionRequest,
     ) -> Result<CreateLoggerDefinitionResponse, RusotoError<CreateLoggerDefinitionError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/greengrass/definition/loggers";
 
         let mut request = SignedRequest::new("POST", "greengrass", &self.region, &request_uri);
@@ -7678,6 +7784,7 @@ impl GreenGrass for GreenGrassClient {
         CreateLoggerDefinitionVersionResponse,
         RusotoError<CreateLoggerDefinitionVersionError>,
     > {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/greengrass/definition/loggers/{logger_definition_id}/versions",
             logger_definition_id = input.logger_definition_id
@@ -7713,6 +7820,7 @@ impl GreenGrass for GreenGrassClient {
         &self,
         input: CreateResourceDefinitionRequest,
     ) -> Result<CreateResourceDefinitionResponse, RusotoError<CreateResourceDefinitionError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/greengrass/definition/resources";
 
         let mut request = SignedRequest::new("POST", "greengrass", &self.region, &request_uri);
@@ -7748,6 +7856,7 @@ impl GreenGrass for GreenGrassClient {
         CreateResourceDefinitionVersionResponse,
         RusotoError<CreateResourceDefinitionVersionError>,
     > {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/greengrass/definition/resources/{resource_definition_id}/versions",
             resource_definition_id = input.resource_definition_id
@@ -7785,6 +7894,7 @@ impl GreenGrass for GreenGrassClient {
         &self,
         input: CreateSoftwareUpdateJobRequest,
     ) -> Result<CreateSoftwareUpdateJobResponse, RusotoError<CreateSoftwareUpdateJobError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/greengrass/updates";
 
         let mut request = SignedRequest::new("POST", "greengrass", &self.region, &request_uri);
@@ -7818,6 +7928,7 @@ impl GreenGrass for GreenGrassClient {
         input: CreateSubscriptionDefinitionRequest,
     ) -> Result<CreateSubscriptionDefinitionResponse, RusotoError<CreateSubscriptionDefinitionError>>
     {
+        #![allow(clippy::needless_update)]
         let request_uri = "/greengrass/definition/subscriptions";
 
         let mut request = SignedRequest::new("POST", "greengrass", &self.region, &request_uri);
@@ -7853,6 +7964,7 @@ impl GreenGrass for GreenGrassClient {
         CreateSubscriptionDefinitionVersionResponse,
         RusotoError<CreateSubscriptionDefinitionVersionError>,
     > {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/greengrass/definition/subscriptions/{subscription_definition_id}/versions",
             subscription_definition_id = input.subscription_definition_id
@@ -7891,6 +8003,7 @@ impl GreenGrass for GreenGrassClient {
         input: DeleteConnectorDefinitionRequest,
     ) -> Result<DeleteConnectorDefinitionResponse, RusotoError<DeleteConnectorDefinitionError>>
     {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/greengrass/definition/connectors/{connector_definition_id}",
             connector_definition_id = input.connector_definition_id
@@ -7922,6 +8035,7 @@ impl GreenGrass for GreenGrassClient {
         &self,
         input: DeleteCoreDefinitionRequest,
     ) -> Result<DeleteCoreDefinitionResponse, RusotoError<DeleteCoreDefinitionError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/greengrass/definition/cores/{core_definition_id}",
             core_definition_id = input.core_definition_id
@@ -7953,6 +8067,7 @@ impl GreenGrass for GreenGrassClient {
         &self,
         input: DeleteDeviceDefinitionRequest,
     ) -> Result<DeleteDeviceDefinitionResponse, RusotoError<DeleteDeviceDefinitionError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/greengrass/definition/devices/{device_definition_id}",
             device_definition_id = input.device_definition_id
@@ -7984,6 +8099,7 @@ impl GreenGrass for GreenGrassClient {
         &self,
         input: DeleteFunctionDefinitionRequest,
     ) -> Result<DeleteFunctionDefinitionResponse, RusotoError<DeleteFunctionDefinitionError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/greengrass/definition/functions/{function_definition_id}",
             function_definition_id = input.function_definition_id
@@ -8015,6 +8131,7 @@ impl GreenGrass for GreenGrassClient {
         &self,
         input: DeleteGroupRequest,
     ) -> Result<DeleteGroupResponse, RusotoError<DeleteGroupError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!("/greengrass/groups/{group_id}", group_id = input.group_id);
 
         let mut request = SignedRequest::new("DELETE", "greengrass", &self.region, &request_uri);
@@ -8043,6 +8160,7 @@ impl GreenGrass for GreenGrassClient {
         &self,
         input: DeleteLoggerDefinitionRequest,
     ) -> Result<DeleteLoggerDefinitionResponse, RusotoError<DeleteLoggerDefinitionError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/greengrass/definition/loggers/{logger_definition_id}",
             logger_definition_id = input.logger_definition_id
@@ -8074,6 +8192,7 @@ impl GreenGrass for GreenGrassClient {
         &self,
         input: DeleteResourceDefinitionRequest,
     ) -> Result<DeleteResourceDefinitionResponse, RusotoError<DeleteResourceDefinitionError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/greengrass/definition/resources/{resource_definition_id}",
             resource_definition_id = input.resource_definition_id
@@ -8106,6 +8225,7 @@ impl GreenGrass for GreenGrassClient {
         input: DeleteSubscriptionDefinitionRequest,
     ) -> Result<DeleteSubscriptionDefinitionResponse, RusotoError<DeleteSubscriptionDefinitionError>>
     {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/greengrass/definition/subscriptions/{subscription_definition_id}",
             subscription_definition_id = input.subscription_definition_id
@@ -8138,6 +8258,7 @@ impl GreenGrass for GreenGrassClient {
         input: DisassociateRoleFromGroupRequest,
     ) -> Result<DisassociateRoleFromGroupResponse, RusotoError<DisassociateRoleFromGroupError>>
     {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/greengrass/groups/{group_id}/role",
             group_id = input.group_id
@@ -8171,6 +8292,7 @@ impl GreenGrass for GreenGrassClient {
         DisassociateServiceRoleFromAccountResponse,
         RusotoError<DisassociateServiceRoleFromAccountError>,
     > {
+        #![allow(clippy::needless_update)]
         let request_uri = "/greengrass/servicerole";
 
         let mut request = SignedRequest::new("DELETE", "greengrass", &self.region, &request_uri);
@@ -8201,6 +8323,7 @@ impl GreenGrass for GreenGrassClient {
         &self,
         input: GetAssociatedRoleRequest,
     ) -> Result<GetAssociatedRoleResponse, RusotoError<GetAssociatedRoleError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/greengrass/groups/{group_id}/role",
             group_id = input.group_id
@@ -8232,6 +8355,7 @@ impl GreenGrass for GreenGrassClient {
         &self,
         input: GetBulkDeploymentStatusRequest,
     ) -> Result<GetBulkDeploymentStatusResponse, RusotoError<GetBulkDeploymentStatusError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/greengrass/bulk/deployments/{bulk_deployment_id}/status",
             bulk_deployment_id = input.bulk_deployment_id
@@ -8263,6 +8387,7 @@ impl GreenGrass for GreenGrassClient {
         &self,
         input: GetConnectivityInfoRequest,
     ) -> Result<GetConnectivityInfoResponse, RusotoError<GetConnectivityInfoError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/greengrass/things/{thing_name}/connectivityInfo",
             thing_name = input.thing_name
@@ -8294,6 +8419,7 @@ impl GreenGrass for GreenGrassClient {
         &self,
         input: GetConnectorDefinitionRequest,
     ) -> Result<GetConnectorDefinitionResponse, RusotoError<GetConnectorDefinitionError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/greengrass/definition/connectors/{connector_definition_id}",
             connector_definition_id = input.connector_definition_id
@@ -8328,6 +8454,7 @@ impl GreenGrass for GreenGrassClient {
         GetConnectorDefinitionVersionResponse,
         RusotoError<GetConnectorDefinitionVersionError>,
     > {
+        #![allow(clippy::needless_update)]
         let request_uri = format!("/greengrass/definition/connectors/{connector_definition_id}/versions/{connector_definition_version_id}", connector_definition_id = input.connector_definition_id, connector_definition_version_id = input.connector_definition_version_id);
 
         let mut request = SignedRequest::new("GET", "greengrass", &self.region, &request_uri);
@@ -8362,6 +8489,7 @@ impl GreenGrass for GreenGrassClient {
         &self,
         input: GetCoreDefinitionRequest,
     ) -> Result<GetCoreDefinitionResponse, RusotoError<GetCoreDefinitionError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/greengrass/definition/cores/{core_definition_id}",
             core_definition_id = input.core_definition_id
@@ -8393,6 +8521,7 @@ impl GreenGrass for GreenGrassClient {
         &self,
         input: GetCoreDefinitionVersionRequest,
     ) -> Result<GetCoreDefinitionVersionResponse, RusotoError<GetCoreDefinitionVersionError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!("/greengrass/definition/cores/{core_definition_id}/versions/{core_definition_version_id}", core_definition_id = input.core_definition_id, core_definition_version_id = input.core_definition_version_id);
 
         let mut request = SignedRequest::new("GET", "greengrass", &self.region, &request_uri);
@@ -8421,6 +8550,7 @@ impl GreenGrass for GreenGrassClient {
         &self,
         input: GetDeploymentStatusRequest,
     ) -> Result<GetDeploymentStatusResponse, RusotoError<GetDeploymentStatusError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/greengrass/groups/{group_id}/deployments/{deployment_id}/status",
             deployment_id = input.deployment_id,
@@ -8453,6 +8583,7 @@ impl GreenGrass for GreenGrassClient {
         &self,
         input: GetDeviceDefinitionRequest,
     ) -> Result<GetDeviceDefinitionResponse, RusotoError<GetDeviceDefinitionError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/greengrass/definition/devices/{device_definition_id}",
             device_definition_id = input.device_definition_id
@@ -8485,6 +8616,7 @@ impl GreenGrass for GreenGrassClient {
         input: GetDeviceDefinitionVersionRequest,
     ) -> Result<GetDeviceDefinitionVersionResponse, RusotoError<GetDeviceDefinitionVersionError>>
     {
+        #![allow(clippy::needless_update)]
         let request_uri = format!("/greengrass/definition/devices/{device_definition_id}/versions/{device_definition_version_id}", device_definition_id = input.device_definition_id, device_definition_version_id = input.device_definition_version_id);
 
         let mut request = SignedRequest::new("GET", "greengrass", &self.region, &request_uri);
@@ -8519,6 +8651,7 @@ impl GreenGrass for GreenGrassClient {
         &self,
         input: GetFunctionDefinitionRequest,
     ) -> Result<GetFunctionDefinitionResponse, RusotoError<GetFunctionDefinitionError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/greengrass/definition/functions/{function_definition_id}",
             function_definition_id = input.function_definition_id
@@ -8551,6 +8684,7 @@ impl GreenGrass for GreenGrassClient {
         input: GetFunctionDefinitionVersionRequest,
     ) -> Result<GetFunctionDefinitionVersionResponse, RusotoError<GetFunctionDefinitionVersionError>>
     {
+        #![allow(clippy::needless_update)]
         let request_uri = format!("/greengrass/definition/functions/{function_definition_id}/versions/{function_definition_version_id}", function_definition_id = input.function_definition_id, function_definition_version_id = input.function_definition_version_id);
 
         let mut request = SignedRequest::new("GET", "greengrass", &self.region, &request_uri);
@@ -8585,6 +8719,7 @@ impl GreenGrass for GreenGrassClient {
         &self,
         input: GetGroupRequest,
     ) -> Result<GetGroupResponse, RusotoError<GetGroupError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!("/greengrass/groups/{group_id}", group_id = input.group_id);
 
         let mut request = SignedRequest::new("GET", "greengrass", &self.region, &request_uri);
@@ -8614,6 +8749,7 @@ impl GreenGrass for GreenGrassClient {
         input: GetGroupCertificateAuthorityRequest,
     ) -> Result<GetGroupCertificateAuthorityResponse, RusotoError<GetGroupCertificateAuthorityError>>
     {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/greengrass/groups/{group_id}/certificateauthorities/{certificate_authority_id}",
             certificate_authority_id = input.certificate_authority_id,
@@ -8649,6 +8785,7 @@ impl GreenGrass for GreenGrassClient {
         GetGroupCertificateConfigurationResponse,
         RusotoError<GetGroupCertificateConfigurationError>,
     > {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/greengrass/groups/{group_id}/certificateauthorities/configuration/expiry",
             group_id = input.group_id
@@ -8682,6 +8819,7 @@ impl GreenGrass for GreenGrassClient {
         &self,
         input: GetGroupVersionRequest,
     ) -> Result<GetGroupVersionResponse, RusotoError<GetGroupVersionError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/greengrass/groups/{group_id}/versions/{group_version_id}",
             group_id = input.group_id,
@@ -8714,6 +8852,7 @@ impl GreenGrass for GreenGrassClient {
         &self,
         input: GetLoggerDefinitionRequest,
     ) -> Result<GetLoggerDefinitionResponse, RusotoError<GetLoggerDefinitionError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/greengrass/definition/loggers/{logger_definition_id}",
             logger_definition_id = input.logger_definition_id
@@ -8746,6 +8885,7 @@ impl GreenGrass for GreenGrassClient {
         input: GetLoggerDefinitionVersionRequest,
     ) -> Result<GetLoggerDefinitionVersionResponse, RusotoError<GetLoggerDefinitionVersionError>>
     {
+        #![allow(clippy::needless_update)]
         let request_uri = format!("/greengrass/definition/loggers/{logger_definition_id}/versions/{logger_definition_version_id}", logger_definition_id = input.logger_definition_id, logger_definition_version_id = input.logger_definition_version_id);
 
         let mut request = SignedRequest::new("GET", "greengrass", &self.region, &request_uri);
@@ -8780,6 +8920,7 @@ impl GreenGrass for GreenGrassClient {
         &self,
         input: GetResourceDefinitionRequest,
     ) -> Result<GetResourceDefinitionResponse, RusotoError<GetResourceDefinitionError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/greengrass/definition/resources/{resource_definition_id}",
             resource_definition_id = input.resource_definition_id
@@ -8812,6 +8953,7 @@ impl GreenGrass for GreenGrassClient {
         input: GetResourceDefinitionVersionRequest,
     ) -> Result<GetResourceDefinitionVersionResponse, RusotoError<GetResourceDefinitionVersionError>>
     {
+        #![allow(clippy::needless_update)]
         let request_uri = format!("/greengrass/definition/resources/{resource_definition_id}/versions/{resource_definition_version_id}", resource_definition_id = input.resource_definition_id, resource_definition_version_id = input.resource_definition_version_id);
 
         let mut request = SignedRequest::new("GET", "greengrass", &self.region, &request_uri);
@@ -8839,6 +8981,7 @@ impl GreenGrass for GreenGrassClient {
     async fn get_service_role_for_account(
         &self,
     ) -> Result<GetServiceRoleForAccountResponse, RusotoError<GetServiceRoleForAccountError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/greengrass/servicerole";
 
         let mut request = SignedRequest::new("GET", "greengrass", &self.region, &request_uri);
@@ -8868,6 +9011,7 @@ impl GreenGrass for GreenGrassClient {
         input: GetSubscriptionDefinitionRequest,
     ) -> Result<GetSubscriptionDefinitionResponse, RusotoError<GetSubscriptionDefinitionError>>
     {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/greengrass/definition/subscriptions/{subscription_definition_id}",
             subscription_definition_id = input.subscription_definition_id
@@ -8902,6 +9046,7 @@ impl GreenGrass for GreenGrassClient {
         GetSubscriptionDefinitionVersionResponse,
         RusotoError<GetSubscriptionDefinitionVersionError>,
     > {
+        #![allow(clippy::needless_update)]
         let request_uri = format!("/greengrass/definition/subscriptions/{subscription_definition_id}/versions/{subscription_definition_version_id}", subscription_definition_id = input.subscription_definition_id, subscription_definition_version_id = input.subscription_definition_version_id);
 
         let mut request = SignedRequest::new("GET", "greengrass", &self.region, &request_uri);
@@ -8939,6 +9084,7 @@ impl GreenGrass for GreenGrassClient {
         input: GetThingRuntimeConfigurationRequest,
     ) -> Result<GetThingRuntimeConfigurationResponse, RusotoError<GetThingRuntimeConfigurationError>>
     {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/greengrass/things/{thing_name}/runtimeconfig",
             thing_name = input.thing_name
@@ -8973,6 +9119,7 @@ impl GreenGrass for GreenGrassClient {
         ListBulkDeploymentDetailedReportsResponse,
         RusotoError<ListBulkDeploymentDetailedReportsError>,
     > {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/greengrass/bulk/deployments/{bulk_deployment_id}/detailed-reports",
             bulk_deployment_id = input.bulk_deployment_id
@@ -9015,6 +9162,7 @@ impl GreenGrass for GreenGrassClient {
         &self,
         input: ListBulkDeploymentsRequest,
     ) -> Result<ListBulkDeploymentsResponse, RusotoError<ListBulkDeploymentsError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/greengrass/bulk/deployments";
 
         let mut request = SignedRequest::new("GET", "greengrass", &self.region, &request_uri);
@@ -9055,6 +9203,7 @@ impl GreenGrass for GreenGrassClient {
         ListConnectorDefinitionVersionsResponse,
         RusotoError<ListConnectorDefinitionVersionsError>,
     > {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/greengrass/definition/connectors/{connector_definition_id}/versions",
             connector_definition_id = input.connector_definition_id
@@ -9097,6 +9246,7 @@ impl GreenGrass for GreenGrassClient {
         &self,
         input: ListConnectorDefinitionsRequest,
     ) -> Result<ListConnectorDefinitionsResponse, RusotoError<ListConnectorDefinitionsError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/greengrass/definition/connectors";
 
         let mut request = SignedRequest::new("GET", "greengrass", &self.region, &request_uri);
@@ -9135,6 +9285,7 @@ impl GreenGrass for GreenGrassClient {
         input: ListCoreDefinitionVersionsRequest,
     ) -> Result<ListCoreDefinitionVersionsResponse, RusotoError<ListCoreDefinitionVersionsError>>
     {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/greengrass/definition/cores/{core_definition_id}/versions",
             core_definition_id = input.core_definition_id
@@ -9175,6 +9326,7 @@ impl GreenGrass for GreenGrassClient {
         &self,
         input: ListCoreDefinitionsRequest,
     ) -> Result<ListCoreDefinitionsResponse, RusotoError<ListCoreDefinitionsError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/greengrass/definition/cores";
 
         let mut request = SignedRequest::new("GET", "greengrass", &self.region, &request_uri);
@@ -9212,6 +9364,7 @@ impl GreenGrass for GreenGrassClient {
         &self,
         input: ListDeploymentsRequest,
     ) -> Result<ListDeploymentsResponse, RusotoError<ListDeploymentsError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/greengrass/groups/{group_id}/deployments",
             group_id = input.group_id
@@ -9253,6 +9406,7 @@ impl GreenGrass for GreenGrassClient {
         input: ListDeviceDefinitionVersionsRequest,
     ) -> Result<ListDeviceDefinitionVersionsResponse, RusotoError<ListDeviceDefinitionVersionsError>>
     {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/greengrass/definition/devices/{device_definition_id}/versions",
             device_definition_id = input.device_definition_id
@@ -9293,6 +9447,7 @@ impl GreenGrass for GreenGrassClient {
         &self,
         input: ListDeviceDefinitionsRequest,
     ) -> Result<ListDeviceDefinitionsResponse, RusotoError<ListDeviceDefinitionsError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/greengrass/definition/devices";
 
         let mut request = SignedRequest::new("GET", "greengrass", &self.region, &request_uri);
@@ -9333,6 +9488,7 @@ impl GreenGrass for GreenGrassClient {
         ListFunctionDefinitionVersionsResponse,
         RusotoError<ListFunctionDefinitionVersionsError>,
     > {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/greengrass/definition/functions/{function_definition_id}/versions",
             function_definition_id = input.function_definition_id
@@ -9373,6 +9529,7 @@ impl GreenGrass for GreenGrassClient {
         &self,
         input: ListFunctionDefinitionsRequest,
     ) -> Result<ListFunctionDefinitionsResponse, RusotoError<ListFunctionDefinitionsError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/greengrass/definition/functions";
 
         let mut request = SignedRequest::new("GET", "greengrass", &self.region, &request_uri);
@@ -9413,6 +9570,7 @@ impl GreenGrass for GreenGrassClient {
         ListGroupCertificateAuthoritiesResponse,
         RusotoError<ListGroupCertificateAuthoritiesError>,
     > {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/greengrass/groups/{group_id}/certificateauthorities",
             group_id = input.group_id
@@ -9446,6 +9604,7 @@ impl GreenGrass for GreenGrassClient {
         &self,
         input: ListGroupVersionsRequest,
     ) -> Result<ListGroupVersionsResponse, RusotoError<ListGroupVersionsError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/greengrass/groups/{group_id}/versions",
             group_id = input.group_id
@@ -9486,6 +9645,7 @@ impl GreenGrass for GreenGrassClient {
         &self,
         input: ListGroupsRequest,
     ) -> Result<ListGroupsResponse, RusotoError<ListGroupsError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/greengrass/groups";
 
         let mut request = SignedRequest::new("GET", "greengrass", &self.region, &request_uri);
@@ -9524,6 +9684,7 @@ impl GreenGrass for GreenGrassClient {
         input: ListLoggerDefinitionVersionsRequest,
     ) -> Result<ListLoggerDefinitionVersionsResponse, RusotoError<ListLoggerDefinitionVersionsError>>
     {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/greengrass/definition/loggers/{logger_definition_id}/versions",
             logger_definition_id = input.logger_definition_id
@@ -9564,6 +9725,7 @@ impl GreenGrass for GreenGrassClient {
         &self,
         input: ListLoggerDefinitionsRequest,
     ) -> Result<ListLoggerDefinitionsResponse, RusotoError<ListLoggerDefinitionsError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/greengrass/definition/loggers";
 
         let mut request = SignedRequest::new("GET", "greengrass", &self.region, &request_uri);
@@ -9604,6 +9766,7 @@ impl GreenGrass for GreenGrassClient {
         ListResourceDefinitionVersionsResponse,
         RusotoError<ListResourceDefinitionVersionsError>,
     > {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/greengrass/definition/resources/{resource_definition_id}/versions",
             resource_definition_id = input.resource_definition_id
@@ -9644,6 +9807,7 @@ impl GreenGrass for GreenGrassClient {
         &self,
         input: ListResourceDefinitionsRequest,
     ) -> Result<ListResourceDefinitionsResponse, RusotoError<ListResourceDefinitionsError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/greengrass/definition/resources";
 
         let mut request = SignedRequest::new("GET", "greengrass", &self.region, &request_uri);
@@ -9684,6 +9848,7 @@ impl GreenGrass for GreenGrassClient {
         ListSubscriptionDefinitionVersionsResponse,
         RusotoError<ListSubscriptionDefinitionVersionsError>,
     > {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/greengrass/definition/subscriptions/{subscription_definition_id}/versions",
             subscription_definition_id = input.subscription_definition_id
@@ -9727,6 +9892,7 @@ impl GreenGrass for GreenGrassClient {
         input: ListSubscriptionDefinitionsRequest,
     ) -> Result<ListSubscriptionDefinitionsResponse, RusotoError<ListSubscriptionDefinitionsError>>
     {
+        #![allow(clippy::needless_update)]
         let request_uri = "/greengrass/definition/subscriptions";
 
         let mut request = SignedRequest::new("GET", "greengrass", &self.region, &request_uri);
@@ -9764,6 +9930,7 @@ impl GreenGrass for GreenGrassClient {
         &self,
         input: ListTagsForResourceRequest,
     ) -> Result<ListTagsForResourceResponse, RusotoError<ListTagsForResourceError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!("/tags/{resource_arn}", resource_arn = input.resource_arn);
 
         let mut request = SignedRequest::new("GET", "greengrass", &self.region, &request_uri);
@@ -9792,6 +9959,7 @@ impl GreenGrass for GreenGrassClient {
         &self,
         input: ResetDeploymentsRequest,
     ) -> Result<ResetDeploymentsResponse, RusotoError<ResetDeploymentsError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/greengrass/groups/{group_id}/deployments/$reset",
             group_id = input.group_id
@@ -9827,6 +9995,7 @@ impl GreenGrass for GreenGrassClient {
         &self,
         input: StartBulkDeploymentRequest,
     ) -> Result<StartBulkDeploymentResponse, RusotoError<StartBulkDeploymentError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/greengrass/bulk/deployments";
 
         let mut request = SignedRequest::new("POST", "greengrass", &self.region, &request_uri);
@@ -9859,6 +10028,7 @@ impl GreenGrass for GreenGrassClient {
         &self,
         input: StopBulkDeploymentRequest,
     ) -> Result<StopBulkDeploymentResponse, RusotoError<StopBulkDeploymentError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/greengrass/bulk/deployments/{bulk_deployment_id}/$stop",
             bulk_deployment_id = input.bulk_deployment_id
@@ -9890,6 +10060,7 @@ impl GreenGrass for GreenGrassClient {
         &self,
         input: TagResourceRequest,
     ) -> Result<(), RusotoError<TagResourceError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!("/tags/{resource_arn}", resource_arn = input.resource_arn);
 
         let mut request = SignedRequest::new("POST", "greengrass", &self.region, &request_uri);
@@ -9905,9 +10076,9 @@ impl GreenGrass for GreenGrassClient {
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 204 {
             let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = ::std::mem::drop(response);
+            let _result = ::std::mem::drop(response);
 
-            Ok(result)
+            Ok(())
         } else {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             Err(TagResourceError::from_response(response))
@@ -9920,6 +10091,7 @@ impl GreenGrass for GreenGrassClient {
         &self,
         input: UntagResourceRequest,
     ) -> Result<(), RusotoError<UntagResourceError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!("/tags/{resource_arn}", resource_arn = input.resource_arn);
 
         let mut request = SignedRequest::new("DELETE", "greengrass", &self.region, &request_uri);
@@ -9938,9 +10110,9 @@ impl GreenGrass for GreenGrassClient {
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 204 {
             let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = ::std::mem::drop(response);
+            let _result = ::std::mem::drop(response);
 
-            Ok(result)
+            Ok(())
         } else {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             Err(UntagResourceError::from_response(response))
@@ -9953,6 +10125,7 @@ impl GreenGrass for GreenGrassClient {
         &self,
         input: UpdateConnectivityInfoRequest,
     ) -> Result<UpdateConnectivityInfoResponse, RusotoError<UpdateConnectivityInfoError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/greengrass/things/{thing_name}/connectivityInfo",
             thing_name = input.thing_name
@@ -9988,6 +10161,7 @@ impl GreenGrass for GreenGrassClient {
         input: UpdateConnectorDefinitionRequest,
     ) -> Result<UpdateConnectorDefinitionResponse, RusotoError<UpdateConnectorDefinitionError>>
     {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/greengrass/definition/connectors/{connector_definition_id}",
             connector_definition_id = input.connector_definition_id
@@ -10022,6 +10196,7 @@ impl GreenGrass for GreenGrassClient {
         &self,
         input: UpdateCoreDefinitionRequest,
     ) -> Result<UpdateCoreDefinitionResponse, RusotoError<UpdateCoreDefinitionError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/greengrass/definition/cores/{core_definition_id}",
             core_definition_id = input.core_definition_id
@@ -10056,6 +10231,7 @@ impl GreenGrass for GreenGrassClient {
         &self,
         input: UpdateDeviceDefinitionRequest,
     ) -> Result<UpdateDeviceDefinitionResponse, RusotoError<UpdateDeviceDefinitionError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/greengrass/definition/devices/{device_definition_id}",
             device_definition_id = input.device_definition_id
@@ -10090,6 +10266,7 @@ impl GreenGrass for GreenGrassClient {
         &self,
         input: UpdateFunctionDefinitionRequest,
     ) -> Result<UpdateFunctionDefinitionResponse, RusotoError<UpdateFunctionDefinitionError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/greengrass/definition/functions/{function_definition_id}",
             function_definition_id = input.function_definition_id
@@ -10124,6 +10301,7 @@ impl GreenGrass for GreenGrassClient {
         &self,
         input: UpdateGroupRequest,
     ) -> Result<UpdateGroupResponse, RusotoError<UpdateGroupError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!("/greengrass/groups/{group_id}", group_id = input.group_id);
 
         let mut request = SignedRequest::new("PUT", "greengrass", &self.region, &request_uri);
@@ -10158,6 +10336,7 @@ impl GreenGrass for GreenGrassClient {
         UpdateGroupCertificateConfigurationResponse,
         RusotoError<UpdateGroupCertificateConfigurationError>,
     > {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/greengrass/groups/{group_id}/certificateauthorities/configuration/expiry",
             group_id = input.group_id
@@ -10194,6 +10373,7 @@ impl GreenGrass for GreenGrassClient {
         &self,
         input: UpdateLoggerDefinitionRequest,
     ) -> Result<UpdateLoggerDefinitionResponse, RusotoError<UpdateLoggerDefinitionError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/greengrass/definition/loggers/{logger_definition_id}",
             logger_definition_id = input.logger_definition_id
@@ -10228,6 +10408,7 @@ impl GreenGrass for GreenGrassClient {
         &self,
         input: UpdateResourceDefinitionRequest,
     ) -> Result<UpdateResourceDefinitionResponse, RusotoError<UpdateResourceDefinitionError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/greengrass/definition/resources/{resource_definition_id}",
             resource_definition_id = input.resource_definition_id
@@ -10263,6 +10444,7 @@ impl GreenGrass for GreenGrassClient {
         input: UpdateSubscriptionDefinitionRequest,
     ) -> Result<UpdateSubscriptionDefinitionResponse, RusotoError<UpdateSubscriptionDefinitionError>>
     {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/greengrass/definition/subscriptions/{subscription_definition_id}",
             subscription_definition_id = input.subscription_definition_id
@@ -10300,6 +10482,7 @@ impl GreenGrass for GreenGrassClient {
         UpdateThingRuntimeConfigurationResponse,
         RusotoError<UpdateThingRuntimeConfigurationError>,
     > {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/greengrass/things/{thing_name}/runtimeconfig",
             thing_name = input.thing_name

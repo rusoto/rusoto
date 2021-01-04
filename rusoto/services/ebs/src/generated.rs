@@ -24,7 +24,6 @@ use rusoto_core::proto;
 use rusoto_core::signature::SignedRequest;
 #[allow(unused_imports)]
 use serde::{Deserialize, Serialize};
-use serde_json;
 /// <p>A block of data in an Amazon Elastic Block Store snapshot.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
@@ -366,6 +365,7 @@ pub enum CompleteSnapshotError {
 impl CompleteSnapshotError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CompleteSnapshotError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(CompleteSnapshotError::AccessDenied(err.msg))
@@ -422,6 +422,7 @@ pub enum GetSnapshotBlockError {
 impl GetSnapshotBlockError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetSnapshotBlockError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(GetSnapshotBlockError::AccessDenied(err.msg))
@@ -478,6 +479,7 @@ pub enum ListChangedBlocksError {
 impl ListChangedBlocksError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListChangedBlocksError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(ListChangedBlocksError::AccessDenied(err.msg))
@@ -534,6 +536,7 @@ pub enum ListSnapshotBlocksError {
 impl ListSnapshotBlocksError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListSnapshotBlocksError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(ListSnapshotBlocksError::AccessDenied(err.msg))
@@ -590,6 +593,7 @@ pub enum PutSnapshotBlockError {
 impl PutSnapshotBlockError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<PutSnapshotBlockError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(PutSnapshotBlockError::AccessDenied(err.msg))
@@ -650,6 +654,7 @@ pub enum StartSnapshotError {
 impl StartSnapshotError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<StartSnapshotError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(StartSnapshotError::AccessDenied(err.msg))
@@ -781,6 +786,7 @@ impl Ebs for EbsClient {
         &self,
         input: CompleteSnapshotRequest,
     ) -> Result<CompleteSnapshotResponse, RusotoError<CompleteSnapshotError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/snapshots/completion/{snapshot_id}",
             snapshot_id = input.snapshot_id
@@ -826,6 +832,7 @@ impl Ebs for EbsClient {
         &self,
         input: GetSnapshotBlockRequest,
     ) -> Result<GetSnapshotBlockResponse, RusotoError<GetSnapshotBlockError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/snapshots/{snapshot_id}/blocks/{block_index}",
             block_index = input.block_index,
@@ -847,8 +854,10 @@ impl Ebs for EbsClient {
         if response.status.is_success() {
             let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
 
-            let mut result = GetSnapshotBlockResponse::default();
-            result.block_data = Some(response.body);
+            let mut result = GetSnapshotBlockResponse {
+                block_data: Some(response.body),
+                ..GetSnapshotBlockResponse::default()
+            };
 
             result.checksum = response.headers.remove("x-amz-Checksum");
             result.checksum_algorithm = response.headers.remove("x-amz-Checksum-Algorithm");
@@ -870,6 +879,7 @@ impl Ebs for EbsClient {
         &self,
         input: ListChangedBlocksRequest,
     ) -> Result<ListChangedBlocksResponse, RusotoError<ListChangedBlocksError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/snapshots/{second_snapshot_id}/changedblocks",
             second_snapshot_id = input.second_snapshot_id
@@ -916,6 +926,7 @@ impl Ebs for EbsClient {
         &self,
         input: ListSnapshotBlocksRequest,
     ) -> Result<ListSnapshotBlocksResponse, RusotoError<ListSnapshotBlocksError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/snapshots/{snapshot_id}/blocks",
             snapshot_id = input.snapshot_id
@@ -959,6 +970,7 @@ impl Ebs for EbsClient {
         &self,
         input: PutSnapshotBlockRequest,
     ) -> Result<PutSnapshotBlockResponse, RusotoError<PutSnapshotBlockError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/snapshots/{snapshot_id}/blocks/{block_index}",
             block_index = input.block_index,
@@ -1003,6 +1015,7 @@ impl Ebs for EbsClient {
         &self,
         input: StartSnapshotRequest,
     ) -> Result<StartSnapshotResponse, RusotoError<StartSnapshotError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/snapshots";
 
         let mut request = SignedRequest::new("POST", "ebs", &self.region, &request_uri);

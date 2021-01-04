@@ -24,7 +24,6 @@ use rusoto_core::proto;
 use rusoto_core::signature::SignedRequest;
 #[allow(unused_imports)]
 use serde::{Deserialize, Serialize};
-use serde_json;
 /// <p>The Amazon Chime account details. An AWS account can have multiple Amazon Chime accounts.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
@@ -5448,6 +5447,7 @@ impl AssociatePhoneNumberWithUserError {
         res: BufferedHttpResponse,
     ) -> RusotoError<AssociatePhoneNumberWithUserError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(AssociatePhoneNumberWithUserError::AccessDenied(
@@ -5542,6 +5542,7 @@ impl AssociatePhoneNumbersWithVoiceConnectorError {
         res: BufferedHttpResponse,
     ) -> RusotoError<AssociatePhoneNumbersWithVoiceConnectorError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(
@@ -5648,6 +5649,7 @@ impl AssociatePhoneNumbersWithVoiceConnectorGroupError {
         res: BufferedHttpResponse,
     ) -> RusotoError<AssociatePhoneNumbersWithVoiceConnectorGroupError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(
@@ -5756,6 +5758,7 @@ impl AssociateSigninDelegateGroupsWithAccountError {
         res: BufferedHttpResponse,
     ) -> RusotoError<AssociateSigninDelegateGroupsWithAccountError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(
@@ -5852,6 +5855,7 @@ pub enum BatchCreateAttendeeError {
 impl BatchCreateAttendeeError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<BatchCreateAttendeeError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(BatchCreateAttendeeError::BadRequest(err.msg))
@@ -5928,6 +5932,7 @@ pub enum BatchCreateRoomMembershipError {
 impl BatchCreateRoomMembershipError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<BatchCreateRoomMembershipError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(BatchCreateRoomMembershipError::BadRequest(
@@ -6004,6 +6009,7 @@ pub enum BatchDeletePhoneNumberError {
 impl BatchDeletePhoneNumberError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<BatchDeletePhoneNumberError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(BatchDeletePhoneNumberError::BadRequest(err.msg))
@@ -6078,6 +6084,7 @@ pub enum BatchSuspendUserError {
 impl BatchSuspendUserError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<BatchSuspendUserError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(BatchSuspendUserError::BadRequest(err.msg))
@@ -6144,6 +6151,7 @@ pub enum BatchUnsuspendUserError {
 impl BatchUnsuspendUserError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<BatchUnsuspendUserError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(BatchUnsuspendUserError::BadRequest(err.msg))
@@ -6214,6 +6222,7 @@ pub enum BatchUpdatePhoneNumberError {
 impl BatchUpdatePhoneNumberError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<BatchUpdatePhoneNumberError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(BatchUpdatePhoneNumberError::BadRequest(err.msg))
@@ -6288,6 +6297,7 @@ pub enum BatchUpdateUserError {
 impl BatchUpdateUserError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<BatchUpdateUserError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(BatchUpdateUserError::BadRequest(err.msg))
@@ -6354,6 +6364,7 @@ pub enum CreateAccountError {
 impl CreateAccountError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateAccountError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(CreateAccountError::BadRequest(err.msg))
@@ -6422,6 +6433,7 @@ pub enum CreateAppInstanceError {
 impl CreateAppInstanceError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateAppInstanceError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(CreateAppInstanceError::BadRequest(err.msg))
@@ -6500,6 +6512,7 @@ pub enum CreateAppInstanceAdminError {
 impl CreateAppInstanceAdminError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateAppInstanceAdminError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(CreateAppInstanceAdminError::BadRequest(err.msg))
@@ -6582,6 +6595,7 @@ pub enum CreateAppInstanceUserError {
 impl CreateAppInstanceUserError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateAppInstanceUserError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(CreateAppInstanceUserError::BadRequest(err.msg))
@@ -6664,6 +6678,7 @@ pub enum CreateAttendeeError {
 impl CreateAttendeeError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateAttendeeError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(CreateAttendeeError::BadRequest(err.msg))
@@ -6738,6 +6753,7 @@ pub enum CreateBotError {
 impl CreateBotError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateBotError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(CreateBotError::BadRequest(err.msg))
@@ -6810,6 +6826,7 @@ pub enum CreateChannelError {
 impl CreateChannelError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateChannelError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(CreateChannelError::BadRequest(err.msg))
@@ -6882,6 +6899,7 @@ pub enum CreateChannelBanError {
 impl CreateChannelBanError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateChannelBanError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(CreateChannelBanError::BadRequest(err.msg))
@@ -6956,6 +6974,7 @@ pub enum CreateChannelMembershipError {
 impl CreateChannelMembershipError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateChannelMembershipError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(CreateChannelMembershipError::BadRequest(err.msg))
@@ -7040,6 +7059,7 @@ pub enum CreateChannelModeratorError {
 impl CreateChannelModeratorError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateChannelModeratorError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(CreateChannelModeratorError::BadRequest(err.msg))
@@ -7120,6 +7140,7 @@ pub enum CreateMeetingError {
 impl CreateMeetingError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateMeetingError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(CreateMeetingError::BadRequest(err.msg))
@@ -7186,6 +7207,7 @@ pub enum CreateMeetingDialOutError {
 impl CreateMeetingDialOutError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateMeetingDialOutError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(CreateMeetingDialOutError::BadRequest(err.msg))
@@ -7262,6 +7284,7 @@ impl CreateMeetingWithAttendeesError {
         res: BufferedHttpResponse,
     ) -> RusotoError<CreateMeetingWithAttendeesError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(CreateMeetingWithAttendeesError::BadRequest(
@@ -7350,6 +7373,7 @@ pub enum CreatePhoneNumberOrderError {
 impl CreatePhoneNumberOrderError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreatePhoneNumberOrderError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(CreatePhoneNumberOrderError::AccessDenied(err.msg))
@@ -7430,6 +7454,7 @@ pub enum CreateProxySessionError {
 impl CreateProxySessionError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateProxySessionError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(CreateProxySessionError::BadRequest(err.msg))
@@ -7502,6 +7527,7 @@ pub enum CreateRoomError {
 impl CreateRoomError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateRoomError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(CreateRoomError::BadRequest(err.msg))
@@ -7576,6 +7602,7 @@ pub enum CreateRoomMembershipError {
 impl CreateRoomMembershipError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateRoomMembershipError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(CreateRoomMembershipError::BadRequest(err.msg))
@@ -7662,6 +7689,7 @@ pub enum CreateSipMediaApplicationError {
 impl CreateSipMediaApplicationError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateSipMediaApplicationError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(CreateSipMediaApplicationError::AccessDenied(
@@ -7754,6 +7782,7 @@ impl CreateSipMediaApplicationCallError {
         res: BufferedHttpResponse,
     ) -> RusotoError<CreateSipMediaApplicationCallError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(CreateSipMediaApplicationCallError::BadRequest(
@@ -7846,6 +7875,7 @@ pub enum CreateSipRuleError {
 impl CreateSipRuleError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateSipRuleError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(CreateSipRuleError::AccessDenied(err.msg))
@@ -7922,6 +7952,7 @@ pub enum CreateUserError {
 impl CreateUserError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateUserError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(CreateUserError::BadRequest(err.msg))
@@ -7994,6 +8025,7 @@ pub enum CreateVoiceConnectorError {
 impl CreateVoiceConnectorError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateVoiceConnectorError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(CreateVoiceConnectorError::AccessDenied(err.msg))
@@ -8074,6 +8106,7 @@ pub enum CreateVoiceConnectorGroupError {
 impl CreateVoiceConnectorGroupError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateVoiceConnectorGroupError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(CreateVoiceConnectorGroupError::AccessDenied(
@@ -8162,6 +8195,7 @@ pub enum DeleteAccountError {
 impl DeleteAccountError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteAccountError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(DeleteAccountError::BadRequest(err.msg))
@@ -8230,6 +8264,7 @@ pub enum DeleteAppInstanceError {
 impl DeleteAppInstanceError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteAppInstanceError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(DeleteAppInstanceError::BadRequest(err.msg))
@@ -8298,6 +8333,7 @@ pub enum DeleteAppInstanceAdminError {
 impl DeleteAppInstanceAdminError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteAppInstanceAdminError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(DeleteAppInstanceAdminError::BadRequest(err.msg))
@@ -8380,6 +8416,7 @@ impl DeleteAppInstanceStreamingConfigurationsError {
         res: BufferedHttpResponse,
     ) -> RusotoError<DeleteAppInstanceStreamingConfigurationsError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(
@@ -8472,6 +8509,7 @@ pub enum DeleteAppInstanceUserError {
 impl DeleteAppInstanceUserError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteAppInstanceUserError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(DeleteAppInstanceUserError::BadRequest(err.msg))
@@ -8542,6 +8580,7 @@ pub enum DeleteAttendeeError {
 impl DeleteAttendeeError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteAttendeeError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(DeleteAttendeeError::BadRequest(err.msg))
@@ -8606,6 +8645,7 @@ pub enum DeleteChannelError {
 impl DeleteChannelError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteChannelError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(DeleteChannelError::BadRequest(err.msg))
@@ -8666,6 +8706,7 @@ pub enum DeleteChannelBanError {
 impl DeleteChannelBanError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteChannelBanError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(DeleteChannelBanError::BadRequest(err.msg))
@@ -8726,6 +8767,7 @@ pub enum DeleteChannelMembershipError {
 impl DeleteChannelMembershipError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteChannelMembershipError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(DeleteChannelMembershipError::BadRequest(err.msg))
@@ -8794,6 +8836,7 @@ pub enum DeleteChannelMessageError {
 impl DeleteChannelMessageError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteChannelMessageError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(DeleteChannelMessageError::BadRequest(err.msg))
@@ -8860,6 +8903,7 @@ pub enum DeleteChannelModeratorError {
 impl DeleteChannelModeratorError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteChannelModeratorError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(DeleteChannelModeratorError::BadRequest(err.msg))
@@ -8928,6 +8972,7 @@ pub enum DeleteEventsConfigurationError {
 impl DeleteEventsConfigurationError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteEventsConfigurationError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(DeleteEventsConfigurationError::BadRequest(
@@ -9002,6 +9047,7 @@ pub enum DeleteMeetingError {
 impl DeleteMeetingError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteMeetingError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(DeleteMeetingError::BadRequest(err.msg))
@@ -9068,6 +9114,7 @@ pub enum DeletePhoneNumberError {
 impl DeletePhoneNumberError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeletePhoneNumberError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(DeletePhoneNumberError::BadRequest(err.msg))
@@ -9138,6 +9185,7 @@ pub enum DeleteProxySessionError {
 impl DeleteProxySessionError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteProxySessionError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(DeleteProxySessionError::BadRequest(err.msg))
@@ -9208,6 +9256,7 @@ pub enum DeleteRoomError {
 impl DeleteRoomError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteRoomError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(DeleteRoomError::BadRequest(err.msg))
@@ -9274,6 +9323,7 @@ pub enum DeleteRoomMembershipError {
 impl DeleteRoomMembershipError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteRoomMembershipError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(DeleteRoomMembershipError::BadRequest(err.msg))
@@ -9348,6 +9398,7 @@ pub enum DeleteSipMediaApplicationError {
 impl DeleteSipMediaApplicationError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteSipMediaApplicationError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(DeleteSipMediaApplicationError::BadRequest(
@@ -9430,6 +9481,7 @@ pub enum DeleteSipRuleError {
 impl DeleteSipRuleError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteSipRuleError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(DeleteSipRuleError::BadRequest(err.msg))
@@ -9502,6 +9554,7 @@ pub enum DeleteVoiceConnectorError {
 impl DeleteVoiceConnectorError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteVoiceConnectorError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(DeleteVoiceConnectorError::BadRequest(err.msg))
@@ -9580,6 +9633,7 @@ impl DeleteVoiceConnectorEmergencyCallingConfigurationError {
         res: BufferedHttpResponse,
     ) -> RusotoError<DeleteVoiceConnectorEmergencyCallingConfigurationError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(
@@ -9684,6 +9738,7 @@ pub enum DeleteVoiceConnectorGroupError {
 impl DeleteVoiceConnectorGroupError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteVoiceConnectorGroupError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(DeleteVoiceConnectorGroupError::BadRequest(
@@ -9766,6 +9821,7 @@ impl DeleteVoiceConnectorOriginationError {
         res: BufferedHttpResponse,
     ) -> RusotoError<DeleteVoiceConnectorOriginationError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(DeleteVoiceConnectorOriginationError::BadRequest(
@@ -9854,6 +9910,7 @@ pub enum DeleteVoiceConnectorProxyError {
 impl DeleteVoiceConnectorProxyError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteVoiceConnectorProxyError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(DeleteVoiceConnectorProxyError::BadRequest(
@@ -9932,6 +9989,7 @@ impl DeleteVoiceConnectorStreamingConfigurationError {
         res: BufferedHttpResponse,
     ) -> RusotoError<DeleteVoiceConnectorStreamingConfigurationError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(
@@ -10032,6 +10090,7 @@ impl DeleteVoiceConnectorTerminationError {
         res: BufferedHttpResponse,
     ) -> RusotoError<DeleteVoiceConnectorTerminationError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(DeleteVoiceConnectorTerminationError::BadRequest(
@@ -10122,6 +10181,7 @@ impl DeleteVoiceConnectorTerminationCredentialsError {
         res: BufferedHttpResponse,
     ) -> RusotoError<DeleteVoiceConnectorTerminationCredentialsError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(
@@ -10218,6 +10278,7 @@ pub enum DescribeAppInstanceError {
 impl DescribeAppInstanceError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeAppInstanceError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(DescribeAppInstanceError::BadRequest(err.msg))
@@ -10282,6 +10343,7 @@ pub enum DescribeAppInstanceAdminError {
 impl DescribeAppInstanceAdminError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeAppInstanceAdminError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(DescribeAppInstanceAdminError::BadRequest(err.msg))
@@ -10350,6 +10412,7 @@ pub enum DescribeAppInstanceUserError {
 impl DescribeAppInstanceUserError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeAppInstanceUserError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(DescribeAppInstanceUserError::BadRequest(err.msg))
@@ -10418,6 +10481,7 @@ pub enum DescribeChannelError {
 impl DescribeChannelError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeChannelError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(DescribeChannelError::BadRequest(err.msg))
@@ -10480,6 +10544,7 @@ pub enum DescribeChannelBanError {
 impl DescribeChannelBanError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeChannelBanError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(DescribeChannelBanError::BadRequest(err.msg))
@@ -10550,6 +10615,7 @@ pub enum DescribeChannelMembershipError {
 impl DescribeChannelMembershipError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeChannelMembershipError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(DescribeChannelMembershipError::BadRequest(
@@ -10626,6 +10692,7 @@ impl DescribeChannelMembershipForAppInstanceUserError {
         res: BufferedHttpResponse,
     ) -> RusotoError<DescribeChannelMembershipForAppInstanceUserError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(
@@ -10716,6 +10783,7 @@ impl DescribeChannelModeratedByAppInstanceUserError {
         res: BufferedHttpResponse,
     ) -> RusotoError<DescribeChannelModeratedByAppInstanceUserError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(
@@ -10802,6 +10870,7 @@ pub enum DescribeChannelModeratorError {
 impl DescribeChannelModeratorError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeChannelModeratorError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(DescribeChannelModeratorError::BadRequest(err.msg))
@@ -10878,6 +10947,7 @@ impl DisassociatePhoneNumberFromUserError {
         res: BufferedHttpResponse,
     ) -> RusotoError<DisassociatePhoneNumberFromUserError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(DisassociatePhoneNumberFromUserError::BadRequest(
@@ -10968,6 +11038,7 @@ impl DisassociatePhoneNumbersFromVoiceConnectorError {
         res: BufferedHttpResponse,
     ) -> RusotoError<DisassociatePhoneNumbersFromVoiceConnectorError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(
@@ -11068,6 +11139,7 @@ impl DisassociatePhoneNumbersFromVoiceConnectorGroupError {
         res: BufferedHttpResponse,
     ) -> RusotoError<DisassociatePhoneNumbersFromVoiceConnectorGroupError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(
@@ -11172,6 +11244,7 @@ impl DisassociateSigninDelegateGroupsFromAccountError {
         res: BufferedHttpResponse,
     ) -> RusotoError<DisassociateSigninDelegateGroupsFromAccountError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(
@@ -11270,6 +11343,7 @@ pub enum GetAccountError {
 impl GetAccountError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetAccountError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(GetAccountError::BadRequest(err.msg))
@@ -11336,6 +11410,7 @@ pub enum GetAccountSettingsError {
 impl GetAccountSettingsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetAccountSettingsError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(GetAccountSettingsError::BadRequest(err.msg))
@@ -11408,6 +11483,7 @@ impl GetAppInstanceRetentionSettingsError {
         res: BufferedHttpResponse,
     ) -> RusotoError<GetAppInstanceRetentionSettingsError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(GetAppInstanceRetentionSettingsError::BadRequest(
@@ -11498,6 +11574,7 @@ impl GetAppInstanceStreamingConfigurationsError {
         res: BufferedHttpResponse,
     ) -> RusotoError<GetAppInstanceStreamingConfigurationsError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(
@@ -11592,6 +11669,7 @@ pub enum GetAttendeeError {
 impl GetAttendeeError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetAttendeeError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(GetAttendeeError::BadRequest(err.msg))
@@ -11658,6 +11736,7 @@ pub enum GetBotError {
 impl GetBotError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetBotError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(GetBotError::BadRequest(err.msg))
@@ -11722,6 +11801,7 @@ pub enum GetChannelMessageError {
 impl GetChannelMessageError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetChannelMessageError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(GetChannelMessageError::BadRequest(err.msg))
@@ -11792,6 +11872,7 @@ pub enum GetEventsConfigurationError {
 impl GetEventsConfigurationError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetEventsConfigurationError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(GetEventsConfigurationError::BadRequest(err.msg))
@@ -11864,6 +11945,7 @@ pub enum GetGlobalSettingsError {
 impl GetGlobalSettingsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetGlobalSettingsError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(GetGlobalSettingsError::BadRequest(err.msg))
@@ -11930,6 +12012,7 @@ pub enum GetMeetingError {
 impl GetMeetingError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetMeetingError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(GetMeetingError::BadRequest(err.msg))
@@ -11994,6 +12077,7 @@ impl GetMessagingSessionEndpointError {
         res: BufferedHttpResponse,
     ) -> RusotoError<GetMessagingSessionEndpointError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ForbiddenException" => {
                     return RusotoError::Service(GetMessagingSessionEndpointError::Forbidden(
@@ -12066,6 +12150,7 @@ pub enum GetPhoneNumberError {
 impl GetPhoneNumberError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetPhoneNumberError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(GetPhoneNumberError::BadRequest(err.msg))
@@ -12132,6 +12217,7 @@ pub enum GetPhoneNumberOrderError {
 impl GetPhoneNumberOrderError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetPhoneNumberOrderError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(GetPhoneNumberOrderError::BadRequest(err.msg))
@@ -12200,6 +12286,7 @@ pub enum GetPhoneNumberSettingsError {
 impl GetPhoneNumberSettingsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetPhoneNumberSettingsError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(GetPhoneNumberSettingsError::BadRequest(err.msg))
@@ -12270,6 +12357,7 @@ pub enum GetProxySessionError {
 impl GetProxySessionError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetProxySessionError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(GetProxySessionError::BadRequest(err.msg))
@@ -12336,6 +12424,7 @@ pub enum GetRetentionSettingsError {
 impl GetRetentionSettingsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetRetentionSettingsError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(GetRetentionSettingsError::BadRequest(err.msg))
@@ -12408,6 +12497,7 @@ pub enum GetRoomError {
 impl GetRoomError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetRoomError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(GetRoomError::BadRequest(err.msg))
@@ -12474,6 +12564,7 @@ pub enum GetSipMediaApplicationError {
 impl GetSipMediaApplicationError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetSipMediaApplicationError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(GetSipMediaApplicationError::BadRequest(err.msg))
@@ -12550,6 +12641,7 @@ impl GetSipMediaApplicationLoggingConfigurationError {
         res: BufferedHttpResponse,
     ) -> RusotoError<GetSipMediaApplicationLoggingConfigurationError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(
@@ -12648,6 +12740,7 @@ pub enum GetSipRuleError {
 impl GetSipRuleError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetSipRuleError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(GetSipRuleError::BadRequest(err.msg))
@@ -12714,6 +12807,7 @@ pub enum GetUserError {
 impl GetUserError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetUserError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(GetUserError::BadRequest(err.msg))
@@ -12780,6 +12874,7 @@ pub enum GetUserSettingsError {
 impl GetUserSettingsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetUserSettingsError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(GetUserSettingsError::BadRequest(err.msg))
@@ -12846,6 +12941,7 @@ pub enum GetVoiceConnectorError {
 impl GetVoiceConnectorError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetVoiceConnectorError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(GetVoiceConnectorError::BadRequest(err.msg))
@@ -12918,6 +13014,7 @@ impl GetVoiceConnectorEmergencyCallingConfigurationError {
         res: BufferedHttpResponse,
     ) -> RusotoError<GetVoiceConnectorEmergencyCallingConfigurationError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(
@@ -13020,6 +13117,7 @@ pub enum GetVoiceConnectorGroupError {
 impl GetVoiceConnectorGroupError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetVoiceConnectorGroupError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(GetVoiceConnectorGroupError::BadRequest(err.msg))
@@ -13096,6 +13194,7 @@ impl GetVoiceConnectorLoggingConfigurationError {
         res: BufferedHttpResponse,
     ) -> RusotoError<GetVoiceConnectorLoggingConfigurationError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(
@@ -13192,6 +13291,7 @@ impl GetVoiceConnectorOriginationError {
         res: BufferedHttpResponse,
     ) -> RusotoError<GetVoiceConnectorOriginationError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(GetVoiceConnectorOriginationError::BadRequest(
@@ -13276,6 +13376,7 @@ pub enum GetVoiceConnectorProxyError {
 impl GetVoiceConnectorProxyError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetVoiceConnectorProxyError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(GetVoiceConnectorProxyError::BadRequest(err.msg))
@@ -13352,6 +13453,7 @@ impl GetVoiceConnectorStreamingConfigurationError {
         res: BufferedHttpResponse,
     ) -> RusotoError<GetVoiceConnectorStreamingConfigurationError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(
@@ -13448,6 +13550,7 @@ impl GetVoiceConnectorTerminationError {
         res: BufferedHttpResponse,
     ) -> RusotoError<GetVoiceConnectorTerminationError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(GetVoiceConnectorTerminationError::BadRequest(
@@ -13534,6 +13637,7 @@ impl GetVoiceConnectorTerminationHealthError {
         res: BufferedHttpResponse,
     ) -> RusotoError<GetVoiceConnectorTerminationHealthError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(
@@ -13624,6 +13728,7 @@ pub enum InviteUsersError {
 impl InviteUsersError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<InviteUsersError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(InviteUsersError::BadRequest(err.msg))
@@ -13690,6 +13795,7 @@ pub enum ListAccountsError {
 impl ListAccountsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListAccountsError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(ListAccountsError::BadRequest(err.msg))
@@ -13756,6 +13862,7 @@ pub enum ListAppInstanceAdminsError {
 impl ListAppInstanceAdminsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListAppInstanceAdminsError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(ListAppInstanceAdminsError::BadRequest(err.msg))
@@ -13830,6 +13937,7 @@ pub enum ListAppInstanceUsersError {
 impl ListAppInstanceUsersError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListAppInstanceUsersError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(ListAppInstanceUsersError::BadRequest(err.msg))
@@ -13896,6 +14004,7 @@ pub enum ListAppInstancesError {
 impl ListAppInstancesError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListAppInstancesError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(ListAppInstancesError::BadRequest(err.msg))
@@ -13958,6 +14067,7 @@ pub enum ListAttendeeTagsError {
 impl ListAttendeeTagsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListAttendeeTagsError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(ListAttendeeTagsError::BadRequest(err.msg))
@@ -14024,6 +14134,7 @@ pub enum ListAttendeesError {
 impl ListAttendeesError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListAttendeesError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(ListAttendeesError::BadRequest(err.msg))
@@ -14090,6 +14201,7 @@ pub enum ListBotsError {
 impl ListBotsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListBotsError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(ListBotsError::BadRequest(err.msg))
@@ -14154,6 +14266,7 @@ pub enum ListChannelBansError {
 impl ListChannelBansError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListChannelBansError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(ListChannelBansError::BadRequest(err.msg))
@@ -14214,6 +14327,7 @@ pub enum ListChannelMembershipsError {
 impl ListChannelMembershipsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListChannelMembershipsError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(ListChannelMembershipsError::BadRequest(err.msg))
@@ -14284,6 +14398,7 @@ impl ListChannelMembershipsForAppInstanceUserError {
         res: BufferedHttpResponse,
     ) -> RusotoError<ListChannelMembershipsForAppInstanceUserError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(
@@ -14368,6 +14483,7 @@ pub enum ListChannelMessagesError {
 impl ListChannelMessagesError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListChannelMessagesError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(ListChannelMessagesError::BadRequest(err.msg))
@@ -14432,6 +14548,7 @@ pub enum ListChannelModeratorsError {
 impl ListChannelModeratorsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListChannelModeratorsError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(ListChannelModeratorsError::BadRequest(err.msg))
@@ -14500,6 +14617,7 @@ pub enum ListChannelsError {
 impl ListChannelsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListChannelsError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(ListChannelsError::BadRequest(err.msg))
@@ -14562,6 +14680,7 @@ impl ListChannelsModeratedByAppInstanceUserError {
         res: BufferedHttpResponse,
     ) -> RusotoError<ListChannelsModeratedByAppInstanceUserError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(
@@ -14648,6 +14767,7 @@ pub enum ListMeetingTagsError {
 impl ListMeetingTagsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListMeetingTagsError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(ListMeetingTagsError::BadRequest(err.msg))
@@ -14712,6 +14832,7 @@ pub enum ListMeetingsError {
 impl ListMeetingsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListMeetingsError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(ListMeetingsError::BadRequest(err.msg))
@@ -14772,6 +14893,7 @@ pub enum ListPhoneNumberOrdersError {
 impl ListPhoneNumberOrdersError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListPhoneNumberOrdersError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(ListPhoneNumberOrdersError::BadRequest(err.msg))
@@ -14840,6 +14962,7 @@ pub enum ListPhoneNumbersError {
 impl ListPhoneNumbersError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListPhoneNumbersError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(ListPhoneNumbersError::BadRequest(err.msg))
@@ -14902,6 +15025,7 @@ pub enum ListProxySessionsError {
 impl ListProxySessionsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListProxySessionsError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(ListProxySessionsError::BadRequest(err.msg))
@@ -14972,6 +15096,7 @@ pub enum ListRoomMembershipsError {
 impl ListRoomMembershipsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListRoomMembershipsError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(ListRoomMembershipsError::BadRequest(err.msg))
@@ -15042,6 +15167,7 @@ pub enum ListRoomsError {
 impl ListRoomsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListRoomsError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(ListRoomsError::BadRequest(err.msg))
@@ -15106,6 +15232,7 @@ pub enum ListSipMediaApplicationsError {
 impl ListSipMediaApplicationsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListSipMediaApplicationsError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(ListSipMediaApplicationsError::BadRequest(err.msg))
@@ -15174,6 +15301,7 @@ pub enum ListSipRulesError {
 impl ListSipRulesError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListSipRulesError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(ListSipRulesError::BadRequest(err.msg))
@@ -15234,6 +15362,7 @@ pub enum ListTagsForResourceError {
 impl ListTagsForResourceError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListTagsForResourceError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(ListTagsForResourceError::BadRequest(err.msg))
@@ -15300,6 +15429,7 @@ pub enum ListUsersError {
 impl ListUsersError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListUsersError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(ListUsersError::BadRequest(err.msg))
@@ -15364,6 +15494,7 @@ pub enum ListVoiceConnectorGroupsError {
 impl ListVoiceConnectorGroupsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListVoiceConnectorGroupsError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(ListVoiceConnectorGroupsError::BadRequest(err.msg))
@@ -15436,6 +15567,7 @@ impl ListVoiceConnectorTerminationCredentialsError {
         res: BufferedHttpResponse,
     ) -> RusotoError<ListVoiceConnectorTerminationCredentialsError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(
@@ -15528,6 +15660,7 @@ pub enum ListVoiceConnectorsError {
 impl ListVoiceConnectorsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListVoiceConnectorsError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(ListVoiceConnectorsError::BadRequest(err.msg))
@@ -15594,6 +15727,7 @@ pub enum LogoutUserError {
 impl LogoutUserError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<LogoutUserError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(LogoutUserError::BadRequest(err.msg))
@@ -15664,6 +15798,7 @@ impl PutAppInstanceRetentionSettingsError {
         res: BufferedHttpResponse,
     ) -> RusotoError<PutAppInstanceRetentionSettingsError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(PutAppInstanceRetentionSettingsError::BadRequest(
@@ -15760,6 +15895,7 @@ impl PutAppInstanceStreamingConfigurationsError {
         res: BufferedHttpResponse,
     ) -> RusotoError<PutAppInstanceStreamingConfigurationsError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(
@@ -15854,6 +15990,7 @@ pub enum PutEventsConfigurationError {
 impl PutEventsConfigurationError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<PutEventsConfigurationError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(PutEventsConfigurationError::BadRequest(err.msg))
@@ -15930,6 +16067,7 @@ pub enum PutRetentionSettingsError {
 impl PutRetentionSettingsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<PutRetentionSettingsError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(PutRetentionSettingsError::BadRequest(err.msg))
@@ -16008,6 +16146,7 @@ impl PutSipMediaApplicationLoggingConfigurationError {
         res: BufferedHttpResponse,
     ) -> RusotoError<PutSipMediaApplicationLoggingConfigurationError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(
@@ -16108,6 +16247,7 @@ impl PutVoiceConnectorEmergencyCallingConfigurationError {
         res: BufferedHttpResponse,
     ) -> RusotoError<PutVoiceConnectorEmergencyCallingConfigurationError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(
@@ -16212,6 +16352,7 @@ impl PutVoiceConnectorLoggingConfigurationError {
         res: BufferedHttpResponse,
     ) -> RusotoError<PutVoiceConnectorLoggingConfigurationError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(
@@ -16308,6 +16449,7 @@ impl PutVoiceConnectorOriginationError {
         res: BufferedHttpResponse,
     ) -> RusotoError<PutVoiceConnectorOriginationError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(PutVoiceConnectorOriginationError::BadRequest(
@@ -16394,6 +16536,7 @@ pub enum PutVoiceConnectorProxyError {
 impl PutVoiceConnectorProxyError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<PutVoiceConnectorProxyError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(PutVoiceConnectorProxyError::AccessDenied(err.msg))
@@ -16474,6 +16617,7 @@ impl PutVoiceConnectorStreamingConfigurationError {
         res: BufferedHttpResponse,
     ) -> RusotoError<PutVoiceConnectorStreamingConfigurationError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(
@@ -16572,6 +16716,7 @@ impl PutVoiceConnectorTerminationError {
         res: BufferedHttpResponse,
     ) -> RusotoError<PutVoiceConnectorTerminationError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(PutVoiceConnectorTerminationError::AccessDenied(
@@ -16664,6 +16809,7 @@ impl PutVoiceConnectorTerminationCredentialsError {
         res: BufferedHttpResponse,
     ) -> RusotoError<PutVoiceConnectorTerminationCredentialsError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(
@@ -16756,6 +16902,7 @@ pub enum RedactChannelMessageError {
 impl RedactChannelMessageError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<RedactChannelMessageError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(RedactChannelMessageError::BadRequest(err.msg))
@@ -16824,6 +16971,7 @@ pub enum RedactConversationMessageError {
 impl RedactConversationMessageError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<RedactConversationMessageError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(RedactConversationMessageError::BadRequest(
@@ -16900,6 +17048,7 @@ pub enum RedactRoomMessageError {
 impl RedactRoomMessageError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<RedactRoomMessageError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(RedactRoomMessageError::BadRequest(err.msg))
@@ -16970,6 +17119,7 @@ pub enum RegenerateSecurityTokenError {
 impl RegenerateSecurityTokenError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<RegenerateSecurityTokenError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(RegenerateSecurityTokenError::BadRequest(err.msg))
@@ -17044,6 +17194,7 @@ pub enum ResetPersonalPINError {
 impl ResetPersonalPINError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ResetPersonalPINError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(ResetPersonalPINError::BadRequest(err.msg))
@@ -17112,6 +17263,7 @@ pub enum RestorePhoneNumberError {
 impl RestorePhoneNumberError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<RestorePhoneNumberError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(RestorePhoneNumberError::BadRequest(err.msg))
@@ -17190,6 +17342,7 @@ impl SearchAvailablePhoneNumbersError {
         res: BufferedHttpResponse,
     ) -> RusotoError<SearchAvailablePhoneNumbersError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(SearchAvailablePhoneNumbersError::AccessDenied(
@@ -17274,6 +17427,7 @@ pub enum SendChannelMessageError {
 impl SendChannelMessageError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<SendChannelMessageError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(SendChannelMessageError::BadRequest(err.msg))
@@ -17346,6 +17500,7 @@ pub enum TagAttendeeError {
 impl TagAttendeeError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<TagAttendeeError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(TagAttendeeError::BadRequest(err.msg))
@@ -17418,6 +17573,7 @@ pub enum TagMeetingError {
 impl TagMeetingError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<TagMeetingError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(TagMeetingError::BadRequest(err.msg))
@@ -17486,6 +17642,7 @@ pub enum TagResourceError {
 impl TagResourceError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<TagResourceError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(TagResourceError::BadRequest(err.msg))
@@ -17548,6 +17705,7 @@ pub enum UntagAttendeeError {
 impl UntagAttendeeError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UntagAttendeeError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(UntagAttendeeError::BadRequest(err.msg))
@@ -17614,6 +17772,7 @@ pub enum UntagMeetingError {
 impl UntagMeetingError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UntagMeetingError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(UntagMeetingError::BadRequest(err.msg))
@@ -17678,6 +17837,7 @@ pub enum UntagResourceError {
 impl UntagResourceError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UntagResourceError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(UntagResourceError::BadRequest(err.msg))
@@ -17740,6 +17900,7 @@ pub enum UpdateAccountError {
 impl UpdateAccountError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateAccountError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(UpdateAccountError::BadRequest(err.msg))
@@ -17808,6 +17969,7 @@ pub enum UpdateAccountSettingsError {
 impl UpdateAccountSettingsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateAccountSettingsError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(UpdateAccountSettingsError::BadRequest(err.msg))
@@ -17886,6 +18048,7 @@ pub enum UpdateAppInstanceError {
 impl UpdateAppInstanceError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateAppInstanceError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(UpdateAppInstanceError::BadRequest(err.msg))
@@ -17956,6 +18119,7 @@ pub enum UpdateAppInstanceUserError {
 impl UpdateAppInstanceUserError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateAppInstanceUserError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(UpdateAppInstanceUserError::BadRequest(err.msg))
@@ -18030,6 +18194,7 @@ pub enum UpdateBotError {
 impl UpdateBotError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateBotError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(UpdateBotError::BadRequest(err.msg))
@@ -18096,6 +18261,7 @@ pub enum UpdateChannelError {
 impl UpdateChannelError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateChannelError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(UpdateChannelError::BadRequest(err.msg))
@@ -18162,6 +18328,7 @@ pub enum UpdateChannelMessageError {
 impl UpdateChannelMessageError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateChannelMessageError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(UpdateChannelMessageError::BadRequest(err.msg))
@@ -18234,6 +18401,7 @@ pub enum UpdateChannelReadMarkerError {
 impl UpdateChannelReadMarkerError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateChannelReadMarkerError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(UpdateChannelReadMarkerError::BadRequest(err.msg))
@@ -18306,6 +18474,7 @@ pub enum UpdateGlobalSettingsError {
 impl UpdateGlobalSettingsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateGlobalSettingsError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(UpdateGlobalSettingsError::BadRequest(err.msg))
@@ -18374,6 +18543,7 @@ pub enum UpdatePhoneNumberError {
 impl UpdatePhoneNumberError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdatePhoneNumberError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(UpdatePhoneNumberError::BadRequest(err.msg))
@@ -18442,6 +18612,7 @@ pub enum UpdatePhoneNumberSettingsError {
 impl UpdatePhoneNumberSettingsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdatePhoneNumberSettingsError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(UpdatePhoneNumberSettingsError::BadRequest(
@@ -18514,6 +18685,7 @@ pub enum UpdateProxySessionError {
 impl UpdateProxySessionError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateProxySessionError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(UpdateProxySessionError::BadRequest(err.msg))
@@ -18584,6 +18756,7 @@ pub enum UpdateRoomError {
 impl UpdateRoomError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateRoomError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(UpdateRoomError::BadRequest(err.msg))
@@ -18650,6 +18823,7 @@ pub enum UpdateRoomMembershipError {
 impl UpdateRoomMembershipError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateRoomMembershipError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(UpdateRoomMembershipError::BadRequest(err.msg))
@@ -18724,6 +18898,7 @@ pub enum UpdateSipMediaApplicationError {
 impl UpdateSipMediaApplicationError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateSipMediaApplicationError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(UpdateSipMediaApplicationError::BadRequest(
@@ -18808,6 +18983,7 @@ pub enum UpdateSipRuleError {
 impl UpdateSipRuleError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateSipRuleError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(UpdateSipRuleError::BadRequest(err.msg))
@@ -18882,6 +19058,7 @@ pub enum UpdateUserError {
 impl UpdateUserError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateUserError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(UpdateUserError::BadRequest(err.msg))
@@ -18948,6 +19125,7 @@ pub enum UpdateUserSettingsError {
 impl UpdateUserSettingsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateUserSettingsError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(UpdateUserSettingsError::BadRequest(err.msg))
@@ -19018,6 +19196,7 @@ pub enum UpdateVoiceConnectorError {
 impl UpdateVoiceConnectorError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateVoiceConnectorError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(UpdateVoiceConnectorError::BadRequest(err.msg))
@@ -19092,6 +19271,7 @@ pub enum UpdateVoiceConnectorGroupError {
 impl UpdateVoiceConnectorGroupError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateVoiceConnectorGroupError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(UpdateVoiceConnectorGroupError::BadRequest(
@@ -20361,6 +20541,7 @@ impl Chime for ChimeClient {
         input: AssociatePhoneNumberWithUserRequest,
     ) -> Result<AssociatePhoneNumberWithUserResponse, RusotoError<AssociatePhoneNumberWithUserError>>
     {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/accounts/{account_id}/users/{user_id}",
             account_id = input.account_id,
@@ -20403,6 +20584,7 @@ impl Chime for ChimeClient {
         AssociatePhoneNumbersWithVoiceConnectorResponse,
         RusotoError<AssociatePhoneNumbersWithVoiceConnectorError>,
     > {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/voice-connectors/{voice_connector_id}",
             voice_connector_id = input.voice_connector_id
@@ -20446,6 +20628,7 @@ impl Chime for ChimeClient {
         AssociatePhoneNumbersWithVoiceConnectorGroupResponse,
         RusotoError<AssociatePhoneNumbersWithVoiceConnectorGroupError>,
     > {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/voice-connector-groups/{voice_connector_group_id}",
             voice_connector_group_id = input.voice_connector_group_id
@@ -20488,6 +20671,7 @@ impl Chime for ChimeClient {
         AssociateSigninDelegateGroupsWithAccountResponse,
         RusotoError<AssociateSigninDelegateGroupsWithAccountError>,
     > {
+        #![allow(clippy::needless_update)]
         let request_uri = format!("/accounts/{account_id}", account_id = input.account_id);
 
         let mut request = SignedRequest::new("POST", "chime", &self.region, &request_uri);
@@ -20523,6 +20707,7 @@ impl Chime for ChimeClient {
         &self,
         input: BatchCreateAttendeeRequest,
     ) -> Result<BatchCreateAttendeeResponse, RusotoError<BatchCreateAttendeeError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/meetings/{meeting_id}/attendees",
             meeting_id = input.meeting_id
@@ -20562,6 +20747,7 @@ impl Chime for ChimeClient {
         input: BatchCreateRoomMembershipRequest,
     ) -> Result<BatchCreateRoomMembershipResponse, RusotoError<BatchCreateRoomMembershipError>>
     {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/accounts/{account_id}/rooms/{room_id}/memberships",
             account_id = input.account_id,
@@ -20601,6 +20787,7 @@ impl Chime for ChimeClient {
         &self,
         input: BatchDeletePhoneNumberRequest,
     ) -> Result<BatchDeletePhoneNumberResponse, RusotoError<BatchDeletePhoneNumberError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/phone-numbers";
 
         let mut request = SignedRequest::new("POST", "chime", &self.region, &request_uri);
@@ -20636,6 +20823,7 @@ impl Chime for ChimeClient {
         &self,
         input: BatchSuspendUserRequest,
     ) -> Result<BatchSuspendUserResponse, RusotoError<BatchSuspendUserError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/accounts/{account_id}/users",
             account_id = input.account_id
@@ -20674,6 +20862,7 @@ impl Chime for ChimeClient {
         &self,
         input: BatchUnsuspendUserRequest,
     ) -> Result<BatchUnsuspendUserResponse, RusotoError<BatchUnsuspendUserError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/accounts/{account_id}/users",
             account_id = input.account_id
@@ -20712,6 +20901,7 @@ impl Chime for ChimeClient {
         &self,
         input: BatchUpdatePhoneNumberRequest,
     ) -> Result<BatchUpdatePhoneNumberResponse, RusotoError<BatchUpdatePhoneNumberError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/phone-numbers";
 
         let mut request = SignedRequest::new("POST", "chime", &self.region, &request_uri);
@@ -20747,6 +20937,7 @@ impl Chime for ChimeClient {
         &self,
         input: BatchUpdateUserRequest,
     ) -> Result<BatchUpdateUserResponse, RusotoError<BatchUpdateUserError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/accounts/{account_id}/users",
             account_id = input.account_id
@@ -20781,6 +20972,7 @@ impl Chime for ChimeClient {
         &self,
         input: CreateAccountRequest,
     ) -> Result<CreateAccountResponse, RusotoError<CreateAccountError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/accounts";
 
         let mut request = SignedRequest::new("POST", "chime", &self.region, &request_uri);
@@ -20812,6 +21004,7 @@ impl Chime for ChimeClient {
         &self,
         input: CreateAppInstanceRequest,
     ) -> Result<CreateAppInstanceResponse, RusotoError<CreateAppInstanceError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/app-instances";
 
         let mut request = SignedRequest::new("POST", "chime", &self.region, &request_uri);
@@ -20843,6 +21036,7 @@ impl Chime for ChimeClient {
         &self,
         input: CreateAppInstanceAdminRequest,
     ) -> Result<CreateAppInstanceAdminResponse, RusotoError<CreateAppInstanceAdminError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/app-instances/{app_instance_arn}/admins",
             app_instance_arn = input.app_instance_arn
@@ -20877,6 +21071,7 @@ impl Chime for ChimeClient {
         &self,
         input: CreateAppInstanceUserRequest,
     ) -> Result<CreateAppInstanceUserResponse, RusotoError<CreateAppInstanceUserError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/app-instance-users";
 
         let mut request = SignedRequest::new("POST", "chime", &self.region, &request_uri);
@@ -20908,6 +21103,7 @@ impl Chime for ChimeClient {
         &self,
         input: CreateAttendeeRequest,
     ) -> Result<CreateAttendeeResponse, RusotoError<CreateAttendeeError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/meetings/{meeting_id}/attendees",
             meeting_id = input.meeting_id
@@ -20942,6 +21138,7 @@ impl Chime for ChimeClient {
         &self,
         input: CreateBotRequest,
     ) -> Result<CreateBotResponse, RusotoError<CreateBotError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!("/accounts/{account_id}/bots", account_id = input.account_id);
 
         let mut request = SignedRequest::new("POST", "chime", &self.region, &request_uri);
@@ -20973,6 +21170,7 @@ impl Chime for ChimeClient {
         &self,
         input: CreateChannelRequest,
     ) -> Result<CreateChannelResponse, RusotoError<CreateChannelError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/channels";
 
         let mut request = SignedRequest::new("POST", "chime", &self.region, &request_uri);
@@ -21004,6 +21202,7 @@ impl Chime for ChimeClient {
         &self,
         input: CreateChannelBanRequest,
     ) -> Result<CreateChannelBanResponse, RusotoError<CreateChannelBanError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/channels/{channel_arn}/bans",
             channel_arn = input.channel_arn
@@ -21038,6 +21237,7 @@ impl Chime for ChimeClient {
         &self,
         input: CreateChannelMembershipRequest,
     ) -> Result<CreateChannelMembershipResponse, RusotoError<CreateChannelMembershipError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/channels/{channel_arn}/memberships",
             channel_arn = input.channel_arn
@@ -21072,6 +21272,7 @@ impl Chime for ChimeClient {
         &self,
         input: CreateChannelModeratorRequest,
     ) -> Result<CreateChannelModeratorResponse, RusotoError<CreateChannelModeratorError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/channels/{channel_arn}/moderators",
             channel_arn = input.channel_arn
@@ -21106,6 +21307,7 @@ impl Chime for ChimeClient {
         &self,
         input: CreateMeetingRequest,
     ) -> Result<CreateMeetingResponse, RusotoError<CreateMeetingError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/meetings";
 
         let mut request = SignedRequest::new("POST", "chime", &self.region, &request_uri);
@@ -21137,6 +21339,7 @@ impl Chime for ChimeClient {
         &self,
         input: CreateMeetingDialOutRequest,
     ) -> Result<CreateMeetingDialOutResponse, RusotoError<CreateMeetingDialOutError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/meetings/{meeting_id}/dial-outs",
             meeting_id = input.meeting_id
@@ -21172,6 +21375,7 @@ impl Chime for ChimeClient {
         input: CreateMeetingWithAttendeesRequest,
     ) -> Result<CreateMeetingWithAttendeesResponse, RusotoError<CreateMeetingWithAttendeesError>>
     {
+        #![allow(clippy::needless_update)]
         let request_uri = "/meetings";
 
         let mut request = SignedRequest::new("POST", "chime", &self.region, &request_uri);
@@ -21207,6 +21411,7 @@ impl Chime for ChimeClient {
         &self,
         input: CreatePhoneNumberOrderRequest,
     ) -> Result<CreatePhoneNumberOrderResponse, RusotoError<CreatePhoneNumberOrderError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/phone-number-orders";
 
         let mut request = SignedRequest::new("POST", "chime", &self.region, &request_uri);
@@ -21238,6 +21443,7 @@ impl Chime for ChimeClient {
         &self,
         input: CreateProxySessionRequest,
     ) -> Result<CreateProxySessionResponse, RusotoError<CreateProxySessionError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/voice-connectors/{voice_connector_id}/proxy-sessions",
             voice_connector_id = input.voice_connector_id
@@ -21272,6 +21478,7 @@ impl Chime for ChimeClient {
         &self,
         input: CreateRoomRequest,
     ) -> Result<CreateRoomResponse, RusotoError<CreateRoomError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/accounts/{account_id}/rooms",
             account_id = input.account_id
@@ -21306,6 +21513,7 @@ impl Chime for ChimeClient {
         &self,
         input: CreateRoomMembershipRequest,
     ) -> Result<CreateRoomMembershipResponse, RusotoError<CreateRoomMembershipError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/accounts/{account_id}/rooms/{room_id}/memberships",
             account_id = input.account_id,
@@ -21342,6 +21550,7 @@ impl Chime for ChimeClient {
         input: CreateSipMediaApplicationRequest,
     ) -> Result<CreateSipMediaApplicationResponse, RusotoError<CreateSipMediaApplicationError>>
     {
+        #![allow(clippy::needless_update)]
         let request_uri = "/sip-media-applications";
 
         let mut request = SignedRequest::new("POST", "chime", &self.region, &request_uri);
@@ -21376,6 +21585,7 @@ impl Chime for ChimeClient {
         CreateSipMediaApplicationCallResponse,
         RusotoError<CreateSipMediaApplicationCallError>,
     > {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/sip-media-applications/{sip_media_application_id}/calls",
             sip_media_application_id = input.sip_media_application_id
@@ -21410,6 +21620,7 @@ impl Chime for ChimeClient {
         &self,
         input: CreateSipRuleRequest,
     ) -> Result<CreateSipRuleResponse, RusotoError<CreateSipRuleError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/sip-rules";
 
         let mut request = SignedRequest::new("POST", "chime", &self.region, &request_uri);
@@ -21441,6 +21652,7 @@ impl Chime for ChimeClient {
         &self,
         input: CreateUserRequest,
     ) -> Result<CreateUserResponse, RusotoError<CreateUserError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/accounts/{account_id}/users",
             account_id = input.account_id
@@ -21479,6 +21691,7 @@ impl Chime for ChimeClient {
         &self,
         input: CreateVoiceConnectorRequest,
     ) -> Result<CreateVoiceConnectorResponse, RusotoError<CreateVoiceConnectorError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/voice-connectors";
 
         let mut request = SignedRequest::new("POST", "chime", &self.region, &request_uri);
@@ -21511,6 +21724,7 @@ impl Chime for ChimeClient {
         input: CreateVoiceConnectorGroupRequest,
     ) -> Result<CreateVoiceConnectorGroupResponse, RusotoError<CreateVoiceConnectorGroupError>>
     {
+        #![allow(clippy::needless_update)]
         let request_uri = "/voice-connector-groups";
 
         let mut request = SignedRequest::new("POST", "chime", &self.region, &request_uri);
@@ -21542,6 +21756,7 @@ impl Chime for ChimeClient {
         &self,
         input: DeleteAccountRequest,
     ) -> Result<DeleteAccountResponse, RusotoError<DeleteAccountError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!("/accounts/{account_id}", account_id = input.account_id);
 
         let mut request = SignedRequest::new("DELETE", "chime", &self.region, &request_uri);
@@ -21570,6 +21785,7 @@ impl Chime for ChimeClient {
         &self,
         input: DeleteAppInstanceRequest,
     ) -> Result<(), RusotoError<DeleteAppInstanceError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/app-instances/{app_instance_arn}",
             app_instance_arn = input.app_instance_arn
@@ -21585,9 +21801,9 @@ impl Chime for ChimeClient {
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 204 {
             let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = ::std::mem::drop(response);
+            let _result = ::std::mem::drop(response);
 
-            Ok(result)
+            Ok(())
         } else {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             Err(DeleteAppInstanceError::from_response(response))
@@ -21600,6 +21816,7 @@ impl Chime for ChimeClient {
         &self,
         input: DeleteAppInstanceAdminRequest,
     ) -> Result<(), RusotoError<DeleteAppInstanceAdminError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/app-instances/{app_instance_arn}/admins/{app_instance_admin_arn}",
             app_instance_admin_arn = input.app_instance_admin_arn,
@@ -21616,9 +21833,9 @@ impl Chime for ChimeClient {
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 204 {
             let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = ::std::mem::drop(response);
+            let _result = ::std::mem::drop(response);
 
-            Ok(result)
+            Ok(())
         } else {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             Err(DeleteAppInstanceAdminError::from_response(response))
@@ -21631,6 +21848,7 @@ impl Chime for ChimeClient {
         &self,
         input: DeleteAppInstanceStreamingConfigurationsRequest,
     ) -> Result<(), RusotoError<DeleteAppInstanceStreamingConfigurationsError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/app-instances/{app_instance_arn}/streaming-configurations",
             app_instance_arn = input.app_instance_arn
@@ -21646,9 +21864,9 @@ impl Chime for ChimeClient {
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 204 {
             let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = ::std::mem::drop(response);
+            let _result = ::std::mem::drop(response);
 
-            Ok(result)
+            Ok(())
         } else {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             Err(DeleteAppInstanceStreamingConfigurationsError::from_response(response))
@@ -21661,6 +21879,7 @@ impl Chime for ChimeClient {
         &self,
         input: DeleteAppInstanceUserRequest,
     ) -> Result<(), RusotoError<DeleteAppInstanceUserError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/app-instance-users/{app_instance_user_arn}",
             app_instance_user_arn = input.app_instance_user_arn
@@ -21676,9 +21895,9 @@ impl Chime for ChimeClient {
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 204 {
             let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = ::std::mem::drop(response);
+            let _result = ::std::mem::drop(response);
 
-            Ok(result)
+            Ok(())
         } else {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             Err(DeleteAppInstanceUserError::from_response(response))
@@ -21691,6 +21910,7 @@ impl Chime for ChimeClient {
         &self,
         input: DeleteAttendeeRequest,
     ) -> Result<(), RusotoError<DeleteAttendeeError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/meetings/{meeting_id}/attendees/{attendee_id}",
             attendee_id = input.attendee_id,
@@ -21707,9 +21927,9 @@ impl Chime for ChimeClient {
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 204 {
             let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = ::std::mem::drop(response);
+            let _result = ::std::mem::drop(response);
 
-            Ok(result)
+            Ok(())
         } else {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             Err(DeleteAttendeeError::from_response(response))
@@ -21722,6 +21942,7 @@ impl Chime for ChimeClient {
         &self,
         input: DeleteChannelRequest,
     ) -> Result<(), RusotoError<DeleteChannelError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!("/channels/{channel_arn}", channel_arn = input.channel_arn);
 
         let mut request = SignedRequest::new("DELETE", "chime", &self.region, &request_uri);
@@ -21734,9 +21955,9 @@ impl Chime for ChimeClient {
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 204 {
             let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = ::std::mem::drop(response);
+            let _result = ::std::mem::drop(response);
 
-            Ok(result)
+            Ok(())
         } else {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             Err(DeleteChannelError::from_response(response))
@@ -21749,6 +21970,7 @@ impl Chime for ChimeClient {
         &self,
         input: DeleteChannelBanRequest,
     ) -> Result<(), RusotoError<DeleteChannelBanError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/channels/{channel_arn}/bans/{member_arn}",
             channel_arn = input.channel_arn,
@@ -21765,9 +21987,9 @@ impl Chime for ChimeClient {
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 204 {
             let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = ::std::mem::drop(response);
+            let _result = ::std::mem::drop(response);
 
-            Ok(result)
+            Ok(())
         } else {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             Err(DeleteChannelBanError::from_response(response))
@@ -21780,6 +22002,7 @@ impl Chime for ChimeClient {
         &self,
         input: DeleteChannelMembershipRequest,
     ) -> Result<(), RusotoError<DeleteChannelMembershipError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/channels/{channel_arn}/memberships/{member_arn}",
             channel_arn = input.channel_arn,
@@ -21796,9 +22019,9 @@ impl Chime for ChimeClient {
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 204 {
             let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = ::std::mem::drop(response);
+            let _result = ::std::mem::drop(response);
 
-            Ok(result)
+            Ok(())
         } else {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             Err(DeleteChannelMembershipError::from_response(response))
@@ -21811,6 +22034,7 @@ impl Chime for ChimeClient {
         &self,
         input: DeleteChannelMessageRequest,
     ) -> Result<(), RusotoError<DeleteChannelMessageError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/channels/{channel_arn}/messages/{message_id}",
             channel_arn = input.channel_arn,
@@ -21827,9 +22051,9 @@ impl Chime for ChimeClient {
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 204 {
             let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = ::std::mem::drop(response);
+            let _result = ::std::mem::drop(response);
 
-            Ok(result)
+            Ok(())
         } else {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             Err(DeleteChannelMessageError::from_response(response))
@@ -21842,6 +22066,7 @@ impl Chime for ChimeClient {
         &self,
         input: DeleteChannelModeratorRequest,
     ) -> Result<(), RusotoError<DeleteChannelModeratorError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/channels/{channel_arn}/moderators/{channel_moderator_arn}",
             channel_arn = input.channel_arn,
@@ -21858,9 +22083,9 @@ impl Chime for ChimeClient {
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 204 {
             let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = ::std::mem::drop(response);
+            let _result = ::std::mem::drop(response);
 
-            Ok(result)
+            Ok(())
         } else {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             Err(DeleteChannelModeratorError::from_response(response))
@@ -21873,6 +22098,7 @@ impl Chime for ChimeClient {
         &self,
         input: DeleteEventsConfigurationRequest,
     ) -> Result<(), RusotoError<DeleteEventsConfigurationError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/accounts/{account_id}/bots/{bot_id}/events-configuration",
             account_id = input.account_id,
@@ -21889,9 +22115,9 @@ impl Chime for ChimeClient {
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 204 {
             let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = ::std::mem::drop(response);
+            let _result = ::std::mem::drop(response);
 
-            Ok(result)
+            Ok(())
         } else {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             Err(DeleteEventsConfigurationError::from_response(response))
@@ -21904,6 +22130,7 @@ impl Chime for ChimeClient {
         &self,
         input: DeleteMeetingRequest,
     ) -> Result<(), RusotoError<DeleteMeetingError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!("/meetings/{meeting_id}", meeting_id = input.meeting_id);
 
         let mut request = SignedRequest::new("DELETE", "chime", &self.region, &request_uri);
@@ -21916,9 +22143,9 @@ impl Chime for ChimeClient {
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 204 {
             let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = ::std::mem::drop(response);
+            let _result = ::std::mem::drop(response);
 
-            Ok(result)
+            Ok(())
         } else {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             Err(DeleteMeetingError::from_response(response))
@@ -21931,6 +22158,7 @@ impl Chime for ChimeClient {
         &self,
         input: DeletePhoneNumberRequest,
     ) -> Result<(), RusotoError<DeletePhoneNumberError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/phone-numbers/{phone_number_id}",
             phone_number_id = input.phone_number_id
@@ -21946,9 +22174,9 @@ impl Chime for ChimeClient {
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 204 {
             let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = ::std::mem::drop(response);
+            let _result = ::std::mem::drop(response);
 
-            Ok(result)
+            Ok(())
         } else {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             Err(DeletePhoneNumberError::from_response(response))
@@ -21961,6 +22189,7 @@ impl Chime for ChimeClient {
         &self,
         input: DeleteProxySessionRequest,
     ) -> Result<(), RusotoError<DeleteProxySessionError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/voice-connectors/{voice_connector_id}/proxy-sessions/{proxy_session_id}",
             proxy_session_id = input.proxy_session_id,
@@ -21977,9 +22206,9 @@ impl Chime for ChimeClient {
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 204 {
             let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = ::std::mem::drop(response);
+            let _result = ::std::mem::drop(response);
 
-            Ok(result)
+            Ok(())
         } else {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             Err(DeleteProxySessionError::from_response(response))
@@ -21992,6 +22221,7 @@ impl Chime for ChimeClient {
         &self,
         input: DeleteRoomRequest,
     ) -> Result<(), RusotoError<DeleteRoomError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/accounts/{account_id}/rooms/{room_id}",
             account_id = input.account_id,
@@ -22008,9 +22238,9 @@ impl Chime for ChimeClient {
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 204 {
             let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = ::std::mem::drop(response);
+            let _result = ::std::mem::drop(response);
 
-            Ok(result)
+            Ok(())
         } else {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             Err(DeleteRoomError::from_response(response))
@@ -22023,6 +22253,7 @@ impl Chime for ChimeClient {
         &self,
         input: DeleteRoomMembershipRequest,
     ) -> Result<(), RusotoError<DeleteRoomMembershipError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/accounts/{account_id}/rooms/{room_id}/memberships/{member_id}",
             account_id = input.account_id,
@@ -22040,9 +22271,9 @@ impl Chime for ChimeClient {
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 204 {
             let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = ::std::mem::drop(response);
+            let _result = ::std::mem::drop(response);
 
-            Ok(result)
+            Ok(())
         } else {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             Err(DeleteRoomMembershipError::from_response(response))
@@ -22055,6 +22286,7 @@ impl Chime for ChimeClient {
         &self,
         input: DeleteSipMediaApplicationRequest,
     ) -> Result<(), RusotoError<DeleteSipMediaApplicationError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/sip-media-applications/{sip_media_application_id}",
             sip_media_application_id = input.sip_media_application_id
@@ -22070,9 +22302,9 @@ impl Chime for ChimeClient {
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 204 {
             let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = ::std::mem::drop(response);
+            let _result = ::std::mem::drop(response);
 
-            Ok(result)
+            Ok(())
         } else {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             Err(DeleteSipMediaApplicationError::from_response(response))
@@ -22085,6 +22317,7 @@ impl Chime for ChimeClient {
         &self,
         input: DeleteSipRuleRequest,
     ) -> Result<(), RusotoError<DeleteSipRuleError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!("/sip-rules/{sip_rule_id}", sip_rule_id = input.sip_rule_id);
 
         let mut request = SignedRequest::new("DELETE", "chime", &self.region, &request_uri);
@@ -22097,9 +22330,9 @@ impl Chime for ChimeClient {
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 204 {
             let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = ::std::mem::drop(response);
+            let _result = ::std::mem::drop(response);
 
-            Ok(result)
+            Ok(())
         } else {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             Err(DeleteSipRuleError::from_response(response))
@@ -22112,6 +22345,7 @@ impl Chime for ChimeClient {
         &self,
         input: DeleteVoiceConnectorRequest,
     ) -> Result<(), RusotoError<DeleteVoiceConnectorError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/voice-connectors/{voice_connector_id}",
             voice_connector_id = input.voice_connector_id
@@ -22127,9 +22361,9 @@ impl Chime for ChimeClient {
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 204 {
             let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = ::std::mem::drop(response);
+            let _result = ::std::mem::drop(response);
 
-            Ok(result)
+            Ok(())
         } else {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             Err(DeleteVoiceConnectorError::from_response(response))
@@ -22142,6 +22376,7 @@ impl Chime for ChimeClient {
         &self,
         input: DeleteVoiceConnectorEmergencyCallingConfigurationRequest,
     ) -> Result<(), RusotoError<DeleteVoiceConnectorEmergencyCallingConfigurationError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/voice-connectors/{voice_connector_id}/emergency-calling-configuration",
             voice_connector_id = input.voice_connector_id
@@ -22157,9 +22392,9 @@ impl Chime for ChimeClient {
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 204 {
             let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = ::std::mem::drop(response);
+            let _result = ::std::mem::drop(response);
 
-            Ok(result)
+            Ok(())
         } else {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             Err(DeleteVoiceConnectorEmergencyCallingConfigurationError::from_response(response))
@@ -22172,6 +22407,7 @@ impl Chime for ChimeClient {
         &self,
         input: DeleteVoiceConnectorGroupRequest,
     ) -> Result<(), RusotoError<DeleteVoiceConnectorGroupError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/voice-connector-groups/{voice_connector_group_id}",
             voice_connector_group_id = input.voice_connector_group_id
@@ -22187,9 +22423,9 @@ impl Chime for ChimeClient {
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 204 {
             let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = ::std::mem::drop(response);
+            let _result = ::std::mem::drop(response);
 
-            Ok(result)
+            Ok(())
         } else {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             Err(DeleteVoiceConnectorGroupError::from_response(response))
@@ -22202,6 +22438,7 @@ impl Chime for ChimeClient {
         &self,
         input: DeleteVoiceConnectorOriginationRequest,
     ) -> Result<(), RusotoError<DeleteVoiceConnectorOriginationError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/voice-connectors/{voice_connector_id}/origination",
             voice_connector_id = input.voice_connector_id
@@ -22217,9 +22454,9 @@ impl Chime for ChimeClient {
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 204 {
             let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = ::std::mem::drop(response);
+            let _result = ::std::mem::drop(response);
 
-            Ok(result)
+            Ok(())
         } else {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             Err(DeleteVoiceConnectorOriginationError::from_response(
@@ -22234,6 +22471,7 @@ impl Chime for ChimeClient {
         &self,
         input: DeleteVoiceConnectorProxyRequest,
     ) -> Result<(), RusotoError<DeleteVoiceConnectorProxyError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/voice-connectors/{voice_connector_id}/programmable-numbers/proxy",
             voice_connector_id = input.voice_connector_id
@@ -22249,9 +22487,9 @@ impl Chime for ChimeClient {
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 204 {
             let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = ::std::mem::drop(response);
+            let _result = ::std::mem::drop(response);
 
-            Ok(result)
+            Ok(())
         } else {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             Err(DeleteVoiceConnectorProxyError::from_response(response))
@@ -22264,6 +22502,7 @@ impl Chime for ChimeClient {
         &self,
         input: DeleteVoiceConnectorStreamingConfigurationRequest,
     ) -> Result<(), RusotoError<DeleteVoiceConnectorStreamingConfigurationError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/voice-connectors/{voice_connector_id}/streaming-configuration",
             voice_connector_id = input.voice_connector_id
@@ -22279,9 +22518,9 @@ impl Chime for ChimeClient {
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 204 {
             let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = ::std::mem::drop(response);
+            let _result = ::std::mem::drop(response);
 
-            Ok(result)
+            Ok(())
         } else {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             Err(DeleteVoiceConnectorStreamingConfigurationError::from_response(response))
@@ -22294,6 +22533,7 @@ impl Chime for ChimeClient {
         &self,
         input: DeleteVoiceConnectorTerminationRequest,
     ) -> Result<(), RusotoError<DeleteVoiceConnectorTerminationError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/voice-connectors/{voice_connector_id}/termination",
             voice_connector_id = input.voice_connector_id
@@ -22309,9 +22549,9 @@ impl Chime for ChimeClient {
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 204 {
             let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = ::std::mem::drop(response);
+            let _result = ::std::mem::drop(response);
 
-            Ok(result)
+            Ok(())
         } else {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             Err(DeleteVoiceConnectorTerminationError::from_response(
@@ -22326,6 +22566,7 @@ impl Chime for ChimeClient {
         &self,
         input: DeleteVoiceConnectorTerminationCredentialsRequest,
     ) -> Result<(), RusotoError<DeleteVoiceConnectorTerminationCredentialsError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/voice-connectors/{voice_connector_id}/termination/credentials",
             voice_connector_id = input.voice_connector_id
@@ -22348,9 +22589,9 @@ impl Chime for ChimeClient {
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 204 {
             let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = ::std::mem::drop(response);
+            let _result = ::std::mem::drop(response);
 
-            Ok(result)
+            Ok(())
         } else {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             Err(DeleteVoiceConnectorTerminationCredentialsError::from_response(response))
@@ -22363,6 +22604,7 @@ impl Chime for ChimeClient {
         &self,
         input: DescribeAppInstanceRequest,
     ) -> Result<DescribeAppInstanceResponse, RusotoError<DescribeAppInstanceError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/app-instances/{app_instance_arn}",
             app_instance_arn = input.app_instance_arn
@@ -22394,6 +22636,7 @@ impl Chime for ChimeClient {
         &self,
         input: DescribeAppInstanceAdminRequest,
     ) -> Result<DescribeAppInstanceAdminResponse, RusotoError<DescribeAppInstanceAdminError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/app-instances/{app_instance_arn}/admins/{app_instance_admin_arn}",
             app_instance_admin_arn = input.app_instance_admin_arn,
@@ -22426,6 +22669,7 @@ impl Chime for ChimeClient {
         &self,
         input: DescribeAppInstanceUserRequest,
     ) -> Result<DescribeAppInstanceUserResponse, RusotoError<DescribeAppInstanceUserError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/app-instance-users/{app_instance_user_arn}",
             app_instance_user_arn = input.app_instance_user_arn
@@ -22457,6 +22701,7 @@ impl Chime for ChimeClient {
         &self,
         input: DescribeChannelRequest,
     ) -> Result<DescribeChannelResponse, RusotoError<DescribeChannelError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!("/channels/{channel_arn}", channel_arn = input.channel_arn);
 
         let mut request = SignedRequest::new("GET", "chime", &self.region, &request_uri);
@@ -22485,6 +22730,7 @@ impl Chime for ChimeClient {
         &self,
         input: DescribeChannelBanRequest,
     ) -> Result<DescribeChannelBanResponse, RusotoError<DescribeChannelBanError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/channels/{channel_arn}/bans/{member_arn}",
             channel_arn = input.channel_arn,
@@ -22518,6 +22764,7 @@ impl Chime for ChimeClient {
         input: DescribeChannelMembershipRequest,
     ) -> Result<DescribeChannelMembershipResponse, RusotoError<DescribeChannelMembershipError>>
     {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/channels/{channel_arn}/memberships/{member_arn}",
             channel_arn = input.channel_arn,
@@ -22553,6 +22800,7 @@ impl Chime for ChimeClient {
         DescribeChannelMembershipForAppInstanceUserResponse,
         RusotoError<DescribeChannelMembershipForAppInstanceUserError>,
     > {
+        #![allow(clippy::needless_update)]
         let request_uri = format!("/channels/{channel_arn}", channel_arn = input.channel_arn);
 
         let mut request = SignedRequest::new("GET", "chime", &self.region, &request_uri);
@@ -22589,6 +22837,7 @@ impl Chime for ChimeClient {
         DescribeChannelModeratedByAppInstanceUserResponse,
         RusotoError<DescribeChannelModeratedByAppInstanceUserError>,
     > {
+        #![allow(clippy::needless_update)]
         let request_uri = format!("/channels/{channel_arn}", channel_arn = input.channel_arn);
 
         let mut request = SignedRequest::new("GET", "chime", &self.region, &request_uri);
@@ -22622,6 +22871,7 @@ impl Chime for ChimeClient {
         &self,
         input: DescribeChannelModeratorRequest,
     ) -> Result<DescribeChannelModeratorResponse, RusotoError<DescribeChannelModeratorError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/channels/{channel_arn}/moderators/{channel_moderator_arn}",
             channel_arn = input.channel_arn,
@@ -22657,6 +22907,7 @@ impl Chime for ChimeClient {
         DisassociatePhoneNumberFromUserResponse,
         RusotoError<DisassociatePhoneNumberFromUserError>,
     > {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/accounts/{account_id}/users/{user_id}",
             account_id = input.account_id,
@@ -22698,6 +22949,7 @@ impl Chime for ChimeClient {
         DisassociatePhoneNumbersFromVoiceConnectorResponse,
         RusotoError<DisassociatePhoneNumbersFromVoiceConnectorError>,
     > {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/voice-connectors/{voice_connector_id}",
             voice_connector_id = input.voice_connector_id
@@ -22739,6 +22991,7 @@ impl Chime for ChimeClient {
         DisassociatePhoneNumbersFromVoiceConnectorGroupResponse,
         RusotoError<DisassociatePhoneNumbersFromVoiceConnectorGroupError>,
     > {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/voice-connector-groups/{voice_connector_group_id}",
             voice_connector_group_id = input.voice_connector_group_id
@@ -22781,6 +23034,7 @@ impl Chime for ChimeClient {
         DisassociateSigninDelegateGroupsFromAccountResponse,
         RusotoError<DisassociateSigninDelegateGroupsFromAccountError>,
     > {
+        #![allow(clippy::needless_update)]
         let request_uri = format!("/accounts/{account_id}", account_id = input.account_id);
 
         let mut request = SignedRequest::new("POST", "chime", &self.region, &request_uri);
@@ -22816,6 +23070,7 @@ impl Chime for ChimeClient {
         &self,
         input: GetAccountRequest,
     ) -> Result<GetAccountResponse, RusotoError<GetAccountError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!("/accounts/{account_id}", account_id = input.account_id);
 
         let mut request = SignedRequest::new("GET", "chime", &self.region, &request_uri);
@@ -22844,6 +23099,7 @@ impl Chime for ChimeClient {
         &self,
         input: GetAccountSettingsRequest,
     ) -> Result<GetAccountSettingsResponse, RusotoError<GetAccountSettingsError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/accounts/{account_id}/settings",
             account_id = input.account_id
@@ -22878,6 +23134,7 @@ impl Chime for ChimeClient {
         GetAppInstanceRetentionSettingsResponse,
         RusotoError<GetAppInstanceRetentionSettingsError>,
     > {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/app-instances/{app_instance_arn}/retention-settings",
             app_instance_arn = input.app_instance_arn
@@ -22914,6 +23171,7 @@ impl Chime for ChimeClient {
         GetAppInstanceStreamingConfigurationsResponse,
         RusotoError<GetAppInstanceStreamingConfigurationsError>,
     > {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/app-instances/{app_instance_arn}/streaming-configurations",
             app_instance_arn = input.app_instance_arn
@@ -22947,6 +23205,7 @@ impl Chime for ChimeClient {
         &self,
         input: GetAttendeeRequest,
     ) -> Result<GetAttendeeResponse, RusotoError<GetAttendeeError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/meetings/{meeting_id}/attendees/{attendee_id}",
             attendee_id = input.attendee_id,
@@ -22979,6 +23238,7 @@ impl Chime for ChimeClient {
         &self,
         input: GetBotRequest,
     ) -> Result<GetBotResponse, RusotoError<GetBotError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/accounts/{account_id}/bots/{bot_id}",
             account_id = input.account_id,
@@ -23011,6 +23271,7 @@ impl Chime for ChimeClient {
         &self,
         input: GetChannelMessageRequest,
     ) -> Result<GetChannelMessageResponse, RusotoError<GetChannelMessageError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/channels/{channel_arn}/messages/{message_id}",
             channel_arn = input.channel_arn,
@@ -23043,6 +23304,7 @@ impl Chime for ChimeClient {
         &self,
         input: GetEventsConfigurationRequest,
     ) -> Result<GetEventsConfigurationResponse, RusotoError<GetEventsConfigurationError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/accounts/{account_id}/bots/{bot_id}/events-configuration",
             account_id = input.account_id,
@@ -23074,6 +23336,7 @@ impl Chime for ChimeClient {
     async fn get_global_settings(
         &self,
     ) -> Result<GetGlobalSettingsResponse, RusotoError<GetGlobalSettingsError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/settings";
 
         let mut request = SignedRequest::new("GET", "chime", &self.region, &request_uri);
@@ -23102,6 +23365,7 @@ impl Chime for ChimeClient {
         &self,
         input: GetMeetingRequest,
     ) -> Result<GetMeetingResponse, RusotoError<GetMeetingError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!("/meetings/{meeting_id}", meeting_id = input.meeting_id);
 
         let mut request = SignedRequest::new("GET", "chime", &self.region, &request_uri);
@@ -23130,6 +23394,7 @@ impl Chime for ChimeClient {
         &self,
     ) -> Result<GetMessagingSessionEndpointResponse, RusotoError<GetMessagingSessionEndpointError>>
     {
+        #![allow(clippy::needless_update)]
         let request_uri = "/endpoints/messaging-session";
 
         let mut request = SignedRequest::new("GET", "chime", &self.region, &request_uri);
@@ -23158,6 +23423,7 @@ impl Chime for ChimeClient {
         &self,
         input: GetPhoneNumberRequest,
     ) -> Result<GetPhoneNumberResponse, RusotoError<GetPhoneNumberError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/phone-numbers/{phone_number_id}",
             phone_number_id = input.phone_number_id
@@ -23189,6 +23455,7 @@ impl Chime for ChimeClient {
         &self,
         input: GetPhoneNumberOrderRequest,
     ) -> Result<GetPhoneNumberOrderResponse, RusotoError<GetPhoneNumberOrderError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/phone-number-orders/{phone_number_order_id}",
             phone_number_order_id = input.phone_number_order_id
@@ -23219,6 +23486,7 @@ impl Chime for ChimeClient {
     async fn get_phone_number_settings(
         &self,
     ) -> Result<GetPhoneNumberSettingsResponse, RusotoError<GetPhoneNumberSettingsError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/settings/phone-number";
 
         let mut request = SignedRequest::new("GET", "chime", &self.region, &request_uri);
@@ -23247,6 +23515,7 @@ impl Chime for ChimeClient {
         &self,
         input: GetProxySessionRequest,
     ) -> Result<GetProxySessionResponse, RusotoError<GetProxySessionError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/voice-connectors/{voice_connector_id}/proxy-sessions/{proxy_session_id}",
             proxy_session_id = input.proxy_session_id,
@@ -23279,6 +23548,7 @@ impl Chime for ChimeClient {
         &self,
         input: GetRetentionSettingsRequest,
     ) -> Result<GetRetentionSettingsResponse, RusotoError<GetRetentionSettingsError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/accounts/{account_id}/retention-settings",
             account_id = input.account_id
@@ -23310,6 +23580,7 @@ impl Chime for ChimeClient {
         &self,
         input: GetRoomRequest,
     ) -> Result<GetRoomResponse, RusotoError<GetRoomError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/accounts/{account_id}/rooms/{room_id}",
             account_id = input.account_id,
@@ -23342,6 +23613,7 @@ impl Chime for ChimeClient {
         &self,
         input: GetSipMediaApplicationRequest,
     ) -> Result<GetSipMediaApplicationResponse, RusotoError<GetSipMediaApplicationError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/sip-media-applications/{sip_media_application_id}",
             sip_media_application_id = input.sip_media_application_id
@@ -23376,6 +23648,7 @@ impl Chime for ChimeClient {
         GetSipMediaApplicationLoggingConfigurationResponse,
         RusotoError<GetSipMediaApplicationLoggingConfigurationError>,
     > {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/sip-media-applications/{sip_media_application_id}/logging-configuration",
             sip_media_application_id = input.sip_media_application_id
@@ -23407,6 +23680,7 @@ impl Chime for ChimeClient {
         &self,
         input: GetSipRuleRequest,
     ) -> Result<GetSipRuleResponse, RusotoError<GetSipRuleError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!("/sip-rules/{sip_rule_id}", sip_rule_id = input.sip_rule_id);
 
         let mut request = SignedRequest::new("GET", "chime", &self.region, &request_uri);
@@ -23435,6 +23709,7 @@ impl Chime for ChimeClient {
         &self,
         input: GetUserRequest,
     ) -> Result<GetUserResponse, RusotoError<GetUserError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/accounts/{account_id}/users/{user_id}",
             account_id = input.account_id,
@@ -23467,6 +23742,7 @@ impl Chime for ChimeClient {
         &self,
         input: GetUserSettingsRequest,
     ) -> Result<GetUserSettingsResponse, RusotoError<GetUserSettingsError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/accounts/{account_id}/users/{user_id}/settings",
             account_id = input.account_id,
@@ -23499,6 +23775,7 @@ impl Chime for ChimeClient {
         &self,
         input: GetVoiceConnectorRequest,
     ) -> Result<GetVoiceConnectorResponse, RusotoError<GetVoiceConnectorError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/voice-connectors/{voice_connector_id}",
             voice_connector_id = input.voice_connector_id
@@ -23533,6 +23810,7 @@ impl Chime for ChimeClient {
         GetVoiceConnectorEmergencyCallingConfigurationResponse,
         RusotoError<GetVoiceConnectorEmergencyCallingConfigurationError>,
     > {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/voice-connectors/{voice_connector_id}/emergency-calling-configuration",
             voice_connector_id = input.voice_connector_id
@@ -23565,6 +23843,7 @@ impl Chime for ChimeClient {
         &self,
         input: GetVoiceConnectorGroupRequest,
     ) -> Result<GetVoiceConnectorGroupResponse, RusotoError<GetVoiceConnectorGroupError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/voice-connector-groups/{voice_connector_group_id}",
             voice_connector_group_id = input.voice_connector_group_id
@@ -23599,6 +23878,7 @@ impl Chime for ChimeClient {
         GetVoiceConnectorLoggingConfigurationResponse,
         RusotoError<GetVoiceConnectorLoggingConfigurationError>,
     > {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/voice-connectors/{voice_connector_id}/logging-configuration",
             voice_connector_id = input.voice_connector_id
@@ -23633,6 +23913,7 @@ impl Chime for ChimeClient {
         input: GetVoiceConnectorOriginationRequest,
     ) -> Result<GetVoiceConnectorOriginationResponse, RusotoError<GetVoiceConnectorOriginationError>>
     {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/voice-connectors/{voice_connector_id}/origination",
             voice_connector_id = input.voice_connector_id
@@ -23664,6 +23945,7 @@ impl Chime for ChimeClient {
         &self,
         input: GetVoiceConnectorProxyRequest,
     ) -> Result<GetVoiceConnectorProxyResponse, RusotoError<GetVoiceConnectorProxyError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/voice-connectors/{voice_connector_id}/programmable-numbers/proxy",
             voice_connector_id = input.voice_connector_id
@@ -23698,6 +23980,7 @@ impl Chime for ChimeClient {
         GetVoiceConnectorStreamingConfigurationResponse,
         RusotoError<GetVoiceConnectorStreamingConfigurationError>,
     > {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/voice-connectors/{voice_connector_id}/streaming-configuration",
             voice_connector_id = input.voice_connector_id
@@ -23732,6 +24015,7 @@ impl Chime for ChimeClient {
         input: GetVoiceConnectorTerminationRequest,
     ) -> Result<GetVoiceConnectorTerminationResponse, RusotoError<GetVoiceConnectorTerminationError>>
     {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/voice-connectors/{voice_connector_id}/termination",
             voice_connector_id = input.voice_connector_id
@@ -23766,6 +24050,7 @@ impl Chime for ChimeClient {
         GetVoiceConnectorTerminationHealthResponse,
         RusotoError<GetVoiceConnectorTerminationHealthError>,
     > {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/voice-connectors/{voice_connector_id}/termination/health",
             voice_connector_id = input.voice_connector_id
@@ -23799,6 +24084,7 @@ impl Chime for ChimeClient {
         &self,
         input: InviteUsersRequest,
     ) -> Result<InviteUsersResponse, RusotoError<InviteUsersError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/accounts/{account_id}/users",
             account_id = input.account_id
@@ -23837,6 +24123,7 @@ impl Chime for ChimeClient {
         &self,
         input: ListAccountsRequest,
     ) -> Result<ListAccountsResponse, RusotoError<ListAccountsError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/accounts";
 
         let mut request = SignedRequest::new("GET", "chime", &self.region, &request_uri);
@@ -23880,6 +24167,7 @@ impl Chime for ChimeClient {
         &self,
         input: ListAppInstanceAdminsRequest,
     ) -> Result<ListAppInstanceAdminsResponse, RusotoError<ListAppInstanceAdminsError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/app-instances/{app_instance_arn}/admins",
             app_instance_arn = input.app_instance_arn
@@ -23920,6 +24208,7 @@ impl Chime for ChimeClient {
         &self,
         input: ListAppInstanceUsersRequest,
     ) -> Result<ListAppInstanceUsersResponse, RusotoError<ListAppInstanceUsersError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/app-instance-users";
 
         let mut request = SignedRequest::new("GET", "chime", &self.region, &request_uri);
@@ -23958,6 +24247,7 @@ impl Chime for ChimeClient {
         &self,
         input: ListAppInstancesRequest,
     ) -> Result<ListAppInstancesResponse, RusotoError<ListAppInstancesError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/app-instances";
 
         let mut request = SignedRequest::new("GET", "chime", &self.region, &request_uri);
@@ -23995,6 +24285,7 @@ impl Chime for ChimeClient {
         &self,
         input: ListAttendeeTagsRequest,
     ) -> Result<ListAttendeeTagsResponse, RusotoError<ListAttendeeTagsError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/meetings/{meeting_id}/attendees/{attendee_id}/tags",
             attendee_id = input.attendee_id,
@@ -24027,6 +24318,7 @@ impl Chime for ChimeClient {
         &self,
         input: ListAttendeesRequest,
     ) -> Result<ListAttendeesResponse, RusotoError<ListAttendeesError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/meetings/{meeting_id}/attendees",
             meeting_id = input.meeting_id
@@ -24067,6 +24359,7 @@ impl Chime for ChimeClient {
         &self,
         input: ListBotsRequest,
     ) -> Result<ListBotsResponse, RusotoError<ListBotsError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!("/accounts/{account_id}/bots", account_id = input.account_id);
 
         let mut request = SignedRequest::new("GET", "chime", &self.region, &request_uri);
@@ -24104,6 +24397,7 @@ impl Chime for ChimeClient {
         &self,
         input: ListChannelBansRequest,
     ) -> Result<ListChannelBansResponse, RusotoError<ListChannelBansError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/channels/{channel_arn}/bans",
             channel_arn = input.channel_arn
@@ -24144,6 +24438,7 @@ impl Chime for ChimeClient {
         &self,
         input: ListChannelMembershipsRequest,
     ) -> Result<ListChannelMembershipsResponse, RusotoError<ListChannelMembershipsError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/channels/{channel_arn}/memberships",
             channel_arn = input.channel_arn
@@ -24190,6 +24485,7 @@ impl Chime for ChimeClient {
         ListChannelMembershipsForAppInstanceUserResponse,
         RusotoError<ListChannelMembershipsForAppInstanceUserError>,
     > {
+        #![allow(clippy::needless_update)]
         let request_uri = "/channels";
 
         let mut request = SignedRequest::new("GET", "chime", &self.region, &request_uri);
@@ -24231,6 +24527,7 @@ impl Chime for ChimeClient {
         &self,
         input: ListChannelMessagesRequest,
     ) -> Result<ListChannelMessagesResponse, RusotoError<ListChannelMessagesError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/channels/{channel_arn}/messages",
             channel_arn = input.channel_arn
@@ -24280,6 +24577,7 @@ impl Chime for ChimeClient {
         &self,
         input: ListChannelModeratorsRequest,
     ) -> Result<ListChannelModeratorsResponse, RusotoError<ListChannelModeratorsError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/channels/{channel_arn}/moderators",
             channel_arn = input.channel_arn
@@ -24320,6 +24618,7 @@ impl Chime for ChimeClient {
         &self,
         input: ListChannelsRequest,
     ) -> Result<ListChannelsResponse, RusotoError<ListChannelsError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/channels";
 
         let mut request = SignedRequest::new("GET", "chime", &self.region, &request_uri);
@@ -24364,6 +24663,7 @@ impl Chime for ChimeClient {
         ListChannelsModeratedByAppInstanceUserResponse,
         RusotoError<ListChannelsModeratedByAppInstanceUserError>,
     > {
+        #![allow(clippy::needless_update)]
         let request_uri = "/channels";
 
         let mut request = SignedRequest::new("GET", "chime", &self.region, &request_uri);
@@ -24407,6 +24707,7 @@ impl Chime for ChimeClient {
         &self,
         input: ListMeetingTagsRequest,
     ) -> Result<ListMeetingTagsResponse, RusotoError<ListMeetingTagsError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!("/meetings/{meeting_id}/tags", meeting_id = input.meeting_id);
 
         let mut request = SignedRequest::new("GET", "chime", &self.region, &request_uri);
@@ -24435,6 +24736,7 @@ impl Chime for ChimeClient {
         &self,
         input: ListMeetingsRequest,
     ) -> Result<ListMeetingsResponse, RusotoError<ListMeetingsError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/meetings";
 
         let mut request = SignedRequest::new("GET", "chime", &self.region, &request_uri);
@@ -24472,6 +24774,7 @@ impl Chime for ChimeClient {
         &self,
         input: ListPhoneNumberOrdersRequest,
     ) -> Result<ListPhoneNumberOrdersResponse, RusotoError<ListPhoneNumberOrdersError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/phone-number-orders";
 
         let mut request = SignedRequest::new("GET", "chime", &self.region, &request_uri);
@@ -24509,6 +24812,7 @@ impl Chime for ChimeClient {
         &self,
         input: ListPhoneNumbersRequest,
     ) -> Result<ListPhoneNumbersResponse, RusotoError<ListPhoneNumbersError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/phone-numbers";
 
         let mut request = SignedRequest::new("GET", "chime", &self.region, &request_uri);
@@ -24558,6 +24862,7 @@ impl Chime for ChimeClient {
         &self,
         input: ListProxySessionsRequest,
     ) -> Result<ListProxySessionsResponse, RusotoError<ListProxySessionsError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/voice-connectors/{voice_connector_id}/proxy-sessions",
             voice_connector_id = input.voice_connector_id
@@ -24601,6 +24906,7 @@ impl Chime for ChimeClient {
         &self,
         input: ListRoomMembershipsRequest,
     ) -> Result<ListRoomMembershipsResponse, RusotoError<ListRoomMembershipsError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/accounts/{account_id}/rooms/{room_id}/memberships",
             account_id = input.account_id,
@@ -24642,6 +24948,7 @@ impl Chime for ChimeClient {
         &self,
         input: ListRoomsRequest,
     ) -> Result<ListRoomsResponse, RusotoError<ListRoomsError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/accounts/{account_id}/rooms",
             account_id = input.account_id
@@ -24685,6 +24992,7 @@ impl Chime for ChimeClient {
         &self,
         input: ListSipMediaApplicationsRequest,
     ) -> Result<ListSipMediaApplicationsResponse, RusotoError<ListSipMediaApplicationsError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/sip-media-applications";
 
         let mut request = SignedRequest::new("GET", "chime", &self.region, &request_uri);
@@ -24722,6 +25030,7 @@ impl Chime for ChimeClient {
         &self,
         input: ListSipRulesRequest,
     ) -> Result<ListSipRulesResponse, RusotoError<ListSipRulesError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/sip-rules";
 
         let mut request = SignedRequest::new("GET", "chime", &self.region, &request_uri);
@@ -24762,6 +25071,7 @@ impl Chime for ChimeClient {
         &self,
         input: ListTagsForResourceRequest,
     ) -> Result<ListTagsForResourceResponse, RusotoError<ListTagsForResourceError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/tags";
 
         let mut request = SignedRequest::new("GET", "chime", &self.region, &request_uri);
@@ -24794,6 +25104,7 @@ impl Chime for ChimeClient {
         &self,
         input: ListUsersRequest,
     ) -> Result<ListUsersResponse, RusotoError<ListUsersError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/accounts/{account_id}/users",
             account_id = input.account_id
@@ -24840,6 +25151,7 @@ impl Chime for ChimeClient {
         &self,
         input: ListVoiceConnectorGroupsRequest,
     ) -> Result<ListVoiceConnectorGroupsResponse, RusotoError<ListVoiceConnectorGroupsError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/voice-connector-groups";
 
         let mut request = SignedRequest::new("GET", "chime", &self.region, &request_uri);
@@ -24880,6 +25192,7 @@ impl Chime for ChimeClient {
         ListVoiceConnectorTerminationCredentialsResponse,
         RusotoError<ListVoiceConnectorTerminationCredentialsError>,
     > {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/voice-connectors/{voice_connector_id}/termination/credentials",
             voice_connector_id = input.voice_connector_id
@@ -24911,6 +25224,7 @@ impl Chime for ChimeClient {
         &self,
         input: ListVoiceConnectorsRequest,
     ) -> Result<ListVoiceConnectorsResponse, RusotoError<ListVoiceConnectorsError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/voice-connectors";
 
         let mut request = SignedRequest::new("GET", "chime", &self.region, &request_uri);
@@ -24948,6 +25262,7 @@ impl Chime for ChimeClient {
         &self,
         input: LogoutUserRequest,
     ) -> Result<LogoutUserResponse, RusotoError<LogoutUserError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/accounts/{account_id}/users/{user_id}",
             account_id = input.account_id,
@@ -24987,6 +25302,7 @@ impl Chime for ChimeClient {
         PutAppInstanceRetentionSettingsResponse,
         RusotoError<PutAppInstanceRetentionSettingsError>,
     > {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/app-instances/{app_instance_arn}/retention-settings",
             app_instance_arn = input.app_instance_arn
@@ -25026,6 +25342,7 @@ impl Chime for ChimeClient {
         PutAppInstanceStreamingConfigurationsResponse,
         RusotoError<PutAppInstanceStreamingConfigurationsError>,
     > {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/app-instances/{app_instance_arn}/streaming-configurations",
             app_instance_arn = input.app_instance_arn
@@ -25062,6 +25379,7 @@ impl Chime for ChimeClient {
         &self,
         input: PutEventsConfigurationRequest,
     ) -> Result<PutEventsConfigurationResponse, RusotoError<PutEventsConfigurationError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/accounts/{account_id}/bots/{bot_id}/events-configuration",
             account_id = input.account_id,
@@ -25097,6 +25415,7 @@ impl Chime for ChimeClient {
         &self,
         input: PutRetentionSettingsRequest,
     ) -> Result<PutRetentionSettingsResponse, RusotoError<PutRetentionSettingsError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/accounts/{account_id}/retention-settings",
             account_id = input.account_id
@@ -25134,6 +25453,7 @@ impl Chime for ChimeClient {
         PutSipMediaApplicationLoggingConfigurationResponse,
         RusotoError<PutSipMediaApplicationLoggingConfigurationError>,
     > {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/sip-media-applications/{sip_media_application_id}/logging-configuration",
             sip_media_application_id = input.sip_media_application_id
@@ -25171,6 +25491,7 @@ impl Chime for ChimeClient {
         PutVoiceConnectorEmergencyCallingConfigurationResponse,
         RusotoError<PutVoiceConnectorEmergencyCallingConfigurationError>,
     > {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/voice-connectors/{voice_connector_id}/emergency-calling-configuration",
             voice_connector_id = input.voice_connector_id
@@ -25209,6 +25530,7 @@ impl Chime for ChimeClient {
         PutVoiceConnectorLoggingConfigurationResponse,
         RusotoError<PutVoiceConnectorLoggingConfigurationError>,
     > {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/voice-connectors/{voice_connector_id}/logging-configuration",
             voice_connector_id = input.voice_connector_id
@@ -25246,6 +25568,7 @@ impl Chime for ChimeClient {
         input: PutVoiceConnectorOriginationRequest,
     ) -> Result<PutVoiceConnectorOriginationResponse, RusotoError<PutVoiceConnectorOriginationError>>
     {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/voice-connectors/{voice_connector_id}/origination",
             voice_connector_id = input.voice_connector_id
@@ -25280,6 +25603,7 @@ impl Chime for ChimeClient {
         &self,
         input: PutVoiceConnectorProxyRequest,
     ) -> Result<PutVoiceConnectorProxyResponse, RusotoError<PutVoiceConnectorProxyError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/voice-connectors/{voice_connector_id}/programmable-numbers/proxy",
             voice_connector_id = input.voice_connector_id
@@ -25317,6 +25641,7 @@ impl Chime for ChimeClient {
         PutVoiceConnectorStreamingConfigurationResponse,
         RusotoError<PutVoiceConnectorStreamingConfigurationError>,
     > {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/voice-connectors/{voice_connector_id}/streaming-configuration",
             voice_connector_id = input.voice_connector_id
@@ -25354,6 +25679,7 @@ impl Chime for ChimeClient {
         input: PutVoiceConnectorTerminationRequest,
     ) -> Result<PutVoiceConnectorTerminationResponse, RusotoError<PutVoiceConnectorTerminationError>>
     {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/voice-connectors/{voice_connector_id}/termination",
             voice_connector_id = input.voice_connector_id
@@ -25388,6 +25714,7 @@ impl Chime for ChimeClient {
         &self,
         input: PutVoiceConnectorTerminationCredentialsRequest,
     ) -> Result<(), RusotoError<PutVoiceConnectorTerminationCredentialsError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/voice-connectors/{voice_connector_id}/termination/credentials",
             voice_connector_id = input.voice_connector_id
@@ -25410,9 +25737,9 @@ impl Chime for ChimeClient {
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 204 {
             let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = ::std::mem::drop(response);
+            let _result = ::std::mem::drop(response);
 
-            Ok(result)
+            Ok(())
         } else {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             Err(PutVoiceConnectorTerminationCredentialsError::from_response(
@@ -25427,6 +25754,7 @@ impl Chime for ChimeClient {
         &self,
         input: RedactChannelMessageRequest,
     ) -> Result<RedactChannelMessageResponse, RusotoError<RedactChannelMessageError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/channels/{channel_arn}/messages/{message_id}",
             channel_arn = input.channel_arn,
@@ -25464,6 +25792,7 @@ impl Chime for ChimeClient {
         input: RedactConversationMessageRequest,
     ) -> Result<RedactConversationMessageResponse, RusotoError<RedactConversationMessageError>>
     {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/accounts/{account_id}/conversations/{conversation_id}/messages/{message_id}",
             account_id = input.account_id,
@@ -25501,6 +25830,7 @@ impl Chime for ChimeClient {
         &self,
         input: RedactRoomMessageRequest,
     ) -> Result<RedactRoomMessageResponse, RusotoError<RedactRoomMessageError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/accounts/{account_id}/rooms/{room_id}/messages/{message_id}",
             account_id = input.account_id,
@@ -25538,6 +25868,7 @@ impl Chime for ChimeClient {
         &self,
         input: RegenerateSecurityTokenRequest,
     ) -> Result<RegenerateSecurityTokenResponse, RusotoError<RegenerateSecurityTokenError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/accounts/{account_id}/bots/{bot_id}",
             account_id = input.account_id,
@@ -25574,6 +25905,7 @@ impl Chime for ChimeClient {
         &self,
         input: ResetPersonalPINRequest,
     ) -> Result<ResetPersonalPINResponse, RusotoError<ResetPersonalPINError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/accounts/{account_id}/users/{user_id}",
             account_id = input.account_id,
@@ -25610,6 +25942,7 @@ impl Chime for ChimeClient {
         &self,
         input: RestorePhoneNumberRequest,
     ) -> Result<RestorePhoneNumberResponse, RusotoError<RestorePhoneNumberError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/phone-numbers/{phone_number_id}",
             phone_number_id = input.phone_number_id
@@ -25646,6 +25979,7 @@ impl Chime for ChimeClient {
         input: SearchAvailablePhoneNumbersRequest,
     ) -> Result<SearchAvailablePhoneNumbersResponse, RusotoError<SearchAvailablePhoneNumbersError>>
     {
+        #![allow(clippy::needless_update)]
         let request_uri = "/search";
 
         let mut request = SignedRequest::new("GET", "chime", &self.region, &request_uri);
@@ -25699,6 +26033,7 @@ impl Chime for ChimeClient {
         &self,
         input: SendChannelMessageRequest,
     ) -> Result<SendChannelMessageResponse, RusotoError<SendChannelMessageError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/channels/{channel_arn}/messages",
             channel_arn = input.channel_arn
@@ -25733,6 +26068,7 @@ impl Chime for ChimeClient {
         &self,
         input: TagAttendeeRequest,
     ) -> Result<(), RusotoError<TagAttendeeError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/meetings/{meeting_id}/attendees/{attendee_id}/tags",
             attendee_id = input.attendee_id,
@@ -25756,9 +26092,9 @@ impl Chime for ChimeClient {
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 204 {
             let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = ::std::mem::drop(response);
+            let _result = ::std::mem::drop(response);
 
-            Ok(result)
+            Ok(())
         } else {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             Err(TagAttendeeError::from_response(response))
@@ -25771,6 +26107,7 @@ impl Chime for ChimeClient {
         &self,
         input: TagMeetingRequest,
     ) -> Result<(), RusotoError<TagMeetingError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!("/meetings/{meeting_id}/tags", meeting_id = input.meeting_id);
 
         let mut request = SignedRequest::new("POST", "chime", &self.region, &request_uri);
@@ -25790,9 +26127,9 @@ impl Chime for ChimeClient {
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 204 {
             let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = ::std::mem::drop(response);
+            let _result = ::std::mem::drop(response);
 
-            Ok(result)
+            Ok(())
         } else {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             Err(TagMeetingError::from_response(response))
@@ -25805,6 +26142,7 @@ impl Chime for ChimeClient {
         &self,
         input: TagResourceRequest,
     ) -> Result<(), RusotoError<TagResourceError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/tags";
 
         let mut request = SignedRequest::new("POST", "chime", &self.region, &request_uri);
@@ -25824,9 +26162,9 @@ impl Chime for ChimeClient {
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 204 {
             let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = ::std::mem::drop(response);
+            let _result = ::std::mem::drop(response);
 
-            Ok(result)
+            Ok(())
         } else {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             Err(TagResourceError::from_response(response))
@@ -25839,6 +26177,7 @@ impl Chime for ChimeClient {
         &self,
         input: UntagAttendeeRequest,
     ) -> Result<(), RusotoError<UntagAttendeeError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/meetings/{meeting_id}/attendees/{attendee_id}/tags",
             attendee_id = input.attendee_id,
@@ -25862,9 +26201,9 @@ impl Chime for ChimeClient {
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 204 {
             let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = ::std::mem::drop(response);
+            let _result = ::std::mem::drop(response);
 
-            Ok(result)
+            Ok(())
         } else {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             Err(UntagAttendeeError::from_response(response))
@@ -25877,6 +26216,7 @@ impl Chime for ChimeClient {
         &self,
         input: UntagMeetingRequest,
     ) -> Result<(), RusotoError<UntagMeetingError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!("/meetings/{meeting_id}/tags", meeting_id = input.meeting_id);
 
         let mut request = SignedRequest::new("POST", "chime", &self.region, &request_uri);
@@ -25896,9 +26236,9 @@ impl Chime for ChimeClient {
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 204 {
             let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = ::std::mem::drop(response);
+            let _result = ::std::mem::drop(response);
 
-            Ok(result)
+            Ok(())
         } else {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             Err(UntagMeetingError::from_response(response))
@@ -25911,6 +26251,7 @@ impl Chime for ChimeClient {
         &self,
         input: UntagResourceRequest,
     ) -> Result<(), RusotoError<UntagResourceError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/tags";
 
         let mut request = SignedRequest::new("POST", "chime", &self.region, &request_uri);
@@ -25930,9 +26271,9 @@ impl Chime for ChimeClient {
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 204 {
             let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = ::std::mem::drop(response);
+            let _result = ::std::mem::drop(response);
 
-            Ok(result)
+            Ok(())
         } else {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             Err(UntagResourceError::from_response(response))
@@ -25945,6 +26286,7 @@ impl Chime for ChimeClient {
         &self,
         input: UpdateAccountRequest,
     ) -> Result<UpdateAccountResponse, RusotoError<UpdateAccountError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!("/accounts/{account_id}", account_id = input.account_id);
 
         let mut request = SignedRequest::new("POST", "chime", &self.region, &request_uri);
@@ -25976,6 +26318,7 @@ impl Chime for ChimeClient {
         &self,
         input: UpdateAccountSettingsRequest,
     ) -> Result<UpdateAccountSettingsResponse, RusotoError<UpdateAccountSettingsError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/accounts/{account_id}/settings",
             account_id = input.account_id
@@ -26010,6 +26353,7 @@ impl Chime for ChimeClient {
         &self,
         input: UpdateAppInstanceRequest,
     ) -> Result<UpdateAppInstanceResponse, RusotoError<UpdateAppInstanceError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/app-instances/{app_instance_arn}",
             app_instance_arn = input.app_instance_arn
@@ -26044,6 +26388,7 @@ impl Chime for ChimeClient {
         &self,
         input: UpdateAppInstanceUserRequest,
     ) -> Result<UpdateAppInstanceUserResponse, RusotoError<UpdateAppInstanceUserError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/app-instance-users/{app_instance_user_arn}",
             app_instance_user_arn = input.app_instance_user_arn
@@ -26078,6 +26423,7 @@ impl Chime for ChimeClient {
         &self,
         input: UpdateBotRequest,
     ) -> Result<UpdateBotResponse, RusotoError<UpdateBotError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/accounts/{account_id}/bots/{bot_id}",
             account_id = input.account_id,
@@ -26113,6 +26459,7 @@ impl Chime for ChimeClient {
         &self,
         input: UpdateChannelRequest,
     ) -> Result<UpdateChannelResponse, RusotoError<UpdateChannelError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!("/channels/{channel_arn}", channel_arn = input.channel_arn);
 
         let mut request = SignedRequest::new("PUT", "chime", &self.region, &request_uri);
@@ -26144,6 +26491,7 @@ impl Chime for ChimeClient {
         &self,
         input: UpdateChannelMessageRequest,
     ) -> Result<UpdateChannelMessageResponse, RusotoError<UpdateChannelMessageError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/channels/{channel_arn}/messages/{message_id}",
             channel_arn = input.channel_arn,
@@ -26179,6 +26527,7 @@ impl Chime for ChimeClient {
         &self,
         input: UpdateChannelReadMarkerRequest,
     ) -> Result<UpdateChannelReadMarkerResponse, RusotoError<UpdateChannelReadMarkerError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/channels/{channel_arn}/readMarker",
             channel_arn = input.channel_arn
@@ -26210,6 +26559,7 @@ impl Chime for ChimeClient {
         &self,
         input: UpdateGlobalSettingsRequest,
     ) -> Result<(), RusotoError<UpdateGlobalSettingsError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/settings";
 
         let mut request = SignedRequest::new("PUT", "chime", &self.region, &request_uri);
@@ -26225,9 +26575,9 @@ impl Chime for ChimeClient {
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 204 {
             let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = ::std::mem::drop(response);
+            let _result = ::std::mem::drop(response);
 
-            Ok(result)
+            Ok(())
         } else {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             Err(UpdateGlobalSettingsError::from_response(response))
@@ -26240,6 +26590,7 @@ impl Chime for ChimeClient {
         &self,
         input: UpdatePhoneNumberRequest,
     ) -> Result<UpdatePhoneNumberResponse, RusotoError<UpdatePhoneNumberError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/phone-numbers/{phone_number_id}",
             phone_number_id = input.phone_number_id
@@ -26274,6 +26625,7 @@ impl Chime for ChimeClient {
         &self,
         input: UpdatePhoneNumberSettingsRequest,
     ) -> Result<(), RusotoError<UpdatePhoneNumberSettingsError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/settings/phone-number";
 
         let mut request = SignedRequest::new("PUT", "chime", &self.region, &request_uri);
@@ -26289,9 +26641,9 @@ impl Chime for ChimeClient {
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 204 {
             let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = ::std::mem::drop(response);
+            let _result = ::std::mem::drop(response);
 
-            Ok(result)
+            Ok(())
         } else {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             Err(UpdatePhoneNumberSettingsError::from_response(response))
@@ -26304,6 +26656,7 @@ impl Chime for ChimeClient {
         &self,
         input: UpdateProxySessionRequest,
     ) -> Result<UpdateProxySessionResponse, RusotoError<UpdateProxySessionError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/voice-connectors/{voice_connector_id}/proxy-sessions/{proxy_session_id}",
             proxy_session_id = input.proxy_session_id,
@@ -26339,6 +26692,7 @@ impl Chime for ChimeClient {
         &self,
         input: UpdateRoomRequest,
     ) -> Result<UpdateRoomResponse, RusotoError<UpdateRoomError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/accounts/{account_id}/rooms/{room_id}",
             account_id = input.account_id,
@@ -26374,6 +26728,7 @@ impl Chime for ChimeClient {
         &self,
         input: UpdateRoomMembershipRequest,
     ) -> Result<UpdateRoomMembershipResponse, RusotoError<UpdateRoomMembershipError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/accounts/{account_id}/rooms/{room_id}/memberships/{member_id}",
             account_id = input.account_id,
@@ -26411,6 +26766,7 @@ impl Chime for ChimeClient {
         input: UpdateSipMediaApplicationRequest,
     ) -> Result<UpdateSipMediaApplicationResponse, RusotoError<UpdateSipMediaApplicationError>>
     {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/sip-media-applications/{sip_media_application_id}",
             sip_media_application_id = input.sip_media_application_id
@@ -26445,6 +26801,7 @@ impl Chime for ChimeClient {
         &self,
         input: UpdateSipRuleRequest,
     ) -> Result<UpdateSipRuleResponse, RusotoError<UpdateSipRuleError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!("/sip-rules/{sip_rule_id}", sip_rule_id = input.sip_rule_id);
 
         let mut request = SignedRequest::new("PUT", "chime", &self.region, &request_uri);
@@ -26476,6 +26833,7 @@ impl Chime for ChimeClient {
         &self,
         input: UpdateUserRequest,
     ) -> Result<UpdateUserResponse, RusotoError<UpdateUserError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/accounts/{account_id}/users/{user_id}",
             account_id = input.account_id,
@@ -26511,6 +26869,7 @@ impl Chime for ChimeClient {
         &self,
         input: UpdateUserSettingsRequest,
     ) -> Result<(), RusotoError<UpdateUserSettingsError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/accounts/{account_id}/users/{user_id}/settings",
             account_id = input.account_id,
@@ -26530,9 +26889,9 @@ impl Chime for ChimeClient {
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 204 {
             let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = ::std::mem::drop(response);
+            let _result = ::std::mem::drop(response);
 
-            Ok(result)
+            Ok(())
         } else {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             Err(UpdateUserSettingsError::from_response(response))
@@ -26545,6 +26904,7 @@ impl Chime for ChimeClient {
         &self,
         input: UpdateVoiceConnectorRequest,
     ) -> Result<UpdateVoiceConnectorResponse, RusotoError<UpdateVoiceConnectorError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/voice-connectors/{voice_connector_id}",
             voice_connector_id = input.voice_connector_id
@@ -26580,6 +26940,7 @@ impl Chime for ChimeClient {
         input: UpdateVoiceConnectorGroupRequest,
     ) -> Result<UpdateVoiceConnectorGroupResponse, RusotoError<UpdateVoiceConnectorGroupError>>
     {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/voice-connector-groups/{voice_connector_group_id}",
             voice_connector_group_id = input.voice_connector_group_id

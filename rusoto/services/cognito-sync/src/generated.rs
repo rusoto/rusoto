@@ -24,7 +24,6 @@ use rusoto_core::proto;
 use rusoto_core::signature::SignedRequest;
 #[allow(unused_imports)]
 use serde::{Deserialize, Serialize};
-use serde_json;
 /// <p>The input for the BulkPublish operation.</p>
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
@@ -709,6 +708,7 @@ pub enum BulkPublishError {
 impl BulkPublishError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<BulkPublishError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AlreadyStreamedException" => {
                     return RusotoError::Service(BulkPublishError::AlreadyStreamed(err.msg))
@@ -769,6 +769,7 @@ pub enum DeleteDatasetError {
 impl DeleteDatasetError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteDatasetError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalErrorException" => {
                     return RusotoError::Service(DeleteDatasetError::InternalError(err.msg))
@@ -827,6 +828,7 @@ pub enum DescribeDatasetError {
 impl DescribeDatasetError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeDatasetError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalErrorException" => {
                     return RusotoError::Service(DescribeDatasetError::InternalError(err.msg))
@@ -881,6 +883,7 @@ pub enum DescribeIdentityPoolUsageError {
 impl DescribeIdentityPoolUsageError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeIdentityPoolUsageError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalErrorException" => {
                     return RusotoError::Service(DescribeIdentityPoolUsageError::InternalError(
@@ -945,6 +948,7 @@ pub enum DescribeIdentityUsageError {
 impl DescribeIdentityUsageError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeIdentityUsageError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalErrorException" => {
                     return RusotoError::Service(DescribeIdentityUsageError::InternalError(err.msg))
@@ -1003,6 +1007,7 @@ pub enum GetBulkPublishDetailsError {
 impl GetBulkPublishDetailsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetBulkPublishDetailsError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalErrorException" => {
                     return RusotoError::Service(GetBulkPublishDetailsError::InternalError(err.msg))
@@ -1057,6 +1062,7 @@ pub enum GetCognitoEventsError {
 impl GetCognitoEventsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetCognitoEventsError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalErrorException" => {
                     return RusotoError::Service(GetCognitoEventsError::InternalError(err.msg))
@@ -1113,6 +1119,7 @@ impl GetIdentityPoolConfigurationError {
         res: BufferedHttpResponse,
     ) -> RusotoError<GetIdentityPoolConfigurationError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalErrorException" => {
                     return RusotoError::Service(GetIdentityPoolConfigurationError::InternalError(
@@ -1179,6 +1186,7 @@ pub enum ListDatasetsError {
 impl ListDatasetsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListDatasetsError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalErrorException" => {
                     return RusotoError::Service(ListDatasetsError::InternalError(err.msg))
@@ -1227,6 +1235,7 @@ pub enum ListIdentityPoolUsageError {
 impl ListIdentityPoolUsageError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListIdentityPoolUsageError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalErrorException" => {
                     return RusotoError::Service(ListIdentityPoolUsageError::InternalError(err.msg))
@@ -1279,6 +1288,7 @@ pub enum ListRecordsError {
 impl ListRecordsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListRecordsError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalErrorException" => {
                     return RusotoError::Service(ListRecordsError::InternalError(err.msg))
@@ -1331,6 +1341,7 @@ pub enum RegisterDeviceError {
 impl RegisterDeviceError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<RegisterDeviceError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalErrorException" => {
                     return RusotoError::Service(RegisterDeviceError::InternalError(err.msg))
@@ -1389,6 +1400,7 @@ pub enum SetCognitoEventsError {
 impl SetCognitoEventsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<SetCognitoEventsError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalErrorException" => {
                     return RusotoError::Service(SetCognitoEventsError::InternalError(err.msg))
@@ -1447,6 +1459,7 @@ impl SetIdentityPoolConfigurationError {
         res: BufferedHttpResponse,
     ) -> RusotoError<SetIdentityPoolConfigurationError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ConcurrentModificationException" => {
                     return RusotoError::Service(
@@ -1525,6 +1538,7 @@ pub enum SubscribeToDatasetError {
 impl SubscribeToDatasetError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<SubscribeToDatasetError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalErrorException" => {
                     return RusotoError::Service(SubscribeToDatasetError::InternalError(err.msg))
@@ -1587,6 +1601,7 @@ pub enum UnsubscribeFromDatasetError {
 impl UnsubscribeFromDatasetError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UnsubscribeFromDatasetError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalErrorException" => {
                     return RusotoError::Service(UnsubscribeFromDatasetError::InternalError(
@@ -1665,6 +1680,7 @@ pub enum UpdateRecordsError {
 impl UpdateRecordsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateRecordsError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalErrorException" => {
                     return RusotoError::Service(UpdateRecordsError::InternalError(err.msg))
@@ -1870,6 +1886,7 @@ impl CognitoSync for CognitoSyncClient {
         &self,
         input: BulkPublishRequest,
     ) -> Result<BulkPublishResponse, RusotoError<BulkPublishError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/identitypools/{identity_pool_id}/bulkpublish",
             identity_pool_id = input.identity_pool_id
@@ -1901,6 +1918,7 @@ impl CognitoSync for CognitoSyncClient {
         &self,
         input: DeleteDatasetRequest,
     ) -> Result<DeleteDatasetResponse, RusotoError<DeleteDatasetError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/identitypools/{identity_pool_id}/identities/{identity_id}/datasets/{dataset_name}",
             dataset_name = input.dataset_name,
@@ -1934,6 +1952,7 @@ impl CognitoSync for CognitoSyncClient {
         &self,
         input: DescribeDatasetRequest,
     ) -> Result<DescribeDatasetResponse, RusotoError<DescribeDatasetError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/identitypools/{identity_pool_id}/identities/{identity_id}/datasets/{dataset_name}",
             dataset_name = input.dataset_name,
@@ -1968,6 +1987,7 @@ impl CognitoSync for CognitoSyncClient {
         input: DescribeIdentityPoolUsageRequest,
     ) -> Result<DescribeIdentityPoolUsageResponse, RusotoError<DescribeIdentityPoolUsageError>>
     {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/identitypools/{identity_pool_id}",
             identity_pool_id = input.identity_pool_id
@@ -1999,6 +2019,7 @@ impl CognitoSync for CognitoSyncClient {
         &self,
         input: DescribeIdentityUsageRequest,
     ) -> Result<DescribeIdentityUsageResponse, RusotoError<DescribeIdentityUsageError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/identitypools/{identity_pool_id}/identities/{identity_id}",
             identity_id = input.identity_id,
@@ -2031,6 +2052,7 @@ impl CognitoSync for CognitoSyncClient {
         &self,
         input: GetBulkPublishDetailsRequest,
     ) -> Result<GetBulkPublishDetailsResponse, RusotoError<GetBulkPublishDetailsError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/identitypools/{identity_pool_id}/getBulkPublishDetails",
             identity_pool_id = input.identity_pool_id
@@ -2062,6 +2084,7 @@ impl CognitoSync for CognitoSyncClient {
         &self,
         input: GetCognitoEventsRequest,
     ) -> Result<GetCognitoEventsResponse, RusotoError<GetCognitoEventsError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/identitypools/{identity_pool_id}/events",
             identity_pool_id = input.identity_pool_id
@@ -2094,6 +2117,7 @@ impl CognitoSync for CognitoSyncClient {
         input: GetIdentityPoolConfigurationRequest,
     ) -> Result<GetIdentityPoolConfigurationResponse, RusotoError<GetIdentityPoolConfigurationError>>
     {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/identitypools/{identity_pool_id}/configuration",
             identity_pool_id = input.identity_pool_id
@@ -2125,6 +2149,7 @@ impl CognitoSync for CognitoSyncClient {
         &self,
         input: ListDatasetsRequest,
     ) -> Result<ListDatasetsResponse, RusotoError<ListDatasetsError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/identitypools/{identity_pool_id}/identities/{identity_id}/datasets",
             identity_id = input.identity_id,
@@ -2166,6 +2191,7 @@ impl CognitoSync for CognitoSyncClient {
         &self,
         input: ListIdentityPoolUsageRequest,
     ) -> Result<ListIdentityPoolUsageResponse, RusotoError<ListIdentityPoolUsageError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/identitypools";
 
         let mut request = SignedRequest::new("GET", "cognito-sync", &self.region, &request_uri);
@@ -2203,6 +2229,7 @@ impl CognitoSync for CognitoSyncClient {
         &self,
         input: ListRecordsRequest,
     ) -> Result<ListRecordsResponse, RusotoError<ListRecordsError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!("/identitypools/{identity_pool_id}/identities/{identity_id}/datasets/{dataset_name}/records", dataset_name = input.dataset_name, identity_id = input.identity_id, identity_pool_id = input.identity_pool_id);
 
         let mut request = SignedRequest::new("GET", "cognito-sync", &self.region, &request_uri);
@@ -2246,6 +2273,7 @@ impl CognitoSync for CognitoSyncClient {
         &self,
         input: RegisterDeviceRequest,
     ) -> Result<RegisterDeviceResponse, RusotoError<RegisterDeviceError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/identitypools/{identity_pool_id}/identity/{identity_id}/device",
             identity_id = input.identity_id,
@@ -2281,6 +2309,7 @@ impl CognitoSync for CognitoSyncClient {
         &self,
         input: SetCognitoEventsRequest,
     ) -> Result<(), RusotoError<SetCognitoEventsError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/identitypools/{identity_pool_id}/events",
             identity_pool_id = input.identity_pool_id
@@ -2299,9 +2328,9 @@ impl CognitoSync for CognitoSyncClient {
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
             let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = ::std::mem::drop(response);
+            let _result = ::std::mem::drop(response);
 
-            Ok(result)
+            Ok(())
         } else {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             Err(SetCognitoEventsError::from_response(response))
@@ -2315,6 +2344,7 @@ impl CognitoSync for CognitoSyncClient {
         input: SetIdentityPoolConfigurationRequest,
     ) -> Result<SetIdentityPoolConfigurationResponse, RusotoError<SetIdentityPoolConfigurationError>>
     {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/identitypools/{identity_pool_id}/configuration",
             identity_pool_id = input.identity_pool_id
@@ -2349,6 +2379,7 @@ impl CognitoSync for CognitoSyncClient {
         &self,
         input: SubscribeToDatasetRequest,
     ) -> Result<SubscribeToDatasetResponse, RusotoError<SubscribeToDatasetError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!("/identitypools/{identity_pool_id}/identities/{identity_id}/datasets/{dataset_name}/subscriptions/{device_id}", dataset_name = input.dataset_name, device_id = input.device_id, identity_id = input.identity_id, identity_pool_id = input.identity_pool_id);
 
         let mut request = SignedRequest::new("POST", "cognito-sync", &self.region, &request_uri);
@@ -2377,6 +2408,7 @@ impl CognitoSync for CognitoSyncClient {
         &self,
         input: UnsubscribeFromDatasetRequest,
     ) -> Result<UnsubscribeFromDatasetResponse, RusotoError<UnsubscribeFromDatasetError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!("/identitypools/{identity_pool_id}/identities/{identity_id}/datasets/{dataset_name}/subscriptions/{device_id}", dataset_name = input.dataset_name, device_id = input.device_id, identity_id = input.identity_id, identity_pool_id = input.identity_pool_id);
 
         let mut request = SignedRequest::new("DELETE", "cognito-sync", &self.region, &request_uri);
@@ -2405,6 +2437,7 @@ impl CognitoSync for CognitoSyncClient {
         &self,
         input: UpdateRecordsRequest,
     ) -> Result<UpdateRecordsResponse, RusotoError<UpdateRecordsError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/identitypools/{identity_pool_id}/identities/{identity_id}/datasets/{dataset_name}",
             dataset_name = input.dataset_name,

@@ -24,7 +24,6 @@ use rusoto_core::proto;
 use rusoto_core::signature::SignedRequest;
 #[allow(unused_imports)]
 use serde::{Deserialize, Serialize};
-use serde_json;
 /// <p>CDN Authorization credentials</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct Authorization {
@@ -1500,6 +1499,7 @@ pub enum ConfigureLogsError {
 impl ConfigureLogsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ConfigureLogsError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ForbiddenException" => {
                     return RusotoError::Service(ConfigureLogsError::Forbidden(err.msg))
@@ -1560,6 +1560,7 @@ pub enum CreateChannelError {
 impl CreateChannelError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateChannelError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ForbiddenException" => {
                     return RusotoError::Service(CreateChannelError::Forbidden(err.msg))
@@ -1620,6 +1621,7 @@ pub enum CreateHarvestJobError {
 impl CreateHarvestJobError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateHarvestJobError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ForbiddenException" => {
                     return RusotoError::Service(CreateHarvestJobError::Forbidden(err.msg))
@@ -1684,6 +1686,7 @@ pub enum CreateOriginEndpointError {
 impl CreateOriginEndpointError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateOriginEndpointError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ForbiddenException" => {
                     return RusotoError::Service(CreateOriginEndpointError::Forbidden(err.msg))
@@ -1752,6 +1755,7 @@ pub enum DeleteChannelError {
 impl DeleteChannelError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteChannelError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ForbiddenException" => {
                     return RusotoError::Service(DeleteChannelError::Forbidden(err.msg))
@@ -1812,6 +1816,7 @@ pub enum DeleteOriginEndpointError {
 impl DeleteOriginEndpointError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteOriginEndpointError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ForbiddenException" => {
                     return RusotoError::Service(DeleteOriginEndpointError::Forbidden(err.msg))
@@ -1880,6 +1885,7 @@ pub enum DescribeChannelError {
 impl DescribeChannelError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeChannelError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ForbiddenException" => {
                     return RusotoError::Service(DescribeChannelError::Forbidden(err.msg))
@@ -1940,6 +1946,7 @@ pub enum DescribeHarvestJobError {
 impl DescribeHarvestJobError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeHarvestJobError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ForbiddenException" => {
                     return RusotoError::Service(DescribeHarvestJobError::Forbidden(err.msg))
@@ -2006,6 +2013,7 @@ pub enum DescribeOriginEndpointError {
 impl DescribeOriginEndpointError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeOriginEndpointError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ForbiddenException" => {
                     return RusotoError::Service(DescribeOriginEndpointError::Forbidden(err.msg))
@@ -2074,6 +2082,7 @@ pub enum ListChannelsError {
 impl ListChannelsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListChannelsError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ForbiddenException" => {
                     return RusotoError::Service(ListChannelsError::Forbidden(err.msg))
@@ -2134,6 +2143,7 @@ pub enum ListHarvestJobsError {
 impl ListHarvestJobsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListHarvestJobsError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ForbiddenException" => {
                     return RusotoError::Service(ListHarvestJobsError::Forbidden(err.msg))
@@ -2194,6 +2204,7 @@ pub enum ListOriginEndpointsError {
 impl ListOriginEndpointsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListOriginEndpointsError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ForbiddenException" => {
                     return RusotoError::Service(ListOriginEndpointsError::Forbidden(err.msg))
@@ -2247,6 +2258,7 @@ pub enum ListTagsForResourceError {}
 impl ListTagsForResourceError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListTagsForResourceError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
@@ -2282,6 +2294,7 @@ pub enum RotateChannelCredentialsError {
 impl RotateChannelCredentialsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<RotateChannelCredentialsError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ForbiddenException" => {
                     return RusotoError::Service(RotateChannelCredentialsError::Forbidden(err.msg))
@@ -2352,6 +2365,7 @@ impl RotateIngestEndpointCredentialsError {
         res: BufferedHttpResponse,
     ) -> RusotoError<RotateIngestEndpointCredentialsError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ForbiddenException" => {
                     return RusotoError::Service(RotateIngestEndpointCredentialsError::Forbidden(
@@ -2419,6 +2433,7 @@ pub enum TagResourceError {}
 impl TagResourceError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<TagResourceError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
@@ -2441,6 +2456,7 @@ pub enum UntagResourceError {}
 impl UntagResourceError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UntagResourceError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
@@ -2476,6 +2492,7 @@ pub enum UpdateChannelError {
 impl UpdateChannelError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateChannelError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ForbiddenException" => {
                     return RusotoError::Service(UpdateChannelError::Forbidden(err.msg))
@@ -2536,6 +2553,7 @@ pub enum UpdateOriginEndpointError {
 impl UpdateOriginEndpointError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateOriginEndpointError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ForbiddenException" => {
                     return RusotoError::Service(UpdateOriginEndpointError::Forbidden(err.msg))
@@ -2747,6 +2765,7 @@ impl MediaPackage for MediaPackageClient {
         &self,
         input: ConfigureLogsRequest,
     ) -> Result<ConfigureLogsResponse, RusotoError<ConfigureLogsError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!("/channels/{id}/configure_logs", id = input.id);
 
         let mut request = SignedRequest::new("PUT", "mediapackage", &self.region, &request_uri);
@@ -2778,6 +2797,7 @@ impl MediaPackage for MediaPackageClient {
         &self,
         input: CreateChannelRequest,
     ) -> Result<CreateChannelResponse, RusotoError<CreateChannelError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/channels";
 
         let mut request = SignedRequest::new("POST", "mediapackage", &self.region, &request_uri);
@@ -2809,6 +2829,7 @@ impl MediaPackage for MediaPackageClient {
         &self,
         input: CreateHarvestJobRequest,
     ) -> Result<CreateHarvestJobResponse, RusotoError<CreateHarvestJobError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/harvest_jobs";
 
         let mut request = SignedRequest::new("POST", "mediapackage", &self.region, &request_uri);
@@ -2840,6 +2861,7 @@ impl MediaPackage for MediaPackageClient {
         &self,
         input: CreateOriginEndpointRequest,
     ) -> Result<CreateOriginEndpointResponse, RusotoError<CreateOriginEndpointError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/origin_endpoints";
 
         let mut request = SignedRequest::new("POST", "mediapackage", &self.region, &request_uri);
@@ -2871,6 +2893,7 @@ impl MediaPackage for MediaPackageClient {
         &self,
         input: DeleteChannelRequest,
     ) -> Result<DeleteChannelResponse, RusotoError<DeleteChannelError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!("/channels/{id}", id = input.id);
 
         let mut request = SignedRequest::new("DELETE", "mediapackage", &self.region, &request_uri);
@@ -2899,6 +2922,7 @@ impl MediaPackage for MediaPackageClient {
         &self,
         input: DeleteOriginEndpointRequest,
     ) -> Result<DeleteOriginEndpointResponse, RusotoError<DeleteOriginEndpointError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!("/origin_endpoints/{id}", id = input.id);
 
         let mut request = SignedRequest::new("DELETE", "mediapackage", &self.region, &request_uri);
@@ -2927,6 +2951,7 @@ impl MediaPackage for MediaPackageClient {
         &self,
         input: DescribeChannelRequest,
     ) -> Result<DescribeChannelResponse, RusotoError<DescribeChannelError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!("/channels/{id}", id = input.id);
 
         let mut request = SignedRequest::new("GET", "mediapackage", &self.region, &request_uri);
@@ -2955,6 +2980,7 @@ impl MediaPackage for MediaPackageClient {
         &self,
         input: DescribeHarvestJobRequest,
     ) -> Result<DescribeHarvestJobResponse, RusotoError<DescribeHarvestJobError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!("/harvest_jobs/{id}", id = input.id);
 
         let mut request = SignedRequest::new("GET", "mediapackage", &self.region, &request_uri);
@@ -2983,6 +3009,7 @@ impl MediaPackage for MediaPackageClient {
         &self,
         input: DescribeOriginEndpointRequest,
     ) -> Result<DescribeOriginEndpointResponse, RusotoError<DescribeOriginEndpointError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!("/origin_endpoints/{id}", id = input.id);
 
         let mut request = SignedRequest::new("GET", "mediapackage", &self.region, &request_uri);
@@ -3011,6 +3038,7 @@ impl MediaPackage for MediaPackageClient {
         &self,
         input: ListChannelsRequest,
     ) -> Result<ListChannelsResponse, RusotoError<ListChannelsError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/channels";
 
         let mut request = SignedRequest::new("GET", "mediapackage", &self.region, &request_uri);
@@ -3048,6 +3076,7 @@ impl MediaPackage for MediaPackageClient {
         &self,
         input: ListHarvestJobsRequest,
     ) -> Result<ListHarvestJobsResponse, RusotoError<ListHarvestJobsError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/harvest_jobs";
 
         let mut request = SignedRequest::new("GET", "mediapackage", &self.region, &request_uri);
@@ -3091,6 +3120,7 @@ impl MediaPackage for MediaPackageClient {
         &self,
         input: ListOriginEndpointsRequest,
     ) -> Result<ListOriginEndpointsResponse, RusotoError<ListOriginEndpointsError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/origin_endpoints";
 
         let mut request = SignedRequest::new("GET", "mediapackage", &self.region, &request_uri);
@@ -3130,6 +3160,7 @@ impl MediaPackage for MediaPackageClient {
         &self,
         input: ListTagsForResourceRequest,
     ) -> Result<ListTagsForResourceResponse, RusotoError<ListTagsForResourceError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!("/tags/{resource_arn}", resource_arn = input.resource_arn);
 
         let mut request = SignedRequest::new("GET", "mediapackage", &self.region, &request_uri);
@@ -3158,6 +3189,7 @@ impl MediaPackage for MediaPackageClient {
         &self,
         input: RotateChannelCredentialsRequest,
     ) -> Result<RotateChannelCredentialsResponse, RusotoError<RotateChannelCredentialsError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!("/channels/{id}/credentials", id = input.id);
 
         let mut request = SignedRequest::new("PUT", "mediapackage", &self.region, &request_uri);
@@ -3189,6 +3221,7 @@ impl MediaPackage for MediaPackageClient {
         RotateIngestEndpointCredentialsResponse,
         RusotoError<RotateIngestEndpointCredentialsError>,
     > {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/channels/{id}/ingest_endpoints/{ingest_endpoint_id}/credentials",
             id = input.id,
@@ -3222,6 +3255,7 @@ impl MediaPackage for MediaPackageClient {
         &self,
         input: TagResourceRequest,
     ) -> Result<(), RusotoError<TagResourceError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!("/tags/{resource_arn}", resource_arn = input.resource_arn);
 
         let mut request = SignedRequest::new("POST", "mediapackage", &self.region, &request_uri);
@@ -3237,9 +3271,9 @@ impl MediaPackage for MediaPackageClient {
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 204 {
             let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = ::std::mem::drop(response);
+            let _result = ::std::mem::drop(response);
 
-            Ok(result)
+            Ok(())
         } else {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             Err(TagResourceError::from_response(response))
@@ -3251,6 +3285,7 @@ impl MediaPackage for MediaPackageClient {
         &self,
         input: UntagResourceRequest,
     ) -> Result<(), RusotoError<UntagResourceError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!("/tags/{resource_arn}", resource_arn = input.resource_arn);
 
         let mut request = SignedRequest::new("DELETE", "mediapackage", &self.region, &request_uri);
@@ -3269,9 +3304,9 @@ impl MediaPackage for MediaPackageClient {
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 204 {
             let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = ::std::mem::drop(response);
+            let _result = ::std::mem::drop(response);
 
-            Ok(result)
+            Ok(())
         } else {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             Err(UntagResourceError::from_response(response))
@@ -3284,6 +3319,7 @@ impl MediaPackage for MediaPackageClient {
         &self,
         input: UpdateChannelRequest,
     ) -> Result<UpdateChannelResponse, RusotoError<UpdateChannelError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!("/channels/{id}", id = input.id);
 
         let mut request = SignedRequest::new("PUT", "mediapackage", &self.region, &request_uri);
@@ -3315,6 +3351,7 @@ impl MediaPackage for MediaPackageClient {
         &self,
         input: UpdateOriginEndpointRequest,
     ) -> Result<UpdateOriginEndpointResponse, RusotoError<UpdateOriginEndpointError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!("/origin_endpoints/{id}", id = input.id);
 
         let mut request = SignedRequest::new("PUT", "mediapackage", &self.region, &request_uri);

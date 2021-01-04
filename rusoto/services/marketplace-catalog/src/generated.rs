@@ -24,7 +24,6 @@ use rusoto_core::proto;
 use rusoto_core::signature::SignedRequest;
 #[allow(unused_imports)]
 use serde::{Deserialize, Serialize};
-use serde_json;
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CancelChangeSetRequest {
@@ -423,6 +422,7 @@ pub enum CancelChangeSetError {
 impl CancelChangeSetError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CancelChangeSetError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(CancelChangeSetError::AccessDenied(err.msg))
@@ -475,6 +475,7 @@ pub enum DescribeChangeSetError {
 impl DescribeChangeSetError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeChangeSetError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(DescribeChangeSetError::AccessDenied(err.msg))
@@ -525,6 +526,7 @@ pub enum DescribeEntityError {
 impl DescribeEntityError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeEntityError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(DescribeEntityError::AccessDenied(err.msg))
@@ -575,6 +577,7 @@ pub enum ListChangeSetsError {
 impl ListChangeSetsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListChangeSetsError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(ListChangeSetsError::AccessDenied(err.msg))
@@ -619,6 +622,7 @@ pub enum ListEntitiesError {
 impl ListEntitiesError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListEntitiesError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(ListEntitiesError::AccessDenied(err.msg))
@@ -671,6 +675,7 @@ pub enum StartChangeSetError {
 impl StartChangeSetError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<StartChangeSetError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(StartChangeSetError::AccessDenied(err.msg))
@@ -796,6 +801,7 @@ impl MarketplaceCatalog for MarketplaceCatalogClient {
         &self,
         input: CancelChangeSetRequest,
     ) -> Result<CancelChangeSetResponse, RusotoError<CancelChangeSetError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/CancelChangeSet";
 
         let mut request =
@@ -832,6 +838,7 @@ impl MarketplaceCatalog for MarketplaceCatalogClient {
         &self,
         input: DescribeChangeSetRequest,
     ) -> Result<DescribeChangeSetResponse, RusotoError<DescribeChangeSetError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/DescribeChangeSet";
 
         let mut request = SignedRequest::new("GET", "aws-marketplace", &self.region, &request_uri);
@@ -867,6 +874,7 @@ impl MarketplaceCatalog for MarketplaceCatalogClient {
         &self,
         input: DescribeEntityRequest,
     ) -> Result<DescribeEntityResponse, RusotoError<DescribeEntityError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/DescribeEntity";
 
         let mut request = SignedRequest::new("GET", "aws-marketplace", &self.region, &request_uri);
@@ -902,6 +910,7 @@ impl MarketplaceCatalog for MarketplaceCatalogClient {
         &self,
         input: ListChangeSetsRequest,
     ) -> Result<ListChangeSetsResponse, RusotoError<ListChangeSetsError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/ListChangeSets";
 
         let mut request = SignedRequest::new("POST", "aws-marketplace", &self.region, &request_uri);
@@ -934,6 +943,7 @@ impl MarketplaceCatalog for MarketplaceCatalogClient {
         &self,
         input: ListEntitiesRequest,
     ) -> Result<ListEntitiesResponse, RusotoError<ListEntitiesError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/ListEntities";
 
         let mut request = SignedRequest::new("POST", "aws-marketplace", &self.region, &request_uri);
@@ -966,6 +976,7 @@ impl MarketplaceCatalog for MarketplaceCatalogClient {
         &self,
         input: StartChangeSetRequest,
     ) -> Result<StartChangeSetResponse, RusotoError<StartChangeSetError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/StartChangeSet";
 
         let mut request = SignedRequest::new("POST", "aws-marketplace", &self.region, &request_uri);

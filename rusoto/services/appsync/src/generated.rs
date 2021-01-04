@@ -24,7 +24,6 @@ use rusoto_core::proto;
 use rusoto_core::signature::SignedRequest;
 #[allow(unused_imports)]
 use serde::{Deserialize, Serialize};
-use serde_json;
 /// <p>Describes an additional authentication provider.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct AdditionalAuthenticationProvider {
@@ -1674,6 +1673,7 @@ pub enum CreateApiCacheError {
 impl CreateApiCacheError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateApiCacheError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(CreateApiCacheError::BadRequest(err.msg))
@@ -1734,6 +1734,7 @@ pub enum CreateApiKeyError {
 impl CreateApiKeyError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateApiKeyError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ApiKeyLimitExceededException" => {
                     return RusotoError::Service(CreateApiKeyError::ApiKeyLimitExceeded(err.msg))
@@ -1798,6 +1799,7 @@ pub enum CreateDataSourceError {
 impl CreateDataSourceError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateDataSourceError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(CreateDataSourceError::BadRequest(err.msg))
@@ -1852,6 +1854,7 @@ pub enum CreateFunctionError {
 impl CreateFunctionError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateFunctionError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ConcurrentModificationException" => {
                     return RusotoError::Service(CreateFunctionError::ConcurrentModification(
@@ -1906,6 +1909,7 @@ pub enum CreateGraphqlApiError {
 impl CreateGraphqlApiError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateGraphqlApiError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ApiLimitExceededException" => {
                     return RusotoError::Service(CreateGraphqlApiError::ApiLimitExceeded(err.msg))
@@ -1964,6 +1968,7 @@ pub enum CreateResolverError {
 impl CreateResolverError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateResolverError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ConcurrentModificationException" => {
                     return RusotoError::Service(CreateResolverError::ConcurrentModification(
@@ -2016,6 +2021,7 @@ pub enum CreateTypeError {
 impl CreateTypeError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateTypeError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(CreateTypeError::BadRequest(err.msg))
@@ -2070,6 +2076,7 @@ pub enum DeleteApiCacheError {
 impl DeleteApiCacheError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteApiCacheError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(DeleteApiCacheError::BadRequest(err.msg))
@@ -2124,6 +2131,7 @@ pub enum DeleteApiKeyError {
 impl DeleteApiKeyError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteApiKeyError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(DeleteApiKeyError::BadRequest(err.msg))
@@ -2174,6 +2182,7 @@ pub enum DeleteDataSourceError {
 impl DeleteDataSourceError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteDataSourceError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(DeleteDataSourceError::BadRequest(err.msg))
@@ -2228,6 +2237,7 @@ pub enum DeleteFunctionError {
 impl DeleteFunctionError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteFunctionError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ConcurrentModificationException" => {
                     return RusotoError::Service(DeleteFunctionError::ConcurrentModification(
@@ -2282,6 +2292,7 @@ pub enum DeleteGraphqlApiError {
 impl DeleteGraphqlApiError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteGraphqlApiError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(DeleteGraphqlApiError::AccessDenied(err.msg))
@@ -2340,6 +2351,7 @@ pub enum DeleteResolverError {
 impl DeleteResolverError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteResolverError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ConcurrentModificationException" => {
                     return RusotoError::Service(DeleteResolverError::ConcurrentModification(
@@ -2392,6 +2404,7 @@ pub enum DeleteTypeError {
 impl DeleteTypeError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteTypeError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(DeleteTypeError::BadRequest(err.msg))
@@ -2446,6 +2459,7 @@ pub enum FlushApiCacheError {
 impl FlushApiCacheError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<FlushApiCacheError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(FlushApiCacheError::BadRequest(err.msg))
@@ -2502,6 +2516,7 @@ pub enum GetApiCacheError {
 impl GetApiCacheError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetApiCacheError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(GetApiCacheError::BadRequest(err.msg))
@@ -2556,6 +2571,7 @@ pub enum GetDataSourceError {
 impl GetDataSourceError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetDataSourceError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(GetDataSourceError::BadRequest(err.msg))
@@ -2608,6 +2624,7 @@ pub enum GetFunctionError {
 impl GetFunctionError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetFunctionError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ConcurrentModificationException" => {
                     return RusotoError::Service(GetFunctionError::ConcurrentModification(err.msg))
@@ -2654,6 +2671,7 @@ pub enum GetGraphqlApiError {
 impl GetGraphqlApiError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetGraphqlApiError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(GetGraphqlApiError::AccessDenied(err.msg))
@@ -2706,6 +2724,7 @@ pub enum GetIntrospectionSchemaError {
 impl GetIntrospectionSchemaError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetIntrospectionSchemaError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "GraphQLSchemaException" => {
                     return RusotoError::Service(GetIntrospectionSchemaError::GraphQLSchema(
@@ -2756,6 +2775,7 @@ pub enum GetResolverError {
 impl GetResolverError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetResolverError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ConcurrentModificationException" => {
                     return RusotoError::Service(GetResolverError::ConcurrentModification(err.msg))
@@ -2800,6 +2820,7 @@ pub enum GetSchemaCreationStatusError {
 impl GetSchemaCreationStatusError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetSchemaCreationStatusError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(GetSchemaCreationStatusError::BadRequest(err.msg))
@@ -2854,6 +2875,7 @@ pub enum GetTypeError {
 impl GetTypeError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetTypeError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(GetTypeError::BadRequest(err.msg))
@@ -2906,6 +2928,7 @@ pub enum ListApiKeysError {
 impl ListApiKeysError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListApiKeysError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(ListApiKeysError::BadRequest(err.msg))
@@ -2954,6 +2977,7 @@ pub enum ListDataSourcesError {
 impl ListDataSourcesError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListDataSourcesError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(ListDataSourcesError::BadRequest(err.msg))
@@ -3002,6 +3026,7 @@ pub enum ListFunctionsError {
 impl ListFunctionsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListFunctionsError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(ListFunctionsError::BadRequest(err.msg))
@@ -3048,6 +3073,7 @@ pub enum ListGraphqlApisError {
 impl ListGraphqlApisError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListGraphqlApisError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(ListGraphqlApisError::BadRequest(err.msg))
@@ -3092,6 +3118,7 @@ pub enum ListResolversError {
 impl ListResolversError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListResolversError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(ListResolversError::BadRequest(err.msg))
@@ -3140,6 +3167,7 @@ pub enum ListResolversByFunctionError {
 impl ListResolversByFunctionError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListResolversByFunctionError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(ListResolversByFunctionError::BadRequest(err.msg))
@@ -3196,6 +3224,7 @@ pub enum ListTagsForResourceError {
 impl ListTagsForResourceError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListTagsForResourceError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(ListTagsForResourceError::AccessDenied(err.msg))
@@ -3254,6 +3283,7 @@ pub enum ListTypesError {
 impl ListTypesError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListTypesError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(ListTypesError::BadRequest(err.msg))
@@ -3308,6 +3338,7 @@ pub enum StartSchemaCreationError {
 impl StartSchemaCreationError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<StartSchemaCreationError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(StartSchemaCreationError::BadRequest(err.msg))
@@ -3366,6 +3397,7 @@ pub enum TagResourceError {
 impl TagResourceError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<TagResourceError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(TagResourceError::AccessDenied(err.msg))
@@ -3426,6 +3458,7 @@ pub enum UntagResourceError {
 impl UntagResourceError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UntagResourceError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(UntagResourceError::AccessDenied(err.msg))
@@ -3484,6 +3517,7 @@ pub enum UpdateApiCacheError {
 impl UpdateApiCacheError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateApiCacheError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(UpdateApiCacheError::BadRequest(err.msg))
@@ -3542,6 +3576,7 @@ pub enum UpdateApiKeyError {
 impl UpdateApiKeyError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateApiKeyError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ApiKeyValidityOutOfBoundsException" => {
                     return RusotoError::Service(UpdateApiKeyError::ApiKeyValidityOutOfBounds(
@@ -3602,6 +3637,7 @@ pub enum UpdateDataSourceError {
 impl UpdateDataSourceError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateDataSourceError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(UpdateDataSourceError::BadRequest(err.msg))
@@ -3656,6 +3692,7 @@ pub enum UpdateFunctionError {
 impl UpdateFunctionError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateFunctionError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ConcurrentModificationException" => {
                     return RusotoError::Service(UpdateFunctionError::ConcurrentModification(
@@ -3710,6 +3747,7 @@ pub enum UpdateGraphqlApiError {
 impl UpdateGraphqlApiError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateGraphqlApiError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(UpdateGraphqlApiError::AccessDenied(err.msg))
@@ -3768,6 +3806,7 @@ pub enum UpdateResolverError {
 impl UpdateResolverError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateResolverError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ConcurrentModificationException" => {
                     return RusotoError::Service(UpdateResolverError::ConcurrentModification(
@@ -3820,6 +3859,7 @@ pub enum UpdateTypeError {
 impl UpdateTypeError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateTypeError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(UpdateTypeError::BadRequest(err.msg))
@@ -4151,6 +4191,7 @@ impl AppSync for AppSyncClient {
         &self,
         input: CreateApiCacheRequest,
     ) -> Result<CreateApiCacheResponse, RusotoError<CreateApiCacheError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!("/v1/apis/{api_id}/ApiCaches", api_id = input.api_id);
 
         let mut request = SignedRequest::new("POST", "appsync", &self.region, &request_uri);
@@ -4182,6 +4223,7 @@ impl AppSync for AppSyncClient {
         &self,
         input: CreateApiKeyRequest,
     ) -> Result<CreateApiKeyResponse, RusotoError<CreateApiKeyError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!("/v1/apis/{api_id}/apikeys", api_id = input.api_id);
 
         let mut request = SignedRequest::new("POST", "appsync", &self.region, &request_uri);
@@ -4213,6 +4255,7 @@ impl AppSync for AppSyncClient {
         &self,
         input: CreateDataSourceRequest,
     ) -> Result<CreateDataSourceResponse, RusotoError<CreateDataSourceError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!("/v1/apis/{api_id}/datasources", api_id = input.api_id);
 
         let mut request = SignedRequest::new("POST", "appsync", &self.region, &request_uri);
@@ -4244,6 +4287,7 @@ impl AppSync for AppSyncClient {
         &self,
         input: CreateFunctionRequest,
     ) -> Result<CreateFunctionResponse, RusotoError<CreateFunctionError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!("/v1/apis/{api_id}/functions", api_id = input.api_id);
 
         let mut request = SignedRequest::new("POST", "appsync", &self.region, &request_uri);
@@ -4275,6 +4319,7 @@ impl AppSync for AppSyncClient {
         &self,
         input: CreateGraphqlApiRequest,
     ) -> Result<CreateGraphqlApiResponse, RusotoError<CreateGraphqlApiError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/v1/apis";
 
         let mut request = SignedRequest::new("POST", "appsync", &self.region, &request_uri);
@@ -4306,6 +4351,7 @@ impl AppSync for AppSyncClient {
         &self,
         input: CreateResolverRequest,
     ) -> Result<CreateResolverResponse, RusotoError<CreateResolverError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/v1/apis/{api_id}/types/{type_name}/resolvers",
             api_id = input.api_id,
@@ -4341,6 +4387,7 @@ impl AppSync for AppSyncClient {
         &self,
         input: CreateTypeRequest,
     ) -> Result<CreateTypeResponse, RusotoError<CreateTypeError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!("/v1/apis/{api_id}/types", api_id = input.api_id);
 
         let mut request = SignedRequest::new("POST", "appsync", &self.region, &request_uri);
@@ -4372,6 +4419,7 @@ impl AppSync for AppSyncClient {
         &self,
         input: DeleteApiCacheRequest,
     ) -> Result<DeleteApiCacheResponse, RusotoError<DeleteApiCacheError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!("/v1/apis/{api_id}/ApiCaches", api_id = input.api_id);
 
         let mut request = SignedRequest::new("DELETE", "appsync", &self.region, &request_uri);
@@ -4400,6 +4448,7 @@ impl AppSync for AppSyncClient {
         &self,
         input: DeleteApiKeyRequest,
     ) -> Result<DeleteApiKeyResponse, RusotoError<DeleteApiKeyError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/v1/apis/{api_id}/apikeys/{id}",
             api_id = input.api_id,
@@ -4432,6 +4481,7 @@ impl AppSync for AppSyncClient {
         &self,
         input: DeleteDataSourceRequest,
     ) -> Result<DeleteDataSourceResponse, RusotoError<DeleteDataSourceError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/v1/apis/{api_id}/datasources/{name}",
             api_id = input.api_id,
@@ -4464,6 +4514,7 @@ impl AppSync for AppSyncClient {
         &self,
         input: DeleteFunctionRequest,
     ) -> Result<DeleteFunctionResponse, RusotoError<DeleteFunctionError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/v1/apis/{api_id}/functions/{function_id}",
             api_id = input.api_id,
@@ -4496,6 +4547,7 @@ impl AppSync for AppSyncClient {
         &self,
         input: DeleteGraphqlApiRequest,
     ) -> Result<DeleteGraphqlApiResponse, RusotoError<DeleteGraphqlApiError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!("/v1/apis/{api_id}", api_id = input.api_id);
 
         let mut request = SignedRequest::new("DELETE", "appsync", &self.region, &request_uri);
@@ -4524,6 +4576,7 @@ impl AppSync for AppSyncClient {
         &self,
         input: DeleteResolverRequest,
     ) -> Result<DeleteResolverResponse, RusotoError<DeleteResolverError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/v1/apis/{api_id}/types/{type_name}/resolvers/{field_name}",
             api_id = input.api_id,
@@ -4557,6 +4610,7 @@ impl AppSync for AppSyncClient {
         &self,
         input: DeleteTypeRequest,
     ) -> Result<DeleteTypeResponse, RusotoError<DeleteTypeError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/v1/apis/{api_id}/types/{type_name}",
             api_id = input.api_id,
@@ -4589,6 +4643,7 @@ impl AppSync for AppSyncClient {
         &self,
         input: FlushApiCacheRequest,
     ) -> Result<FlushApiCacheResponse, RusotoError<FlushApiCacheError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!("/v1/apis/{api_id}/FlushCache", api_id = input.api_id);
 
         let mut request = SignedRequest::new("DELETE", "appsync", &self.region, &request_uri);
@@ -4617,6 +4672,7 @@ impl AppSync for AppSyncClient {
         &self,
         input: GetApiCacheRequest,
     ) -> Result<GetApiCacheResponse, RusotoError<GetApiCacheError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!("/v1/apis/{api_id}/ApiCaches", api_id = input.api_id);
 
         let mut request = SignedRequest::new("GET", "appsync", &self.region, &request_uri);
@@ -4645,6 +4701,7 @@ impl AppSync for AppSyncClient {
         &self,
         input: GetDataSourceRequest,
     ) -> Result<GetDataSourceResponse, RusotoError<GetDataSourceError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/v1/apis/{api_id}/datasources/{name}",
             api_id = input.api_id,
@@ -4677,6 +4734,7 @@ impl AppSync for AppSyncClient {
         &self,
         input: GetFunctionRequest,
     ) -> Result<GetFunctionResponse, RusotoError<GetFunctionError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/v1/apis/{api_id}/functions/{function_id}",
             api_id = input.api_id,
@@ -4709,6 +4767,7 @@ impl AppSync for AppSyncClient {
         &self,
         input: GetGraphqlApiRequest,
     ) -> Result<GetGraphqlApiResponse, RusotoError<GetGraphqlApiError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!("/v1/apis/{api_id}", api_id = input.api_id);
 
         let mut request = SignedRequest::new("GET", "appsync", &self.region, &request_uri);
@@ -4737,6 +4796,7 @@ impl AppSync for AppSyncClient {
         &self,
         input: GetIntrospectionSchemaRequest,
     ) -> Result<GetIntrospectionSchemaResponse, RusotoError<GetIntrospectionSchemaError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!("/v1/apis/{api_id}/schema", api_id = input.api_id);
 
         let mut request = SignedRequest::new("GET", "appsync", &self.region, &request_uri);
@@ -4757,8 +4817,10 @@ impl AppSync for AppSyncClient {
         if response.status.is_success() {
             let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
 
-            let mut result = GetIntrospectionSchemaResponse::default();
-            result.schema = Some(response.body);
+            let mut result = GetIntrospectionSchemaResponse {
+                schema: Some(response.body),
+                ..GetIntrospectionSchemaResponse::default()
+            };
 
             Ok(result)
         } else {
@@ -4773,6 +4835,7 @@ impl AppSync for AppSyncClient {
         &self,
         input: GetResolverRequest,
     ) -> Result<GetResolverResponse, RusotoError<GetResolverError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/v1/apis/{api_id}/types/{type_name}/resolvers/{field_name}",
             api_id = input.api_id,
@@ -4806,6 +4869,7 @@ impl AppSync for AppSyncClient {
         &self,
         input: GetSchemaCreationStatusRequest,
     ) -> Result<GetSchemaCreationStatusResponse, RusotoError<GetSchemaCreationStatusError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!("/v1/apis/{api_id}/schemacreation", api_id = input.api_id);
 
         let mut request = SignedRequest::new("GET", "appsync", &self.region, &request_uri);
@@ -4834,6 +4898,7 @@ impl AppSync for AppSyncClient {
         &self,
         input: GetTypeRequest,
     ) -> Result<GetTypeResponse, RusotoError<GetTypeError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/v1/apis/{api_id}/types/{type_name}",
             api_id = input.api_id,
@@ -4870,6 +4935,7 @@ impl AppSync for AppSyncClient {
         &self,
         input: ListApiKeysRequest,
     ) -> Result<ListApiKeysResponse, RusotoError<ListApiKeysError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!("/v1/apis/{api_id}/apikeys", api_id = input.api_id);
 
         let mut request = SignedRequest::new("GET", "appsync", &self.region, &request_uri);
@@ -4907,6 +4973,7 @@ impl AppSync for AppSyncClient {
         &self,
         input: ListDataSourcesRequest,
     ) -> Result<ListDataSourcesResponse, RusotoError<ListDataSourcesError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!("/v1/apis/{api_id}/datasources", api_id = input.api_id);
 
         let mut request = SignedRequest::new("GET", "appsync", &self.region, &request_uri);
@@ -4944,6 +5011,7 @@ impl AppSync for AppSyncClient {
         &self,
         input: ListFunctionsRequest,
     ) -> Result<ListFunctionsResponse, RusotoError<ListFunctionsError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!("/v1/apis/{api_id}/functions", api_id = input.api_id);
 
         let mut request = SignedRequest::new("GET", "appsync", &self.region, &request_uri);
@@ -4981,6 +5049,7 @@ impl AppSync for AppSyncClient {
         &self,
         input: ListGraphqlApisRequest,
     ) -> Result<ListGraphqlApisResponse, RusotoError<ListGraphqlApisError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/v1/apis";
 
         let mut request = SignedRequest::new("GET", "appsync", &self.region, &request_uri);
@@ -5018,6 +5087,7 @@ impl AppSync for AppSyncClient {
         &self,
         input: ListResolversRequest,
     ) -> Result<ListResolversResponse, RusotoError<ListResolversError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/v1/apis/{api_id}/types/{type_name}/resolvers",
             api_id = input.api_id,
@@ -5059,6 +5129,7 @@ impl AppSync for AppSyncClient {
         &self,
         input: ListResolversByFunctionRequest,
     ) -> Result<ListResolversByFunctionResponse, RusotoError<ListResolversByFunctionError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/v1/apis/{api_id}/functions/{function_id}/resolvers",
             api_id = input.api_id,
@@ -5100,6 +5171,7 @@ impl AppSync for AppSyncClient {
         &self,
         input: ListTagsForResourceRequest,
     ) -> Result<ListTagsForResourceResponse, RusotoError<ListTagsForResourceError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!("/v1/tags/{resource_arn}", resource_arn = input.resource_arn);
 
         let mut request = SignedRequest::new("GET", "appsync", &self.region, &request_uri);
@@ -5128,6 +5200,7 @@ impl AppSync for AppSyncClient {
         &self,
         input: ListTypesRequest,
     ) -> Result<ListTypesResponse, RusotoError<ListTypesError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!("/v1/apis/{api_id}/types", api_id = input.api_id);
 
         let mut request = SignedRequest::new("GET", "appsync", &self.region, &request_uri);
@@ -5166,6 +5239,7 @@ impl AppSync for AppSyncClient {
         &self,
         input: StartSchemaCreationRequest,
     ) -> Result<StartSchemaCreationResponse, RusotoError<StartSchemaCreationError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!("/v1/apis/{api_id}/schemacreation", api_id = input.api_id);
 
         let mut request = SignedRequest::new("POST", "appsync", &self.region, &request_uri);
@@ -5197,6 +5271,7 @@ impl AppSync for AppSyncClient {
         &self,
         input: TagResourceRequest,
     ) -> Result<TagResourceResponse, RusotoError<TagResourceError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!("/v1/tags/{resource_arn}", resource_arn = input.resource_arn);
 
         let mut request = SignedRequest::new("POST", "appsync", &self.region, &request_uri);
@@ -5228,6 +5303,7 @@ impl AppSync for AppSyncClient {
         &self,
         input: UntagResourceRequest,
     ) -> Result<UntagResourceResponse, RusotoError<UntagResourceError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!("/v1/tags/{resource_arn}", resource_arn = input.resource_arn);
 
         let mut request = SignedRequest::new("DELETE", "appsync", &self.region, &request_uri);
@@ -5262,6 +5338,7 @@ impl AppSync for AppSyncClient {
         &self,
         input: UpdateApiCacheRequest,
     ) -> Result<UpdateApiCacheResponse, RusotoError<UpdateApiCacheError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!("/v1/apis/{api_id}/ApiCaches/update", api_id = input.api_id);
 
         let mut request = SignedRequest::new("POST", "appsync", &self.region, &request_uri);
@@ -5293,6 +5370,7 @@ impl AppSync for AppSyncClient {
         &self,
         input: UpdateApiKeyRequest,
     ) -> Result<UpdateApiKeyResponse, RusotoError<UpdateApiKeyError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/v1/apis/{api_id}/apikeys/{id}",
             api_id = input.api_id,
@@ -5328,6 +5406,7 @@ impl AppSync for AppSyncClient {
         &self,
         input: UpdateDataSourceRequest,
     ) -> Result<UpdateDataSourceResponse, RusotoError<UpdateDataSourceError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/v1/apis/{api_id}/datasources/{name}",
             api_id = input.api_id,
@@ -5363,6 +5442,7 @@ impl AppSync for AppSyncClient {
         &self,
         input: UpdateFunctionRequest,
     ) -> Result<UpdateFunctionResponse, RusotoError<UpdateFunctionError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/v1/apis/{api_id}/functions/{function_id}",
             api_id = input.api_id,
@@ -5398,6 +5478,7 @@ impl AppSync for AppSyncClient {
         &self,
         input: UpdateGraphqlApiRequest,
     ) -> Result<UpdateGraphqlApiResponse, RusotoError<UpdateGraphqlApiError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!("/v1/apis/{api_id}", api_id = input.api_id);
 
         let mut request = SignedRequest::new("POST", "appsync", &self.region, &request_uri);
@@ -5429,6 +5510,7 @@ impl AppSync for AppSyncClient {
         &self,
         input: UpdateResolverRequest,
     ) -> Result<UpdateResolverResponse, RusotoError<UpdateResolverError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/v1/apis/{api_id}/types/{type_name}/resolvers/{field_name}",
             api_id = input.api_id,
@@ -5465,6 +5547,7 @@ impl AppSync for AppSyncClient {
         &self,
         input: UpdateTypeRequest,
     ) -> Result<UpdateTypeResponse, RusotoError<UpdateTypeError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/v1/apis/{api_id}/types/{type_name}",
             api_id = input.api_id,

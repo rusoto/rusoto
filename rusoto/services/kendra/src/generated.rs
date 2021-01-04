@@ -49,7 +49,6 @@ impl KendraClient {
     }
 }
 
-use serde_json;
 /// <p>Access Control List files for the documents in a data source. For the format of the file, see <a href="https://docs.aws.amazon.com/kendra/latest/dg/s3-acl.html">Access control for S3 data sources</a>.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct AccessControlListConfiguration {
@@ -2472,6 +2471,7 @@ pub enum BatchDeleteDocumentError {
 impl BatchDeleteDocumentError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<BatchDeleteDocumentError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(BatchDeleteDocumentError::AccessDenied(err.msg))
@@ -2530,6 +2530,7 @@ pub enum BatchPutDocumentError {
 impl BatchPutDocumentError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<BatchPutDocumentError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(BatchPutDocumentError::AccessDenied(err.msg))
@@ -2594,6 +2595,7 @@ pub enum CreateDataSourceError {
 impl CreateDataSourceError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateDataSourceError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(CreateDataSourceError::AccessDenied(err.msg))
@@ -2662,6 +2664,7 @@ pub enum CreateFaqError {
 impl CreateFaqError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateFaqError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(CreateFaqError::AccessDenied(err.msg))
@@ -2722,6 +2725,7 @@ pub enum CreateIndexError {
 impl CreateIndexError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateIndexError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(CreateIndexError::AccessDenied(err.msg))
@@ -2782,6 +2786,7 @@ pub enum CreateThesaurusError {
 impl CreateThesaurusError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateThesaurusError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(CreateThesaurusError::AccessDenied(err.msg))
@@ -2842,6 +2847,7 @@ pub enum DeleteDataSourceError {
 impl DeleteDataSourceError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteDataSourceError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(DeleteDataSourceError::AccessDenied(err.msg))
@@ -2896,6 +2902,7 @@ pub enum DeleteFaqError {
 impl DeleteFaqError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteFaqError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(DeleteFaqError::AccessDenied(err.msg))
@@ -2950,6 +2957,7 @@ pub enum DeleteIndexError {
 impl DeleteIndexError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteIndexError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(DeleteIndexError::AccessDenied(err.msg))
@@ -3004,6 +3012,7 @@ pub enum DeleteThesaurusError {
 impl DeleteThesaurusError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteThesaurusError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(DeleteThesaurusError::AccessDenied(err.msg))
@@ -3056,6 +3065,7 @@ pub enum DescribeDataSourceError {
 impl DescribeDataSourceError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeDataSourceError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(DescribeDataSourceError::AccessDenied(err.msg))
@@ -3104,6 +3114,7 @@ pub enum DescribeFaqError {
 impl DescribeFaqError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeFaqError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(DescribeFaqError::AccessDenied(err.msg))
@@ -3152,6 +3163,7 @@ pub enum DescribeIndexError {
 impl DescribeIndexError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeIndexError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(DescribeIndexError::AccessDenied(err.msg))
@@ -3200,6 +3212,7 @@ pub enum DescribeThesaurusError {
 impl DescribeThesaurusError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeThesaurusError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(DescribeThesaurusError::AccessDenied(err.msg))
@@ -3250,6 +3263,7 @@ pub enum ListDataSourceSyncJobsError {
 impl ListDataSourceSyncJobsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListDataSourceSyncJobsError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(ListDataSourceSyncJobsError::AccessDenied(err.msg))
@@ -3306,6 +3320,7 @@ pub enum ListDataSourcesError {
 impl ListDataSourcesError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListDataSourcesError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(ListDataSourcesError::AccessDenied(err.msg))
@@ -3354,6 +3369,7 @@ pub enum ListFaqsError {
 impl ListFaqsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListFaqsError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(ListFaqsError::AccessDenied(err.msg))
@@ -3400,6 +3416,7 @@ pub enum ListIndicesError {
 impl ListIndicesError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListIndicesError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(ListIndicesError::AccessDenied(err.msg))
@@ -3444,6 +3461,7 @@ pub enum ListTagsForResourceError {
 impl ListTagsForResourceError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListTagsForResourceError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(ListTagsForResourceError::AccessDenied(err.msg))
@@ -3494,6 +3512,7 @@ pub enum ListThesauriError {
 impl ListThesauriError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListThesauriError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(ListThesauriError::AccessDenied(err.msg))
@@ -3546,6 +3565,7 @@ pub enum QueryError {
 impl QueryError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<QueryError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(QueryError::AccessDenied(err.msg))
@@ -3604,6 +3624,7 @@ pub enum StartDataSourceSyncJobError {
 impl StartDataSourceSyncJobError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<StartDataSourceSyncJobError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(StartDataSourceSyncJobError::AccessDenied(err.msg))
@@ -3666,6 +3687,7 @@ pub enum StopDataSourceSyncJobError {
 impl StopDataSourceSyncJobError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<StopDataSourceSyncJobError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(StopDataSourceSyncJobError::AccessDenied(err.msg))
@@ -3720,6 +3742,7 @@ pub enum SubmitFeedbackError {
 impl SubmitFeedbackError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<SubmitFeedbackError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(SubmitFeedbackError::AccessDenied(err.msg))
@@ -3772,6 +3795,7 @@ pub enum TagResourceError {
 impl TagResourceError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<TagResourceError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(TagResourceError::AccessDenied(err.msg))
@@ -3820,6 +3844,7 @@ pub enum UntagResourceError {
 impl UntagResourceError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UntagResourceError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(UntagResourceError::AccessDenied(err.msg))
@@ -3870,6 +3895,7 @@ pub enum UpdateDataSourceError {
 impl UpdateDataSourceError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateDataSourceError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(UpdateDataSourceError::AccessDenied(err.msg))
@@ -3926,6 +3952,7 @@ pub enum UpdateIndexError {
 impl UpdateIndexError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateIndexError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(UpdateIndexError::AccessDenied(err.msg))
@@ -3984,6 +4011,7 @@ pub enum UpdateThesaurusError {
 impl UpdateThesaurusError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateThesaurusError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(UpdateThesaurusError::AccessDenied(err.msg))

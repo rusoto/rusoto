@@ -49,7 +49,6 @@ impl TranscribeClient {
     }
 }
 
-use serde_json;
 /// <p>Settings for content redaction within a transcription job.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct ContentRedaction {
@@ -1340,6 +1339,7 @@ pub enum CreateLanguageModelError {
 impl CreateLanguageModelError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateLanguageModelError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(CreateLanguageModelError::BadRequest(err.msg))
@@ -1388,6 +1388,7 @@ pub enum CreateMedicalVocabularyError {
 impl CreateMedicalVocabularyError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateMedicalVocabularyError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(CreateMedicalVocabularyError::BadRequest(err.msg))
@@ -1440,6 +1441,7 @@ pub enum CreateVocabularyError {
 impl CreateVocabularyError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateVocabularyError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(CreateVocabularyError::BadRequest(err.msg))
@@ -1488,6 +1490,7 @@ pub enum CreateVocabularyFilterError {
 impl CreateVocabularyFilterError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateVocabularyFilterError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(CreateVocabularyFilterError::BadRequest(err.msg))
@@ -1538,6 +1541,7 @@ pub enum DeleteLanguageModelError {
 impl DeleteLanguageModelError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteLanguageModelError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(DeleteLanguageModelError::BadRequest(err.msg))
@@ -1582,6 +1586,7 @@ impl DeleteMedicalTranscriptionJobError {
         res: BufferedHttpResponse,
     ) -> RusotoError<DeleteMedicalTranscriptionJobError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(DeleteMedicalTranscriptionJobError::BadRequest(
@@ -1634,6 +1639,7 @@ pub enum DeleteMedicalVocabularyError {
 impl DeleteMedicalVocabularyError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteMedicalVocabularyError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(DeleteMedicalVocabularyError::BadRequest(err.msg))
@@ -1684,6 +1690,7 @@ pub enum DeleteTranscriptionJobError {
 impl DeleteTranscriptionJobError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteTranscriptionJobError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(DeleteTranscriptionJobError::BadRequest(err.msg))
@@ -1732,6 +1739,7 @@ pub enum DeleteVocabularyError {
 impl DeleteVocabularyError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteVocabularyError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(DeleteVocabularyError::BadRequest(err.msg))
@@ -1780,6 +1788,7 @@ pub enum DeleteVocabularyFilterError {
 impl DeleteVocabularyFilterError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteVocabularyFilterError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(DeleteVocabularyFilterError::BadRequest(err.msg))
@@ -1832,6 +1841,7 @@ pub enum DescribeLanguageModelError {
 impl DescribeLanguageModelError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeLanguageModelError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(DescribeLanguageModelError::BadRequest(err.msg))
@@ -1884,6 +1894,7 @@ impl GetMedicalTranscriptionJobError {
         res: BufferedHttpResponse,
     ) -> RusotoError<GetMedicalTranscriptionJobError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(GetMedicalTranscriptionJobError::BadRequest(
@@ -1938,6 +1949,7 @@ pub enum GetMedicalVocabularyError {
 impl GetMedicalVocabularyError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetMedicalVocabularyError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(GetMedicalVocabularyError::BadRequest(err.msg))
@@ -1988,6 +2000,7 @@ pub enum GetTranscriptionJobError {
 impl GetTranscriptionJobError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetTranscriptionJobError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(GetTranscriptionJobError::BadRequest(err.msg))
@@ -2036,6 +2049,7 @@ pub enum GetVocabularyError {
 impl GetVocabularyError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetVocabularyError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(GetVocabularyError::BadRequest(err.msg))
@@ -2084,6 +2098,7 @@ pub enum GetVocabularyFilterError {
 impl GetVocabularyFilterError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetVocabularyFilterError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(GetVocabularyFilterError::BadRequest(err.msg))
@@ -2130,6 +2145,7 @@ pub enum ListLanguageModelsError {
 impl ListLanguageModelsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListLanguageModelsError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(ListLanguageModelsError::BadRequest(err.msg))
@@ -2174,6 +2190,7 @@ impl ListMedicalTranscriptionJobsError {
         res: BufferedHttpResponse,
     ) -> RusotoError<ListMedicalTranscriptionJobsError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(ListMedicalTranscriptionJobsError::BadRequest(
@@ -2222,6 +2239,7 @@ pub enum ListMedicalVocabulariesError {
 impl ListMedicalVocabulariesError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListMedicalVocabulariesError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(ListMedicalVocabulariesError::BadRequest(err.msg))
@@ -2268,6 +2286,7 @@ pub enum ListTranscriptionJobsError {
 impl ListTranscriptionJobsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListTranscriptionJobsError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(ListTranscriptionJobsError::BadRequest(err.msg))
@@ -2312,6 +2331,7 @@ pub enum ListVocabulariesError {
 impl ListVocabulariesError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListVocabulariesError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(ListVocabulariesError::BadRequest(err.msg))
@@ -2354,6 +2374,7 @@ pub enum ListVocabularyFiltersError {
 impl ListVocabularyFiltersError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListVocabularyFiltersError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(ListVocabularyFiltersError::BadRequest(err.msg))
@@ -2402,6 +2423,7 @@ impl StartMedicalTranscriptionJobError {
         res: BufferedHttpResponse,
     ) -> RusotoError<StartMedicalTranscriptionJobError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(StartMedicalTranscriptionJobError::BadRequest(
@@ -2458,6 +2480,7 @@ pub enum StartTranscriptionJobError {
 impl StartTranscriptionJobError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<StartTranscriptionJobError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(StartTranscriptionJobError::BadRequest(err.msg))
@@ -2510,6 +2533,7 @@ pub enum UpdateMedicalVocabularyError {
 impl UpdateMedicalVocabularyError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateMedicalVocabularyError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(UpdateMedicalVocabularyError::BadRequest(err.msg))
@@ -2568,6 +2592,7 @@ pub enum UpdateVocabularyError {
 impl UpdateVocabularyError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateVocabularyError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(UpdateVocabularyError::BadRequest(err.msg))
@@ -2620,6 +2645,7 @@ pub enum UpdateVocabularyFilterError {
 impl UpdateVocabularyFilterError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateVocabularyFilterError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(UpdateVocabularyFilterError::BadRequest(err.msg))

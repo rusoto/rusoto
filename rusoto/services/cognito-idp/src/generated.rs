@@ -49,7 +49,6 @@ impl CognitoIdentityProviderClient {
     }
 }
 
-use serde_json;
 /// <p>The data type for <code>AccountRecoverySetting</code>.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct AccountRecoverySettingType {
@@ -4304,6 +4303,7 @@ pub enum AddCustomAttributesError {
 impl AddCustomAttributesError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<AddCustomAttributesError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalErrorException" => {
                     return RusotoError::Service(AddCustomAttributesError::InternalError(err.msg))
@@ -4370,6 +4370,7 @@ pub enum AdminAddUserToGroupError {
 impl AdminAddUserToGroupError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<AdminAddUserToGroupError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalErrorException" => {
                     return RusotoError::Service(AdminAddUserToGroupError::InternalError(err.msg))
@@ -4444,6 +4445,7 @@ pub enum AdminConfirmSignUpError {
 impl AdminConfirmSignUpError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<AdminConfirmSignUpError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalErrorException" => {
                     return RusotoError::Service(AdminConfirmSignUpError::InternalError(err.msg))
@@ -4550,6 +4552,7 @@ pub enum AdminCreateUserError {
 impl AdminCreateUserError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<AdminCreateUserError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "CodeDeliveryFailureException" => {
                     return RusotoError::Service(AdminCreateUserError::CodeDeliveryFailure(err.msg))
@@ -4662,6 +4665,7 @@ pub enum AdminDeleteUserError {
 impl AdminDeleteUserError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<AdminDeleteUserError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalErrorException" => {
                     return RusotoError::Service(AdminDeleteUserError::InternalError(err.msg))
@@ -4722,6 +4726,7 @@ pub enum AdminDeleteUserAttributesError {
 impl AdminDeleteUserAttributesError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<AdminDeleteUserAttributesError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalErrorException" => {
                     return RusotoError::Service(AdminDeleteUserAttributesError::InternalError(
@@ -4798,6 +4803,7 @@ impl AdminDisableProviderForUserError {
         res: BufferedHttpResponse,
     ) -> RusotoError<AdminDisableProviderForUserError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AliasExistsException" => {
                     return RusotoError::Service(AdminDisableProviderForUserError::AliasExists(
@@ -4876,6 +4882,7 @@ pub enum AdminDisableUserError {
 impl AdminDisableUserError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<AdminDisableUserError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalErrorException" => {
                     return RusotoError::Service(AdminDisableUserError::InternalError(err.msg))
@@ -4936,6 +4943,7 @@ pub enum AdminEnableUserError {
 impl AdminEnableUserError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<AdminEnableUserError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalErrorException" => {
                     return RusotoError::Service(AdminEnableUserError::InternalError(err.msg))
@@ -4998,6 +5006,7 @@ pub enum AdminForgetDeviceError {
 impl AdminForgetDeviceError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<AdminForgetDeviceError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalErrorException" => {
                     return RusotoError::Service(AdminForgetDeviceError::InternalError(err.msg))
@@ -5066,6 +5075,7 @@ pub enum AdminGetDeviceError {
 impl AdminGetDeviceError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<AdminGetDeviceError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalErrorException" => {
                     return RusotoError::Service(AdminGetDeviceError::InternalError(err.msg))
@@ -5128,6 +5138,7 @@ pub enum AdminGetUserError {
 impl AdminGetUserError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<AdminGetUserError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalErrorException" => {
                     return RusotoError::Service(AdminGetUserError::InternalError(err.msg))
@@ -5206,6 +5217,7 @@ pub enum AdminInitiateAuthError {
 impl AdminInitiateAuthError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<AdminInitiateAuthError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalErrorException" => {
                     return RusotoError::Service(AdminInitiateAuthError::InternalError(err.msg))
@@ -5322,6 +5334,7 @@ pub enum AdminLinkProviderForUserError {
 impl AdminLinkProviderForUserError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<AdminLinkProviderForUserError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AliasExistsException" => {
                     return RusotoError::Service(AdminLinkProviderForUserError::AliasExists(
@@ -5406,6 +5419,7 @@ pub enum AdminListDevicesError {
 impl AdminListDevicesError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<AdminListDevicesError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalErrorException" => {
                     return RusotoError::Service(AdminListDevicesError::InternalError(err.msg))
@@ -5470,6 +5484,7 @@ pub enum AdminListGroupsForUserError {
 impl AdminListGroupsForUserError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<AdminListGroupsForUserError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalErrorException" => {
                     return RusotoError::Service(AdminListGroupsForUserError::InternalError(
@@ -5542,6 +5557,7 @@ pub enum AdminListUserAuthEventsError {
 impl AdminListUserAuthEventsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<AdminListUserAuthEventsError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalErrorException" => {
                     return RusotoError::Service(AdminListUserAuthEventsError::InternalError(
@@ -5622,6 +5638,7 @@ pub enum AdminRemoveUserFromGroupError {
 impl AdminRemoveUserFromGroupError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<AdminRemoveUserFromGroupError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalErrorException" => {
                     return RusotoError::Service(AdminRemoveUserFromGroupError::InternalError(
@@ -5708,6 +5725,7 @@ pub enum AdminResetUserPasswordError {
 impl AdminResetUserPasswordError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<AdminResetUserPasswordError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalErrorException" => {
                     return RusotoError::Service(AdminResetUserPasswordError::InternalError(
@@ -5856,6 +5874,7 @@ impl AdminRespondToAuthChallengeError {
         res: BufferedHttpResponse,
     ) -> RusotoError<AdminRespondToAuthChallengeError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AliasExistsException" => {
                     return RusotoError::Service(AdminRespondToAuthChallengeError::AliasExists(
@@ -6030,6 +6049,7 @@ pub enum AdminSetUserMFAPreferenceError {
 impl AdminSetUserMFAPreferenceError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<AdminSetUserMFAPreferenceError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalErrorException" => {
                     return RusotoError::Service(AdminSetUserMFAPreferenceError::InternalError(
@@ -6112,6 +6132,7 @@ pub enum AdminSetUserPasswordError {
 impl AdminSetUserPasswordError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<AdminSetUserPasswordError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalErrorException" => {
                     return RusotoError::Service(AdminSetUserPasswordError::InternalError(err.msg))
@@ -6182,6 +6203,7 @@ pub enum AdminSetUserSettingsError {
 impl AdminSetUserSettingsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<AdminSetUserSettingsError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalErrorException" => {
                     return RusotoError::Service(AdminSetUserSettingsError::InternalError(err.msg))
@@ -6246,6 +6268,7 @@ impl AdminUpdateAuthEventFeedbackError {
         res: BufferedHttpResponse,
     ) -> RusotoError<AdminUpdateAuthEventFeedbackError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalErrorException" => {
                     return RusotoError::Service(AdminUpdateAuthEventFeedbackError::InternalError(
@@ -6332,6 +6355,7 @@ pub enum AdminUpdateDeviceStatusError {
 impl AdminUpdateDeviceStatusError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<AdminUpdateDeviceStatusError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalErrorException" => {
                     return RusotoError::Service(AdminUpdateDeviceStatusError::InternalError(
@@ -6426,6 +6450,7 @@ pub enum AdminUpdateUserAttributesError {
 impl AdminUpdateUserAttributesError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<AdminUpdateUserAttributesError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AliasExistsException" => {
                     return RusotoError::Service(AdminUpdateUserAttributesError::AliasExists(
@@ -6550,6 +6575,7 @@ pub enum AdminUserGlobalSignOutError {
 impl AdminUserGlobalSignOutError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<AdminUserGlobalSignOutError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalErrorException" => {
                     return RusotoError::Service(AdminUserGlobalSignOutError::InternalError(
@@ -6620,6 +6646,7 @@ pub enum AssociateSoftwareTokenError {
 impl AssociateSoftwareTokenError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<AssociateSoftwareTokenError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ConcurrentModificationException" => {
                     return RusotoError::Service(
@@ -6704,6 +6731,7 @@ pub enum ChangePasswordError {
 impl ChangePasswordError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ChangePasswordError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalErrorException" => {
                     return RusotoError::Service(ChangePasswordError::InternalError(err.msg))
@@ -6794,6 +6822,7 @@ pub enum ConfirmDeviceError {
 impl ConfirmDeviceError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ConfirmDeviceError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalErrorException" => {
                     return RusotoError::Service(ConfirmDeviceError::InternalError(err.msg))
@@ -6898,6 +6927,7 @@ pub enum ConfirmForgotPasswordError {
 impl ConfirmForgotPasswordError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ConfirmForgotPasswordError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "CodeMismatchException" => {
                     return RusotoError::Service(ConfirmForgotPasswordError::CodeMismatch(err.msg))
@@ -7028,6 +7058,7 @@ pub enum ConfirmSignUpError {
 impl ConfirmSignUpError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ConfirmSignUpError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AliasExistsException" => {
                     return RusotoError::Service(ConfirmSignUpError::AliasExists(err.msg))
@@ -7122,6 +7153,7 @@ pub enum CreateGroupError {
 impl CreateGroupError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateGroupError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "GroupExistsException" => {
                     return RusotoError::Service(CreateGroupError::GroupExists(err.msg))
@@ -7188,6 +7220,7 @@ pub enum CreateIdentityProviderError {
 impl CreateIdentityProviderError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateIdentityProviderError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "DuplicateProviderException" => {
                     return RusotoError::Service(CreateIdentityProviderError::DuplicateProvider(
@@ -7266,6 +7299,7 @@ pub enum CreateResourceServerError {
 impl CreateResourceServerError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateResourceServerError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalErrorException" => {
                     return RusotoError::Service(CreateResourceServerError::InternalError(err.msg))
@@ -7334,6 +7368,7 @@ pub enum CreateUserImportJobError {
 impl CreateUserImportJobError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateUserImportJobError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalErrorException" => {
                     return RusotoError::Service(CreateUserImportJobError::InternalError(err.msg))
@@ -7410,6 +7445,7 @@ pub enum CreateUserPoolError {
 impl CreateUserPoolError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateUserPoolError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalErrorException" => {
                     return RusotoError::Service(CreateUserPoolError::InternalError(err.msg))
@@ -7494,6 +7530,7 @@ pub enum CreateUserPoolClientError {
 impl CreateUserPoolClientError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateUserPoolClientError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalErrorException" => {
                     return RusotoError::Service(CreateUserPoolClientError::InternalError(err.msg))
@@ -7570,6 +7607,7 @@ pub enum CreateUserPoolDomainError {
 impl CreateUserPoolDomainError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateUserPoolDomainError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalErrorException" => {
                     return RusotoError::Service(CreateUserPoolDomainError::InternalError(err.msg))
@@ -7628,6 +7666,7 @@ pub enum DeleteGroupError {
 impl DeleteGroupError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteGroupError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalErrorException" => {
                     return RusotoError::Service(DeleteGroupError::InternalError(err.msg))
@@ -7684,6 +7723,7 @@ pub enum DeleteIdentityProviderError {
 impl DeleteIdentityProviderError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteIdentityProviderError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalErrorException" => {
                     return RusotoError::Service(DeleteIdentityProviderError::InternalError(
@@ -7756,6 +7796,7 @@ pub enum DeleteResourceServerError {
 impl DeleteResourceServerError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteResourceServerError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalErrorException" => {
                     return RusotoError::Service(DeleteResourceServerError::InternalError(err.msg))
@@ -7822,6 +7863,7 @@ pub enum DeleteUserError {
 impl DeleteUserError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteUserError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalErrorException" => {
                     return RusotoError::Service(DeleteUserError::InternalError(err.msg))
@@ -7894,6 +7936,7 @@ pub enum DeleteUserAttributesError {
 impl DeleteUserAttributesError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteUserAttributesError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalErrorException" => {
                     return RusotoError::Service(DeleteUserAttributesError::InternalError(err.msg))
@@ -7972,6 +8015,7 @@ pub enum DeleteUserPoolError {
 impl DeleteUserPoolError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteUserPoolError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalErrorException" => {
                     return RusotoError::Service(DeleteUserPoolError::InternalError(err.msg))
@@ -8030,6 +8074,7 @@ pub enum DeleteUserPoolClientError {
 impl DeleteUserPoolClientError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteUserPoolClientError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalErrorException" => {
                     return RusotoError::Service(DeleteUserPoolClientError::InternalError(err.msg))
@@ -8088,6 +8133,7 @@ pub enum DeleteUserPoolDomainError {
 impl DeleteUserPoolDomainError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteUserPoolDomainError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalErrorException" => {
                     return RusotoError::Service(DeleteUserPoolDomainError::InternalError(err.msg))
@@ -8142,6 +8188,7 @@ pub enum DescribeIdentityProviderError {
 impl DescribeIdentityProviderError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeIdentityProviderError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalErrorException" => {
                     return RusotoError::Service(DescribeIdentityProviderError::InternalError(
@@ -8206,6 +8253,7 @@ pub enum DescribeResourceServerError {
 impl DescribeResourceServerError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeResourceServerError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalErrorException" => {
                     return RusotoError::Service(DescribeResourceServerError::InternalError(
@@ -8272,6 +8320,7 @@ pub enum DescribeRiskConfigurationError {
 impl DescribeRiskConfigurationError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeRiskConfigurationError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalErrorException" => {
                     return RusotoError::Service(DescribeRiskConfigurationError::InternalError(
@@ -8344,6 +8393,7 @@ pub enum DescribeUserImportJobError {
 impl DescribeUserImportJobError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeUserImportJobError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalErrorException" => {
                     return RusotoError::Service(DescribeUserImportJobError::InternalError(err.msg))
@@ -8406,6 +8456,7 @@ pub enum DescribeUserPoolError {
 impl DescribeUserPoolError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeUserPoolError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalErrorException" => {
                     return RusotoError::Service(DescribeUserPoolError::InternalError(err.msg))
@@ -8464,6 +8515,7 @@ pub enum DescribeUserPoolClientError {
 impl DescribeUserPoolClientError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeUserPoolClientError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalErrorException" => {
                     return RusotoError::Service(DescribeUserPoolClientError::InternalError(
@@ -8526,6 +8578,7 @@ pub enum DescribeUserPoolDomainError {
 impl DescribeUserPoolDomainError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeUserPoolDomainError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalErrorException" => {
                     return RusotoError::Service(DescribeUserPoolDomainError::InternalError(
@@ -8592,6 +8645,7 @@ pub enum ForgetDeviceError {
 impl ForgetDeviceError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ForgetDeviceError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalErrorException" => {
                     return RusotoError::Service(ForgetDeviceError::InternalError(err.msg))
@@ -8684,6 +8738,7 @@ pub enum ForgotPasswordError {
 impl ForgotPasswordError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ForgotPasswordError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "CodeDeliveryFailureException" => {
                     return RusotoError::Service(ForgotPasswordError::CodeDeliveryFailure(err.msg))
@@ -8788,6 +8843,7 @@ pub enum GetCSVHeaderError {
 impl GetCSVHeaderError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetCSVHeaderError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalErrorException" => {
                     return RusotoError::Service(GetCSVHeaderError::InternalError(err.msg))
@@ -8850,6 +8906,7 @@ pub enum GetDeviceError {
 impl GetDeviceError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetDeviceError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalErrorException" => {
                     return RusotoError::Service(GetDeviceError::InternalError(err.msg))
@@ -8922,6 +8979,7 @@ pub enum GetGroupError {
 impl GetGroupError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetGroupError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalErrorException" => {
                     return RusotoError::Service(GetGroupError::InternalError(err.msg))
@@ -8978,6 +9036,7 @@ impl GetIdentityProviderByIdentifierError {
         res: BufferedHttpResponse,
     ) -> RusotoError<GetIdentityProviderByIdentifierError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalErrorException" => {
                     return RusotoError::Service(
@@ -9048,6 +9107,7 @@ pub enum GetSigningCertificateError {
 impl GetSigningCertificateError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetSigningCertificateError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalErrorException" => {
                     return RusotoError::Service(GetSigningCertificateError::InternalError(err.msg))
@@ -9098,6 +9158,7 @@ pub enum GetUICustomizationError {
 impl GetUICustomizationError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetUICustomizationError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalErrorException" => {
                     return RusotoError::Service(GetUICustomizationError::InternalError(err.msg))
@@ -9158,6 +9219,7 @@ pub enum GetUserError {
 impl GetUserError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetUserError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalErrorException" => {
                     return RusotoError::Service(GetUserError::InternalError(err.msg))
@@ -9248,6 +9310,7 @@ impl GetUserAttributeVerificationCodeError {
         res: BufferedHttpResponse,
     ) -> RusotoError<GetUserAttributeVerificationCodeError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "CodeDeliveryFailureException" => {
                     return RusotoError::Service(
@@ -9414,6 +9477,7 @@ pub enum GetUserPoolMfaConfigError {
 impl GetUserPoolMfaConfigError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetUserPoolMfaConfigError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalErrorException" => {
                     return RusotoError::Service(GetUserPoolMfaConfigError::InternalError(err.msg))
@@ -9478,6 +9542,7 @@ pub enum GlobalSignOutError {
 impl GlobalSignOutError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GlobalSignOutError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalErrorException" => {
                     return RusotoError::Service(GlobalSignOutError::InternalError(err.msg))
@@ -9558,6 +9623,7 @@ pub enum InitiateAuthError {
 impl InitiateAuthError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<InitiateAuthError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalErrorException" => {
                     return RusotoError::Service(InitiateAuthError::InternalError(err.msg))
@@ -9662,6 +9728,7 @@ pub enum ListDevicesError {
 impl ListDevicesError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListDevicesError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalErrorException" => {
                     return RusotoError::Service(ListDevicesError::InternalError(err.msg))
@@ -9734,6 +9801,7 @@ pub enum ListGroupsError {
 impl ListGroupsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListGroupsError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalErrorException" => {
                     return RusotoError::Service(ListGroupsError::InternalError(err.msg))
@@ -9788,6 +9856,7 @@ pub enum ListIdentityProvidersError {
 impl ListIdentityProvidersError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListIdentityProvidersError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalErrorException" => {
                     return RusotoError::Service(ListIdentityProvidersError::InternalError(err.msg))
@@ -9848,6 +9917,7 @@ pub enum ListResourceServersError {
 impl ListResourceServersError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListResourceServersError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalErrorException" => {
                     return RusotoError::Service(ListResourceServersError::InternalError(err.msg))
@@ -9906,6 +9976,7 @@ pub enum ListTagsForResourceError {
 impl ListTagsForResourceError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListTagsForResourceError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalErrorException" => {
                     return RusotoError::Service(ListTagsForResourceError::InternalError(err.msg))
@@ -9964,6 +10035,7 @@ pub enum ListUserImportJobsError {
 impl ListUserImportJobsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListUserImportJobsError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalErrorException" => {
                     return RusotoError::Service(ListUserImportJobsError::InternalError(err.msg))
@@ -10018,6 +10090,7 @@ pub enum ListUserPoolClientsError {
 impl ListUserPoolClientsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListUserPoolClientsError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalErrorException" => {
                     return RusotoError::Service(ListUserPoolClientsError::InternalError(err.msg))
@@ -10074,6 +10147,7 @@ pub enum ListUserPoolsError {
 impl ListUserPoolsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListUserPoolsError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalErrorException" => {
                     return RusotoError::Service(ListUserPoolsError::InternalError(err.msg))
@@ -10124,6 +10198,7 @@ pub enum ListUsersError {
 impl ListUsersError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListUsersError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalErrorException" => {
                     return RusotoError::Service(ListUsersError::InternalError(err.msg))
@@ -10178,6 +10253,7 @@ pub enum ListUsersInGroupError {
 impl ListUsersInGroupError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListUsersInGroupError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalErrorException" => {
                     return RusotoError::Service(ListUsersInGroupError::InternalError(err.msg))
@@ -10250,6 +10326,7 @@ pub enum ResendConfirmationCodeError {
 impl ResendConfirmationCodeError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ResendConfirmationCodeError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "CodeDeliveryFailureException" => {
                     return RusotoError::Service(ResendConfirmationCodeError::CodeDeliveryFailure(
@@ -10402,6 +10479,7 @@ pub enum RespondToAuthChallengeError {
 impl RespondToAuthChallengeError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<RespondToAuthChallengeError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AliasExistsException" => {
                     return RusotoError::Service(RespondToAuthChallengeError::AliasExists(err.msg))
@@ -10562,6 +10640,7 @@ pub enum SetRiskConfigurationError {
 impl SetRiskConfigurationError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<SetRiskConfigurationError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "CodeDeliveryFailureException" => {
                     return RusotoError::Service(SetRiskConfigurationError::CodeDeliveryFailure(
@@ -10642,6 +10721,7 @@ pub enum SetUICustomizationError {
 impl SetUICustomizationError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<SetUICustomizationError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalErrorException" => {
                     return RusotoError::Service(SetUICustomizationError::InternalError(err.msg))
@@ -10700,6 +10780,7 @@ pub enum SetUserMFAPreferenceError {
 impl SetUserMFAPreferenceError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<SetUserMFAPreferenceError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalErrorException" => {
                     return RusotoError::Service(SetUserMFAPreferenceError::InternalError(err.msg))
@@ -10774,6 +10855,7 @@ pub enum SetUserPoolMfaConfigError {
 impl SetUserPoolMfaConfigError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<SetUserPoolMfaConfigError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalErrorException" => {
                     return RusotoError::Service(SetUserPoolMfaConfigError::InternalError(err.msg))
@@ -10854,6 +10936,7 @@ pub enum SetUserSettingsError {
 impl SetUserSettingsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<SetUserSettingsError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalErrorException" => {
                     return RusotoError::Service(SetUserSettingsError::InternalError(err.msg))
@@ -10936,6 +11019,7 @@ pub enum SignUpError {
 impl SignUpError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<SignUpError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "CodeDeliveryFailureException" => {
                     return RusotoError::Service(SignUpError::CodeDeliveryFailure(err.msg))
@@ -11030,6 +11114,7 @@ pub enum StartUserImportJobError {
 impl StartUserImportJobError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<StartUserImportJobError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalErrorException" => {
                     return RusotoError::Service(StartUserImportJobError::InternalError(err.msg))
@@ -11092,6 +11177,7 @@ pub enum StopUserImportJobError {
 impl StopUserImportJobError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<StopUserImportJobError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalErrorException" => {
                     return RusotoError::Service(StopUserImportJobError::InternalError(err.msg))
@@ -11152,6 +11238,7 @@ pub enum TagResourceError {
 impl TagResourceError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<TagResourceError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalErrorException" => {
                     return RusotoError::Service(TagResourceError::InternalError(err.msg))
@@ -11206,6 +11293,7 @@ pub enum UntagResourceError {
 impl UntagResourceError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UntagResourceError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalErrorException" => {
                     return RusotoError::Service(UntagResourceError::InternalError(err.msg))
@@ -11264,6 +11352,7 @@ pub enum UpdateAuthEventFeedbackError {
 impl UpdateAuthEventFeedbackError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateAuthEventFeedbackError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalErrorException" => {
                     return RusotoError::Service(UpdateAuthEventFeedbackError::InternalError(
@@ -11350,6 +11439,7 @@ pub enum UpdateDeviceStatusError {
 impl UpdateDeviceStatusError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateDeviceStatusError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalErrorException" => {
                     return RusotoError::Service(UpdateDeviceStatusError::InternalError(err.msg))
@@ -11426,6 +11516,7 @@ pub enum UpdateGroupError {
 impl UpdateGroupError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateGroupError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalErrorException" => {
                     return RusotoError::Service(UpdateGroupError::InternalError(err.msg))
@@ -11482,6 +11573,7 @@ pub enum UpdateIdentityProviderError {
 impl UpdateIdentityProviderError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateIdentityProviderError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalErrorException" => {
                     return RusotoError::Service(UpdateIdentityProviderError::InternalError(
@@ -11554,6 +11646,7 @@ pub enum UpdateResourceServerError {
 impl UpdateResourceServerError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateResourceServerError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalErrorException" => {
                     return RusotoError::Service(UpdateResourceServerError::InternalError(err.msg))
@@ -11640,6 +11733,7 @@ pub enum UpdateUserAttributesError {
 impl UpdateUserAttributesError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateUserAttributesError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AliasExistsException" => {
                     return RusotoError::Service(UpdateUserAttributesError::AliasExists(err.msg))
@@ -11788,6 +11882,7 @@ pub enum UpdateUserPoolError {
 impl UpdateUserPoolError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateUserPoolError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ConcurrentModificationException" => {
                     return RusotoError::Service(UpdateUserPoolError::ConcurrentModification(
@@ -11882,6 +11977,7 @@ pub enum UpdateUserPoolClientError {
 impl UpdateUserPoolClientError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateUserPoolClientError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ConcurrentModificationException" => {
                     return RusotoError::Service(UpdateUserPoolClientError::ConcurrentModification(
@@ -11960,6 +12056,7 @@ pub enum UpdateUserPoolDomainError {
 impl UpdateUserPoolDomainError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateUserPoolDomainError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalErrorException" => {
                     return RusotoError::Service(UpdateUserPoolDomainError::InternalError(err.msg))
@@ -12034,6 +12131,7 @@ pub enum VerifySoftwareTokenError {
 impl VerifySoftwareTokenError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<VerifySoftwareTokenError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "CodeMismatchException" => {
                     return RusotoError::Service(VerifySoftwareTokenError::CodeMismatch(err.msg))
@@ -12144,6 +12242,7 @@ pub enum VerifyUserAttributeError {
 impl VerifyUserAttributeError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<VerifyUserAttributeError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "CodeMismatchException" => {
                     return RusotoError::Service(VerifyUserAttributeError::CodeMismatch(err.msg))

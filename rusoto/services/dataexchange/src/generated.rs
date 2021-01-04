@@ -24,7 +24,6 @@ use rusoto_core::proto;
 use rusoto_core::signature::SignedRequest;
 #[allow(unused_imports)]
 use serde::{Deserialize, Serialize};
-use serde_json;
 /// <p>The destination for the asset.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct AssetDestinationEntry {
@@ -1275,6 +1274,7 @@ pub enum CancelJobError {
 impl CancelJobError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CancelJobError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ConflictException" => {
                     return RusotoError::Service(CancelJobError::Conflict(err.msg))
@@ -1323,6 +1323,7 @@ pub enum CreateDataSetError {
 impl CreateDataSetError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateDataSetError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(CreateDataSetError::AccessDenied(err.msg))
@@ -1371,6 +1372,7 @@ pub enum CreateJobError {
 impl CreateJobError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateJobError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(CreateJobError::AccessDenied(err.msg))
@@ -1419,6 +1421,7 @@ pub enum CreateRevisionError {
 impl CreateRevisionError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateRevisionError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(CreateRevisionError::AccessDenied(err.msg))
@@ -1469,6 +1472,7 @@ pub enum DeleteAssetError {
 impl DeleteAssetError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteAssetError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(DeleteAssetError::AccessDenied(err.msg))
@@ -1523,6 +1527,7 @@ pub enum DeleteDataSetError {
 impl DeleteDataSetError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteDataSetError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(DeleteDataSetError::AccessDenied(err.msg))
@@ -1577,6 +1582,7 @@ pub enum DeleteRevisionError {
 impl DeleteRevisionError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteRevisionError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(DeleteRevisionError::AccessDenied(err.msg))
@@ -1627,6 +1633,7 @@ pub enum GetAssetError {
 impl GetAssetError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetAssetError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalServerException" => {
                     return RusotoError::Service(GetAssetError::InternalServer(err.msg))
@@ -1669,6 +1676,7 @@ pub enum GetDataSetError {
 impl GetDataSetError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetDataSetError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalServerException" => {
                     return RusotoError::Service(GetDataSetError::InternalServer(err.msg))
@@ -1711,6 +1719,7 @@ pub enum GetJobError {
 impl GetJobError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetJobError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalServerException" => {
                     return RusotoError::Service(GetJobError::InternalServer(err.msg))
@@ -1753,6 +1762,7 @@ pub enum GetRevisionError {
 impl GetRevisionError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetRevisionError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalServerException" => {
                     return RusotoError::Service(GetRevisionError::InternalServer(err.msg))
@@ -1795,6 +1805,7 @@ pub enum ListDataSetRevisionsError {
 impl ListDataSetRevisionsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListDataSetRevisionsError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalServerException" => {
                     return RusotoError::Service(ListDataSetRevisionsError::InternalServer(err.msg))
@@ -1839,6 +1850,7 @@ pub enum ListDataSetsError {
 impl ListDataSetsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListDataSetsError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalServerException" => {
                     return RusotoError::Service(ListDataSetsError::InternalServer(err.msg))
@@ -1881,6 +1893,7 @@ pub enum ListJobsError {
 impl ListJobsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListJobsError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalServerException" => {
                     return RusotoError::Service(ListJobsError::InternalServer(err.msg))
@@ -1923,6 +1936,7 @@ pub enum ListRevisionAssetsError {
 impl ListRevisionAssetsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListRevisionAssetsError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalServerException" => {
                     return RusotoError::Service(ListRevisionAssetsError::InternalServer(err.msg))
@@ -1958,6 +1972,7 @@ pub enum ListTagsForResourceError {}
 impl ListTagsForResourceError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListTagsForResourceError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
@@ -1991,6 +2006,7 @@ pub enum StartJobError {
 impl StartJobError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<StartJobError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(StartJobError::AccessDenied(err.msg))
@@ -2034,6 +2050,7 @@ pub enum TagResourceError {}
 impl TagResourceError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<TagResourceError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
@@ -2056,6 +2073,7 @@ pub enum UntagResourceError {}
 impl UntagResourceError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UntagResourceError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
@@ -2089,6 +2107,7 @@ pub enum UpdateAssetError {
 impl UpdateAssetError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateAssetError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(UpdateAssetError::AccessDenied(err.msg))
@@ -2141,6 +2160,7 @@ pub enum UpdateDataSetError {
 impl UpdateDataSetError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateDataSetError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(UpdateDataSetError::AccessDenied(err.msg))
@@ -2191,6 +2211,7 @@ pub enum UpdateRevisionError {
 impl UpdateRevisionError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateRevisionError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(UpdateRevisionError::AccessDenied(err.msg))
@@ -2402,6 +2423,7 @@ impl DataExchange for DataExchangeClient {
     /// <p>This operation cancels a job. Jobs can be cancelled only when they are in the WAITING state.</p>
     #[allow(unused_mut)]
     async fn cancel_job(&self, input: CancelJobRequest) -> Result<(), RusotoError<CancelJobError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!("/v1/jobs/{job_id}", job_id = input.job_id);
 
         let mut request = SignedRequest::new("DELETE", "dataexchange", &self.region, &request_uri);
@@ -2414,9 +2436,9 @@ impl DataExchange for DataExchangeClient {
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 204 {
             let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = ::std::mem::drop(response);
+            let _result = ::std::mem::drop(response);
 
-            Ok(result)
+            Ok(())
         } else {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             Err(CancelJobError::from_response(response))
@@ -2429,6 +2451,7 @@ impl DataExchange for DataExchangeClient {
         &self,
         input: CreateDataSetRequest,
     ) -> Result<CreateDataSetResponse, RusotoError<CreateDataSetError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/v1/data-sets";
 
         let mut request = SignedRequest::new("POST", "dataexchange", &self.region, &request_uri);
@@ -2460,6 +2483,7 @@ impl DataExchange for DataExchangeClient {
         &self,
         input: CreateJobRequest,
     ) -> Result<CreateJobResponse, RusotoError<CreateJobError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/v1/jobs";
 
         let mut request = SignedRequest::new("POST", "dataexchange", &self.region, &request_uri);
@@ -2491,6 +2515,7 @@ impl DataExchange for DataExchangeClient {
         &self,
         input: CreateRevisionRequest,
     ) -> Result<CreateRevisionResponse, RusotoError<CreateRevisionError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/v1/data-sets/{data_set_id}/revisions",
             data_set_id = input.data_set_id
@@ -2525,6 +2550,7 @@ impl DataExchange for DataExchangeClient {
         &self,
         input: DeleteAssetRequest,
     ) -> Result<(), RusotoError<DeleteAssetError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/v1/data-sets/{data_set_id}/revisions/{revision_id}/assets/{asset_id}",
             asset_id = input.asset_id,
@@ -2542,9 +2568,9 @@ impl DataExchange for DataExchangeClient {
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 204 {
             let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = ::std::mem::drop(response);
+            let _result = ::std::mem::drop(response);
 
-            Ok(result)
+            Ok(())
         } else {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             Err(DeleteAssetError::from_response(response))
@@ -2557,6 +2583,7 @@ impl DataExchange for DataExchangeClient {
         &self,
         input: DeleteDataSetRequest,
     ) -> Result<(), RusotoError<DeleteDataSetError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/v1/data-sets/{data_set_id}",
             data_set_id = input.data_set_id
@@ -2572,9 +2599,9 @@ impl DataExchange for DataExchangeClient {
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 204 {
             let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = ::std::mem::drop(response);
+            let _result = ::std::mem::drop(response);
 
-            Ok(result)
+            Ok(())
         } else {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             Err(DeleteDataSetError::from_response(response))
@@ -2587,6 +2614,7 @@ impl DataExchange for DataExchangeClient {
         &self,
         input: DeleteRevisionRequest,
     ) -> Result<(), RusotoError<DeleteRevisionError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/v1/data-sets/{data_set_id}/revisions/{revision_id}",
             data_set_id = input.data_set_id,
@@ -2603,9 +2631,9 @@ impl DataExchange for DataExchangeClient {
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 204 {
             let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = ::std::mem::drop(response);
+            let _result = ::std::mem::drop(response);
 
-            Ok(result)
+            Ok(())
         } else {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             Err(DeleteRevisionError::from_response(response))
@@ -2618,6 +2646,7 @@ impl DataExchange for DataExchangeClient {
         &self,
         input: GetAssetRequest,
     ) -> Result<GetAssetResponse, RusotoError<GetAssetError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/v1/data-sets/{data_set_id}/revisions/{revision_id}/assets/{asset_id}",
             asset_id = input.asset_id,
@@ -2651,6 +2680,7 @@ impl DataExchange for DataExchangeClient {
         &self,
         input: GetDataSetRequest,
     ) -> Result<GetDataSetResponse, RusotoError<GetDataSetError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/v1/data-sets/{data_set_id}",
             data_set_id = input.data_set_id
@@ -2682,6 +2712,7 @@ impl DataExchange for DataExchangeClient {
         &self,
         input: GetJobRequest,
     ) -> Result<GetJobResponse, RusotoError<GetJobError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!("/v1/jobs/{job_id}", job_id = input.job_id);
 
         let mut request = SignedRequest::new("GET", "dataexchange", &self.region, &request_uri);
@@ -2710,6 +2741,7 @@ impl DataExchange for DataExchangeClient {
         &self,
         input: GetRevisionRequest,
     ) -> Result<GetRevisionResponse, RusotoError<GetRevisionError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/v1/data-sets/{data_set_id}/revisions/{revision_id}",
             data_set_id = input.data_set_id,
@@ -2742,6 +2774,7 @@ impl DataExchange for DataExchangeClient {
         &self,
         input: ListDataSetRevisionsRequest,
     ) -> Result<ListDataSetRevisionsResponse, RusotoError<ListDataSetRevisionsError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/v1/data-sets/{data_set_id}/revisions",
             data_set_id = input.data_set_id
@@ -2782,6 +2815,7 @@ impl DataExchange for DataExchangeClient {
         &self,
         input: ListDataSetsRequest,
     ) -> Result<ListDataSetsResponse, RusotoError<ListDataSetsError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/v1/data-sets";
 
         let mut request = SignedRequest::new("GET", "dataexchange", &self.region, &request_uri);
@@ -2822,6 +2856,7 @@ impl DataExchange for DataExchangeClient {
         &self,
         input: ListJobsRequest,
     ) -> Result<ListJobsResponse, RusotoError<ListJobsError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/v1/jobs";
 
         let mut request = SignedRequest::new("GET", "dataexchange", &self.region, &request_uri);
@@ -2865,6 +2900,7 @@ impl DataExchange for DataExchangeClient {
         &self,
         input: ListRevisionAssetsRequest,
     ) -> Result<ListRevisionAssetsResponse, RusotoError<ListRevisionAssetsError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/v1/data-sets/{data_set_id}/revisions/{revision_id}/assets",
             data_set_id = input.data_set_id,
@@ -2906,6 +2942,7 @@ impl DataExchange for DataExchangeClient {
         &self,
         input: ListTagsForResourceRequest,
     ) -> Result<ListTagsForResourceResponse, RusotoError<ListTagsForResourceError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!("/tags/{resource_arn}", resource_arn = input.resource_arn);
 
         let mut request = SignedRequest::new("GET", "dataexchange", &self.region, &request_uri);
@@ -2934,6 +2971,7 @@ impl DataExchange for DataExchangeClient {
         &self,
         input: StartJobRequest,
     ) -> Result<StartJobResponse, RusotoError<StartJobError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!("/v1/jobs/{job_id}", job_id = input.job_id);
 
         let mut request = SignedRequest::new("PATCH", "dataexchange", &self.region, &request_uri);
@@ -2962,6 +3000,7 @@ impl DataExchange for DataExchangeClient {
         &self,
         input: TagResourceRequest,
     ) -> Result<(), RusotoError<TagResourceError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!("/tags/{resource_arn}", resource_arn = input.resource_arn);
 
         let mut request = SignedRequest::new("POST", "dataexchange", &self.region, &request_uri);
@@ -2977,9 +3016,9 @@ impl DataExchange for DataExchangeClient {
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 204 {
             let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = ::std::mem::drop(response);
+            let _result = ::std::mem::drop(response);
 
-            Ok(result)
+            Ok(())
         } else {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             Err(TagResourceError::from_response(response))
@@ -2992,6 +3031,7 @@ impl DataExchange for DataExchangeClient {
         &self,
         input: UntagResourceRequest,
     ) -> Result<(), RusotoError<UntagResourceError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!("/tags/{resource_arn}", resource_arn = input.resource_arn);
 
         let mut request = SignedRequest::new("DELETE", "dataexchange", &self.region, &request_uri);
@@ -3010,9 +3050,9 @@ impl DataExchange for DataExchangeClient {
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 204 {
             let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = ::std::mem::drop(response);
+            let _result = ::std::mem::drop(response);
 
-            Ok(result)
+            Ok(())
         } else {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             Err(UntagResourceError::from_response(response))
@@ -3025,6 +3065,7 @@ impl DataExchange for DataExchangeClient {
         &self,
         input: UpdateAssetRequest,
     ) -> Result<UpdateAssetResponse, RusotoError<UpdateAssetError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/v1/data-sets/{data_set_id}/revisions/{revision_id}/assets/{asset_id}",
             asset_id = input.asset_id,
@@ -3061,6 +3102,7 @@ impl DataExchange for DataExchangeClient {
         &self,
         input: UpdateDataSetRequest,
     ) -> Result<UpdateDataSetResponse, RusotoError<UpdateDataSetError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/v1/data-sets/{data_set_id}",
             data_set_id = input.data_set_id
@@ -3095,6 +3137,7 @@ impl DataExchange for DataExchangeClient {
         &self,
         input: UpdateRevisionRequest,
     ) -> Result<UpdateRevisionResponse, RusotoError<UpdateRevisionError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/v1/data-sets/{data_set_id}/revisions/{revision_id}",
             data_set_id = input.data_set_id,

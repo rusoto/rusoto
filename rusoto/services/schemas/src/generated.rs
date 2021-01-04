@@ -24,7 +24,6 @@ use rusoto_core::proto;
 use rusoto_core::signature::SignedRequest;
 #[allow(unused_imports)]
 use serde::{Deserialize, Serialize};
-use serde_json;
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
@@ -1076,6 +1075,7 @@ pub enum CreateDiscovererError {
 impl CreateDiscovererError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateDiscovererError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(CreateDiscovererError::BadRequest(err.msg))
@@ -1137,6 +1137,7 @@ pub enum CreateRegistryError {
 impl CreateRegistryError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateRegistryError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(CreateRegistryError::BadRequest(err.msg))
@@ -1192,6 +1193,7 @@ pub enum CreateSchemaError {
 impl CreateSchemaError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateSchemaError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(CreateSchemaError::BadRequest(err.msg))
@@ -1243,6 +1245,7 @@ pub enum DeleteDiscovererError {
 impl DeleteDiscovererError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteDiscovererError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(DeleteDiscovererError::BadRequest(err.msg))
@@ -1304,6 +1307,7 @@ pub enum DeleteRegistryError {
 impl DeleteRegistryError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteRegistryError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(DeleteRegistryError::BadRequest(err.msg))
@@ -1363,6 +1367,7 @@ pub enum DeleteResourcePolicyError {
 impl DeleteResourcePolicyError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteResourcePolicyError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(DeleteResourcePolicyError::BadRequest(err.msg))
@@ -1426,6 +1431,7 @@ pub enum DeleteSchemaError {
 impl DeleteSchemaError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteSchemaError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(DeleteSchemaError::BadRequest(err.msg))
@@ -1485,6 +1491,7 @@ pub enum DeleteSchemaVersionError {
 impl DeleteSchemaVersionError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteSchemaVersionError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(DeleteSchemaVersionError::BadRequest(err.msg))
@@ -1548,6 +1555,7 @@ pub enum DescribeCodeBindingError {
 impl DescribeCodeBindingError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeCodeBindingError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(DescribeCodeBindingError::BadRequest(err.msg))
@@ -1609,6 +1617,7 @@ pub enum DescribeDiscovererError {
 impl DescribeDiscovererError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeDiscovererError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(DescribeDiscovererError::BadRequest(err.msg))
@@ -1672,6 +1681,7 @@ pub enum DescribeRegistryError {
 impl DescribeRegistryError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeRegistryError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(DescribeRegistryError::BadRequest(err.msg))
@@ -1733,6 +1743,7 @@ pub enum DescribeSchemaError {
 impl DescribeSchemaError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeSchemaError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(DescribeSchemaError::BadRequest(err.msg))
@@ -1794,6 +1805,7 @@ pub enum ExportSchemaError {
 impl ExportSchemaError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ExportSchemaError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(ExportSchemaError::BadRequest(err.msg))
@@ -1857,6 +1869,7 @@ pub enum GetCodeBindingSourceError {
 impl GetCodeBindingSourceError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetCodeBindingSourceError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(GetCodeBindingSourceError::BadRequest(err.msg))
@@ -1918,6 +1931,7 @@ pub enum GetDiscoveredSchemaError {
 impl GetDiscoveredSchemaError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetDiscoveredSchemaError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(GetDiscoveredSchemaError::BadRequest(err.msg))
@@ -1977,6 +1991,7 @@ pub enum GetResourcePolicyError {
 impl GetResourcePolicyError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetResourcePolicyError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(GetResourcePolicyError::BadRequest(err.msg))
@@ -2038,6 +2053,7 @@ pub enum ListDiscoverersError {
 impl ListDiscoverersError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListDiscoverersError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(ListDiscoverersError::BadRequest(err.msg))
@@ -2091,6 +2107,7 @@ pub enum ListRegistriesError {
 impl ListRegistriesError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListRegistriesError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(ListRegistriesError::BadRequest(err.msg))
@@ -2146,6 +2163,7 @@ pub enum ListSchemaVersionsError {
 impl ListSchemaVersionsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListSchemaVersionsError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(ListSchemaVersionsError::BadRequest(err.msg))
@@ -2207,6 +2225,7 @@ pub enum ListSchemasError {
 impl ListSchemasError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListSchemasError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(ListSchemasError::BadRequest(err.msg))
@@ -2258,6 +2277,7 @@ pub enum ListTagsForResourceError {
 impl ListTagsForResourceError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListTagsForResourceError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(ListTagsForResourceError::BadRequest(err.msg))
@@ -2313,6 +2333,7 @@ pub enum PutCodeBindingError {
 impl PutCodeBindingError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<PutCodeBindingError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(PutCodeBindingError::BadRequest(err.msg))
@@ -2376,6 +2397,7 @@ pub enum PutResourcePolicyError {
 impl PutResourcePolicyError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<PutResourcePolicyError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(PutResourcePolicyError::BadRequest(err.msg))
@@ -2443,6 +2465,7 @@ pub enum SearchSchemasError {
 impl SearchSchemasError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<SearchSchemasError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(SearchSchemasError::BadRequest(err.msg))
@@ -2498,6 +2521,7 @@ pub enum StartDiscovererError {
 impl StartDiscovererError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<StartDiscovererError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(StartDiscovererError::BadRequest(err.msg))
@@ -2557,6 +2581,7 @@ pub enum StopDiscovererError {
 impl StopDiscovererError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<StopDiscovererError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(StopDiscovererError::BadRequest(err.msg))
@@ -2612,6 +2637,7 @@ pub enum TagResourceError {
 impl TagResourceError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<TagResourceError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(TagResourceError::BadRequest(err.msg))
@@ -2659,6 +2685,7 @@ pub enum UntagResourceError {
 impl UntagResourceError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UntagResourceError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(UntagResourceError::BadRequest(err.msg))
@@ -2710,6 +2737,7 @@ pub enum UpdateDiscovererError {
 impl UpdateDiscovererError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateDiscovererError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(UpdateDiscovererError::BadRequest(err.msg))
@@ -2771,6 +2799,7 @@ pub enum UpdateRegistryError {
 impl UpdateRegistryError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateRegistryError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(UpdateRegistryError::BadRequest(err.msg))
@@ -2828,6 +2857,7 @@ pub enum UpdateSchemaError {
 impl UpdateSchemaError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateSchemaError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(UpdateSchemaError::BadRequest(err.msg))
@@ -3098,6 +3128,7 @@ impl Schemas for SchemasClient {
         &self,
         input: CreateDiscovererRequest,
     ) -> Result<CreateDiscovererResponse, RusotoError<CreateDiscovererError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/v1/discoverers";
 
         let mut request = SignedRequest::new("POST", "schemas", &self.region, &request_uri);
@@ -3129,6 +3160,7 @@ impl Schemas for SchemasClient {
         &self,
         input: CreateRegistryRequest,
     ) -> Result<CreateRegistryResponse, RusotoError<CreateRegistryError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/v1/registries/name/{registry_name}",
             registry_name = input.registry_name
@@ -3163,6 +3195,7 @@ impl Schemas for SchemasClient {
         &self,
         input: CreateSchemaRequest,
     ) -> Result<CreateSchemaResponse, RusotoError<CreateSchemaError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/v1/registries/name/{registry_name}/schemas/name/{schema_name}",
             registry_name = input.registry_name,
@@ -3198,6 +3231,7 @@ impl Schemas for SchemasClient {
         &self,
         input: DeleteDiscovererRequest,
     ) -> Result<(), RusotoError<DeleteDiscovererError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/v1/discoverers/id/{discoverer_id}",
             discoverer_id = input.discoverer_id
@@ -3213,9 +3247,9 @@ impl Schemas for SchemasClient {
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 204 {
             let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = ::std::mem::drop(response);
+            let _result = ::std::mem::drop(response);
 
-            Ok(result)
+            Ok(())
         } else {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             Err(DeleteDiscovererError::from_response(response))
@@ -3228,6 +3262,7 @@ impl Schemas for SchemasClient {
         &self,
         input: DeleteRegistryRequest,
     ) -> Result<(), RusotoError<DeleteRegistryError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/v1/registries/name/{registry_name}",
             registry_name = input.registry_name
@@ -3243,9 +3278,9 @@ impl Schemas for SchemasClient {
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 204 {
             let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = ::std::mem::drop(response);
+            let _result = ::std::mem::drop(response);
 
-            Ok(result)
+            Ok(())
         } else {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             Err(DeleteRegistryError::from_response(response))
@@ -3258,6 +3293,7 @@ impl Schemas for SchemasClient {
         &self,
         input: DeleteResourcePolicyRequest,
     ) -> Result<(), RusotoError<DeleteResourcePolicyError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/v1/policy";
 
         let mut request = SignedRequest::new("DELETE", "schemas", &self.region, &request_uri);
@@ -3276,9 +3312,9 @@ impl Schemas for SchemasClient {
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 204 {
             let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = ::std::mem::drop(response);
+            let _result = ::std::mem::drop(response);
 
-            Ok(result)
+            Ok(())
         } else {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             Err(DeleteResourcePolicyError::from_response(response))
@@ -3291,6 +3327,7 @@ impl Schemas for SchemasClient {
         &self,
         input: DeleteSchemaRequest,
     ) -> Result<(), RusotoError<DeleteSchemaError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/v1/registries/name/{registry_name}/schemas/name/{schema_name}",
             registry_name = input.registry_name,
@@ -3307,9 +3344,9 @@ impl Schemas for SchemasClient {
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 204 {
             let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = ::std::mem::drop(response);
+            let _result = ::std::mem::drop(response);
 
-            Ok(result)
+            Ok(())
         } else {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             Err(DeleteSchemaError::from_response(response))
@@ -3322,6 +3359,7 @@ impl Schemas for SchemasClient {
         &self,
         input: DeleteSchemaVersionRequest,
     ) -> Result<(), RusotoError<DeleteSchemaVersionError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!("/v1/registries/name/{registry_name}/schemas/name/{schema_name}/version/{schema_version}", registry_name = input.registry_name, schema_name = input.schema_name, schema_version = input.schema_version);
 
         let mut request = SignedRequest::new("DELETE", "schemas", &self.region, &request_uri);
@@ -3334,9 +3372,9 @@ impl Schemas for SchemasClient {
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 204 {
             let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = ::std::mem::drop(response);
+            let _result = ::std::mem::drop(response);
 
-            Ok(result)
+            Ok(())
         } else {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             Err(DeleteSchemaVersionError::from_response(response))
@@ -3349,6 +3387,7 @@ impl Schemas for SchemasClient {
         &self,
         input: DescribeCodeBindingRequest,
     ) -> Result<DescribeCodeBindingResponse, RusotoError<DescribeCodeBindingError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/v1/registries/name/{registry_name}/schemas/name/{schema_name}/language/{language}",
             language = input.language,
@@ -3388,6 +3427,7 @@ impl Schemas for SchemasClient {
         &self,
         input: DescribeDiscovererRequest,
     ) -> Result<DescribeDiscovererResponse, RusotoError<DescribeDiscovererError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/v1/discoverers/id/{discoverer_id}",
             discoverer_id = input.discoverer_id
@@ -3419,6 +3459,7 @@ impl Schemas for SchemasClient {
         &self,
         input: DescribeRegistryRequest,
     ) -> Result<DescribeRegistryResponse, RusotoError<DescribeRegistryError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/v1/registries/name/{registry_name}",
             registry_name = input.registry_name
@@ -3450,6 +3491,7 @@ impl Schemas for SchemasClient {
         &self,
         input: DescribeSchemaRequest,
     ) -> Result<DescribeSchemaResponse, RusotoError<DescribeSchemaError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/v1/registries/name/{registry_name}/schemas/name/{schema_name}",
             registry_name = input.registry_name,
@@ -3487,6 +3529,7 @@ impl Schemas for SchemasClient {
         &self,
         input: ExportSchemaRequest,
     ) -> Result<ExportSchemaResponse, RusotoError<ExportSchemaError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/v1/registries/name/{registry_name}/schemas/name/{schema_name}/export",
             registry_name = input.registry_name,
@@ -3526,6 +3569,7 @@ impl Schemas for SchemasClient {
         &self,
         input: GetCodeBindingSourceRequest,
     ) -> Result<GetCodeBindingSourceResponse, RusotoError<GetCodeBindingSourceError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!("/v1/registries/name/{registry_name}/schemas/name/{schema_name}/language/{language}/source", language = input.language, registry_name = input.registry_name, schema_name = input.schema_name);
 
         let mut request = SignedRequest::new("GET", "schemas", &self.region, &request_uri);
@@ -3545,8 +3589,10 @@ impl Schemas for SchemasClient {
         if response.status.as_u16() == 200 {
             let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
 
-            let mut result = GetCodeBindingSourceResponse::default();
-            result.body = Some(response.body);
+            let mut result = GetCodeBindingSourceResponse {
+                body: Some(response.body),
+                ..GetCodeBindingSourceResponse::default()
+            };
 
             Ok(result)
         } else {
@@ -3561,6 +3607,7 @@ impl Schemas for SchemasClient {
         &self,
         input: GetDiscoveredSchemaRequest,
     ) -> Result<GetDiscoveredSchemaResponse, RusotoError<GetDiscoveredSchemaError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/v1/discover";
 
         let mut request = SignedRequest::new("POST", "schemas", &self.region, &request_uri);
@@ -3592,6 +3639,7 @@ impl Schemas for SchemasClient {
         &self,
         input: GetResourcePolicyRequest,
     ) -> Result<GetResourcePolicyResponse, RusotoError<GetResourcePolicyError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/v1/policy";
 
         let mut request = SignedRequest::new("GET", "schemas", &self.region, &request_uri);
@@ -3626,6 +3674,7 @@ impl Schemas for SchemasClient {
         &self,
         input: ListDiscoverersRequest,
     ) -> Result<ListDiscoverersResponse, RusotoError<ListDiscoverersError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/v1/discoverers";
 
         let mut request = SignedRequest::new("GET", "schemas", &self.region, &request_uri);
@@ -3669,6 +3718,7 @@ impl Schemas for SchemasClient {
         &self,
         input: ListRegistriesRequest,
     ) -> Result<ListRegistriesResponse, RusotoError<ListRegistriesError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/v1/registries";
 
         let mut request = SignedRequest::new("GET", "schemas", &self.region, &request_uri);
@@ -3712,6 +3762,7 @@ impl Schemas for SchemasClient {
         &self,
         input: ListSchemaVersionsRequest,
     ) -> Result<ListSchemaVersionsResponse, RusotoError<ListSchemaVersionsError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/v1/registries/name/{registry_name}/schemas/name/{schema_name}/versions",
             registry_name = input.registry_name,
@@ -3753,6 +3804,7 @@ impl Schemas for SchemasClient {
         &self,
         input: ListSchemasRequest,
     ) -> Result<ListSchemasResponse, RusotoError<ListSchemasError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/v1/registries/name/{registry_name}/schemas",
             registry_name = input.registry_name
@@ -3796,6 +3848,7 @@ impl Schemas for SchemasClient {
         &self,
         input: ListTagsForResourceRequest,
     ) -> Result<ListTagsForResourceResponse, RusotoError<ListTagsForResourceError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!("/tags/{resource_arn}", resource_arn = input.resource_arn);
 
         let mut request = SignedRequest::new("GET", "schemas", &self.region, &request_uri);
@@ -3824,6 +3877,7 @@ impl Schemas for SchemasClient {
         &self,
         input: PutCodeBindingRequest,
     ) -> Result<PutCodeBindingResponse, RusotoError<PutCodeBindingError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/v1/registries/name/{registry_name}/schemas/name/{schema_name}/language/{language}",
             language = input.language,
@@ -3863,6 +3917,7 @@ impl Schemas for SchemasClient {
         &self,
         input: PutResourcePolicyRequest,
     ) -> Result<PutResourcePolicyResponse, RusotoError<PutResourcePolicyError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/v1/policy";
 
         let mut request = SignedRequest::new("PUT", "schemas", &self.region, &request_uri);
@@ -3900,6 +3955,7 @@ impl Schemas for SchemasClient {
         &self,
         input: SearchSchemasRequest,
     ) -> Result<SearchSchemasResponse, RusotoError<SearchSchemasError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/v1/registries/name/{registry_name}/schemas/search",
             registry_name = input.registry_name
@@ -3941,6 +3997,7 @@ impl Schemas for SchemasClient {
         &self,
         input: StartDiscovererRequest,
     ) -> Result<StartDiscovererResponse, RusotoError<StartDiscovererError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/v1/discoverers/id/{discoverer_id}/start",
             discoverer_id = input.discoverer_id
@@ -3972,6 +4029,7 @@ impl Schemas for SchemasClient {
         &self,
         input: StopDiscovererRequest,
     ) -> Result<StopDiscovererResponse, RusotoError<StopDiscovererError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/v1/discoverers/id/{discoverer_id}/stop",
             discoverer_id = input.discoverer_id
@@ -4003,6 +4061,7 @@ impl Schemas for SchemasClient {
         &self,
         input: TagResourceRequest,
     ) -> Result<(), RusotoError<TagResourceError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!("/tags/{resource_arn}", resource_arn = input.resource_arn);
 
         let mut request = SignedRequest::new("POST", "schemas", &self.region, &request_uri);
@@ -4018,9 +4077,9 @@ impl Schemas for SchemasClient {
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 204 {
             let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = ::std::mem::drop(response);
+            let _result = ::std::mem::drop(response);
 
-            Ok(result)
+            Ok(())
         } else {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             Err(TagResourceError::from_response(response))
@@ -4033,6 +4092,7 @@ impl Schemas for SchemasClient {
         &self,
         input: UntagResourceRequest,
     ) -> Result<(), RusotoError<UntagResourceError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!("/tags/{resource_arn}", resource_arn = input.resource_arn);
 
         let mut request = SignedRequest::new("DELETE", "schemas", &self.region, &request_uri);
@@ -4051,9 +4111,9 @@ impl Schemas for SchemasClient {
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 204 {
             let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = ::std::mem::drop(response);
+            let _result = ::std::mem::drop(response);
 
-            Ok(result)
+            Ok(())
         } else {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             Err(UntagResourceError::from_response(response))
@@ -4066,6 +4126,7 @@ impl Schemas for SchemasClient {
         &self,
         input: UpdateDiscovererRequest,
     ) -> Result<UpdateDiscovererResponse, RusotoError<UpdateDiscovererError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/v1/discoverers/id/{discoverer_id}",
             discoverer_id = input.discoverer_id
@@ -4100,6 +4161,7 @@ impl Schemas for SchemasClient {
         &self,
         input: UpdateRegistryRequest,
     ) -> Result<UpdateRegistryResponse, RusotoError<UpdateRegistryError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/v1/registries/name/{registry_name}",
             registry_name = input.registry_name
@@ -4134,6 +4196,7 @@ impl Schemas for SchemasClient {
         &self,
         input: UpdateSchemaRequest,
     ) -> Result<UpdateSchemaResponse, RusotoError<UpdateSchemaError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/v1/registries/name/{registry_name}/schemas/name/{schema_name}",
             registry_name = input.registry_name,

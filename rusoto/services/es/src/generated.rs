@@ -24,7 +24,6 @@ use rusoto_core::proto;
 use rusoto_core::signature::SignedRequest;
 #[allow(unused_imports)]
 use serde::{Deserialize, Serialize};
-use serde_json;
 /// <p>Container for the parameters to the <code><a>AcceptInboundCrossClusterSearchConnection</a></code> operation.</p>
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
@@ -2253,6 +2252,7 @@ impl AcceptInboundCrossClusterSearchConnectionError {
         res: BufferedHttpResponse,
     ) -> RusotoError<AcceptInboundCrossClusterSearchConnectionError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "DisabledOperationException" => {
                     return RusotoError::Service(
@@ -2307,6 +2307,7 @@ pub enum AddTagsError {
 impl AddTagsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<AddTagsError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BaseException" => return RusotoError::Service(AddTagsError::Base(err.msg)),
                 "InternalException" => {
@@ -2351,6 +2352,7 @@ pub enum AssociatePackageError {
 impl AssociatePackageError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<AssociatePackageError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(AssociatePackageError::AccessDenied(err.msg))
@@ -2403,6 +2405,7 @@ impl CancelElasticsearchServiceSoftwareUpdateError {
         res: BufferedHttpResponse,
     ) -> RusotoError<CancelElasticsearchServiceSoftwareUpdateError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BaseException" => {
                     return RusotoError::Service(
@@ -2463,6 +2466,7 @@ pub enum CreateElasticsearchDomainError {
 impl CreateElasticsearchDomainError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateElasticsearchDomainError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BaseException" => {
                     return RusotoError::Service(CreateElasticsearchDomainError::Base(err.msg))
@@ -2531,6 +2535,7 @@ impl CreateOutboundCrossClusterSearchConnectionError {
         res: BufferedHttpResponse,
     ) -> RusotoError<CreateOutboundCrossClusterSearchConnectionError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "DisabledOperationException" => {
                     return RusotoError::Service(
@@ -2601,6 +2606,7 @@ pub enum CreatePackageError {
 impl CreatePackageError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreatePackageError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(CreatePackageError::AccessDenied(err.msg))
@@ -2653,6 +2659,7 @@ pub enum DeleteElasticsearchDomainError {
 impl DeleteElasticsearchDomainError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteElasticsearchDomainError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BaseException" => {
                     return RusotoError::Service(DeleteElasticsearchDomainError::Base(err.msg))
@@ -2697,6 +2704,7 @@ impl DeleteElasticsearchServiceRoleError {
         res: BufferedHttpResponse,
     ) -> RusotoError<DeleteElasticsearchServiceRoleError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BaseException" => {
                     return RusotoError::Service(DeleteElasticsearchServiceRoleError::Base(err.msg))
@@ -2737,6 +2745,7 @@ impl DeleteInboundCrossClusterSearchConnectionError {
         res: BufferedHttpResponse,
     ) -> RusotoError<DeleteInboundCrossClusterSearchConnectionError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "DisabledOperationException" => {
                     return RusotoError::Service(
@@ -2783,6 +2792,7 @@ impl DeleteOutboundCrossClusterSearchConnectionError {
         res: BufferedHttpResponse,
     ) -> RusotoError<DeleteOutboundCrossClusterSearchConnectionError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "DisabledOperationException" => {
                     return RusotoError::Service(
@@ -2833,6 +2843,7 @@ pub enum DeletePackageError {
 impl DeletePackageError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeletePackageError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(DeletePackageError::AccessDenied(err.msg))
@@ -2883,6 +2894,7 @@ impl DescribeElasticsearchDomainError {
         res: BufferedHttpResponse,
     ) -> RusotoError<DescribeElasticsearchDomainError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BaseException" => {
                     return RusotoError::Service(DescribeElasticsearchDomainError::Base(err.msg))
@@ -2931,6 +2943,7 @@ impl DescribeElasticsearchDomainConfigError {
         res: BufferedHttpResponse,
     ) -> RusotoError<DescribeElasticsearchDomainConfigError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BaseException" => {
                     return RusotoError::Service(DescribeElasticsearchDomainConfigError::Base(
@@ -2981,6 +2994,7 @@ impl DescribeElasticsearchDomainsError {
         res: BufferedHttpResponse,
     ) -> RusotoError<DescribeElasticsearchDomainsError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BaseException" => {
                     return RusotoError::Service(DescribeElasticsearchDomainsError::Base(err.msg))
@@ -3027,6 +3041,7 @@ impl DescribeElasticsearchInstanceTypeLimitsError {
         res: BufferedHttpResponse,
     ) -> RusotoError<DescribeElasticsearchInstanceTypeLimitsError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BaseException" => {
                     return RusotoError::Service(
@@ -3095,6 +3110,7 @@ impl DescribeInboundCrossClusterSearchConnectionsError {
         res: BufferedHttpResponse,
     ) -> RusotoError<DescribeInboundCrossClusterSearchConnectionsError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "DisabledOperationException" => {
                     return RusotoError::Service(
@@ -3145,6 +3161,7 @@ impl DescribeOutboundCrossClusterSearchConnectionsError {
         res: BufferedHttpResponse,
     ) -> RusotoError<DescribeOutboundCrossClusterSearchConnectionsError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "DisabledOperationException" => {
                     return RusotoError::Service(
@@ -3197,6 +3214,7 @@ pub enum DescribePackagesError {
 impl DescribePackagesError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribePackagesError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(DescribePackagesError::AccessDenied(err.msg))
@@ -3245,6 +3263,7 @@ impl DescribeReservedElasticsearchInstanceOfferingsError {
         res: BufferedHttpResponse,
     ) -> RusotoError<DescribeReservedElasticsearchInstanceOfferingsError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "DisabledOperationException" => {
                     return RusotoError::Service(
@@ -3305,6 +3324,7 @@ impl DescribeReservedElasticsearchInstancesError {
         res: BufferedHttpResponse,
     ) -> RusotoError<DescribeReservedElasticsearchInstancesError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "DisabledOperationException" => {
                     return RusotoError::Service(
@@ -3363,6 +3383,7 @@ pub enum DissociatePackageError {
 impl DissociatePackageError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DissociatePackageError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(DissociatePackageError::AccessDenied(err.msg))
@@ -3417,6 +3438,7 @@ impl GetCompatibleElasticsearchVersionsError {
         res: BufferedHttpResponse,
     ) -> RusotoError<GetCompatibleElasticsearchVersionsError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BaseException" => {
                     return RusotoError::Service(GetCompatibleElasticsearchVersionsError::Base(
@@ -3477,6 +3499,7 @@ pub enum GetPackageVersionHistoryError {
 impl GetPackageVersionHistoryError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetPackageVersionHistoryError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(GetPackageVersionHistoryError::AccessDenied(
@@ -3529,6 +3552,7 @@ pub enum GetUpgradeHistoryError {
 impl GetUpgradeHistoryError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetUpgradeHistoryError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BaseException" => {
                     return RusotoError::Service(GetUpgradeHistoryError::Base(err.msg))
@@ -3577,6 +3601,7 @@ pub enum GetUpgradeStatusError {
 impl GetUpgradeStatusError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetUpgradeStatusError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BaseException" => {
                     return RusotoError::Service(GetUpgradeStatusError::Base(err.msg))
@@ -3619,6 +3644,7 @@ pub enum ListDomainNamesError {
 impl ListDomainNamesError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListDomainNamesError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BaseException" => {
                     return RusotoError::Service(ListDomainNamesError::Base(err.msg))
@@ -3655,6 +3681,7 @@ pub enum ListDomainsForPackageError {
 impl ListDomainsForPackageError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListDomainsForPackageError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(ListDomainsForPackageError::AccessDenied(err.msg))
@@ -3705,6 +3732,7 @@ impl ListElasticsearchInstanceTypesError {
         res: BufferedHttpResponse,
     ) -> RusotoError<ListElasticsearchInstanceTypesError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BaseException" => {
                     return RusotoError::Service(ListElasticsearchInstanceTypesError::Base(err.msg))
@@ -3753,6 +3781,7 @@ pub enum ListElasticsearchVersionsError {
 impl ListElasticsearchVersionsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListElasticsearchVersionsError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BaseException" => {
                     return RusotoError::Service(ListElasticsearchVersionsError::Base(err.msg))
@@ -3799,6 +3828,7 @@ pub enum ListPackagesForDomainError {
 impl ListPackagesForDomainError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListPackagesForDomainError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(ListPackagesForDomainError::AccessDenied(err.msg))
@@ -3847,6 +3877,7 @@ pub enum ListTagsError {
 impl ListTagsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListTagsError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BaseException" => return RusotoError::Service(ListTagsError::Base(err.msg)),
                 "InternalException" => {
@@ -3893,6 +3924,7 @@ impl PurchaseReservedElasticsearchInstanceOfferingError {
         res: BufferedHttpResponse,
     ) -> RusotoError<PurchaseReservedElasticsearchInstanceOfferingError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "DisabledOperationException" => {
                     return RusotoError::Service(
@@ -3969,6 +4001,7 @@ impl RejectInboundCrossClusterSearchConnectionError {
         res: BufferedHttpResponse,
     ) -> RusotoError<RejectInboundCrossClusterSearchConnectionError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "DisabledOperationException" => {
                     return RusotoError::Service(
@@ -4013,6 +4046,7 @@ pub enum RemoveTagsError {
 impl RemoveTagsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<RemoveTagsError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BaseException" => return RusotoError::Service(RemoveTagsError::Base(err.msg)),
                 "InternalException" => {
@@ -4051,6 +4085,7 @@ impl StartElasticsearchServiceSoftwareUpdateError {
         res: BufferedHttpResponse,
     ) -> RusotoError<StartElasticsearchServiceSoftwareUpdateError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BaseException" => {
                     return RusotoError::Service(
@@ -4109,6 +4144,7 @@ impl UpdateElasticsearchDomainConfigError {
         res: BufferedHttpResponse,
     ) -> RusotoError<UpdateElasticsearchDomainConfigError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BaseException" => {
                     return RusotoError::Service(UpdateElasticsearchDomainConfigError::Base(
@@ -4177,6 +4213,7 @@ pub enum UpdatePackageError {
 impl UpdatePackageError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdatePackageError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(UpdatePackageError::AccessDenied(err.msg))
@@ -4231,6 +4268,7 @@ impl UpgradeElasticsearchDomainError {
         res: BufferedHttpResponse,
     ) -> RusotoError<UpgradeElasticsearchDomainError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BaseException" => {
                     return RusotoError::Service(UpgradeElasticsearchDomainError::Base(err.msg))
@@ -4607,6 +4645,7 @@ impl Es for EsClient {
         AcceptInboundCrossClusterSearchConnectionResponse,
         RusotoError<AcceptInboundCrossClusterSearchConnectionError>,
     > {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/2015-01-01/es/ccs/inboundConnection/{connection_id}/accept",
             connection_id = input.cross_cluster_search_connection_id
@@ -4635,6 +4674,7 @@ impl Es for EsClient {
     /// <p>Attaches tags to an existing Elasticsearch domain. Tags are a set of case-sensitive key value pairs. An Elasticsearch domain may have up to 10 tags. See <a href="http://docs.aws.amazon.com/elasticsearch-service/latest/developerguide/es-managedomains.html#es-managedomains-awsresorcetagging" target="_blank"> Tagging Amazon Elasticsearch Service Domains for more information.</a></p>
     #[allow(unused_mut)]
     async fn add_tags(&self, input: AddTagsRequest) -> Result<(), RusotoError<AddTagsError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/2015-01-01/tags";
 
         let mut request = SignedRequest::new("POST", "es", &self.region, &request_uri);
@@ -4650,9 +4690,9 @@ impl Es for EsClient {
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
             let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = ::std::mem::drop(response);
+            let _result = ::std::mem::drop(response);
 
-            Ok(result)
+            Ok(())
         } else {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             Err(AddTagsError::from_response(response))
@@ -4665,6 +4705,7 @@ impl Es for EsClient {
         &self,
         input: AssociatePackageRequest,
     ) -> Result<AssociatePackageResponse, RusotoError<AssociatePackageError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/2015-01-01/packages/associate/{package_id}/{domain_name}",
             domain_name = input.domain_name,
@@ -4700,6 +4741,7 @@ impl Es for EsClient {
         CancelElasticsearchServiceSoftwareUpdateResponse,
         RusotoError<CancelElasticsearchServiceSoftwareUpdateError>,
     > {
+        #![allow(clippy::needless_update)]
         let request_uri = "/2015-01-01/es/serviceSoftwareUpdate/cancel";
 
         let mut request = SignedRequest::new("POST", "es", &self.region, &request_uri);
@@ -4732,6 +4774,7 @@ impl Es for EsClient {
         input: CreateElasticsearchDomainRequest,
     ) -> Result<CreateElasticsearchDomainResponse, RusotoError<CreateElasticsearchDomainError>>
     {
+        #![allow(clippy::needless_update)]
         let request_uri = "/2015-01-01/es/domain";
 
         let mut request = SignedRequest::new("POST", "es", &self.region, &request_uri);
@@ -4766,6 +4809,7 @@ impl Es for EsClient {
         CreateOutboundCrossClusterSearchConnectionResponse,
         RusotoError<CreateOutboundCrossClusterSearchConnectionError>,
     > {
+        #![allow(clippy::needless_update)]
         let request_uri = "/2015-01-01/es/ccs/outboundConnection";
 
         let mut request = SignedRequest::new("POST", "es", &self.region, &request_uri);
@@ -4797,6 +4841,7 @@ impl Es for EsClient {
         &self,
         input: CreatePackageRequest,
     ) -> Result<CreatePackageResponse, RusotoError<CreatePackageError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/2015-01-01/packages";
 
         let mut request = SignedRequest::new("POST", "es", &self.region, &request_uri);
@@ -4829,6 +4874,7 @@ impl Es for EsClient {
         input: DeleteElasticsearchDomainRequest,
     ) -> Result<DeleteElasticsearchDomainResponse, RusotoError<DeleteElasticsearchDomainError>>
     {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/2015-01-01/es/domain/{domain_name}",
             domain_name = input.domain_name
@@ -4859,6 +4905,7 @@ impl Es for EsClient {
     async fn delete_elasticsearch_service_role(
         &self,
     ) -> Result<(), RusotoError<DeleteElasticsearchServiceRoleError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/2015-01-01/es/role";
 
         let mut request = SignedRequest::new("DELETE", "es", &self.region, &request_uri);
@@ -4871,9 +4918,9 @@ impl Es for EsClient {
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
             let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = ::std::mem::drop(response);
+            let _result = ::std::mem::drop(response);
 
-            Ok(result)
+            Ok(())
         } else {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             Err(DeleteElasticsearchServiceRoleError::from_response(response))
@@ -4889,6 +4936,7 @@ impl Es for EsClient {
         DeleteInboundCrossClusterSearchConnectionResponse,
         RusotoError<DeleteInboundCrossClusterSearchConnectionError>,
     > {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/2015-01-01/es/ccs/inboundConnection/{connection_id}",
             connection_id = input.cross_cluster_search_connection_id
@@ -4923,6 +4971,7 @@ impl Es for EsClient {
         DeleteOutboundCrossClusterSearchConnectionResponse,
         RusotoError<DeleteOutboundCrossClusterSearchConnectionError>,
     > {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/2015-01-01/es/ccs/outboundConnection/{connection_id}",
             connection_id = input.cross_cluster_search_connection_id
@@ -4954,6 +5003,7 @@ impl Es for EsClient {
         &self,
         input: DeletePackageRequest,
     ) -> Result<DeletePackageResponse, RusotoError<DeletePackageError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/2015-01-01/packages/{package_id}",
             package_id = input.package_id
@@ -4986,6 +5036,7 @@ impl Es for EsClient {
         input: DescribeElasticsearchDomainRequest,
     ) -> Result<DescribeElasticsearchDomainResponse, RusotoError<DescribeElasticsearchDomainError>>
     {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/2015-01-01/es/domain/{domain_name}",
             domain_name = input.domain_name
@@ -5020,6 +5071,7 @@ impl Es for EsClient {
         DescribeElasticsearchDomainConfigResponse,
         RusotoError<DescribeElasticsearchDomainConfigError>,
     > {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/2015-01-01/es/domain/{domain_name}/config",
             domain_name = input.domain_name
@@ -5054,6 +5106,7 @@ impl Es for EsClient {
         input: DescribeElasticsearchDomainsRequest,
     ) -> Result<DescribeElasticsearchDomainsResponse, RusotoError<DescribeElasticsearchDomainsError>>
     {
+        #![allow(clippy::needless_update)]
         let request_uri = "/2015-01-01/es/domain-info";
 
         let mut request = SignedRequest::new("POST", "es", &self.region, &request_uri);
@@ -5088,6 +5141,7 @@ impl Es for EsClient {
         DescribeElasticsearchInstanceTypeLimitsResponse,
         RusotoError<DescribeElasticsearchInstanceTypeLimitsError>,
     > {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/2015-01-01/es/instanceTypeLimits/{elasticsearch_version}/{instance_type}",
             elasticsearch_version = input.elasticsearch_version,
@@ -5131,6 +5185,7 @@ impl Es for EsClient {
         DescribeInboundCrossClusterSearchConnectionsResponse,
         RusotoError<DescribeInboundCrossClusterSearchConnectionsError>,
     > {
+        #![allow(clippy::needless_update)]
         let request_uri = "/2015-01-01/es/ccs/inboundConnection/search";
 
         let mut request = SignedRequest::new("POST", "es", &self.region, &request_uri);
@@ -5166,6 +5221,7 @@ impl Es for EsClient {
         DescribeOutboundCrossClusterSearchConnectionsResponse,
         RusotoError<DescribeOutboundCrossClusterSearchConnectionsError>,
     > {
+        #![allow(clippy::needless_update)]
         let request_uri = "/2015-01-01/es/ccs/outboundConnection/search";
 
         let mut request = SignedRequest::new("POST", "es", &self.region, &request_uri);
@@ -5198,6 +5254,7 @@ impl Es for EsClient {
         &self,
         input: DescribePackagesRequest,
     ) -> Result<DescribePackagesResponse, RusotoError<DescribePackagesError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/2015-01-01/packages/describe";
 
         let mut request = SignedRequest::new("POST", "es", &self.region, &request_uri);
@@ -5232,6 +5289,7 @@ impl Es for EsClient {
         DescribeReservedElasticsearchInstanceOfferingsResponse,
         RusotoError<DescribeReservedElasticsearchInstanceOfferingsError>,
     > {
+        #![allow(clippy::needless_update)]
         let request_uri = "/2015-01-01/es/reservedInstanceOfferings";
 
         let mut request = SignedRequest::new("GET", "es", &self.region, &request_uri);
@@ -5276,6 +5334,7 @@ impl Es for EsClient {
         DescribeReservedElasticsearchInstancesResponse,
         RusotoError<DescribeReservedElasticsearchInstancesError>,
     > {
+        #![allow(clippy::needless_update)]
         let request_uri = "/2015-01-01/es/reservedInstances";
 
         let mut request = SignedRequest::new("GET", "es", &self.region, &request_uri);
@@ -5318,6 +5377,7 @@ impl Es for EsClient {
         &self,
         input: DissociatePackageRequest,
     ) -> Result<DissociatePackageResponse, RusotoError<DissociatePackageError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/2015-01-01/packages/dissociate/{package_id}/{domain_name}",
             domain_name = input.domain_name,
@@ -5353,6 +5413,7 @@ impl Es for EsClient {
         GetCompatibleElasticsearchVersionsResponse,
         RusotoError<GetCompatibleElasticsearchVersionsError>,
     > {
+        #![allow(clippy::needless_update)]
         let request_uri = "/2015-01-01/es/compatibleVersions";
 
         let mut request = SignedRequest::new("GET", "es", &self.region, &request_uri);
@@ -5389,6 +5450,7 @@ impl Es for EsClient {
         &self,
         input: GetPackageVersionHistoryRequest,
     ) -> Result<GetPackageVersionHistoryResponse, RusotoError<GetPackageVersionHistoryError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/2015-01-01/packages/{package_id}/history",
             package_id = input.package_id
@@ -5429,6 +5491,7 @@ impl Es for EsClient {
         &self,
         input: GetUpgradeHistoryRequest,
     ) -> Result<GetUpgradeHistoryResponse, RusotoError<GetUpgradeHistoryError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/2015-01-01/es/upgradeDomain/{domain_name}/history",
             domain_name = input.domain_name
@@ -5469,6 +5532,7 @@ impl Es for EsClient {
         &self,
         input: GetUpgradeStatusRequest,
     ) -> Result<GetUpgradeStatusResponse, RusotoError<GetUpgradeStatusError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/2015-01-01/es/upgradeDomain/{domain_name}/status",
             domain_name = input.domain_name
@@ -5499,6 +5563,7 @@ impl Es for EsClient {
     async fn list_domain_names(
         &self,
     ) -> Result<ListDomainNamesResponse, RusotoError<ListDomainNamesError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/2015-01-01/domain";
 
         let mut request = SignedRequest::new("GET", "es", &self.region, &request_uri);
@@ -5527,6 +5592,7 @@ impl Es for EsClient {
         &self,
         input: ListDomainsForPackageRequest,
     ) -> Result<ListDomainsForPackageResponse, RusotoError<ListDomainsForPackageError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/2015-01-01/packages/{package_id}/domains",
             package_id = input.package_id
@@ -5570,6 +5636,7 @@ impl Es for EsClient {
         ListElasticsearchInstanceTypesResponse,
         RusotoError<ListElasticsearchInstanceTypesError>,
     > {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/2015-01-01/es/instanceTypes/{elasticsearch_version}",
             elasticsearch_version = input.elasticsearch_version
@@ -5614,6 +5681,7 @@ impl Es for EsClient {
         input: ListElasticsearchVersionsRequest,
     ) -> Result<ListElasticsearchVersionsResponse, RusotoError<ListElasticsearchVersionsError>>
     {
+        #![allow(clippy::needless_update)]
         let request_uri = "/2015-01-01/es/versions";
 
         let mut request = SignedRequest::new("GET", "es", &self.region, &request_uri);
@@ -5651,6 +5719,7 @@ impl Es for EsClient {
         &self,
         input: ListPackagesForDomainRequest,
     ) -> Result<ListPackagesForDomainResponse, RusotoError<ListPackagesForDomainError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/2015-01-01/domain/{domain_name}/packages",
             domain_name = input.domain_name
@@ -5691,6 +5760,7 @@ impl Es for EsClient {
         &self,
         input: ListTagsRequest,
     ) -> Result<ListTagsResponse, RusotoError<ListTagsError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/2015-01-01/tags/";
 
         let mut request = SignedRequest::new("GET", "es", &self.region, &request_uri);
@@ -5726,6 +5796,7 @@ impl Es for EsClient {
         PurchaseReservedElasticsearchInstanceOfferingResponse,
         RusotoError<PurchaseReservedElasticsearchInstanceOfferingError>,
     > {
+        #![allow(clippy::needless_update)]
         let request_uri = "/2015-01-01/es/purchaseReservedInstanceOffering";
 
         let mut request = SignedRequest::new("POST", "es", &self.region, &request_uri);
@@ -5761,6 +5832,7 @@ impl Es for EsClient {
         RejectInboundCrossClusterSearchConnectionResponse,
         RusotoError<RejectInboundCrossClusterSearchConnectionError>,
     > {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/2015-01-01/es/ccs/inboundConnection/{connection_id}/reject",
             connection_id = input.cross_cluster_search_connection_id
@@ -5792,6 +5864,7 @@ impl Es for EsClient {
         &self,
         input: RemoveTagsRequest,
     ) -> Result<(), RusotoError<RemoveTagsError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/2015-01-01/tags-removal";
 
         let mut request = SignedRequest::new("POST", "es", &self.region, &request_uri);
@@ -5807,9 +5880,9 @@ impl Es for EsClient {
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
             let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = ::std::mem::drop(response);
+            let _result = ::std::mem::drop(response);
 
-            Ok(result)
+            Ok(())
         } else {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             Err(RemoveTagsError::from_response(response))
@@ -5825,6 +5898,7 @@ impl Es for EsClient {
         StartElasticsearchServiceSoftwareUpdateResponse,
         RusotoError<StartElasticsearchServiceSoftwareUpdateError>,
     > {
+        #![allow(clippy::needless_update)]
         let request_uri = "/2015-01-01/es/serviceSoftwareUpdate/start";
 
         let mut request = SignedRequest::new("POST", "es", &self.region, &request_uri);
@@ -5861,6 +5935,7 @@ impl Es for EsClient {
         UpdateElasticsearchDomainConfigResponse,
         RusotoError<UpdateElasticsearchDomainConfigError>,
     > {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/2015-01-01/es/domain/{domain_name}/config",
             domain_name = input.domain_name
@@ -5897,6 +5972,7 @@ impl Es for EsClient {
         &self,
         input: UpdatePackageRequest,
     ) -> Result<UpdatePackageResponse, RusotoError<UpdatePackageError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/2015-01-01/packages/update";
 
         let mut request = SignedRequest::new("POST", "es", &self.region, &request_uri);
@@ -5929,6 +6005,7 @@ impl Es for EsClient {
         input: UpgradeElasticsearchDomainRequest,
     ) -> Result<UpgradeElasticsearchDomainResponse, RusotoError<UpgradeElasticsearchDomainError>>
     {
+        #![allow(clippy::needless_update)]
         let request_uri = "/2015-01-01/es/upgradeDomain";
 
         let mut request = SignedRequest::new("POST", "es", &self.region, &request_uri);

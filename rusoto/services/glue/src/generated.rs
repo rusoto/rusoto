@@ -49,7 +49,6 @@ impl GlueClient {
     }
 }
 
-use serde_json;
 /// <p>Defines an action to be initiated by a trigger.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct Action {
@@ -7993,6 +7992,7 @@ pub enum BatchCreatePartitionError {
 impl BatchCreatePartitionError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<BatchCreatePartitionError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AlreadyExistsException" => {
                     return RusotoError::Service(BatchCreatePartitionError::AlreadyExists(err.msg))
@@ -8057,6 +8057,7 @@ pub enum BatchDeleteConnectionError {
 impl BatchDeleteConnectionError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<BatchDeleteConnectionError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalServiceException" => {
                     return RusotoError::Service(BatchDeleteConnectionError::InternalService(
@@ -8101,6 +8102,7 @@ pub enum BatchDeletePartitionError {
 impl BatchDeletePartitionError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<BatchDeletePartitionError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "EntityNotFoundException" => {
                     return RusotoError::Service(BatchDeletePartitionError::EntityNotFound(err.msg))
@@ -8153,6 +8155,7 @@ pub enum BatchDeleteTableError {
 impl BatchDeleteTableError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<BatchDeleteTableError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "EntityNotFoundException" => {
                     return RusotoError::Service(BatchDeleteTableError::EntityNotFound(err.msg))
@@ -8201,6 +8204,7 @@ pub enum BatchDeleteTableVersionError {
 impl BatchDeleteTableVersionError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<BatchDeleteTableVersionError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "EntityNotFoundException" => {
                     return RusotoError::Service(BatchDeleteTableVersionError::EntityNotFound(
@@ -8253,6 +8257,7 @@ pub enum BatchGetCrawlersError {
 impl BatchGetCrawlersError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<BatchGetCrawlersError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidInputException" => {
                     return RusotoError::Service(BatchGetCrawlersError::InvalidInput(err.msg))
@@ -8293,6 +8298,7 @@ pub enum BatchGetDevEndpointsError {
 impl BatchGetDevEndpointsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<BatchGetDevEndpointsError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(BatchGetDevEndpointsError::AccessDenied(err.msg))
@@ -8343,6 +8349,7 @@ pub enum BatchGetJobsError {
 impl BatchGetJobsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<BatchGetJobsError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalServiceException" => {
                     return RusotoError::Service(BatchGetJobsError::InternalService(err.msg))
@@ -8389,6 +8396,7 @@ pub enum BatchGetPartitionError {
 impl BatchGetPartitionError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<BatchGetPartitionError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "EntityNotFoundException" => {
                     return RusotoError::Service(BatchGetPartitionError::EntityNotFound(err.msg))
@@ -8439,6 +8447,7 @@ pub enum BatchGetTriggersError {
 impl BatchGetTriggersError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<BatchGetTriggersError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalServiceException" => {
                     return RusotoError::Service(BatchGetTriggersError::InternalService(err.msg))
@@ -8481,6 +8490,7 @@ pub enum BatchGetWorkflowsError {
 impl BatchGetWorkflowsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<BatchGetWorkflowsError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalServiceException" => {
                     return RusotoError::Service(BatchGetWorkflowsError::InternalService(err.msg))
@@ -8523,6 +8533,7 @@ pub enum GlueBatchStopJobRunError {
 impl GlueBatchStopJobRunError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GlueBatchStopJobRunError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalServiceException" => {
                     return RusotoError::Service(GlueBatchStopJobRunError::InternalService(err.msg))
@@ -8571,6 +8582,7 @@ pub enum BatchUpdatePartitionError {
 impl BatchUpdatePartitionError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<BatchUpdatePartitionError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "EntityNotFoundException" => {
                     return RusotoError::Service(BatchUpdatePartitionError::EntityNotFound(err.msg))
@@ -8627,6 +8639,7 @@ pub enum CancelMLTaskRunError {
 impl CancelMLTaskRunError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CancelMLTaskRunError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "EntityNotFoundException" => {
                     return RusotoError::Service(CancelMLTaskRunError::EntityNotFound(err.msg))
@@ -8675,6 +8688,7 @@ impl CheckSchemaVersionValidityError {
         res: BufferedHttpResponse,
     ) -> RusotoError<CheckSchemaVersionValidityError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(CheckSchemaVersionValidityError::AccessDenied(
@@ -8723,6 +8737,7 @@ pub enum CreateClassifierError {
 impl CreateClassifierError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateClassifierError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AlreadyExistsException" => {
                     return RusotoError::Service(CreateClassifierError::AlreadyExists(err.msg))
@@ -8769,6 +8784,7 @@ pub enum CreateConnectionError {
 impl CreateConnectionError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateConnectionError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AlreadyExistsException" => {
                     return RusotoError::Service(CreateConnectionError::AlreadyExists(err.msg))
@@ -8823,6 +8839,7 @@ pub enum CreateCrawlerError {
 impl CreateCrawlerError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateCrawlerError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AlreadyExistsException" => {
                     return RusotoError::Service(CreateCrawlerError::AlreadyExists(err.msg))
@@ -8877,6 +8894,7 @@ pub enum CreateDatabaseError {
 impl CreateDatabaseError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateDatabaseError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AlreadyExistsException" => {
                     return RusotoError::Service(CreateDatabaseError::AlreadyExists(err.msg))
@@ -8941,6 +8959,7 @@ pub enum CreateDevEndpointError {
 impl CreateDevEndpointError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateDevEndpointError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(CreateDevEndpointError::AccessDenied(err.msg))
@@ -9015,6 +9034,7 @@ pub enum CreateJobError {
 impl CreateJobError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateJobError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AlreadyExistsException" => {
                     return RusotoError::Service(CreateJobError::AlreadyExists(err.msg))
@@ -9085,6 +9105,7 @@ pub enum CreateMLTransformError {
 impl CreateMLTransformError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateMLTransformError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(CreateMLTransformError::AccessDenied(err.msg))
@@ -9159,6 +9180,7 @@ pub enum CreatePartitionError {
 impl CreatePartitionError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreatePartitionError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AlreadyExistsException" => {
                     return RusotoError::Service(CreatePartitionError::AlreadyExists(err.msg))
@@ -9227,6 +9249,7 @@ pub enum CreatePartitionIndexError {
 impl CreatePartitionIndexError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreatePartitionIndexError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AlreadyExistsException" => {
                     return RusotoError::Service(CreatePartitionIndexError::AlreadyExists(err.msg))
@@ -9297,6 +9320,7 @@ pub enum CreateRegistryError {
 impl CreateRegistryError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateRegistryError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(CreateRegistryError::AccessDenied(err.msg))
@@ -9355,6 +9379,7 @@ pub enum CreateSchemaError {
 impl CreateSchemaError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateSchemaError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(CreateSchemaError::AccessDenied(err.msg))
@@ -9411,6 +9436,7 @@ pub enum CreateScriptError {
 impl CreateScriptError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateScriptError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalServiceException" => {
                     return RusotoError::Service(CreateScriptError::InternalService(err.msg))
@@ -9459,6 +9485,7 @@ impl CreateSecurityConfigurationError {
         res: BufferedHttpResponse,
     ) -> RusotoError<CreateSecurityConfigurationError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AlreadyExistsException" => {
                     return RusotoError::Service(CreateSecurityConfigurationError::AlreadyExists(
@@ -9529,6 +9556,7 @@ pub enum CreateTableError {
 impl CreateTableError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateTableError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AlreadyExistsException" => {
                     return RusotoError::Service(CreateTableError::AlreadyExists(err.msg))
@@ -9599,6 +9627,7 @@ pub enum CreateTriggerError {
 impl CreateTriggerError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateTriggerError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AlreadyExistsException" => {
                     return RusotoError::Service(CreateTriggerError::AlreadyExists(err.msg))
@@ -9675,6 +9704,7 @@ pub enum CreateUserDefinedFunctionError {
 impl CreateUserDefinedFunctionError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateUserDefinedFunctionError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AlreadyExistsException" => {
                     return RusotoError::Service(CreateUserDefinedFunctionError::AlreadyExists(
@@ -9755,6 +9785,7 @@ pub enum CreateWorkflowError {
 impl CreateWorkflowError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateWorkflowError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AlreadyExistsException" => {
                     return RusotoError::Service(CreateWorkflowError::AlreadyExists(err.msg))
@@ -9811,6 +9842,7 @@ pub enum DeleteClassifierError {
 impl DeleteClassifierError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteClassifierError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "EntityNotFoundException" => {
                     return RusotoError::Service(DeleteClassifierError::EntityNotFound(err.msg))
@@ -9855,6 +9887,7 @@ impl DeleteColumnStatisticsForPartitionError {
         res: BufferedHttpResponse,
     ) -> RusotoError<DeleteColumnStatisticsForPartitionError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "EntityNotFoundException" => {
                     return RusotoError::Service(
@@ -9931,6 +9964,7 @@ impl DeleteColumnStatisticsForTableError {
         res: BufferedHttpResponse,
     ) -> RusotoError<DeleteColumnStatisticsForTableError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "EntityNotFoundException" => {
                     return RusotoError::Service(
@@ -9997,6 +10031,7 @@ pub enum DeleteConnectionError {
 impl DeleteConnectionError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteConnectionError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "EntityNotFoundException" => {
                     return RusotoError::Service(DeleteConnectionError::EntityNotFound(err.msg))
@@ -10037,6 +10072,7 @@ pub enum DeleteCrawlerError {
 impl DeleteCrawlerError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteCrawlerError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "CrawlerRunningException" => {
                     return RusotoError::Service(DeleteCrawlerError::CrawlerRunning(err.msg))
@@ -10087,6 +10123,7 @@ pub enum DeleteDatabaseError {
 impl DeleteDatabaseError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteDatabaseError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "EntityNotFoundException" => {
                     return RusotoError::Service(DeleteDatabaseError::EntityNotFound(err.msg))
@@ -10135,6 +10172,7 @@ pub enum DeleteDevEndpointError {
 impl DeleteDevEndpointError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteDevEndpointError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "EntityNotFoundException" => {
                     return RusotoError::Service(DeleteDevEndpointError::EntityNotFound(err.msg))
@@ -10181,6 +10219,7 @@ pub enum DeleteJobError {
 impl DeleteJobError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteJobError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalServiceException" => {
                     return RusotoError::Service(DeleteJobError::InternalService(err.msg))
@@ -10225,6 +10264,7 @@ pub enum DeleteMLTransformError {
 impl DeleteMLTransformError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteMLTransformError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "EntityNotFoundException" => {
                     return RusotoError::Service(DeleteMLTransformError::EntityNotFound(err.msg))
@@ -10273,6 +10313,7 @@ pub enum DeletePartitionError {
 impl DeletePartitionError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeletePartitionError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "EntityNotFoundException" => {
                     return RusotoError::Service(DeletePartitionError::EntityNotFound(err.msg))
@@ -10325,6 +10366,7 @@ pub enum DeletePartitionIndexError {
 impl DeletePartitionIndexError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeletePartitionIndexError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ConflictException" => {
                     return RusotoError::Service(DeletePartitionIndexError::Conflict(err.msg))
@@ -10385,6 +10427,7 @@ pub enum DeleteRegistryError {
 impl DeleteRegistryError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteRegistryError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(DeleteRegistryError::AccessDenied(err.msg))
@@ -10437,6 +10480,7 @@ pub enum DeleteResourcePolicyError {
 impl DeleteResourcePolicyError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteResourcePolicyError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ConditionCheckFailureException" => {
                     return RusotoError::Service(DeleteResourcePolicyError::ConditionCheckFailure(
@@ -10495,6 +10539,7 @@ pub enum DeleteSchemaError {
 impl DeleteSchemaError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteSchemaError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(DeleteSchemaError::AccessDenied(err.msg))
@@ -10543,6 +10588,7 @@ pub enum DeleteSchemaVersionsError {
 impl DeleteSchemaVersionsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteSchemaVersionsError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(DeleteSchemaVersionsError::AccessDenied(err.msg))
@@ -10595,6 +10641,7 @@ impl DeleteSecurityConfigurationError {
         res: BufferedHttpResponse,
     ) -> RusotoError<DeleteSecurityConfigurationError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "EntityNotFoundException" => {
                     return RusotoError::Service(DeleteSecurityConfigurationError::EntityNotFound(
@@ -10651,6 +10698,7 @@ pub enum DeleteTableError {
 impl DeleteTableError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteTableError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "EntityNotFoundException" => {
                     return RusotoError::Service(DeleteTableError::EntityNotFound(err.msg))
@@ -10699,6 +10747,7 @@ pub enum DeleteTableVersionError {
 impl DeleteTableVersionError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteTableVersionError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "EntityNotFoundException" => {
                     return RusotoError::Service(DeleteTableVersionError::EntityNotFound(err.msg))
@@ -10747,6 +10796,7 @@ pub enum DeleteTriggerError {
 impl DeleteTriggerError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteTriggerError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ConcurrentModificationException" => {
                     return RusotoError::Service(DeleteTriggerError::ConcurrentModification(
@@ -10797,6 +10847,7 @@ pub enum DeleteUserDefinedFunctionError {
 impl DeleteUserDefinedFunctionError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteUserDefinedFunctionError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "EntityNotFoundException" => {
                     return RusotoError::Service(DeleteUserDefinedFunctionError::EntityNotFound(
@@ -10853,6 +10904,7 @@ pub enum DeleteWorkflowError {
 impl DeleteWorkflowError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteWorkflowError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ConcurrentModificationException" => {
                     return RusotoError::Service(DeleteWorkflowError::ConcurrentModification(
@@ -10899,6 +10951,7 @@ pub enum GetCatalogImportStatusError {
 impl GetCatalogImportStatusError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetCatalogImportStatusError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalServiceException" => {
                     return RusotoError::Service(GetCatalogImportStatusError::InternalService(
@@ -10939,6 +10992,7 @@ pub enum GetClassifierError {
 impl GetClassifierError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetClassifierError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "EntityNotFoundException" => {
                     return RusotoError::Service(GetClassifierError::EntityNotFound(err.msg))
@@ -10973,6 +11027,7 @@ pub enum GetClassifiersError {
 impl GetClassifiersError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetClassifiersError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "OperationTimeoutException" => {
                     return RusotoError::Service(GetClassifiersError::OperationTimeout(err.msg))
@@ -11013,6 +11068,7 @@ impl GetColumnStatisticsForPartitionError {
         res: BufferedHttpResponse,
     ) -> RusotoError<GetColumnStatisticsForPartitionError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "EntityNotFoundException" => {
                     return RusotoError::Service(
@@ -11087,6 +11143,7 @@ impl GetColumnStatisticsForTableError {
         res: BufferedHttpResponse,
     ) -> RusotoError<GetColumnStatisticsForTableError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "EntityNotFoundException" => {
                     return RusotoError::Service(GetColumnStatisticsForTableError::EntityNotFound(
@@ -11149,6 +11206,7 @@ pub enum GetConnectionError {
 impl GetConnectionError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetConnectionError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "EntityNotFoundException" => {
                     return RusotoError::Service(GetConnectionError::EntityNotFound(err.msg))
@@ -11197,6 +11255,7 @@ pub enum GetConnectionsError {
 impl GetConnectionsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetConnectionsError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "EntityNotFoundException" => {
                     return RusotoError::Service(GetConnectionsError::EntityNotFound(err.msg))
@@ -11241,6 +11300,7 @@ pub enum GetCrawlerError {
 impl GetCrawlerError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetCrawlerError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "EntityNotFoundException" => {
                     return RusotoError::Service(GetCrawlerError::EntityNotFound(err.msg))
@@ -11275,6 +11335,7 @@ pub enum GetCrawlerMetricsError {
 impl GetCrawlerMetricsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetCrawlerMetricsError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "OperationTimeoutException" => {
                     return RusotoError::Service(GetCrawlerMetricsError::OperationTimeout(err.msg))
@@ -11305,6 +11366,7 @@ pub enum GetCrawlersError {
 impl GetCrawlersError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetCrawlersError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "OperationTimeoutException" => {
                     return RusotoError::Service(GetCrawlersError::OperationTimeout(err.msg))
@@ -11341,6 +11403,7 @@ impl GetDataCatalogEncryptionSettingsError {
         res: BufferedHttpResponse,
     ) -> RusotoError<GetDataCatalogEncryptionSettingsError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalServiceException" => {
                     return RusotoError::Service(
@@ -11399,6 +11462,7 @@ pub enum GetDatabaseError {
 impl GetDatabaseError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetDatabaseError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "EntityNotFoundException" => {
                     return RusotoError::Service(GetDatabaseError::EntityNotFound(err.msg))
@@ -11451,6 +11515,7 @@ pub enum GetDatabasesError {
 impl GetDatabasesError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetDatabasesError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "GlueEncryptionException" => {
                     return RusotoError::Service(GetDatabasesError::GlueEncryption(err.msg))
@@ -11497,6 +11562,7 @@ pub enum GetDataflowGraphError {
 impl GetDataflowGraphError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetDataflowGraphError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalServiceException" => {
                     return RusotoError::Service(GetDataflowGraphError::InternalService(err.msg))
@@ -11541,6 +11607,7 @@ pub enum GetDevEndpointError {
 impl GetDevEndpointError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetDevEndpointError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "EntityNotFoundException" => {
                     return RusotoError::Service(GetDevEndpointError::EntityNotFound(err.msg))
@@ -11589,6 +11656,7 @@ pub enum GetDevEndpointsError {
 impl GetDevEndpointsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetDevEndpointsError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "EntityNotFoundException" => {
                     return RusotoError::Service(GetDevEndpointsError::EntityNotFound(err.msg))
@@ -11637,6 +11705,7 @@ pub enum GetJobError {
 impl GetJobError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetJobError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "EntityNotFoundException" => {
                     return RusotoError::Service(GetJobError::EntityNotFound(err.msg))
@@ -11685,6 +11754,7 @@ pub enum GetJobBookmarkError {
 impl GetJobBookmarkError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetJobBookmarkError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "EntityNotFoundException" => {
                     return RusotoError::Service(GetJobBookmarkError::EntityNotFound(err.msg))
@@ -11733,6 +11803,7 @@ pub enum GetJobRunError {
 impl GetJobRunError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetJobRunError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "EntityNotFoundException" => {
                     return RusotoError::Service(GetJobRunError::EntityNotFound(err.msg))
@@ -11781,6 +11852,7 @@ pub enum GetJobRunsError {
 impl GetJobRunsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetJobRunsError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "EntityNotFoundException" => {
                     return RusotoError::Service(GetJobRunsError::EntityNotFound(err.msg))
@@ -11829,6 +11901,7 @@ pub enum GetJobsError {
 impl GetJobsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetJobsError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "EntityNotFoundException" => {
                     return RusotoError::Service(GetJobsError::EntityNotFound(err.msg))
@@ -11877,6 +11950,7 @@ pub enum GetMLTaskRunError {
 impl GetMLTaskRunError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetMLTaskRunError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "EntityNotFoundException" => {
                     return RusotoError::Service(GetMLTaskRunError::EntityNotFound(err.msg))
@@ -11925,6 +11999,7 @@ pub enum GetMLTaskRunsError {
 impl GetMLTaskRunsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetMLTaskRunsError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "EntityNotFoundException" => {
                     return RusotoError::Service(GetMLTaskRunsError::EntityNotFound(err.msg))
@@ -11973,6 +12048,7 @@ pub enum GetMLTransformError {
 impl GetMLTransformError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetMLTransformError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "EntityNotFoundException" => {
                     return RusotoError::Service(GetMLTransformError::EntityNotFound(err.msg))
@@ -12021,6 +12097,7 @@ pub enum GetMLTransformsError {
 impl GetMLTransformsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetMLTransformsError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "EntityNotFoundException" => {
                     return RusotoError::Service(GetMLTransformsError::EntityNotFound(err.msg))
@@ -12069,6 +12146,7 @@ pub enum GetMappingError {
 impl GetMappingError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetMappingError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "EntityNotFoundException" => {
                     return RusotoError::Service(GetMappingError::EntityNotFound(err.msg))
@@ -12119,6 +12197,7 @@ pub enum GetPartitionError {
 impl GetPartitionError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetPartitionError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "EntityNotFoundException" => {
                     return RusotoError::Service(GetPartitionError::EntityNotFound(err.msg))
@@ -12173,6 +12252,7 @@ pub enum GetPartitionIndexesError {
 impl GetPartitionIndexesError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetPartitionIndexesError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ConflictException" => {
                     return RusotoError::Service(GetPartitionIndexesError::Conflict(err.msg))
@@ -12229,6 +12309,7 @@ pub enum GetPartitionsError {
 impl GetPartitionsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetPartitionsError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "EntityNotFoundException" => {
                     return RusotoError::Service(GetPartitionsError::EntityNotFound(err.msg))
@@ -12279,6 +12360,7 @@ pub enum GetPlanError {
 impl GetPlanError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetPlanError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalServiceException" => {
                     return RusotoError::Service(GetPlanError::InternalService(err.msg))
@@ -12323,6 +12405,7 @@ pub enum GetRegistryError {
 impl GetRegistryError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetRegistryError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(GetRegistryError::AccessDenied(err.msg))
@@ -12371,6 +12454,7 @@ pub enum GetResourcePoliciesError {
 impl GetResourcePoliciesError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetResourcePoliciesError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "GlueEncryptionException" => {
                     return RusotoError::Service(GetResourcePoliciesError::GlueEncryption(err.msg))
@@ -12421,6 +12505,7 @@ pub enum GetResourcePolicyError {
 impl GetResourcePolicyError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetResourcePolicyError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "EntityNotFoundException" => {
                     return RusotoError::Service(GetResourcePolicyError::EntityNotFound(err.msg))
@@ -12469,6 +12554,7 @@ pub enum GetSchemaError {
 impl GetSchemaError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetSchemaError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(GetSchemaError::AccessDenied(err.msg))
@@ -12517,6 +12603,7 @@ pub enum GetSchemaByDefinitionError {
 impl GetSchemaByDefinitionError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetSchemaByDefinitionError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(GetSchemaByDefinitionError::AccessDenied(err.msg))
@@ -12569,6 +12656,7 @@ pub enum GetSchemaVersionError {
 impl GetSchemaVersionError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetSchemaVersionError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(GetSchemaVersionError::AccessDenied(err.msg))
@@ -12617,6 +12705,7 @@ pub enum GetSchemaVersionsDiffError {
 impl GetSchemaVersionsDiffError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetSchemaVersionsDiffError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(GetSchemaVersionsDiffError::AccessDenied(err.msg))
@@ -12669,6 +12758,7 @@ pub enum GetSecurityConfigurationError {
 impl GetSecurityConfigurationError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetSecurityConfigurationError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "EntityNotFoundException" => {
                     return RusotoError::Service(GetSecurityConfigurationError::EntityNotFound(
@@ -12725,6 +12815,7 @@ pub enum GetSecurityConfigurationsError {
 impl GetSecurityConfigurationsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetSecurityConfigurationsError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "EntityNotFoundException" => {
                     return RusotoError::Service(GetSecurityConfigurationsError::EntityNotFound(
@@ -12783,6 +12874,7 @@ pub enum GetTableError {
 impl GetTableError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetTableError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "EntityNotFoundException" => {
                     return RusotoError::Service(GetTableError::EntityNotFound(err.msg))
@@ -12837,6 +12929,7 @@ pub enum GetTableVersionError {
 impl GetTableVersionError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetTableVersionError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "EntityNotFoundException" => {
                     return RusotoError::Service(GetTableVersionError::EntityNotFound(err.msg))
@@ -12891,6 +12984,7 @@ pub enum GetTableVersionsError {
 impl GetTableVersionsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetTableVersionsError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "EntityNotFoundException" => {
                     return RusotoError::Service(GetTableVersionsError::EntityNotFound(err.msg))
@@ -12945,6 +13039,7 @@ pub enum GetTablesError {
 impl GetTablesError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetTablesError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "EntityNotFoundException" => {
                     return RusotoError::Service(GetTablesError::EntityNotFound(err.msg))
@@ -12997,6 +13092,7 @@ pub enum GetTagsError {
 impl GetTagsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetTagsError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "EntityNotFoundException" => {
                     return RusotoError::Service(GetTagsError::EntityNotFound(err.msg))
@@ -13045,6 +13141,7 @@ pub enum GetTriggerError {
 impl GetTriggerError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetTriggerError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "EntityNotFoundException" => {
                     return RusotoError::Service(GetTriggerError::EntityNotFound(err.msg))
@@ -13093,6 +13190,7 @@ pub enum GetTriggersError {
 impl GetTriggersError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetTriggersError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "EntityNotFoundException" => {
                     return RusotoError::Service(GetTriggersError::EntityNotFound(err.msg))
@@ -13143,6 +13241,7 @@ pub enum GetUserDefinedFunctionError {
 impl GetUserDefinedFunctionError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetUserDefinedFunctionError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "EntityNotFoundException" => {
                     return RusotoError::Service(GetUserDefinedFunctionError::EntityNotFound(
@@ -13205,6 +13304,7 @@ pub enum GetUserDefinedFunctionsError {
 impl GetUserDefinedFunctionsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetUserDefinedFunctionsError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "EntityNotFoundException" => {
                     return RusotoError::Service(GetUserDefinedFunctionsError::EntityNotFound(
@@ -13267,6 +13367,7 @@ pub enum GetWorkflowError {
 impl GetWorkflowError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetWorkflowError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "EntityNotFoundException" => {
                     return RusotoError::Service(GetWorkflowError::EntityNotFound(err.msg))
@@ -13315,6 +13416,7 @@ pub enum GetWorkflowRunError {
 impl GetWorkflowRunError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetWorkflowRunError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "EntityNotFoundException" => {
                     return RusotoError::Service(GetWorkflowRunError::EntityNotFound(err.msg))
@@ -13363,6 +13465,7 @@ pub enum GetWorkflowRunPropertiesError {
 impl GetWorkflowRunPropertiesError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetWorkflowRunPropertiesError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "EntityNotFoundException" => {
                     return RusotoError::Service(GetWorkflowRunPropertiesError::EntityNotFound(
@@ -13419,6 +13522,7 @@ pub enum GetWorkflowRunsError {
 impl GetWorkflowRunsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetWorkflowRunsError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "EntityNotFoundException" => {
                     return RusotoError::Service(GetWorkflowRunsError::EntityNotFound(err.msg))
@@ -13463,6 +13567,7 @@ pub enum ImportCatalogToGlueError {
 impl ImportCatalogToGlueError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ImportCatalogToGlueError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalServiceException" => {
                     return RusotoError::Service(ImportCatalogToGlueError::InternalService(err.msg))
@@ -13499,6 +13604,7 @@ pub enum ListCrawlersError {
 impl ListCrawlersError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListCrawlersError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "OperationTimeoutException" => {
                     return RusotoError::Service(ListCrawlersError::OperationTimeout(err.msg))
@@ -13535,6 +13641,7 @@ pub enum ListDevEndpointsError {
 impl ListDevEndpointsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListDevEndpointsError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "EntityNotFoundException" => {
                     return RusotoError::Service(ListDevEndpointsError::EntityNotFound(err.msg))
@@ -13583,6 +13690,7 @@ pub enum ListJobsError {
 impl ListJobsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListJobsError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "EntityNotFoundException" => {
                     return RusotoError::Service(ListJobsError::EntityNotFound(err.msg))
@@ -13631,6 +13739,7 @@ pub enum ListMLTransformsError {
 impl ListMLTransformsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListMLTransformsError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "EntityNotFoundException" => {
                     return RusotoError::Service(ListMLTransformsError::EntityNotFound(err.msg))
@@ -13677,6 +13786,7 @@ pub enum ListRegistriesError {
 impl ListRegistriesError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListRegistriesError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(ListRegistriesError::AccessDenied(err.msg))
@@ -13721,6 +13831,7 @@ pub enum ListSchemaVersionsError {
 impl ListSchemaVersionsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListSchemaVersionsError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(ListSchemaVersionsError::AccessDenied(err.msg))
@@ -13769,6 +13880,7 @@ pub enum ListSchemasError {
 impl ListSchemasError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListSchemasError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(ListSchemasError::AccessDenied(err.msg))
@@ -13817,6 +13929,7 @@ pub enum ListTriggersError {
 impl ListTriggersError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListTriggersError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "EntityNotFoundException" => {
                     return RusotoError::Service(ListTriggersError::EntityNotFound(err.msg))
@@ -13863,6 +13976,7 @@ pub enum ListWorkflowsError {
 impl ListWorkflowsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListWorkflowsError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalServiceException" => {
                     return RusotoError::Service(ListWorkflowsError::InternalService(err.msg))
@@ -13907,6 +14021,7 @@ impl PutDataCatalogEncryptionSettingsError {
         res: BufferedHttpResponse,
     ) -> RusotoError<PutDataCatalogEncryptionSettingsError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalServiceException" => {
                     return RusotoError::Service(
@@ -13965,6 +14080,7 @@ pub enum PutResourcePolicyError {
 impl PutResourcePolicyError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<PutResourcePolicyError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ConditionCheckFailureException" => {
                     return RusotoError::Service(PutResourcePolicyError::ConditionCheckFailure(
@@ -14021,6 +14137,7 @@ pub enum PutSchemaVersionMetadataError {
 impl PutSchemaVersionMetadataError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<PutSchemaVersionMetadataError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(PutSchemaVersionMetadataError::AccessDenied(
@@ -14091,6 +14208,7 @@ pub enum PutWorkflowRunPropertiesError {
 impl PutWorkflowRunPropertiesError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<PutWorkflowRunPropertiesError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AlreadyExistsException" => {
                     return RusotoError::Service(PutWorkflowRunPropertiesError::AlreadyExists(
@@ -14169,6 +14287,7 @@ impl QuerySchemaVersionMetadataError {
         res: BufferedHttpResponse,
     ) -> RusotoError<QuerySchemaVersionMetadataError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(QuerySchemaVersionMetadataError::AccessDenied(
@@ -14223,6 +14342,7 @@ pub enum RegisterSchemaVersionError {
 impl RegisterSchemaVersionError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<RegisterSchemaVersionError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(RegisterSchemaVersionError::AccessDenied(err.msg))
@@ -14289,6 +14409,7 @@ impl RemoveSchemaVersionMetadataError {
         res: BufferedHttpResponse,
     ) -> RusotoError<RemoveSchemaVersionMetadataError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(RemoveSchemaVersionMetadataError::AccessDenied(
@@ -14339,6 +14460,7 @@ pub enum ResetJobBookmarkError {
 impl ResetJobBookmarkError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ResetJobBookmarkError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "EntityNotFoundException" => {
                     return RusotoError::Service(ResetJobBookmarkError::EntityNotFound(err.msg))
@@ -14391,6 +14513,7 @@ pub enum ResumeWorkflowRunError {
 impl ResumeWorkflowRunError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ResumeWorkflowRunError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ConcurrentRunsExceededException" => {
                     return RusotoError::Service(ResumeWorkflowRunError::ConcurrentRunsExceeded(
@@ -14449,6 +14572,7 @@ pub enum SearchTablesError {
 impl SearchTablesError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<SearchTablesError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalServiceException" => {
                     return RusotoError::Service(SearchTablesError::InternalService(err.msg))
@@ -14491,6 +14615,7 @@ pub enum StartCrawlerError {
 impl StartCrawlerError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<StartCrawlerError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "CrawlerRunningException" => {
                     return RusotoError::Service(StartCrawlerError::CrawlerRunning(err.msg))
@@ -14537,6 +14662,7 @@ pub enum StartCrawlerScheduleError {
 impl StartCrawlerScheduleError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<StartCrawlerScheduleError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "EntityNotFoundException" => {
                     return RusotoError::Service(StartCrawlerScheduleError::EntityNotFound(err.msg))
@@ -14595,6 +14721,7 @@ pub enum StartExportLabelsTaskRunError {
 impl StartExportLabelsTaskRunError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<StartExportLabelsTaskRunError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "EntityNotFoundException" => {
                     return RusotoError::Service(StartExportLabelsTaskRunError::EntityNotFound(
@@ -14653,6 +14780,7 @@ pub enum StartImportLabelsTaskRunError {
 impl StartImportLabelsTaskRunError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<StartImportLabelsTaskRunError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "EntityNotFoundException" => {
                     return RusotoError::Service(StartImportLabelsTaskRunError::EntityNotFound(
@@ -14721,6 +14849,7 @@ pub enum StartJobRunError {
 impl StartJobRunError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<StartJobRunError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ConcurrentRunsExceededException" => {
                     return RusotoError::Service(StartJobRunError::ConcurrentRunsExceeded(err.msg))
@@ -14783,6 +14912,7 @@ pub enum StartMLEvaluationTaskRunError {
 impl StartMLEvaluationTaskRunError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<StartMLEvaluationTaskRunError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ConcurrentRunsExceededException" => {
                     return RusotoError::Service(
@@ -14857,6 +14987,7 @@ impl StartMLLabelingSetGenerationTaskRunError {
         res: BufferedHttpResponse,
     ) -> RusotoError<StartMLLabelingSetGenerationTaskRunError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ConcurrentRunsExceededException" => {
                     return RusotoError::Service(
@@ -14933,6 +15064,7 @@ pub enum StartTriggerError {
 impl StartTriggerError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<StartTriggerError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ConcurrentRunsExceededException" => {
                     return RusotoError::Service(StartTriggerError::ConcurrentRunsExceeded(err.msg))
@@ -14995,6 +15127,7 @@ pub enum StartWorkflowRunError {
 impl StartWorkflowRunError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<StartWorkflowRunError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ConcurrentRunsExceededException" => {
                     return RusotoError::Service(StartWorkflowRunError::ConcurrentRunsExceeded(
@@ -15055,6 +15188,7 @@ pub enum StopCrawlerError {
 impl StopCrawlerError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<StopCrawlerError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "CrawlerNotRunningException" => {
                     return RusotoError::Service(StopCrawlerError::CrawlerNotRunning(err.msg))
@@ -15103,6 +15237,7 @@ pub enum StopCrawlerScheduleError {
 impl StopCrawlerScheduleError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<StopCrawlerScheduleError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "EntityNotFoundException" => {
                     return RusotoError::Service(StopCrawlerScheduleError::EntityNotFound(err.msg))
@@ -15159,6 +15294,7 @@ pub enum StopTriggerError {
 impl StopTriggerError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<StopTriggerError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ConcurrentModificationException" => {
                     return RusotoError::Service(StopTriggerError::ConcurrentModification(err.msg))
@@ -15213,6 +15349,7 @@ pub enum StopWorkflowRunError {
 impl StopWorkflowRunError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<StopWorkflowRunError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "EntityNotFoundException" => {
                     return RusotoError::Service(StopWorkflowRunError::EntityNotFound(err.msg))
@@ -15267,6 +15404,7 @@ pub enum TagResourceError {
 impl TagResourceError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<TagResourceError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "EntityNotFoundException" => {
                     return RusotoError::Service(TagResourceError::EntityNotFound(err.msg))
@@ -15315,6 +15453,7 @@ pub enum UntagResourceError {
 impl UntagResourceError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UntagResourceError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "EntityNotFoundException" => {
                     return RusotoError::Service(UntagResourceError::EntityNotFound(err.msg))
@@ -15363,6 +15502,7 @@ pub enum UpdateClassifierError {
 impl UpdateClassifierError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateClassifierError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "EntityNotFoundException" => {
                     return RusotoError::Service(UpdateClassifierError::EntityNotFound(err.msg))
@@ -15415,6 +15555,7 @@ impl UpdateColumnStatisticsForPartitionError {
         res: BufferedHttpResponse,
     ) -> RusotoError<UpdateColumnStatisticsForPartitionError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "EntityNotFoundException" => {
                     return RusotoError::Service(
@@ -15491,6 +15632,7 @@ impl UpdateColumnStatisticsForTableError {
         res: BufferedHttpResponse,
     ) -> RusotoError<UpdateColumnStatisticsForTableError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "EntityNotFoundException" => {
                     return RusotoError::Service(
@@ -15561,6 +15703,7 @@ pub enum UpdateConnectionError {
 impl UpdateConnectionError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateConnectionError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "EntityNotFoundException" => {
                     return RusotoError::Service(UpdateConnectionError::EntityNotFound(err.msg))
@@ -15611,6 +15754,7 @@ pub enum UpdateCrawlerError {
 impl UpdateCrawlerError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateCrawlerError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "CrawlerRunningException" => {
                     return RusotoError::Service(UpdateCrawlerError::CrawlerRunning(err.msg))
@@ -15665,6 +15809,7 @@ pub enum UpdateCrawlerScheduleError {
 impl UpdateCrawlerScheduleError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateCrawlerScheduleError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "EntityNotFoundException" => {
                     return RusotoError::Service(UpdateCrawlerScheduleError::EntityNotFound(
@@ -15727,6 +15872,7 @@ pub enum UpdateDatabaseError {
 impl UpdateDatabaseError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateDatabaseError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "EntityNotFoundException" => {
                     return RusotoError::Service(UpdateDatabaseError::EntityNotFound(err.msg))
@@ -15779,6 +15925,7 @@ pub enum UpdateDevEndpointError {
 impl UpdateDevEndpointError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateDevEndpointError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "EntityNotFoundException" => {
                     return RusotoError::Service(UpdateDevEndpointError::EntityNotFound(err.msg))
@@ -15829,6 +15976,7 @@ pub enum UpdateJobError {
 impl UpdateJobError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateJobError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ConcurrentModificationException" => {
                     return RusotoError::Service(UpdateJobError::ConcurrentModification(err.msg))
@@ -15883,6 +16031,7 @@ pub enum UpdateMLTransformError {
 impl UpdateMLTransformError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateMLTransformError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(UpdateMLTransformError::AccessDenied(err.msg))
@@ -15937,6 +16086,7 @@ pub enum UpdatePartitionError {
 impl UpdatePartitionError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdatePartitionError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "EntityNotFoundException" => {
                     return RusotoError::Service(UpdatePartitionError::EntityNotFound(err.msg))
@@ -15991,6 +16141,7 @@ pub enum UpdateRegistryError {
 impl UpdateRegistryError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateRegistryError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(UpdateRegistryError::AccessDenied(err.msg))
@@ -16047,6 +16198,7 @@ pub enum UpdateSchemaError {
 impl UpdateSchemaError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateSchemaError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(UpdateSchemaError::AccessDenied(err.msg))
@@ -16105,6 +16257,7 @@ pub enum UpdateTableError {
 impl UpdateTableError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateTableError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ConcurrentModificationException" => {
                     return RusotoError::Service(UpdateTableError::ConcurrentModification(err.msg))
@@ -16169,6 +16322,7 @@ pub enum UpdateTriggerError {
 impl UpdateTriggerError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateTriggerError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ConcurrentModificationException" => {
                     return RusotoError::Service(UpdateTriggerError::ConcurrentModification(
@@ -16225,6 +16379,7 @@ pub enum UpdateUserDefinedFunctionError {
 impl UpdateUserDefinedFunctionError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateUserDefinedFunctionError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "EntityNotFoundException" => {
                     return RusotoError::Service(UpdateUserDefinedFunctionError::EntityNotFound(
@@ -16289,6 +16444,7 @@ pub enum UpdateWorkflowError {
 impl UpdateWorkflowError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateWorkflowError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ConcurrentModificationException" => {
                     return RusotoError::Service(UpdateWorkflowError::ConcurrentModification(

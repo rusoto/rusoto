@@ -49,7 +49,6 @@ impl CodeDeployClient {
     }
 }
 
-use serde_json;
 /// <p>Represents the input of, and adds tags to, an on-premises instance operation.</p>
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
@@ -2436,6 +2435,7 @@ impl AddTagsToOnPremisesInstancesError {
         res: BufferedHttpResponse,
     ) -> RusotoError<AddTagsToOnPremisesInstancesError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InstanceLimitExceededException" => {
                     return RusotoError::Service(
@@ -2526,6 +2526,7 @@ impl BatchGetApplicationRevisionsError {
         res: BufferedHttpResponse,
     ) -> RusotoError<BatchGetApplicationRevisionsError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ApplicationDoesNotExistException" => {
                     return RusotoError::Service(
@@ -2604,6 +2605,7 @@ pub enum BatchGetApplicationsError {
 impl BatchGetApplicationsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<BatchGetApplicationsError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ApplicationDoesNotExistException" => {
                     return RusotoError::Service(
@@ -2666,6 +2668,7 @@ pub enum BatchGetDeploymentGroupsError {
 impl BatchGetDeploymentGroupsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<BatchGetDeploymentGroupsError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ApplicationDoesNotExistException" => {
                     return RusotoError::Service(
@@ -2760,6 +2763,7 @@ impl BatchGetDeploymentInstancesError {
         res: BufferedHttpResponse,
     ) -> RusotoError<BatchGetDeploymentInstancesError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BatchLimitExceededException" => {
                     return RusotoError::Service(
@@ -2858,6 +2862,7 @@ pub enum BatchGetDeploymentTargetsError {
 impl BatchGetDeploymentTargetsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<BatchGetDeploymentTargetsError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "DeploymentDoesNotExistException" => {
                     return RusotoError::Service(
@@ -2960,6 +2965,7 @@ pub enum BatchGetDeploymentsError {
 impl BatchGetDeploymentsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<BatchGetDeploymentsError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BatchLimitExceededException" => {
                     return RusotoError::Service(BatchGetDeploymentsError::BatchLimitExceeded(
@@ -3010,6 +3016,7 @@ impl BatchGetOnPremisesInstancesError {
         res: BufferedHttpResponse,
     ) -> RusotoError<BatchGetOnPremisesInstancesError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BatchLimitExceededException" => {
                     return RusotoError::Service(
@@ -3074,6 +3081,7 @@ pub enum ContinueDeploymentError {
 impl ContinueDeploymentError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ContinueDeploymentError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "DeploymentAlreadyCompletedException" => {
                     return RusotoError::Service(
@@ -3164,6 +3172,7 @@ pub enum CreateApplicationError {
 impl CreateApplicationError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateApplicationError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ApplicationAlreadyExistsException" => {
                     return RusotoError::Service(CreateApplicationError::ApplicationAlreadyExists(
@@ -3270,6 +3279,7 @@ pub enum CreateDeploymentError {
 impl CreateDeploymentError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateDeploymentError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ApplicationDoesNotExistException" => {
                     return RusotoError::Service(CreateDeploymentError::ApplicationDoesNotExist(
@@ -3450,6 +3460,7 @@ pub enum CreateDeploymentConfigError {
 impl CreateDeploymentConfigError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateDeploymentConfigError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "DeploymentConfigAlreadyExistsException" => {
                     return RusotoError::Service(
@@ -3596,6 +3607,7 @@ pub enum CreateDeploymentGroupError {
 impl CreateDeploymentGroupError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateDeploymentGroupError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AlarmsLimitExceededException" => {
                     return RusotoError::Service(CreateDeploymentGroupError::AlarmsLimitExceeded(
@@ -3852,6 +3864,7 @@ pub enum DeleteApplicationError {
 impl DeleteApplicationError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteApplicationError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ApplicationNameRequiredException" => {
                     return RusotoError::Service(DeleteApplicationError::ApplicationNameRequired(
@@ -3900,6 +3913,7 @@ pub enum DeleteDeploymentConfigError {
 impl DeleteDeploymentConfigError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteDeploymentConfigError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "DeploymentConfigInUseException" => {
                     return RusotoError::Service(
@@ -3962,6 +3976,7 @@ pub enum DeleteDeploymentGroupError {
 impl DeleteDeploymentGroupError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteDeploymentGroupError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ApplicationNameRequiredException" => {
                     return RusotoError::Service(
@@ -4030,6 +4045,7 @@ pub enum DeleteGitHubAccountTokenError {
 impl DeleteGitHubAccountTokenError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteGitHubAccountTokenError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "GitHubAccountTokenDoesNotExistException" => {
                     return RusotoError::Service(
@@ -4093,6 +4109,7 @@ impl DeleteResourcesByExternalIdError {
         res: BufferedHttpResponse,
     ) -> RusotoError<DeleteResourcesByExternalIdError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
@@ -4122,6 +4139,7 @@ impl DeregisterOnPremisesInstanceError {
         res: BufferedHttpResponse,
     ) -> RusotoError<DeregisterOnPremisesInstanceError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InstanceNameRequiredException" => {
                     return RusotoError::Service(
@@ -4168,6 +4186,7 @@ pub enum GetApplicationError {
 impl GetApplicationError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetApplicationError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ApplicationDoesNotExistException" => {
                     return RusotoError::Service(GetApplicationError::ApplicationDoesNotExist(
@@ -4222,6 +4241,7 @@ pub enum GetApplicationRevisionError {
 impl GetApplicationRevisionError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetApplicationRevisionError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ApplicationDoesNotExistException" => {
                     return RusotoError::Service(
@@ -4294,6 +4314,7 @@ pub enum GetDeploymentError {
 impl GetDeploymentError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetDeploymentError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "DeploymentDoesNotExistException" => {
                     return RusotoError::Service(GetDeploymentError::DeploymentDoesNotExist(
@@ -4340,6 +4361,7 @@ pub enum GetDeploymentConfigError {
 impl GetDeploymentConfigError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetDeploymentConfigError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "DeploymentConfigDoesNotExistException" => {
                     return RusotoError::Service(
@@ -4408,6 +4430,7 @@ pub enum GetDeploymentGroupError {
 impl GetDeploymentGroupError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetDeploymentGroupError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ApplicationDoesNotExistException" => {
                     return RusotoError::Service(GetDeploymentGroupError::ApplicationDoesNotExist(
@@ -4496,6 +4519,7 @@ pub enum GetDeploymentInstanceError {
 impl GetDeploymentInstanceError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetDeploymentInstanceError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "DeploymentDoesNotExistException" => {
                     return RusotoError::Service(
@@ -4578,6 +4602,7 @@ pub enum GetDeploymentTargetError {
 impl GetDeploymentTargetError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetDeploymentTargetError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "DeploymentDoesNotExistException" => {
                     return RusotoError::Service(GetDeploymentTargetError::DeploymentDoesNotExist(
@@ -4662,6 +4687,7 @@ pub enum GetOnPremisesInstanceError {
 impl GetOnPremisesInstanceError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetOnPremisesInstanceError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InstanceNameRequiredException" => {
                     return RusotoError::Service(GetOnPremisesInstanceError::InstanceNameRequired(
@@ -4724,6 +4750,7 @@ pub enum ListApplicationRevisionsError {
 impl ListApplicationRevisionsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListApplicationRevisionsError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ApplicationDoesNotExistException" => {
                     return RusotoError::Service(
@@ -4824,6 +4851,7 @@ pub enum ListApplicationsError {
 impl ListApplicationsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListApplicationsError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidNextTokenException" => {
                     return RusotoError::Service(ListApplicationsError::InvalidNextToken(err.msg))
@@ -4854,6 +4882,7 @@ pub enum ListDeploymentConfigsError {
 impl ListDeploymentConfigsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListDeploymentConfigsError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidNextTokenException" => {
                     return RusotoError::Service(ListDeploymentConfigsError::InvalidNextToken(
@@ -4892,6 +4921,7 @@ pub enum ListDeploymentGroupsError {
 impl ListDeploymentGroupsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListDeploymentGroupsError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ApplicationDoesNotExistException" => {
                     return RusotoError::Service(
@@ -4960,6 +4990,7 @@ pub enum ListDeploymentInstancesError {
 impl ListDeploymentInstancesError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListDeploymentInstancesError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "DeploymentDoesNotExistException" => {
                     return RusotoError::Service(
@@ -5070,6 +5101,7 @@ pub enum ListDeploymentTargetsError {
 impl ListDeploymentTargetsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListDeploymentTargetsError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "DeploymentDoesNotExistException" => {
                     return RusotoError::Service(
@@ -5166,6 +5198,7 @@ pub enum ListDeploymentsError {
 impl ListDeploymentsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListDeploymentsError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ApplicationDoesNotExistException" => {
                     return RusotoError::Service(ListDeploymentsError::ApplicationDoesNotExist(
@@ -5256,6 +5289,7 @@ impl ListGitHubAccountTokenNamesError {
         res: BufferedHttpResponse,
     ) -> RusotoError<ListGitHubAccountTokenNamesError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidNextTokenException" => {
                     return RusotoError::Service(
@@ -5308,6 +5342,7 @@ pub enum ListOnPremisesInstancesError {
 impl ListOnPremisesInstancesError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListOnPremisesInstancesError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidNextTokenException" => {
                     return RusotoError::Service(ListOnPremisesInstancesError::InvalidNextToken(
@@ -5358,6 +5393,7 @@ pub enum ListTagsForResourceError {
 impl ListTagsForResourceError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListTagsForResourceError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ArnNotSupportedException" => {
                     return RusotoError::Service(ListTagsForResourceError::ArnNotSupported(err.msg))
@@ -5412,8 +5448,9 @@ impl PutLifecycleEventHookExecutionStatusError {
         res: BufferedHttpResponse,
     ) -> RusotoError<PutLifecycleEventHookExecutionStatusError> {
         if let Some(err) = proto::json::Error::parse(&res) {
-            match err.typ.as_str() {
-                                "DeploymentDoesNotExistException" => return RusotoError::Service(PutLifecycleEventHookExecutionStatusError::DeploymentDoesNotExist(err.msg)),
+            #[allow(clippy::single_match)]
+                match err.typ.as_str() {
+                    "DeploymentDoesNotExistException" => return RusotoError::Service(PutLifecycleEventHookExecutionStatusError::DeploymentDoesNotExist(err.msg)),
 "DeploymentIdRequiredException" => return RusotoError::Service(PutLifecycleEventHookExecutionStatusError::DeploymentIdRequired(err.msg)),
 "InvalidDeploymentIdException" => return RusotoError::Service(PutLifecycleEventHookExecutionStatusError::InvalidDeploymentId(err.msg)),
 "InvalidLifecycleEventHookExecutionIdException" => return RusotoError::Service(PutLifecycleEventHookExecutionStatusError::InvalidLifecycleEventHookExecutionId(err.msg)),
@@ -5422,7 +5459,7 @@ impl PutLifecycleEventHookExecutionStatusError {
 "UnsupportedActionForDeploymentTypeException" => return RusotoError::Service(PutLifecycleEventHookExecutionStatusError::UnsupportedActionForDeploymentType(err.msg)),
 "ValidationException" => return RusotoError::Validation(err.msg),
 _ => {}
-                            }
+                }
         }
         RusotoError::Unknown(res)
     }
@@ -5478,6 +5515,7 @@ impl RegisterApplicationRevisionError {
         res: BufferedHttpResponse,
     ) -> RusotoError<RegisterApplicationRevisionError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ApplicationDoesNotExistException" => {
                     return RusotoError::Service(
@@ -5568,6 +5606,7 @@ impl RegisterOnPremisesInstanceError {
         res: BufferedHttpResponse,
     ) -> RusotoError<RegisterOnPremisesInstanceError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "IamArnRequiredException" => {
                     return RusotoError::Service(RegisterOnPremisesInstanceError::IamArnRequired(
@@ -5684,6 +5723,7 @@ impl RemoveTagsFromOnPremisesInstancesError {
         res: BufferedHttpResponse,
     ) -> RusotoError<RemoveTagsFromOnPremisesInstancesError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InstanceLimitExceededException" => {
                     return RusotoError::Service(
@@ -5776,6 +5816,7 @@ impl SkipWaitTimeForInstanceTerminationError {
         res: BufferedHttpResponse,
     ) -> RusotoError<SkipWaitTimeForInstanceTerminationError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "DeploymentAlreadyCompletedException" => {
                     return RusotoError::Service(
@@ -5864,6 +5905,7 @@ pub enum StopDeploymentError {
 impl StopDeploymentError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<StopDeploymentError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "DeploymentAlreadyCompletedException" => {
                     return RusotoError::Service(StopDeploymentError::DeploymentAlreadyCompleted(
@@ -5938,6 +5980,7 @@ pub enum TagResourceError {
 impl TagResourceError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<TagResourceError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ApplicationDoesNotExistException" => {
                     return RusotoError::Service(TagResourceError::ApplicationDoesNotExist(err.msg))
@@ -6014,6 +6057,7 @@ pub enum UntagResourceError {
 impl UntagResourceError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UntagResourceError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ApplicationDoesNotExistException" => {
                     return RusotoError::Service(UntagResourceError::ApplicationDoesNotExist(
@@ -6084,6 +6128,7 @@ pub enum UpdateApplicationError {
 impl UpdateApplicationError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateApplicationError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ApplicationAlreadyExistsException" => {
                     return RusotoError::Service(UpdateApplicationError::ApplicationAlreadyExists(
@@ -6194,6 +6239,7 @@ pub enum UpdateDeploymentGroupError {
 impl UpdateDeploymentGroupError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateDeploymentGroupError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AlarmsLimitExceededException" => {
                     return RusotoError::Service(UpdateDeploymentGroupError::AlarmsLimitExceeded(

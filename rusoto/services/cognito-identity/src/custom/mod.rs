@@ -5,7 +5,7 @@ use rusoto_core::Region;
 use async_trait::async_trait;
 
 use rusoto_core::credential::{
-    AwsCredentials, 
+    AwsCredentials,
     CredentialsError,
     ProvideAwsCredentials,
     StaticProvider
@@ -39,7 +39,7 @@ use std::collections::HashMap;
 ///     .region(Region::EuCentral1)
 ///     .login("graph.facebook.com".to_string(), "FBTOKEN".to_string())
 ///     .build();
-/// 
+///
 /// ```
 
 /// <p>The Cognito credential provider.</p>
@@ -66,10 +66,10 @@ pub struct CognitoProviderBuilder {
 
 impl CognitoProviderBuilder {
     /// <p>Build the provider.</p>
-    pub fn build(self) -> CognitoProvider { 
+    pub fn build(self) -> CognitoProvider {
         CognitoProvider {
             identity_id: self.identity_id.expect("no identity id provided"),
-            region: self.region.unwrap_or(Region::default()),
+            region: self.region.unwrap_or_default(),
             logins: self.logins,
             custom_role_arn: self.custom_role_arn
         }
@@ -123,18 +123,17 @@ impl ProvideAwsCredentials for CognitoProvider {
             identity_id: self.identity_id.clone(),
             logins: self.logins.clone(),
             custom_role_arn: self.custom_role_arn.clone(),
-            ..Default::default()
         };
 
         let resp = client.get_credentials_for_identity(input).await.map_err(|e| CredentialsError::new(format!("{:?}", e)))?;
-        
-        let creds = resp.credentials.ok_or(CredentialsError::new("no credentials were found in the response"))?;
+
+        let creds = resp.credentials.ok_or_else(|| CredentialsError::new("no credentials were found in the response"))?;
         Ok(
             AwsCredentials::new(
-                creds.access_key_id.ok_or(CredentialsError::new("no access key id was found in the response"))?, 
-                creds.secret_key.ok_or(CredentialsError::new("no secret key was found in the response"))?, 
-                creds.session_token, 
-                creds.expiration.map(|x| DateTime::from_utc(NaiveDateTime::from_timestamp(x as i64, 0), Utc)) 
+                creds.access_key_id.ok_or_else(|| CredentialsError::new("no access key id was found in the response"))?,
+                creds.secret_key.ok_or_else(|| CredentialsError::new("no secret key was found in the response"))?,
+                creds.session_token,
+                creds.expiration.map(|x| DateTime::from_utc(NaiveDateTime::from_timestamp(x as i64, 0), Utc))
             )
         )
     }
@@ -143,7 +142,7 @@ impl ProvideAwsCredentials for CognitoProvider {
 #[cfg(test)]
 mod tests {
     use super::*;
-        
+
     #[test]
     #[should_panic(expected = "no identity id provided")]
     fn builder_empty() {

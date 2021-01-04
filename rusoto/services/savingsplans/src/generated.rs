@@ -23,7 +23,6 @@ use rusoto_core::proto;
 use rusoto_core::signature::SignedRequest;
 #[allow(unused_imports)]
 use serde::{Deserialize, Serialize};
-use serde_json;
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateSavingsPlanRequest {
@@ -672,6 +671,7 @@ pub enum CreateSavingsPlanError {
 impl CreateSavingsPlanError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateSavingsPlanError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalServerException" => {
                     return RusotoError::Service(CreateSavingsPlanError::InternalServer(err.msg))
@@ -716,6 +716,7 @@ pub enum DeleteQueuedSavingsPlanError {
 impl DeleteQueuedSavingsPlanError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteQueuedSavingsPlanError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalServerException" => {
                     return RusotoError::Service(DeleteQueuedSavingsPlanError::InternalServer(
@@ -760,6 +761,7 @@ pub enum DescribeSavingsPlanRatesError {
 impl DescribeSavingsPlanRatesError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeSavingsPlanRatesError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(DescribeSavingsPlanRatesError::ResourceNotFound(
@@ -792,6 +794,7 @@ pub enum DescribeSavingsPlansError {
 impl DescribeSavingsPlansError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeSavingsPlansError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalServerException" => {
                     return RusotoError::Service(DescribeSavingsPlansError::InternalServer(err.msg))
@@ -824,6 +827,7 @@ impl DescribeSavingsPlansOfferingRatesError {
         res: BufferedHttpResponse,
     ) -> RusotoError<DescribeSavingsPlansOfferingRatesError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalServerException" => {
                     return RusotoError::Service(
@@ -860,6 +864,7 @@ impl DescribeSavingsPlansOfferingsError {
         res: BufferedHttpResponse,
     ) -> RusotoError<DescribeSavingsPlansOfferingsError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalServerException" => {
                     return RusotoError::Service(
@@ -894,6 +899,7 @@ pub enum ListTagsForResourceError {
 impl ListTagsForResourceError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListTagsForResourceError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalServerException" => {
                     return RusotoError::Service(ListTagsForResourceError::InternalServer(err.msg))
@@ -934,6 +940,7 @@ pub enum TagResourceError {
 impl TagResourceError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<TagResourceError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalServerException" => {
                     return RusotoError::Service(TagResourceError::InternalServer(err.msg))
@@ -974,6 +981,7 @@ pub enum UntagResourceError {
 impl UntagResourceError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UntagResourceError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalServerException" => {
                     return RusotoError::Service(UntagResourceError::InternalServer(err.msg))
@@ -1107,6 +1115,7 @@ impl SavingsPlans for SavingsPlansClient {
         &self,
         input: CreateSavingsPlanRequest,
     ) -> Result<CreateSavingsPlanResponse, RusotoError<CreateSavingsPlanError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/CreateSavingsPlan";
 
         let mut request = SignedRequest::new("POST", "savingsplans", &self.region, &request_uri);
@@ -1138,6 +1147,7 @@ impl SavingsPlans for SavingsPlansClient {
         &self,
         input: DeleteQueuedSavingsPlanRequest,
     ) -> Result<DeleteQueuedSavingsPlanResponse, RusotoError<DeleteQueuedSavingsPlanError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/DeleteQueuedSavingsPlan";
 
         let mut request = SignedRequest::new("POST", "savingsplans", &self.region, &request_uri);
@@ -1169,6 +1179,7 @@ impl SavingsPlans for SavingsPlansClient {
         &self,
         input: DescribeSavingsPlanRatesRequest,
     ) -> Result<DescribeSavingsPlanRatesResponse, RusotoError<DescribeSavingsPlanRatesError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/DescribeSavingsPlanRates";
 
         let mut request = SignedRequest::new("POST", "savingsplans", &self.region, &request_uri);
@@ -1200,6 +1211,7 @@ impl SavingsPlans for SavingsPlansClient {
         &self,
         input: DescribeSavingsPlansRequest,
     ) -> Result<DescribeSavingsPlansResponse, RusotoError<DescribeSavingsPlansError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/DescribeSavingsPlans";
 
         let mut request = SignedRequest::new("POST", "savingsplans", &self.region, &request_uri);
@@ -1234,6 +1246,7 @@ impl SavingsPlans for SavingsPlansClient {
         DescribeSavingsPlansOfferingRatesResponse,
         RusotoError<DescribeSavingsPlansOfferingRatesError>,
     > {
+        #![allow(clippy::needless_update)]
         let request_uri = "/DescribeSavingsPlansOfferingRates";
 
         let mut request = SignedRequest::new("POST", "savingsplans", &self.region, &request_uri);
@@ -1270,6 +1283,7 @@ impl SavingsPlans for SavingsPlansClient {
         DescribeSavingsPlansOfferingsResponse,
         RusotoError<DescribeSavingsPlansOfferingsError>,
     > {
+        #![allow(clippy::needless_update)]
         let request_uri = "/DescribeSavingsPlansOfferings";
 
         let mut request = SignedRequest::new("POST", "savingsplans", &self.region, &request_uri);
@@ -1301,6 +1315,7 @@ impl SavingsPlans for SavingsPlansClient {
         &self,
         input: ListTagsForResourceRequest,
     ) -> Result<ListTagsForResourceResponse, RusotoError<ListTagsForResourceError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/ListTagsForResource";
 
         let mut request = SignedRequest::new("POST", "savingsplans", &self.region, &request_uri);
@@ -1332,6 +1347,7 @@ impl SavingsPlans for SavingsPlansClient {
         &self,
         input: TagResourceRequest,
     ) -> Result<TagResourceResponse, RusotoError<TagResourceError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/TagResource";
 
         let mut request = SignedRequest::new("POST", "savingsplans", &self.region, &request_uri);
@@ -1363,6 +1379,7 @@ impl SavingsPlans for SavingsPlansClient {
         &self,
         input: UntagResourceRequest,
     ) -> Result<UntagResourceResponse, RusotoError<UntagResourceError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/UntagResource";
 
         let mut request = SignedRequest::new("POST", "savingsplans", &self.region, &request_uri);

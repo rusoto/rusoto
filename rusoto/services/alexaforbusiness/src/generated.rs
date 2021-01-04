@@ -49,7 +49,6 @@ impl AlexaForBusinessClient {
     }
 }
 
-use serde_json;
 /// <p>An address book with attributes.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
@@ -3553,6 +3552,7 @@ pub enum ApproveSkillError {
 impl ApproveSkillError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ApproveSkillError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ConcurrentModificationException" => {
                     return RusotoError::Service(ApproveSkillError::ConcurrentModification(err.msg))
@@ -3593,6 +3593,7 @@ impl AssociateContactWithAddressBookError {
         res: BufferedHttpResponse,
     ) -> RusotoError<AssociateContactWithAddressBookError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "LimitExceededException" => {
                     return RusotoError::Service(
@@ -3633,6 +3634,7 @@ impl AssociateDeviceWithNetworkProfileError {
         res: BufferedHttpResponse,
     ) -> RusotoError<AssociateDeviceWithNetworkProfileError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ConcurrentModificationException" => {
                     return RusotoError::Service(
@@ -3685,6 +3687,7 @@ pub enum AssociateDeviceWithRoomError {
 impl AssociateDeviceWithRoomError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<AssociateDeviceWithRoomError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ConcurrentModificationException" => {
                     return RusotoError::Service(
@@ -3733,6 +3736,7 @@ impl AssociateSkillGroupWithRoomError {
         res: BufferedHttpResponse,
     ) -> RusotoError<AssociateSkillGroupWithRoomError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ConcurrentModificationException" => {
                     return RusotoError::Service(
@@ -3773,6 +3777,7 @@ impl AssociateSkillWithSkillGroupError {
         res: BufferedHttpResponse,
     ) -> RusotoError<AssociateSkillWithSkillGroupError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ConcurrentModificationException" => {
                     return RusotoError::Service(
@@ -3821,6 +3826,7 @@ pub enum AssociateSkillWithUsersError {
 impl AssociateSkillWithUsersError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<AssociateSkillWithUsersError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ConcurrentModificationException" => {
                     return RusotoError::Service(
@@ -3861,6 +3867,7 @@ pub enum CreateAddressBookError {
 impl CreateAddressBookError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateAddressBookError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AlreadyExistsException" => {
                     return RusotoError::Service(CreateAddressBookError::AlreadyExists(err.msg))
@@ -3897,6 +3904,7 @@ impl CreateBusinessReportScheduleError {
         res: BufferedHttpResponse,
     ) -> RusotoError<CreateBusinessReportScheduleError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AlreadyExistsException" => {
                     return RusotoError::Service(CreateBusinessReportScheduleError::AlreadyExists(
@@ -3929,6 +3937,7 @@ pub enum CreateConferenceProviderError {
 impl CreateConferenceProviderError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateConferenceProviderError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AlreadyExistsException" => {
                     return RusotoError::Service(CreateConferenceProviderError::AlreadyExists(
@@ -3963,6 +3972,7 @@ pub enum CreateContactError {
 impl CreateContactError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateContactError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AlreadyExistsException" => {
                     return RusotoError::Service(CreateContactError::AlreadyExists(err.msg))
@@ -3999,6 +4009,7 @@ pub enum CreateGatewayGroupError {
 impl CreateGatewayGroupError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateGatewayGroupError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AlreadyExistsException" => {
                     return RusotoError::Service(CreateGatewayGroupError::AlreadyExists(err.msg))
@@ -4041,6 +4052,7 @@ pub enum CreateNetworkProfileError {
 impl CreateNetworkProfileError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateNetworkProfileError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AlreadyExistsException" => {
                     return RusotoError::Service(CreateNetworkProfileError::AlreadyExists(err.msg))
@@ -4101,6 +4113,7 @@ pub enum CreateProfileError {
 impl CreateProfileError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateProfileError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AlreadyExistsException" => {
                     return RusotoError::Service(CreateProfileError::AlreadyExists(err.msg))
@@ -4143,6 +4156,7 @@ pub enum CreateRoomError {
 impl CreateRoomError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateRoomError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AlreadyExistsException" => {
                     return RusotoError::Service(CreateRoomError::AlreadyExists(err.msg))
@@ -4181,6 +4195,7 @@ pub enum CreateSkillGroupError {
 impl CreateSkillGroupError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateSkillGroupError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AlreadyExistsException" => {
                     return RusotoError::Service(CreateSkillGroupError::AlreadyExists(err.msg))
@@ -4225,6 +4240,7 @@ pub enum CreateUserError {
 impl CreateUserError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateUserError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ConcurrentModificationException" => {
                     return RusotoError::Service(CreateUserError::ConcurrentModification(err.msg))
@@ -4265,6 +4281,7 @@ pub enum DeleteAddressBookError {
 impl DeleteAddressBookError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteAddressBookError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ConcurrentModificationException" => {
                     return RusotoError::Service(DeleteAddressBookError::ConcurrentModification(
@@ -4305,6 +4322,7 @@ impl DeleteBusinessReportScheduleError {
         res: BufferedHttpResponse,
     ) -> RusotoError<DeleteBusinessReportScheduleError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ConcurrentModificationException" => {
                     return RusotoError::Service(
@@ -4345,6 +4363,7 @@ pub enum DeleteConferenceProviderError {
 impl DeleteConferenceProviderError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteConferenceProviderError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "NotFoundException" => {
                     return RusotoError::Service(DeleteConferenceProviderError::NotFound(err.msg))
@@ -4377,6 +4396,7 @@ pub enum DeleteContactError {
 impl DeleteContactError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteContactError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ConcurrentModificationException" => {
                     return RusotoError::Service(DeleteContactError::ConcurrentModification(
@@ -4417,6 +4437,7 @@ pub enum DeleteDeviceError {
 impl DeleteDeviceError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteDeviceError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ConcurrentModificationException" => {
                     return RusotoError::Service(DeleteDeviceError::ConcurrentModification(err.msg))
@@ -4461,6 +4482,7 @@ pub enum DeleteDeviceUsageDataError {
 impl DeleteDeviceUsageDataError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteDeviceUsageDataError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "DeviceNotRegisteredException" => {
                     return RusotoError::Service(DeleteDeviceUsageDataError::DeviceNotRegistered(
@@ -4501,6 +4523,7 @@ pub enum DeleteGatewayGroupError {
 impl DeleteGatewayGroupError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteGatewayGroupError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ResourceAssociatedException" => {
                     return RusotoError::Service(DeleteGatewayGroupError::ResourceAssociated(
@@ -4537,6 +4560,7 @@ pub enum DeleteNetworkProfileError {
 impl DeleteNetworkProfileError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteNetworkProfileError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ConcurrentModificationException" => {
                     return RusotoError::Service(DeleteNetworkProfileError::ConcurrentModification(
@@ -4579,6 +4603,7 @@ pub enum DeleteProfileError {
 impl DeleteProfileError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteProfileError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ConcurrentModificationException" => {
                     return RusotoError::Service(DeleteProfileError::ConcurrentModification(
@@ -4617,6 +4642,7 @@ pub enum DeleteRoomError {
 impl DeleteRoomError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteRoomError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ConcurrentModificationException" => {
                     return RusotoError::Service(DeleteRoomError::ConcurrentModification(err.msg))
@@ -4651,6 +4677,7 @@ pub enum DeleteRoomSkillParameterError {
 impl DeleteRoomSkillParameterError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteRoomSkillParameterError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ConcurrentModificationException" => {
                     return RusotoError::Service(
@@ -4687,6 +4714,7 @@ pub enum DeleteSkillAuthorizationError {
 impl DeleteSkillAuthorizationError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteSkillAuthorizationError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ConcurrentModificationException" => {
                     return RusotoError::Service(
@@ -4727,6 +4755,7 @@ pub enum DeleteSkillGroupError {
 impl DeleteSkillGroupError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteSkillGroupError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ConcurrentModificationException" => {
                     return RusotoError::Service(DeleteSkillGroupError::ConcurrentModification(
@@ -4765,6 +4794,7 @@ pub enum DeleteUserError {
 impl DeleteUserError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteUserError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ConcurrentModificationException" => {
                     return RusotoError::Service(DeleteUserError::ConcurrentModification(err.msg))
@@ -4798,6 +4828,7 @@ impl DisassociateContactFromAddressBookError {
         res: BufferedHttpResponse,
     ) -> RusotoError<DisassociateContactFromAddressBookError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
@@ -4827,6 +4858,7 @@ impl DisassociateDeviceFromRoomError {
         res: BufferedHttpResponse,
     ) -> RusotoError<DisassociateDeviceFromRoomError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ConcurrentModificationException" => {
                     return RusotoError::Service(
@@ -4873,6 +4905,7 @@ impl DisassociateSkillFromSkillGroupError {
         res: BufferedHttpResponse,
     ) -> RusotoError<DisassociateSkillFromSkillGroupError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ConcurrentModificationException" => {
                     return RusotoError::Service(
@@ -4917,6 +4950,7 @@ impl DisassociateSkillFromUsersError {
         res: BufferedHttpResponse,
     ) -> RusotoError<DisassociateSkillFromUsersError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ConcurrentModificationException" => {
                     return RusotoError::Service(
@@ -4957,6 +4991,7 @@ impl DisassociateSkillGroupFromRoomError {
         res: BufferedHttpResponse,
     ) -> RusotoError<DisassociateSkillGroupFromRoomError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ConcurrentModificationException" => {
                     return RusotoError::Service(
@@ -4991,6 +5026,7 @@ pub enum ForgetSmartHomeAppliancesError {
 impl ForgetSmartHomeAppliancesError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ForgetSmartHomeAppliancesError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "NotFoundException" => {
                     return RusotoError::Service(ForgetSmartHomeAppliancesError::NotFound(err.msg))
@@ -5021,6 +5057,7 @@ pub enum GetAddressBookError {
 impl GetAddressBookError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetAddressBookError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "NotFoundException" => {
                     return RusotoError::Service(GetAddressBookError::NotFound(err.msg))
@@ -5051,6 +5088,7 @@ pub enum GetConferencePreferenceError {
 impl GetConferencePreferenceError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetConferencePreferenceError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "NotFoundException" => {
                     return RusotoError::Service(GetConferencePreferenceError::NotFound(err.msg))
@@ -5081,6 +5119,7 @@ pub enum GetConferenceProviderError {
 impl GetConferenceProviderError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetConferenceProviderError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "NotFoundException" => {
                     return RusotoError::Service(GetConferenceProviderError::NotFound(err.msg))
@@ -5111,6 +5150,7 @@ pub enum GetContactError {
 impl GetContactError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetContactError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "NotFoundException" => {
                     return RusotoError::Service(GetContactError::NotFound(err.msg))
@@ -5141,6 +5181,7 @@ pub enum GetDeviceError {
 impl GetDeviceError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetDeviceError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "NotFoundException" => {
                     return RusotoError::Service(GetDeviceError::NotFound(err.msg))
@@ -5171,6 +5212,7 @@ pub enum GetGatewayError {
 impl GetGatewayError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetGatewayError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "NotFoundException" => {
                     return RusotoError::Service(GetGatewayError::NotFound(err.msg))
@@ -5201,6 +5243,7 @@ pub enum GetGatewayGroupError {
 impl GetGatewayGroupError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetGatewayGroupError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "NotFoundException" => {
                     return RusotoError::Service(GetGatewayGroupError::NotFound(err.msg))
@@ -5233,6 +5276,7 @@ impl GetInvitationConfigurationError {
         res: BufferedHttpResponse,
     ) -> RusotoError<GetInvitationConfigurationError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "NotFoundException" => {
                     return RusotoError::Service(GetInvitationConfigurationError::NotFound(err.msg))
@@ -5265,6 +5309,7 @@ pub enum GetNetworkProfileError {
 impl GetNetworkProfileError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetNetworkProfileError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidSecretsManagerResourceException" => {
                     return RusotoError::Service(
@@ -5303,6 +5348,7 @@ pub enum GetProfileError {
 impl GetProfileError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetProfileError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "NotFoundException" => {
                     return RusotoError::Service(GetProfileError::NotFound(err.msg))
@@ -5333,6 +5379,7 @@ pub enum GetRoomError {
 impl GetRoomError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetRoomError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "NotFoundException" => {
                     return RusotoError::Service(GetRoomError::NotFound(err.msg))
@@ -5363,6 +5410,7 @@ pub enum GetRoomSkillParameterError {
 impl GetRoomSkillParameterError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetRoomSkillParameterError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "NotFoundException" => {
                     return RusotoError::Service(GetRoomSkillParameterError::NotFound(err.msg))
@@ -5393,6 +5441,7 @@ pub enum GetSkillGroupError {
 impl GetSkillGroupError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetSkillGroupError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "NotFoundException" => {
                     return RusotoError::Service(GetSkillGroupError::NotFound(err.msg))
@@ -5422,6 +5471,7 @@ impl ListBusinessReportSchedulesError {
         res: BufferedHttpResponse,
     ) -> RusotoError<ListBusinessReportSchedulesError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
@@ -5444,6 +5494,7 @@ pub enum ListConferenceProvidersError {}
 impl ListConferenceProvidersError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListConferenceProvidersError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
@@ -5469,6 +5520,7 @@ pub enum ListDeviceEventsError {
 impl ListDeviceEventsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListDeviceEventsError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "NotFoundException" => {
                     return RusotoError::Service(ListDeviceEventsError::NotFound(err.msg))
@@ -5496,6 +5548,7 @@ pub enum ListGatewayGroupsError {}
 impl ListGatewayGroupsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListGatewayGroupsError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
@@ -5518,6 +5571,7 @@ pub enum ListGatewaysError {}
 impl ListGatewaysError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListGatewaysError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
@@ -5540,6 +5594,7 @@ pub enum ListSkillsError {}
 impl ListSkillsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListSkillsError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
@@ -5562,6 +5617,7 @@ pub enum ListSkillsStoreCategoriesError {}
 impl ListSkillsStoreCategoriesError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListSkillsStoreCategoriesError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
@@ -5586,6 +5642,7 @@ impl ListSkillsStoreSkillsByCategoryError {
         res: BufferedHttpResponse,
     ) -> RusotoError<ListSkillsStoreSkillsByCategoryError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
@@ -5611,6 +5668,7 @@ pub enum ListSmartHomeAppliancesError {
 impl ListSmartHomeAppliancesError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListSmartHomeAppliancesError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "NotFoundException" => {
                     return RusotoError::Service(ListSmartHomeAppliancesError::NotFound(err.msg))
@@ -5641,6 +5699,7 @@ pub enum ListTagsError {
 impl ListTagsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListTagsError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "NotFoundException" => {
                     return RusotoError::Service(ListTagsError::NotFound(err.msg))
@@ -5671,6 +5730,7 @@ pub enum PutConferencePreferenceError {
 impl PutConferencePreferenceError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<PutConferencePreferenceError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "NotFoundException" => {
                     return RusotoError::Service(PutConferencePreferenceError::NotFound(err.msg))
@@ -5705,6 +5765,7 @@ impl PutInvitationConfigurationError {
         res: BufferedHttpResponse,
     ) -> RusotoError<PutInvitationConfigurationError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ConcurrentModificationException" => {
                     return RusotoError::Service(
@@ -5743,6 +5804,7 @@ pub enum PutRoomSkillParameterError {
 impl PutRoomSkillParameterError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<PutRoomSkillParameterError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ConcurrentModificationException" => {
                     return RusotoError::Service(
@@ -5777,6 +5839,7 @@ pub enum PutSkillAuthorizationError {
 impl PutSkillAuthorizationError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<PutSkillAuthorizationError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ConcurrentModificationException" => {
                     return RusotoError::Service(
@@ -5819,6 +5882,7 @@ pub enum RegisterAVSDeviceError {
 impl RegisterAVSDeviceError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<RegisterAVSDeviceError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ConcurrentModificationException" => {
                     return RusotoError::Service(RegisterAVSDeviceError::ConcurrentModification(
@@ -5865,6 +5929,7 @@ pub enum RejectSkillError {
 impl RejectSkillError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<RejectSkillError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ConcurrentModificationException" => {
                     return RusotoError::Service(RejectSkillError::ConcurrentModification(err.msg))
@@ -5899,6 +5964,7 @@ pub enum ResolveRoomError {
 impl ResolveRoomError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ResolveRoomError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "NotFoundException" => {
                     return RusotoError::Service(ResolveRoomError::NotFound(err.msg))
@@ -5931,6 +5997,7 @@ pub enum RevokeInvitationError {
 impl RevokeInvitationError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<RevokeInvitationError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ConcurrentModificationException" => {
                     return RusotoError::Service(RevokeInvitationError::ConcurrentModification(
@@ -5964,6 +6031,7 @@ pub enum SearchAddressBooksError {}
 impl SearchAddressBooksError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<SearchAddressBooksError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
@@ -5986,6 +6054,7 @@ pub enum SearchContactsError {}
 impl SearchContactsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<SearchContactsError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
@@ -6008,6 +6077,7 @@ pub enum SearchDevicesError {}
 impl SearchDevicesError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<SearchDevicesError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
@@ -6030,6 +6100,7 @@ pub enum SearchNetworkProfilesError {}
 impl SearchNetworkProfilesError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<SearchNetworkProfilesError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
@@ -6052,6 +6123,7 @@ pub enum SearchProfilesError {}
 impl SearchProfilesError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<SearchProfilesError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
@@ -6074,6 +6146,7 @@ pub enum SearchRoomsError {}
 impl SearchRoomsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<SearchRoomsError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
@@ -6096,6 +6169,7 @@ pub enum SearchSkillGroupsError {}
 impl SearchSkillGroupsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<SearchSkillGroupsError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
@@ -6118,6 +6192,7 @@ pub enum SearchUsersError {}
 impl SearchUsersError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<SearchUsersError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
@@ -6145,6 +6220,7 @@ pub enum SendAnnouncementError {
 impl SendAnnouncementError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<SendAnnouncementError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AlreadyExistsException" => {
                     return RusotoError::Service(SendAnnouncementError::AlreadyExists(err.msg))
@@ -6183,6 +6259,7 @@ pub enum SendInvitationError {
 impl SendInvitationError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<SendInvitationError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ConcurrentModificationException" => {
                     return RusotoError::Service(SendInvitationError::ConcurrentModification(
@@ -6223,6 +6300,7 @@ pub enum StartDeviceSyncError {
 impl StartDeviceSyncError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<StartDeviceSyncError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "DeviceNotRegisteredException" => {
                     return RusotoError::Service(StartDeviceSyncError::DeviceNotRegistered(err.msg))
@@ -6255,6 +6333,7 @@ impl StartSmartHomeApplianceDiscoveryError {
         res: BufferedHttpResponse,
     ) -> RusotoError<StartSmartHomeApplianceDiscoveryError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "NotFoundException" => {
                     return RusotoError::Service(StartSmartHomeApplianceDiscoveryError::NotFound(
@@ -6287,6 +6366,7 @@ pub enum TagResourceError {
 impl TagResourceError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<TagResourceError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "NotFoundException" => {
                     return RusotoError::Service(TagResourceError::NotFound(err.msg))
@@ -6317,6 +6397,7 @@ pub enum UntagResourceError {
 impl UntagResourceError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UntagResourceError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "NotFoundException" => {
                     return RusotoError::Service(UntagResourceError::NotFound(err.msg))
@@ -6351,6 +6432,7 @@ pub enum UpdateAddressBookError {
 impl UpdateAddressBookError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateAddressBookError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ConcurrentModificationException" => {
                     return RusotoError::Service(UpdateAddressBookError::ConcurrentModification(
@@ -6395,6 +6477,7 @@ impl UpdateBusinessReportScheduleError {
         res: BufferedHttpResponse,
     ) -> RusotoError<UpdateBusinessReportScheduleError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ConcurrentModificationException" => {
                     return RusotoError::Service(
@@ -6435,6 +6518,7 @@ pub enum UpdateConferenceProviderError {
 impl UpdateConferenceProviderError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateConferenceProviderError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "NotFoundException" => {
                     return RusotoError::Service(UpdateConferenceProviderError::NotFound(err.msg))
@@ -6467,6 +6551,7 @@ pub enum UpdateContactError {
 impl UpdateContactError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateContactError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ConcurrentModificationException" => {
                     return RusotoError::Service(UpdateContactError::ConcurrentModification(
@@ -6507,6 +6592,7 @@ pub enum UpdateDeviceError {
 impl UpdateDeviceError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateDeviceError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ConcurrentModificationException" => {
                     return RusotoError::Service(UpdateDeviceError::ConcurrentModification(err.msg))
@@ -6547,6 +6633,7 @@ pub enum UpdateGatewayError {
 impl UpdateGatewayError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateGatewayError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "NameInUseException" => {
                     return RusotoError::Service(UpdateGatewayError::NameInUse(err.msg))
@@ -6583,6 +6670,7 @@ pub enum UpdateGatewayGroupError {
 impl UpdateGatewayGroupError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateGatewayGroupError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "NameInUseException" => {
                     return RusotoError::Service(UpdateGatewayGroupError::NameInUse(err.msg))
@@ -6625,6 +6713,7 @@ pub enum UpdateNetworkProfileError {
 impl UpdateNetworkProfileError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateNetworkProfileError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ConcurrentModificationException" => {
                     return RusotoError::Service(UpdateNetworkProfileError::ConcurrentModification(
@@ -6685,6 +6774,7 @@ pub enum UpdateProfileError {
 impl UpdateProfileError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateProfileError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ConcurrentModificationException" => {
                     return RusotoError::Service(UpdateProfileError::ConcurrentModification(
@@ -6727,6 +6817,7 @@ pub enum UpdateRoomError {
 impl UpdateRoomError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateRoomError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "NameInUseException" => {
                     return RusotoError::Service(UpdateRoomError::NameInUse(err.msg))
@@ -6765,6 +6856,7 @@ pub enum UpdateSkillGroupError {
 impl UpdateSkillGroupError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateSkillGroupError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ConcurrentModificationException" => {
                     return RusotoError::Service(UpdateSkillGroupError::ConcurrentModification(

@@ -24,7 +24,6 @@ use rusoto_core::proto;
 use rusoto_core::signature::SignedRequest;
 #[allow(unused_imports)]
 use serde::{Deserialize, Serialize};
-use serde_json;
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct AcceptInvitationRequest {
@@ -2583,6 +2582,7 @@ pub enum AcceptInvitationError {
 impl AcceptInvitationError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<AcceptInvitationError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(AcceptInvitationError::BadRequest(err.msg))
@@ -2621,6 +2621,7 @@ pub enum ArchiveFindingsError {
 impl ArchiveFindingsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ArchiveFindingsError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(ArchiveFindingsError::BadRequest(err.msg))
@@ -2657,6 +2658,7 @@ pub enum CreateDetectorError {
 impl CreateDetectorError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateDetectorError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(CreateDetectorError::BadRequest(err.msg))
@@ -2693,6 +2695,7 @@ pub enum CreateFilterError {
 impl CreateFilterError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateFilterError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(CreateFilterError::BadRequest(err.msg))
@@ -2729,6 +2732,7 @@ pub enum CreateIPSetError {
 impl CreateIPSetError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateIPSetError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(CreateIPSetError::BadRequest(err.msg))
@@ -2765,6 +2769,7 @@ pub enum CreateMembersError {
 impl CreateMembersError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateMembersError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(CreateMembersError::BadRequest(err.msg))
@@ -2803,6 +2808,7 @@ impl CreatePublishingDestinationError {
         res: BufferedHttpResponse,
     ) -> RusotoError<CreatePublishingDestinationError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(CreatePublishingDestinationError::BadRequest(
@@ -2845,6 +2851,7 @@ pub enum CreateSampleFindingsError {
 impl CreateSampleFindingsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateSampleFindingsError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(CreateSampleFindingsError::BadRequest(err.msg))
@@ -2883,6 +2890,7 @@ pub enum CreateThreatIntelSetError {
 impl CreateThreatIntelSetError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateThreatIntelSetError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(CreateThreatIntelSetError::BadRequest(err.msg))
@@ -2921,6 +2929,7 @@ pub enum DeclineInvitationsError {
 impl DeclineInvitationsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeclineInvitationsError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(DeclineInvitationsError::BadRequest(err.msg))
@@ -2959,6 +2968,7 @@ pub enum DeleteDetectorError {
 impl DeleteDetectorError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteDetectorError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(DeleteDetectorError::BadRequest(err.msg))
@@ -2995,6 +3005,7 @@ pub enum DeleteFilterError {
 impl DeleteFilterError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteFilterError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(DeleteFilterError::BadRequest(err.msg))
@@ -3031,6 +3042,7 @@ pub enum DeleteIPSetError {
 impl DeleteIPSetError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteIPSetError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(DeleteIPSetError::BadRequest(err.msg))
@@ -3067,6 +3079,7 @@ pub enum DeleteInvitationsError {
 impl DeleteInvitationsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteInvitationsError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(DeleteInvitationsError::BadRequest(err.msg))
@@ -3105,6 +3118,7 @@ pub enum DeleteMembersError {
 impl DeleteMembersError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteMembersError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(DeleteMembersError::BadRequest(err.msg))
@@ -3143,6 +3157,7 @@ impl DeletePublishingDestinationError {
         res: BufferedHttpResponse,
     ) -> RusotoError<DeletePublishingDestinationError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(DeletePublishingDestinationError::BadRequest(
@@ -3185,6 +3200,7 @@ pub enum DeleteThreatIntelSetError {
 impl DeleteThreatIntelSetError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteThreatIntelSetError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(DeleteThreatIntelSetError::BadRequest(err.msg))
@@ -3225,6 +3241,7 @@ impl DescribeOrganizationConfigurationError {
         res: BufferedHttpResponse,
     ) -> RusotoError<DescribeOrganizationConfigurationError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(
@@ -3269,6 +3286,7 @@ impl DescribePublishingDestinationError {
         res: BufferedHttpResponse,
     ) -> RusotoError<DescribePublishingDestinationError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(DescribePublishingDestinationError::BadRequest(
@@ -3313,6 +3331,7 @@ impl DisableOrganizationAdminAccountError {
         res: BufferedHttpResponse,
     ) -> RusotoError<DisableOrganizationAdminAccountError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(DisableOrganizationAdminAccountError::BadRequest(
@@ -3357,6 +3376,7 @@ impl DisassociateFromMasterAccountError {
         res: BufferedHttpResponse,
     ) -> RusotoError<DisassociateFromMasterAccountError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(DisassociateFromMasterAccountError::BadRequest(
@@ -3399,6 +3419,7 @@ pub enum DisassociateMembersError {
 impl DisassociateMembersError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DisassociateMembersError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(DisassociateMembersError::BadRequest(err.msg))
@@ -3439,6 +3460,7 @@ impl EnableOrganizationAdminAccountError {
         res: BufferedHttpResponse,
     ) -> RusotoError<EnableOrganizationAdminAccountError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(EnableOrganizationAdminAccountError::BadRequest(
@@ -3481,6 +3503,7 @@ pub enum GetDetectorError {
 impl GetDetectorError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetDetectorError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(GetDetectorError::BadRequest(err.msg))
@@ -3517,6 +3540,7 @@ pub enum GetFilterError {
 impl GetFilterError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetFilterError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(GetFilterError::BadRequest(err.msg))
@@ -3553,6 +3577,7 @@ pub enum GetFindingsError {
 impl GetFindingsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetFindingsError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(GetFindingsError::BadRequest(err.msg))
@@ -3589,6 +3614,7 @@ pub enum GetFindingsStatisticsError {
 impl GetFindingsStatisticsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetFindingsStatisticsError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(GetFindingsStatisticsError::BadRequest(err.msg))
@@ -3627,6 +3653,7 @@ pub enum GetIPSetError {
 impl GetIPSetError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetIPSetError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(GetIPSetError::BadRequest(err.msg))
@@ -3663,6 +3690,7 @@ pub enum GetInvitationsCountError {
 impl GetInvitationsCountError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetInvitationsCountError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(GetInvitationsCountError::BadRequest(err.msg))
@@ -3701,6 +3729,7 @@ pub enum GetMasterAccountError {
 impl GetMasterAccountError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetMasterAccountError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(GetMasterAccountError::BadRequest(err.msg))
@@ -3739,6 +3768,7 @@ pub enum GetMemberDetectorsError {
 impl GetMemberDetectorsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetMemberDetectorsError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(GetMemberDetectorsError::BadRequest(err.msg))
@@ -3777,6 +3807,7 @@ pub enum GetMembersError {
 impl GetMembersError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetMembersError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(GetMembersError::BadRequest(err.msg))
@@ -3813,6 +3844,7 @@ pub enum GetThreatIntelSetError {
 impl GetThreatIntelSetError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetThreatIntelSetError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(GetThreatIntelSetError::BadRequest(err.msg))
@@ -3851,6 +3883,7 @@ pub enum GetUsageStatisticsError {
 impl GetUsageStatisticsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetUsageStatisticsError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(GetUsageStatisticsError::BadRequest(err.msg))
@@ -3889,6 +3922,7 @@ pub enum InviteMembersError {
 impl InviteMembersError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<InviteMembersError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(InviteMembersError::BadRequest(err.msg))
@@ -3925,6 +3959,7 @@ pub enum ListDetectorsError {
 impl ListDetectorsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListDetectorsError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(ListDetectorsError::BadRequest(err.msg))
@@ -3961,6 +3996,7 @@ pub enum ListFiltersError {
 impl ListFiltersError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListFiltersError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(ListFiltersError::BadRequest(err.msg))
@@ -3997,6 +4033,7 @@ pub enum ListFindingsError {
 impl ListFindingsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListFindingsError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(ListFindingsError::BadRequest(err.msg))
@@ -4033,6 +4070,7 @@ pub enum ListIPSetsError {
 impl ListIPSetsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListIPSetsError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(ListIPSetsError::BadRequest(err.msg))
@@ -4069,6 +4107,7 @@ pub enum ListInvitationsError {
 impl ListInvitationsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListInvitationsError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(ListInvitationsError::BadRequest(err.msg))
@@ -4105,6 +4144,7 @@ pub enum ListMembersError {
 impl ListMembersError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListMembersError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(ListMembersError::BadRequest(err.msg))
@@ -4143,6 +4183,7 @@ impl ListOrganizationAdminAccountsError {
         res: BufferedHttpResponse,
     ) -> RusotoError<ListOrganizationAdminAccountsError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(ListOrganizationAdminAccountsError::BadRequest(
@@ -4187,6 +4228,7 @@ impl ListPublishingDestinationsError {
         res: BufferedHttpResponse,
     ) -> RusotoError<ListPublishingDestinationsError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(ListPublishingDestinationsError::BadRequest(
@@ -4229,6 +4271,7 @@ pub enum ListTagsForResourceError {
 impl ListTagsForResourceError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListTagsForResourceError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(ListTagsForResourceError::BadRequest(err.msg))
@@ -4267,6 +4310,7 @@ pub enum ListThreatIntelSetsError {
 impl ListThreatIntelSetsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListThreatIntelSetsError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(ListThreatIntelSetsError::BadRequest(err.msg))
@@ -4305,6 +4349,7 @@ pub enum StartMonitoringMembersError {
 impl StartMonitoringMembersError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<StartMonitoringMembersError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(StartMonitoringMembersError::BadRequest(err.msg))
@@ -4343,6 +4388,7 @@ pub enum StopMonitoringMembersError {
 impl StopMonitoringMembersError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<StopMonitoringMembersError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(StopMonitoringMembersError::BadRequest(err.msg))
@@ -4381,6 +4427,7 @@ pub enum TagResourceError {
 impl TagResourceError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<TagResourceError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(TagResourceError::BadRequest(err.msg))
@@ -4417,6 +4464,7 @@ pub enum UnarchiveFindingsError {
 impl UnarchiveFindingsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UnarchiveFindingsError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(UnarchiveFindingsError::BadRequest(err.msg))
@@ -4455,6 +4503,7 @@ pub enum UntagResourceError {
 impl UntagResourceError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UntagResourceError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(UntagResourceError::BadRequest(err.msg))
@@ -4491,6 +4540,7 @@ pub enum UpdateDetectorError {
 impl UpdateDetectorError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateDetectorError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(UpdateDetectorError::BadRequest(err.msg))
@@ -4527,6 +4577,7 @@ pub enum UpdateFilterError {
 impl UpdateFilterError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateFilterError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(UpdateFilterError::BadRequest(err.msg))
@@ -4563,6 +4614,7 @@ pub enum UpdateFindingsFeedbackError {
 impl UpdateFindingsFeedbackError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateFindingsFeedbackError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(UpdateFindingsFeedbackError::BadRequest(err.msg))
@@ -4601,6 +4653,7 @@ pub enum UpdateIPSetError {
 impl UpdateIPSetError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateIPSetError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(UpdateIPSetError::BadRequest(err.msg))
@@ -4637,6 +4690,7 @@ pub enum UpdateMemberDetectorsError {
 impl UpdateMemberDetectorsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateMemberDetectorsError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(UpdateMemberDetectorsError::BadRequest(err.msg))
@@ -4677,6 +4731,7 @@ impl UpdateOrganizationConfigurationError {
         res: BufferedHttpResponse,
     ) -> RusotoError<UpdateOrganizationConfigurationError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(UpdateOrganizationConfigurationError::BadRequest(
@@ -4721,6 +4776,7 @@ impl UpdatePublishingDestinationError {
         res: BufferedHttpResponse,
     ) -> RusotoError<UpdatePublishingDestinationError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(UpdatePublishingDestinationError::BadRequest(
@@ -4763,6 +4819,7 @@ pub enum UpdateThreatIntelSetError {
 impl UpdateThreatIntelSetError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateThreatIntelSetError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(UpdateThreatIntelSetError::BadRequest(err.msg))
@@ -5206,6 +5263,7 @@ impl GuardDuty for GuardDutyClient {
         &self,
         input: AcceptInvitationRequest,
     ) -> Result<AcceptInvitationResponse, RusotoError<AcceptInvitationError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/detector/{detector_id}/master",
             detector_id = input.detector_id
@@ -5240,6 +5298,7 @@ impl GuardDuty for GuardDutyClient {
         &self,
         input: ArchiveFindingsRequest,
     ) -> Result<ArchiveFindingsResponse, RusotoError<ArchiveFindingsError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/detector/{detector_id}/findings/archive",
             detector_id = input.detector_id
@@ -5274,6 +5333,7 @@ impl GuardDuty for GuardDutyClient {
         &self,
         input: CreateDetectorRequest,
     ) -> Result<CreateDetectorResponse, RusotoError<CreateDetectorError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/detector";
 
         let mut request = SignedRequest::new("POST", "guardduty", &self.region, &request_uri);
@@ -5305,6 +5365,7 @@ impl GuardDuty for GuardDutyClient {
         &self,
         input: CreateFilterRequest,
     ) -> Result<CreateFilterResponse, RusotoError<CreateFilterError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/detector/{detector_id}/filter",
             detector_id = input.detector_id
@@ -5339,6 +5400,7 @@ impl GuardDuty for GuardDutyClient {
         &self,
         input: CreateIPSetRequest,
     ) -> Result<CreateIPSetResponse, RusotoError<CreateIPSetError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/detector/{detector_id}/ipset",
             detector_id = input.detector_id
@@ -5373,6 +5435,7 @@ impl GuardDuty for GuardDutyClient {
         &self,
         input: CreateMembersRequest,
     ) -> Result<CreateMembersResponse, RusotoError<CreateMembersError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/detector/{detector_id}/member",
             detector_id = input.detector_id
@@ -5408,6 +5471,7 @@ impl GuardDuty for GuardDutyClient {
         input: CreatePublishingDestinationRequest,
     ) -> Result<CreatePublishingDestinationResponse, RusotoError<CreatePublishingDestinationError>>
     {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/detector/{detector_id}/publishingDestination",
             detector_id = input.detector_id
@@ -5442,6 +5506,7 @@ impl GuardDuty for GuardDutyClient {
         &self,
         input: CreateSampleFindingsRequest,
     ) -> Result<CreateSampleFindingsResponse, RusotoError<CreateSampleFindingsError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/detector/{detector_id}/findings/create",
             detector_id = input.detector_id
@@ -5476,6 +5541,7 @@ impl GuardDuty for GuardDutyClient {
         &self,
         input: CreateThreatIntelSetRequest,
     ) -> Result<CreateThreatIntelSetResponse, RusotoError<CreateThreatIntelSetError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/detector/{detector_id}/threatintelset",
             detector_id = input.detector_id
@@ -5510,6 +5576,7 @@ impl GuardDuty for GuardDutyClient {
         &self,
         input: DeclineInvitationsRequest,
     ) -> Result<DeclineInvitationsResponse, RusotoError<DeclineInvitationsError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/invitation/decline";
 
         let mut request = SignedRequest::new("POST", "guardduty", &self.region, &request_uri);
@@ -5541,6 +5608,7 @@ impl GuardDuty for GuardDutyClient {
         &self,
         input: DeleteDetectorRequest,
     ) -> Result<DeleteDetectorResponse, RusotoError<DeleteDetectorError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!("/detector/{detector_id}", detector_id = input.detector_id);
 
         let mut request = SignedRequest::new("DELETE", "guardduty", &self.region, &request_uri);
@@ -5569,6 +5637,7 @@ impl GuardDuty for GuardDutyClient {
         &self,
         input: DeleteFilterRequest,
     ) -> Result<DeleteFilterResponse, RusotoError<DeleteFilterError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/detector/{detector_id}/filter/{filter_name}",
             detector_id = input.detector_id,
@@ -5601,6 +5670,7 @@ impl GuardDuty for GuardDutyClient {
         &self,
         input: DeleteIPSetRequest,
     ) -> Result<DeleteIPSetResponse, RusotoError<DeleteIPSetError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/detector/{detector_id}/ipset/{ip_set_id}",
             detector_id = input.detector_id,
@@ -5633,6 +5703,7 @@ impl GuardDuty for GuardDutyClient {
         &self,
         input: DeleteInvitationsRequest,
     ) -> Result<DeleteInvitationsResponse, RusotoError<DeleteInvitationsError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/invitation/delete";
 
         let mut request = SignedRequest::new("POST", "guardduty", &self.region, &request_uri);
@@ -5664,6 +5735,7 @@ impl GuardDuty for GuardDutyClient {
         &self,
         input: DeleteMembersRequest,
     ) -> Result<DeleteMembersResponse, RusotoError<DeleteMembersError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/detector/{detector_id}/member/delete",
             detector_id = input.detector_id
@@ -5699,6 +5771,7 @@ impl GuardDuty for GuardDutyClient {
         input: DeletePublishingDestinationRequest,
     ) -> Result<DeletePublishingDestinationResponse, RusotoError<DeletePublishingDestinationError>>
     {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/detector/{detector_id}/publishingDestination/{destination_id}",
             destination_id = input.destination_id,
@@ -5731,6 +5804,7 @@ impl GuardDuty for GuardDutyClient {
         &self,
         input: DeleteThreatIntelSetRequest,
     ) -> Result<DeleteThreatIntelSetResponse, RusotoError<DeleteThreatIntelSetError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/detector/{detector_id}/threatintelset/{threat_intel_set_id}",
             detector_id = input.detector_id,
@@ -5766,6 +5840,7 @@ impl GuardDuty for GuardDutyClient {
         DescribeOrganizationConfigurationResponse,
         RusotoError<DescribeOrganizationConfigurationError>,
     > {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/detector/{detector_id}/admin",
             detector_id = input.detector_id
@@ -5802,6 +5877,7 @@ impl GuardDuty for GuardDutyClient {
         DescribePublishingDestinationResponse,
         RusotoError<DescribePublishingDestinationError>,
     > {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/detector/{detector_id}/publishingDestination/{destination_id}",
             destination_id = input.destination_id,
@@ -5837,6 +5913,7 @@ impl GuardDuty for GuardDutyClient {
         DisableOrganizationAdminAccountResponse,
         RusotoError<DisableOrganizationAdminAccountError>,
     > {
+        #![allow(clippy::needless_update)]
         let request_uri = "/admin/disable";
 
         let mut request = SignedRequest::new("POST", "guardduty", &self.region, &request_uri);
@@ -5873,6 +5950,7 @@ impl GuardDuty for GuardDutyClient {
         DisassociateFromMasterAccountResponse,
         RusotoError<DisassociateFromMasterAccountError>,
     > {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/detector/{detector_id}/master/disassociate",
             detector_id = input.detector_id
@@ -5904,6 +5982,7 @@ impl GuardDuty for GuardDutyClient {
         &self,
         input: DisassociateMembersRequest,
     ) -> Result<DisassociateMembersResponse, RusotoError<DisassociateMembersError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/detector/{detector_id}/member/disassociate",
             detector_id = input.detector_id
@@ -5941,6 +6020,7 @@ impl GuardDuty for GuardDutyClient {
         EnableOrganizationAdminAccountResponse,
         RusotoError<EnableOrganizationAdminAccountError>,
     > {
+        #![allow(clippy::needless_update)]
         let request_uri = "/admin/enable";
 
         let mut request = SignedRequest::new("POST", "guardduty", &self.region, &request_uri);
@@ -5972,6 +6052,7 @@ impl GuardDuty for GuardDutyClient {
         &self,
         input: GetDetectorRequest,
     ) -> Result<GetDetectorResponse, RusotoError<GetDetectorError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!("/detector/{detector_id}", detector_id = input.detector_id);
 
         let mut request = SignedRequest::new("GET", "guardduty", &self.region, &request_uri);
@@ -6000,6 +6081,7 @@ impl GuardDuty for GuardDutyClient {
         &self,
         input: GetFilterRequest,
     ) -> Result<GetFilterResponse, RusotoError<GetFilterError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/detector/{detector_id}/filter/{filter_name}",
             detector_id = input.detector_id,
@@ -6032,6 +6114,7 @@ impl GuardDuty for GuardDutyClient {
         &self,
         input: GetFindingsRequest,
     ) -> Result<GetFindingsResponse, RusotoError<GetFindingsError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/detector/{detector_id}/findings/get",
             detector_id = input.detector_id
@@ -6066,6 +6149,7 @@ impl GuardDuty for GuardDutyClient {
         &self,
         input: GetFindingsStatisticsRequest,
     ) -> Result<GetFindingsStatisticsResponse, RusotoError<GetFindingsStatisticsError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/detector/{detector_id}/findings/statistics",
             detector_id = input.detector_id
@@ -6100,6 +6184,7 @@ impl GuardDuty for GuardDutyClient {
         &self,
         input: GetIPSetRequest,
     ) -> Result<GetIPSetResponse, RusotoError<GetIPSetError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/detector/{detector_id}/ipset/{ip_set_id}",
             detector_id = input.detector_id,
@@ -6131,6 +6216,7 @@ impl GuardDuty for GuardDutyClient {
     async fn get_invitations_count(
         &self,
     ) -> Result<GetInvitationsCountResponse, RusotoError<GetInvitationsCountError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/invitation/count";
 
         let mut request = SignedRequest::new("GET", "guardduty", &self.region, &request_uri);
@@ -6159,6 +6245,7 @@ impl GuardDuty for GuardDutyClient {
         &self,
         input: GetMasterAccountRequest,
     ) -> Result<GetMasterAccountResponse, RusotoError<GetMasterAccountError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/detector/{detector_id}/master",
             detector_id = input.detector_id
@@ -6190,6 +6277,7 @@ impl GuardDuty for GuardDutyClient {
         &self,
         input: GetMemberDetectorsRequest,
     ) -> Result<GetMemberDetectorsResponse, RusotoError<GetMemberDetectorsError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/detector/{detector_id}/member/detector/get",
             detector_id = input.detector_id
@@ -6224,6 +6312,7 @@ impl GuardDuty for GuardDutyClient {
         &self,
         input: GetMembersRequest,
     ) -> Result<GetMembersResponse, RusotoError<GetMembersError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/detector/{detector_id}/member/get",
             detector_id = input.detector_id
@@ -6258,6 +6347,7 @@ impl GuardDuty for GuardDutyClient {
         &self,
         input: GetThreatIntelSetRequest,
     ) -> Result<GetThreatIntelSetResponse, RusotoError<GetThreatIntelSetError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/detector/{detector_id}/threatintelset/{threat_intel_set_id}",
             detector_id = input.detector_id,
@@ -6290,6 +6380,7 @@ impl GuardDuty for GuardDutyClient {
         &self,
         input: GetUsageStatisticsRequest,
     ) -> Result<GetUsageStatisticsResponse, RusotoError<GetUsageStatisticsError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/detector/{detector_id}/usage/statistics",
             detector_id = input.detector_id
@@ -6324,6 +6415,7 @@ impl GuardDuty for GuardDutyClient {
         &self,
         input: InviteMembersRequest,
     ) -> Result<InviteMembersResponse, RusotoError<InviteMembersError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/detector/{detector_id}/member/invite",
             detector_id = input.detector_id
@@ -6358,6 +6450,7 @@ impl GuardDuty for GuardDutyClient {
         &self,
         input: ListDetectorsRequest,
     ) -> Result<ListDetectorsResponse, RusotoError<ListDetectorsError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/detector";
 
         let mut request = SignedRequest::new("GET", "guardduty", &self.region, &request_uri);
@@ -6395,6 +6488,7 @@ impl GuardDuty for GuardDutyClient {
         &self,
         input: ListFiltersRequest,
     ) -> Result<ListFiltersResponse, RusotoError<ListFiltersError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/detector/{detector_id}/filter",
             detector_id = input.detector_id
@@ -6435,6 +6529,7 @@ impl GuardDuty for GuardDutyClient {
         &self,
         input: ListFindingsRequest,
     ) -> Result<ListFindingsResponse, RusotoError<ListFindingsError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/detector/{detector_id}/findings",
             detector_id = input.detector_id
@@ -6469,6 +6564,7 @@ impl GuardDuty for GuardDutyClient {
         &self,
         input: ListIPSetsRequest,
     ) -> Result<ListIPSetsResponse, RusotoError<ListIPSetsError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/detector/{detector_id}/ipset",
             detector_id = input.detector_id
@@ -6509,6 +6605,7 @@ impl GuardDuty for GuardDutyClient {
         &self,
         input: ListInvitationsRequest,
     ) -> Result<ListInvitationsResponse, RusotoError<ListInvitationsError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/invitation";
 
         let mut request = SignedRequest::new("GET", "guardduty", &self.region, &request_uri);
@@ -6546,6 +6643,7 @@ impl GuardDuty for GuardDutyClient {
         &self,
         input: ListMembersRequest,
     ) -> Result<ListMembersResponse, RusotoError<ListMembersError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/detector/{detector_id}/member",
             detector_id = input.detector_id
@@ -6592,6 +6690,7 @@ impl GuardDuty for GuardDutyClient {
         ListOrganizationAdminAccountsResponse,
         RusotoError<ListOrganizationAdminAccountsError>,
     > {
+        #![allow(clippy::needless_update)]
         let request_uri = "/admin";
 
         let mut request = SignedRequest::new("GET", "guardduty", &self.region, &request_uri);
@@ -6630,6 +6729,7 @@ impl GuardDuty for GuardDutyClient {
         input: ListPublishingDestinationsRequest,
     ) -> Result<ListPublishingDestinationsResponse, RusotoError<ListPublishingDestinationsError>>
     {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/detector/{detector_id}/publishingDestination",
             detector_id = input.detector_id
@@ -6670,6 +6770,7 @@ impl GuardDuty for GuardDutyClient {
         &self,
         input: ListTagsForResourceRequest,
     ) -> Result<ListTagsForResourceResponse, RusotoError<ListTagsForResourceError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!("/tags/{resource_arn}", resource_arn = input.resource_arn);
 
         let mut request = SignedRequest::new("GET", "guardduty", &self.region, &request_uri);
@@ -6698,6 +6799,7 @@ impl GuardDuty for GuardDutyClient {
         &self,
         input: ListThreatIntelSetsRequest,
     ) -> Result<ListThreatIntelSetsResponse, RusotoError<ListThreatIntelSetsError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/detector/{detector_id}/threatintelset",
             detector_id = input.detector_id
@@ -6738,6 +6840,7 @@ impl GuardDuty for GuardDutyClient {
         &self,
         input: StartMonitoringMembersRequest,
     ) -> Result<StartMonitoringMembersResponse, RusotoError<StartMonitoringMembersError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/detector/{detector_id}/member/start",
             detector_id = input.detector_id
@@ -6772,6 +6875,7 @@ impl GuardDuty for GuardDutyClient {
         &self,
         input: StopMonitoringMembersRequest,
     ) -> Result<StopMonitoringMembersResponse, RusotoError<StopMonitoringMembersError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/detector/{detector_id}/member/stop",
             detector_id = input.detector_id
@@ -6806,6 +6910,7 @@ impl GuardDuty for GuardDutyClient {
         &self,
         input: TagResourceRequest,
     ) -> Result<TagResourceResponse, RusotoError<TagResourceError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!("/tags/{resource_arn}", resource_arn = input.resource_arn);
 
         let mut request = SignedRequest::new("POST", "guardduty", &self.region, &request_uri);
@@ -6837,6 +6942,7 @@ impl GuardDuty for GuardDutyClient {
         &self,
         input: UnarchiveFindingsRequest,
     ) -> Result<UnarchiveFindingsResponse, RusotoError<UnarchiveFindingsError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/detector/{detector_id}/findings/unarchive",
             detector_id = input.detector_id
@@ -6871,6 +6977,7 @@ impl GuardDuty for GuardDutyClient {
         &self,
         input: UntagResourceRequest,
     ) -> Result<UntagResourceResponse, RusotoError<UntagResourceError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!("/tags/{resource_arn}", resource_arn = input.resource_arn);
 
         let mut request = SignedRequest::new("DELETE", "guardduty", &self.region, &request_uri);
@@ -6905,6 +7012,7 @@ impl GuardDuty for GuardDutyClient {
         &self,
         input: UpdateDetectorRequest,
     ) -> Result<UpdateDetectorResponse, RusotoError<UpdateDetectorError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!("/detector/{detector_id}", detector_id = input.detector_id);
 
         let mut request = SignedRequest::new("POST", "guardduty", &self.region, &request_uri);
@@ -6936,6 +7044,7 @@ impl GuardDuty for GuardDutyClient {
         &self,
         input: UpdateFilterRequest,
     ) -> Result<UpdateFilterResponse, RusotoError<UpdateFilterError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/detector/{detector_id}/filter/{filter_name}",
             detector_id = input.detector_id,
@@ -6971,6 +7080,7 @@ impl GuardDuty for GuardDutyClient {
         &self,
         input: UpdateFindingsFeedbackRequest,
     ) -> Result<UpdateFindingsFeedbackResponse, RusotoError<UpdateFindingsFeedbackError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/detector/{detector_id}/findings/feedback",
             detector_id = input.detector_id
@@ -7005,6 +7115,7 @@ impl GuardDuty for GuardDutyClient {
         &self,
         input: UpdateIPSetRequest,
     ) -> Result<UpdateIPSetResponse, RusotoError<UpdateIPSetError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/detector/{detector_id}/ipset/{ip_set_id}",
             detector_id = input.detector_id,
@@ -7040,6 +7151,7 @@ impl GuardDuty for GuardDutyClient {
         &self,
         input: UpdateMemberDetectorsRequest,
     ) -> Result<UpdateMemberDetectorsResponse, RusotoError<UpdateMemberDetectorsError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/detector/{detector_id}/member/detector/update",
             detector_id = input.detector_id
@@ -7077,6 +7189,7 @@ impl GuardDuty for GuardDutyClient {
         UpdateOrganizationConfigurationResponse,
         RusotoError<UpdateOrganizationConfigurationError>,
     > {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/detector/{detector_id}/admin",
             detector_id = input.detector_id
@@ -7114,6 +7227,7 @@ impl GuardDuty for GuardDutyClient {
         input: UpdatePublishingDestinationRequest,
     ) -> Result<UpdatePublishingDestinationResponse, RusotoError<UpdatePublishingDestinationError>>
     {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/detector/{detector_id}/publishingDestination/{destination_id}",
             destination_id = input.destination_id,
@@ -7149,6 +7263,7 @@ impl GuardDuty for GuardDutyClient {
         &self,
         input: UpdateThreatIntelSetRequest,
     ) -> Result<UpdateThreatIntelSetResponse, RusotoError<UpdateThreatIntelSetError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/detector/{detector_id}/threatintelset/{threat_intel_set_id}",
             detector_id = input.detector_id,

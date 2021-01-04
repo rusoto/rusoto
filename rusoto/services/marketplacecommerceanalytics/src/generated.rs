@@ -54,7 +54,6 @@ impl MarketplaceCommerceAnalyticsClient {
     }
 }
 
-use serde_json;
 /// <p>Container for the parameters to the GenerateDataSet operation.</p>
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
@@ -143,6 +142,7 @@ pub enum GenerateDataSetError {
 impl GenerateDataSetError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GenerateDataSetError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "MarketplaceCommerceAnalyticsException" => {
                     return RusotoError::Service(
@@ -175,6 +175,7 @@ pub enum StartSupportDataExportError {
 impl StartSupportDataExportError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<StartSupportDataExportError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "MarketplaceCommerceAnalyticsException" => {
                     return RusotoError::Service(

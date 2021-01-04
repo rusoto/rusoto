@@ -49,7 +49,6 @@ impl BudgetsClient {
     }
 }
 
-use serde_json;
 /// <p> A budget action resource. </p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
@@ -1009,6 +1008,7 @@ pub enum CreateBudgetError {
 impl CreateBudgetError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateBudgetError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(CreateBudgetError::AccessDenied(err.msg))
@@ -1065,6 +1065,7 @@ pub enum CreateBudgetActionError {
 impl CreateBudgetActionError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateBudgetActionError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(CreateBudgetActionError::AccessDenied(err.msg))
@@ -1127,6 +1128,7 @@ pub enum CreateNotificationError {
 impl CreateNotificationError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateNotificationError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(CreateNotificationError::AccessDenied(err.msg))
@@ -1189,6 +1191,7 @@ pub enum CreateSubscriberError {
 impl CreateSubscriberError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateSubscriberError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(CreateSubscriberError::AccessDenied(err.msg))
@@ -1247,6 +1250,7 @@ pub enum DeleteBudgetError {
 impl DeleteBudgetError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteBudgetError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(DeleteBudgetError::AccessDenied(err.msg))
@@ -1297,6 +1301,7 @@ pub enum DeleteBudgetActionError {
 impl DeleteBudgetActionError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteBudgetActionError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(DeleteBudgetActionError::AccessDenied(err.msg))
@@ -1349,6 +1354,7 @@ pub enum DeleteNotificationError {
 impl DeleteNotificationError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteNotificationError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(DeleteNotificationError::AccessDenied(err.msg))
@@ -1397,6 +1403,7 @@ pub enum DeleteSubscriberError {
 impl DeleteSubscriberError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteSubscriberError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(DeleteSubscriberError::AccessDenied(err.msg))
@@ -1445,6 +1452,7 @@ pub enum DescribeBudgetError {
 impl DescribeBudgetError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeBudgetError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(DescribeBudgetError::AccessDenied(err.msg))
@@ -1493,6 +1501,7 @@ pub enum DescribeBudgetActionError {
 impl DescribeBudgetActionError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeBudgetActionError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(DescribeBudgetActionError::AccessDenied(err.msg))
@@ -1547,6 +1556,7 @@ impl DescribeBudgetActionHistoriesError {
         res: BufferedHttpResponse,
     ) -> RusotoError<DescribeBudgetActionHistoriesError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(DescribeBudgetActionHistoriesError::AccessDenied(
@@ -1615,6 +1625,7 @@ impl DescribeBudgetActionsForAccountError {
         res: BufferedHttpResponse,
     ) -> RusotoError<DescribeBudgetActionsForAccountError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(
@@ -1681,6 +1692,7 @@ impl DescribeBudgetActionsForBudgetError {
         res: BufferedHttpResponse,
     ) -> RusotoError<DescribeBudgetActionsForBudgetError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(DescribeBudgetActionsForBudgetError::AccessDenied(
@@ -1753,6 +1765,7 @@ impl DescribeBudgetPerformanceHistoryError {
         res: BufferedHttpResponse,
     ) -> RusotoError<DescribeBudgetPerformanceHistoryError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(
@@ -1835,6 +1848,7 @@ pub enum DescribeBudgetsError {
 impl DescribeBudgetsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeBudgetsError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(DescribeBudgetsError::AccessDenied(err.msg))
@@ -1897,6 +1911,7 @@ impl DescribeNotificationsForBudgetError {
         res: BufferedHttpResponse,
     ) -> RusotoError<DescribeNotificationsForBudgetError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(DescribeNotificationsForBudgetError::AccessDenied(
@@ -1977,6 +1992,7 @@ impl DescribeSubscribersForNotificationError {
         res: BufferedHttpResponse,
     ) -> RusotoError<DescribeSubscribersForNotificationError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(
@@ -2057,6 +2073,7 @@ pub enum ExecuteBudgetActionError {
 impl ExecuteBudgetActionError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ExecuteBudgetActionError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(ExecuteBudgetActionError::AccessDenied(err.msg))
@@ -2111,6 +2128,7 @@ pub enum UpdateBudgetError {
 impl UpdateBudgetError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateBudgetError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(UpdateBudgetError::AccessDenied(err.msg))
@@ -2161,6 +2179,7 @@ pub enum UpdateBudgetActionError {
 impl UpdateBudgetActionError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateBudgetActionError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(UpdateBudgetActionError::AccessDenied(err.msg))
@@ -2215,6 +2234,7 @@ pub enum UpdateNotificationError {
 impl UpdateNotificationError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateNotificationError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(UpdateNotificationError::AccessDenied(err.msg))
@@ -2269,6 +2289,7 @@ pub enum UpdateSubscriberError {
 impl UpdateSubscriberError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateSubscriberError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(UpdateSubscriberError::AccessDenied(err.msg))

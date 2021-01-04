@@ -47,6 +47,7 @@ pub enum GetRawMessageContentError {
 impl GetRawMessageContentError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetRawMessageContentError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(GetRawMessageContentError::ResourceNotFound(
@@ -124,6 +125,7 @@ impl WorkmailMessageFlow for WorkmailMessageFlowClient {
         &self,
         input: GetRawMessageContentRequest,
     ) -> Result<GetRawMessageContentResponse, RusotoError<GetRawMessageContentError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!("/messages/{message_id}", message_id = input.message_id);
 
         let mut request =
@@ -138,8 +140,10 @@ impl WorkmailMessageFlow for WorkmailMessageFlowClient {
         if response.status.is_success() {
             let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
 
-            let mut result = GetRawMessageContentResponse::default();
-            result.message_content = response.body;
+            let mut result = GetRawMessageContentResponse {
+                message_content: response.body,
+                ..GetRawMessageContentResponse::default()
+            };
 
             Ok(result)
         } else {

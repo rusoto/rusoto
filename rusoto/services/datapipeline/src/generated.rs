@@ -50,7 +50,6 @@ impl DataPipelineClient {
     }
 }
 
-use serde_json;
 /// <p>Contains the parameters for ActivatePipeline.</p>
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
@@ -763,6 +762,7 @@ pub enum ActivatePipelineError {
 impl ActivatePipelineError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ActivatePipelineError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalServiceError" => {
                     return RusotoError::Service(ActivatePipelineError::InternalServiceError(
@@ -813,6 +813,7 @@ pub enum AddTagsError {
 impl AddTagsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<AddTagsError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalServiceError" => {
                     return RusotoError::Service(AddTagsError::InternalServiceError(err.msg))
@@ -857,6 +858,7 @@ pub enum CreatePipelineError {
 impl CreatePipelineError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreatePipelineError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalServiceError" => {
                     return RusotoError::Service(CreatePipelineError::InternalServiceError(err.msg))
@@ -897,6 +899,7 @@ pub enum DeactivatePipelineError {
 impl DeactivatePipelineError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeactivatePipelineError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalServiceError" => {
                     return RusotoError::Service(DeactivatePipelineError::InternalServiceError(
@@ -945,6 +948,7 @@ pub enum DeletePipelineError {
 impl DeletePipelineError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeletePipelineError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalServiceError" => {
                     return RusotoError::Service(DeletePipelineError::InternalServiceError(err.msg))
@@ -989,6 +993,7 @@ pub enum DescribeObjectsError {
 impl DescribeObjectsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeObjectsError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalServiceError" => {
                     return RusotoError::Service(DescribeObjectsError::InternalServiceError(
@@ -1039,6 +1044,7 @@ pub enum DescribePipelinesError {
 impl DescribePipelinesError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribePipelinesError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalServiceError" => {
                     return RusotoError::Service(DescribePipelinesError::InternalServiceError(
@@ -1091,6 +1097,7 @@ pub enum EvaluateExpressionError {
 impl EvaluateExpressionError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<EvaluateExpressionError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalServiceError" => {
                     return RusotoError::Service(EvaluateExpressionError::InternalServiceError(
@@ -1145,6 +1152,7 @@ pub enum GetPipelineDefinitionError {
 impl GetPipelineDefinitionError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetPipelineDefinitionError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalServiceError" => {
                     return RusotoError::Service(GetPipelineDefinitionError::InternalServiceError(
@@ -1197,6 +1205,7 @@ pub enum ListPipelinesError {
 impl ListPipelinesError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListPipelinesError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalServiceError" => {
                     return RusotoError::Service(ListPipelinesError::InternalServiceError(err.msg))
@@ -1235,6 +1244,7 @@ pub enum PollForTaskError {
 impl PollForTaskError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<PollForTaskError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalServiceError" => {
                     return RusotoError::Service(PollForTaskError::InternalServiceError(err.msg))
@@ -1279,6 +1289,7 @@ pub enum PutPipelineDefinitionError {
 impl PutPipelineDefinitionError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<PutPipelineDefinitionError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalServiceError" => {
                     return RusotoError::Service(PutPipelineDefinitionError::InternalServiceError(
@@ -1335,6 +1346,7 @@ pub enum QueryObjectsError {
 impl QueryObjectsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<QueryObjectsError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalServiceError" => {
                     return RusotoError::Service(QueryObjectsError::InternalServiceError(err.msg))
@@ -1383,6 +1395,7 @@ pub enum RemoveTagsError {
 impl RemoveTagsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<RemoveTagsError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalServiceError" => {
                     return RusotoError::Service(RemoveTagsError::InternalServiceError(err.msg))
@@ -1433,6 +1446,7 @@ pub enum ReportTaskProgressError {
 impl ReportTaskProgressError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ReportTaskProgressError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalServiceError" => {
                     return RusotoError::Service(ReportTaskProgressError::InternalServiceError(
@@ -1483,6 +1497,7 @@ pub enum ReportTaskRunnerHeartbeatError {
 impl ReportTaskRunnerHeartbeatError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ReportTaskRunnerHeartbeatError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalServiceError" => {
                     return RusotoError::Service(
@@ -1529,6 +1544,7 @@ pub enum SetStatusError {
 impl SetStatusError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<SetStatusError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalServiceError" => {
                     return RusotoError::Service(SetStatusError::InternalServiceError(err.msg))
@@ -1579,6 +1595,7 @@ pub enum SetTaskStatusError {
 impl SetTaskStatusError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<SetTaskStatusError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalServiceError" => {
                     return RusotoError::Service(SetTaskStatusError::InternalServiceError(err.msg))
@@ -1633,6 +1650,7 @@ impl ValidatePipelineDefinitionError {
         res: BufferedHttpResponse,
     ) -> RusotoError<ValidatePipelineDefinitionError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalServiceError" => {
                     return RusotoError::Service(

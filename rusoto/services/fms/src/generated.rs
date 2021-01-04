@@ -49,7 +49,6 @@ impl FmsClient {
     }
 }
 
-use serde_json;
 /// <p>An individual AWS Firewall Manager application.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct App {
@@ -1242,6 +1241,7 @@ pub enum AssociateAdminAccountError {
 impl AssociateAdminAccountError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<AssociateAdminAccountError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalErrorException" => {
                     return RusotoError::Service(AssociateAdminAccountError::InternalError(err.msg))
@@ -1292,6 +1292,7 @@ pub enum DeleteAppsListError {
 impl DeleteAppsListError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteAppsListError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalErrorException" => {
                     return RusotoError::Service(DeleteAppsListError::InternalError(err.msg))
@@ -1334,6 +1335,7 @@ pub enum DeleteNotificationChannelError {
 impl DeleteNotificationChannelError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteNotificationChannelError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalErrorException" => {
                     return RusotoError::Service(DeleteNotificationChannelError::InternalError(
@@ -1386,6 +1388,7 @@ pub enum DeletePolicyError {
 impl DeletePolicyError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeletePolicyError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalErrorException" => {
                     return RusotoError::Service(DeletePolicyError::InternalError(err.msg))
@@ -1436,6 +1439,7 @@ pub enum DeleteProtocolsListError {
 impl DeleteProtocolsListError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteProtocolsListError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalErrorException" => {
                     return RusotoError::Service(DeleteProtocolsListError::InternalError(err.msg))
@@ -1482,6 +1486,7 @@ pub enum DisassociateAdminAccountError {
 impl DisassociateAdminAccountError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DisassociateAdminAccountError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalErrorException" => {
                     return RusotoError::Service(DisassociateAdminAccountError::InternalError(
@@ -1530,6 +1535,7 @@ pub enum GetAdminAccountError {
 impl GetAdminAccountError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetAdminAccountError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalErrorException" => {
                     return RusotoError::Service(GetAdminAccountError::InternalError(err.msg))
@@ -1572,6 +1578,7 @@ pub enum GetAppsListError {
 impl GetAppsListError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetAppsListError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalErrorException" => {
                     return RusotoError::Service(GetAppsListError::InternalError(err.msg))
@@ -1616,6 +1623,7 @@ pub enum GetComplianceDetailError {
 impl GetComplianceDetailError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetComplianceDetailError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalErrorException" => {
                     return RusotoError::Service(GetComplianceDetailError::InternalError(err.msg))
@@ -1666,6 +1674,7 @@ pub enum GetNotificationChannelError {
 impl GetNotificationChannelError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetNotificationChannelError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalErrorException" => {
                     return RusotoError::Service(GetNotificationChannelError::InternalError(
@@ -1716,6 +1725,7 @@ pub enum GetPolicyError {
 impl GetPolicyError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetPolicyError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalErrorException" => {
                     return RusotoError::Service(GetPolicyError::InternalError(err.msg))
@@ -1762,6 +1772,7 @@ pub enum GetProtectionStatusError {
 impl GetProtectionStatusError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetProtectionStatusError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalErrorException" => {
                     return RusotoError::Service(GetProtectionStatusError::InternalError(err.msg))
@@ -1806,6 +1817,7 @@ pub enum GetProtocolsListError {
 impl GetProtocolsListError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetProtocolsListError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalErrorException" => {
                     return RusotoError::Service(GetProtocolsListError::InternalError(err.msg))
@@ -1848,6 +1860,7 @@ pub enum GetViolationDetailsError {
 impl GetViolationDetailsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetViolationDetailsError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalErrorException" => {
                     return RusotoError::Service(GetViolationDetailsError::InternalError(err.msg))
@@ -1894,6 +1907,7 @@ pub enum ListAppsListsError {
 impl ListAppsListsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListAppsListsError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalErrorException" => {
                     return RusotoError::Service(ListAppsListsError::InternalError(err.msg))
@@ -1938,6 +1952,7 @@ pub enum ListComplianceStatusError {
 impl ListComplianceStatusError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListComplianceStatusError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalErrorException" => {
                     return RusotoError::Service(ListComplianceStatusError::InternalError(err.msg))
@@ -1976,6 +1991,7 @@ pub enum ListMemberAccountsError {
 impl ListMemberAccountsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListMemberAccountsError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalErrorException" => {
                     return RusotoError::Service(ListMemberAccountsError::InternalError(err.msg))
@@ -2016,6 +2032,7 @@ pub enum ListPoliciesError {
 impl ListPoliciesError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListPoliciesError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalErrorException" => {
                     return RusotoError::Service(ListPoliciesError::InternalError(err.msg))
@@ -2062,6 +2079,7 @@ pub enum ListProtocolsListsError {
 impl ListProtocolsListsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListProtocolsListsError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalErrorException" => {
                     return RusotoError::Service(ListProtocolsListsError::InternalError(err.msg))
@@ -2106,6 +2124,7 @@ pub enum ListTagsForResourceError {
 impl ListTagsForResourceError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListTagsForResourceError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalErrorException" => {
                     return RusotoError::Service(ListTagsForResourceError::InternalError(err.msg))
@@ -2160,6 +2179,7 @@ pub enum PutAppsListError {
 impl PutAppsListError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<PutAppsListError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalErrorException" => {
                     return RusotoError::Service(PutAppsListError::InternalError(err.msg))
@@ -2210,6 +2230,7 @@ pub enum PutNotificationChannelError {
 impl PutNotificationChannelError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<PutNotificationChannelError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalErrorException" => {
                     return RusotoError::Service(PutNotificationChannelError::InternalError(
@@ -2264,6 +2285,7 @@ pub enum PutPolicyError {
 impl PutPolicyError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<PutPolicyError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalErrorException" => {
                     return RusotoError::Service(PutPolicyError::InternalError(err.msg))
@@ -2322,6 +2344,7 @@ pub enum PutProtocolsListError {
 impl PutProtocolsListError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<PutProtocolsListError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalErrorException" => {
                     return RusotoError::Service(PutProtocolsListError::InternalError(err.msg))
@@ -2376,6 +2399,7 @@ pub enum TagResourceError {
 impl TagResourceError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<TagResourceError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalErrorException" => {
                     return RusotoError::Service(TagResourceError::InternalError(err.msg))
@@ -2428,6 +2452,7 @@ pub enum UntagResourceError {
 impl UntagResourceError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UntagResourceError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalErrorException" => {
                     return RusotoError::Service(UntagResourceError::InternalError(err.msg))

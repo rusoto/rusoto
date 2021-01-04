@@ -24,7 +24,6 @@ use rusoto_core::proto;
 use rusoto_core::signature::SignedRequest;
 #[allow(unused_imports)]
 use serde::{Deserialize, Serialize};
-use serde_json;
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct AcceptResourceShareInvitationRequest {
@@ -1079,6 +1078,7 @@ impl AcceptResourceShareInvitationError {
         res: BufferedHttpResponse,
     ) -> RusotoError<AcceptResourceShareInvitationError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "IdempotentParameterMismatchException" => {
                     return RusotoError::Service(
@@ -1205,6 +1205,7 @@ pub enum AssociateResourceShareError {
 impl AssociateResourceShareError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<AssociateResourceShareError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "IdempotentParameterMismatchException" => {
                     return RusotoError::Service(
@@ -1309,6 +1310,7 @@ impl AssociateResourceSharePermissionError {
         res: BufferedHttpResponse,
     ) -> RusotoError<AssociateResourceSharePermissionError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidClientTokenException" => {
                     return RusotoError::Service(
@@ -1411,6 +1413,7 @@ pub enum CreateResourceShareError {
 impl CreateResourceShareError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateResourceShareError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "IdempotentParameterMismatchException" => {
                     return RusotoError::Service(
@@ -1517,6 +1520,7 @@ pub enum DeleteResourceShareError {
 impl DeleteResourceShareError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteResourceShareError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "IdempotentParameterMismatchException" => {
                     return RusotoError::Service(
@@ -1611,6 +1615,7 @@ pub enum DisassociateResourceShareError {
 impl DisassociateResourceShareError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DisassociateResourceShareError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "IdempotentParameterMismatchException" => {
                     return RusotoError::Service(
@@ -1719,6 +1724,7 @@ impl DisassociateResourceSharePermissionError {
         res: BufferedHttpResponse,
     ) -> RusotoError<DisassociateResourceSharePermissionError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidClientTokenException" => {
                     return RusotoError::Service(
@@ -1807,6 +1813,7 @@ impl EnableSharingWithAwsOrganizationError {
         res: BufferedHttpResponse,
     ) -> RusotoError<EnableSharingWithAwsOrganizationError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "OperationNotPermittedException" => {
                     return RusotoError::Service(
@@ -1867,6 +1874,7 @@ pub enum GetPermissionError {
 impl GetPermissionError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetPermissionError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidParameterException" => {
                     return RusotoError::Service(GetPermissionError::InvalidParameter(err.msg))
@@ -1927,6 +1935,7 @@ pub enum GetResourcePoliciesError {
 impl GetResourcePoliciesError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetResourcePoliciesError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidNextTokenException" => {
                     return RusotoError::Service(GetResourcePoliciesError::InvalidNextToken(
@@ -1999,6 +2008,7 @@ impl GetResourceShareAssociationsError {
         res: BufferedHttpResponse,
     ) -> RusotoError<GetResourceShareAssociationsError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidNextTokenException" => {
                     return RusotoError::Service(
@@ -2091,6 +2101,7 @@ impl GetResourceShareInvitationsError {
         res: BufferedHttpResponse,
     ) -> RusotoError<GetResourceShareInvitationsError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidMaxResultsException" => {
                     return RusotoError::Service(
@@ -2183,6 +2194,7 @@ pub enum GetResourceSharesError {
 impl GetResourceSharesError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetResourceSharesError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidNextTokenException" => {
                     return RusotoError::Service(GetResourceSharesError::InvalidNextToken(err.msg))
@@ -2253,6 +2265,7 @@ impl ListPendingInvitationResourcesError {
         res: BufferedHttpResponse,
     ) -> RusotoError<ListPendingInvitationResourcesError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidNextTokenException" => {
                     return RusotoError::Service(
@@ -2363,6 +2376,7 @@ pub enum ListPermissionsError {
 impl ListPermissionsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListPermissionsError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidNextTokenException" => {
                     return RusotoError::Service(ListPermissionsError::InvalidNextToken(err.msg))
@@ -2421,6 +2435,7 @@ pub enum ListPrincipalsError {
 impl ListPrincipalsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListPrincipalsError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidNextTokenException" => {
                     return RusotoError::Service(ListPrincipalsError::InvalidNextToken(err.msg))
@@ -2485,6 +2500,7 @@ impl ListResourceSharePermissionsError {
         res: BufferedHttpResponse,
     ) -> RusotoError<ListResourceSharePermissionsError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidNextTokenException" => {
                     return RusotoError::Service(
@@ -2567,6 +2583,7 @@ pub enum ListResourceTypesError {
 impl ListResourceTypesError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListResourceTypesError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidNextTokenException" => {
                     return RusotoError::Service(ListResourceTypesError::InvalidNextToken(err.msg))
@@ -2623,6 +2640,7 @@ pub enum ListResourcesError {
 impl ListResourcesError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListResourcesError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidNextTokenException" => {
                     return RusotoError::Service(ListResourcesError::InvalidNextToken(err.msg))
@@ -2691,6 +2709,7 @@ impl PromoteResourceShareCreatedFromPolicyError {
         res: BufferedHttpResponse,
     ) -> RusotoError<PromoteResourceShareCreatedFromPolicyError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidParameterException" => {
                     return RusotoError::Service(
@@ -2795,6 +2814,7 @@ impl RejectResourceShareInvitationError {
         res: BufferedHttpResponse,
     ) -> RusotoError<RejectResourceShareInvitationError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "IdempotentParameterMismatchException" => {
                     return RusotoError::Service(
@@ -2915,6 +2935,7 @@ pub enum TagResourceError {
 impl TagResourceError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<TagResourceError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidParameterException" => {
                     return RusotoError::Service(TagResourceError::InvalidParameter(err.msg))
@@ -2973,6 +2994,7 @@ pub enum UntagResourceError {
 impl UntagResourceError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UntagResourceError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidParameterException" => {
                     return RusotoError::Service(UntagResourceError::InvalidParameter(err.msg))
@@ -3027,6 +3049,7 @@ pub enum UpdateResourceShareError {
 impl UpdateResourceShareError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateResourceShareError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "IdempotentParameterMismatchException" => {
                     return RusotoError::Service(
@@ -3309,6 +3332,7 @@ impl Ram for RamClient {
         AcceptResourceShareInvitationResponse,
         RusotoError<AcceptResourceShareInvitationError>,
     > {
+        #![allow(clippy::needless_update)]
         let request_uri = "/acceptresourceshareinvitation";
 
         let mut request = SignedRequest::new("POST", "ram", &self.region, &request_uri);
@@ -3340,6 +3364,7 @@ impl Ram for RamClient {
         &self,
         input: AssociateResourceShareRequest,
     ) -> Result<AssociateResourceShareResponse, RusotoError<AssociateResourceShareError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/associateresourceshare";
 
         let mut request = SignedRequest::new("POST", "ram", &self.region, &request_uri);
@@ -3374,6 +3399,7 @@ impl Ram for RamClient {
         AssociateResourceSharePermissionResponse,
         RusotoError<AssociateResourceSharePermissionError>,
     > {
+        #![allow(clippy::needless_update)]
         let request_uri = "/associateresourcesharepermission";
 
         let mut request = SignedRequest::new("POST", "ram", &self.region, &request_uri);
@@ -3407,6 +3433,7 @@ impl Ram for RamClient {
         &self,
         input: CreateResourceShareRequest,
     ) -> Result<CreateResourceShareResponse, RusotoError<CreateResourceShareError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/createresourceshare";
 
         let mut request = SignedRequest::new("POST", "ram", &self.region, &request_uri);
@@ -3438,6 +3465,7 @@ impl Ram for RamClient {
         &self,
         input: DeleteResourceShareRequest,
     ) -> Result<DeleteResourceShareResponse, RusotoError<DeleteResourceShareError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/deleteresourceshare";
 
         let mut request = SignedRequest::new("DELETE", "ram", &self.region, &request_uri);
@@ -3474,6 +3502,7 @@ impl Ram for RamClient {
         input: DisassociateResourceShareRequest,
     ) -> Result<DisassociateResourceShareResponse, RusotoError<DisassociateResourceShareError>>
     {
+        #![allow(clippy::needless_update)]
         let request_uri = "/disassociateresourceshare";
 
         let mut request = SignedRequest::new("POST", "ram", &self.region, &request_uri);
@@ -3508,6 +3537,7 @@ impl Ram for RamClient {
         DisassociateResourceSharePermissionResponse,
         RusotoError<DisassociateResourceSharePermissionError>,
     > {
+        #![allow(clippy::needless_update)]
         let request_uri = "/disassociateresourcesharepermission";
 
         let mut request = SignedRequest::new("POST", "ram", &self.region, &request_uri);
@@ -3543,6 +3573,7 @@ impl Ram for RamClient {
         EnableSharingWithAwsOrganizationResponse,
         RusotoError<EnableSharingWithAwsOrganizationError>,
     > {
+        #![allow(clippy::needless_update)]
         let request_uri = "/enablesharingwithawsorganization";
 
         let mut request = SignedRequest::new("POST", "ram", &self.region, &request_uri);
@@ -3573,6 +3604,7 @@ impl Ram for RamClient {
         &self,
         input: GetPermissionRequest,
     ) -> Result<GetPermissionResponse, RusotoError<GetPermissionError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/getpermission";
 
         let mut request = SignedRequest::new("POST", "ram", &self.region, &request_uri);
@@ -3604,6 +3636,7 @@ impl Ram for RamClient {
         &self,
         input: GetResourcePoliciesRequest,
     ) -> Result<GetResourcePoliciesResponse, RusotoError<GetResourcePoliciesError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/getresourcepolicies";
 
         let mut request = SignedRequest::new("POST", "ram", &self.region, &request_uri);
@@ -3636,6 +3669,7 @@ impl Ram for RamClient {
         input: GetResourceShareAssociationsRequest,
     ) -> Result<GetResourceShareAssociationsResponse, RusotoError<GetResourceShareAssociationsError>>
     {
+        #![allow(clippy::needless_update)]
         let request_uri = "/getresourceshareassociations";
 
         let mut request = SignedRequest::new("POST", "ram", &self.region, &request_uri);
@@ -3668,6 +3702,7 @@ impl Ram for RamClient {
         input: GetResourceShareInvitationsRequest,
     ) -> Result<GetResourceShareInvitationsResponse, RusotoError<GetResourceShareInvitationsError>>
     {
+        #![allow(clippy::needless_update)]
         let request_uri = "/getresourceshareinvitations";
 
         let mut request = SignedRequest::new("POST", "ram", &self.region, &request_uri);
@@ -3699,6 +3734,7 @@ impl Ram for RamClient {
         &self,
         input: GetResourceSharesRequest,
     ) -> Result<GetResourceSharesResponse, RusotoError<GetResourceSharesError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/getresourceshares";
 
         let mut request = SignedRequest::new("POST", "ram", &self.region, &request_uri);
@@ -3733,6 +3769,7 @@ impl Ram for RamClient {
         ListPendingInvitationResourcesResponse,
         RusotoError<ListPendingInvitationResourcesError>,
     > {
+        #![allow(clippy::needless_update)]
         let request_uri = "/listpendinginvitationresources";
 
         let mut request = SignedRequest::new("POST", "ram", &self.region, &request_uri);
@@ -3764,6 +3801,7 @@ impl Ram for RamClient {
         &self,
         input: ListPermissionsRequest,
     ) -> Result<ListPermissionsResponse, RusotoError<ListPermissionsError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/listpermissions";
 
         let mut request = SignedRequest::new("POST", "ram", &self.region, &request_uri);
@@ -3795,6 +3833,7 @@ impl Ram for RamClient {
         &self,
         input: ListPrincipalsRequest,
     ) -> Result<ListPrincipalsResponse, RusotoError<ListPrincipalsError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/listprincipals";
 
         let mut request = SignedRequest::new("POST", "ram", &self.region, &request_uri);
@@ -3827,6 +3866,7 @@ impl Ram for RamClient {
         input: ListResourceSharePermissionsRequest,
     ) -> Result<ListResourceSharePermissionsResponse, RusotoError<ListResourceSharePermissionsError>>
     {
+        #![allow(clippy::needless_update)]
         let request_uri = "/listresourcesharepermissions";
 
         let mut request = SignedRequest::new("POST", "ram", &self.region, &request_uri);
@@ -3858,6 +3898,7 @@ impl Ram for RamClient {
         &self,
         input: ListResourceTypesRequest,
     ) -> Result<ListResourceTypesResponse, RusotoError<ListResourceTypesError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/listresourcetypes";
 
         let mut request = SignedRequest::new("POST", "ram", &self.region, &request_uri);
@@ -3889,6 +3930,7 @@ impl Ram for RamClient {
         &self,
         input: ListResourcesRequest,
     ) -> Result<ListResourcesResponse, RusotoError<ListResourcesError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/listresources";
 
         let mut request = SignedRequest::new("POST", "ram", &self.region, &request_uri);
@@ -3923,6 +3965,7 @@ impl Ram for RamClient {
         PromoteResourceShareCreatedFromPolicyResponse,
         RusotoError<PromoteResourceShareCreatedFromPolicyError>,
     > {
+        #![allow(clippy::needless_update)]
         let request_uri = "/promoteresourcesharecreatedfrompolicy";
 
         let mut request = SignedRequest::new("POST", "ram", &self.region, &request_uri);
@@ -3960,6 +4003,7 @@ impl Ram for RamClient {
         RejectResourceShareInvitationResponse,
         RusotoError<RejectResourceShareInvitationError>,
     > {
+        #![allow(clippy::needless_update)]
         let request_uri = "/rejectresourceshareinvitation";
 
         let mut request = SignedRequest::new("POST", "ram", &self.region, &request_uri);
@@ -3991,6 +4035,7 @@ impl Ram for RamClient {
         &self,
         input: TagResourceRequest,
     ) -> Result<TagResourceResponse, RusotoError<TagResourceError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/tagresource";
 
         let mut request = SignedRequest::new("POST", "ram", &self.region, &request_uri);
@@ -4022,6 +4067,7 @@ impl Ram for RamClient {
         &self,
         input: UntagResourceRequest,
     ) -> Result<UntagResourceResponse, RusotoError<UntagResourceError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/untagresource";
 
         let mut request = SignedRequest::new("POST", "ram", &self.region, &request_uri);
@@ -4053,6 +4099,7 @@ impl Ram for RamClient {
         &self,
         input: UpdateResourceShareRequest,
     ) -> Result<UpdateResourceShareResponse, RusotoError<UpdateResourceShareError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/updateresourceshare";
 
         let mut request = SignedRequest::new("POST", "ram", &self.region, &request_uri);

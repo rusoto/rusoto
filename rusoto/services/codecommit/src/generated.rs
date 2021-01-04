@@ -49,7 +49,6 @@ impl CodeCommitClient {
     }
 }
 
-use serde_json;
 /// <p>Returns information about a specific approval on a pull request.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
@@ -3586,8 +3585,9 @@ impl AssociateApprovalRuleTemplateWithRepositoryError {
         res: BufferedHttpResponse,
     ) -> RusotoError<AssociateApprovalRuleTemplateWithRepositoryError> {
         if let Some(err) = proto::json::Error::parse(&res) {
-            match err.typ.as_str() {
-                                "ApprovalRuleTemplateDoesNotExistException" => return RusotoError::Service(AssociateApprovalRuleTemplateWithRepositoryError::ApprovalRuleTemplateDoesNotExist(err.msg)),
+            #[allow(clippy::single_match)]
+                match err.typ.as_str() {
+                    "ApprovalRuleTemplateDoesNotExistException" => return RusotoError::Service(AssociateApprovalRuleTemplateWithRepositoryError::ApprovalRuleTemplateDoesNotExist(err.msg)),
 "ApprovalRuleTemplateNameRequiredException" => return RusotoError::Service(AssociateApprovalRuleTemplateWithRepositoryError::ApprovalRuleTemplateNameRequired(err.msg)),
 "EncryptionIntegrityChecksFailedException" => return RusotoError::Service(AssociateApprovalRuleTemplateWithRepositoryError::EncryptionIntegrityChecksFailed(err.msg)),
 "EncryptionKeyAccessDeniedException" => return RusotoError::Service(AssociateApprovalRuleTemplateWithRepositoryError::EncryptionKeyAccessDenied(err.msg)),
@@ -3601,7 +3601,7 @@ impl AssociateApprovalRuleTemplateWithRepositoryError {
 "RepositoryNameRequiredException" => return RusotoError::Service(AssociateApprovalRuleTemplateWithRepositoryError::RepositoryNameRequired(err.msg)),
 "ValidationException" => return RusotoError::Validation(err.msg),
 _ => {}
-                            }
+                }
         }
         RusotoError::Unknown(res)
     }
@@ -3656,8 +3656,9 @@ impl BatchAssociateApprovalRuleTemplateWithRepositoriesError {
         res: BufferedHttpResponse,
     ) -> RusotoError<BatchAssociateApprovalRuleTemplateWithRepositoriesError> {
         if let Some(err) = proto::json::Error::parse(&res) {
-            match err.typ.as_str() {
-                                "ApprovalRuleTemplateDoesNotExistException" => return RusotoError::Service(BatchAssociateApprovalRuleTemplateWithRepositoriesError::ApprovalRuleTemplateDoesNotExist(err.msg)),
+            #[allow(clippy::single_match)]
+                match err.typ.as_str() {
+                    "ApprovalRuleTemplateDoesNotExistException" => return RusotoError::Service(BatchAssociateApprovalRuleTemplateWithRepositoriesError::ApprovalRuleTemplateDoesNotExist(err.msg)),
 "ApprovalRuleTemplateNameRequiredException" => return RusotoError::Service(BatchAssociateApprovalRuleTemplateWithRepositoriesError::ApprovalRuleTemplateNameRequired(err.msg)),
 "EncryptionIntegrityChecksFailedException" => return RusotoError::Service(BatchAssociateApprovalRuleTemplateWithRepositoriesError::EncryptionIntegrityChecksFailed(err.msg)),
 "EncryptionKeyAccessDeniedException" => return RusotoError::Service(BatchAssociateApprovalRuleTemplateWithRepositoriesError::EncryptionKeyAccessDenied(err.msg)),
@@ -3669,7 +3670,7 @@ impl BatchAssociateApprovalRuleTemplateWithRepositoriesError {
 "RepositoryNamesRequiredException" => return RusotoError::Service(BatchAssociateApprovalRuleTemplateWithRepositoriesError::RepositoryNamesRequired(err.msg)),
 "ValidationException" => return RusotoError::Validation(err.msg),
 _ => {}
-                            }
+                }
         }
         RusotoError::Unknown(res)
     }
@@ -3744,6 +3745,7 @@ impl BatchDescribeMergeConflictsError {
         res: BufferedHttpResponse,
     ) -> RusotoError<BatchDescribeMergeConflictsError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "CommitDoesNotExistException" => {
                     return RusotoError::Service(
@@ -3956,8 +3958,9 @@ impl BatchDisassociateApprovalRuleTemplateFromRepositoriesError {
         res: BufferedHttpResponse,
     ) -> RusotoError<BatchDisassociateApprovalRuleTemplateFromRepositoriesError> {
         if let Some(err) = proto::json::Error::parse(&res) {
-            match err.typ.as_str() {
-                                "ApprovalRuleTemplateDoesNotExistException" => return RusotoError::Service(BatchDisassociateApprovalRuleTemplateFromRepositoriesError::ApprovalRuleTemplateDoesNotExist(err.msg)),
+            #[allow(clippy::single_match)]
+                match err.typ.as_str() {
+                    "ApprovalRuleTemplateDoesNotExistException" => return RusotoError::Service(BatchDisassociateApprovalRuleTemplateFromRepositoriesError::ApprovalRuleTemplateDoesNotExist(err.msg)),
 "ApprovalRuleTemplateNameRequiredException" => return RusotoError::Service(BatchDisassociateApprovalRuleTemplateFromRepositoriesError::ApprovalRuleTemplateNameRequired(err.msg)),
 "EncryptionIntegrityChecksFailedException" => return RusotoError::Service(BatchDisassociateApprovalRuleTemplateFromRepositoriesError::EncryptionIntegrityChecksFailed(err.msg)),
 "EncryptionKeyAccessDeniedException" => return RusotoError::Service(BatchDisassociateApprovalRuleTemplateFromRepositoriesError::EncryptionKeyAccessDenied(err.msg)),
@@ -3969,7 +3972,7 @@ impl BatchDisassociateApprovalRuleTemplateFromRepositoriesError {
 "RepositoryNamesRequiredException" => return RusotoError::Service(BatchDisassociateApprovalRuleTemplateFromRepositoriesError::RepositoryNamesRequired(err.msg)),
 "ValidationException" => return RusotoError::Validation(err.msg),
 _ => {}
-                            }
+                }
         }
         RusotoError::Unknown(res)
     }
@@ -4020,6 +4023,7 @@ pub enum BatchGetCommitsError {
 impl BatchGetCommitsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<BatchGetCommitsError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "CommitIdsLimitExceededException" => {
                     return RusotoError::Service(BatchGetCommitsError::CommitIdsLimitExceeded(
@@ -4122,6 +4126,7 @@ pub enum BatchGetRepositoriesError {
 impl BatchGetRepositoriesError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<BatchGetRepositoriesError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "EncryptionIntegrityChecksFailedException" => {
                     return RusotoError::Service(
@@ -4218,6 +4223,7 @@ impl CreateApprovalRuleTemplateError {
         res: BufferedHttpResponse,
     ) -> RusotoError<CreateApprovalRuleTemplateError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ApprovalRuleTemplateContentRequiredException" => {
                     return RusotoError::Service(
@@ -4334,6 +4340,7 @@ pub enum CreateBranchError {
 impl CreateBranchError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateBranchError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BranchNameExistsException" => {
                     return RusotoError::Service(CreateBranchError::BranchNameExists(err.msg))
@@ -4496,6 +4503,7 @@ pub enum CreateCommitError {
 impl CreateCommitError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateCommitError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BranchDoesNotExistException" => {
                     return RusotoError::Service(CreateCommitError::BranchDoesNotExist(err.msg))
@@ -4758,6 +4766,7 @@ pub enum CreatePullRequestError {
 impl CreatePullRequestError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreatePullRequestError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ClientRequestTokenRequiredException" => {
                     return RusotoError::Service(
@@ -4962,6 +4971,7 @@ impl CreatePullRequestApprovalRuleError {
         res: BufferedHttpResponse,
     ) -> RusotoError<CreatePullRequestApprovalRuleError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ApprovalRuleContentRequiredException" => {
                     return RusotoError::Service(
@@ -5136,6 +5146,7 @@ pub enum CreateRepositoryError {
 impl CreateRepositoryError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateRepositoryError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "EncryptionIntegrityChecksFailedException" => {
                     return RusotoError::Service(
@@ -5316,6 +5327,7 @@ impl CreateUnreferencedMergeCommitError {
         res: BufferedHttpResponse,
     ) -> RusotoError<CreateUnreferencedMergeCommitError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "CommitDoesNotExistException" => {
                     return RusotoError::Service(
@@ -5634,6 +5646,7 @@ impl DeleteApprovalRuleTemplateError {
         res: BufferedHttpResponse,
     ) -> RusotoError<DeleteApprovalRuleTemplateError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ApprovalRuleTemplateInUseException" => {
                     return RusotoError::Service(
@@ -5704,6 +5717,7 @@ pub enum DeleteBranchError {
 impl DeleteBranchError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteBranchError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BranchNameRequiredException" => {
                     return RusotoError::Service(DeleteBranchError::BranchNameRequired(err.msg))
@@ -5788,6 +5802,7 @@ pub enum DeleteCommentContentError {
 impl DeleteCommentContentError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteCommentContentError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "CommentDeletedException" => {
                     return RusotoError::Service(DeleteCommentContentError::CommentDeleted(err.msg))
@@ -5878,6 +5893,7 @@ pub enum DeleteFileError {
 impl DeleteFileError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteFileError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BranchDoesNotExistException" => {
                     return RusotoError::Service(DeleteFileError::BranchDoesNotExist(err.msg))
@@ -6022,6 +6038,7 @@ impl DeletePullRequestApprovalRuleError {
         res: BufferedHttpResponse,
     ) -> RusotoError<DeletePullRequestApprovalRuleError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ApprovalRuleNameRequiredException" => {
                     return RusotoError::Service(
@@ -6160,6 +6177,7 @@ pub enum DeleteRepositoryError {
 impl DeleteRepositoryError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteRepositoryError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "EncryptionIntegrityChecksFailedException" => {
                     return RusotoError::Service(
@@ -6274,6 +6292,7 @@ pub enum DescribeMergeConflictsError {
 impl DescribeMergeConflictsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeMergeConflictsError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "CommitDoesNotExistException" => {
                     return RusotoError::Service(DescribeMergeConflictsError::CommitDoesNotExist(
@@ -6480,6 +6499,7 @@ pub enum DescribePullRequestEventsError {
 impl DescribePullRequestEventsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribePullRequestEventsError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ActorDoesNotExistException" => {
                     return RusotoError::Service(DescribePullRequestEventsError::ActorDoesNotExist(
@@ -6626,8 +6646,9 @@ impl DisassociateApprovalRuleTemplateFromRepositoryError {
         res: BufferedHttpResponse,
     ) -> RusotoError<DisassociateApprovalRuleTemplateFromRepositoryError> {
         if let Some(err) = proto::json::Error::parse(&res) {
-            match err.typ.as_str() {
-                                "ApprovalRuleTemplateDoesNotExistException" => return RusotoError::Service(DisassociateApprovalRuleTemplateFromRepositoryError::ApprovalRuleTemplateDoesNotExist(err.msg)),
+            #[allow(clippy::single_match)]
+                match err.typ.as_str() {
+                    "ApprovalRuleTemplateDoesNotExistException" => return RusotoError::Service(DisassociateApprovalRuleTemplateFromRepositoryError::ApprovalRuleTemplateDoesNotExist(err.msg)),
 "ApprovalRuleTemplateNameRequiredException" => return RusotoError::Service(DisassociateApprovalRuleTemplateFromRepositoryError::ApprovalRuleTemplateNameRequired(err.msg)),
 "EncryptionIntegrityChecksFailedException" => return RusotoError::Service(DisassociateApprovalRuleTemplateFromRepositoryError::EncryptionIntegrityChecksFailed(err.msg)),
 "EncryptionKeyAccessDeniedException" => return RusotoError::Service(DisassociateApprovalRuleTemplateFromRepositoryError::EncryptionKeyAccessDenied(err.msg)),
@@ -6640,7 +6661,7 @@ impl DisassociateApprovalRuleTemplateFromRepositoryError {
 "RepositoryNameRequiredException" => return RusotoError::Service(DisassociateApprovalRuleTemplateFromRepositoryError::RepositoryNameRequired(err.msg)),
 "ValidationException" => return RusotoError::Validation(err.msg),
 _ => {}
-                            }
+                }
         }
         RusotoError::Unknown(res)
     }
@@ -6696,6 +6717,7 @@ impl EvaluatePullRequestApprovalRulesError {
         res: BufferedHttpResponse,
     ) -> RusotoError<EvaluatePullRequestApprovalRulesError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "EncryptionIntegrityChecksFailedException" => {
                     return RusotoError::Service(
@@ -6816,6 +6838,7 @@ pub enum GetApprovalRuleTemplateError {
 impl GetApprovalRuleTemplateError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetApprovalRuleTemplateError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ApprovalRuleTemplateDoesNotExistException" => {
                     return RusotoError::Service(
@@ -6888,6 +6911,7 @@ pub enum GetBlobError {
 impl GetBlobError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetBlobError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BlobIdDoesNotExistException" => {
                     return RusotoError::Service(GetBlobError::BlobIdDoesNotExist(err.msg))
@@ -6984,6 +7008,7 @@ pub enum GetBranchError {
 impl GetBranchError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetBranchError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BranchDoesNotExistException" => {
                     return RusotoError::Service(GetBranchError::BranchDoesNotExist(err.msg))
@@ -7072,6 +7097,7 @@ pub enum GetCommentError {
 impl GetCommentError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetCommentError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "CommentDeletedException" => {
                     return RusotoError::Service(GetCommentError::CommentDeleted(err.msg))
@@ -7150,6 +7176,7 @@ pub enum GetCommentReactionsError {
 impl GetCommentReactionsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetCommentReactionsError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "CommentDeletedException" => {
                     return RusotoError::Service(GetCommentReactionsError::CommentDeleted(err.msg))
@@ -7242,6 +7269,7 @@ impl GetCommentsForComparedCommitError {
         res: BufferedHttpResponse,
     ) -> RusotoError<GetCommentsForComparedCommitError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "CommitDoesNotExistException" => {
                     return RusotoError::Service(
@@ -7402,6 +7430,7 @@ pub enum GetCommentsForPullRequestError {
 impl GetCommentsForPullRequestError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetCommentsForPullRequestError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "CommitDoesNotExistException" => {
                     return RusotoError::Service(
@@ -7578,6 +7607,7 @@ pub enum GetCommitError {
 impl GetCommitError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetCommitError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "CommitIdDoesNotExistException" => {
                     return RusotoError::Service(GetCommitError::CommitIdDoesNotExist(err.msg))
@@ -7680,6 +7710,7 @@ pub enum GetDifferencesError {
 impl GetDifferencesError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetDifferencesError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "CommitDoesNotExistException" => {
                     return RusotoError::Service(GetDifferencesError::CommitDoesNotExist(err.msg))
@@ -7816,6 +7847,7 @@ pub enum GetFileError {
 impl GetFileError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetFileError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "CommitDoesNotExistException" => {
                     return RusotoError::Service(GetFileError::CommitDoesNotExist(err.msg))
@@ -7924,6 +7956,7 @@ pub enum GetFolderError {
 impl GetFolderError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetFolderError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "CommitDoesNotExistException" => {
                     return RusotoError::Service(GetFolderError::CommitDoesNotExist(err.msg))
@@ -8028,6 +8061,7 @@ pub enum GetMergeCommitError {
 impl GetMergeCommitError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetMergeCommitError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "CommitDoesNotExistException" => {
                     return RusotoError::Service(GetMergeCommitError::CommitDoesNotExist(err.msg))
@@ -8172,6 +8206,7 @@ pub enum GetMergeConflictsError {
 impl GetMergeConflictsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetMergeConflictsError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "CommitDoesNotExistException" => {
                     return RusotoError::Service(GetMergeConflictsError::CommitDoesNotExist(
@@ -8368,6 +8403,7 @@ pub enum GetMergeOptionsError {
 impl GetMergeOptionsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetMergeOptionsError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "CommitDoesNotExistException" => {
                     return RusotoError::Service(GetMergeOptionsError::CommitDoesNotExist(err.msg))
@@ -8506,6 +8542,7 @@ pub enum GetPullRequestError {
 impl GetPullRequestError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetPullRequestError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "EncryptionIntegrityChecksFailedException" => {
                     return RusotoError::Service(
@@ -8600,6 +8637,7 @@ impl GetPullRequestApprovalStatesError {
         res: BufferedHttpResponse,
     ) -> RusotoError<GetPullRequestApprovalStatesError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "EncryptionIntegrityChecksFailedException" => {
                     return RusotoError::Service(
@@ -8726,6 +8764,7 @@ impl GetPullRequestOverrideStateError {
         res: BufferedHttpResponse,
     ) -> RusotoError<GetPullRequestOverrideStateError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "EncryptionIntegrityChecksFailedException" => {
                     return RusotoError::Service(
@@ -8846,6 +8885,7 @@ pub enum GetRepositoryError {
 impl GetRepositoryError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetRepositoryError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "EncryptionIntegrityChecksFailedException" => {
                     return RusotoError::Service(
@@ -8930,6 +8970,7 @@ pub enum GetRepositoryTriggersError {
 impl GetRepositoryTriggersError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetRepositoryTriggersError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "EncryptionIntegrityChecksFailedException" => {
                     return RusotoError::Service(
@@ -9012,6 +9053,7 @@ pub enum ListApprovalRuleTemplatesError {
 impl ListApprovalRuleTemplatesError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListApprovalRuleTemplatesError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidContinuationTokenException" => {
                     return RusotoError::Service(
@@ -9072,8 +9114,9 @@ impl ListAssociatedApprovalRuleTemplatesForRepositoryError {
         res: BufferedHttpResponse,
     ) -> RusotoError<ListAssociatedApprovalRuleTemplatesForRepositoryError> {
         if let Some(err) = proto::json::Error::parse(&res) {
-            match err.typ.as_str() {
-                                "EncryptionIntegrityChecksFailedException" => return RusotoError::Service(ListAssociatedApprovalRuleTemplatesForRepositoryError::EncryptionIntegrityChecksFailed(err.msg)),
+            #[allow(clippy::single_match)]
+                match err.typ.as_str() {
+                    "EncryptionIntegrityChecksFailedException" => return RusotoError::Service(ListAssociatedApprovalRuleTemplatesForRepositoryError::EncryptionIntegrityChecksFailed(err.msg)),
 "EncryptionKeyAccessDeniedException" => return RusotoError::Service(ListAssociatedApprovalRuleTemplatesForRepositoryError::EncryptionKeyAccessDenied(err.msg)),
 "EncryptionKeyDisabledException" => return RusotoError::Service(ListAssociatedApprovalRuleTemplatesForRepositoryError::EncryptionKeyDisabled(err.msg)),
 "EncryptionKeyNotFoundException" => return RusotoError::Service(ListAssociatedApprovalRuleTemplatesForRepositoryError::EncryptionKeyNotFound(err.msg)),
@@ -9085,7 +9128,7 @@ impl ListAssociatedApprovalRuleTemplatesForRepositoryError {
 "RepositoryNameRequiredException" => return RusotoError::Service(ListAssociatedApprovalRuleTemplatesForRepositoryError::RepositoryNameRequired(err.msg)),
 "ValidationException" => return RusotoError::Validation(err.msg),
 _ => {}
-                            }
+                }
         }
         RusotoError::Unknown(res)
     }
@@ -9134,6 +9177,7 @@ pub enum ListBranchesError {
 impl ListBranchesError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListBranchesError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "EncryptionIntegrityChecksFailedException" => {
                     return RusotoError::Service(
@@ -9228,6 +9272,7 @@ pub enum ListPullRequestsError {
 impl ListPullRequestsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListPullRequestsError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AuthorDoesNotExistException" => {
                     return RusotoError::Service(ListPullRequestsError::AuthorDoesNotExist(err.msg))
@@ -9332,6 +9377,7 @@ pub enum ListRepositoriesError {
 impl ListRepositoriesError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListRepositoriesError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidContinuationTokenException" => {
                     return RusotoError::Service(ListRepositoriesError::InvalidContinuationToken(
@@ -9392,6 +9438,7 @@ impl ListRepositoriesForApprovalRuleTemplateError {
         res: BufferedHttpResponse,
     ) -> RusotoError<ListRepositoriesForApprovalRuleTemplateError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ApprovalRuleTemplateDoesNotExistException" => return RusotoError::Service(
                     ListRepositoriesForApprovalRuleTemplateError::ApprovalRuleTemplateDoesNotExist(
@@ -9514,6 +9561,7 @@ pub enum ListTagsForResourceError {
 impl ListTagsForResourceError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListTagsForResourceError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidRepositoryNameException" => {
                     return RusotoError::Service(ListTagsForResourceError::InvalidRepositoryName(
@@ -9602,6 +9650,7 @@ impl MergeBranchesByFastForwardError {
         res: BufferedHttpResponse,
     ) -> RusotoError<MergeBranchesByFastForwardError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BranchDoesNotExistException" => {
                     return RusotoError::Service(
@@ -9850,6 +9899,7 @@ pub enum MergeBranchesBySquashError {
 impl MergeBranchesBySquashError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<MergeBranchesBySquashError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BranchDoesNotExistException" => {
                     return RusotoError::Service(MergeBranchesBySquashError::BranchDoesNotExist(
@@ -10214,6 +10264,7 @@ pub enum MergeBranchesByThreeWayError {
 impl MergeBranchesByThreeWayError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<MergeBranchesByThreeWayError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BranchDoesNotExistException" => {
                     return RusotoError::Service(MergeBranchesByThreeWayError::BranchDoesNotExist(
@@ -10560,6 +10611,7 @@ impl MergePullRequestByFastForwardError {
         res: BufferedHttpResponse,
     ) -> RusotoError<MergePullRequestByFastForwardError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ConcurrentReferenceUpdateException" => {
                     return RusotoError::Service(
@@ -10820,6 +10872,7 @@ pub enum MergePullRequestBySquashError {
 impl MergePullRequestBySquashError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<MergePullRequestBySquashError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "CommitMessageLengthExceededException" => {
                     return RusotoError::Service(
@@ -11218,6 +11271,7 @@ impl MergePullRequestByThreeWayError {
         res: BufferedHttpResponse,
     ) -> RusotoError<MergePullRequestByThreeWayError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "CommitMessageLengthExceededException" => {
                     return RusotoError::Service(
@@ -11574,6 +11628,7 @@ impl OverridePullRequestApprovalRulesError {
         res: BufferedHttpResponse,
     ) -> RusotoError<OverridePullRequestApprovalRulesError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "EncryptionIntegrityChecksFailedException" => {
                     return RusotoError::Service(
@@ -11768,6 +11823,7 @@ impl PostCommentForComparedCommitError {
         res: BufferedHttpResponse,
     ) -> RusotoError<PostCommentForComparedCommitError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BeforeCommitIdAndAfterCommitIdAreSameException" => {
                     return RusotoError::Service(
@@ -12026,6 +12082,7 @@ pub enum PostCommentForPullRequestError {
 impl PostCommentForPullRequestError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<PostCommentForPullRequestError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BeforeCommitIdAndAfterCommitIdAreSameException" => {
                     return RusotoError::Service(
@@ -12274,6 +12331,7 @@ pub enum PostCommentReplyError {
 impl PostCommentReplyError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<PostCommentReplyError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ClientRequestTokenRequiredException" => {
                     return RusotoError::Service(PostCommentReplyError::ClientRequestTokenRequired(
@@ -12360,6 +12418,7 @@ pub enum PutCommentReactionError {
 impl PutCommentReactionError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<PutCommentReactionError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "CommentDeletedException" => {
                     return RusotoError::Service(PutCommentReactionError::CommentDeleted(err.msg))
@@ -12482,6 +12541,7 @@ pub enum PutFileError {
 impl PutFileError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<PutFileError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BranchDoesNotExistException" => {
                     return RusotoError::Service(PutFileError::BranchDoesNotExist(err.msg))
@@ -12680,6 +12740,7 @@ pub enum PutRepositoryTriggersError {
 impl PutRepositoryTriggersError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<PutRepositoryTriggersError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "EncryptionIntegrityChecksFailedException" => {
                     return RusotoError::Service(
@@ -12884,6 +12945,7 @@ pub enum TagResourceError {
 impl TagResourceError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<TagResourceError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidRepositoryNameException" => {
                     return RusotoError::Service(TagResourceError::InvalidRepositoryName(err.msg))
@@ -12986,6 +13048,7 @@ pub enum TestRepositoryTriggersError {
 impl TestRepositoryTriggersError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<TestRepositoryTriggersError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "EncryptionIntegrityChecksFailedException" => {
                     return RusotoError::Service(
@@ -13196,6 +13259,7 @@ pub enum UntagResourceError {
 impl UntagResourceError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UntagResourceError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidRepositoryNameException" => {
                     return RusotoError::Service(UntagResourceError::InvalidRepositoryName(err.msg))
@@ -13272,6 +13336,7 @@ impl UpdateApprovalRuleTemplateContentError {
         res: BufferedHttpResponse,
     ) -> RusotoError<UpdateApprovalRuleTemplateContentError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ApprovalRuleTemplateContentRequiredException" => {
                     return RusotoError::Service(
@@ -13364,14 +13429,15 @@ impl UpdateApprovalRuleTemplateDescriptionError {
         res: BufferedHttpResponse,
     ) -> RusotoError<UpdateApprovalRuleTemplateDescriptionError> {
         if let Some(err) = proto::json::Error::parse(&res) {
-            match err.typ.as_str() {
-                                "ApprovalRuleTemplateDoesNotExistException" => return RusotoError::Service(UpdateApprovalRuleTemplateDescriptionError::ApprovalRuleTemplateDoesNotExist(err.msg)),
+            #[allow(clippy::single_match)]
+                match err.typ.as_str() {
+                    "ApprovalRuleTemplateDoesNotExistException" => return RusotoError::Service(UpdateApprovalRuleTemplateDescriptionError::ApprovalRuleTemplateDoesNotExist(err.msg)),
 "ApprovalRuleTemplateNameRequiredException" => return RusotoError::Service(UpdateApprovalRuleTemplateDescriptionError::ApprovalRuleTemplateNameRequired(err.msg)),
 "InvalidApprovalRuleTemplateDescriptionException" => return RusotoError::Service(UpdateApprovalRuleTemplateDescriptionError::InvalidApprovalRuleTemplateDescription(err.msg)),
 "InvalidApprovalRuleTemplateNameException" => return RusotoError::Service(UpdateApprovalRuleTemplateDescriptionError::InvalidApprovalRuleTemplateName(err.msg)),
 "ValidationException" => return RusotoError::Validation(err.msg),
 _ => {}
-                            }
+                }
         }
         RusotoError::Unknown(res)
     }
@@ -13414,6 +13480,7 @@ impl UpdateApprovalRuleTemplateNameError {
         res: BufferedHttpResponse,
     ) -> RusotoError<UpdateApprovalRuleTemplateNameError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ApprovalRuleTemplateDoesNotExistException" => {
                     return RusotoError::Service(
@@ -13492,6 +13559,7 @@ pub enum UpdateCommentError {
 impl UpdateCommentError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateCommentError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "CommentContentRequiredException" => {
                     return RusotoError::Service(UpdateCommentError::CommentContentRequired(
@@ -13574,6 +13642,7 @@ pub enum UpdateDefaultBranchError {
 impl UpdateDefaultBranchError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateDefaultBranchError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BranchDoesNotExistException" => {
                     return RusotoError::Service(UpdateDefaultBranchError::BranchDoesNotExist(
@@ -13702,6 +13771,7 @@ impl UpdatePullRequestApprovalRuleContentError {
         res: BufferedHttpResponse,
     ) -> RusotoError<UpdatePullRequestApprovalRuleContentError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ApprovalRuleContentRequiredException" => {
                     return RusotoError::Service(
@@ -13906,6 +13976,7 @@ impl UpdatePullRequestApprovalStateError {
         res: BufferedHttpResponse,
     ) -> RusotoError<UpdatePullRequestApprovalStateError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ApprovalStateRequiredException" => {
                     return RusotoError::Service(
@@ -14076,6 +14147,7 @@ impl UpdatePullRequestDescriptionError {
         res: BufferedHttpResponse,
     ) -> RusotoError<UpdatePullRequestDescriptionError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidDescriptionException" => {
                     return RusotoError::Service(
@@ -14162,6 +14234,7 @@ pub enum UpdatePullRequestStatusError {
 impl UpdatePullRequestStatusError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdatePullRequestStatusError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "EncryptionIntegrityChecksFailedException" => {
                     return RusotoError::Service(
@@ -14284,6 +14357,7 @@ pub enum UpdatePullRequestTitleError {
 impl UpdatePullRequestTitleError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdatePullRequestTitleError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidPullRequestIdException" => {
                     return RusotoError::Service(UpdatePullRequestTitleError::InvalidPullRequestId(
@@ -14366,6 +14440,7 @@ impl UpdateRepositoryDescriptionError {
         res: BufferedHttpResponse,
     ) -> RusotoError<UpdateRepositoryDescriptionError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "EncryptionIntegrityChecksFailedException" => {
                     return RusotoError::Service(
@@ -14470,6 +14545,7 @@ pub enum UpdateRepositoryNameError {
 impl UpdateRepositoryNameError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateRepositoryNameError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidRepositoryNameException" => {
                     return RusotoError::Service(UpdateRepositoryNameError::InvalidRepositoryName(

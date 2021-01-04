@@ -23,7 +23,6 @@ use rusoto_core::proto;
 use rusoto_core::signature::SignedRequest;
 #[allow(unused_imports)]
 use serde::{Deserialize, Serialize};
-use serde_json;
 /// <p>Describes the timestamp range and timestamp origin of a range of fragments.</p> <p>Fragments that have duplicate producer timestamps are deduplicated. This means that if producers are producing a stream of fragments with producer timestamps that are approximately equal to the true clock time, the clip will contain all of the fragments within the requested timestamp range. If some fragments are ingested within the same time range and very different points in time, only the oldest ingested collection of fragments are returned.</p>
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
@@ -352,6 +351,7 @@ pub enum GetClipError {
 impl GetClipError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetClipError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ClientLimitExceededException" => {
                     return RusotoError::Service(GetClipError::ClientLimitExceeded(err.msg))
@@ -430,6 +430,7 @@ impl GetDASHStreamingSessionURLError {
         res: BufferedHttpResponse,
     ) -> RusotoError<GetDASHStreamingSessionURLError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ClientLimitExceededException" => {
                     return RusotoError::Service(
@@ -526,6 +527,7 @@ pub enum GetHLSStreamingSessionURLError {
 impl GetHLSStreamingSessionURLError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetHLSStreamingSessionURLError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ClientLimitExceededException" => {
                     return RusotoError::Service(
@@ -614,6 +616,7 @@ pub enum GetMediaForFragmentListError {
 impl GetMediaForFragmentListError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetMediaForFragmentListError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ClientLimitExceededException" => {
                     return RusotoError::Service(GetMediaForFragmentListError::ClientLimitExceeded(
@@ -670,6 +673,7 @@ pub enum ListFragmentsError {
 impl ListFragmentsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListFragmentsError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ClientLimitExceededException" => {
                     return RusotoError::Service(ListFragmentsError::ClientLimitExceeded(err.msg))
@@ -784,6 +788,7 @@ impl KinesisVideoArchivedMedia for KinesisVideoArchivedMediaClient {
         &self,
         input: GetClipInput,
     ) -> Result<GetClipOutput, RusotoError<GetClipError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/getClip";
 
         let mut request = SignedRequest::new("POST", "kinesisvideo", &self.region, &request_uri);
@@ -800,8 +805,10 @@ impl KinesisVideoArchivedMedia for KinesisVideoArchivedMediaClient {
         if response.status.is_success() {
             let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
 
-            let mut result = GetClipOutput::default();
-            result.payload = Some(response.body);
+            let mut result = GetClipOutput {
+                payload: Some(response.body),
+                ..GetClipOutput::default()
+            };
 
             result.content_type = response.headers.remove("Content-Type");
 
@@ -819,6 +826,7 @@ impl KinesisVideoArchivedMedia for KinesisVideoArchivedMediaClient {
         input: GetDASHStreamingSessionURLInput,
     ) -> Result<GetDASHStreamingSessionURLOutput, RusotoError<GetDASHStreamingSessionURLError>>
     {
+        #![allow(clippy::needless_update)]
         let request_uri = "/getDASHStreamingSessionURL";
 
         let mut request = SignedRequest::new("POST", "kinesisvideo", &self.region, &request_uri);
@@ -850,6 +858,7 @@ impl KinesisVideoArchivedMedia for KinesisVideoArchivedMediaClient {
         &self,
         input: GetHLSStreamingSessionURLInput,
     ) -> Result<GetHLSStreamingSessionURLOutput, RusotoError<GetHLSStreamingSessionURLError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/getHLSStreamingSessionURL";
 
         let mut request = SignedRequest::new("POST", "kinesisvideo", &self.region, &request_uri);
@@ -881,6 +890,7 @@ impl KinesisVideoArchivedMedia for KinesisVideoArchivedMediaClient {
         &self,
         input: GetMediaForFragmentListInput,
     ) -> Result<GetMediaForFragmentListOutput, RusotoError<GetMediaForFragmentListError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/getMediaForFragmentList";
 
         let mut request = SignedRequest::new("POST", "kinesisvideo", &self.region, &request_uri);
@@ -897,8 +907,10 @@ impl KinesisVideoArchivedMedia for KinesisVideoArchivedMediaClient {
         if response.status.is_success() {
             let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
 
-            let mut result = GetMediaForFragmentListOutput::default();
-            result.payload = Some(response.body);
+            let mut result = GetMediaForFragmentListOutput {
+                payload: Some(response.body),
+                ..GetMediaForFragmentListOutput::default()
+            };
 
             result.content_type = response.headers.remove("Content-Type");
 
@@ -915,6 +927,7 @@ impl KinesisVideoArchivedMedia for KinesisVideoArchivedMediaClient {
         &self,
         input: ListFragmentsInput,
     ) -> Result<ListFragmentsOutput, RusotoError<ListFragmentsError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/listFragments";
 
         let mut request = SignedRequest::new("POST", "kinesisvideo", &self.region, &request_uri);

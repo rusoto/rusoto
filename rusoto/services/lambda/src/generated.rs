@@ -24,7 +24,6 @@ use rusoto_core::proto;
 use rusoto_core::signature::SignedRequest;
 #[allow(unused_imports)]
 use serde::{Deserialize, Serialize};
-use serde_json;
 /// <p>Limits that are related to concurrency and storage. All file and storage sizes are in bytes.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
@@ -2402,6 +2401,7 @@ pub enum AddLayerVersionPermissionError {
 impl AddLayerVersionPermissionError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<AddLayerVersionPermissionError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidParameterValueException" => {
                     return RusotoError::Service(
@@ -2484,6 +2484,7 @@ pub enum AddPermissionError {
 impl AddPermissionError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<AddPermissionError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidParameterValueException" => {
                     return RusotoError::Service(AddPermissionError::InvalidParameterValue(err.msg))
@@ -2546,6 +2547,7 @@ pub enum CreateAliasError {
 impl CreateAliasError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateAliasError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidParameterValueException" => {
                     return RusotoError::Service(CreateAliasError::InvalidParameterValue(err.msg))
@@ -2594,6 +2596,7 @@ pub enum CreateCodeSigningConfigError {
 impl CreateCodeSigningConfigError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateCodeSigningConfigError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidParameterValueException" => {
                     return RusotoError::Service(
@@ -2640,6 +2643,7 @@ pub enum CreateEventSourceMappingError {
 impl CreateEventSourceMappingError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateEventSourceMappingError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidParameterValueException" => {
                     return RusotoError::Service(
@@ -2712,6 +2716,7 @@ pub enum CreateFunctionError {
 impl CreateFunctionError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateFunctionError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "CodeSigningConfigNotFoundException" => {
                     return RusotoError::Service(CreateFunctionError::CodeSigningConfigNotFound(
@@ -2786,6 +2791,7 @@ pub enum DeleteAliasError {
 impl DeleteAliasError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteAliasError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidParameterValueException" => {
                     return RusotoError::Service(DeleteAliasError::InvalidParameterValue(err.msg))
@@ -2834,6 +2840,7 @@ pub enum DeleteCodeSigningConfigError {
 impl DeleteCodeSigningConfigError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteCodeSigningConfigError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidParameterValueException" => {
                     return RusotoError::Service(
@@ -2892,6 +2899,7 @@ pub enum DeleteEventSourceMappingError {
 impl DeleteEventSourceMappingError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteEventSourceMappingError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidParameterValueException" => {
                     return RusotoError::Service(
@@ -2956,6 +2964,7 @@ pub enum DeleteFunctionError {
 impl DeleteFunctionError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteFunctionError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidParameterValueException" => {
                     return RusotoError::Service(DeleteFunctionError::InvalidParameterValue(
@@ -3016,6 +3025,7 @@ impl DeleteFunctionCodeSigningConfigError {
         res: BufferedHttpResponse,
     ) -> RusotoError<DeleteFunctionCodeSigningConfigError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "CodeSigningConfigNotFoundException" => {
                     return RusotoError::Service(
@@ -3096,6 +3106,7 @@ pub enum DeleteFunctionConcurrencyError {
 impl DeleteFunctionConcurrencyError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteFunctionConcurrencyError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidParameterValueException" => {
                     return RusotoError::Service(
@@ -3160,6 +3171,7 @@ impl DeleteFunctionEventInvokeConfigError {
         res: BufferedHttpResponse,
     ) -> RusotoError<DeleteFunctionEventInvokeConfigError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidParameterValueException" => {
                     return RusotoError::Service(
@@ -3218,6 +3230,7 @@ pub enum DeleteLayerVersionError {
 impl DeleteLayerVersionError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteLayerVersionError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ServiceException" => {
                     return RusotoError::Service(DeleteLayerVersionError::Service(err.msg))
@@ -3262,6 +3275,7 @@ impl DeleteProvisionedConcurrencyConfigError {
         res: BufferedHttpResponse,
     ) -> RusotoError<DeleteProvisionedConcurrencyConfigError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidParameterValueException" => {
                     return RusotoError::Service(
@@ -3328,6 +3342,7 @@ pub enum GetAccountSettingsError {
 impl GetAccountSettingsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetAccountSettingsError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ServiceException" => {
                     return RusotoError::Service(GetAccountSettingsError::Service(err.msg))
@@ -3368,6 +3383,7 @@ pub enum GetAliasError {
 impl GetAliasError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetAliasError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidParameterValueException" => {
                     return RusotoError::Service(GetAliasError::InvalidParameterValue(err.msg))
@@ -3412,6 +3428,7 @@ pub enum GetCodeSigningConfigError {
 impl GetCodeSigningConfigError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetCodeSigningConfigError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidParameterValueException" => {
                     return RusotoError::Service(GetCodeSigningConfigError::InvalidParameterValue(
@@ -3460,6 +3477,7 @@ pub enum GetEventSourceMappingError {
 impl GetEventSourceMappingError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetEventSourceMappingError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidParameterValueException" => {
                     return RusotoError::Service(GetEventSourceMappingError::InvalidParameterValue(
@@ -3514,6 +3532,7 @@ pub enum GetFunctionError {
 impl GetFunctionError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetFunctionError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidParameterValueException" => {
                     return RusotoError::Service(GetFunctionError::InvalidParameterValue(err.msg))
@@ -3564,6 +3583,7 @@ impl GetFunctionCodeSigningConfigError {
         res: BufferedHttpResponse,
     ) -> RusotoError<GetFunctionCodeSigningConfigError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidParameterValueException" => {
                     return RusotoError::Service(
@@ -3624,6 +3644,7 @@ pub enum GetFunctionConcurrencyError {
 impl GetFunctionConcurrencyError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetFunctionConcurrencyError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidParameterValueException" => {
                     return RusotoError::Service(
@@ -3678,6 +3699,7 @@ pub enum GetFunctionConfigurationError {
 impl GetFunctionConfigurationError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetFunctionConfigurationError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidParameterValueException" => {
                     return RusotoError::Service(
@@ -3736,6 +3758,7 @@ impl GetFunctionEventInvokeConfigError {
         res: BufferedHttpResponse,
     ) -> RusotoError<GetFunctionEventInvokeConfigError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidParameterValueException" => {
                     return RusotoError::Service(
@@ -3796,6 +3819,7 @@ pub enum GetLayerVersionError {
 impl GetLayerVersionError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetLayerVersionError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidParameterValueException" => {
                     return RusotoError::Service(GetLayerVersionError::InvalidParameterValue(
@@ -3846,6 +3870,7 @@ pub enum GetLayerVersionByArnError {
 impl GetLayerVersionByArnError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetLayerVersionByArnError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidParameterValueException" => {
                     return RusotoError::Service(GetLayerVersionByArnError::InvalidParameterValue(
@@ -3900,6 +3925,7 @@ pub enum GetLayerVersionPolicyError {
 impl GetLayerVersionPolicyError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetLayerVersionPolicyError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidParameterValueException" => {
                     return RusotoError::Service(GetLayerVersionPolicyError::InvalidParameterValue(
@@ -3954,6 +3980,7 @@ pub enum GetPolicyError {
 impl GetPolicyError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetPolicyError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidParameterValueException" => {
                     return RusotoError::Service(GetPolicyError::InvalidParameterValue(err.msg))
@@ -4006,6 +4033,7 @@ impl GetProvisionedConcurrencyConfigError {
         res: BufferedHttpResponse,
     ) -> RusotoError<GetProvisionedConcurrencyConfigError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidParameterValueException" => {
                     return RusotoError::Service(
@@ -4122,6 +4150,7 @@ pub enum InvokeError {
 impl InvokeError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<InvokeError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "EC2AccessDeniedException" => {
                     return RusotoError::Service(InvokeError::EC2AccessDenied(err.msg))
@@ -4256,6 +4285,7 @@ pub enum InvokeAsyncError {
 impl InvokeAsyncError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<InvokeAsyncError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidRequestContentException" => {
                     return RusotoError::Service(InvokeAsyncError::InvalidRequestContent(err.msg))
@@ -4308,6 +4338,7 @@ pub enum ListAliasesError {
 impl ListAliasesError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListAliasesError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidParameterValueException" => {
                     return RusotoError::Service(ListAliasesError::InvalidParameterValue(err.msg))
@@ -4352,6 +4383,7 @@ pub enum ListCodeSigningConfigsError {
 impl ListCodeSigningConfigsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListCodeSigningConfigsError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidParameterValueException" => {
                     return RusotoError::Service(
@@ -4394,6 +4426,7 @@ pub enum ListEventSourceMappingsError {
 impl ListEventSourceMappingsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListEventSourceMappingsError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidParameterValueException" => {
                     return RusotoError::Service(
@@ -4452,6 +4485,7 @@ impl ListFunctionEventInvokeConfigsError {
         res: BufferedHttpResponse,
     ) -> RusotoError<ListFunctionEventInvokeConfigsError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidParameterValueException" => {
                     return RusotoError::Service(
@@ -4512,6 +4546,7 @@ pub enum ListFunctionsError {
 impl ListFunctionsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListFunctionsError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidParameterValueException" => {
                     return RusotoError::Service(ListFunctionsError::InvalidParameterValue(err.msg))
@@ -4556,6 +4591,7 @@ impl ListFunctionsByCodeSigningConfigError {
         res: BufferedHttpResponse,
     ) -> RusotoError<ListFunctionsByCodeSigningConfigError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidParameterValueException" => {
                     return RusotoError::Service(
@@ -4610,6 +4646,7 @@ pub enum ListLayerVersionsError {
 impl ListLayerVersionsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListLayerVersionsError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidParameterValueException" => {
                     return RusotoError::Service(ListLayerVersionsError::InvalidParameterValue(
@@ -4658,6 +4695,7 @@ pub enum ListLayersError {
 impl ListLayersError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListLayersError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidParameterValueException" => {
                     return RusotoError::Service(ListLayersError::InvalidParameterValue(err.msg))
@@ -4704,6 +4742,7 @@ impl ListProvisionedConcurrencyConfigsError {
         res: BufferedHttpResponse,
     ) -> RusotoError<ListProvisionedConcurrencyConfigsError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidParameterValueException" => {
                     return RusotoError::Service(
@@ -4766,6 +4805,7 @@ pub enum ListTagsError {
 impl ListTagsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListTagsError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidParameterValueException" => {
                     return RusotoError::Service(ListTagsError::InvalidParameterValue(err.msg))
@@ -4812,6 +4852,7 @@ pub enum ListVersionsByFunctionError {
 impl ListVersionsByFunctionError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListVersionsByFunctionError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidParameterValueException" => {
                     return RusotoError::Service(
@@ -4868,6 +4909,7 @@ pub enum PublishLayerVersionError {
 impl PublishLayerVersionError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<PublishLayerVersionError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "CodeStorageExceededException" => {
                     return RusotoError::Service(PublishLayerVersionError::CodeStorageExceeded(
@@ -4932,6 +4974,7 @@ pub enum PublishVersionError {
 impl PublishVersionError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<PublishVersionError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "CodeStorageExceededException" => {
                     return RusotoError::Service(PublishVersionError::CodeStorageExceeded(err.msg))
@@ -5000,6 +5043,7 @@ impl PutFunctionCodeSigningConfigError {
         res: BufferedHttpResponse,
     ) -> RusotoError<PutFunctionCodeSigningConfigError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "CodeSigningConfigNotFoundException" => {
                     return RusotoError::Service(
@@ -5078,6 +5122,7 @@ pub enum PutFunctionConcurrencyError {
 impl PutFunctionConcurrencyError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<PutFunctionConcurrencyError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidParameterValueException" => {
                     return RusotoError::Service(
@@ -5140,6 +5185,7 @@ impl PutFunctionEventInvokeConfigError {
         res: BufferedHttpResponse,
     ) -> RusotoError<PutFunctionEventInvokeConfigError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidParameterValueException" => {
                     return RusotoError::Service(
@@ -5204,6 +5250,7 @@ impl PutProvisionedConcurrencyConfigError {
         res: BufferedHttpResponse,
     ) -> RusotoError<PutProvisionedConcurrencyConfigError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidParameterValueException" => {
                     return RusotoError::Service(
@@ -5278,6 +5325,7 @@ impl RemoveLayerVersionPermissionError {
         res: BufferedHttpResponse,
     ) -> RusotoError<RemoveLayerVersionPermissionError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidParameterValueException" => {
                     return RusotoError::Service(
@@ -5348,6 +5396,7 @@ pub enum RemovePermissionError {
 impl RemovePermissionError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<RemovePermissionError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidParameterValueException" => {
                     return RusotoError::Service(RemovePermissionError::InvalidParameterValue(
@@ -5404,6 +5453,7 @@ pub enum TagResourceError {
 impl TagResourceError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<TagResourceError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidParameterValueException" => {
                     return RusotoError::Service(TagResourceError::InvalidParameterValue(err.msg))
@@ -5458,6 +5508,7 @@ pub enum UntagResourceError {
 impl UntagResourceError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UntagResourceError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidParameterValueException" => {
                     return RusotoError::Service(UntagResourceError::InvalidParameterValue(err.msg))
@@ -5514,6 +5565,7 @@ pub enum UpdateAliasError {
 impl UpdateAliasError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateAliasError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidParameterValueException" => {
                     return RusotoError::Service(UpdateAliasError::InvalidParameterValue(err.msg))
@@ -5568,6 +5620,7 @@ pub enum UpdateCodeSigningConfigError {
 impl UpdateCodeSigningConfigError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateCodeSigningConfigError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidParameterValueException" => {
                     return RusotoError::Service(
@@ -5622,6 +5675,7 @@ pub enum UpdateEventSourceMappingError {
 impl UpdateEventSourceMappingError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateEventSourceMappingError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidParameterValueException" => {
                     return RusotoError::Service(
@@ -5702,6 +5756,7 @@ pub enum UpdateFunctionCodeError {
 impl UpdateFunctionCodeError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateFunctionCodeError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "CodeSigningConfigNotFoundException" => {
                     return RusotoError::Service(
@@ -5798,6 +5853,7 @@ impl UpdateFunctionConfigurationError {
         res: BufferedHttpResponse,
     ) -> RusotoError<UpdateFunctionConfigurationError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "CodeSigningConfigNotFoundException" => {
                     return RusotoError::Service(
@@ -5894,6 +5950,7 @@ impl UpdateFunctionEventInvokeConfigError {
         res: BufferedHttpResponse,
     ) -> RusotoError<UpdateFunctionEventInvokeConfigError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidParameterValueException" => {
                     return RusotoError::Service(
@@ -6352,6 +6409,7 @@ impl Lambda for LambdaClient {
         input: AddLayerVersionPermissionRequest,
     ) -> Result<AddLayerVersionPermissionResponse, RusotoError<AddLayerVersionPermissionError>>
     {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/2018-10-31/layers/{layer_name}/versions/{version_number}/policy",
             layer_name = input.layer_name,
@@ -6393,6 +6451,7 @@ impl Lambda for LambdaClient {
         &self,
         input: AddPermissionRequest,
     ) -> Result<AddPermissionResponse, RusotoError<AddPermissionError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/2015-03-31/functions/{function_name}/policy",
             function_name = input.function_name
@@ -6433,6 +6492,7 @@ impl Lambda for LambdaClient {
         &self,
         input: CreateAliasRequest,
     ) -> Result<AliasConfiguration, RusotoError<CreateAliasError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/2015-03-31/functions/{function_name}/aliases",
             function_name = input.function_name
@@ -6467,6 +6527,7 @@ impl Lambda for LambdaClient {
         &self,
         input: CreateCodeSigningConfigRequest,
     ) -> Result<CreateCodeSigningConfigResponse, RusotoError<CreateCodeSigningConfigError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/2020-04-22/code-signing-configs/";
 
         let mut request = SignedRequest::new("POST", "lambda", &self.region, &request_uri);
@@ -6498,6 +6559,7 @@ impl Lambda for LambdaClient {
         &self,
         input: CreateEventSourceMappingRequest,
     ) -> Result<EventSourceMappingConfiguration, RusotoError<CreateEventSourceMappingError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/2015-03-31/event-source-mappings/";
 
         let mut request = SignedRequest::new("POST", "lambda", &self.region, &request_uri);
@@ -6529,6 +6591,7 @@ impl Lambda for LambdaClient {
         &self,
         input: CreateFunctionRequest,
     ) -> Result<FunctionConfiguration, RusotoError<CreateFunctionError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/2015-03-31/functions";
 
         let mut request = SignedRequest::new("POST", "lambda", &self.region, &request_uri);
@@ -6560,6 +6623,7 @@ impl Lambda for LambdaClient {
         &self,
         input: DeleteAliasRequest,
     ) -> Result<(), RusotoError<DeleteAliasError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/2015-03-31/functions/{function_name}/aliases/{name}",
             function_name = input.function_name,
@@ -6576,9 +6640,9 @@ impl Lambda for LambdaClient {
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 204 {
             let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = ::std::mem::drop(response);
+            let _result = ::std::mem::drop(response);
 
-            Ok(result)
+            Ok(())
         } else {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             Err(DeleteAliasError::from_response(response))
@@ -6591,6 +6655,7 @@ impl Lambda for LambdaClient {
         &self,
         input: DeleteCodeSigningConfigRequest,
     ) -> Result<DeleteCodeSigningConfigResponse, RusotoError<DeleteCodeSigningConfigError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/2020-04-22/code-signing-configs/{code_signing_config_arn}",
             code_signing_config_arn = input.code_signing_config_arn
@@ -6622,6 +6687,7 @@ impl Lambda for LambdaClient {
         &self,
         input: DeleteEventSourceMappingRequest,
     ) -> Result<EventSourceMappingConfiguration, RusotoError<DeleteEventSourceMappingError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/2015-03-31/event-source-mappings/{uuid}",
             uuid = input.uuid
@@ -6653,6 +6719,7 @@ impl Lambda for LambdaClient {
         &self,
         input: DeleteFunctionRequest,
     ) -> Result<(), RusotoError<DeleteFunctionError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/2015-03-31/functions/{function_name}",
             function_name = input.function_name
@@ -6674,9 +6741,9 @@ impl Lambda for LambdaClient {
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 204 {
             let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = ::std::mem::drop(response);
+            let _result = ::std::mem::drop(response);
 
-            Ok(result)
+            Ok(())
         } else {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             Err(DeleteFunctionError::from_response(response))
@@ -6689,6 +6756,7 @@ impl Lambda for LambdaClient {
         &self,
         input: DeleteFunctionCodeSigningConfigRequest,
     ) -> Result<(), RusotoError<DeleteFunctionCodeSigningConfigError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/2020-06-30/functions/{function_name}/code-signing-config",
             function_name = input.function_name
@@ -6704,9 +6772,9 @@ impl Lambda for LambdaClient {
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 204 {
             let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = ::std::mem::drop(response);
+            let _result = ::std::mem::drop(response);
 
-            Ok(result)
+            Ok(())
         } else {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             Err(DeleteFunctionCodeSigningConfigError::from_response(
@@ -6721,6 +6789,7 @@ impl Lambda for LambdaClient {
         &self,
         input: DeleteFunctionConcurrencyRequest,
     ) -> Result<(), RusotoError<DeleteFunctionConcurrencyError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/2017-10-31/functions/{function_name}/concurrency",
             function_name = input.function_name
@@ -6736,9 +6805,9 @@ impl Lambda for LambdaClient {
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 204 {
             let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = ::std::mem::drop(response);
+            let _result = ::std::mem::drop(response);
 
-            Ok(result)
+            Ok(())
         } else {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             Err(DeleteFunctionConcurrencyError::from_response(response))
@@ -6751,6 +6820,7 @@ impl Lambda for LambdaClient {
         &self,
         input: DeleteFunctionEventInvokeConfigRequest,
     ) -> Result<(), RusotoError<DeleteFunctionEventInvokeConfigError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/2019-09-25/functions/{function_name}/event-invoke-config",
             function_name = input.function_name
@@ -6772,9 +6842,9 @@ impl Lambda for LambdaClient {
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 204 {
             let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = ::std::mem::drop(response);
+            let _result = ::std::mem::drop(response);
 
-            Ok(result)
+            Ok(())
         } else {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             Err(DeleteFunctionEventInvokeConfigError::from_response(
@@ -6789,6 +6859,7 @@ impl Lambda for LambdaClient {
         &self,
         input: DeleteLayerVersionRequest,
     ) -> Result<(), RusotoError<DeleteLayerVersionError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/2018-10-31/layers/{layer_name}/versions/{version_number}",
             layer_name = input.layer_name,
@@ -6805,9 +6876,9 @@ impl Lambda for LambdaClient {
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 204 {
             let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = ::std::mem::drop(response);
+            let _result = ::std::mem::drop(response);
 
-            Ok(result)
+            Ok(())
         } else {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             Err(DeleteLayerVersionError::from_response(response))
@@ -6820,6 +6891,7 @@ impl Lambda for LambdaClient {
         &self,
         input: DeleteProvisionedConcurrencyConfigRequest,
     ) -> Result<(), RusotoError<DeleteProvisionedConcurrencyConfigError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/2019-09-30/functions/{function_name}/provisioned-concurrency",
             function_name = input.function_name
@@ -6839,9 +6911,9 @@ impl Lambda for LambdaClient {
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 204 {
             let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = ::std::mem::drop(response);
+            let _result = ::std::mem::drop(response);
 
-            Ok(result)
+            Ok(())
         } else {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             Err(DeleteProvisionedConcurrencyConfigError::from_response(
@@ -6855,6 +6927,7 @@ impl Lambda for LambdaClient {
     async fn get_account_settings(
         &self,
     ) -> Result<GetAccountSettingsResponse, RusotoError<GetAccountSettingsError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/2016-08-19/account-settings/";
 
         let mut request = SignedRequest::new("GET", "lambda", &self.region, &request_uri);
@@ -6883,6 +6956,7 @@ impl Lambda for LambdaClient {
         &self,
         input: GetAliasRequest,
     ) -> Result<AliasConfiguration, RusotoError<GetAliasError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/2015-03-31/functions/{function_name}/aliases/{name}",
             function_name = input.function_name,
@@ -6915,6 +6989,7 @@ impl Lambda for LambdaClient {
         &self,
         input: GetCodeSigningConfigRequest,
     ) -> Result<GetCodeSigningConfigResponse, RusotoError<GetCodeSigningConfigError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/2020-04-22/code-signing-configs/{code_signing_config_arn}",
             code_signing_config_arn = input.code_signing_config_arn
@@ -6946,6 +7021,7 @@ impl Lambda for LambdaClient {
         &self,
         input: GetEventSourceMappingRequest,
     ) -> Result<EventSourceMappingConfiguration, RusotoError<GetEventSourceMappingError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/2015-03-31/event-source-mappings/{uuid}",
             uuid = input.uuid
@@ -6977,6 +7053,7 @@ impl Lambda for LambdaClient {
         &self,
         input: GetFunctionRequest,
     ) -> Result<GetFunctionResponse, RusotoError<GetFunctionError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/2015-03-31/functions/{function_name}",
             function_name = input.function_name
@@ -7015,6 +7092,7 @@ impl Lambda for LambdaClient {
         input: GetFunctionCodeSigningConfigRequest,
     ) -> Result<GetFunctionCodeSigningConfigResponse, RusotoError<GetFunctionCodeSigningConfigError>>
     {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/2020-06-30/functions/{function_name}/code-signing-config",
             function_name = input.function_name
@@ -7046,6 +7124,7 @@ impl Lambda for LambdaClient {
         &self,
         input: GetFunctionConcurrencyRequest,
     ) -> Result<GetFunctionConcurrencyResponse, RusotoError<GetFunctionConcurrencyError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/2019-09-30/functions/{function_name}/concurrency",
             function_name = input.function_name
@@ -7077,6 +7156,7 @@ impl Lambda for LambdaClient {
         &self,
         input: GetFunctionConfigurationRequest,
     ) -> Result<FunctionConfiguration, RusotoError<GetFunctionConfigurationError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/2015-03-31/functions/{function_name}/configuration",
             function_name = input.function_name
@@ -7114,6 +7194,7 @@ impl Lambda for LambdaClient {
         &self,
         input: GetFunctionEventInvokeConfigRequest,
     ) -> Result<FunctionEventInvokeConfig, RusotoError<GetFunctionEventInvokeConfigError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/2019-09-25/functions/{function_name}/event-invoke-config",
             function_name = input.function_name
@@ -7151,6 +7232,7 @@ impl Lambda for LambdaClient {
         &self,
         input: GetLayerVersionRequest,
     ) -> Result<GetLayerVersionResponse, RusotoError<GetLayerVersionError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/2018-10-31/layers/{layer_name}/versions/{version_number}",
             layer_name = input.layer_name,
@@ -7183,6 +7265,7 @@ impl Lambda for LambdaClient {
         &self,
         input: GetLayerVersionByArnRequest,
     ) -> Result<GetLayerVersionResponse, RusotoError<GetLayerVersionByArnError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/2018-10-31/layers";
 
         let mut request = SignedRequest::new("GET", "lambda", &self.region, &request_uri);
@@ -7216,6 +7299,7 @@ impl Lambda for LambdaClient {
         &self,
         input: GetLayerVersionPolicyRequest,
     ) -> Result<GetLayerVersionPolicyResponse, RusotoError<GetLayerVersionPolicyError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/2018-10-31/layers/{layer_name}/versions/{version_number}/policy",
             layer_name = input.layer_name,
@@ -7248,6 +7332,7 @@ impl Lambda for LambdaClient {
         &self,
         input: GetPolicyRequest,
     ) -> Result<GetPolicyResponse, RusotoError<GetPolicyError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/2015-03-31/functions/{function_name}/policy",
             function_name = input.function_name
@@ -7288,6 +7373,7 @@ impl Lambda for LambdaClient {
         GetProvisionedConcurrencyConfigResponse,
         RusotoError<GetProvisionedConcurrencyConfigError>,
     > {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/2019-09-30/functions/{function_name}/provisioned-concurrency",
             function_name = input.function_name
@@ -7325,6 +7411,7 @@ impl Lambda for LambdaClient {
         &self,
         input: InvocationRequest,
     ) -> Result<InvocationResponse, RusotoError<InvokeError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/2015-03-31/functions/{function_name}/invocations",
             function_name = input.function_name
@@ -7356,8 +7443,10 @@ impl Lambda for LambdaClient {
         if response.status.is_success() {
             let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
 
-            let mut result = InvocationResponse::default();
-            result.payload = Some(response.body);
+            let mut result = InvocationResponse {
+                payload: Some(response.body),
+                ..InvocationResponse::default()
+            };
 
             result.executed_version = response.headers.remove("X-Amz-Executed-Version");
             result.function_error = response.headers.remove("X-Amz-Function-Error");
@@ -7376,6 +7465,7 @@ impl Lambda for LambdaClient {
         &self,
         input: InvokeAsyncRequest,
     ) -> Result<InvokeAsyncResponse, RusotoError<InvokeAsyncError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/2014-11-13/functions/{function_name}/invoke-async/",
             function_name = input.function_name
@@ -7411,6 +7501,7 @@ impl Lambda for LambdaClient {
         &self,
         input: ListAliasesRequest,
     ) -> Result<ListAliasesResponse, RusotoError<ListAliasesError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/2015-03-31/functions/{function_name}/aliases",
             function_name = input.function_name
@@ -7454,6 +7545,7 @@ impl Lambda for LambdaClient {
         &self,
         input: ListCodeSigningConfigsRequest,
     ) -> Result<ListCodeSigningConfigsResponse, RusotoError<ListCodeSigningConfigsError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/2020-04-22/code-signing-configs/";
 
         let mut request = SignedRequest::new("GET", "lambda", &self.region, &request_uri);
@@ -7491,6 +7583,7 @@ impl Lambda for LambdaClient {
         &self,
         input: ListEventSourceMappingsRequest,
     ) -> Result<ListEventSourceMappingsResponse, RusotoError<ListEventSourceMappingsError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/2015-03-31/event-source-mappings/";
 
         let mut request = SignedRequest::new("GET", "lambda", &self.region, &request_uri);
@@ -7537,6 +7630,7 @@ impl Lambda for LambdaClient {
         ListFunctionEventInvokeConfigsResponse,
         RusotoError<ListFunctionEventInvokeConfigsError>,
     > {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/2019-09-25/functions/{function_name}/event-invoke-config/list",
             function_name = input.function_name
@@ -7577,6 +7671,7 @@ impl Lambda for LambdaClient {
         &self,
         input: ListFunctionsRequest,
     ) -> Result<ListFunctionsResponse, RusotoError<ListFunctionsError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/2015-03-31/functions/";
 
         let mut request = SignedRequest::new("GET", "lambda", &self.region, &request_uri);
@@ -7623,6 +7718,7 @@ impl Lambda for LambdaClient {
         ListFunctionsByCodeSigningConfigResponse,
         RusotoError<ListFunctionsByCodeSigningConfigError>,
     > {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/2020-04-22/code-signing-configs/{code_signing_config_arn}/functions",
             code_signing_config_arn = input.code_signing_config_arn
@@ -7665,6 +7761,7 @@ impl Lambda for LambdaClient {
         &self,
         input: ListLayerVersionsRequest,
     ) -> Result<ListLayerVersionsResponse, RusotoError<ListLayerVersionsError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/2018-10-31/layers/{layer_name}/versions",
             layer_name = input.layer_name
@@ -7708,6 +7805,7 @@ impl Lambda for LambdaClient {
         &self,
         input: ListLayersRequest,
     ) -> Result<ListLayersResponse, RusotoError<ListLayersError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/2018-10-31/layers";
 
         let mut request = SignedRequest::new("GET", "lambda", &self.region, &request_uri);
@@ -7751,6 +7849,7 @@ impl Lambda for LambdaClient {
         ListProvisionedConcurrencyConfigsResponse,
         RusotoError<ListProvisionedConcurrencyConfigsError>,
     > {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/2019-09-30/functions/{function_name}/provisioned-concurrency",
             function_name = input.function_name
@@ -7794,6 +7893,7 @@ impl Lambda for LambdaClient {
         &self,
         input: ListTagsRequest,
     ) -> Result<ListTagsResponse, RusotoError<ListTagsError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!("/2017-03-31/tags/{arn}", arn = input.resource);
 
         let mut request = SignedRequest::new("GET", "lambda", &self.region, &request_uri);
@@ -7822,6 +7922,7 @@ impl Lambda for LambdaClient {
         &self,
         input: ListVersionsByFunctionRequest,
     ) -> Result<ListVersionsByFunctionResponse, RusotoError<ListVersionsByFunctionError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/2015-03-31/functions/{function_name}/versions",
             function_name = input.function_name
@@ -7862,6 +7963,7 @@ impl Lambda for LambdaClient {
         &self,
         input: PublishLayerVersionRequest,
     ) -> Result<PublishLayerVersionResponse, RusotoError<PublishLayerVersionError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/2018-10-31/layers/{layer_name}/versions",
             layer_name = input.layer_name
@@ -7896,6 +7998,7 @@ impl Lambda for LambdaClient {
         &self,
         input: PublishVersionRequest,
     ) -> Result<FunctionConfiguration, RusotoError<PublishVersionError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/2015-03-31/functions/{function_name}/versions",
             function_name = input.function_name
@@ -7931,6 +8034,7 @@ impl Lambda for LambdaClient {
         input: PutFunctionCodeSigningConfigRequest,
     ) -> Result<PutFunctionCodeSigningConfigResponse, RusotoError<PutFunctionCodeSigningConfigError>>
     {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/2020-06-30/functions/{function_name}/code-signing-config",
             function_name = input.function_name
@@ -7965,6 +8069,7 @@ impl Lambda for LambdaClient {
         &self,
         input: PutFunctionConcurrencyRequest,
     ) -> Result<Concurrency, RusotoError<PutFunctionConcurrencyError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/2017-10-31/functions/{function_name}/concurrency",
             function_name = input.function_name
@@ -7999,6 +8104,7 @@ impl Lambda for LambdaClient {
         &self,
         input: PutFunctionEventInvokeConfigRequest,
     ) -> Result<FunctionEventInvokeConfig, RusotoError<PutFunctionEventInvokeConfigError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/2019-09-25/functions/{function_name}/event-invoke-config",
             function_name = input.function_name
@@ -8042,6 +8148,7 @@ impl Lambda for LambdaClient {
         PutProvisionedConcurrencyConfigResponse,
         RusotoError<PutProvisionedConcurrencyConfigError>,
     > {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/2019-09-30/functions/{function_name}/provisioned-concurrency",
             function_name = input.function_name
@@ -8082,6 +8189,7 @@ impl Lambda for LambdaClient {
         &self,
         input: RemoveLayerVersionPermissionRequest,
     ) -> Result<(), RusotoError<RemoveLayerVersionPermissionError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/2018-10-31/layers/{layer_name}/versions/{version_number}/policy/{statement_id}",
             layer_name = input.layer_name,
@@ -8105,9 +8213,9 @@ impl Lambda for LambdaClient {
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 204 {
             let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = ::std::mem::drop(response);
+            let _result = ::std::mem::drop(response);
 
-            Ok(result)
+            Ok(())
         } else {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             Err(RemoveLayerVersionPermissionError::from_response(response))
@@ -8120,6 +8228,7 @@ impl Lambda for LambdaClient {
         &self,
         input: RemovePermissionRequest,
     ) -> Result<(), RusotoError<RemovePermissionError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/2015-03-31/functions/{function_name}/policy/{statement_id}",
             function_name = input.function_name,
@@ -8145,9 +8254,9 @@ impl Lambda for LambdaClient {
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 204 {
             let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = ::std::mem::drop(response);
+            let _result = ::std::mem::drop(response);
 
-            Ok(result)
+            Ok(())
         } else {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             Err(RemovePermissionError::from_response(response))
@@ -8160,6 +8269,7 @@ impl Lambda for LambdaClient {
         &self,
         input: TagResourceRequest,
     ) -> Result<(), RusotoError<TagResourceError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!("/2017-03-31/tags/{arn}", arn = input.resource);
 
         let mut request = SignedRequest::new("POST", "lambda", &self.region, &request_uri);
@@ -8175,9 +8285,9 @@ impl Lambda for LambdaClient {
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 204 {
             let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = ::std::mem::drop(response);
+            let _result = ::std::mem::drop(response);
 
-            Ok(result)
+            Ok(())
         } else {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             Err(TagResourceError::from_response(response))
@@ -8190,6 +8300,7 @@ impl Lambda for LambdaClient {
         &self,
         input: UntagResourceRequest,
     ) -> Result<(), RusotoError<UntagResourceError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!("/2017-03-31/tags/{arn}", arn = input.resource);
 
         let mut request = SignedRequest::new("DELETE", "lambda", &self.region, &request_uri);
@@ -8208,9 +8319,9 @@ impl Lambda for LambdaClient {
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 204 {
             let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = ::std::mem::drop(response);
+            let _result = ::std::mem::drop(response);
 
-            Ok(result)
+            Ok(())
         } else {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             Err(UntagResourceError::from_response(response))
@@ -8223,6 +8334,7 @@ impl Lambda for LambdaClient {
         &self,
         input: UpdateAliasRequest,
     ) -> Result<AliasConfiguration, RusotoError<UpdateAliasError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/2015-03-31/functions/{function_name}/aliases/{name}",
             function_name = input.function_name,
@@ -8258,6 +8370,7 @@ impl Lambda for LambdaClient {
         &self,
         input: UpdateCodeSigningConfigRequest,
     ) -> Result<UpdateCodeSigningConfigResponse, RusotoError<UpdateCodeSigningConfigError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/2020-04-22/code-signing-configs/{code_signing_config_arn}",
             code_signing_config_arn = input.code_signing_config_arn
@@ -8292,6 +8405,7 @@ impl Lambda for LambdaClient {
         &self,
         input: UpdateEventSourceMappingRequest,
     ) -> Result<EventSourceMappingConfiguration, RusotoError<UpdateEventSourceMappingError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/2015-03-31/event-source-mappings/{uuid}",
             uuid = input.uuid
@@ -8326,6 +8440,7 @@ impl Lambda for LambdaClient {
         &self,
         input: UpdateFunctionCodeRequest,
     ) -> Result<FunctionConfiguration, RusotoError<UpdateFunctionCodeError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/2015-03-31/functions/{function_name}/code",
             function_name = input.function_name
@@ -8360,6 +8475,7 @@ impl Lambda for LambdaClient {
         &self,
         input: UpdateFunctionConfigurationRequest,
     ) -> Result<FunctionConfiguration, RusotoError<UpdateFunctionConfigurationError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/2015-03-31/functions/{function_name}/configuration",
             function_name = input.function_name
@@ -8394,6 +8510,7 @@ impl Lambda for LambdaClient {
         &self,
         input: UpdateFunctionEventInvokeConfigRequest,
     ) -> Result<FunctionEventInvokeConfig, RusotoError<UpdateFunctionEventInvokeConfigError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/2019-09-25/functions/{function_name}/event-invoke-config",
             function_name = input.function_name

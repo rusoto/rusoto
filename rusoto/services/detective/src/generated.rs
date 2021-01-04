@@ -23,7 +23,6 @@ use rusoto_core::proto;
 use rusoto_core::signature::SignedRequest;
 #[allow(unused_imports)]
 use serde::{Deserialize, Serialize};
-use serde_json;
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct AcceptInvitationRequest {
@@ -333,6 +332,7 @@ pub enum AcceptInvitationError {
 impl AcceptInvitationError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<AcceptInvitationError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ConflictException" => {
                     return RusotoError::Service(AcceptInvitationError::Conflict(err.msg))
@@ -375,6 +375,7 @@ pub enum CreateGraphError {
 impl CreateGraphError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateGraphError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ConflictException" => {
                     return RusotoError::Service(CreateGraphError::Conflict(err.msg))
@@ -417,6 +418,7 @@ pub enum CreateMembersError {
 impl CreateMembersError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateMembersError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalServerException" => {
                     return RusotoError::Service(CreateMembersError::InternalServer(err.msg))
@@ -457,6 +459,7 @@ pub enum DeleteGraphError {
 impl DeleteGraphError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteGraphError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalServerException" => {
                     return RusotoError::Service(DeleteGraphError::InternalServer(err.msg))
@@ -495,6 +498,7 @@ pub enum DeleteMembersError {
 impl DeleteMembersError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteMembersError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ConflictException" => {
                     return RusotoError::Service(DeleteMembersError::Conflict(err.msg))
@@ -537,6 +541,7 @@ pub enum DisassociateMembershipError {
 impl DisassociateMembershipError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DisassociateMembershipError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ConflictException" => {
                     return RusotoError::Service(DisassociateMembershipError::Conflict(err.msg))
@@ -581,6 +586,7 @@ pub enum GetMembersError {
 impl GetMembersError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetMembersError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalServerException" => {
                     return RusotoError::Service(GetMembersError::InternalServer(err.msg))
@@ -615,6 +621,7 @@ pub enum ListGraphsError {
 impl ListGraphsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListGraphsError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalServerException" => {
                     return RusotoError::Service(ListGraphsError::InternalServer(err.msg))
@@ -645,6 +652,7 @@ pub enum ListInvitationsError {
 impl ListInvitationsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListInvitationsError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalServerException" => {
                     return RusotoError::Service(ListInvitationsError::InternalServer(err.msg))
@@ -677,6 +685,7 @@ pub enum ListMembersError {
 impl ListMembersError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListMembersError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalServerException" => {
                     return RusotoError::Service(ListMembersError::InternalServer(err.msg))
@@ -715,6 +724,7 @@ pub enum RejectInvitationError {
 impl RejectInvitationError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<RejectInvitationError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ConflictException" => {
                     return RusotoError::Service(RejectInvitationError::Conflict(err.msg))
@@ -759,6 +769,7 @@ pub enum StartMonitoringMemberError {
 impl StartMonitoringMemberError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<StartMonitoringMemberError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ConflictException" => {
                     return RusotoError::Service(StartMonitoringMemberError::Conflict(err.msg))
@@ -915,6 +926,7 @@ impl Detective for DetectiveClient {
         &self,
         input: AcceptInvitationRequest,
     ) -> Result<(), RusotoError<AcceptInvitationError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/invitation";
 
         let mut request = SignedRequest::new("PUT", "detective", &self.region, &request_uri);
@@ -931,9 +943,9 @@ impl Detective for DetectiveClient {
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
             let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = ::std::mem::drop(response);
+            let _result = ::std::mem::drop(response);
 
-            Ok(result)
+            Ok(())
         } else {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             Err(AcceptInvitationError::from_response(response))
@@ -943,6 +955,7 @@ impl Detective for DetectiveClient {
     /// <p>Creates a new behavior graph for the calling account, and sets that account as the master account. This operation is called by the account that is enabling Detective.</p> <p>Before you try to enable Detective, make sure that your account has been enrolled in Amazon GuardDuty for at least 48 hours. If you do not meet this requirement, you cannot enable Detective. If you do meet the GuardDuty prerequisite, then when you make the request to enable Detective, it checks whether your data volume is within the Detective quota. If it exceeds the quota, then you cannot enable Detective. </p> <p>The operation also enables Detective for the calling account in the currently selected Region. It returns the ARN of the new behavior graph.</p> <p> <code>CreateGraph</code> triggers a process to create the corresponding data tables for the new behavior graph.</p> <p>An account can only be the master account for one behavior graph within a Region. If the same account calls <code>CreateGraph</code> with the same master account, it always returns the same behavior graph ARN. It does not create a new behavior graph.</p>
     #[allow(unused_mut)]
     async fn create_graph(&self) -> Result<CreateGraphResponse, RusotoError<CreateGraphError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/graph";
 
         let mut request = SignedRequest::new("POST", "detective", &self.region, &request_uri);
@@ -973,6 +986,7 @@ impl Detective for DetectiveClient {
         &self,
         input: CreateMembersRequest,
     ) -> Result<CreateMembersResponse, RusotoError<CreateMembersError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/graph/members";
 
         let mut request = SignedRequest::new("POST", "detective", &self.region, &request_uri);
@@ -1005,6 +1019,7 @@ impl Detective for DetectiveClient {
         &self,
         input: DeleteGraphRequest,
     ) -> Result<(), RusotoError<DeleteGraphError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/graph/removal";
 
         let mut request = SignedRequest::new("POST", "detective", &self.region, &request_uri);
@@ -1021,9 +1036,9 @@ impl Detective for DetectiveClient {
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
             let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = ::std::mem::drop(response);
+            let _result = ::std::mem::drop(response);
 
-            Ok(result)
+            Ok(())
         } else {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             Err(DeleteGraphError::from_response(response))
@@ -1036,6 +1051,7 @@ impl Detective for DetectiveClient {
         &self,
         input: DeleteMembersRequest,
     ) -> Result<DeleteMembersResponse, RusotoError<DeleteMembersError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/graph/members/removal";
 
         let mut request = SignedRequest::new("POST", "detective", &self.region, &request_uri);
@@ -1068,6 +1084,7 @@ impl Detective for DetectiveClient {
         &self,
         input: DisassociateMembershipRequest,
     ) -> Result<(), RusotoError<DisassociateMembershipError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/membership/removal";
 
         let mut request = SignedRequest::new("POST", "detective", &self.region, &request_uri);
@@ -1084,9 +1101,9 @@ impl Detective for DetectiveClient {
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
             let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = ::std::mem::drop(response);
+            let _result = ::std::mem::drop(response);
 
-            Ok(result)
+            Ok(())
         } else {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             Err(DisassociateMembershipError::from_response(response))
@@ -1099,6 +1116,7 @@ impl Detective for DetectiveClient {
         &self,
         input: GetMembersRequest,
     ) -> Result<GetMembersResponse, RusotoError<GetMembersError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/graph/members/get";
 
         let mut request = SignedRequest::new("POST", "detective", &self.region, &request_uri);
@@ -1131,6 +1149,7 @@ impl Detective for DetectiveClient {
         &self,
         input: ListGraphsRequest,
     ) -> Result<ListGraphsResponse, RusotoError<ListGraphsError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/graphs/list";
 
         let mut request = SignedRequest::new("POST", "detective", &self.region, &request_uri);
@@ -1163,6 +1182,7 @@ impl Detective for DetectiveClient {
         &self,
         input: ListInvitationsRequest,
     ) -> Result<ListInvitationsResponse, RusotoError<ListInvitationsError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/invitations/list";
 
         let mut request = SignedRequest::new("POST", "detective", &self.region, &request_uri);
@@ -1195,6 +1215,7 @@ impl Detective for DetectiveClient {
         &self,
         input: ListMembersRequest,
     ) -> Result<ListMembersResponse, RusotoError<ListMembersError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/graph/members/list";
 
         let mut request = SignedRequest::new("POST", "detective", &self.region, &request_uri);
@@ -1227,6 +1248,7 @@ impl Detective for DetectiveClient {
         &self,
         input: RejectInvitationRequest,
     ) -> Result<(), RusotoError<RejectInvitationError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/invitation/removal";
 
         let mut request = SignedRequest::new("POST", "detective", &self.region, &request_uri);
@@ -1243,9 +1265,9 @@ impl Detective for DetectiveClient {
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
             let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = ::std::mem::drop(response);
+            let _result = ::std::mem::drop(response);
 
-            Ok(result)
+            Ok(())
         } else {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             Err(RejectInvitationError::from_response(response))
@@ -1258,6 +1280,7 @@ impl Detective for DetectiveClient {
         &self,
         input: StartMonitoringMemberRequest,
     ) -> Result<(), RusotoError<StartMonitoringMemberError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/graph/member/monitoringstate";
 
         let mut request = SignedRequest::new("POST", "detective", &self.region, &request_uri);
@@ -1274,9 +1297,9 @@ impl Detective for DetectiveClient {
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
             let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = ::std::mem::drop(response);
+            let _result = ::std::mem::drop(response);
 
-            Ok(result)
+            Ok(())
         } else {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             Err(StartMonitoringMemberError::from_response(response))

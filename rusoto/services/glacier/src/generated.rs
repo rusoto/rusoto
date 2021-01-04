@@ -24,7 +24,6 @@ use rusoto_core::proto;
 use rusoto_core::signature::SignedRequest;
 #[allow(unused_imports)]
 use serde::{Deserialize, Serialize};
-use serde_json;
 /// <p>Provides options to abort a multipart upload identified by the upload ID.</p> <p>For information about the underlying REST API, see <a href="https://docs.aws.amazon.com/amazonglacier/latest/dev/api-multipart-abort-upload.html">Abort Multipart Upload</a>. For conceptual information, see <a href="https://docs.aws.amazon.com/amazonglacier/latest/dev/working-with-archives.html">Working with Archives in Amazon S3 Glacier</a>.</p>
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
@@ -1340,6 +1339,7 @@ pub enum AbortMultipartUploadError {
 impl AbortMultipartUploadError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<AbortMultipartUploadError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidParameterValueException" => {
                     return RusotoError::Service(AbortMultipartUploadError::InvalidParameterValue(
@@ -1396,6 +1396,7 @@ pub enum AbortVaultLockError {
 impl AbortVaultLockError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<AbortVaultLockError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidParameterValueException" => {
                     return RusotoError::Service(AbortVaultLockError::InvalidParameterValue(
@@ -1450,6 +1451,7 @@ pub enum AddTagsToVaultError {
 impl AddTagsToVaultError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<AddTagsToVaultError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidParameterValueException" => {
                     return RusotoError::Service(AddTagsToVaultError::InvalidParameterValue(
@@ -1506,6 +1508,7 @@ pub enum CompleteMultipartUploadError {
 impl CompleteMultipartUploadError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CompleteMultipartUploadError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidParameterValueException" => {
                     return RusotoError::Service(
@@ -1566,6 +1569,7 @@ pub enum CompleteVaultLockError {
 impl CompleteVaultLockError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CompleteVaultLockError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidParameterValueException" => {
                     return RusotoError::Service(CompleteVaultLockError::InvalidParameterValue(
@@ -1620,6 +1624,7 @@ pub enum CreateVaultError {
 impl CreateVaultError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateVaultError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidParameterValueException" => {
                     return RusotoError::Service(CreateVaultError::InvalidParameterValue(err.msg))
@@ -1668,6 +1673,7 @@ pub enum DeleteArchiveError {
 impl DeleteArchiveError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteArchiveError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidParameterValueException" => {
                     return RusotoError::Service(DeleteArchiveError::InvalidParameterValue(err.msg))
@@ -1716,6 +1722,7 @@ pub enum DeleteVaultError {
 impl DeleteVaultError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteVaultError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidParameterValueException" => {
                     return RusotoError::Service(DeleteVaultError::InvalidParameterValue(err.msg))
@@ -1764,6 +1771,7 @@ pub enum DeleteVaultAccessPolicyError {
 impl DeleteVaultAccessPolicyError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteVaultAccessPolicyError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidParameterValueException" => {
                     return RusotoError::Service(
@@ -1824,6 +1832,7 @@ pub enum DeleteVaultNotificationsError {
 impl DeleteVaultNotificationsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteVaultNotificationsError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidParameterValueException" => {
                     return RusotoError::Service(
@@ -1884,6 +1893,7 @@ pub enum DescribeJobError {
 impl DescribeJobError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeJobError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidParameterValueException" => {
                     return RusotoError::Service(DescribeJobError::InvalidParameterValue(err.msg))
@@ -1932,6 +1942,7 @@ pub enum DescribeVaultError {
 impl DescribeVaultError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeVaultError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidParameterValueException" => {
                     return RusotoError::Service(DescribeVaultError::InvalidParameterValue(err.msg))
@@ -1978,6 +1989,7 @@ pub enum GetDataRetrievalPolicyError {
 impl GetDataRetrievalPolicyError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetDataRetrievalPolicyError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidParameterValueException" => {
                     return RusotoError::Service(
@@ -2028,6 +2040,7 @@ pub enum GetJobOutputError {
 impl GetJobOutputError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetJobOutputError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidParameterValueException" => {
                     return RusotoError::Service(GetJobOutputError::InvalidParameterValue(err.msg))
@@ -2076,6 +2089,7 @@ pub enum GetVaultAccessPolicyError {
 impl GetVaultAccessPolicyError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetVaultAccessPolicyError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidParameterValueException" => {
                     return RusotoError::Service(GetVaultAccessPolicyError::InvalidParameterValue(
@@ -2132,6 +2146,7 @@ pub enum GetVaultLockError {
 impl GetVaultLockError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetVaultLockError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidParameterValueException" => {
                     return RusotoError::Service(GetVaultLockError::InvalidParameterValue(err.msg))
@@ -2180,6 +2195,7 @@ pub enum GetVaultNotificationsError {
 impl GetVaultNotificationsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetVaultNotificationsError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidParameterValueException" => {
                     return RusotoError::Service(GetVaultNotificationsError::InvalidParameterValue(
@@ -2240,6 +2256,7 @@ pub enum InitiateJobError {
 impl InitiateJobError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<InitiateJobError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InsufficientCapacityException" => {
                     return RusotoError::Service(InitiateJobError::InsufficientCapacity(err.msg))
@@ -2296,6 +2313,7 @@ pub enum InitiateMultipartUploadError {
 impl InitiateMultipartUploadError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<InitiateMultipartUploadError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidParameterValueException" => {
                     return RusotoError::Service(
@@ -2356,6 +2374,7 @@ pub enum InitiateVaultLockError {
 impl InitiateVaultLockError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<InitiateVaultLockError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidParameterValueException" => {
                     return RusotoError::Service(InitiateVaultLockError::InvalidParameterValue(
@@ -2410,6 +2429,7 @@ pub enum ListJobsError {
 impl ListJobsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListJobsError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidParameterValueException" => {
                     return RusotoError::Service(ListJobsError::InvalidParameterValue(err.msg))
@@ -2458,6 +2478,7 @@ pub enum ListMultipartUploadsError {
 impl ListMultipartUploadsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListMultipartUploadsError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidParameterValueException" => {
                     return RusotoError::Service(ListMultipartUploadsError::InvalidParameterValue(
@@ -2514,6 +2535,7 @@ pub enum ListPartsError {
 impl ListPartsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListPartsError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidParameterValueException" => {
                     return RusotoError::Service(ListPartsError::InvalidParameterValue(err.msg))
@@ -2560,6 +2582,7 @@ pub enum ListProvisionedCapacityError {
 impl ListProvisionedCapacityError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListProvisionedCapacityError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidParameterValueException" => {
                     return RusotoError::Service(
@@ -2614,6 +2637,7 @@ pub enum ListTagsForVaultError {
 impl ListTagsForVaultError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListTagsForVaultError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidParameterValueException" => {
                     return RusotoError::Service(ListTagsForVaultError::InvalidParameterValue(
@@ -2666,6 +2690,7 @@ pub enum ListVaultsError {
 impl ListVaultsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListVaultsError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidParameterValueException" => {
                     return RusotoError::Service(ListVaultsError::InvalidParameterValue(err.msg))
@@ -2716,6 +2741,7 @@ impl PurchaseProvisionedCapacityError {
         res: BufferedHttpResponse,
     ) -> RusotoError<PurchaseProvisionedCapacityError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidParameterValueException" => {
                     return RusotoError::Service(
@@ -2778,6 +2804,7 @@ pub enum RemoveTagsFromVaultError {
 impl RemoveTagsFromVaultError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<RemoveTagsFromVaultError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidParameterValueException" => {
                     return RusotoError::Service(RemoveTagsFromVaultError::InvalidParameterValue(
@@ -2832,6 +2859,7 @@ pub enum SetDataRetrievalPolicyError {
 impl SetDataRetrievalPolicyError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<SetDataRetrievalPolicyError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidParameterValueException" => {
                     return RusotoError::Service(
@@ -2882,6 +2910,7 @@ pub enum SetVaultAccessPolicyError {
 impl SetVaultAccessPolicyError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<SetVaultAccessPolicyError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidParameterValueException" => {
                     return RusotoError::Service(SetVaultAccessPolicyError::InvalidParameterValue(
@@ -2938,6 +2967,7 @@ pub enum SetVaultNotificationsError {
 impl SetVaultNotificationsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<SetVaultNotificationsError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidParameterValueException" => {
                     return RusotoError::Service(SetVaultNotificationsError::InvalidParameterValue(
@@ -2996,6 +3026,7 @@ pub enum UploadArchiveError {
 impl UploadArchiveError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UploadArchiveError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidParameterValueException" => {
                     return RusotoError::Service(UploadArchiveError::InvalidParameterValue(err.msg))
@@ -3050,6 +3081,7 @@ pub enum UploadMultipartPartError {
 impl UploadMultipartPartError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UploadMultipartPartError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidParameterValueException" => {
                     return RusotoError::Service(UploadMultipartPartError::InvalidParameterValue(
@@ -3341,6 +3373,7 @@ impl Glacier for GlacierClient {
         &self,
         input: AbortMultipartUploadInput,
     ) -> Result<(), RusotoError<AbortMultipartUploadError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/{account_id}/vaults/{vault_name}/multipart-uploads/{upload_id}",
             account_id = input.account_id,
@@ -3359,9 +3392,9 @@ impl Glacier for GlacierClient {
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 204 {
             let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = ::std::mem::drop(response);
+            let _result = ::std::mem::drop(response);
 
-            Ok(result)
+            Ok(())
         } else {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             Err(AbortMultipartUploadError::from_response(response))
@@ -3374,6 +3407,7 @@ impl Glacier for GlacierClient {
         &self,
         input: AbortVaultLockInput,
     ) -> Result<(), RusotoError<AbortVaultLockError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/{account_id}/vaults/{vault_name}/lock-policy",
             account_id = input.account_id,
@@ -3391,9 +3425,9 @@ impl Glacier for GlacierClient {
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 204 {
             let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = ::std::mem::drop(response);
+            let _result = ::std::mem::drop(response);
 
-            Ok(result)
+            Ok(())
         } else {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             Err(AbortVaultLockError::from_response(response))
@@ -3406,6 +3440,7 @@ impl Glacier for GlacierClient {
         &self,
         input: AddTagsToVaultInput,
     ) -> Result<(), RusotoError<AddTagsToVaultError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/{account_id}/vaults/{vault_name}/tags",
             account_id = input.account_id,
@@ -3430,9 +3465,9 @@ impl Glacier for GlacierClient {
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 204 {
             let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = ::std::mem::drop(response);
+            let _result = ::std::mem::drop(response);
 
-            Ok(result)
+            Ok(())
         } else {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             Err(AddTagsToVaultError::from_response(response))
@@ -3445,6 +3480,7 @@ impl Glacier for GlacierClient {
         &self,
         input: CompleteMultipartUploadInput,
     ) -> Result<ArchiveCreationOutput, RusotoError<CompleteMultipartUploadError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/{account_id}/vaults/{vault_name}/multipart-uploads/{upload_id}",
             account_id = input.account_id,
@@ -3485,6 +3521,7 @@ impl Glacier for GlacierClient {
         &self,
         input: CompleteVaultLockInput,
     ) -> Result<(), RusotoError<CompleteVaultLockError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/{account_id}/vaults/{vault_name}/lock-policy/{lock_id}",
             account_id = input.account_id,
@@ -3503,9 +3540,9 @@ impl Glacier for GlacierClient {
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 204 {
             let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = ::std::mem::drop(response);
+            let _result = ::std::mem::drop(response);
 
-            Ok(result)
+            Ok(())
         } else {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             Err(CompleteVaultLockError::from_response(response))
@@ -3518,6 +3555,7 @@ impl Glacier for GlacierClient {
         &self,
         input: CreateVaultInput,
     ) -> Result<CreateVaultOutput, RusotoError<CreateVaultError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/{account_id}/vaults/{vault_name}",
             account_id = input.account_id,
@@ -3552,6 +3590,7 @@ impl Glacier for GlacierClient {
         &self,
         input: DeleteArchiveInput,
     ) -> Result<(), RusotoError<DeleteArchiveError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/{account_id}/vaults/{vault_name}/archives/{archive_id}",
             account_id = input.account_id,
@@ -3570,9 +3609,9 @@ impl Glacier for GlacierClient {
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 204 {
             let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = ::std::mem::drop(response);
+            let _result = ::std::mem::drop(response);
 
-            Ok(result)
+            Ok(())
         } else {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             Err(DeleteArchiveError::from_response(response))
@@ -3585,6 +3624,7 @@ impl Glacier for GlacierClient {
         &self,
         input: DeleteVaultInput,
     ) -> Result<(), RusotoError<DeleteVaultError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/{account_id}/vaults/{vault_name}",
             account_id = input.account_id,
@@ -3602,9 +3642,9 @@ impl Glacier for GlacierClient {
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 204 {
             let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = ::std::mem::drop(response);
+            let _result = ::std::mem::drop(response);
 
-            Ok(result)
+            Ok(())
         } else {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             Err(DeleteVaultError::from_response(response))
@@ -3617,6 +3657,7 @@ impl Glacier for GlacierClient {
         &self,
         input: DeleteVaultAccessPolicyInput,
     ) -> Result<(), RusotoError<DeleteVaultAccessPolicyError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/{account_id}/vaults/{vault_name}/access-policy",
             account_id = input.account_id,
@@ -3634,9 +3675,9 @@ impl Glacier for GlacierClient {
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 204 {
             let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = ::std::mem::drop(response);
+            let _result = ::std::mem::drop(response);
 
-            Ok(result)
+            Ok(())
         } else {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             Err(DeleteVaultAccessPolicyError::from_response(response))
@@ -3649,6 +3690,7 @@ impl Glacier for GlacierClient {
         &self,
         input: DeleteVaultNotificationsInput,
     ) -> Result<(), RusotoError<DeleteVaultNotificationsError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/{account_id}/vaults/{vault_name}/notification-configuration",
             account_id = input.account_id,
@@ -3666,9 +3708,9 @@ impl Glacier for GlacierClient {
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 204 {
             let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = ::std::mem::drop(response);
+            let _result = ::std::mem::drop(response);
 
-            Ok(result)
+            Ok(())
         } else {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             Err(DeleteVaultNotificationsError::from_response(response))
@@ -3681,6 +3723,7 @@ impl Glacier for GlacierClient {
         &self,
         input: DescribeJobInput,
     ) -> Result<GlacierJobDescription, RusotoError<DescribeJobError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/{account_id}/vaults/{vault_name}/jobs/{job_id}",
             account_id = input.account_id,
@@ -3715,6 +3758,7 @@ impl Glacier for GlacierClient {
         &self,
         input: DescribeVaultInput,
     ) -> Result<DescribeVaultOutput, RusotoError<DescribeVaultError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/{account_id}/vaults/{vault_name}",
             account_id = input.account_id,
@@ -3748,6 +3792,7 @@ impl Glacier for GlacierClient {
         &self,
         input: GetDataRetrievalPolicyInput,
     ) -> Result<GetDataRetrievalPolicyOutput, RusotoError<GetDataRetrievalPolicyError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/{account_id}/policies/data-retrieval",
             account_id = input.account_id
@@ -3780,6 +3825,7 @@ impl Glacier for GlacierClient {
         &self,
         input: GetJobOutputInput,
     ) -> Result<GetJobOutputOutput, RusotoError<GetJobOutputError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/{account_id}/vaults/{vault_name}/jobs/{job_id}/output",
             account_id = input.account_id,
@@ -3801,8 +3847,10 @@ impl Glacier for GlacierClient {
         if response.status.is_success() {
             let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
 
-            let mut result = GetJobOutputOutput::default();
-            result.body = Some(response.body);
+            let mut result = GetJobOutputOutput {
+                body: Some(response.body),
+                ..GetJobOutputOutput::default()
+            };
 
             result.accept_ranges = response.headers.remove("Accept-Ranges");
             result.archive_description = response.headers.remove("x-amz-archive-description");
@@ -3823,6 +3871,7 @@ impl Glacier for GlacierClient {
         &self,
         input: GetVaultAccessPolicyInput,
     ) -> Result<GetVaultAccessPolicyOutput, RusotoError<GetVaultAccessPolicyError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/{account_id}/vaults/{vault_name}/access-policy",
             account_id = input.account_id,
@@ -3856,6 +3905,7 @@ impl Glacier for GlacierClient {
         &self,
         input: GetVaultLockInput,
     ) -> Result<GetVaultLockOutput, RusotoError<GetVaultLockError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/{account_id}/vaults/{vault_name}/lock-policy",
             account_id = input.account_id,
@@ -3889,6 +3939,7 @@ impl Glacier for GlacierClient {
         &self,
         input: GetVaultNotificationsInput,
     ) -> Result<GetVaultNotificationsOutput, RusotoError<GetVaultNotificationsError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/{account_id}/vaults/{vault_name}/notification-configuration",
             account_id = input.account_id,
@@ -3922,6 +3973,7 @@ impl Glacier for GlacierClient {
         &self,
         input: InitiateJobInput,
     ) -> Result<InitiateJobOutput, RusotoError<InitiateJobError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/{account_id}/vaults/{vault_name}/jobs",
             account_id = input.account_id,
@@ -3961,6 +4013,7 @@ impl Glacier for GlacierClient {
         &self,
         input: InitiateMultipartUploadInput,
     ) -> Result<InitiateMultipartUploadOutput, RusotoError<InitiateMultipartUploadError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/{account_id}/vaults/{vault_name}/multipart-uploads",
             account_id = input.account_id,
@@ -4002,6 +4055,7 @@ impl Glacier for GlacierClient {
         &self,
         input: InitiateVaultLockInput,
     ) -> Result<InitiateVaultLockOutput, RusotoError<InitiateVaultLockError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/{account_id}/vaults/{vault_name}/lock-policy",
             account_id = input.account_id,
@@ -4039,6 +4093,7 @@ impl Glacier for GlacierClient {
         &self,
         input: ListJobsInput,
     ) -> Result<ListJobsOutput, RusotoError<ListJobsError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/{account_id}/vaults/{vault_name}/jobs",
             account_id = input.account_id,
@@ -4087,6 +4142,7 @@ impl Glacier for GlacierClient {
         &self,
         input: ListMultipartUploadsInput,
     ) -> Result<ListMultipartUploadsOutput, RusotoError<ListMultipartUploadsError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/{account_id}/vaults/{vault_name}/multipart-uploads",
             account_id = input.account_id,
@@ -4129,6 +4185,7 @@ impl Glacier for GlacierClient {
         &self,
         input: ListPartsInput,
     ) -> Result<ListPartsOutput, RusotoError<ListPartsError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/{account_id}/vaults/{vault_name}/multipart-uploads/{upload_id}",
             account_id = input.account_id,
@@ -4172,6 +4229,7 @@ impl Glacier for GlacierClient {
         &self,
         input: ListProvisionedCapacityInput,
     ) -> Result<ListProvisionedCapacityOutput, RusotoError<ListProvisionedCapacityError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/{account_id}/provisioned-capacity",
             account_id = input.account_id
@@ -4204,6 +4262,7 @@ impl Glacier for GlacierClient {
         &self,
         input: ListTagsForVaultInput,
     ) -> Result<ListTagsForVaultOutput, RusotoError<ListTagsForVaultError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/{account_id}/vaults/{vault_name}/tags",
             account_id = input.account_id,
@@ -4237,6 +4296,7 @@ impl Glacier for GlacierClient {
         &self,
         input: ListVaultsInput,
     ) -> Result<ListVaultsOutput, RusotoError<ListVaultsError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!("/{account_id}/vaults", account_id = input.account_id);
 
         let mut request = SignedRequest::new("GET", "glacier", &self.region, &request_uri);
@@ -4276,6 +4336,7 @@ impl Glacier for GlacierClient {
         input: PurchaseProvisionedCapacityInput,
     ) -> Result<PurchaseProvisionedCapacityOutput, RusotoError<PurchaseProvisionedCapacityError>>
     {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/{account_id}/provisioned-capacity",
             account_id = input.account_id
@@ -4309,6 +4370,7 @@ impl Glacier for GlacierClient {
         &self,
         input: RemoveTagsFromVaultInput,
     ) -> Result<(), RusotoError<RemoveTagsFromVaultError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/{account_id}/vaults/{vault_name}/tags",
             account_id = input.account_id,
@@ -4333,9 +4395,9 @@ impl Glacier for GlacierClient {
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 204 {
             let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = ::std::mem::drop(response);
+            let _result = ::std::mem::drop(response);
 
-            Ok(result)
+            Ok(())
         } else {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             Err(RemoveTagsFromVaultError::from_response(response))
@@ -4348,6 +4410,7 @@ impl Glacier for GlacierClient {
         &self,
         input: SetDataRetrievalPolicyInput,
     ) -> Result<(), RusotoError<SetDataRetrievalPolicyError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/{account_id}/policies/data-retrieval",
             account_id = input.account_id
@@ -4367,9 +4430,9 @@ impl Glacier for GlacierClient {
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 204 {
             let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = ::std::mem::drop(response);
+            let _result = ::std::mem::drop(response);
 
-            Ok(result)
+            Ok(())
         } else {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             Err(SetDataRetrievalPolicyError::from_response(response))
@@ -4382,6 +4445,7 @@ impl Glacier for GlacierClient {
         &self,
         input: SetVaultAccessPolicyInput,
     ) -> Result<(), RusotoError<SetVaultAccessPolicyError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/{account_id}/vaults/{vault_name}/access-policy",
             account_id = input.account_id,
@@ -4402,9 +4466,9 @@ impl Glacier for GlacierClient {
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 204 {
             let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = ::std::mem::drop(response);
+            let _result = ::std::mem::drop(response);
 
-            Ok(result)
+            Ok(())
         } else {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             Err(SetVaultAccessPolicyError::from_response(response))
@@ -4417,6 +4481,7 @@ impl Glacier for GlacierClient {
         &self,
         input: SetVaultNotificationsInput,
     ) -> Result<(), RusotoError<SetVaultNotificationsError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/{account_id}/vaults/{vault_name}/notification-configuration",
             account_id = input.account_id,
@@ -4437,9 +4502,9 @@ impl Glacier for GlacierClient {
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 204 {
             let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = ::std::mem::drop(response);
+            let _result = ::std::mem::drop(response);
 
-            Ok(result)
+            Ok(())
         } else {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             Err(SetVaultNotificationsError::from_response(response))
@@ -4452,6 +4517,7 @@ impl Glacier for GlacierClient {
         &self,
         input: UploadArchiveInput,
     ) -> Result<ArchiveCreationOutput, RusotoError<UploadArchiveError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/{account_id}/vaults/{vault_name}/archives",
             account_id = input.account_id,
@@ -4500,6 +4566,7 @@ impl Glacier for GlacierClient {
         &self,
         input: UploadMultipartPartInput,
     ) -> Result<UploadMultipartPartOutput, RusotoError<UploadMultipartPartError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/{account_id}/vaults/{vault_name}/multipart-uploads/{upload_id}",
             account_id = input.account_id,

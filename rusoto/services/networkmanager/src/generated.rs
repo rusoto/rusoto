@@ -24,7 +24,6 @@ use rusoto_core::proto;
 use rusoto_core::signature::SignedRequest;
 #[allow(unused_imports)]
 use serde::{Deserialize, Serialize};
-use serde_json;
 /// <p>Specifies a location in AWS.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct AWSLocation {
@@ -1439,6 +1438,7 @@ pub enum AssociateCustomerGatewayError {
 impl AssociateCustomerGatewayError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<AssociateCustomerGatewayError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(AssociateCustomerGatewayError::AccessDenied(
@@ -1509,6 +1509,7 @@ pub enum AssociateLinkError {
 impl AssociateLinkError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<AssociateLinkError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(AssociateLinkError::AccessDenied(err.msg))
@@ -1571,6 +1572,7 @@ impl AssociateTransitGatewayConnectPeerError {
         res: BufferedHttpResponse,
     ) -> RusotoError<AssociateTransitGatewayConnectPeerError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(
@@ -1651,6 +1653,7 @@ pub enum CreateConnectionError {
 impl CreateConnectionError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateConnectionError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(CreateConnectionError::AccessDenied(err.msg))
@@ -1709,6 +1712,7 @@ pub enum CreateDeviceError {
 impl CreateDeviceError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateDeviceError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(CreateDeviceError::AccessDenied(err.msg))
@@ -1767,6 +1771,7 @@ pub enum CreateGlobalNetworkError {
 impl CreateGlobalNetworkError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateGlobalNetworkError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(CreateGlobalNetworkError::AccessDenied(err.msg))
@@ -1825,6 +1830,7 @@ pub enum CreateLinkError {
 impl CreateLinkError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateLinkError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(CreateLinkError::AccessDenied(err.msg))
@@ -1885,6 +1891,7 @@ pub enum CreateSiteError {
 impl CreateSiteError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateSiteError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(CreateSiteError::AccessDenied(err.msg))
@@ -1943,6 +1950,7 @@ pub enum DeleteConnectionError {
 impl DeleteConnectionError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteConnectionError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(DeleteConnectionError::AccessDenied(err.msg))
@@ -1997,6 +2005,7 @@ pub enum DeleteDeviceError {
 impl DeleteDeviceError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteDeviceError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(DeleteDeviceError::AccessDenied(err.msg))
@@ -2051,6 +2060,7 @@ pub enum DeleteGlobalNetworkError {
 impl DeleteGlobalNetworkError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteGlobalNetworkError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(DeleteGlobalNetworkError::AccessDenied(err.msg))
@@ -2107,6 +2117,7 @@ pub enum DeleteLinkError {
 impl DeleteLinkError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteLinkError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(DeleteLinkError::AccessDenied(err.msg))
@@ -2161,6 +2172,7 @@ pub enum DeleteSiteError {
 impl DeleteSiteError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteSiteError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(DeleteSiteError::AccessDenied(err.msg))
@@ -2215,6 +2227,7 @@ pub enum DeregisterTransitGatewayError {
 impl DeregisterTransitGatewayError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeregisterTransitGatewayError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(DeregisterTransitGatewayError::AccessDenied(
@@ -2273,6 +2286,7 @@ pub enum DescribeGlobalNetworksError {
 impl DescribeGlobalNetworksError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeGlobalNetworksError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(DescribeGlobalNetworksError::AccessDenied(err.msg))
@@ -2329,6 +2343,7 @@ impl DisassociateCustomerGatewayError {
         res: BufferedHttpResponse,
     ) -> RusotoError<DisassociateCustomerGatewayError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(DisassociateCustomerGatewayError::AccessDenied(
@@ -2393,6 +2408,7 @@ pub enum DisassociateLinkError {
 impl DisassociateLinkError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DisassociateLinkError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(DisassociateLinkError::AccessDenied(err.msg))
@@ -2449,6 +2465,7 @@ impl DisassociateTransitGatewayConnectPeerError {
         res: BufferedHttpResponse,
     ) -> RusotoError<DisassociateTransitGatewayConnectPeerError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(
@@ -2521,6 +2538,7 @@ pub enum GetConnectionsError {
 impl GetConnectionsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetConnectionsError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(GetConnectionsError::AccessDenied(err.msg))
@@ -2573,6 +2591,7 @@ impl GetCustomerGatewayAssociationsError {
         res: BufferedHttpResponse,
     ) -> RusotoError<GetCustomerGatewayAssociationsError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(GetCustomerGatewayAssociationsError::AccessDenied(
@@ -2639,6 +2658,7 @@ pub enum GetDevicesError {
 impl GetDevicesError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetDevicesError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(GetDevicesError::AccessDenied(err.msg))
@@ -2687,6 +2707,7 @@ pub enum GetLinkAssociationsError {
 impl GetLinkAssociationsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetLinkAssociationsError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(GetLinkAssociationsError::AccessDenied(err.msg))
@@ -2737,6 +2758,7 @@ pub enum GetLinksError {
 impl GetLinksError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetLinksError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(GetLinksError::AccessDenied(err.msg))
@@ -2785,6 +2807,7 @@ pub enum GetSitesError {
 impl GetSitesError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetSitesError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(GetSitesError::AccessDenied(err.msg))
@@ -2837,6 +2860,7 @@ impl GetTransitGatewayConnectPeerAssociationsError {
         res: BufferedHttpResponse,
     ) -> RusotoError<GetTransitGatewayConnectPeerAssociationsError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(
@@ -2911,6 +2935,7 @@ impl GetTransitGatewayRegistrationsError {
         res: BufferedHttpResponse,
     ) -> RusotoError<GetTransitGatewayRegistrationsError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(GetTransitGatewayRegistrationsError::AccessDenied(
@@ -2971,6 +2996,7 @@ pub enum ListTagsForResourceError {
 impl ListTagsForResourceError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListTagsForResourceError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(ListTagsForResourceError::AccessDenied(err.msg))
@@ -3023,6 +3049,7 @@ pub enum RegisterTransitGatewayError {
 impl RegisterTransitGatewayError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<RegisterTransitGatewayError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(RegisterTransitGatewayError::AccessDenied(err.msg))
@@ -3083,6 +3110,7 @@ pub enum TagResourceError {
 impl TagResourceError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<TagResourceError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(TagResourceError::AccessDenied(err.msg))
@@ -3141,6 +3169,7 @@ pub enum UntagResourceError {
 impl UntagResourceError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UntagResourceError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(UntagResourceError::AccessDenied(err.msg))
@@ -3195,6 +3224,7 @@ pub enum UpdateConnectionError {
 impl UpdateConnectionError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateConnectionError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(UpdateConnectionError::AccessDenied(err.msg))
@@ -3249,6 +3279,7 @@ pub enum UpdateDeviceError {
 impl UpdateDeviceError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateDeviceError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(UpdateDeviceError::AccessDenied(err.msg))
@@ -3303,6 +3334,7 @@ pub enum UpdateGlobalNetworkError {
 impl UpdateGlobalNetworkError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateGlobalNetworkError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(UpdateGlobalNetworkError::AccessDenied(err.msg))
@@ -3361,6 +3393,7 @@ pub enum UpdateLinkError {
 impl UpdateLinkError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateLinkError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(UpdateLinkError::AccessDenied(err.msg))
@@ -3419,6 +3452,7 @@ pub enum UpdateSiteError {
 impl UpdateSiteError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateSiteError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(UpdateSiteError::AccessDenied(err.msg))
@@ -3729,6 +3763,7 @@ impl NetworkManager for NetworkManagerClient {
         &self,
         input: AssociateCustomerGatewayRequest,
     ) -> Result<AssociateCustomerGatewayResponse, RusotoError<AssociateCustomerGatewayError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/global-networks/{global_network_id}/customer-gateway-associations",
             global_network_id = input.global_network_id
@@ -3763,6 +3798,7 @@ impl NetworkManager for NetworkManagerClient {
         &self,
         input: AssociateLinkRequest,
     ) -> Result<AssociateLinkResponse, RusotoError<AssociateLinkError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/global-networks/{global_network_id}/link-associations",
             global_network_id = input.global_network_id
@@ -3800,6 +3836,7 @@ impl NetworkManager for NetworkManagerClient {
         AssociateTransitGatewayConnectPeerResponse,
         RusotoError<AssociateTransitGatewayConnectPeerError>,
     > {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/global-networks/{global_network_id}/transit-gateway-connect-peer-associations",
             global_network_id = input.global_network_id
@@ -3836,6 +3873,7 @@ impl NetworkManager for NetworkManagerClient {
         &self,
         input: CreateConnectionRequest,
     ) -> Result<CreateConnectionResponse, RusotoError<CreateConnectionError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/global-networks/{global_network_id}/connections",
             global_network_id = input.global_network_id
@@ -3870,6 +3908,7 @@ impl NetworkManager for NetworkManagerClient {
         &self,
         input: CreateDeviceRequest,
     ) -> Result<CreateDeviceResponse, RusotoError<CreateDeviceError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/global-networks/{global_network_id}/devices",
             global_network_id = input.global_network_id
@@ -3904,6 +3943,7 @@ impl NetworkManager for NetworkManagerClient {
         &self,
         input: CreateGlobalNetworkRequest,
     ) -> Result<CreateGlobalNetworkResponse, RusotoError<CreateGlobalNetworkError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/global-networks";
 
         let mut request = SignedRequest::new("POST", "networkmanager", &self.region, &request_uri);
@@ -3935,6 +3975,7 @@ impl NetworkManager for NetworkManagerClient {
         &self,
         input: CreateLinkRequest,
     ) -> Result<CreateLinkResponse, RusotoError<CreateLinkError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/global-networks/{global_network_id}/links",
             global_network_id = input.global_network_id
@@ -3969,6 +4010,7 @@ impl NetworkManager for NetworkManagerClient {
         &self,
         input: CreateSiteRequest,
     ) -> Result<CreateSiteResponse, RusotoError<CreateSiteError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/global-networks/{global_network_id}/sites",
             global_network_id = input.global_network_id
@@ -4003,6 +4045,7 @@ impl NetworkManager for NetworkManagerClient {
         &self,
         input: DeleteConnectionRequest,
     ) -> Result<DeleteConnectionResponse, RusotoError<DeleteConnectionError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/global-networks/{global_network_id}/connections/{connection_id}",
             connection_id = input.connection_id,
@@ -4036,6 +4079,7 @@ impl NetworkManager for NetworkManagerClient {
         &self,
         input: DeleteDeviceRequest,
     ) -> Result<DeleteDeviceResponse, RusotoError<DeleteDeviceError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/global-networks/{global_network_id}/devices/{device_id}",
             device_id = input.device_id,
@@ -4069,6 +4113,7 @@ impl NetworkManager for NetworkManagerClient {
         &self,
         input: DeleteGlobalNetworkRequest,
     ) -> Result<DeleteGlobalNetworkResponse, RusotoError<DeleteGlobalNetworkError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/global-networks/{global_network_id}",
             global_network_id = input.global_network_id
@@ -4101,6 +4146,7 @@ impl NetworkManager for NetworkManagerClient {
         &self,
         input: DeleteLinkRequest,
     ) -> Result<DeleteLinkResponse, RusotoError<DeleteLinkError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/global-networks/{global_network_id}/links/{link_id}",
             global_network_id = input.global_network_id,
@@ -4134,6 +4180,7 @@ impl NetworkManager for NetworkManagerClient {
         &self,
         input: DeleteSiteRequest,
     ) -> Result<DeleteSiteResponse, RusotoError<DeleteSiteError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/global-networks/{global_network_id}/sites/{site_id}",
             global_network_id = input.global_network_id,
@@ -4167,6 +4214,7 @@ impl NetworkManager for NetworkManagerClient {
         &self,
         input: DeregisterTransitGatewayRequest,
     ) -> Result<DeregisterTransitGatewayResponse, RusotoError<DeregisterTransitGatewayError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!("/global-networks/{global_network_id}/transit-gateway-registrations/{transit_gateway_arn}", global_network_id = input.global_network_id, transit_gateway_arn = input.transit_gateway_arn);
 
         let mut request =
@@ -4196,6 +4244,7 @@ impl NetworkManager for NetworkManagerClient {
         &self,
         input: DescribeGlobalNetworksRequest,
     ) -> Result<DescribeGlobalNetworksResponse, RusotoError<DescribeGlobalNetworksError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/global-networks";
 
         let mut request = SignedRequest::new("GET", "networkmanager", &self.region, &request_uri);
@@ -4239,6 +4288,7 @@ impl NetworkManager for NetworkManagerClient {
         input: DisassociateCustomerGatewayRequest,
     ) -> Result<DisassociateCustomerGatewayResponse, RusotoError<DisassociateCustomerGatewayError>>
     {
+        #![allow(clippy::needless_update)]
         let request_uri = format!("/global-networks/{global_network_id}/customer-gateway-associations/{customer_gateway_arn}", customer_gateway_arn = input.customer_gateway_arn, global_network_id = input.global_network_id);
 
         let mut request =
@@ -4268,6 +4318,7 @@ impl NetworkManager for NetworkManagerClient {
         &self,
         input: DisassociateLinkRequest,
     ) -> Result<DisassociateLinkResponse, RusotoError<DisassociateLinkError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/global-networks/{global_network_id}/link-associations",
             global_network_id = input.global_network_id
@@ -4308,6 +4359,7 @@ impl NetworkManager for NetworkManagerClient {
         DisassociateTransitGatewayConnectPeerResponse,
         RusotoError<DisassociateTransitGatewayConnectPeerError>,
     > {
+        #![allow(clippy::needless_update)]
         let request_uri = format!("/global-networks/{global_network_id}/transit-gateway-connect-peer-associations/{transit_gateway_connect_peer_arn}", global_network_id = input.global_network_id, transit_gateway_connect_peer_arn = input.transit_gateway_connect_peer_arn);
 
         let mut request =
@@ -4339,6 +4391,7 @@ impl NetworkManager for NetworkManagerClient {
         &self,
         input: GetConnectionsRequest,
     ) -> Result<GetConnectionsResponse, RusotoError<GetConnectionsError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/global-networks/{global_network_id}/connections",
             global_network_id = input.global_network_id
@@ -4390,6 +4443,7 @@ impl NetworkManager for NetworkManagerClient {
         GetCustomerGatewayAssociationsResponse,
         RusotoError<GetCustomerGatewayAssociationsError>,
     > {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/global-networks/{global_network_id}/customer-gateway-associations",
             global_network_id = input.global_network_id
@@ -4435,6 +4489,7 @@ impl NetworkManager for NetworkManagerClient {
         &self,
         input: GetDevicesRequest,
     ) -> Result<GetDevicesResponse, RusotoError<GetDevicesError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/global-networks/{global_network_id}/devices",
             global_network_id = input.global_network_id
@@ -4483,6 +4538,7 @@ impl NetworkManager for NetworkManagerClient {
         &self,
         input: GetLinkAssociationsRequest,
     ) -> Result<GetLinkAssociationsResponse, RusotoError<GetLinkAssociationsError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/global-networks/{global_network_id}/link-associations",
             global_network_id = input.global_network_id
@@ -4529,6 +4585,7 @@ impl NetworkManager for NetworkManagerClient {
         &self,
         input: GetLinksRequest,
     ) -> Result<GetLinksResponse, RusotoError<GetLinksError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/global-networks/{global_network_id}/links",
             global_network_id = input.global_network_id
@@ -4583,6 +4640,7 @@ impl NetworkManager for NetworkManagerClient {
         &self,
         input: GetSitesRequest,
     ) -> Result<GetSitesResponse, RusotoError<GetSitesError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/global-networks/{global_network_id}/sites",
             global_network_id = input.global_network_id
@@ -4631,6 +4689,7 @@ impl NetworkManager for NetworkManagerClient {
         GetTransitGatewayConnectPeerAssociationsResponse,
         RusotoError<GetTransitGatewayConnectPeerAssociationsError>,
     > {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/global-networks/{global_network_id}/transit-gateway-connect-peer-associations",
             global_network_id = input.global_network_id
@@ -4679,6 +4738,7 @@ impl NetworkManager for NetworkManagerClient {
         GetTransitGatewayRegistrationsResponse,
         RusotoError<GetTransitGatewayRegistrationsError>,
     > {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/global-networks/{global_network_id}/transit-gateway-registrations",
             global_network_id = input.global_network_id
@@ -4724,6 +4784,7 @@ impl NetworkManager for NetworkManagerClient {
         &self,
         input: ListTagsForResourceRequest,
     ) -> Result<ListTagsForResourceResponse, RusotoError<ListTagsForResourceError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!("/tags/{resource_arn}", resource_arn = input.resource_arn);
 
         let mut request = SignedRequest::new("GET", "networkmanager", &self.region, &request_uri);
@@ -4752,6 +4813,7 @@ impl NetworkManager for NetworkManagerClient {
         &self,
         input: RegisterTransitGatewayRequest,
     ) -> Result<RegisterTransitGatewayResponse, RusotoError<RegisterTransitGatewayError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/global-networks/{global_network_id}/transit-gateway-registrations",
             global_network_id = input.global_network_id
@@ -4786,6 +4848,7 @@ impl NetworkManager for NetworkManagerClient {
         &self,
         input: TagResourceRequest,
     ) -> Result<TagResourceResponse, RusotoError<TagResourceError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!("/tags/{resource_arn}", resource_arn = input.resource_arn);
 
         let mut request = SignedRequest::new("POST", "networkmanager", &self.region, &request_uri);
@@ -4817,6 +4880,7 @@ impl NetworkManager for NetworkManagerClient {
         &self,
         input: UntagResourceRequest,
     ) -> Result<UntagResourceResponse, RusotoError<UntagResourceError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!("/tags/{resource_arn}", resource_arn = input.resource_arn);
 
         let mut request =
@@ -4852,6 +4916,7 @@ impl NetworkManager for NetworkManagerClient {
         &self,
         input: UpdateConnectionRequest,
     ) -> Result<UpdateConnectionResponse, RusotoError<UpdateConnectionError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/global-networks/{global_network_id}/connections/{connection_id}",
             connection_id = input.connection_id,
@@ -4887,6 +4952,7 @@ impl NetworkManager for NetworkManagerClient {
         &self,
         input: UpdateDeviceRequest,
     ) -> Result<UpdateDeviceResponse, RusotoError<UpdateDeviceError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/global-networks/{global_network_id}/devices/{device_id}",
             device_id = input.device_id,
@@ -4922,6 +4988,7 @@ impl NetworkManager for NetworkManagerClient {
         &self,
         input: UpdateGlobalNetworkRequest,
     ) -> Result<UpdateGlobalNetworkResponse, RusotoError<UpdateGlobalNetworkError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/global-networks/{global_network_id}",
             global_network_id = input.global_network_id
@@ -4956,6 +5023,7 @@ impl NetworkManager for NetworkManagerClient {
         &self,
         input: UpdateLinkRequest,
     ) -> Result<UpdateLinkResponse, RusotoError<UpdateLinkError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/global-networks/{global_network_id}/links/{link_id}",
             global_network_id = input.global_network_id,
@@ -4991,6 +5059,7 @@ impl NetworkManager for NetworkManagerClient {
         &self,
         input: UpdateSiteRequest,
     ) -> Result<UpdateSiteResponse, RusotoError<UpdateSiteError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/global-networks/{global_network_id}/sites/{site_id}",
             global_network_id = input.global_network_id,

@@ -24,7 +24,6 @@ use rusoto_core::proto;
 use rusoto_core::signature::SignedRequest;
 #[allow(unused_imports)]
 use serde::{Deserialize, Serialize};
-use serde_json;
 /// <p>A MediaPackage VOD Asset resource.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
@@ -865,6 +864,7 @@ pub enum CreateAssetError {
 impl CreateAssetError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateAssetError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ForbiddenException" => {
                     return RusotoError::Service(CreateAssetError::Forbidden(err.msg))
@@ -927,6 +927,7 @@ impl CreatePackagingConfigurationError {
         res: BufferedHttpResponse,
     ) -> RusotoError<CreatePackagingConfigurationError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ForbiddenException" => {
                     return RusotoError::Service(CreatePackagingConfigurationError::Forbidden(
@@ -1005,6 +1006,7 @@ pub enum CreatePackagingGroupError {
 impl CreatePackagingGroupError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreatePackagingGroupError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ForbiddenException" => {
                     return RusotoError::Service(CreatePackagingGroupError::Forbidden(err.msg))
@@ -1073,6 +1075,7 @@ pub enum DeleteAssetError {
 impl DeleteAssetError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteAssetError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ForbiddenException" => {
                     return RusotoError::Service(DeleteAssetError::Forbidden(err.msg))
@@ -1135,6 +1138,7 @@ impl DeletePackagingConfigurationError {
         res: BufferedHttpResponse,
     ) -> RusotoError<DeletePackagingConfigurationError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ForbiddenException" => {
                     return RusotoError::Service(DeletePackagingConfigurationError::Forbidden(
@@ -1213,6 +1217,7 @@ pub enum DeletePackagingGroupError {
 impl DeletePackagingGroupError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeletePackagingGroupError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ForbiddenException" => {
                     return RusotoError::Service(DeletePackagingGroupError::Forbidden(err.msg))
@@ -1281,6 +1286,7 @@ pub enum DescribeAssetError {
 impl DescribeAssetError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeAssetError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ForbiddenException" => {
                     return RusotoError::Service(DescribeAssetError::Forbidden(err.msg))
@@ -1343,6 +1349,7 @@ impl DescribePackagingConfigurationError {
         res: BufferedHttpResponse,
     ) -> RusotoError<DescribePackagingConfigurationError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ForbiddenException" => {
                     return RusotoError::Service(DescribePackagingConfigurationError::Forbidden(
@@ -1423,6 +1430,7 @@ pub enum DescribePackagingGroupError {
 impl DescribePackagingGroupError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribePackagingGroupError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ForbiddenException" => {
                     return RusotoError::Service(DescribePackagingGroupError::Forbidden(err.msg))
@@ -1491,6 +1499,7 @@ pub enum ListAssetsError {
 impl ListAssetsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListAssetsError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ForbiddenException" => {
                     return RusotoError::Service(ListAssetsError::Forbidden(err.msg))
@@ -1553,6 +1562,7 @@ impl ListPackagingConfigurationsError {
         res: BufferedHttpResponse,
     ) -> RusotoError<ListPackagingConfigurationsError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ForbiddenException" => {
                     return RusotoError::Service(ListPackagingConfigurationsError::Forbidden(
@@ -1631,6 +1641,7 @@ pub enum ListPackagingGroupsError {
 impl ListPackagingGroupsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListPackagingGroupsError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ForbiddenException" => {
                     return RusotoError::Service(ListPackagingGroupsError::Forbidden(err.msg))
@@ -1684,6 +1695,7 @@ pub enum ListTagsForResourceError {}
 impl ListTagsForResourceError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListTagsForResourceError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
@@ -1706,6 +1718,7 @@ pub enum TagResourceError {}
 impl TagResourceError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<TagResourceError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
@@ -1728,6 +1741,7 @@ pub enum UntagResourceError {}
 impl UntagResourceError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UntagResourceError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
@@ -1763,6 +1777,7 @@ pub enum UpdatePackagingGroupError {
 impl UpdatePackagingGroupError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdatePackagingGroupError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ForbiddenException" => {
                     return RusotoError::Service(UpdatePackagingGroupError::Forbidden(err.msg))
@@ -1959,6 +1974,7 @@ impl MediaPackageVod for MediaPackageVodClient {
         &self,
         input: CreateAssetRequest,
     ) -> Result<CreateAssetResponse, RusotoError<CreateAssetError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/assets";
 
         let mut request =
@@ -1992,6 +2008,7 @@ impl MediaPackageVod for MediaPackageVodClient {
         input: CreatePackagingConfigurationRequest,
     ) -> Result<CreatePackagingConfigurationResponse, RusotoError<CreatePackagingConfigurationError>>
     {
+        #![allow(clippy::needless_update)]
         let request_uri = "/packaging_configurations";
 
         let mut request =
@@ -2024,6 +2041,7 @@ impl MediaPackageVod for MediaPackageVodClient {
         &self,
         input: CreatePackagingGroupRequest,
     ) -> Result<CreatePackagingGroupResponse, RusotoError<CreatePackagingGroupError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/packaging_groups";
 
         let mut request =
@@ -2056,6 +2074,7 @@ impl MediaPackageVod for MediaPackageVodClient {
         &self,
         input: DeleteAssetRequest,
     ) -> Result<DeleteAssetResponse, RusotoError<DeleteAssetError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!("/assets/{id}", id = input.id);
 
         let mut request =
@@ -2086,6 +2105,7 @@ impl MediaPackageVod for MediaPackageVodClient {
         input: DeletePackagingConfigurationRequest,
     ) -> Result<DeletePackagingConfigurationResponse, RusotoError<DeletePackagingConfigurationError>>
     {
+        #![allow(clippy::needless_update)]
         let request_uri = format!("/packaging_configurations/{id}", id = input.id);
 
         let mut request =
@@ -2115,6 +2135,7 @@ impl MediaPackageVod for MediaPackageVodClient {
         &self,
         input: DeletePackagingGroupRequest,
     ) -> Result<DeletePackagingGroupResponse, RusotoError<DeletePackagingGroupError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!("/packaging_groups/{id}", id = input.id);
 
         let mut request =
@@ -2144,6 +2165,7 @@ impl MediaPackageVod for MediaPackageVodClient {
         &self,
         input: DescribeAssetRequest,
     ) -> Result<DescribeAssetResponse, RusotoError<DescribeAssetError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!("/assets/{id}", id = input.id);
 
         let mut request = SignedRequest::new("GET", "mediapackage-vod", &self.region, &request_uri);
@@ -2175,6 +2197,7 @@ impl MediaPackageVod for MediaPackageVodClient {
         DescribePackagingConfigurationResponse,
         RusotoError<DescribePackagingConfigurationError>,
     > {
+        #![allow(clippy::needless_update)]
         let request_uri = format!("/packaging_configurations/{id}", id = input.id);
 
         let mut request = SignedRequest::new("GET", "mediapackage-vod", &self.region, &request_uri);
@@ -2203,6 +2226,7 @@ impl MediaPackageVod for MediaPackageVodClient {
         &self,
         input: DescribePackagingGroupRequest,
     ) -> Result<DescribePackagingGroupResponse, RusotoError<DescribePackagingGroupError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!("/packaging_groups/{id}", id = input.id);
 
         let mut request = SignedRequest::new("GET", "mediapackage-vod", &self.region, &request_uri);
@@ -2231,6 +2255,7 @@ impl MediaPackageVod for MediaPackageVodClient {
         &self,
         input: ListAssetsRequest,
     ) -> Result<ListAssetsResponse, RusotoError<ListAssetsError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/assets";
 
         let mut request = SignedRequest::new("GET", "mediapackage-vod", &self.region, &request_uri);
@@ -2272,6 +2297,7 @@ impl MediaPackageVod for MediaPackageVodClient {
         input: ListPackagingConfigurationsRequest,
     ) -> Result<ListPackagingConfigurationsResponse, RusotoError<ListPackagingConfigurationsError>>
     {
+        #![allow(clippy::needless_update)]
         let request_uri = "/packaging_configurations";
 
         let mut request = SignedRequest::new("GET", "mediapackage-vod", &self.region, &request_uri);
@@ -2312,6 +2338,7 @@ impl MediaPackageVod for MediaPackageVodClient {
         &self,
         input: ListPackagingGroupsRequest,
     ) -> Result<ListPackagingGroupsResponse, RusotoError<ListPackagingGroupsError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/packaging_groups";
 
         let mut request = SignedRequest::new("GET", "mediapackage-vod", &self.region, &request_uri);
@@ -2349,6 +2376,7 @@ impl MediaPackageVod for MediaPackageVodClient {
         &self,
         input: ListTagsForResourceRequest,
     ) -> Result<ListTagsForResourceResponse, RusotoError<ListTagsForResourceError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!("/tags/{resource_arn}", resource_arn = input.resource_arn);
 
         let mut request = SignedRequest::new("GET", "mediapackage-vod", &self.region, &request_uri);
@@ -2377,6 +2405,7 @@ impl MediaPackageVod for MediaPackageVodClient {
         &self,
         input: TagResourceRequest,
     ) -> Result<(), RusotoError<TagResourceError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!("/tags/{resource_arn}", resource_arn = input.resource_arn);
 
         let mut request =
@@ -2393,9 +2422,9 @@ impl MediaPackageVod for MediaPackageVodClient {
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 204 {
             let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = ::std::mem::drop(response);
+            let _result = ::std::mem::drop(response);
 
-            Ok(result)
+            Ok(())
         } else {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             Err(TagResourceError::from_response(response))
@@ -2408,6 +2437,7 @@ impl MediaPackageVod for MediaPackageVodClient {
         &self,
         input: UntagResourceRequest,
     ) -> Result<(), RusotoError<UntagResourceError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!("/tags/{resource_arn}", resource_arn = input.resource_arn);
 
         let mut request =
@@ -2427,9 +2457,9 @@ impl MediaPackageVod for MediaPackageVodClient {
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 204 {
             let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = ::std::mem::drop(response);
+            let _result = ::std::mem::drop(response);
 
-            Ok(result)
+            Ok(())
         } else {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             Err(UntagResourceError::from_response(response))
@@ -2442,6 +2472,7 @@ impl MediaPackageVod for MediaPackageVodClient {
         &self,
         input: UpdatePackagingGroupRequest,
     ) -> Result<UpdatePackagingGroupResponse, RusotoError<UpdatePackagingGroupError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!("/packaging_groups/{id}", id = input.id);
 
         let mut request = SignedRequest::new("PUT", "mediapackage-vod", &self.region, &request_uri);

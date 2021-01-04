@@ -49,7 +49,6 @@ impl StepFunctionsClient {
     }
 }
 
-use serde_json;
 /// <p>Contains details about an activity that failed during an execution.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
@@ -1453,6 +1452,7 @@ pub enum CreateActivityError {
 impl CreateActivityError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateActivityError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ActivityLimitExceeded" => {
                     return RusotoError::Service(CreateActivityError::ActivityLimitExceeded(
@@ -1511,6 +1511,7 @@ pub enum CreateStateMachineError {
 impl CreateStateMachineError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateStateMachineError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidArn" => {
                     return RusotoError::Service(CreateStateMachineError::InvalidArn(err.msg))
@@ -1597,6 +1598,7 @@ pub enum DeleteActivityError {
 impl DeleteActivityError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteActivityError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidArn" => {
                     return RusotoError::Service(DeleteActivityError::InvalidArn(err.msg))
@@ -1627,6 +1629,7 @@ pub enum DeleteStateMachineError {
 impl DeleteStateMachineError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteStateMachineError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidArn" => {
                     return RusotoError::Service(DeleteStateMachineError::InvalidArn(err.msg))
@@ -1659,6 +1662,7 @@ pub enum DescribeActivityError {
 impl DescribeActivityError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeActivityError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ActivityDoesNotExist" => {
                     return RusotoError::Service(DescribeActivityError::ActivityDoesNotExist(
@@ -1697,6 +1701,7 @@ pub enum DescribeExecutionError {
 impl DescribeExecutionError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeExecutionError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ExecutionDoesNotExist" => {
                     return RusotoError::Service(DescribeExecutionError::ExecutionDoesNotExist(
@@ -1735,6 +1740,7 @@ pub enum DescribeStateMachineError {
 impl DescribeStateMachineError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeStateMachineError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidArn" => {
                     return RusotoError::Service(DescribeStateMachineError::InvalidArn(err.msg))
@@ -1777,6 +1783,7 @@ impl DescribeStateMachineForExecutionError {
         res: BufferedHttpResponse,
     ) -> RusotoError<DescribeStateMachineForExecutionError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ExecutionDoesNotExist" => {
                     return RusotoError::Service(
@@ -1821,6 +1828,7 @@ pub enum GetActivityTaskError {
 impl GetActivityTaskError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetActivityTaskError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ActivityDoesNotExist" => {
                     return RusotoError::Service(GetActivityTaskError::ActivityDoesNotExist(
@@ -1867,6 +1875,7 @@ pub enum GetExecutionHistoryError {
 impl GetExecutionHistoryError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetExecutionHistoryError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ExecutionDoesNotExist" => {
                     return RusotoError::Service(GetExecutionHistoryError::ExecutionDoesNotExist(
@@ -1907,6 +1916,7 @@ pub enum ListActivitiesError {
 impl ListActivitiesError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListActivitiesError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidToken" => {
                     return RusotoError::Service(ListActivitiesError::InvalidToken(err.msg))
@@ -1943,6 +1953,7 @@ pub enum ListExecutionsError {
 impl ListExecutionsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListExecutionsError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidArn" => {
                     return RusotoError::Service(ListExecutionsError::InvalidArn(err.msg))
@@ -1989,6 +2000,7 @@ pub enum ListStateMachinesError {
 impl ListStateMachinesError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListStateMachinesError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidToken" => {
                     return RusotoError::Service(ListStateMachinesError::InvalidToken(err.msg))
@@ -2021,6 +2033,7 @@ pub enum ListTagsForResourceError {
 impl ListTagsForResourceError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListTagsForResourceError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidArn" => {
                     return RusotoError::Service(ListTagsForResourceError::InvalidArn(err.msg))
@@ -2061,6 +2074,7 @@ pub enum SendTaskFailureError {
 impl SendTaskFailureError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<SendTaskFailureError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidToken" => {
                     return RusotoError::Service(SendTaskFailureError::InvalidToken(err.msg))
@@ -2103,6 +2117,7 @@ pub enum SendTaskHeartbeatError {
 impl SendTaskHeartbeatError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<SendTaskHeartbeatError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidToken" => {
                     return RusotoError::Service(SendTaskHeartbeatError::InvalidToken(err.msg))
@@ -2147,6 +2162,7 @@ pub enum SendTaskSuccessError {
 impl SendTaskSuccessError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<SendTaskSuccessError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidOutput" => {
                     return RusotoError::Service(SendTaskSuccessError::InvalidOutput(err.msg))
@@ -2201,6 +2217,7 @@ pub enum StartExecutionError {
 impl StartExecutionError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<StartExecutionError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ExecutionAlreadyExists" => {
                     return RusotoError::Service(StartExecutionError::ExecutionAlreadyExists(
@@ -2273,6 +2290,7 @@ pub enum StartSyncExecutionError {
 impl StartSyncExecutionError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<StartSyncExecutionError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidArn" => {
                     return RusotoError::Service(StartSyncExecutionError::InvalidArn(err.msg))
@@ -2335,6 +2353,7 @@ pub enum StopExecutionError {
 impl StopExecutionError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<StopExecutionError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ExecutionDoesNotExist" => {
                     return RusotoError::Service(StopExecutionError::ExecutionDoesNotExist(err.msg))
@@ -2373,6 +2392,7 @@ pub enum TagResourceError {
 impl TagResourceError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<TagResourceError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidArn" => return RusotoError::Service(TagResourceError::InvalidArn(err.msg)),
                 "ResourceNotFound" => {
@@ -2411,6 +2431,7 @@ pub enum UntagResourceError {
 impl UntagResourceError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UntagResourceError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidArn" => {
                     return RusotoError::Service(UntagResourceError::InvalidArn(err.msg))
@@ -2457,6 +2478,7 @@ pub enum UpdateStateMachineError {
 impl UpdateStateMachineError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateStateMachineError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidArn" => {
                     return RusotoError::Service(UpdateStateMachineError::InvalidArn(err.msg))

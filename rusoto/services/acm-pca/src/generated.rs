@@ -49,7 +49,6 @@ impl AcmPcaClient {
     }
 }
 
-use serde_json;
 /// <p>Contains information about the certificate subject. The certificate can be one issued by your private certificate authority (CA) or it can be your private CA certificate. The <b>Subject</b> field in the certificate identifies the entity that owns or controls the public key in the certificate. The entity can be a user, computer, device, or service. The <b>Subject</b> must contain an X.500 distinguished name (DN). A DN is a sequence of relative distinguished names (RDNs). The RDNs are separated by commas in the certificate. The DN must be unique for each entity, but your private CA can issue more than one certificate with the same DN to the same entity. </p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct ASN1Subject {
@@ -747,6 +746,7 @@ impl CreateCertificateAuthorityError {
         res: BufferedHttpResponse,
     ) -> RusotoError<CreateCertificateAuthorityError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidArgsException" => {
                     return RusotoError::Service(CreateCertificateAuthorityError::InvalidArgs(
@@ -809,6 +809,7 @@ impl CreateCertificateAuthorityAuditReportError {
         res: BufferedHttpResponse,
     ) -> RusotoError<CreateCertificateAuthorityAuditReportError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidArgsException" => {
                     return RusotoError::Service(
@@ -893,6 +894,7 @@ pub enum CreatePermissionError {
 impl CreatePermissionError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreatePermissionError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidArnException" => {
                     return RusotoError::Service(CreatePermissionError::InvalidArn(err.msg))
@@ -953,6 +955,7 @@ impl DeleteCertificateAuthorityError {
         res: BufferedHttpResponse,
     ) -> RusotoError<DeleteCertificateAuthorityError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ConcurrentModificationException" => {
                     return RusotoError::Service(
@@ -1011,6 +1014,7 @@ pub enum DeletePermissionError {
 impl DeletePermissionError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeletePermissionError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidArnException" => {
                     return RusotoError::Service(DeletePermissionError::InvalidArn(err.msg))
@@ -1063,6 +1067,7 @@ pub enum DeletePolicyError {
 impl DeletePolicyError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeletePolicyError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ConcurrentModificationException" => {
                     return RusotoError::Service(DeletePolicyError::ConcurrentModification(err.msg))
@@ -1117,6 +1122,7 @@ impl DescribeCertificateAuthorityError {
         res: BufferedHttpResponse,
     ) -> RusotoError<DescribeCertificateAuthorityError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidArnException" => {
                     return RusotoError::Service(DescribeCertificateAuthorityError::InvalidArn(
@@ -1163,6 +1169,7 @@ impl DescribeCertificateAuthorityAuditReportError {
         res: BufferedHttpResponse,
     ) -> RusotoError<DescribeCertificateAuthorityAuditReportError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidArgsException" => {
                     return RusotoError::Service(
@@ -1221,6 +1228,7 @@ pub enum GetCertificateError {
 impl GetCertificateError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetCertificateError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidArnException" => {
                     return RusotoError::Service(GetCertificateError::InvalidArn(err.msg))
@@ -1273,6 +1281,7 @@ impl GetCertificateAuthorityCertificateError {
         res: BufferedHttpResponse,
     ) -> RusotoError<GetCertificateAuthorityCertificateError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidArnException" => {
                     return RusotoError::Service(
@@ -1333,6 +1342,7 @@ impl GetCertificateAuthorityCsrError {
         res: BufferedHttpResponse,
     ) -> RusotoError<GetCertificateAuthorityCsrError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidArnException" => {
                     return RusotoError::Service(GetCertificateAuthorityCsrError::InvalidArn(
@@ -1395,6 +1405,7 @@ pub enum GetPolicyError {
 impl GetPolicyError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetPolicyError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidArnException" => {
                     return RusotoError::Service(GetPolicyError::InvalidArn(err.msg))
@@ -1455,6 +1466,7 @@ impl ImportCertificateAuthorityCertificateError {
         res: BufferedHttpResponse,
     ) -> RusotoError<ImportCertificateAuthorityCertificateError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "CertificateMismatchException" => {
                     return RusotoError::Service(
@@ -1563,6 +1575,7 @@ pub enum IssueCertificateError {
 impl IssueCertificateError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<IssueCertificateError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidArgsException" => {
                     return RusotoError::Service(IssueCertificateError::InvalidArgs(err.msg))
@@ -1615,6 +1628,7 @@ impl ListCertificateAuthoritiesError {
         res: BufferedHttpResponse,
     ) -> RusotoError<ListCertificateAuthoritiesError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidNextTokenException" => {
                     return RusotoError::Service(ListCertificateAuthoritiesError::InvalidNextToken(
@@ -1655,6 +1669,7 @@ pub enum ListPermissionsError {
 impl ListPermissionsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListPermissionsError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidArnException" => {
                     return RusotoError::Service(ListPermissionsError::InvalidArn(err.msg))
@@ -1705,6 +1720,7 @@ pub enum ListTagsError {
 impl ListTagsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListTagsError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidArnException" => {
                     return RusotoError::Service(ListTagsError::InvalidArn(err.msg))
@@ -1755,6 +1771,7 @@ pub enum PutPolicyError {
 impl PutPolicyError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<PutPolicyError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ConcurrentModificationException" => {
                     return RusotoError::Service(PutPolicyError::ConcurrentModification(err.msg))
@@ -1815,6 +1832,7 @@ impl RestoreCertificateAuthorityError {
         res: BufferedHttpResponse,
     ) -> RusotoError<RestoreCertificateAuthorityError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidArnException" => {
                     return RusotoError::Service(RestoreCertificateAuthorityError::InvalidArn(
@@ -1875,6 +1893,7 @@ pub enum RevokeCertificateError {
 impl RevokeCertificateError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<RevokeCertificateError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ConcurrentModificationException" => {
                     return RusotoError::Service(RevokeCertificateError::ConcurrentModification(
@@ -1949,6 +1968,7 @@ pub enum TagCertificateAuthorityError {
 impl TagCertificateAuthorityError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<TagCertificateAuthorityError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidArnException" => {
                     return RusotoError::Service(TagCertificateAuthorityError::InvalidArn(err.msg))
@@ -2005,6 +2025,7 @@ pub enum UntagCertificateAuthorityError {
 impl UntagCertificateAuthorityError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UntagCertificateAuthorityError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidArnException" => {
                     return RusotoError::Service(UntagCertificateAuthorityError::InvalidArn(
@@ -2067,6 +2088,7 @@ impl UpdateCertificateAuthorityError {
         res: BufferedHttpResponse,
     ) -> RusotoError<UpdateCertificateAuthorityError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ConcurrentModificationException" => {
                     return RusotoError::Service(

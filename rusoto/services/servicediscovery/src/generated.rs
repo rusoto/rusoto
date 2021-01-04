@@ -50,7 +50,6 @@ impl ServiceDiscoveryClient {
     }
 }
 
-use serde_json;
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateHttpNamespaceRequest {
@@ -1064,6 +1063,7 @@ pub enum CreateHttpNamespaceError {
 impl CreateHttpNamespaceError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateHttpNamespaceError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "DuplicateRequest" => {
                     return RusotoError::Service(CreateHttpNamespaceError::DuplicateRequest(
@@ -1124,6 +1124,7 @@ pub enum CreatePrivateDnsNamespaceError {
 impl CreatePrivateDnsNamespaceError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreatePrivateDnsNamespaceError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "DuplicateRequest" => {
                     return RusotoError::Service(CreatePrivateDnsNamespaceError::DuplicateRequest(
@@ -1192,6 +1193,7 @@ pub enum CreatePublicDnsNamespaceError {
 impl CreatePublicDnsNamespaceError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreatePublicDnsNamespaceError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "DuplicateRequest" => {
                     return RusotoError::Service(CreatePublicDnsNamespaceError::DuplicateRequest(
@@ -1260,6 +1262,7 @@ pub enum CreateServiceError {
 impl CreateServiceError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateServiceError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidInput" => {
                     return RusotoError::Service(CreateServiceError::InvalidInput(err.msg))
@@ -1312,6 +1315,7 @@ pub enum DeleteNamespaceError {
 impl DeleteNamespaceError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteNamespaceError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "DuplicateRequest" => {
                     return RusotoError::Service(DeleteNamespaceError::DuplicateRequest(err.msg))
@@ -1358,6 +1362,7 @@ pub enum DeleteServiceError {
 impl DeleteServiceError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteServiceError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidInput" => {
                     return RusotoError::Service(DeleteServiceError::InvalidInput(err.msg))
@@ -1404,6 +1409,7 @@ pub enum DeregisterInstanceError {
 impl DeregisterInstanceError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeregisterInstanceError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "DuplicateRequest" => {
                     return RusotoError::Service(DeregisterInstanceError::DuplicateRequest(err.msg))
@@ -1456,6 +1462,7 @@ pub enum DiscoverInstancesError {
 impl DiscoverInstancesError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DiscoverInstancesError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidInput" => {
                     return RusotoError::Service(DiscoverInstancesError::InvalidInput(err.msg))
@@ -1504,6 +1511,7 @@ pub enum GetInstanceError {
 impl GetInstanceError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetInstanceError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InstanceNotFound" => {
                     return RusotoError::Service(GetInstanceError::InstanceNotFound(err.msg))
@@ -1546,6 +1554,7 @@ pub enum GetInstancesHealthStatusError {
 impl GetInstancesHealthStatusError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetInstancesHealthStatusError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InstanceNotFound" => {
                     return RusotoError::Service(GetInstancesHealthStatusError::InstanceNotFound(
@@ -1592,6 +1601,7 @@ pub enum GetNamespaceError {
 impl GetNamespaceError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetNamespaceError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidInput" => {
                     return RusotoError::Service(GetNamespaceError::InvalidInput(err.msg))
@@ -1628,6 +1638,7 @@ pub enum GetOperationError {
 impl GetOperationError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetOperationError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidInput" => {
                     return RusotoError::Service(GetOperationError::InvalidInput(err.msg))
@@ -1664,6 +1675,7 @@ pub enum GetServiceError {
 impl GetServiceError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetServiceError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidInput" => {
                     return RusotoError::Service(GetServiceError::InvalidInput(err.msg))
@@ -1700,6 +1712,7 @@ pub enum ListInstancesError {
 impl ListInstancesError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListInstancesError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidInput" => {
                     return RusotoError::Service(ListInstancesError::InvalidInput(err.msg))
@@ -1734,6 +1747,7 @@ pub enum ListNamespacesError {
 impl ListNamespacesError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListNamespacesError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidInput" => {
                     return RusotoError::Service(ListNamespacesError::InvalidInput(err.msg))
@@ -1764,6 +1778,7 @@ pub enum ListOperationsError {
 impl ListOperationsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListOperationsError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidInput" => {
                     return RusotoError::Service(ListOperationsError::InvalidInput(err.msg))
@@ -1794,6 +1809,7 @@ pub enum ListServicesError {
 impl ListServicesError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListServicesError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidInput" => {
                     return RusotoError::Service(ListServicesError::InvalidInput(err.msg))
@@ -1826,6 +1842,7 @@ pub enum ListTagsForResourceError {
 impl ListTagsForResourceError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListTagsForResourceError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidInput" => {
                     return RusotoError::Service(ListTagsForResourceError::InvalidInput(err.msg))
@@ -1870,6 +1887,7 @@ pub enum RegisterInstanceError {
 impl RegisterInstanceError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<RegisterInstanceError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "DuplicateRequest" => {
                     return RusotoError::Service(RegisterInstanceError::DuplicateRequest(err.msg))
@@ -1922,6 +1940,7 @@ pub enum TagResourceError {
 impl TagResourceError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<TagResourceError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidInput" => {
                     return RusotoError::Service(TagResourceError::InvalidInput(err.msg))
@@ -1962,6 +1981,7 @@ pub enum UntagResourceError {
 impl UntagResourceError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UntagResourceError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidInput" => {
                     return RusotoError::Service(UntagResourceError::InvalidInput(err.msg))
@@ -2004,6 +2024,7 @@ impl UpdateInstanceCustomHealthStatusError {
         res: BufferedHttpResponse,
     ) -> RusotoError<UpdateInstanceCustomHealthStatusError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "CustomHealthNotFound" => {
                     return RusotoError::Service(
@@ -2066,6 +2087,7 @@ pub enum UpdateServiceError {
 impl UpdateServiceError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateServiceError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "DuplicateRequest" => {
                     return RusotoError::Service(UpdateServiceError::DuplicateRequest(err.msg))

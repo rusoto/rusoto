@@ -50,7 +50,6 @@ impl EmrClient {
     }
 }
 
-use serde_json;
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct AddInstanceFleetInput {
@@ -3304,6 +3303,7 @@ pub enum AddInstanceFleetError {
 impl AddInstanceFleetError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<AddInstanceFleetError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalServerException" => {
                     return RusotoError::Service(AddInstanceFleetError::InternalServer(err.msg))
@@ -3338,6 +3338,7 @@ pub enum AddInstanceGroupsError {
 impl AddInstanceGroupsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<AddInstanceGroupsError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalServerError" => {
                     return RusotoError::Service(AddInstanceGroupsError::InternalServerError(
@@ -3370,6 +3371,7 @@ pub enum AddJobFlowStepsError {
 impl AddJobFlowStepsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<AddJobFlowStepsError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalServerError" => {
                     return RusotoError::Service(AddJobFlowStepsError::InternalServerError(err.msg))
@@ -3402,6 +3404,7 @@ pub enum AddTagsError {
 impl AddTagsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<AddTagsError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalServerException" => {
                     return RusotoError::Service(AddTagsError::InternalServer(err.msg))
@@ -3438,6 +3441,7 @@ pub enum CancelStepsError {
 impl CancelStepsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CancelStepsError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalServerError" => {
                     return RusotoError::Service(CancelStepsError::InternalServerError(err.msg))
@@ -3476,6 +3480,7 @@ impl CreateSecurityConfigurationError {
         res: BufferedHttpResponse,
     ) -> RusotoError<CreateSecurityConfigurationError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalServerException" => {
                     return RusotoError::Service(CreateSecurityConfigurationError::InternalServer(
@@ -3516,6 +3521,7 @@ pub enum CreateStudioError {
 impl CreateStudioError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateStudioError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalServerException" => {
                     return RusotoError::Service(CreateStudioError::InternalServer(err.msg))
@@ -3554,6 +3560,7 @@ impl CreateStudioSessionMappingError {
         res: BufferedHttpResponse,
     ) -> RusotoError<CreateStudioSessionMappingError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalServerError" => {
                     return RusotoError::Service(
@@ -3598,6 +3605,7 @@ impl DeleteSecurityConfigurationError {
         res: BufferedHttpResponse,
     ) -> RusotoError<DeleteSecurityConfigurationError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalServerException" => {
                     return RusotoError::Service(DeleteSecurityConfigurationError::InternalServer(
@@ -3638,6 +3646,7 @@ pub enum DeleteStudioError {
 impl DeleteStudioError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteStudioError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalServerException" => {
                     return RusotoError::Service(DeleteStudioError::InternalServer(err.msg))
@@ -3676,6 +3685,7 @@ impl DeleteStudioSessionMappingError {
         res: BufferedHttpResponse,
     ) -> RusotoError<DeleteStudioSessionMappingError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalServerError" => {
                     return RusotoError::Service(
@@ -3718,6 +3728,7 @@ pub enum DescribeClusterError {
 impl DescribeClusterError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeClusterError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalServerException" => {
                     return RusotoError::Service(DescribeClusterError::InternalServer(err.msg))
@@ -3752,6 +3763,7 @@ pub enum DescribeJobFlowsError {
 impl DescribeJobFlowsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeJobFlowsError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalServerError" => {
                     return RusotoError::Service(DescribeJobFlowsError::InternalServerError(
@@ -3786,6 +3798,7 @@ pub enum DescribeNotebookExecutionError {
 impl DescribeNotebookExecutionError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeNotebookExecutionError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalServerError" => {
                     return RusotoError::Service(
@@ -3830,6 +3843,7 @@ impl DescribeSecurityConfigurationError {
         res: BufferedHttpResponse,
     ) -> RusotoError<DescribeSecurityConfigurationError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalServerException" => {
                     return RusotoError::Service(
@@ -3870,6 +3884,7 @@ pub enum DescribeStepError {
 impl DescribeStepError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeStepError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalServerException" => {
                     return RusotoError::Service(DescribeStepError::InternalServer(err.msg))
@@ -3906,6 +3921,7 @@ pub enum DescribeStudioError {
 impl DescribeStudioError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeStudioError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalServerException" => {
                     return RusotoError::Service(DescribeStudioError::InternalServer(err.msg))
@@ -3944,6 +3960,7 @@ impl GetBlockPublicAccessConfigurationError {
         res: BufferedHttpResponse,
     ) -> RusotoError<GetBlockPublicAccessConfigurationError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalServerException" => {
                     return RusotoError::Service(
@@ -3983,6 +4000,7 @@ pub enum GetManagedScalingPolicyError {}
 impl GetManagedScalingPolicyError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetManagedScalingPolicyError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
@@ -4010,6 +4028,7 @@ pub enum GetStudioSessionMappingError {
 impl GetStudioSessionMappingError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetStudioSessionMappingError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalServerError" => {
                     return RusotoError::Service(GetStudioSessionMappingError::InternalServerError(
@@ -4050,6 +4069,7 @@ pub enum ListBootstrapActionsError {
 impl ListBootstrapActionsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListBootstrapActionsError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalServerException" => {
                     return RusotoError::Service(ListBootstrapActionsError::InternalServer(err.msg))
@@ -4086,6 +4106,7 @@ pub enum ListClustersError {
 impl ListClustersError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListClustersError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalServerException" => {
                     return RusotoError::Service(ListClustersError::InternalServer(err.msg))
@@ -4122,6 +4143,7 @@ pub enum ListInstanceFleetsError {
 impl ListInstanceFleetsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListInstanceFleetsError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalServerException" => {
                     return RusotoError::Service(ListInstanceFleetsError::InternalServer(err.msg))
@@ -4158,6 +4180,7 @@ pub enum ListInstanceGroupsError {
 impl ListInstanceGroupsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListInstanceGroupsError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalServerException" => {
                     return RusotoError::Service(ListInstanceGroupsError::InternalServer(err.msg))
@@ -4194,6 +4217,7 @@ pub enum ListInstancesError {
 impl ListInstancesError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListInstancesError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalServerException" => {
                     return RusotoError::Service(ListInstancesError::InternalServer(err.msg))
@@ -4230,6 +4254,7 @@ pub enum ListNotebookExecutionsError {
 impl ListNotebookExecutionsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListNotebookExecutionsError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalServerError" => {
                     return RusotoError::Service(ListNotebookExecutionsError::InternalServerError(
@@ -4272,6 +4297,7 @@ impl ListSecurityConfigurationsError {
         res: BufferedHttpResponse,
     ) -> RusotoError<ListSecurityConfigurationsError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalServerException" => {
                     return RusotoError::Service(ListSecurityConfigurationsError::InternalServer(
@@ -4312,6 +4338,7 @@ pub enum ListStepsError {
 impl ListStepsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListStepsError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalServerException" => {
                     return RusotoError::Service(ListStepsError::InternalServer(err.msg))
@@ -4348,6 +4375,7 @@ pub enum ListStudioSessionMappingsError {
 impl ListStudioSessionMappingsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListStudioSessionMappingsError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalServerError" => {
                     return RusotoError::Service(
@@ -4390,6 +4418,7 @@ pub enum ListStudiosError {
 impl ListStudiosError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListStudiosError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalServerException" => {
                     return RusotoError::Service(ListStudiosError::InternalServer(err.msg))
@@ -4426,6 +4455,7 @@ pub enum ModifyClusterError {
 impl ModifyClusterError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ModifyClusterError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalServerError" => {
                     return RusotoError::Service(ModifyClusterError::InternalServerError(err.msg))
@@ -4462,6 +4492,7 @@ pub enum ModifyInstanceFleetError {
 impl ModifyInstanceFleetError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ModifyInstanceFleetError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalServerException" => {
                     return RusotoError::Service(ModifyInstanceFleetError::InternalServer(err.msg))
@@ -4496,6 +4527,7 @@ pub enum ModifyInstanceGroupsError {
 impl ModifyInstanceGroupsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ModifyInstanceGroupsError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalServerError" => {
                     return RusotoError::Service(ModifyInstanceGroupsError::InternalServerError(
@@ -4525,6 +4557,7 @@ pub enum PutAutoScalingPolicyError {}
 impl PutAutoScalingPolicyError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<PutAutoScalingPolicyError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
@@ -4554,6 +4587,7 @@ impl PutBlockPublicAccessConfigurationError {
         res: BufferedHttpResponse,
     ) -> RusotoError<PutBlockPublicAccessConfigurationError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalServerException" => {
                     return RusotoError::Service(
@@ -4593,6 +4627,7 @@ pub enum PutManagedScalingPolicyError {}
 impl PutManagedScalingPolicyError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<PutManagedScalingPolicyError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
@@ -4615,6 +4650,7 @@ pub enum RemoveAutoScalingPolicyError {}
 impl RemoveAutoScalingPolicyError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<RemoveAutoScalingPolicyError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
@@ -4639,6 +4675,7 @@ impl RemoveManagedScalingPolicyError {
         res: BufferedHttpResponse,
     ) -> RusotoError<RemoveManagedScalingPolicyError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
@@ -4666,6 +4703,7 @@ pub enum RemoveTagsError {
 impl RemoveTagsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<RemoveTagsError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalServerException" => {
                     return RusotoError::Service(RemoveTagsError::InternalServer(err.msg))
@@ -4700,6 +4738,7 @@ pub enum RunJobFlowError {
 impl RunJobFlowError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<RunJobFlowError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalServerError" => {
                     return RusotoError::Service(RunJobFlowError::InternalServerError(err.msg))
@@ -4730,6 +4769,7 @@ pub enum SetTerminationProtectionError {
 impl SetTerminationProtectionError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<SetTerminationProtectionError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalServerError" => {
                     return RusotoError::Service(
@@ -4762,6 +4802,7 @@ pub enum SetVisibleToAllUsersError {
 impl SetVisibleToAllUsersError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<SetVisibleToAllUsersError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalServerError" => {
                     return RusotoError::Service(SetVisibleToAllUsersError::InternalServerError(
@@ -4796,6 +4837,7 @@ pub enum StartNotebookExecutionError {
 impl StartNotebookExecutionError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<StartNotebookExecutionError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalServerException" => {
                     return RusotoError::Service(StartNotebookExecutionError::InternalServer(
@@ -4836,6 +4878,7 @@ pub enum StopNotebookExecutionError {
 impl StopNotebookExecutionError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<StopNotebookExecutionError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalServerError" => {
                     return RusotoError::Service(StopNotebookExecutionError::InternalServerError(
@@ -4874,6 +4917,7 @@ pub enum TerminateJobFlowsError {
 impl TerminateJobFlowsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<TerminateJobFlowsError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalServerError" => {
                     return RusotoError::Service(TerminateJobFlowsError::InternalServerError(
@@ -4910,6 +4954,7 @@ impl UpdateStudioSessionMappingError {
         res: BufferedHttpResponse,
     ) -> RusotoError<UpdateStudioSessionMappingError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalServerError" => {
                     return RusotoError::Service(

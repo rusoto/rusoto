@@ -24,7 +24,6 @@ use rusoto_core::proto;
 use rusoto_core::signature::SignedRequest;
 #[allow(unused_imports)]
 use serde::{Deserialize, Serialize};
-use serde_json;
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct AssociateRepositoryRequest {
@@ -786,6 +785,7 @@ pub enum AssociateRepositoryError {
 impl AssociateRepositoryError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<AssociateRepositoryError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(AssociateRepositoryError::AccessDenied(err.msg))
@@ -836,6 +836,7 @@ pub enum CreateCodeReviewError {
 impl CreateCodeReviewError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateCodeReviewError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(CreateCodeReviewError::AccessDenied(err.msg))
@@ -888,6 +889,7 @@ pub enum DescribeCodeReviewError {
 impl DescribeCodeReviewError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeCodeReviewError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(DescribeCodeReviewError::AccessDenied(err.msg))
@@ -938,6 +940,7 @@ impl DescribeRecommendationFeedbackError {
         res: BufferedHttpResponse,
     ) -> RusotoError<DescribeRecommendationFeedbackError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(DescribeRecommendationFeedbackError::AccessDenied(
@@ -1000,6 +1003,7 @@ impl DescribeRepositoryAssociationError {
         res: BufferedHttpResponse,
     ) -> RusotoError<DescribeRepositoryAssociationError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(DescribeRepositoryAssociationError::AccessDenied(
@@ -1058,6 +1062,7 @@ pub enum DisassociateRepositoryError {
 impl DisassociateRepositoryError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DisassociateRepositoryError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(DisassociateRepositoryError::AccessDenied(err.msg))
@@ -1110,6 +1115,7 @@ pub enum ListCodeReviewsError {
 impl ListCodeReviewsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListCodeReviewsError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(ListCodeReviewsError::AccessDenied(err.msg))
@@ -1156,6 +1162,7 @@ impl ListRecommendationFeedbackError {
         res: BufferedHttpResponse,
     ) -> RusotoError<ListRecommendationFeedbackError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(ListRecommendationFeedbackError::AccessDenied(
@@ -1212,6 +1219,7 @@ pub enum ListRecommendationsError {
 impl ListRecommendationsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListRecommendationsError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(ListRecommendationsError::AccessDenied(err.msg))
@@ -1260,6 +1268,7 @@ impl ListRepositoryAssociationsError {
         res: BufferedHttpResponse,
     ) -> RusotoError<ListRepositoryAssociationsError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalServerException" => {
                     return RusotoError::Service(ListRepositoryAssociationsError::InternalServer(
@@ -1300,6 +1309,7 @@ pub enum ListTagsForResourceError {
 impl ListTagsForResourceError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListTagsForResourceError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalServerException" => {
                     return RusotoError::Service(ListTagsForResourceError::InternalServer(err.msg))
@@ -1342,6 +1352,7 @@ pub enum PutRecommendationFeedbackError {
 impl PutRecommendationFeedbackError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<PutRecommendationFeedbackError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(PutRecommendationFeedbackError::AccessDenied(
@@ -1394,6 +1405,7 @@ pub enum TagResourceError {
 impl TagResourceError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<TagResourceError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalServerException" => {
                     return RusotoError::Service(TagResourceError::InternalServer(err.msg))
@@ -1430,6 +1442,7 @@ pub enum UntagResourceError {
 impl UntagResourceError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UntagResourceError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalServerException" => {
                     return RusotoError::Service(UntagResourceError::InternalServer(err.msg))
@@ -1593,6 +1606,7 @@ impl CodeGuruReviewer for CodeGuruReviewerClient {
         &self,
         input: AssociateRepositoryRequest,
     ) -> Result<AssociateRepositoryResponse, RusotoError<AssociateRepositoryError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/associations";
 
         let mut request =
@@ -1625,6 +1639,7 @@ impl CodeGuruReviewer for CodeGuruReviewerClient {
         &self,
         input: CreateCodeReviewRequest,
     ) -> Result<CreateCodeReviewResponse, RusotoError<CreateCodeReviewError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/codereviews";
 
         let mut request =
@@ -1657,6 +1672,7 @@ impl CodeGuruReviewer for CodeGuruReviewerClient {
         &self,
         input: DescribeCodeReviewRequest,
     ) -> Result<DescribeCodeReviewResponse, RusotoError<DescribeCodeReviewError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/codereviews/{code_review_arn}",
             code_review_arn = input.code_review_arn
@@ -1692,6 +1708,7 @@ impl CodeGuruReviewer for CodeGuruReviewerClient {
         DescribeRecommendationFeedbackResponse,
         RusotoError<DescribeRecommendationFeedbackError>,
     > {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/feedback/{code_review_arn}",
             code_review_arn = input.code_review_arn
@@ -1734,6 +1751,7 @@ impl CodeGuruReviewer for CodeGuruReviewerClient {
         DescribeRepositoryAssociationResponse,
         RusotoError<DescribeRepositoryAssociationError>,
     > {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/associations/{association_arn}",
             association_arn = input.association_arn
@@ -1766,6 +1784,7 @@ impl CodeGuruReviewer for CodeGuruReviewerClient {
         &self,
         input: DisassociateRepositoryRequest,
     ) -> Result<DisassociateRepositoryResponse, RusotoError<DisassociateRepositoryError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/associations/{association_arn}",
             association_arn = input.association_arn
@@ -1798,6 +1817,7 @@ impl CodeGuruReviewer for CodeGuruReviewerClient {
         &self,
         input: ListCodeReviewsRequest,
     ) -> Result<ListCodeReviewsResponse, RusotoError<ListCodeReviewsError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/codereviews";
 
         let mut request =
@@ -1853,6 +1873,7 @@ impl CodeGuruReviewer for CodeGuruReviewerClient {
         input: ListRecommendationFeedbackRequest,
     ) -> Result<ListRecommendationFeedbackResponse, RusotoError<ListRecommendationFeedbackError>>
     {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/feedback/{code_review_arn}/RecommendationFeedback",
             code_review_arn = input.code_review_arn
@@ -1904,6 +1925,7 @@ impl CodeGuruReviewer for CodeGuruReviewerClient {
         &self,
         input: ListRecommendationsRequest,
     ) -> Result<ListRecommendationsResponse, RusotoError<ListRecommendationsError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/codereviews/{code_review_arn}/Recommendations",
             code_review_arn = input.code_review_arn
@@ -1946,6 +1968,7 @@ impl CodeGuruReviewer for CodeGuruReviewerClient {
         input: ListRepositoryAssociationsRequest,
     ) -> Result<ListRepositoryAssociationsResponse, RusotoError<ListRepositoryAssociationsError>>
     {
+        #![allow(clippy::needless_update)]
         let request_uri = "/associations";
 
         let mut request =
@@ -2004,6 +2027,7 @@ impl CodeGuruReviewer for CodeGuruReviewerClient {
         &self,
         input: ListTagsForResourceRequest,
     ) -> Result<ListTagsForResourceResponse, RusotoError<ListTagsForResourceError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!("/tags/{resource_arn}", resource_arn = input.resource_arn);
 
         let mut request =
@@ -2034,6 +2058,7 @@ impl CodeGuruReviewer for CodeGuruReviewerClient {
         input: PutRecommendationFeedbackRequest,
     ) -> Result<PutRecommendationFeedbackResponse, RusotoError<PutRecommendationFeedbackError>>
     {
+        #![allow(clippy::needless_update)]
         let request_uri = "/feedback";
 
         let mut request =
@@ -2066,6 +2091,7 @@ impl CodeGuruReviewer for CodeGuruReviewerClient {
         &self,
         input: TagResourceRequest,
     ) -> Result<TagResourceResponse, RusotoError<TagResourceError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!("/tags/{resource_arn}", resource_arn = input.resource_arn);
 
         let mut request =
@@ -2098,6 +2124,7 @@ impl CodeGuruReviewer for CodeGuruReviewerClient {
         &self,
         input: UntagResourceRequest,
     ) -> Result<UntagResourceResponse, RusotoError<UntagResourceError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!("/tags/{resource_arn}", resource_arn = input.resource_arn);
 
         let mut request =

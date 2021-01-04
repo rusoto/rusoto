@@ -49,7 +49,6 @@ impl WorkspacesClient {
     }
 }
 
-use serde_json;
 /// <p>Describes a modification to the configuration of Bring Your Own License (BYOL) for the specified account. </p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
@@ -1837,6 +1836,7 @@ pub enum AssociateConnectionAliasError {
 impl AssociateConnectionAliasError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<AssociateConnectionAliasError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(AssociateConnectionAliasError::AccessDenied(
@@ -1915,6 +1915,7 @@ pub enum AssociateIpGroupsError {
 impl AssociateIpGroupsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<AssociateIpGroupsError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(AssociateIpGroupsError::AccessDenied(err.msg))
@@ -1981,6 +1982,7 @@ pub enum AuthorizeIpRulesError {
 impl AuthorizeIpRulesError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<AuthorizeIpRulesError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(AuthorizeIpRulesError::AccessDenied(err.msg))
@@ -2045,6 +2047,7 @@ pub enum CopyWorkspaceImageError {
 impl CopyWorkspaceImageError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CopyWorkspaceImageError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(CopyWorkspaceImageError::AccessDenied(err.msg))
@@ -2119,6 +2122,7 @@ pub enum CreateConnectionAliasError {
 impl CreateConnectionAliasError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateConnectionAliasError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(CreateConnectionAliasError::AccessDenied(err.msg))
@@ -2187,6 +2191,7 @@ pub enum CreateIpGroupError {
 impl CreateIpGroupError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateIpGroupError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(CreateIpGroupError::AccessDenied(err.msg))
@@ -2241,6 +2246,7 @@ pub enum CreateTagsError {
 impl CreateTagsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateTagsError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidParameterValuesException" => {
                     return RusotoError::Service(CreateTagsError::InvalidParameterValues(err.msg))
@@ -2281,6 +2287,7 @@ pub enum CreateWorkspacesError {
 impl CreateWorkspacesError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateWorkspacesError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidParameterValuesException" => {
                     return RusotoError::Service(CreateWorkspacesError::InvalidParameterValues(
@@ -2329,6 +2336,7 @@ pub enum DeleteConnectionAliasError {
 impl DeleteConnectionAliasError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteConnectionAliasError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(DeleteConnectionAliasError::AccessDenied(err.msg))
@@ -2395,6 +2403,7 @@ pub enum DeleteIpGroupError {
 impl DeleteIpGroupError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteIpGroupError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(DeleteIpGroupError::AccessDenied(err.msg))
@@ -2441,6 +2450,7 @@ pub enum DeleteTagsError {
 impl DeleteTagsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteTagsError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidParameterValuesException" => {
                     return RusotoError::Service(DeleteTagsError::InvalidParameterValues(err.msg))
@@ -2479,6 +2489,7 @@ pub enum DeleteWorkspaceImageError {
 impl DeleteWorkspaceImageError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteWorkspaceImageError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(DeleteWorkspaceImageError::AccessDenied(err.msg))
@@ -2531,6 +2542,7 @@ impl DeregisterWorkspaceDirectoryError {
         res: BufferedHttpResponse,
     ) -> RusotoError<DeregisterWorkspaceDirectoryError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(DeregisterWorkspaceDirectoryError::AccessDenied(
@@ -2595,6 +2607,7 @@ pub enum DescribeAccountError {
 impl DescribeAccountError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeAccountError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(DescribeAccountError::AccessDenied(err.msg))
@@ -2627,6 +2640,7 @@ impl DescribeAccountModificationsError {
         res: BufferedHttpResponse,
     ) -> RusotoError<DescribeAccountModificationsError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(DescribeAccountModificationsError::AccessDenied(
@@ -2663,6 +2677,7 @@ pub enum DescribeClientPropertiesError {
 impl DescribeClientPropertiesError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeClientPropertiesError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(DescribeClientPropertiesError::AccessDenied(
@@ -2717,6 +2732,7 @@ impl DescribeConnectionAliasPermissionsError {
         res: BufferedHttpResponse,
     ) -> RusotoError<DescribeConnectionAliasPermissionsError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(
@@ -2779,6 +2795,7 @@ pub enum DescribeConnectionAliasesError {
 impl DescribeConnectionAliasesError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeConnectionAliasesError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(DescribeConnectionAliasesError::AccessDenied(
@@ -2829,6 +2846,7 @@ pub enum DescribeIpGroupsError {
 impl DescribeIpGroupsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeIpGroupsError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(DescribeIpGroupsError::AccessDenied(err.msg))
@@ -2865,6 +2883,7 @@ pub enum DescribeTagsError {
 impl DescribeTagsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeTagsError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(DescribeTagsError::ResourceNotFound(err.msg))
@@ -2895,6 +2914,7 @@ pub enum DescribeWorkspaceBundlesError {
 impl DescribeWorkspaceBundlesError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeWorkspaceBundlesError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidParameterValuesException" => {
                     return RusotoError::Service(
@@ -2931,6 +2951,7 @@ impl DescribeWorkspaceDirectoriesError {
         res: BufferedHttpResponse,
     ) -> RusotoError<DescribeWorkspaceDirectoriesError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidParameterValuesException" => {
                     return RusotoError::Service(
@@ -2971,6 +2992,7 @@ impl DescribeWorkspaceImagePermissionsError {
         res: BufferedHttpResponse,
     ) -> RusotoError<DescribeWorkspaceImagePermissionsError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(
@@ -3021,6 +3043,7 @@ pub enum DescribeWorkspaceImagesError {
 impl DescribeWorkspaceImagesError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeWorkspaceImagesError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(DescribeWorkspaceImagesError::AccessDenied(
@@ -3059,6 +3082,7 @@ impl DescribeWorkspaceSnapshotsError {
         res: BufferedHttpResponse,
     ) -> RusotoError<DescribeWorkspaceSnapshotsError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(DescribeWorkspaceSnapshotsError::AccessDenied(
@@ -3107,6 +3131,7 @@ pub enum DescribeWorkspacesError {
 impl DescribeWorkspacesError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeWorkspacesError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidParameterValuesException" => {
                     return RusotoError::Service(DescribeWorkspacesError::InvalidParameterValues(
@@ -3147,6 +3172,7 @@ impl DescribeWorkspacesConnectionStatusError {
         res: BufferedHttpResponse,
     ) -> RusotoError<DescribeWorkspacesConnectionStatusError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidParameterValuesException" => {
                     return RusotoError::Service(
@@ -3191,6 +3217,7 @@ impl DisassociateConnectionAliasError {
         res: BufferedHttpResponse,
     ) -> RusotoError<DisassociateConnectionAliasError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(DisassociateConnectionAliasError::AccessDenied(
@@ -3259,6 +3286,7 @@ pub enum DisassociateIpGroupsError {
 impl DisassociateIpGroupsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DisassociateIpGroupsError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(DisassociateIpGroupsError::AccessDenied(err.msg))
@@ -3317,6 +3345,7 @@ pub enum ImportWorkspaceImageError {
 impl ImportWorkspaceImageError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ImportWorkspaceImageError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(ImportWorkspaceImageError::AccessDenied(err.msg))
@@ -3381,6 +3410,7 @@ impl ListAvailableManagementCidrRangesError {
         res: BufferedHttpResponse,
     ) -> RusotoError<ListAvailableManagementCidrRangesError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(
@@ -3433,6 +3463,7 @@ pub enum MigrateWorkspaceError {
 impl MigrateWorkspaceError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<MigrateWorkspaceError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(MigrateWorkspaceError::AccessDenied(err.msg))
@@ -3499,6 +3530,7 @@ pub enum ModifyAccountError {
 impl ModifyAccountError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ModifyAccountError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(ModifyAccountError::AccessDenied(err.msg))
@@ -3551,6 +3583,7 @@ pub enum ModifyClientPropertiesError {
 impl ModifyClientPropertiesError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ModifyClientPropertiesError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(ModifyClientPropertiesError::AccessDenied(err.msg))
@@ -3601,6 +3634,7 @@ impl ModifySelfservicePermissionsError {
         res: BufferedHttpResponse,
     ) -> RusotoError<ModifySelfservicePermissionsError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(ModifySelfservicePermissionsError::AccessDenied(
@@ -3653,6 +3687,7 @@ impl ModifyWorkspaceAccessPropertiesError {
         res: BufferedHttpResponse,
     ) -> RusotoError<ModifyWorkspaceAccessPropertiesError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(
@@ -3701,6 +3736,7 @@ impl ModifyWorkspaceCreationPropertiesError {
         res: BufferedHttpResponse,
     ) -> RusotoError<ModifyWorkspaceCreationPropertiesError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(
@@ -3771,6 +3807,7 @@ pub enum ModifyWorkspacePropertiesError {
 impl ModifyWorkspacePropertiesError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ModifyWorkspacePropertiesError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(ModifyWorkspacePropertiesError::AccessDenied(
@@ -3853,6 +3890,7 @@ pub enum ModifyWorkspaceStateError {
 impl ModifyWorkspaceStateError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ModifyWorkspaceStateError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidParameterValuesException" => {
                     return RusotoError::Service(ModifyWorkspaceStateError::InvalidParameterValues(
@@ -3894,6 +3932,7 @@ pub enum RebootWorkspacesError {}
 impl RebootWorkspacesError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<RebootWorkspacesError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
@@ -3916,6 +3955,7 @@ pub enum RebuildWorkspacesError {}
 impl RebuildWorkspacesError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<RebuildWorkspacesError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
@@ -3957,6 +3997,7 @@ impl RegisterWorkspaceDirectoryError {
         res: BufferedHttpResponse,
     ) -> RusotoError<RegisterWorkspaceDirectoryError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(RegisterWorkspaceDirectoryError::AccessDenied(
@@ -4047,6 +4088,7 @@ pub enum RestoreWorkspaceError {
 impl RestoreWorkspaceError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<RestoreWorkspaceError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(RestoreWorkspaceError::AccessDenied(err.msg))
@@ -4093,6 +4135,7 @@ pub enum RevokeIpRulesError {
 impl RevokeIpRulesError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<RevokeIpRulesError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(RevokeIpRulesError::AccessDenied(err.msg))
@@ -4134,6 +4177,7 @@ pub enum StartWorkspacesError {}
 impl StartWorkspacesError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<StartWorkspacesError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
@@ -4156,6 +4200,7 @@ pub enum StopWorkspacesError {}
 impl StopWorkspacesError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<StopWorkspacesError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
@@ -4178,6 +4223,7 @@ pub enum TerminateWorkspacesError {}
 impl TerminateWorkspacesError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<TerminateWorkspacesError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
@@ -4217,6 +4263,7 @@ impl UpdateConnectionAliasPermissionError {
         res: BufferedHttpResponse,
     ) -> RusotoError<UpdateConnectionAliasPermissionError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(
@@ -4305,6 +4352,7 @@ pub enum UpdateRulesOfIpGroupError {
 impl UpdateRulesOfIpGroupError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateRulesOfIpGroupError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(UpdateRulesOfIpGroupError::AccessDenied(err.msg))
@@ -4369,6 +4417,7 @@ impl UpdateWorkspaceImagePermissionError {
         res: BufferedHttpResponse,
     ) -> RusotoError<UpdateWorkspaceImagePermissionError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(UpdateWorkspaceImagePermissionError::AccessDenied(

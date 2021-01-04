@@ -49,7 +49,6 @@ impl KinesisFirehoseClient {
     }
 }
 
-use serde_json;
 /// <p>Describes hints for the buffering to perform before delivering data to the destination. These options are treated as hints, and therefore Kinesis Data Firehose might choose to use different values when it is optimal. The <code>SizeInMBs</code> and <code>IntervalInSeconds</code> parameters are optional. However, if specify a value for one of them, you must also provide a value for the other.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct BufferingHints {
@@ -1816,6 +1815,7 @@ pub enum CreateDeliveryStreamError {
 impl CreateDeliveryStreamError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateDeliveryStreamError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidArgumentException" => {
                     return RusotoError::Service(CreateDeliveryStreamError::InvalidArgument(
@@ -1864,6 +1864,7 @@ pub enum DeleteDeliveryStreamError {
 impl DeleteDeliveryStreamError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteDeliveryStreamError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ResourceInUseException" => {
                     return RusotoError::Service(DeleteDeliveryStreamError::ResourceInUse(err.msg))
@@ -1900,6 +1901,7 @@ pub enum DescribeDeliveryStreamError {
 impl DescribeDeliveryStreamError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeDeliveryStreamError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(DescribeDeliveryStreamError::ResourceNotFound(
@@ -1929,6 +1931,7 @@ pub enum ListDeliveryStreamsError {}
 impl ListDeliveryStreamsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListDeliveryStreamsError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
@@ -1958,6 +1961,7 @@ pub enum ListTagsForDeliveryStreamError {
 impl ListTagsForDeliveryStreamError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListTagsForDeliveryStreamError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidArgumentException" => {
                     return RusotoError::Service(ListTagsForDeliveryStreamError::InvalidArgument(
@@ -2008,6 +2012,7 @@ pub enum PutRecordError {
 impl PutRecordError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<PutRecordError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidArgumentException" => {
                     return RusotoError::Service(PutRecordError::InvalidArgument(err.msg))
@@ -2056,6 +2061,7 @@ pub enum PutRecordBatchError {
 impl PutRecordBatchError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<PutRecordBatchError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidArgumentException" => {
                     return RusotoError::Service(PutRecordBatchError::InvalidArgument(err.msg))
@@ -2108,6 +2114,7 @@ impl StartDeliveryStreamEncryptionError {
         res: BufferedHttpResponse,
     ) -> RusotoError<StartDeliveryStreamEncryptionError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidArgumentException" => {
                     return RusotoError::Service(
@@ -2178,6 +2185,7 @@ impl StopDeliveryStreamEncryptionError {
         res: BufferedHttpResponse,
     ) -> RusotoError<StopDeliveryStreamEncryptionError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidArgumentException" => {
                     return RusotoError::Service(
@@ -2236,6 +2244,7 @@ pub enum TagDeliveryStreamError {
 impl TagDeliveryStreamError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<TagDeliveryStreamError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidArgumentException" => {
                     return RusotoError::Service(TagDeliveryStreamError::InvalidArgument(err.msg))
@@ -2284,6 +2293,7 @@ pub enum UntagDeliveryStreamError {
 impl UntagDeliveryStreamError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UntagDeliveryStreamError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidArgumentException" => {
                     return RusotoError::Service(UntagDeliveryStreamError::InvalidArgument(err.msg))
@@ -2334,6 +2344,7 @@ pub enum UpdateDestinationError {
 impl UpdateDestinationError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateDestinationError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ConcurrentModificationException" => {
                     return RusotoError::Service(UpdateDestinationError::ConcurrentModification(

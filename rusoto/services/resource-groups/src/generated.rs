@@ -24,7 +24,6 @@ use rusoto_core::proto;
 use rusoto_core::signature::SignedRequest;
 #[allow(unused_imports)]
 use serde::{Deserialize, Serialize};
-use serde_json;
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateGroupInput {
@@ -590,6 +589,7 @@ pub enum CreateGroupError {
 impl CreateGroupError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateGroupError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(CreateGroupError::BadRequest(err.msg))
@@ -646,6 +646,7 @@ pub enum DeleteGroupError {
 impl DeleteGroupError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteGroupError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(DeleteGroupError::BadRequest(err.msg))
@@ -706,6 +707,7 @@ pub enum GetGroupError {
 impl GetGroupError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetGroupError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(GetGroupError::BadRequest(err.msg))
@@ -766,6 +768,7 @@ pub enum GetGroupConfigurationError {
 impl GetGroupConfigurationError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetGroupConfigurationError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(GetGroupConfigurationError::BadRequest(err.msg))
@@ -832,6 +835,7 @@ pub enum GetGroupQueryError {
 impl GetGroupQueryError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetGroupQueryError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(GetGroupQueryError::BadRequest(err.msg))
@@ -892,6 +896,7 @@ pub enum GetTagsError {
 impl GetTagsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetTagsError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(GetTagsError::BadRequest(err.msg))
@@ -952,6 +957,7 @@ pub enum GroupResourcesError {
 impl GroupResourcesError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GroupResourcesError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(GroupResourcesError::BadRequest(err.msg))
@@ -1014,6 +1020,7 @@ pub enum ListGroupResourcesError {
 impl ListGroupResourcesError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListGroupResourcesError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(ListGroupResourcesError::BadRequest(err.msg))
@@ -1078,6 +1085,7 @@ pub enum ListGroupsError {
 impl ListGroupsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListGroupsError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(ListGroupsError::BadRequest(err.msg))
@@ -1134,6 +1142,7 @@ pub enum SearchResourcesError {
 impl SearchResourcesError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<SearchResourcesError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(SearchResourcesError::BadRequest(err.msg))
@@ -1194,6 +1203,7 @@ pub enum TagError {
 impl TagError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<TagError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(TagError::BadRequest(err.msg))
@@ -1250,6 +1260,7 @@ pub enum UngroupResourcesError {
 impl UngroupResourcesError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UngroupResourcesError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(UngroupResourcesError::BadRequest(err.msg))
@@ -1312,6 +1323,7 @@ pub enum UntagError {
 impl UntagError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UntagError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(UntagError::BadRequest(err.msg))
@@ -1370,6 +1382,7 @@ pub enum UpdateGroupError {
 impl UpdateGroupError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateGroupError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(UpdateGroupError::BadRequest(err.msg))
@@ -1430,6 +1443,7 @@ pub enum UpdateGroupQueryError {
 impl UpdateGroupQueryError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateGroupQueryError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(UpdateGroupQueryError::BadRequest(err.msg))
@@ -1605,6 +1619,7 @@ impl ResourceGroups for ResourceGroupsClient {
         &self,
         input: CreateGroupInput,
     ) -> Result<CreateGroupOutput, RusotoError<CreateGroupError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/groups";
 
         let mut request = SignedRequest::new("POST", "resource-groups", &self.region, &request_uri);
@@ -1636,6 +1651,7 @@ impl ResourceGroups for ResourceGroupsClient {
         &self,
         input: DeleteGroupInput,
     ) -> Result<DeleteGroupOutput, RusotoError<DeleteGroupError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/delete-group";
 
         let mut request = SignedRequest::new("POST", "resource-groups", &self.region, &request_uri);
@@ -1667,6 +1683,7 @@ impl ResourceGroups for ResourceGroupsClient {
         &self,
         input: GetGroupInput,
     ) -> Result<GetGroupOutput, RusotoError<GetGroupError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/get-group";
 
         let mut request = SignedRequest::new("POST", "resource-groups", &self.region, &request_uri);
@@ -1698,6 +1715,7 @@ impl ResourceGroups for ResourceGroupsClient {
         &self,
         input: GetGroupConfigurationInput,
     ) -> Result<GetGroupConfigurationOutput, RusotoError<GetGroupConfigurationError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/get-group-configuration";
 
         let mut request = SignedRequest::new("POST", "resource-groups", &self.region, &request_uri);
@@ -1729,6 +1747,7 @@ impl ResourceGroups for ResourceGroupsClient {
         &self,
         input: GetGroupQueryInput,
     ) -> Result<GetGroupQueryOutput, RusotoError<GetGroupQueryError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/get-group-query";
 
         let mut request = SignedRequest::new("POST", "resource-groups", &self.region, &request_uri);
@@ -1760,6 +1779,7 @@ impl ResourceGroups for ResourceGroupsClient {
         &self,
         input: GetTagsInput,
     ) -> Result<GetTagsOutput, RusotoError<GetTagsError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!("/resources/{arn}/tags", arn = input.arn);
 
         let mut request = SignedRequest::new("GET", "resource-groups", &self.region, &request_uri);
@@ -1788,6 +1808,7 @@ impl ResourceGroups for ResourceGroupsClient {
         &self,
         input: GroupResourcesInput,
     ) -> Result<GroupResourcesOutput, RusotoError<GroupResourcesError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/group-resources";
 
         let mut request = SignedRequest::new("POST", "resource-groups", &self.region, &request_uri);
@@ -1819,6 +1840,7 @@ impl ResourceGroups for ResourceGroupsClient {
         &self,
         input: ListGroupResourcesInput,
     ) -> Result<ListGroupResourcesOutput, RusotoError<ListGroupResourcesError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/list-group-resources";
 
         let mut request = SignedRequest::new("POST", "resource-groups", &self.region, &request_uri);
@@ -1850,6 +1872,7 @@ impl ResourceGroups for ResourceGroupsClient {
         &self,
         input: ListGroupsInput,
     ) -> Result<ListGroupsOutput, RusotoError<ListGroupsError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/groups-list";
 
         let mut request = SignedRequest::new("POST", "resource-groups", &self.region, &request_uri);
@@ -1890,6 +1913,7 @@ impl ResourceGroups for ResourceGroupsClient {
         &self,
         input: SearchResourcesInput,
     ) -> Result<SearchResourcesOutput, RusotoError<SearchResourcesError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/resources/search";
 
         let mut request = SignedRequest::new("POST", "resource-groups", &self.region, &request_uri);
@@ -1918,6 +1942,7 @@ impl ResourceGroups for ResourceGroupsClient {
     /// <p><p>Adds tags to a resource group with the specified ARN. Existing tags on a resource group are not changed if they are not specified in the request parameters.</p> <important> <p>Do not store personally identifiable information (PII) or other confidential or sensitive information in tags. We use tags to provide you with billing and administration services. Tags are not intended to be used for private or sensitive data.</p> </important></p>
     #[allow(unused_mut)]
     async fn tag(&self, input: TagInput) -> Result<TagOutput, RusotoError<TagError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!("/resources/{arn}/tags", arn = input.arn);
 
         let mut request = SignedRequest::new("PUT", "resource-groups", &self.region, &request_uri);
@@ -1949,6 +1974,7 @@ impl ResourceGroups for ResourceGroupsClient {
         &self,
         input: UngroupResourcesInput,
     ) -> Result<UngroupResourcesOutput, RusotoError<UngroupResourcesError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/ungroup-resources";
 
         let mut request = SignedRequest::new("POST", "resource-groups", &self.region, &request_uri);
@@ -1977,6 +2003,7 @@ impl ResourceGroups for ResourceGroupsClient {
     /// <p>Deletes tags from a specified resource group.</p>
     #[allow(unused_mut)]
     async fn untag(&self, input: UntagInput) -> Result<UntagOutput, RusotoError<UntagError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!("/resources/{arn}/tags", arn = input.arn);
 
         let mut request =
@@ -2009,6 +2036,7 @@ impl ResourceGroups for ResourceGroupsClient {
         &self,
         input: UpdateGroupInput,
     ) -> Result<UpdateGroupOutput, RusotoError<UpdateGroupError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/update-group";
 
         let mut request = SignedRequest::new("POST", "resource-groups", &self.region, &request_uri);
@@ -2040,6 +2068,7 @@ impl ResourceGroups for ResourceGroupsClient {
         &self,
         input: UpdateGroupQueryInput,
     ) -> Result<UpdateGroupQueryOutput, RusotoError<UpdateGroupQueryError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/update-group-query";
 
         let mut request = SignedRequest::new("POST", "resource-groups", &self.region, &request_uri);

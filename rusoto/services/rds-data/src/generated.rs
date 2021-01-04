@@ -23,7 +23,6 @@ use rusoto_core::proto;
 use rusoto_core::signature::SignedRequest;
 #[allow(unused_imports)]
 use serde::{Deserialize, Serialize};
-use serde_json;
 /// <p>Contains an array.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct ArrayValue {
@@ -537,6 +536,7 @@ pub enum BatchExecuteStatementError {
 impl BatchExecuteStatementError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<BatchExecuteStatementError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(BatchExecuteStatementError::BadRequest(err.msg))
@@ -599,6 +599,7 @@ pub enum BeginTransactionError {
 impl BeginTransactionError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<BeginTransactionError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(BeginTransactionError::BadRequest(err.msg))
@@ -659,6 +660,7 @@ pub enum CommitTransactionError {
 impl CommitTransactionError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CommitTransactionError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(CommitTransactionError::BadRequest(err.msg))
@@ -719,6 +721,7 @@ pub enum ExecuteSqlError {
 impl ExecuteSqlError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ExecuteSqlError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(ExecuteSqlError::BadRequest(err.msg))
@@ -769,6 +772,7 @@ pub enum ExecuteStatementError {
 impl ExecuteStatementError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ExecuteStatementError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(ExecuteStatementError::BadRequest(err.msg))
@@ -829,6 +833,7 @@ pub enum RollbackTransactionError {
 impl RollbackTransactionError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<RollbackTransactionError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(RollbackTransactionError::BadRequest(err.msg))
@@ -960,6 +965,7 @@ impl RdsData for RdsDataClient {
         &self,
         input: BatchExecuteStatementRequest,
     ) -> Result<BatchExecuteStatementResponse, RusotoError<BatchExecuteStatementError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/BatchExecute";
 
         let mut request = SignedRequest::new("POST", "rds-data", &self.region, &request_uri);
@@ -991,6 +997,7 @@ impl RdsData for RdsDataClient {
         &self,
         input: BeginTransactionRequest,
     ) -> Result<BeginTransactionResponse, RusotoError<BeginTransactionError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/BeginTransaction";
 
         let mut request = SignedRequest::new("POST", "rds-data", &self.region, &request_uri);
@@ -1022,6 +1029,7 @@ impl RdsData for RdsDataClient {
         &self,
         input: CommitTransactionRequest,
     ) -> Result<CommitTransactionResponse, RusotoError<CommitTransactionError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/CommitTransaction";
 
         let mut request = SignedRequest::new("POST", "rds-data", &self.region, &request_uri);
@@ -1053,6 +1061,7 @@ impl RdsData for RdsDataClient {
         &self,
         input: ExecuteSqlRequest,
     ) -> Result<ExecuteSqlResponse, RusotoError<ExecuteSqlError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/ExecuteSql";
 
         let mut request = SignedRequest::new("POST", "rds-data", &self.region, &request_uri);
@@ -1084,6 +1093,7 @@ impl RdsData for RdsDataClient {
         &self,
         input: ExecuteStatementRequest,
     ) -> Result<ExecuteStatementResponse, RusotoError<ExecuteStatementError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/Execute";
 
         let mut request = SignedRequest::new("POST", "rds-data", &self.region, &request_uri);
@@ -1115,6 +1125,7 @@ impl RdsData for RdsDataClient {
         &self,
         input: RollbackTransactionRequest,
     ) -> Result<RollbackTransactionResponse, RusotoError<RollbackTransactionError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/RollbackTransaction";
 
         let mut request = SignedRequest::new("POST", "rds-data", &self.region, &request_uri);

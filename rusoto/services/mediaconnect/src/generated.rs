@@ -24,7 +24,6 @@ use rusoto_core::proto;
 use rusoto_core::signature::SignedRequest;
 #[allow(unused_imports)]
 use serde::{Deserialize, Serialize};
-use serde_json;
 /// <p>A request to add outputs to the specified flow.</p>
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
@@ -1392,6 +1391,7 @@ pub enum AddFlowOutputsError {
 impl AddFlowOutputsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<AddFlowOutputsError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AddFlowOutputs420Exception" => {
                     return RusotoError::Service(AddFlowOutputsError::AddFlowOutputs420(err.msg))
@@ -1456,6 +1456,7 @@ pub enum AddFlowSourcesError {
 impl AddFlowSourcesError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<AddFlowSourcesError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(AddFlowSourcesError::BadRequest(err.msg))
@@ -1516,6 +1517,7 @@ pub enum AddFlowVpcInterfacesError {
 impl AddFlowVpcInterfacesError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<AddFlowVpcInterfacesError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(AddFlowVpcInterfacesError::BadRequest(err.msg))
@@ -1582,6 +1584,7 @@ pub enum CreateFlowError {
 impl CreateFlowError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateFlowError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(CreateFlowError::BadRequest(err.msg))
@@ -1642,6 +1645,7 @@ pub enum DeleteFlowError {
 impl DeleteFlowError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteFlowError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(DeleteFlowError::BadRequest(err.msg))
@@ -1702,6 +1706,7 @@ pub enum DescribeFlowError {
 impl DescribeFlowError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeFlowError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(DescribeFlowError::BadRequest(err.msg))
@@ -1760,6 +1765,7 @@ pub enum DescribeOfferingError {
 impl DescribeOfferingError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeOfferingError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(DescribeOfferingError::BadRequest(err.msg))
@@ -1816,6 +1822,7 @@ pub enum DescribeReservationError {
 impl DescribeReservationError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeReservationError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(DescribeReservationError::BadRequest(err.msg))
@@ -1878,6 +1885,7 @@ pub enum GrantFlowEntitlementsError {
 impl GrantFlowEntitlementsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GrantFlowEntitlementsError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(GrantFlowEntitlementsError::BadRequest(err.msg))
@@ -1948,6 +1956,7 @@ pub enum ListEntitlementsError {
 impl ListEntitlementsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListEntitlementsError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(ListEntitlementsError::BadRequest(err.msg))
@@ -1998,6 +2007,7 @@ pub enum ListFlowsError {
 impl ListFlowsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListFlowsError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(ListFlowsError::BadRequest(err.msg))
@@ -2046,6 +2056,7 @@ pub enum ListOfferingsError {
 impl ListOfferingsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListOfferingsError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(ListOfferingsError::BadRequest(err.msg))
@@ -2094,6 +2105,7 @@ pub enum ListReservationsError {
 impl ListReservationsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListReservationsError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(ListReservationsError::BadRequest(err.msg))
@@ -2142,6 +2154,7 @@ pub enum ListTagsForResourceError {
 impl ListTagsForResourceError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListTagsForResourceError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(ListTagsForResourceError::BadRequest(err.msg))
@@ -2192,6 +2205,7 @@ pub enum PurchaseOfferingError {
 impl PurchaseOfferingError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<PurchaseOfferingError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(PurchaseOfferingError::BadRequest(err.msg))
@@ -2254,6 +2268,7 @@ pub enum RemoveFlowOutputError {
 impl RemoveFlowOutputError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<RemoveFlowOutputError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(RemoveFlowOutputError::BadRequest(err.msg))
@@ -2316,6 +2331,7 @@ pub enum RemoveFlowSourceError {
 impl RemoveFlowSourceError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<RemoveFlowSourceError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(RemoveFlowSourceError::BadRequest(err.msg))
@@ -2378,6 +2394,7 @@ pub enum RemoveFlowVpcInterfaceError {
 impl RemoveFlowVpcInterfaceError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<RemoveFlowVpcInterfaceError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(RemoveFlowVpcInterfaceError::BadRequest(err.msg))
@@ -2444,6 +2461,7 @@ pub enum RevokeFlowEntitlementError {
 impl RevokeFlowEntitlementError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<RevokeFlowEntitlementError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(RevokeFlowEntitlementError::BadRequest(err.msg))
@@ -2510,6 +2528,7 @@ pub enum StartFlowError {
 impl StartFlowError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<StartFlowError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(StartFlowError::BadRequest(err.msg))
@@ -2570,6 +2589,7 @@ pub enum StopFlowError {
 impl StopFlowError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<StopFlowError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(StopFlowError::BadRequest(err.msg))
@@ -2624,6 +2644,7 @@ pub enum TagResourceError {
 impl TagResourceError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<TagResourceError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(TagResourceError::BadRequest(err.msg))
@@ -2666,6 +2687,7 @@ pub enum UntagResourceError {
 impl UntagResourceError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UntagResourceError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(UntagResourceError::BadRequest(err.msg))
@@ -2714,6 +2736,7 @@ pub enum UpdateFlowError {
 impl UpdateFlowError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateFlowError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(UpdateFlowError::BadRequest(err.msg))
@@ -2774,6 +2797,7 @@ pub enum UpdateFlowEntitlementError {
 impl UpdateFlowEntitlementError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateFlowEntitlementError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(UpdateFlowEntitlementError::BadRequest(err.msg))
@@ -2840,6 +2864,7 @@ pub enum UpdateFlowOutputError {
 impl UpdateFlowOutputError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateFlowOutputError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(UpdateFlowOutputError::BadRequest(err.msg))
@@ -2902,6 +2927,7 @@ pub enum UpdateFlowSourceError {
 impl UpdateFlowSourceError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateFlowSourceError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(UpdateFlowSourceError::BadRequest(err.msg))
@@ -3155,6 +3181,7 @@ impl MediaConnect for MediaConnectClient {
         &self,
         input: AddFlowOutputsRequest,
     ) -> Result<AddFlowOutputsResponse, RusotoError<AddFlowOutputsError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!("/v1/flows/{flow_arn}/outputs", flow_arn = input.flow_arn);
 
         let mut request = SignedRequest::new("POST", "mediaconnect", &self.region, &request_uri);
@@ -3186,6 +3213,7 @@ impl MediaConnect for MediaConnectClient {
         &self,
         input: AddFlowSourcesRequest,
     ) -> Result<AddFlowSourcesResponse, RusotoError<AddFlowSourcesError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!("/v1/flows/{flow_arn}/source", flow_arn = input.flow_arn);
 
         let mut request = SignedRequest::new("POST", "mediaconnect", &self.region, &request_uri);
@@ -3217,6 +3245,7 @@ impl MediaConnect for MediaConnectClient {
         &self,
         input: AddFlowVpcInterfacesRequest,
     ) -> Result<AddFlowVpcInterfacesResponse, RusotoError<AddFlowVpcInterfacesError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/v1/flows/{flow_arn}/vpcInterfaces",
             flow_arn = input.flow_arn
@@ -3251,6 +3280,7 @@ impl MediaConnect for MediaConnectClient {
         &self,
         input: CreateFlowRequest,
     ) -> Result<CreateFlowResponse, RusotoError<CreateFlowError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/v1/flows";
 
         let mut request = SignedRequest::new("POST", "mediaconnect", &self.region, &request_uri);
@@ -3282,6 +3312,7 @@ impl MediaConnect for MediaConnectClient {
         &self,
         input: DeleteFlowRequest,
     ) -> Result<DeleteFlowResponse, RusotoError<DeleteFlowError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!("/v1/flows/{flow_arn}", flow_arn = input.flow_arn);
 
         let mut request = SignedRequest::new("DELETE", "mediaconnect", &self.region, &request_uri);
@@ -3310,6 +3341,7 @@ impl MediaConnect for MediaConnectClient {
         &self,
         input: DescribeFlowRequest,
     ) -> Result<DescribeFlowResponse, RusotoError<DescribeFlowError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!("/v1/flows/{flow_arn}", flow_arn = input.flow_arn);
 
         let mut request = SignedRequest::new("GET", "mediaconnect", &self.region, &request_uri);
@@ -3338,6 +3370,7 @@ impl MediaConnect for MediaConnectClient {
         &self,
         input: DescribeOfferingRequest,
     ) -> Result<DescribeOfferingResponse, RusotoError<DescribeOfferingError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/v1/offerings/{offering_arn}",
             offering_arn = input.offering_arn
@@ -3369,6 +3402,7 @@ impl MediaConnect for MediaConnectClient {
         &self,
         input: DescribeReservationRequest,
     ) -> Result<DescribeReservationResponse, RusotoError<DescribeReservationError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/v1/reservations/{reservation_arn}",
             reservation_arn = input.reservation_arn
@@ -3400,6 +3434,7 @@ impl MediaConnect for MediaConnectClient {
         &self,
         input: GrantFlowEntitlementsRequest,
     ) -> Result<GrantFlowEntitlementsResponse, RusotoError<GrantFlowEntitlementsError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/v1/flows/{flow_arn}/entitlements",
             flow_arn = input.flow_arn
@@ -3434,6 +3469,7 @@ impl MediaConnect for MediaConnectClient {
         &self,
         input: ListEntitlementsRequest,
     ) -> Result<ListEntitlementsResponse, RusotoError<ListEntitlementsError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/v1/entitlements";
 
         let mut request = SignedRequest::new("GET", "mediaconnect", &self.region, &request_uri);
@@ -3471,6 +3507,7 @@ impl MediaConnect for MediaConnectClient {
         &self,
         input: ListFlowsRequest,
     ) -> Result<ListFlowsResponse, RusotoError<ListFlowsError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/v1/flows";
 
         let mut request = SignedRequest::new("GET", "mediaconnect", &self.region, &request_uri);
@@ -3508,6 +3545,7 @@ impl MediaConnect for MediaConnectClient {
         &self,
         input: ListOfferingsRequest,
     ) -> Result<ListOfferingsResponse, RusotoError<ListOfferingsError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/v1/offerings";
 
         let mut request = SignedRequest::new("GET", "mediaconnect", &self.region, &request_uri);
@@ -3545,6 +3583,7 @@ impl MediaConnect for MediaConnectClient {
         &self,
         input: ListReservationsRequest,
     ) -> Result<ListReservationsResponse, RusotoError<ListReservationsError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/v1/reservations";
 
         let mut request = SignedRequest::new("GET", "mediaconnect", &self.region, &request_uri);
@@ -3582,6 +3621,7 @@ impl MediaConnect for MediaConnectClient {
         &self,
         input: ListTagsForResourceRequest,
     ) -> Result<ListTagsForResourceResponse, RusotoError<ListTagsForResourceError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!("/tags/{resource_arn}", resource_arn = input.resource_arn);
 
         let mut request = SignedRequest::new("GET", "mediaconnect", &self.region, &request_uri);
@@ -3610,6 +3650,7 @@ impl MediaConnect for MediaConnectClient {
         &self,
         input: PurchaseOfferingRequest,
     ) -> Result<PurchaseOfferingResponse, RusotoError<PurchaseOfferingError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/v1/offerings/{offering_arn}",
             offering_arn = input.offering_arn
@@ -3644,6 +3685,7 @@ impl MediaConnect for MediaConnectClient {
         &self,
         input: RemoveFlowOutputRequest,
     ) -> Result<RemoveFlowOutputResponse, RusotoError<RemoveFlowOutputError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/v1/flows/{flow_arn}/outputs/{output_arn}",
             flow_arn = input.flow_arn,
@@ -3676,6 +3718,7 @@ impl MediaConnect for MediaConnectClient {
         &self,
         input: RemoveFlowSourceRequest,
     ) -> Result<RemoveFlowSourceResponse, RusotoError<RemoveFlowSourceError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/v1/flows/{flow_arn}/source/{source_arn}",
             flow_arn = input.flow_arn,
@@ -3708,6 +3751,7 @@ impl MediaConnect for MediaConnectClient {
         &self,
         input: RemoveFlowVpcInterfaceRequest,
     ) -> Result<RemoveFlowVpcInterfaceResponse, RusotoError<RemoveFlowVpcInterfaceError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/v1/flows/{flow_arn}/vpcInterfaces/{vpc_interface_name}",
             flow_arn = input.flow_arn,
@@ -3740,6 +3784,7 @@ impl MediaConnect for MediaConnectClient {
         &self,
         input: RevokeFlowEntitlementRequest,
     ) -> Result<RevokeFlowEntitlementResponse, RusotoError<RevokeFlowEntitlementError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/v1/flows/{flow_arn}/entitlements/{entitlement_arn}",
             entitlement_arn = input.entitlement_arn,
@@ -3772,6 +3817,7 @@ impl MediaConnect for MediaConnectClient {
         &self,
         input: StartFlowRequest,
     ) -> Result<StartFlowResponse, RusotoError<StartFlowError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!("/v1/flows/start/{flow_arn}", flow_arn = input.flow_arn);
 
         let mut request = SignedRequest::new("POST", "mediaconnect", &self.region, &request_uri);
@@ -3800,6 +3846,7 @@ impl MediaConnect for MediaConnectClient {
         &self,
         input: StopFlowRequest,
     ) -> Result<StopFlowResponse, RusotoError<StopFlowError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!("/v1/flows/stop/{flow_arn}", flow_arn = input.flow_arn);
 
         let mut request = SignedRequest::new("POST", "mediaconnect", &self.region, &request_uri);
@@ -3828,6 +3875,7 @@ impl MediaConnect for MediaConnectClient {
         &self,
         input: TagResourceRequest,
     ) -> Result<(), RusotoError<TagResourceError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!("/tags/{resource_arn}", resource_arn = input.resource_arn);
 
         let mut request = SignedRequest::new("POST", "mediaconnect", &self.region, &request_uri);
@@ -3843,9 +3891,9 @@ impl MediaConnect for MediaConnectClient {
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 204 {
             let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = ::std::mem::drop(response);
+            let _result = ::std::mem::drop(response);
 
-            Ok(result)
+            Ok(())
         } else {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             Err(TagResourceError::from_response(response))
@@ -3858,6 +3906,7 @@ impl MediaConnect for MediaConnectClient {
         &self,
         input: UntagResourceRequest,
     ) -> Result<(), RusotoError<UntagResourceError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!("/tags/{resource_arn}", resource_arn = input.resource_arn);
 
         let mut request = SignedRequest::new("DELETE", "mediaconnect", &self.region, &request_uri);
@@ -3876,9 +3925,9 @@ impl MediaConnect for MediaConnectClient {
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 204 {
             let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = ::std::mem::drop(response);
+            let _result = ::std::mem::drop(response);
 
-            Ok(result)
+            Ok(())
         } else {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             Err(UntagResourceError::from_response(response))
@@ -3891,6 +3940,7 @@ impl MediaConnect for MediaConnectClient {
         &self,
         input: UpdateFlowRequest,
     ) -> Result<UpdateFlowResponse, RusotoError<UpdateFlowError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!("/v1/flows/{flow_arn}", flow_arn = input.flow_arn);
 
         let mut request = SignedRequest::new("PUT", "mediaconnect", &self.region, &request_uri);
@@ -3922,6 +3972,7 @@ impl MediaConnect for MediaConnectClient {
         &self,
         input: UpdateFlowEntitlementRequest,
     ) -> Result<UpdateFlowEntitlementResponse, RusotoError<UpdateFlowEntitlementError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/v1/flows/{flow_arn}/entitlements/{entitlement_arn}",
             entitlement_arn = input.entitlement_arn,
@@ -3957,6 +4008,7 @@ impl MediaConnect for MediaConnectClient {
         &self,
         input: UpdateFlowOutputRequest,
     ) -> Result<UpdateFlowOutputResponse, RusotoError<UpdateFlowOutputError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/v1/flows/{flow_arn}/outputs/{output_arn}",
             flow_arn = input.flow_arn,
@@ -3992,6 +4044,7 @@ impl MediaConnect for MediaConnectClient {
         &self,
         input: UpdateFlowSourceRequest,
     ) -> Result<UpdateFlowSourceResponse, RusotoError<UpdateFlowSourceError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/v1/flows/{flow_arn}/source/{source_arn}",
             flow_arn = input.flow_arn,

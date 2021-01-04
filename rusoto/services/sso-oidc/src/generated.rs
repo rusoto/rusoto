@@ -23,7 +23,6 @@ use rusoto_core::proto;
 use rusoto_core::signature::SignedRequest;
 #[allow(unused_imports)]
 use serde::{Deserialize, Serialize};
-use serde_json;
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateTokenRequest {
@@ -199,6 +198,7 @@ pub enum CreateTokenError {
 impl CreateTokenError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateTokenError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(CreateTokenError::AccessDenied(err.msg))
@@ -275,6 +275,7 @@ pub enum RegisterClientError {
 impl RegisterClientError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<RegisterClientError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalServerException" => {
                     return RusotoError::Service(RegisterClientError::InternalServer(err.msg))
@@ -327,6 +328,7 @@ pub enum StartDeviceAuthorizationError {
 impl StartDeviceAuthorizationError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<StartDeviceAuthorizationError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalServerException" => {
                     return RusotoError::Service(StartDeviceAuthorizationError::InternalServer(
@@ -438,6 +440,7 @@ impl SsoOidc for SsoOidcClient {
         &self,
         input: CreateTokenRequest,
     ) -> Result<CreateTokenResponse, RusotoError<CreateTokenError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/token";
 
         let mut request = SignedRequest::new("POST", "awsssooidc", &self.region, &request_uri);
@@ -470,6 +473,7 @@ impl SsoOidc for SsoOidcClient {
         &self,
         input: RegisterClientRequest,
     ) -> Result<RegisterClientResponse, RusotoError<RegisterClientError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/client/register";
 
         let mut request = SignedRequest::new("POST", "awsssooidc", &self.region, &request_uri);
@@ -502,6 +506,7 @@ impl SsoOidc for SsoOidcClient {
         &self,
         input: StartDeviceAuthorizationRequest,
     ) -> Result<StartDeviceAuthorizationResponse, RusotoError<StartDeviceAuthorizationError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/device_authorization";
 
         let mut request = SignedRequest::new("POST", "awsssooidc", &self.region, &request_uri);

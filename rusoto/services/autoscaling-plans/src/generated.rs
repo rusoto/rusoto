@@ -50,7 +50,6 @@ impl AutoscalingPlansClient {
     }
 }
 
-use serde_json;
 /// <p>Represents an application source.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct ApplicationSource {
@@ -519,6 +518,7 @@ pub enum CreateScalingPlanError {
 impl CreateScalingPlanError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateScalingPlanError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ConcurrentUpdateException" => {
                     return RusotoError::Service(CreateScalingPlanError::ConcurrentUpdate(err.msg))
@@ -561,6 +561,7 @@ pub enum DeleteScalingPlanError {
 impl DeleteScalingPlanError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteScalingPlanError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ConcurrentUpdateException" => {
                     return RusotoError::Service(DeleteScalingPlanError::ConcurrentUpdate(err.msg))
@@ -605,6 +606,7 @@ impl DescribeScalingPlanResourcesError {
         res: BufferedHttpResponse,
     ) -> RusotoError<DescribeScalingPlanResourcesError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ConcurrentUpdateException" => {
                     return RusotoError::Service(
@@ -657,6 +659,7 @@ pub enum DescribeScalingPlansError {
 impl DescribeScalingPlansError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeScalingPlansError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ConcurrentUpdateException" => {
                     return RusotoError::Service(DescribeScalingPlansError::ConcurrentUpdate(
@@ -703,6 +706,7 @@ impl GetScalingPlanResourceForecastDataError {
         res: BufferedHttpResponse,
     ) -> RusotoError<GetScalingPlanResourceForecastDataError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalServiceException" => {
                     return RusotoError::Service(
@@ -741,6 +745,7 @@ pub enum UpdateScalingPlanError {
 impl UpdateScalingPlanError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateScalingPlanError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ConcurrentUpdateException" => {
                     return RusotoError::Service(UpdateScalingPlanError::ConcurrentUpdate(err.msg))

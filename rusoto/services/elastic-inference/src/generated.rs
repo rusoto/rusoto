@@ -24,7 +24,6 @@ use rusoto_core::proto;
 use rusoto_core::signature::SignedRequest;
 #[allow(unused_imports)]
 use serde::{Deserialize, Serialize};
-use serde_json;
 /// <p> The details of an Elastic Inference Accelerator type. </p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
@@ -266,6 +265,7 @@ impl DescribeAcceleratorOfferingsError {
         res: BufferedHttpResponse,
     ) -> RusotoError<DescribeAcceleratorOfferingsError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(DescribeAcceleratorOfferingsError::BadRequest(
@@ -312,6 +312,7 @@ pub enum DescribeAcceleratorTypesError {
 impl DescribeAcceleratorTypesError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeAcceleratorTypesError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalServerException" => {
                     return RusotoError::Service(DescribeAcceleratorTypesError::InternalServer(
@@ -348,6 +349,7 @@ pub enum DescribeAcceleratorsError {
 impl DescribeAcceleratorsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeAcceleratorsError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(DescribeAcceleratorsError::BadRequest(err.msg))
@@ -392,6 +394,7 @@ pub enum ListTagsForResourceError {
 impl ListTagsForResourceError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListTagsForResourceError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(ListTagsForResourceError::BadRequest(err.msg))
@@ -436,6 +439,7 @@ pub enum TagResourceError {
 impl TagResourceError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<TagResourceError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(TagResourceError::BadRequest(err.msg))
@@ -478,6 +482,7 @@ pub enum UntagResourceError {
 impl UntagResourceError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UntagResourceError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(UntagResourceError::BadRequest(err.msg))
@@ -591,6 +596,7 @@ impl ElasticInference for ElasticInferenceClient {
         input: DescribeAcceleratorOfferingsRequest,
     ) -> Result<DescribeAcceleratorOfferingsResponse, RusotoError<DescribeAcceleratorOfferingsError>>
     {
+        #![allow(clippy::needless_update)]
         let request_uri = "/describe-accelerator-offerings";
 
         let mut request =
@@ -623,6 +629,7 @@ impl ElasticInference for ElasticInferenceClient {
     async fn describe_accelerator_types(
         &self,
     ) -> Result<DescribeAcceleratorTypesResponse, RusotoError<DescribeAcceleratorTypesError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/describe-accelerator-types";
 
         let mut request =
@@ -654,6 +661,7 @@ impl ElasticInference for ElasticInferenceClient {
         &self,
         input: DescribeAcceleratorsRequest,
     ) -> Result<DescribeAcceleratorsResponse, RusotoError<DescribeAcceleratorsError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/describe-accelerators";
 
         let mut request =
@@ -687,6 +695,7 @@ impl ElasticInference for ElasticInferenceClient {
         &self,
         input: ListTagsForResourceRequest,
     ) -> Result<ListTagsForResourceResult, RusotoError<ListTagsForResourceError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!("/tags/{resource_arn}", resource_arn = input.resource_arn);
 
         let mut request =
@@ -718,6 +727,7 @@ impl ElasticInference for ElasticInferenceClient {
         &self,
         input: TagResourceRequest,
     ) -> Result<TagResourceResult, RusotoError<TagResourceError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!("/tags/{resource_arn}", resource_arn = input.resource_arn);
 
         let mut request =
@@ -751,6 +761,7 @@ impl ElasticInference for ElasticInferenceClient {
         &self,
         input: UntagResourceRequest,
     ) -> Result<UntagResourceResult, RusotoError<UntagResourceError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!("/tags/{resource_arn}", resource_arn = input.resource_arn);
 
         let mut request =

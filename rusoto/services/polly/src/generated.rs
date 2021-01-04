@@ -24,7 +24,6 @@ use rusoto_core::proto;
 use rusoto_core::signature::SignedRequest;
 #[allow(unused_imports)]
 use serde::{Deserialize, Serialize};
-use serde_json;
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteLexiconInput {
@@ -452,6 +451,7 @@ pub enum DeleteLexiconError {
 impl DeleteLexiconError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteLexiconError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "LexiconNotFoundException" => {
                     return RusotoError::Service(DeleteLexiconError::LexiconNotFound(err.msg))
@@ -488,6 +488,7 @@ pub enum DescribeVoicesError {
 impl DescribeVoicesError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeVoicesError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidNextTokenException" => {
                     return RusotoError::Service(DescribeVoicesError::InvalidNextToken(err.msg))
@@ -524,6 +525,7 @@ pub enum GetLexiconError {
 impl GetLexiconError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetLexiconError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "LexiconNotFoundException" => {
                     return RusotoError::Service(GetLexiconError::LexiconNotFound(err.msg))
@@ -562,6 +564,7 @@ pub enum GetSpeechSynthesisTaskError {
 impl GetSpeechSynthesisTaskError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetSpeechSynthesisTaskError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidTaskIdException" => {
                     return RusotoError::Service(GetSpeechSynthesisTaskError::InvalidTaskId(
@@ -608,6 +611,7 @@ pub enum ListLexiconsError {
 impl ListLexiconsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListLexiconsError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidNextTokenException" => {
                     return RusotoError::Service(ListLexiconsError::InvalidNextToken(err.msg))
@@ -644,6 +648,7 @@ pub enum ListSpeechSynthesisTasksError {
 impl ListSpeechSynthesisTasksError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListSpeechSynthesisTasksError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidNextTokenException" => {
                     return RusotoError::Service(ListSpeechSynthesisTasksError::InvalidNextToken(
@@ -694,6 +699,7 @@ pub enum PutLexiconError {
 impl PutLexiconError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<PutLexiconError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidLexiconException" => {
                     return RusotoError::Service(PutLexiconError::InvalidLexicon(err.msg))
@@ -772,6 +778,7 @@ pub enum StartSpeechSynthesisTaskError {
 impl StartSpeechSynthesisTaskError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<StartSpeechSynthesisTaskError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "EngineNotSupportedException" => {
                     return RusotoError::Service(StartSpeechSynthesisTaskError::EngineNotSupported(
@@ -892,6 +899,7 @@ pub enum SynthesizeSpeechError {
 impl SynthesizeSpeechError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<SynthesizeSpeechError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "EngineNotSupportedException" => {
                     return RusotoError::Service(SynthesizeSpeechError::EngineNotSupported(err.msg))
@@ -1055,6 +1063,7 @@ impl Polly for PollyClient {
         &self,
         input: DeleteLexiconInput,
     ) -> Result<DeleteLexiconOutput, RusotoError<DeleteLexiconError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!("/v1/lexicons/{lexicon_name}", lexicon_name = input.name);
 
         let mut request = SignedRequest::new("DELETE", "polly", &self.region, &request_uri);
@@ -1083,6 +1092,7 @@ impl Polly for PollyClient {
         &self,
         input: DescribeVoicesInput,
     ) -> Result<DescribeVoicesOutput, RusotoError<DescribeVoicesError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/v1/voices";
 
         let mut request = SignedRequest::new("GET", "polly", &self.region, &request_uri);
@@ -1126,6 +1136,7 @@ impl Polly for PollyClient {
         &self,
         input: GetLexiconInput,
     ) -> Result<GetLexiconOutput, RusotoError<GetLexiconError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!("/v1/lexicons/{lexicon_name}", lexicon_name = input.name);
 
         let mut request = SignedRequest::new("GET", "polly", &self.region, &request_uri);
@@ -1154,6 +1165,7 @@ impl Polly for PollyClient {
         &self,
         input: GetSpeechSynthesisTaskInput,
     ) -> Result<GetSpeechSynthesisTaskOutput, RusotoError<GetSpeechSynthesisTaskError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!("/v1/synthesisTasks/{task_id}", task_id = input.task_id);
 
         let mut request = SignedRequest::new("GET", "polly", &self.region, &request_uri);
@@ -1182,6 +1194,7 @@ impl Polly for PollyClient {
         &self,
         input: ListLexiconsInput,
     ) -> Result<ListLexiconsOutput, RusotoError<ListLexiconsError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/v1/lexicons";
 
         let mut request = SignedRequest::new("GET", "polly", &self.region, &request_uri);
@@ -1216,6 +1229,7 @@ impl Polly for PollyClient {
         &self,
         input: ListSpeechSynthesisTasksInput,
     ) -> Result<ListSpeechSynthesisTasksOutput, RusotoError<ListSpeechSynthesisTasksError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/v1/synthesisTasks";
 
         let mut request = SignedRequest::new("GET", "polly", &self.region, &request_uri);
@@ -1256,6 +1270,7 @@ impl Polly for PollyClient {
         &self,
         input: PutLexiconInput,
     ) -> Result<PutLexiconOutput, RusotoError<PutLexiconError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!("/v1/lexicons/{lexicon_name}", lexicon_name = input.name);
 
         let mut request = SignedRequest::new("PUT", "polly", &self.region, &request_uri);
@@ -1287,6 +1302,7 @@ impl Polly for PollyClient {
         &self,
         input: StartSpeechSynthesisTaskInput,
     ) -> Result<StartSpeechSynthesisTaskOutput, RusotoError<StartSpeechSynthesisTaskError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/v1/synthesisTasks";
 
         let mut request = SignedRequest::new("POST", "polly", &self.region, &request_uri);
@@ -1318,6 +1334,7 @@ impl Polly for PollyClient {
         &self,
         input: SynthesizeSpeechInput,
     ) -> Result<SynthesizeSpeechOutput, RusotoError<SynthesizeSpeechError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/v1/speech";
 
         let mut request = SignedRequest::new("POST", "polly", &self.region, &request_uri);
@@ -1334,8 +1351,10 @@ impl Polly for PollyClient {
         if response.status.as_u16() == 200 {
             let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
 
-            let mut result = SynthesizeSpeechOutput::default();
-            result.audio_stream = Some(response.body);
+            let mut result = SynthesizeSpeechOutput {
+                audio_stream: Some(response.body),
+                ..SynthesizeSpeechOutput::default()
+            };
 
             result.content_type = response.headers.remove("Content-Type");
             result.request_characters = response

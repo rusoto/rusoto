@@ -50,7 +50,6 @@ impl QldbSessionClient {
     }
 }
 
-use serde_json;
 /// <p>Contains the details of the transaction to abort.</p>
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
@@ -375,6 +374,7 @@ pub enum SendCommandError {
 impl SendCommandError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<SendCommandError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(SendCommandError::BadRequest(err.msg))

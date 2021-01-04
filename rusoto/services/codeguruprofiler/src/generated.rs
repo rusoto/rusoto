@@ -24,7 +24,6 @@ use rusoto_core::proto;
 use rusoto_core::signature::SignedRequest;
 #[allow(unused_imports)]
 use serde::{Deserialize, Serialize};
-use serde_json;
 /// <p>The structure representing the AddNotificationChannelsRequest.</p>
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
@@ -1002,6 +1001,7 @@ pub enum AddNotificationChannelsError {
 impl AddNotificationChannelsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<AddNotificationChannelsError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ConflictException" => {
                     return RusotoError::Service(AddNotificationChannelsError::Conflict(err.msg))
@@ -1058,6 +1058,7 @@ pub enum BatchGetFrameMetricDataError {
 impl BatchGetFrameMetricDataError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<BatchGetFrameMetricDataError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalServerException" => {
                     return RusotoError::Service(BatchGetFrameMetricDataError::InternalServer(
@@ -1104,6 +1105,7 @@ pub enum ConfigureAgentError {
 impl ConfigureAgentError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ConfigureAgentError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalServerException" => {
                     return RusotoError::Service(ConfigureAgentError::InternalServer(err.msg))
@@ -1148,6 +1150,7 @@ pub enum CreateProfilingGroupError {
 impl CreateProfilingGroupError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateProfilingGroupError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ConflictException" => {
                     return RusotoError::Service(CreateProfilingGroupError::Conflict(err.msg))
@@ -1196,6 +1199,7 @@ pub enum DeleteProfilingGroupError {
 impl DeleteProfilingGroupError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteProfilingGroupError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalServerException" => {
                     return RusotoError::Service(DeleteProfilingGroupError::InternalServer(err.msg))
@@ -1240,6 +1244,7 @@ pub enum DescribeProfilingGroupError {
 impl DescribeProfilingGroupError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeProfilingGroupError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalServerException" => {
                     return RusotoError::Service(DescribeProfilingGroupError::InternalServer(
@@ -1286,6 +1291,7 @@ impl GetFindingsReportAccountSummaryError {
         res: BufferedHttpResponse,
     ) -> RusotoError<GetFindingsReportAccountSummaryError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalServerException" => {
                     return RusotoError::Service(
@@ -1332,6 +1338,7 @@ impl GetNotificationConfigurationError {
         res: BufferedHttpResponse,
     ) -> RusotoError<GetNotificationConfigurationError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalServerException" => {
                     return RusotoError::Service(GetNotificationConfigurationError::InternalServer(
@@ -1382,6 +1389,7 @@ pub enum GetPolicyError {
 impl GetPolicyError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetPolicyError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalServerException" => {
                     return RusotoError::Service(GetPolicyError::InternalServer(err.msg))
@@ -1424,6 +1432,7 @@ pub enum GetProfileError {
 impl GetProfileError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetProfileError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalServerException" => {
                     return RusotoError::Service(GetProfileError::InternalServer(err.msg))
@@ -1466,6 +1475,7 @@ pub enum GetRecommendationsError {
 impl GetRecommendationsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetRecommendationsError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalServerException" => {
                     return RusotoError::Service(GetRecommendationsError::InternalServer(err.msg))
@@ -1508,6 +1518,7 @@ pub enum ListFindingsReportsError {
 impl ListFindingsReportsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListFindingsReportsError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalServerException" => {
                     return RusotoError::Service(ListFindingsReportsError::InternalServer(err.msg))
@@ -1552,6 +1563,7 @@ pub enum ListProfileTimesError {
 impl ListProfileTimesError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListProfileTimesError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalServerException" => {
                     return RusotoError::Service(ListProfileTimesError::InternalServer(err.msg))
@@ -1592,6 +1604,7 @@ pub enum ListProfilingGroupsError {
 impl ListProfilingGroupsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListProfilingGroupsError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalServerException" => {
                     return RusotoError::Service(ListProfilingGroupsError::InternalServer(err.msg))
@@ -1628,6 +1641,7 @@ pub enum ListTagsForResourceError {
 impl ListTagsForResourceError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListTagsForResourceError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalServerException" => {
                     return RusotoError::Service(ListTagsForResourceError::InternalServer(err.msg))
@@ -1668,6 +1682,7 @@ pub enum PostAgentProfileError {
 impl PostAgentProfileError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<PostAgentProfileError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalServerException" => {
                     return RusotoError::Service(PostAgentProfileError::InternalServer(err.msg))
@@ -1712,6 +1727,7 @@ pub enum PutPermissionError {
 impl PutPermissionError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<PutPermissionError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ConflictException" => {
                     return RusotoError::Service(PutPermissionError::Conflict(err.msg))
@@ -1758,6 +1774,7 @@ pub enum RemoveNotificationChannelError {
 impl RemoveNotificationChannelError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<RemoveNotificationChannelError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalServerException" => {
                     return RusotoError::Service(RemoveNotificationChannelError::InternalServer(
@@ -1808,6 +1825,7 @@ pub enum RemovePermissionError {
 impl RemovePermissionError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<RemovePermissionError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ConflictException" => {
                     return RusotoError::Service(RemovePermissionError::Conflict(err.msg))
@@ -1854,6 +1872,7 @@ pub enum SubmitFeedbackError {
 impl SubmitFeedbackError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<SubmitFeedbackError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalServerException" => {
                     return RusotoError::Service(SubmitFeedbackError::InternalServer(err.msg))
@@ -1894,6 +1913,7 @@ pub enum TagResourceError {
 impl TagResourceError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<TagResourceError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalServerException" => {
                     return RusotoError::Service(TagResourceError::InternalServer(err.msg))
@@ -1930,6 +1950,7 @@ pub enum UntagResourceError {
 impl UntagResourceError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UntagResourceError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalServerException" => {
                     return RusotoError::Service(UntagResourceError::InternalServer(err.msg))
@@ -1970,6 +1991,7 @@ pub enum UpdateProfilingGroupError {
 impl UpdateProfilingGroupError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateProfilingGroupError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ConflictException" => {
                     return RusotoError::Service(UpdateProfilingGroupError::Conflict(err.msg))
@@ -2194,6 +2216,7 @@ impl CodeGuruProfiler for CodeGuruProfilerClient {
         &self,
         input: AddNotificationChannelsRequest,
     ) -> Result<AddNotificationChannelsResponse, RusotoError<AddNotificationChannelsError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/profilingGroups/{profiling_group_name}/notificationConfiguration",
             profiling_group_name = input.profiling_group_name
@@ -2229,6 +2252,7 @@ impl CodeGuruProfiler for CodeGuruProfilerClient {
         &self,
         input: BatchGetFrameMetricDataRequest,
     ) -> Result<BatchGetFrameMetricDataResponse, RusotoError<BatchGetFrameMetricDataError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/profilingGroups/{profiling_group_name}/frames/-/metrics",
             profiling_group_name = input.profiling_group_name
@@ -2279,6 +2303,7 @@ impl CodeGuruProfiler for CodeGuruProfilerClient {
         &self,
         input: ConfigureAgentRequest,
     ) -> Result<ConfigureAgentResponse, RusotoError<ConfigureAgentError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/profilingGroups/{profiling_group_name}/configureAgent",
             profiling_group_name = input.profiling_group_name
@@ -2314,6 +2339,7 @@ impl CodeGuruProfiler for CodeGuruProfilerClient {
         &self,
         input: CreateProfilingGroupRequest,
     ) -> Result<CreateProfilingGroupResponse, RusotoError<CreateProfilingGroupError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/profilingGroups";
 
         let mut request =
@@ -2350,6 +2376,7 @@ impl CodeGuruProfiler for CodeGuruProfilerClient {
         &self,
         input: DeleteProfilingGroupRequest,
     ) -> Result<DeleteProfilingGroupResponse, RusotoError<DeleteProfilingGroupError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/profilingGroups/{profiling_group_name}",
             profiling_group_name = input.profiling_group_name
@@ -2382,6 +2409,7 @@ impl CodeGuruProfiler for CodeGuruProfilerClient {
         &self,
         input: DescribeProfilingGroupRequest,
     ) -> Result<DescribeProfilingGroupResponse, RusotoError<DescribeProfilingGroupError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/profilingGroups/{profiling_group_name}",
             profiling_group_name = input.profiling_group_name
@@ -2417,6 +2445,7 @@ impl CodeGuruProfiler for CodeGuruProfilerClient {
         GetFindingsReportAccountSummaryResponse,
         RusotoError<GetFindingsReportAccountSummaryError>,
     > {
+        #![allow(clippy::needless_update)]
         let request_uri = "/internal/findingsReports";
 
         let mut request =
@@ -2461,6 +2490,7 @@ impl CodeGuruProfiler for CodeGuruProfilerClient {
         input: GetNotificationConfigurationRequest,
     ) -> Result<GetNotificationConfigurationResponse, RusotoError<GetNotificationConfigurationError>>
     {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/profilingGroups/{profiling_group_name}/notificationConfiguration",
             profiling_group_name = input.profiling_group_name
@@ -2493,6 +2523,7 @@ impl CodeGuruProfiler for CodeGuruProfilerClient {
         &self,
         input: GetPolicyRequest,
     ) -> Result<GetPolicyResponse, RusotoError<GetPolicyError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/profilingGroups/{profiling_group_name}/policy",
             profiling_group_name = input.profiling_group_name
@@ -2525,6 +2556,7 @@ impl CodeGuruProfiler for CodeGuruProfilerClient {
         &self,
         input: GetProfileRequest,
     ) -> Result<GetProfileResponse, RusotoError<GetProfileError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/profilingGroups/{profiling_group_name}/profile",
             profiling_group_name = input.profiling_group_name
@@ -2558,8 +2590,10 @@ impl CodeGuruProfiler for CodeGuruProfilerClient {
         if response.status.as_u16() == 200 {
             let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
 
-            let mut result = GetProfileResponse::default();
-            result.profile = response.body;
+            let mut result = GetProfileResponse {
+                profile: response.body,
+                ..GetProfileResponse::default()
+            };
 
             result.content_encoding = response.headers.remove("Content-Encoding");
             let value = response.headers.remove("Content-Type").unwrap();
@@ -2578,6 +2612,7 @@ impl CodeGuruProfiler for CodeGuruProfilerClient {
         &self,
         input: GetRecommendationsRequest,
     ) -> Result<GetRecommendationsResponse, RusotoError<GetRecommendationsError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/internal/profilingGroups/{profiling_group_name}/recommendations",
             profiling_group_name = input.profiling_group_name
@@ -2618,6 +2653,7 @@ impl CodeGuruProfiler for CodeGuruProfilerClient {
         &self,
         input: ListFindingsReportsRequest,
     ) -> Result<ListFindingsReportsResponse, RusotoError<ListFindingsReportsError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/internal/profilingGroups/{profiling_group_name}/findingsReports",
             profiling_group_name = input.profiling_group_name
@@ -2664,6 +2700,7 @@ impl CodeGuruProfiler for CodeGuruProfilerClient {
         &self,
         input: ListProfileTimesRequest,
     ) -> Result<ListProfileTimesResponse, RusotoError<ListProfileTimesError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/profilingGroups/{profiling_group_name}/profileTimes",
             profiling_group_name = input.profiling_group_name
@@ -2711,6 +2748,7 @@ impl CodeGuruProfiler for CodeGuruProfilerClient {
         &self,
         input: ListProfilingGroupsRequest,
     ) -> Result<ListProfilingGroupsResponse, RusotoError<ListProfilingGroupsError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/profilingGroups";
 
         let mut request =
@@ -2752,6 +2790,7 @@ impl CodeGuruProfiler for CodeGuruProfilerClient {
         &self,
         input: ListTagsForResourceRequest,
     ) -> Result<ListTagsForResourceResponse, RusotoError<ListTagsForResourceError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!("/tags/{resource_arn}", resource_arn = input.resource_arn);
 
         let mut request =
@@ -2781,6 +2820,7 @@ impl CodeGuruProfiler for CodeGuruProfilerClient {
         &self,
         input: PostAgentProfileRequest,
     ) -> Result<PostAgentProfileResponse, RusotoError<PostAgentProfileError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/profilingGroups/{profiling_group_name}/agentProfile",
             profiling_group_name = input.profiling_group_name
@@ -2822,6 +2862,7 @@ impl CodeGuruProfiler for CodeGuruProfilerClient {
         &self,
         input: PutPermissionRequest,
     ) -> Result<PutPermissionResponse, RusotoError<PutPermissionError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/profilingGroups/{profiling_group_name}/policy/{action_group}",
             action_group = input.action_group,
@@ -2859,6 +2900,7 @@ impl CodeGuruProfiler for CodeGuruProfilerClient {
         input: RemoveNotificationChannelRequest,
     ) -> Result<RemoveNotificationChannelResponse, RusotoError<RemoveNotificationChannelError>>
     {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/profilingGroups/{profiling_group_name}/notificationConfiguration/{channel_id}",
             channel_id = input.channel_id,
@@ -2892,6 +2934,7 @@ impl CodeGuruProfiler for CodeGuruProfilerClient {
         &self,
         input: RemovePermissionRequest,
     ) -> Result<RemovePermissionResponse, RusotoError<RemovePermissionError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/profilingGroups/{profiling_group_name}/policy/{action_group}",
             action_group = input.action_group,
@@ -2929,6 +2972,7 @@ impl CodeGuruProfiler for CodeGuruProfilerClient {
         &self,
         input: SubmitFeedbackRequest,
     ) -> Result<SubmitFeedbackResponse, RusotoError<SubmitFeedbackError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!("/internal/profilingGroups/{profiling_group_name}/anomalies/{anomaly_instance_id}/feedback", anomaly_instance_id = input.anomaly_instance_id, profiling_group_name = input.profiling_group_name);
 
         let mut request =
@@ -2961,6 +3005,7 @@ impl CodeGuruProfiler for CodeGuruProfilerClient {
         &self,
         input: TagResourceRequest,
     ) -> Result<TagResourceResponse, RusotoError<TagResourceError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!("/tags/{resource_arn}", resource_arn = input.resource_arn);
 
         let mut request =
@@ -2993,6 +3038,7 @@ impl CodeGuruProfiler for CodeGuruProfilerClient {
         &self,
         input: UntagResourceRequest,
     ) -> Result<UntagResourceResponse, RusotoError<UntagResourceError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!("/tags/{resource_arn}", resource_arn = input.resource_arn);
 
         let mut request =
@@ -3028,6 +3074,7 @@ impl CodeGuruProfiler for CodeGuruProfilerClient {
         &self,
         input: UpdateProfilingGroupRequest,
     ) -> Result<UpdateProfilingGroupResponse, RusotoError<UpdateProfilingGroupError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/profilingGroups/{profiling_group_name}",
             profiling_group_name = input.profiling_group_name

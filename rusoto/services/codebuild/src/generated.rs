@@ -49,7 +49,6 @@ impl CodeBuildClient {
     }
 }
 
-use serde_json;
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct BatchDeleteBuildsInput {
@@ -2875,6 +2874,7 @@ pub enum BatchDeleteBuildsError {
 impl BatchDeleteBuildsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<BatchDeleteBuildsError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidInputException" => {
                     return RusotoError::Service(BatchDeleteBuildsError::InvalidInput(err.msg))
@@ -2905,6 +2905,7 @@ pub enum BatchGetBuildBatchesError {
 impl BatchGetBuildBatchesError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<BatchGetBuildBatchesError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidInputException" => {
                     return RusotoError::Service(BatchGetBuildBatchesError::InvalidInput(err.msg))
@@ -2935,6 +2936,7 @@ pub enum BatchGetBuildsError {
 impl BatchGetBuildsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<BatchGetBuildsError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidInputException" => {
                     return RusotoError::Service(BatchGetBuildsError::InvalidInput(err.msg))
@@ -2965,6 +2967,7 @@ pub enum BatchGetProjectsError {
 impl BatchGetProjectsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<BatchGetProjectsError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidInputException" => {
                     return RusotoError::Service(BatchGetProjectsError::InvalidInput(err.msg))
@@ -2995,6 +2998,7 @@ pub enum BatchGetReportGroupsError {
 impl BatchGetReportGroupsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<BatchGetReportGroupsError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidInputException" => {
                     return RusotoError::Service(BatchGetReportGroupsError::InvalidInput(err.msg))
@@ -3025,6 +3029,7 @@ pub enum BatchGetReportsError {
 impl BatchGetReportsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<BatchGetReportsError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidInputException" => {
                     return RusotoError::Service(BatchGetReportsError::InvalidInput(err.msg))
@@ -3059,6 +3064,7 @@ pub enum CreateProjectError {
 impl CreateProjectError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateProjectError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AccountLimitExceededException" => {
                     return RusotoError::Service(CreateProjectError::AccountLimitExceeded(err.msg))
@@ -3101,6 +3107,7 @@ pub enum CreateReportGroupError {
 impl CreateReportGroupError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateReportGroupError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AccountLimitExceededException" => {
                     return RusotoError::Service(CreateReportGroupError::AccountLimitExceeded(
@@ -3149,6 +3156,7 @@ pub enum CreateWebhookError {
 impl CreateWebhookError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateWebhookError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidInputException" => {
                     return RusotoError::Service(CreateWebhookError::InvalidInput(err.msg))
@@ -3191,6 +3199,7 @@ pub enum DeleteBuildBatchError {
 impl DeleteBuildBatchError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteBuildBatchError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidInputException" => {
                     return RusotoError::Service(DeleteBuildBatchError::InvalidInput(err.msg))
@@ -3221,6 +3230,7 @@ pub enum DeleteProjectError {
 impl DeleteProjectError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteProjectError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidInputException" => {
                     return RusotoError::Service(DeleteProjectError::InvalidInput(err.msg))
@@ -3251,6 +3261,7 @@ pub enum DeleteReportError {
 impl DeleteReportError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteReportError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidInputException" => {
                     return RusotoError::Service(DeleteReportError::InvalidInput(err.msg))
@@ -3281,6 +3292,7 @@ pub enum DeleteReportGroupError {
 impl DeleteReportGroupError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteReportGroupError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidInputException" => {
                     return RusotoError::Service(DeleteReportGroupError::InvalidInput(err.msg))
@@ -3311,6 +3323,7 @@ pub enum DeleteResourcePolicyError {
 impl DeleteResourcePolicyError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteResourcePolicyError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidInputException" => {
                     return RusotoError::Service(DeleteResourcePolicyError::InvalidInput(err.msg))
@@ -3343,6 +3356,7 @@ pub enum DeleteSourceCredentialsError {
 impl DeleteSourceCredentialsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteSourceCredentialsError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidInputException" => {
                     return RusotoError::Service(DeleteSourceCredentialsError::InvalidInput(
@@ -3385,6 +3399,7 @@ pub enum DeleteWebhookError {
 impl DeleteWebhookError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteWebhookError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidInputException" => {
                     return RusotoError::Service(DeleteWebhookError::InvalidInput(err.msg))
@@ -3423,6 +3438,7 @@ pub enum DescribeCodeCoveragesError {
 impl DescribeCodeCoveragesError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeCodeCoveragesError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidInputException" => {
                     return RusotoError::Service(DescribeCodeCoveragesError::InvalidInput(err.msg))
@@ -3455,6 +3471,7 @@ pub enum DescribeTestCasesError {
 impl DescribeTestCasesError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeTestCasesError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidInputException" => {
                     return RusotoError::Service(DescribeTestCasesError::InvalidInput(err.msg))
@@ -3491,6 +3508,7 @@ pub enum GetReportGroupTrendError {
 impl GetReportGroupTrendError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetReportGroupTrendError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidInputException" => {
                     return RusotoError::Service(GetReportGroupTrendError::InvalidInput(err.msg))
@@ -3529,6 +3547,7 @@ pub enum GetResourcePolicyError {
 impl GetResourcePolicyError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetResourcePolicyError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidInputException" => {
                     return RusotoError::Service(GetResourcePolicyError::InvalidInput(err.msg))
@@ -3567,6 +3586,7 @@ pub enum ImportSourceCredentialsError {
 impl ImportSourceCredentialsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ImportSourceCredentialsError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AccountLimitExceededException" => {
                     return RusotoError::Service(
@@ -3615,6 +3635,7 @@ pub enum InvalidateProjectCacheError {
 impl InvalidateProjectCacheError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<InvalidateProjectCacheError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidInputException" => {
                     return RusotoError::Service(InvalidateProjectCacheError::InvalidInput(err.msg))
@@ -3651,6 +3672,7 @@ pub enum ListBuildBatchesError {
 impl ListBuildBatchesError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListBuildBatchesError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidInputException" => {
                     return RusotoError::Service(ListBuildBatchesError::InvalidInput(err.msg))
@@ -3685,6 +3707,7 @@ impl ListBuildBatchesForProjectError {
         res: BufferedHttpResponse,
     ) -> RusotoError<ListBuildBatchesForProjectError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidInputException" => {
                     return RusotoError::Service(ListBuildBatchesForProjectError::InvalidInput(
@@ -3723,6 +3746,7 @@ pub enum ListBuildsError {
 impl ListBuildsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListBuildsError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidInputException" => {
                     return RusotoError::Service(ListBuildsError::InvalidInput(err.msg))
@@ -3755,6 +3779,7 @@ pub enum ListBuildsForProjectError {
 impl ListBuildsForProjectError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListBuildsForProjectError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidInputException" => {
                     return RusotoError::Service(ListBuildsForProjectError::InvalidInput(err.msg))
@@ -3790,6 +3815,7 @@ impl ListCuratedEnvironmentImagesError {
         res: BufferedHttpResponse,
     ) -> RusotoError<ListCuratedEnvironmentImagesError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
@@ -3815,6 +3841,7 @@ pub enum ListProjectsError {
 impl ListProjectsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListProjectsError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidInputException" => {
                     return RusotoError::Service(ListProjectsError::InvalidInput(err.msg))
@@ -3845,6 +3872,7 @@ pub enum ListReportGroupsError {
 impl ListReportGroupsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListReportGroupsError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidInputException" => {
                     return RusotoError::Service(ListReportGroupsError::InvalidInput(err.msg))
@@ -3875,6 +3903,7 @@ pub enum ListReportsError {
 impl ListReportsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListReportsError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidInputException" => {
                     return RusotoError::Service(ListReportsError::InvalidInput(err.msg))
@@ -3907,6 +3936,7 @@ pub enum ListReportsForReportGroupError {
 impl ListReportsForReportGroupError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListReportsForReportGroupError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidInputException" => {
                     return RusotoError::Service(ListReportsForReportGroupError::InvalidInput(
@@ -3945,6 +3975,7 @@ pub enum ListSharedProjectsError {
 impl ListSharedProjectsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListSharedProjectsError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidInputException" => {
                     return RusotoError::Service(ListSharedProjectsError::InvalidInput(err.msg))
@@ -3975,6 +4006,7 @@ pub enum ListSharedReportGroupsError {
 impl ListSharedReportGroupsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListSharedReportGroupsError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidInputException" => {
                     return RusotoError::Service(ListSharedReportGroupsError::InvalidInput(err.msg))
@@ -4005,6 +4037,7 @@ pub enum ListSourceCredentialsError {
 impl ListSourceCredentialsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListSourceCredentialsError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidInputException" => {
                     return RusotoError::Service(ListSourceCredentialsError::InvalidInput(err.msg))
@@ -4037,6 +4070,7 @@ pub enum PutResourcePolicyError {
 impl PutResourcePolicyError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<PutResourcePolicyError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidInputException" => {
                     return RusotoError::Service(PutResourcePolicyError::InvalidInput(err.msg))
@@ -4075,6 +4109,7 @@ pub enum RetryBuildError {
 impl RetryBuildError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<RetryBuildError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AccountLimitExceededException" => {
                     return RusotoError::Service(RetryBuildError::AccountLimitExceeded(err.msg))
@@ -4115,6 +4150,7 @@ pub enum RetryBuildBatchError {
 impl RetryBuildBatchError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<RetryBuildBatchError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidInputException" => {
                     return RusotoError::Service(RetryBuildBatchError::InvalidInput(err.msg))
@@ -4153,6 +4189,7 @@ pub enum StartBuildError {
 impl StartBuildError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<StartBuildError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AccountLimitExceededException" => {
                     return RusotoError::Service(StartBuildError::AccountLimitExceeded(err.msg))
@@ -4193,6 +4230,7 @@ pub enum StartBuildBatchError {
 impl StartBuildBatchError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<StartBuildBatchError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidInputException" => {
                     return RusotoError::Service(StartBuildBatchError::InvalidInput(err.msg))
@@ -4229,6 +4267,7 @@ pub enum StopBuildError {
 impl StopBuildError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<StopBuildError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidInputException" => {
                     return RusotoError::Service(StopBuildError::InvalidInput(err.msg))
@@ -4265,6 +4304,7 @@ pub enum StopBuildBatchError {
 impl StopBuildBatchError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<StopBuildBatchError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidInputException" => {
                     return RusotoError::Service(StopBuildBatchError::InvalidInput(err.msg))
@@ -4301,6 +4341,7 @@ pub enum UpdateProjectError {
 impl UpdateProjectError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateProjectError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidInputException" => {
                     return RusotoError::Service(UpdateProjectError::InvalidInput(err.msg))
@@ -4337,6 +4378,7 @@ pub enum UpdateReportGroupError {
 impl UpdateReportGroupError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateReportGroupError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidInputException" => {
                     return RusotoError::Service(UpdateReportGroupError::InvalidInput(err.msg))
@@ -4375,6 +4417,7 @@ pub enum UpdateWebhookError {
 impl UpdateWebhookError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateWebhookError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidInputException" => {
                     return RusotoError::Service(UpdateWebhookError::InvalidInput(err.msg))

@@ -49,7 +49,6 @@ impl SnowballClient {
     }
 }
 
-use serde_json;
 /// <p>The address that you want the Snow device(s) associated with a specific job to be shipped to. Addresses are validated at the time of creation. The address you provide must be located within the serviceable area of your region. Although no individual elements of the <code>Address</code> are required, if the address is invalid or unsupported, then an exception is thrown.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct Address {
@@ -1110,6 +1109,7 @@ pub enum CancelClusterError {
 impl CancelClusterError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CancelClusterError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidJobStateException" => {
                     return RusotoError::Service(CancelClusterError::InvalidJobState(err.msg))
@@ -1152,6 +1152,7 @@ pub enum CancelJobError {
 impl CancelJobError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CancelJobError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidJobStateException" => {
                     return RusotoError::Service(CancelJobError::InvalidJobState(err.msg))
@@ -1192,6 +1193,7 @@ pub enum CreateAddressError {
 impl CreateAddressError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateAddressError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidAddressException" => {
                     return RusotoError::Service(CreateAddressError::InvalidAddress(err.msg))
@@ -1232,6 +1234,7 @@ pub enum CreateClusterError {
 impl CreateClusterError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateClusterError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "Ec2RequestFailedException" => {
                     return RusotoError::Service(CreateClusterError::Ec2RequestFailed(err.msg))
@@ -1284,6 +1287,7 @@ pub enum CreateJobError {
 impl CreateJobError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateJobError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ClusterLimitExceededException" => {
                     return RusotoError::Service(CreateJobError::ClusterLimitExceeded(err.msg))
@@ -1338,6 +1342,7 @@ pub enum CreateReturnShippingLabelError {
 impl CreateReturnShippingLabelError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateReturnShippingLabelError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ConflictException" => {
                     return RusotoError::Service(CreateReturnShippingLabelError::Conflict(err.msg))
@@ -1396,6 +1401,7 @@ pub enum DescribeAddressError {
 impl DescribeAddressError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeAddressError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidResourceException" => {
                     return RusotoError::Service(DescribeAddressError::InvalidResource(err.msg))
@@ -1428,6 +1434,7 @@ pub enum DescribeAddressesError {
 impl DescribeAddressesError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeAddressesError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidNextTokenException" => {
                     return RusotoError::Service(DescribeAddressesError::InvalidNextToken(err.msg))
@@ -1462,6 +1469,7 @@ pub enum DescribeClusterError {
 impl DescribeClusterError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeClusterError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidResourceException" => {
                     return RusotoError::Service(DescribeClusterError::InvalidResource(err.msg))
@@ -1492,6 +1500,7 @@ pub enum DescribeJobError {
 impl DescribeJobError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeJobError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidResourceException" => {
                     return RusotoError::Service(DescribeJobError::InvalidResource(err.msg))
@@ -1528,6 +1537,7 @@ impl DescribeReturnShippingLabelError {
         res: BufferedHttpResponse,
     ) -> RusotoError<DescribeReturnShippingLabelError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ConflictException" => {
                     return RusotoError::Service(DescribeReturnShippingLabelError::Conflict(
@@ -1574,6 +1584,7 @@ pub enum GetJobManifestError {
 impl GetJobManifestError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetJobManifestError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidJobStateException" => {
                     return RusotoError::Service(GetJobManifestError::InvalidJobState(err.msg))
@@ -1610,6 +1621,7 @@ pub enum GetJobUnlockCodeError {
 impl GetJobUnlockCodeError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetJobUnlockCodeError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidJobStateException" => {
                     return RusotoError::Service(GetJobUnlockCodeError::InvalidJobState(err.msg))
@@ -1641,6 +1653,7 @@ pub enum GetSnowballUsageError {}
 impl GetSnowballUsageError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetSnowballUsageError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
@@ -1668,6 +1681,7 @@ pub enum GetSoftwareUpdatesError {
 impl GetSoftwareUpdatesError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetSoftwareUpdatesError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidJobStateException" => {
                     return RusotoError::Service(GetSoftwareUpdatesError::InvalidJobState(err.msg))
@@ -1704,6 +1718,7 @@ pub enum ListClusterJobsError {
 impl ListClusterJobsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListClusterJobsError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidNextTokenException" => {
                     return RusotoError::Service(ListClusterJobsError::InvalidNextToken(err.msg))
@@ -1738,6 +1753,7 @@ pub enum ListClustersError {
 impl ListClustersError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListClustersError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidNextTokenException" => {
                     return RusotoError::Service(ListClustersError::InvalidNextToken(err.msg))
@@ -1770,6 +1786,7 @@ pub enum ListCompatibleImagesError {
 impl ListCompatibleImagesError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListCompatibleImagesError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "Ec2RequestFailedException" => {
                     return RusotoError::Service(ListCompatibleImagesError::Ec2RequestFailed(
@@ -1808,6 +1825,7 @@ pub enum ListJobsError {
 impl ListJobsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListJobsError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidNextTokenException" => {
                     return RusotoError::Service(ListJobsError::InvalidNextToken(err.msg))
@@ -1846,6 +1864,7 @@ pub enum UpdateClusterError {
 impl UpdateClusterError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateClusterError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "Ec2RequestFailedException" => {
                     return RusotoError::Service(UpdateClusterError::Ec2RequestFailed(err.msg))
@@ -1904,6 +1923,7 @@ pub enum UpdateJobError {
 impl UpdateJobError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateJobError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ClusterLimitExceededException" => {
                     return RusotoError::Service(UpdateJobError::ClusterLimitExceeded(err.msg))
@@ -1956,6 +1976,7 @@ pub enum UpdateJobShipmentStateError {
 impl UpdateJobShipmentStateError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateJobShipmentStateError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidJobStateException" => {
                     return RusotoError::Service(UpdateJobShipmentStateError::InvalidJobState(

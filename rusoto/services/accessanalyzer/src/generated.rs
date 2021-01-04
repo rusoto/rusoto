@@ -24,7 +24,6 @@ use rusoto_core::proto;
 use rusoto_core::signature::SignedRequest;
 #[allow(unused_imports)]
 use serde::{Deserialize, Serialize};
-use serde_json;
 /// <p>Contains details about the analyzed resource.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
@@ -771,6 +770,7 @@ pub enum ApplyArchiveRuleError {
 impl ApplyArchiveRuleError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ApplyArchiveRuleError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(ApplyArchiveRuleError::AccessDenied(err.msg))
@@ -821,6 +821,7 @@ pub enum CreateAnalyzerError {
 impl CreateAnalyzerError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateAnalyzerError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(CreateAnalyzerError::AccessDenied(err.msg))
@@ -877,6 +878,7 @@ pub enum CreateArchiveRuleError {
 impl CreateArchiveRuleError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateArchiveRuleError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(CreateArchiveRuleError::AccessDenied(err.msg))
@@ -935,6 +937,7 @@ pub enum DeleteAnalyzerError {
 impl DeleteAnalyzerError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteAnalyzerError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(DeleteAnalyzerError::AccessDenied(err.msg))
@@ -983,6 +986,7 @@ pub enum DeleteArchiveRuleError {
 impl DeleteArchiveRuleError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteArchiveRuleError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(DeleteArchiveRuleError::AccessDenied(err.msg))
@@ -1031,6 +1035,7 @@ pub enum GetAnalyzedResourceError {
 impl GetAnalyzedResourceError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetAnalyzedResourceError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(GetAnalyzedResourceError::AccessDenied(err.msg))
@@ -1081,6 +1086,7 @@ pub enum GetAnalyzerError {
 impl GetAnalyzerError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetAnalyzerError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(GetAnalyzerError::AccessDenied(err.msg))
@@ -1129,6 +1135,7 @@ pub enum GetArchiveRuleError {
 impl GetArchiveRuleError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetArchiveRuleError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(GetArchiveRuleError::AccessDenied(err.msg))
@@ -1177,6 +1184,7 @@ pub enum GetFindingError {
 impl GetFindingError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetFindingError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(GetFindingError::AccessDenied(err.msg))
@@ -1225,6 +1233,7 @@ pub enum ListAnalyzedResourcesError {
 impl ListAnalyzedResourcesError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListAnalyzedResourcesError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(ListAnalyzedResourcesError::AccessDenied(err.msg))
@@ -1275,6 +1284,7 @@ pub enum ListAnalyzersError {
 impl ListAnalyzersError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListAnalyzersError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(ListAnalyzersError::AccessDenied(err.msg))
@@ -1317,6 +1327,7 @@ pub enum ListArchiveRulesError {
 impl ListArchiveRulesError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListArchiveRulesError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(ListArchiveRulesError::AccessDenied(err.msg))
@@ -1361,6 +1372,7 @@ pub enum ListFindingsError {
 impl ListFindingsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListFindingsError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(ListFindingsError::AccessDenied(err.msg))
@@ -1409,6 +1421,7 @@ pub enum ListTagsForResourceError {
 impl ListTagsForResourceError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListTagsForResourceError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(ListTagsForResourceError::AccessDenied(err.msg))
@@ -1459,6 +1472,7 @@ pub enum StartResourceScanError {
 impl StartResourceScanError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<StartResourceScanError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(StartResourceScanError::AccessDenied(err.msg))
@@ -1507,6 +1521,7 @@ pub enum TagResourceError {
 impl TagResourceError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<TagResourceError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(TagResourceError::AccessDenied(err.msg))
@@ -1555,6 +1570,7 @@ pub enum UntagResourceError {
 impl UntagResourceError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UntagResourceError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(UntagResourceError::AccessDenied(err.msg))
@@ -1603,6 +1619,7 @@ pub enum UpdateArchiveRuleError {
 impl UpdateArchiveRuleError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateArchiveRuleError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(UpdateArchiveRuleError::AccessDenied(err.msg))
@@ -1651,6 +1668,7 @@ pub enum UpdateFindingsError {
 impl UpdateFindingsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateFindingsError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(UpdateFindingsError::AccessDenied(err.msg))
@@ -1846,6 +1864,7 @@ impl AccessAnalyzer for AccessAnalyzerClient {
         &self,
         input: ApplyArchiveRuleRequest,
     ) -> Result<(), RusotoError<ApplyArchiveRuleError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/archive-rule";
 
         let mut request = SignedRequest::new("PUT", "access-analyzer", &self.region, &request_uri);
@@ -1861,9 +1880,9 @@ impl AccessAnalyzer for AccessAnalyzerClient {
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
             let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = ::std::mem::drop(response);
+            let _result = ::std::mem::drop(response);
 
-            Ok(result)
+            Ok(())
         } else {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             Err(ApplyArchiveRuleError::from_response(response))
@@ -1876,6 +1895,7 @@ impl AccessAnalyzer for AccessAnalyzerClient {
         &self,
         input: CreateAnalyzerRequest,
     ) -> Result<CreateAnalyzerResponse, RusotoError<CreateAnalyzerError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/analyzer";
 
         let mut request = SignedRequest::new("PUT", "access-analyzer", &self.region, &request_uri);
@@ -1907,6 +1927,7 @@ impl AccessAnalyzer for AccessAnalyzerClient {
         &self,
         input: CreateArchiveRuleRequest,
     ) -> Result<(), RusotoError<CreateArchiveRuleError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/analyzer/{analyzer_name}/archive-rule",
             analyzer_name = input.analyzer_name
@@ -1925,9 +1946,9 @@ impl AccessAnalyzer for AccessAnalyzerClient {
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
             let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = ::std::mem::drop(response);
+            let _result = ::std::mem::drop(response);
 
-            Ok(result)
+            Ok(())
         } else {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             Err(CreateArchiveRuleError::from_response(response))
@@ -1940,6 +1961,7 @@ impl AccessAnalyzer for AccessAnalyzerClient {
         &self,
         input: DeleteAnalyzerRequest,
     ) -> Result<(), RusotoError<DeleteAnalyzerError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/analyzer/{analyzer_name}",
             analyzer_name = input.analyzer_name
@@ -1962,9 +1984,9 @@ impl AccessAnalyzer for AccessAnalyzerClient {
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
             let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = ::std::mem::drop(response);
+            let _result = ::std::mem::drop(response);
 
-            Ok(result)
+            Ok(())
         } else {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             Err(DeleteAnalyzerError::from_response(response))
@@ -1977,6 +1999,7 @@ impl AccessAnalyzer for AccessAnalyzerClient {
         &self,
         input: DeleteArchiveRuleRequest,
     ) -> Result<(), RusotoError<DeleteArchiveRuleError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/analyzer/{analyzer_name}/archive-rule/{rule_name}",
             analyzer_name = input.analyzer_name,
@@ -2000,9 +2023,9 @@ impl AccessAnalyzer for AccessAnalyzerClient {
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
             let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = ::std::mem::drop(response);
+            let _result = ::std::mem::drop(response);
 
-            Ok(result)
+            Ok(())
         } else {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             Err(DeleteArchiveRuleError::from_response(response))
@@ -2015,6 +2038,7 @@ impl AccessAnalyzer for AccessAnalyzerClient {
         &self,
         input: GetAnalyzedResourceRequest,
     ) -> Result<GetAnalyzedResourceResponse, RusotoError<GetAnalyzedResourceError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/analyzed-resource";
 
         let mut request = SignedRequest::new("GET", "access-analyzer", &self.region, &request_uri);
@@ -2048,6 +2072,7 @@ impl AccessAnalyzer for AccessAnalyzerClient {
         &self,
         input: GetAnalyzerRequest,
     ) -> Result<GetAnalyzerResponse, RusotoError<GetAnalyzerError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/analyzer/{analyzer_name}",
             analyzer_name = input.analyzer_name
@@ -2079,6 +2104,7 @@ impl AccessAnalyzer for AccessAnalyzerClient {
         &self,
         input: GetArchiveRuleRequest,
     ) -> Result<GetArchiveRuleResponse, RusotoError<GetArchiveRuleError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/analyzer/{analyzer_name}/archive-rule/{rule_name}",
             analyzer_name = input.analyzer_name,
@@ -2111,6 +2137,7 @@ impl AccessAnalyzer for AccessAnalyzerClient {
         &self,
         input: GetFindingRequest,
     ) -> Result<GetFindingResponse, RusotoError<GetFindingError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!("/finding/{id}", id = input.id);
 
         let mut request = SignedRequest::new("GET", "access-analyzer", &self.region, &request_uri);
@@ -2143,6 +2170,7 @@ impl AccessAnalyzer for AccessAnalyzerClient {
         &self,
         input: ListAnalyzedResourcesRequest,
     ) -> Result<ListAnalyzedResourcesResponse, RusotoError<ListAnalyzedResourcesError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/analyzed-resource";
 
         let mut request = SignedRequest::new("POST", "access-analyzer", &self.region, &request_uri);
@@ -2174,6 +2202,7 @@ impl AccessAnalyzer for AccessAnalyzerClient {
         &self,
         input: ListAnalyzersRequest,
     ) -> Result<ListAnalyzersResponse, RusotoError<ListAnalyzersError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/analyzer";
 
         let mut request = SignedRequest::new("GET", "access-analyzer", &self.region, &request_uri);
@@ -2214,6 +2243,7 @@ impl AccessAnalyzer for AccessAnalyzerClient {
         &self,
         input: ListArchiveRulesRequest,
     ) -> Result<ListArchiveRulesResponse, RusotoError<ListArchiveRulesError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/analyzer/{analyzer_name}/archive-rule",
             analyzer_name = input.analyzer_name
@@ -2254,6 +2284,7 @@ impl AccessAnalyzer for AccessAnalyzerClient {
         &self,
         input: ListFindingsRequest,
     ) -> Result<ListFindingsResponse, RusotoError<ListFindingsError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/finding";
 
         let mut request = SignedRequest::new("POST", "access-analyzer", &self.region, &request_uri);
@@ -2285,6 +2316,7 @@ impl AccessAnalyzer for AccessAnalyzerClient {
         &self,
         input: ListTagsForResourceRequest,
     ) -> Result<ListTagsForResourceResponse, RusotoError<ListTagsForResourceError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!("/tags/{resource_arn}", resource_arn = input.resource_arn);
 
         let mut request = SignedRequest::new("GET", "access-analyzer", &self.region, &request_uri);
@@ -2313,6 +2345,7 @@ impl AccessAnalyzer for AccessAnalyzerClient {
         &self,
         input: StartResourceScanRequest,
     ) -> Result<(), RusotoError<StartResourceScanError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/resource/scan";
 
         let mut request = SignedRequest::new("POST", "access-analyzer", &self.region, &request_uri);
@@ -2328,9 +2361,9 @@ impl AccessAnalyzer for AccessAnalyzerClient {
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
             let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = ::std::mem::drop(response);
+            let _result = ::std::mem::drop(response);
 
-            Ok(result)
+            Ok(())
         } else {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             Err(StartResourceScanError::from_response(response))
@@ -2343,6 +2376,7 @@ impl AccessAnalyzer for AccessAnalyzerClient {
         &self,
         input: TagResourceRequest,
     ) -> Result<TagResourceResponse, RusotoError<TagResourceError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!("/tags/{resource_arn}", resource_arn = input.resource_arn);
 
         let mut request = SignedRequest::new("POST", "access-analyzer", &self.region, &request_uri);
@@ -2374,6 +2408,7 @@ impl AccessAnalyzer for AccessAnalyzerClient {
         &self,
         input: UntagResourceRequest,
     ) -> Result<UntagResourceResponse, RusotoError<UntagResourceError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!("/tags/{resource_arn}", resource_arn = input.resource_arn);
 
         let mut request =
@@ -2409,6 +2444,7 @@ impl AccessAnalyzer for AccessAnalyzerClient {
         &self,
         input: UpdateArchiveRuleRequest,
     ) -> Result<(), RusotoError<UpdateArchiveRuleError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/analyzer/{analyzer_name}/archive-rule/{rule_name}",
             analyzer_name = input.analyzer_name,
@@ -2428,9 +2464,9 @@ impl AccessAnalyzer for AccessAnalyzerClient {
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
             let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = ::std::mem::drop(response);
+            let _result = ::std::mem::drop(response);
 
-            Ok(result)
+            Ok(())
         } else {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             Err(UpdateArchiveRuleError::from_response(response))
@@ -2443,6 +2479,7 @@ impl AccessAnalyzer for AccessAnalyzerClient {
         &self,
         input: UpdateFindingsRequest,
     ) -> Result<(), RusotoError<UpdateFindingsError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/finding";
 
         let mut request = SignedRequest::new("PUT", "access-analyzer", &self.region, &request_uri);
@@ -2458,9 +2495,9 @@ impl AccessAnalyzer for AccessAnalyzerClient {
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
             let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = ::std::mem::drop(response);
+            let _result = ::std::mem::drop(response);
 
-            Ok(result)
+            Ok(())
         } else {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             Err(UpdateFindingsError::from_response(response))

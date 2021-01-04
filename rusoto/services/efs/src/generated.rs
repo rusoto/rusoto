@@ -24,7 +24,6 @@ use rusoto_core::proto;
 use rusoto_core::signature::SignedRequest;
 #[allow(unused_imports)]
 use serde::{Deserialize, Serialize};
-use serde_json;
 /// <p>Provides a description of an EFS file system access point.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
@@ -754,6 +753,7 @@ pub enum CreateAccessPointError {
 impl CreateAccessPointError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateAccessPointError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AccessPointAlreadyExists" => {
                     return RusotoError::Service(CreateAccessPointError::AccessPointAlreadyExists(
@@ -826,6 +826,7 @@ pub enum CreateFileSystemError {
 impl CreateFileSystemError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateFileSystemError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequest" => {
                     return RusotoError::Service(CreateFileSystemError::BadRequest(err.msg))
@@ -910,6 +911,7 @@ pub enum CreateMountTargetError {
 impl CreateMountTargetError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateMountTargetError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequest" => {
                     return RusotoError::Service(CreateMountTargetError::BadRequest(err.msg))
@@ -1012,6 +1014,7 @@ pub enum CreateTagsError {
 impl CreateTagsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateTagsError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequest" => return RusotoError::Service(CreateTagsError::BadRequest(err.msg)),
                 "FileSystemNotFound" => {
@@ -1052,6 +1055,7 @@ pub enum DeleteAccessPointError {
 impl DeleteAccessPointError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteAccessPointError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AccessPointNotFound" => {
                     return RusotoError::Service(DeleteAccessPointError::AccessPointNotFound(
@@ -1100,6 +1104,7 @@ pub enum DeleteFileSystemError {
 impl DeleteFileSystemError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteFileSystemError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequest" => {
                     return RusotoError::Service(DeleteFileSystemError::BadRequest(err.msg))
@@ -1148,6 +1153,7 @@ pub enum DeleteFileSystemPolicyError {
 impl DeleteFileSystemPolicyError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteFileSystemPolicyError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "FileSystemNotFound" => {
                     return RusotoError::Service(DeleteFileSystemPolicyError::FileSystemNotFound(
@@ -1200,6 +1206,7 @@ pub enum DeleteMountTargetError {
 impl DeleteMountTargetError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteMountTargetError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequest" => {
                     return RusotoError::Service(DeleteMountTargetError::BadRequest(err.msg))
@@ -1250,6 +1257,7 @@ pub enum DeleteTagsError {
 impl DeleteTagsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteTagsError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequest" => return RusotoError::Service(DeleteTagsError::BadRequest(err.msg)),
                 "FileSystemNotFound" => {
@@ -1292,6 +1300,7 @@ pub enum DescribeAccessPointsError {
 impl DescribeAccessPointsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeAccessPointsError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AccessPointNotFound" => {
                     return RusotoError::Service(DescribeAccessPointsError::AccessPointNotFound(
@@ -1346,6 +1355,7 @@ pub enum DescribeBackupPolicyError {
 impl DescribeBackupPolicyError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeBackupPolicyError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequest" => {
                     return RusotoError::Service(DescribeBackupPolicyError::BadRequest(err.msg))
@@ -1396,6 +1406,7 @@ pub enum DescribeFileSystemPolicyError {
 impl DescribeFileSystemPolicyError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeFileSystemPolicyError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "FileSystemNotFound" => {
                     return RusotoError::Service(DescribeFileSystemPolicyError::FileSystemNotFound(
@@ -1444,6 +1455,7 @@ pub enum DescribeFileSystemsError {
 impl DescribeFileSystemsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeFileSystemsError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequest" => {
                     return RusotoError::Service(DescribeFileSystemsError::BadRequest(err.msg))
@@ -1492,6 +1504,7 @@ impl DescribeLifecycleConfigurationError {
         res: BufferedHttpResponse,
     ) -> RusotoError<DescribeLifecycleConfigurationError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequest" => {
                     return RusotoError::Service(DescribeLifecycleConfigurationError::BadRequest(
@@ -1548,6 +1561,7 @@ impl DescribeMountTargetSecurityGroupsError {
         res: BufferedHttpResponse,
     ) -> RusotoError<DescribeMountTargetSecurityGroupsError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequest" => {
                     return RusotoError::Service(
@@ -1612,6 +1626,7 @@ pub enum DescribeMountTargetsError {
 impl DescribeMountTargetsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeMountTargetsError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AccessPointNotFound" => {
                     return RusotoError::Service(DescribeMountTargetsError::AccessPointNotFound(
@@ -1670,6 +1685,7 @@ pub enum DescribeTagsError {
 impl DescribeTagsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeTagsError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequest" => {
                     return RusotoError::Service(DescribeTagsError::BadRequest(err.msg))
@@ -1714,6 +1730,7 @@ pub enum ListTagsForResourceError {
 impl ListTagsForResourceError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListTagsForResourceError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AccessPointNotFound" => {
                     return RusotoError::Service(ListTagsForResourceError::AccessPointNotFound(
@@ -1774,6 +1791,7 @@ impl ModifyMountTargetSecurityGroupsError {
         res: BufferedHttpResponse,
     ) -> RusotoError<ModifyMountTargetSecurityGroupsError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequest" => {
                     return RusotoError::Service(ModifyMountTargetSecurityGroupsError::BadRequest(
@@ -1852,6 +1870,7 @@ pub enum PutBackupPolicyError {
 impl PutBackupPolicyError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<PutBackupPolicyError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequest" => {
                     return RusotoError::Service(PutBackupPolicyError::BadRequest(err.msg))
@@ -1904,6 +1923,7 @@ pub enum PutFileSystemPolicyError {
 impl PutFileSystemPolicyError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<PutFileSystemPolicyError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "FileSystemNotFound" => {
                     return RusotoError::Service(PutFileSystemPolicyError::FileSystemNotFound(
@@ -1960,6 +1980,7 @@ pub enum PutLifecycleConfigurationError {
 impl PutLifecycleConfigurationError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<PutLifecycleConfigurationError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequest" => {
                     return RusotoError::Service(PutLifecycleConfigurationError::BadRequest(
@@ -2020,6 +2041,7 @@ pub enum TagResourceError {
 impl TagResourceError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<TagResourceError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AccessPointNotFound" => {
                     return RusotoError::Service(TagResourceError::AccessPointNotFound(err.msg))
@@ -2066,6 +2088,7 @@ pub enum UntagResourceError {
 impl UntagResourceError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UntagResourceError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AccessPointNotFound" => {
                     return RusotoError::Service(UntagResourceError::AccessPointNotFound(err.msg))
@@ -2120,6 +2143,7 @@ pub enum UpdateFileSystemError {
 impl UpdateFileSystemError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateFileSystemError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequest" => {
                     return RusotoError::Service(UpdateFileSystemError::BadRequest(err.msg))
@@ -2378,6 +2402,7 @@ impl Efs for EfsClient {
         &self,
         input: CreateAccessPointRequest,
     ) -> Result<AccessPointDescription, RusotoError<CreateAccessPointError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/2015-02-01/access-points";
 
         let mut request =
@@ -2410,6 +2435,7 @@ impl Efs for EfsClient {
         &self,
         input: CreateFileSystemRequest,
     ) -> Result<FileSystemDescription, RusotoError<CreateFileSystemError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/2015-02-01/file-systems";
 
         let mut request =
@@ -2442,6 +2468,7 @@ impl Efs for EfsClient {
         &self,
         input: CreateMountTargetRequest,
     ) -> Result<MountTargetDescription, RusotoError<CreateMountTargetError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/2015-02-01/mount-targets";
 
         let mut request =
@@ -2474,6 +2501,7 @@ impl Efs for EfsClient {
         &self,
         input: CreateTagsRequest,
     ) -> Result<(), RusotoError<CreateTagsError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/2015-02-01/create-tags/{file_system_id}",
             file_system_id = input.file_system_id
@@ -2493,9 +2521,9 @@ impl Efs for EfsClient {
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 204 {
             let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = ::std::mem::drop(response);
+            let _result = ::std::mem::drop(response);
 
-            Ok(result)
+            Ok(())
         } else {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             Err(CreateTagsError::from_response(response))
@@ -2508,6 +2536,7 @@ impl Efs for EfsClient {
         &self,
         input: DeleteAccessPointRequest,
     ) -> Result<(), RusotoError<DeleteAccessPointError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/2015-02-01/access-points/{access_point_id}",
             access_point_id = input.access_point_id
@@ -2524,9 +2553,9 @@ impl Efs for EfsClient {
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 204 {
             let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = ::std::mem::drop(response);
+            let _result = ::std::mem::drop(response);
 
-            Ok(result)
+            Ok(())
         } else {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             Err(DeleteAccessPointError::from_response(response))
@@ -2539,6 +2568,7 @@ impl Efs for EfsClient {
         &self,
         input: DeleteFileSystemRequest,
     ) -> Result<(), RusotoError<DeleteFileSystemError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/2015-02-01/file-systems/{file_system_id}",
             file_system_id = input.file_system_id
@@ -2555,9 +2585,9 @@ impl Efs for EfsClient {
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 204 {
             let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = ::std::mem::drop(response);
+            let _result = ::std::mem::drop(response);
 
-            Ok(result)
+            Ok(())
         } else {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             Err(DeleteFileSystemError::from_response(response))
@@ -2570,6 +2600,7 @@ impl Efs for EfsClient {
         &self,
         input: DeleteFileSystemPolicyRequest,
     ) -> Result<(), RusotoError<DeleteFileSystemPolicyError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/2015-02-01/file-systems/{file_system_id}/policy",
             file_system_id = input.file_system_id
@@ -2586,9 +2617,9 @@ impl Efs for EfsClient {
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
             let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = ::std::mem::drop(response);
+            let _result = ::std::mem::drop(response);
 
-            Ok(result)
+            Ok(())
         } else {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             Err(DeleteFileSystemPolicyError::from_response(response))
@@ -2601,6 +2632,7 @@ impl Efs for EfsClient {
         &self,
         input: DeleteMountTargetRequest,
     ) -> Result<(), RusotoError<DeleteMountTargetError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/2015-02-01/mount-targets/{mount_target_id}",
             mount_target_id = input.mount_target_id
@@ -2617,9 +2649,9 @@ impl Efs for EfsClient {
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 204 {
             let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = ::std::mem::drop(response);
+            let _result = ::std::mem::drop(response);
 
-            Ok(result)
+            Ok(())
         } else {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             Err(DeleteMountTargetError::from_response(response))
@@ -2632,6 +2664,7 @@ impl Efs for EfsClient {
         &self,
         input: DeleteTagsRequest,
     ) -> Result<(), RusotoError<DeleteTagsError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/2015-02-01/delete-tags/{file_system_id}",
             file_system_id = input.file_system_id
@@ -2651,9 +2684,9 @@ impl Efs for EfsClient {
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 204 {
             let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = ::std::mem::drop(response);
+            let _result = ::std::mem::drop(response);
 
-            Ok(result)
+            Ok(())
         } else {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             Err(DeleteTagsError::from_response(response))
@@ -2666,6 +2699,7 @@ impl Efs for EfsClient {
         &self,
         input: DescribeAccessPointsRequest,
     ) -> Result<DescribeAccessPointsResponse, RusotoError<DescribeAccessPointsError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/2015-02-01/access-points";
 
         let mut request =
@@ -2710,6 +2744,7 @@ impl Efs for EfsClient {
         &self,
         input: DescribeBackupPolicyRequest,
     ) -> Result<BackupPolicyDescription, RusotoError<DescribeBackupPolicyError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/2015-02-01/file-systems/{file_system_id}/backup-policy",
             file_system_id = input.file_system_id
@@ -2742,6 +2777,7 @@ impl Efs for EfsClient {
         &self,
         input: DescribeFileSystemPolicyRequest,
     ) -> Result<FileSystemPolicyDescription, RusotoError<DescribeFileSystemPolicyError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/2015-02-01/file-systems/{file_system_id}/policy",
             file_system_id = input.file_system_id
@@ -2774,6 +2810,7 @@ impl Efs for EfsClient {
         &self,
         input: DescribeFileSystemsRequest,
     ) -> Result<DescribeFileSystemsResponse, RusotoError<DescribeFileSystemsError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/2015-02-01/file-systems";
 
         let mut request =
@@ -2819,6 +2856,7 @@ impl Efs for EfsClient {
         input: DescribeLifecycleConfigurationRequest,
     ) -> Result<LifecycleConfigurationDescription, RusotoError<DescribeLifecycleConfigurationError>>
     {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/2015-02-01/file-systems/{file_system_id}/lifecycle-configuration",
             file_system_id = input.file_system_id
@@ -2854,6 +2892,7 @@ impl Efs for EfsClient {
         DescribeMountTargetSecurityGroupsResponse,
         RusotoError<DescribeMountTargetSecurityGroupsError>,
     > {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/2015-02-01/mount-targets/{mount_target_id}/security-groups",
             mount_target_id = input.mount_target_id
@@ -2888,6 +2927,7 @@ impl Efs for EfsClient {
         &self,
         input: DescribeMountTargetsRequest,
     ) -> Result<DescribeMountTargetsResponse, RusotoError<DescribeMountTargetsError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/2015-02-01/mount-targets";
 
         let mut request =
@@ -2935,6 +2975,7 @@ impl Efs for EfsClient {
         &self,
         input: DescribeTagsRequest,
     ) -> Result<DescribeTagsResponse, RusotoError<DescribeTagsError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/2015-02-01/tags/{file_system_id}/",
             file_system_id = input.file_system_id
@@ -2976,6 +3017,7 @@ impl Efs for EfsClient {
         &self,
         input: ListTagsForResourceRequest,
     ) -> Result<ListTagsForResourceResponse, RusotoError<ListTagsForResourceError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/2015-02-01/resource-tags/{resource_id}",
             resource_id = input.resource_id
@@ -3017,6 +3059,7 @@ impl Efs for EfsClient {
         &self,
         input: ModifyMountTargetSecurityGroupsRequest,
     ) -> Result<(), RusotoError<ModifyMountTargetSecurityGroupsError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/2015-02-01/mount-targets/{mount_target_id}/security-groups",
             mount_target_id = input.mount_target_id
@@ -3036,9 +3079,9 @@ impl Efs for EfsClient {
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 204 {
             let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = ::std::mem::drop(response);
+            let _result = ::std::mem::drop(response);
 
-            Ok(result)
+            Ok(())
         } else {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             Err(ModifyMountTargetSecurityGroupsError::from_response(
@@ -3053,6 +3096,7 @@ impl Efs for EfsClient {
         &self,
         input: PutBackupPolicyRequest,
     ) -> Result<BackupPolicyDescription, RusotoError<PutBackupPolicyError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/2015-02-01/file-systems/{file_system_id}/backup-policy",
             file_system_id = input.file_system_id
@@ -3088,6 +3132,7 @@ impl Efs for EfsClient {
         &self,
         input: PutFileSystemPolicyRequest,
     ) -> Result<FileSystemPolicyDescription, RusotoError<PutFileSystemPolicyError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/2015-02-01/file-systems/{file_system_id}/policy",
             file_system_id = input.file_system_id
@@ -3124,6 +3169,7 @@ impl Efs for EfsClient {
         input: PutLifecycleConfigurationRequest,
     ) -> Result<LifecycleConfigurationDescription, RusotoError<PutLifecycleConfigurationError>>
     {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/2015-02-01/file-systems/{file_system_id}/lifecycle-configuration",
             file_system_id = input.file_system_id
@@ -3159,6 +3205,7 @@ impl Efs for EfsClient {
         &self,
         input: TagResourceRequest,
     ) -> Result<(), RusotoError<TagResourceError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/2015-02-01/resource-tags/{resource_id}",
             resource_id = input.resource_id
@@ -3178,9 +3225,9 @@ impl Efs for EfsClient {
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
             let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = ::std::mem::drop(response);
+            let _result = ::std::mem::drop(response);
 
-            Ok(result)
+            Ok(())
         } else {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             Err(TagResourceError::from_response(response))
@@ -3193,6 +3240,7 @@ impl Efs for EfsClient {
         &self,
         input: UntagResourceRequest,
     ) -> Result<(), RusotoError<UntagResourceError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/2015-02-01/resource-tags/{resource_id}",
             resource_id = input.resource_id
@@ -3215,9 +3263,9 @@ impl Efs for EfsClient {
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
             let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = ::std::mem::drop(response);
+            let _result = ::std::mem::drop(response);
 
-            Ok(result)
+            Ok(())
         } else {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             Err(UntagResourceError::from_response(response))
@@ -3230,6 +3278,7 @@ impl Efs for EfsClient {
         &self,
         input: UpdateFileSystemRequest,
     ) -> Result<FileSystemDescription, RusotoError<UpdateFileSystemError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/2015-02-01/file-systems/{file_system_id}",
             file_system_id = input.file_system_id

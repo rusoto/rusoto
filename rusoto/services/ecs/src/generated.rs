@@ -49,7 +49,6 @@ impl EcsClient {
     }
 }
 
-use serde_json;
 /// <p>An object representing a container instance or task attachment.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
@@ -3634,6 +3633,7 @@ pub enum CreateCapacityProviderError {
 impl CreateCapacityProviderError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateCapacityProviderError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ClientException" => {
                     return RusotoError::Service(CreateCapacityProviderError::Client(err.msg))
@@ -3690,6 +3690,7 @@ pub enum CreateClusterError {
 impl CreateClusterError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateClusterError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ClientException" => {
                     return RusotoError::Service(CreateClusterError::Client(err.msg))
@@ -3742,6 +3743,7 @@ pub enum CreateServiceError {
 impl CreateServiceError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateServiceError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(CreateServiceError::AccessDenied(err.msg))
@@ -3822,6 +3824,7 @@ pub enum CreateTaskSetError {
 impl CreateTaskSetError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateTaskSetError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(CreateTaskSetError::AccessDenied(err.msg))
@@ -3896,6 +3899,7 @@ pub enum DeleteAccountSettingError {
 impl DeleteAccountSettingError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteAccountSettingError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ClientException" => {
                     return RusotoError::Service(DeleteAccountSettingError::Client(err.msg))
@@ -3940,6 +3944,7 @@ pub enum DeleteAttributesError {
 impl DeleteAttributesError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteAttributesError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ClusterNotFoundException" => {
                     return RusotoError::Service(DeleteAttributesError::ClusterNotFound(err.msg))
@@ -3982,6 +3987,7 @@ pub enum DeleteCapacityProviderError {
 impl DeleteCapacityProviderError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteCapacityProviderError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ClientException" => {
                     return RusotoError::Service(DeleteCapacityProviderError::Client(err.msg))
@@ -4036,6 +4042,7 @@ pub enum DeleteClusterError {
 impl DeleteClusterError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteClusterError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ClientException" => {
                     return RusotoError::Service(DeleteClusterError::Client(err.msg))
@@ -4108,6 +4115,7 @@ pub enum DeleteServiceError {
 impl DeleteServiceError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteServiceError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ClientException" => {
                     return RusotoError::Service(DeleteServiceError::Client(err.msg))
@@ -4170,6 +4178,7 @@ pub enum DeleteTaskSetError {
 impl DeleteTaskSetError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteTaskSetError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(DeleteTaskSetError::AccessDenied(err.msg))
@@ -4240,6 +4249,7 @@ impl DeregisterContainerInstanceError {
         res: BufferedHttpResponse,
     ) -> RusotoError<DeregisterContainerInstanceError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ClientException" => {
                     return RusotoError::Service(DeregisterContainerInstanceError::Client(err.msg))
@@ -4290,6 +4300,7 @@ pub enum DeregisterTaskDefinitionError {
 impl DeregisterTaskDefinitionError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeregisterTaskDefinitionError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ClientException" => {
                     return RusotoError::Service(DeregisterTaskDefinitionError::Client(err.msg))
@@ -4334,6 +4345,7 @@ pub enum DescribeCapacityProvidersError {
 impl DescribeCapacityProvidersError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeCapacityProvidersError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ClientException" => {
                     return RusotoError::Service(DescribeCapacityProvidersError::Client(err.msg))
@@ -4378,6 +4390,7 @@ pub enum DescribeClustersError {
 impl DescribeClustersError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeClustersError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ClientException" => {
                     return RusotoError::Service(DescribeClustersError::Client(err.msg))
@@ -4424,6 +4437,7 @@ impl DescribeContainerInstancesError {
         res: BufferedHttpResponse,
     ) -> RusotoError<DescribeContainerInstancesError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ClientException" => {
                     return RusotoError::Service(DescribeContainerInstancesError::Client(err.msg))
@@ -4476,6 +4490,7 @@ pub enum DescribeServicesError {
 impl DescribeServicesError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeServicesError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ClientException" => {
                     return RusotoError::Service(DescribeServicesError::Client(err.msg))
@@ -4522,6 +4537,7 @@ pub enum DescribeTaskDefinitionError {
 impl DescribeTaskDefinitionError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeTaskDefinitionError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ClientException" => {
                     return RusotoError::Service(DescribeTaskDefinitionError::Client(err.msg))
@@ -4576,6 +4592,7 @@ pub enum DescribeTaskSetsError {
 impl DescribeTaskSetsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeTaskSetsError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(DescribeTaskSetsError::AccessDenied(err.msg))
@@ -4640,6 +4657,7 @@ pub enum DescribeTasksError {
 impl DescribeTasksError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeTasksError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ClientException" => {
                     return RusotoError::Service(DescribeTasksError::Client(err.msg))
@@ -4684,6 +4702,7 @@ pub enum DiscoverPollEndpointError {
 impl DiscoverPollEndpointError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DiscoverPollEndpointError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ClientException" => {
                     return RusotoError::Service(DiscoverPollEndpointError::Client(err.msg))
@@ -4722,6 +4741,7 @@ pub enum ListAccountSettingsError {
 impl ListAccountSettingsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListAccountSettingsError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ClientException" => {
                     return RusotoError::Service(ListAccountSettingsError::Client(err.msg))
@@ -4764,6 +4784,7 @@ pub enum ListAttributesError {
 impl ListAttributesError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListAttributesError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ClusterNotFoundException" => {
                     return RusotoError::Service(ListAttributesError::ClusterNotFound(err.msg))
@@ -4802,6 +4823,7 @@ pub enum ListClustersError {
 impl ListClustersError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListClustersError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ClientException" => {
                     return RusotoError::Service(ListClustersError::Client(err.msg))
@@ -4846,6 +4868,7 @@ pub enum ListContainerInstancesError {
 impl ListContainerInstancesError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListContainerInstancesError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ClientException" => {
                     return RusotoError::Service(ListContainerInstancesError::Client(err.msg))
@@ -4898,6 +4921,7 @@ pub enum ListServicesError {
 impl ListServicesError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListServicesError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ClientException" => {
                     return RusotoError::Service(ListServicesError::Client(err.msg))
@@ -4946,6 +4970,7 @@ pub enum ListTagsForResourceError {
 impl ListTagsForResourceError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListTagsForResourceError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ClientException" => {
                     return RusotoError::Service(ListTagsForResourceError::Client(err.msg))
@@ -4996,6 +5021,7 @@ impl ListTaskDefinitionFamiliesError {
         res: BufferedHttpResponse,
     ) -> RusotoError<ListTaskDefinitionFamiliesError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ClientException" => {
                     return RusotoError::Service(ListTaskDefinitionFamiliesError::Client(err.msg))
@@ -5040,6 +5066,7 @@ pub enum ListTaskDefinitionsError {
 impl ListTaskDefinitionsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListTaskDefinitionsError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ClientException" => {
                     return RusotoError::Service(ListTaskDefinitionsError::Client(err.msg))
@@ -5088,6 +5115,7 @@ pub enum ListTasksError {
 impl ListTasksError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListTasksError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ClientException" => return RusotoError::Service(ListTasksError::Client(err.msg)),
                 "ClusterNotFoundException" => {
@@ -5134,6 +5162,7 @@ pub enum PutAccountSettingError {
 impl PutAccountSettingError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<PutAccountSettingError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ClientException" => {
                     return RusotoError::Service(PutAccountSettingError::Client(err.msg))
@@ -5176,6 +5205,7 @@ pub enum PutAccountSettingDefaultError {
 impl PutAccountSettingDefaultError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<PutAccountSettingDefaultError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ClientException" => {
                     return RusotoError::Service(PutAccountSettingDefaultError::Client(err.msg))
@@ -5222,6 +5252,7 @@ pub enum PutAttributesError {
 impl PutAttributesError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<PutAttributesError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AttributeLimitExceededException" => {
                     return RusotoError::Service(PutAttributesError::AttributeLimitExceeded(
@@ -5278,6 +5309,7 @@ impl PutClusterCapacityProvidersError {
         res: BufferedHttpResponse,
     ) -> RusotoError<PutClusterCapacityProvidersError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ClientException" => {
                     return RusotoError::Service(PutClusterCapacityProvidersError::Client(err.msg))
@@ -5340,6 +5372,7 @@ pub enum RegisterContainerInstanceError {
 impl RegisterContainerInstanceError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<RegisterContainerInstanceError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ClientException" => {
                     return RusotoError::Service(RegisterContainerInstanceError::Client(err.msg))
@@ -5384,6 +5417,7 @@ pub enum RegisterTaskDefinitionError {
 impl RegisterTaskDefinitionError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<RegisterTaskDefinitionError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ClientException" => {
                     return RusotoError::Service(RegisterTaskDefinitionError::Client(err.msg))
@@ -5440,6 +5474,7 @@ pub enum RunTaskError {
 impl RunTaskError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<RunTaskError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(RunTaskError::AccessDenied(err.msg))
@@ -5506,6 +5541,7 @@ pub enum StartTaskError {
 impl StartTaskError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<StartTaskError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ClientException" => return RusotoError::Service(StartTaskError::Client(err.msg)),
                 "ClusterNotFoundException" => {
@@ -5550,6 +5586,7 @@ pub enum StopTaskError {
 impl StopTaskError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<StopTaskError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ClientException" => return RusotoError::Service(StopTaskError::Client(err.msg)),
                 "ClusterNotFoundException" => {
@@ -5596,6 +5633,7 @@ impl SubmitAttachmentStateChangesError {
         res: BufferedHttpResponse,
     ) -> RusotoError<SubmitAttachmentStateChangesError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(SubmitAttachmentStateChangesError::AccessDenied(
@@ -5650,6 +5688,7 @@ impl SubmitContainerStateChangeError {
         res: BufferedHttpResponse,
     ) -> RusotoError<SubmitContainerStateChangeError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(SubmitContainerStateChangeError::AccessDenied(
@@ -5696,6 +5735,7 @@ pub enum SubmitTaskStateChangeError {
 impl SubmitTaskStateChangeError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<SubmitTaskStateChangeError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(SubmitTaskStateChangeError::AccessDenied(err.msg))
@@ -5748,6 +5788,7 @@ pub enum TagResourceError {
 impl TagResourceError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<TagResourceError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ClientException" => {
                     return RusotoError::Service(TagResourceError::Client(err.msg))
@@ -5802,6 +5843,7 @@ pub enum UntagResourceError {
 impl UntagResourceError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UntagResourceError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ClientException" => {
                     return RusotoError::Service(UntagResourceError::Client(err.msg))
@@ -5852,6 +5894,7 @@ pub enum UpdateCapacityProviderError {
 impl UpdateCapacityProviderError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateCapacityProviderError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ClientException" => {
                     return RusotoError::Service(UpdateCapacityProviderError::Client(err.msg))
@@ -5898,6 +5941,7 @@ pub enum UpdateClusterSettingsError {
 impl UpdateClusterSettingsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateClusterSettingsError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ClientException" => {
                     return RusotoError::Service(UpdateClusterSettingsError::Client(err.msg))
@@ -5956,6 +6000,7 @@ pub enum UpdateContainerAgentError {
 impl UpdateContainerAgentError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateContainerAgentError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ClientException" => {
                     return RusotoError::Service(UpdateContainerAgentError::Client(err.msg))
@@ -6026,6 +6071,7 @@ impl UpdateContainerInstancesStateError {
         res: BufferedHttpResponse,
     ) -> RusotoError<UpdateContainerInstancesStateError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ClientException" => {
                     return RusotoError::Service(UpdateContainerInstancesStateError::Client(
@@ -6096,6 +6142,7 @@ pub enum UpdateServiceError {
 impl UpdateServiceError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateServiceError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(UpdateServiceError::AccessDenied(err.msg))
@@ -6180,6 +6227,7 @@ impl UpdateServicePrimaryTaskSetError {
         res: BufferedHttpResponse,
     ) -> RusotoError<UpdateServicePrimaryTaskSetError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(UpdateServicePrimaryTaskSetError::AccessDenied(
@@ -6274,6 +6322,7 @@ pub enum UpdateTaskSetError {
 impl UpdateTaskSetError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateTaskSetError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(UpdateTaskSetError::AccessDenied(err.msg))

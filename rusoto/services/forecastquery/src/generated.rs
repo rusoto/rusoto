@@ -50,7 +50,6 @@ impl ForecastQueryClient {
     }
 }
 
-use serde_json;
 /// <p>The forecast value for a specific date. Part of the <a>Forecast</a> object.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
@@ -125,6 +124,7 @@ pub enum QueryForecastError {
 impl QueryForecastError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<QueryForecastError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidInputException" => {
                     return RusotoError::Service(QueryForecastError::InvalidInput(err.msg))

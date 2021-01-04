@@ -50,7 +50,6 @@ impl AppStreamClient {
     }
 }
 
-use serde_json;
 /// <p>Describes an interface VPC endpoint (interface endpoint) that lets you create a private connection between the virtual private cloud (VPC) that you specify and AppStream 2.0. When you specify an interface endpoint for a stack, users of the stack can connect to AppStream 2.0 only through that endpoint. When you specify an interface endpoint for an image builder, administrators can connect to the image builder only through that endpoint.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct AccessEndpoint {
@@ -2039,6 +2038,7 @@ pub enum AssociateFleetError {
 impl AssociateFleetError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<AssociateFleetError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ConcurrentModificationException" => {
                     return RusotoError::Service(AssociateFleetError::ConcurrentModification(
@@ -2095,6 +2095,7 @@ pub enum BatchAssociateUserStackError {
 impl BatchAssociateUserStackError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<BatchAssociateUserStackError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidParameterCombinationException" => {
                     return RusotoError::Service(
@@ -2141,6 +2142,7 @@ impl BatchDisassociateUserStackError {
         res: BufferedHttpResponse,
     ) -> RusotoError<BatchDisassociateUserStackError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidParameterCombinationException" => {
                     return RusotoError::Service(
@@ -2193,6 +2195,7 @@ pub enum CopyImageError {
 impl CopyImageError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CopyImageError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "IncompatibleImageException" => {
                     return RusotoError::Service(CopyImageError::IncompatibleImage(err.msg))
@@ -2253,6 +2256,7 @@ pub enum CreateDirectoryConfigError {
 impl CreateDirectoryConfigError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateDirectoryConfigError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidAccountStatusException" => {
                     return RusotoError::Service(CreateDirectoryConfigError::InvalidAccountStatus(
@@ -2331,6 +2335,7 @@ pub enum CreateFleetError {
 impl CreateFleetError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateFleetError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ConcurrentModificationException" => {
                     return RusotoError::Service(CreateFleetError::ConcurrentModification(err.msg))
@@ -2423,6 +2428,7 @@ pub enum CreateImageBuilderError {
 impl CreateImageBuilderError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateImageBuilderError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ConcurrentModificationException" => {
                     return RusotoError::Service(CreateImageBuilderError::ConcurrentModification(
@@ -2515,6 +2521,7 @@ impl CreateImageBuilderStreamingURLError {
         res: BufferedHttpResponse,
     ) -> RusotoError<CreateImageBuilderStreamingURLError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "OperationNotPermittedException" => {
                     return RusotoError::Service(
@@ -2569,6 +2576,7 @@ pub enum CreateStackError {
 impl CreateStackError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateStackError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ConcurrentModificationException" => {
                     return RusotoError::Service(CreateStackError::ConcurrentModification(err.msg))
@@ -2631,6 +2639,7 @@ pub enum CreateStreamingURLError {
 impl CreateStreamingURLError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateStreamingURLError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidParameterCombinationException" => {
                     return RusotoError::Service(
@@ -2687,6 +2696,7 @@ impl CreateUsageReportSubscriptionError {
         res: BufferedHttpResponse,
     ) -> RusotoError<CreateUsageReportSubscriptionError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidAccountStatusException" => {
                     return RusotoError::Service(
@@ -2741,6 +2751,7 @@ pub enum CreateUserError {
 impl CreateUserError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateUserError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidAccountStatusException" => {
                     return RusotoError::Service(CreateUserError::InvalidAccountStatus(err.msg))
@@ -2791,6 +2802,7 @@ pub enum DeleteDirectoryConfigError {
 impl DeleteDirectoryConfigError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteDirectoryConfigError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ResourceInUseException" => {
                     return RusotoError::Service(DeleteDirectoryConfigError::ResourceInUse(err.msg))
@@ -2831,6 +2843,7 @@ pub enum DeleteFleetError {
 impl DeleteFleetError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteFleetError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ConcurrentModificationException" => {
                     return RusotoError::Service(DeleteFleetError::ConcurrentModification(err.msg))
@@ -2875,6 +2888,7 @@ pub enum DeleteImageError {
 impl DeleteImageError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteImageError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ConcurrentModificationException" => {
                     return RusotoError::Service(DeleteImageError::ConcurrentModification(err.msg))
@@ -2921,6 +2935,7 @@ pub enum DeleteImageBuilderError {
 impl DeleteImageBuilderError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteImageBuilderError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ConcurrentModificationException" => {
                     return RusotoError::Service(DeleteImageBuilderError::ConcurrentModification(
@@ -2965,6 +2980,7 @@ pub enum DeleteImagePermissionsError {
 impl DeleteImagePermissionsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteImagePermissionsError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ResourceNotAvailableException" => {
                     return RusotoError::Service(DeleteImagePermissionsError::ResourceNotAvailable(
@@ -3007,6 +3023,7 @@ pub enum DeleteStackError {
 impl DeleteStackError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteStackError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ConcurrentModificationException" => {
                     return RusotoError::Service(DeleteStackError::ConcurrentModification(err.msg))
@@ -3049,6 +3066,7 @@ impl DeleteUsageReportSubscriptionError {
         res: BufferedHttpResponse,
     ) -> RusotoError<DeleteUsageReportSubscriptionError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidAccountStatusException" => {
                     return RusotoError::Service(
@@ -3091,6 +3109,7 @@ pub enum DeleteUserError {
 impl DeleteUserError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteUserError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(DeleteUserError::ResourceNotFound(err.msg))
@@ -3121,6 +3140,7 @@ pub enum DescribeDirectoryConfigsError {
 impl DescribeDirectoryConfigsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeDirectoryConfigsError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(DescribeDirectoryConfigsError::ResourceNotFound(
@@ -3153,6 +3173,7 @@ pub enum DescribeFleetsError {
 impl DescribeFleetsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeFleetsError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(DescribeFleetsError::ResourceNotFound(err.msg))
@@ -3183,6 +3204,7 @@ pub enum DescribeImageBuildersError {
 impl DescribeImageBuildersError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeImageBuildersError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(DescribeImageBuildersError::ResourceNotFound(
@@ -3215,6 +3237,7 @@ pub enum DescribeImagePermissionsError {
 impl DescribeImagePermissionsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeImagePermissionsError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(DescribeImagePermissionsError::ResourceNotFound(
@@ -3249,6 +3272,7 @@ pub enum DescribeImagesError {
 impl DescribeImagesError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeImagesError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidParameterCombinationException" => {
                     return RusotoError::Service(DescribeImagesError::InvalidParameterCombination(
@@ -3285,6 +3309,7 @@ pub enum DescribeSessionsError {
 impl DescribeSessionsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeSessionsError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidParameterCombinationException" => {
                     return RusotoError::Service(
@@ -3317,6 +3342,7 @@ pub enum DescribeStacksError {
 impl DescribeStacksError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeStacksError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(DescribeStacksError::ResourceNotFound(err.msg))
@@ -3351,6 +3377,7 @@ impl DescribeUsageReportSubscriptionsError {
         res: BufferedHttpResponse,
     ) -> RusotoError<DescribeUsageReportSubscriptionsError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidAccountStatusException" => {
                     return RusotoError::Service(
@@ -3397,6 +3424,7 @@ impl DescribeUserStackAssociationsError {
         res: BufferedHttpResponse,
     ) -> RusotoError<DescribeUserStackAssociationsError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidParameterCombinationException" => {
                     return RusotoError::Service(
@@ -3441,6 +3469,7 @@ pub enum DescribeUsersError {
 impl DescribeUsersError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeUsersError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidParameterCombinationException" => {
                     return RusotoError::Service(DescribeUsersError::InvalidParameterCombination(
@@ -3477,6 +3506,7 @@ pub enum DisableUserError {
 impl DisableUserError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DisableUserError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(DisableUserError::ResourceNotFound(err.msg))
@@ -3513,6 +3543,7 @@ pub enum DisassociateFleetError {
 impl DisassociateFleetError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DisassociateFleetError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ConcurrentModificationException" => {
                     return RusotoError::Service(DisassociateFleetError::ConcurrentModification(
@@ -3561,6 +3592,7 @@ pub enum EnableUserError {
 impl EnableUserError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<EnableUserError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidAccountStatusException" => {
                     return RusotoError::Service(EnableUserError::InvalidAccountStatus(err.msg))
@@ -3592,6 +3624,7 @@ pub enum ExpireSessionError {}
 impl ExpireSessionError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ExpireSessionError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
@@ -3614,6 +3647,7 @@ pub enum ListAssociatedFleetsError {}
 impl ListAssociatedFleetsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListAssociatedFleetsError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
@@ -3636,6 +3670,7 @@ pub enum ListAssociatedStacksError {}
 impl ListAssociatedStacksError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListAssociatedStacksError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
@@ -3661,6 +3696,7 @@ pub enum ListTagsForResourceError {
 impl ListTagsForResourceError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListTagsForResourceError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(ListTagsForResourceError::ResourceNotFound(
@@ -3707,6 +3743,7 @@ pub enum StartFleetError {
 impl StartFleetError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<StartFleetError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ConcurrentModificationException" => {
                     return RusotoError::Service(StartFleetError::ConcurrentModification(err.msg))
@@ -3773,6 +3810,7 @@ pub enum StartImageBuilderError {
 impl StartImageBuilderError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<StartImageBuilderError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ConcurrentModificationException" => {
                     return RusotoError::Service(StartImageBuilderError::ConcurrentModification(
@@ -3827,6 +3865,7 @@ pub enum StopFleetError {
 impl StopFleetError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<StopFleetError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ConcurrentModificationException" => {
                     return RusotoError::Service(StopFleetError::ConcurrentModification(err.msg))
@@ -3865,6 +3904,7 @@ pub enum StopImageBuilderError {
 impl StopImageBuilderError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<StopImageBuilderError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ConcurrentModificationException" => {
                     return RusotoError::Service(StopImageBuilderError::ConcurrentModification(
@@ -3911,6 +3951,7 @@ pub enum TagResourceError {
 impl TagResourceError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<TagResourceError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidAccountStatusException" => {
                     return RusotoError::Service(TagResourceError::InvalidAccountStatus(err.msg))
@@ -3949,6 +3990,7 @@ pub enum UntagResourceError {
 impl UntagResourceError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UntagResourceError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(UntagResourceError::ResourceNotFound(err.msg))
@@ -3987,6 +4029,7 @@ pub enum UpdateDirectoryConfigError {
 impl UpdateDirectoryConfigError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateDirectoryConfigError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ConcurrentModificationException" => {
                     return RusotoError::Service(
@@ -4059,6 +4102,7 @@ pub enum UpdateFleetError {
 impl UpdateFleetError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateFleetError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ConcurrentModificationException" => {
                     return RusotoError::Service(UpdateFleetError::ConcurrentModification(err.msg))
@@ -4135,6 +4179,7 @@ pub enum UpdateImagePermissionsError {
 impl UpdateImagePermissionsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateImagePermissionsError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "LimitExceededException" => {
                     return RusotoError::Service(UpdateImagePermissionsError::LimitExceeded(
@@ -4195,6 +4240,7 @@ pub enum UpdateStackError {
 impl UpdateStackError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateStackError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ConcurrentModificationException" => {
                     return RusotoError::Service(UpdateStackError::ConcurrentModification(err.msg))

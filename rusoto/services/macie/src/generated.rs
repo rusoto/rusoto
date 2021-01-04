@@ -49,7 +49,6 @@ impl MacieClient {
     }
 }
 
-use serde_json;
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct AssociateMemberAccountRequest {
@@ -295,6 +294,7 @@ pub enum AssociateMemberAccountError {
 impl AssociateMemberAccountError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<AssociateMemberAccountError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalException" => {
                     return RusotoError::Service(AssociateMemberAccountError::Internal(err.msg))
@@ -341,6 +341,7 @@ pub enum AssociateS3ResourcesError {
 impl AssociateS3ResourcesError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<AssociateS3ResourcesError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(AssociateS3ResourcesError::AccessDenied(err.msg))
@@ -385,6 +386,7 @@ pub enum DisassociateMemberAccountError {
 impl DisassociateMemberAccountError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DisassociateMemberAccountError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalException" => {
                     return RusotoError::Service(DisassociateMemberAccountError::Internal(err.msg))
@@ -425,6 +427,7 @@ pub enum DisassociateS3ResourcesError {
 impl DisassociateS3ResourcesError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DisassociateS3ResourcesError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(DisassociateS3ResourcesError::AccessDenied(
@@ -469,6 +472,7 @@ pub enum ListMemberAccountsError {
 impl ListMemberAccountsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListMemberAccountsError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalException" => {
                     return RusotoError::Service(ListMemberAccountsError::Internal(err.msg))
@@ -507,6 +511,7 @@ pub enum ListS3ResourcesError {
 impl ListS3ResourcesError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListS3ResourcesError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(ListS3ResourcesError::AccessDenied(err.msg))
@@ -549,6 +554,7 @@ pub enum UpdateS3ResourcesError {
 impl UpdateS3ResourcesError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateS3ResourcesError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(UpdateS3ResourcesError::AccessDenied(err.msg))

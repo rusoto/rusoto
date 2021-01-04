@@ -24,7 +24,6 @@ use rusoto_core::proto;
 use rusoto_core::signature::SignedRequest;
 #[allow(unused_imports)]
 use serde::{Deserialize, Serialize};
-use serde_json;
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct Application {
@@ -1038,6 +1037,7 @@ pub enum CreateApplicationError {
 impl CreateApplicationError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateApplicationError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(CreateApplicationError::BadRequest(err.msg))
@@ -1078,6 +1078,7 @@ impl CreateConfigurationProfileError {
         res: BufferedHttpResponse,
     ) -> RusotoError<CreateConfigurationProfileError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(CreateConfigurationProfileError::BadRequest(
@@ -1124,6 +1125,7 @@ pub enum CreateDeploymentStrategyError {
 impl CreateDeploymentStrategyError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateDeploymentStrategyError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(CreateDeploymentStrategyError::BadRequest(err.msg))
@@ -1164,6 +1166,7 @@ pub enum CreateEnvironmentError {
 impl CreateEnvironmentError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateEnvironmentError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(CreateEnvironmentError::BadRequest(err.msg))
@@ -1214,6 +1217,7 @@ impl CreateHostedConfigurationVersionError {
         res: BufferedHttpResponse,
     ) -> RusotoError<CreateHostedConfigurationVersionError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(CreateHostedConfigurationVersionError::BadRequest(
@@ -1288,6 +1292,7 @@ pub enum DeleteApplicationError {
 impl DeleteApplicationError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteApplicationError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(DeleteApplicationError::BadRequest(err.msg))
@@ -1334,6 +1339,7 @@ impl DeleteConfigurationProfileError {
         res: BufferedHttpResponse,
     ) -> RusotoError<DeleteConfigurationProfileError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(DeleteConfigurationProfileError::BadRequest(
@@ -1386,6 +1392,7 @@ pub enum DeleteDeploymentStrategyError {
 impl DeleteDeploymentStrategyError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteDeploymentStrategyError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(DeleteDeploymentStrategyError::BadRequest(err.msg))
@@ -1434,6 +1441,7 @@ pub enum DeleteEnvironmentError {
 impl DeleteEnvironmentError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteEnvironmentError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(DeleteEnvironmentError::BadRequest(err.msg))
@@ -1482,6 +1490,7 @@ impl DeleteHostedConfigurationVersionError {
         res: BufferedHttpResponse,
     ) -> RusotoError<DeleteHostedConfigurationVersionError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(DeleteHostedConfigurationVersionError::BadRequest(
@@ -1534,6 +1543,7 @@ pub enum GetApplicationError {
 impl GetApplicationError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetApplicationError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(GetApplicationError::BadRequest(err.msg))
@@ -1576,6 +1586,7 @@ pub enum GetConfigurationError {
 impl GetConfigurationError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetConfigurationError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(GetConfigurationError::BadRequest(err.msg))
@@ -1618,6 +1629,7 @@ pub enum GetConfigurationProfileError {
 impl GetConfigurationProfileError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetConfigurationProfileError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(GetConfigurationProfileError::BadRequest(err.msg))
@@ -1664,6 +1676,7 @@ pub enum GetDeploymentError {
 impl GetDeploymentError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetDeploymentError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(GetDeploymentError::BadRequest(err.msg))
@@ -1706,6 +1719,7 @@ pub enum GetDeploymentStrategyError {
 impl GetDeploymentStrategyError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetDeploymentStrategyError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(GetDeploymentStrategyError::BadRequest(err.msg))
@@ -1752,6 +1766,7 @@ pub enum GetEnvironmentError {
 impl GetEnvironmentError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetEnvironmentError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(GetEnvironmentError::BadRequest(err.msg))
@@ -1796,6 +1811,7 @@ impl GetHostedConfigurationVersionError {
         res: BufferedHttpResponse,
     ) -> RusotoError<GetHostedConfigurationVersionError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(GetHostedConfigurationVersionError::BadRequest(
@@ -1844,6 +1860,7 @@ pub enum ListApplicationsError {
 impl ListApplicationsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListApplicationsError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(ListApplicationsError::BadRequest(err.msg))
@@ -1882,6 +1899,7 @@ pub enum ListConfigurationProfilesError {
 impl ListConfigurationProfilesError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListConfigurationProfilesError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(ListConfigurationProfilesError::BadRequest(
@@ -1928,6 +1946,7 @@ pub enum ListDeploymentStrategiesError {
 impl ListDeploymentStrategiesError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListDeploymentStrategiesError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(ListDeploymentStrategiesError::BadRequest(err.msg))
@@ -1968,6 +1987,7 @@ pub enum ListDeploymentsError {
 impl ListDeploymentsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListDeploymentsError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(ListDeploymentsError::BadRequest(err.msg))
@@ -2010,6 +2030,7 @@ pub enum ListEnvironmentsError {
 impl ListEnvironmentsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListEnvironmentsError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(ListEnvironmentsError::BadRequest(err.msg))
@@ -2054,6 +2075,7 @@ impl ListHostedConfigurationVersionsError {
         res: BufferedHttpResponse,
     ) -> RusotoError<ListHostedConfigurationVersionsError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(ListHostedConfigurationVersionsError::BadRequest(
@@ -2106,6 +2128,7 @@ pub enum ListTagsForResourceError {
 impl ListTagsForResourceError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListTagsForResourceError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(ListTagsForResourceError::BadRequest(err.msg))
@@ -2152,6 +2175,7 @@ pub enum StartDeploymentError {
 impl StartDeploymentError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<StartDeploymentError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(StartDeploymentError::BadRequest(err.msg))
@@ -2198,6 +2222,7 @@ pub enum StopDeploymentError {
 impl StopDeploymentError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<StopDeploymentError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(StopDeploymentError::BadRequest(err.msg))
@@ -2240,6 +2265,7 @@ pub enum TagResourceError {
 impl TagResourceError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<TagResourceError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(TagResourceError::BadRequest(err.msg))
@@ -2282,6 +2308,7 @@ pub enum UntagResourceError {
 impl UntagResourceError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UntagResourceError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(UntagResourceError::BadRequest(err.msg))
@@ -2324,6 +2351,7 @@ pub enum UpdateApplicationError {
 impl UpdateApplicationError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateApplicationError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(UpdateApplicationError::BadRequest(err.msg))
@@ -2368,6 +2396,7 @@ impl UpdateConfigurationProfileError {
         res: BufferedHttpResponse,
     ) -> RusotoError<UpdateConfigurationProfileError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(UpdateConfigurationProfileError::BadRequest(
@@ -2416,6 +2445,7 @@ pub enum UpdateDeploymentStrategyError {
 impl UpdateDeploymentStrategyError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateDeploymentStrategyError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(UpdateDeploymentStrategyError::BadRequest(err.msg))
@@ -2462,6 +2492,7 @@ pub enum UpdateEnvironmentError {
 impl UpdateEnvironmentError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateEnvironmentError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(UpdateEnvironmentError::BadRequest(err.msg))
@@ -2504,6 +2535,7 @@ pub enum ValidateConfigurationError {
 impl ValidateConfigurationError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ValidateConfigurationError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(ValidateConfigurationError::BadRequest(err.msg))
@@ -2783,6 +2815,7 @@ impl AppConfig for AppConfigClient {
         &self,
         input: CreateApplicationRequest,
     ) -> Result<Application, RusotoError<CreateApplicationError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/applications";
 
         let mut request = SignedRequest::new("POST", "appconfig", &self.region, &request_uri);
@@ -2814,6 +2847,7 @@ impl AppConfig for AppConfigClient {
         &self,
         input: CreateConfigurationProfileRequest,
     ) -> Result<ConfigurationProfile, RusotoError<CreateConfigurationProfileError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/applications/{application_id}/configurationprofiles",
             application_id = input.application_id
@@ -2848,6 +2882,7 @@ impl AppConfig for AppConfigClient {
         &self,
         input: CreateDeploymentStrategyRequest,
     ) -> Result<DeploymentStrategy, RusotoError<CreateDeploymentStrategyError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/deploymentstrategies";
 
         let mut request = SignedRequest::new("POST", "appconfig", &self.region, &request_uri);
@@ -2879,6 +2914,7 @@ impl AppConfig for AppConfigClient {
         &self,
         input: CreateEnvironmentRequest,
     ) -> Result<Environment, RusotoError<CreateEnvironmentError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/applications/{application_id}/environments",
             application_id = input.application_id
@@ -2914,6 +2950,7 @@ impl AppConfig for AppConfigClient {
         input: CreateHostedConfigurationVersionRequest,
     ) -> Result<HostedConfigurationVersion, RusotoError<CreateHostedConfigurationVersionError>>
     {
+        #![allow(clippy::needless_update)]
         let request_uri = format!("/applications/{application_id}/configurationprofiles/{configuration_profile_id}/hostedconfigurationversions", application_id = input.application_id, configuration_profile_id = input.configuration_profile_id);
 
         let mut request = SignedRequest::new("POST", "appconfig", &self.region, &request_uri);
@@ -2936,8 +2973,10 @@ impl AppConfig for AppConfigClient {
         if response.status.as_u16() == 201 {
             let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
 
-            let mut result = HostedConfigurationVersion::default();
-            result.content = Some(response.body);
+            let mut result = HostedConfigurationVersion {
+                content: Some(response.body),
+                ..HostedConfigurationVersion::default()
+            };
 
             result.application_id = response.headers.remove("Application-Id");
             result.configuration_profile_id = response.headers.remove("Configuration-Profile-Id");
@@ -2963,6 +3002,7 @@ impl AppConfig for AppConfigClient {
         &self,
         input: DeleteApplicationRequest,
     ) -> Result<(), RusotoError<DeleteApplicationError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/applications/{application_id}",
             application_id = input.application_id
@@ -2978,9 +3018,9 @@ impl AppConfig for AppConfigClient {
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 204 {
             let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = ::std::mem::drop(response);
+            let _result = ::std::mem::drop(response);
 
-            Ok(result)
+            Ok(())
         } else {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             Err(DeleteApplicationError::from_response(response))
@@ -2993,6 +3033,7 @@ impl AppConfig for AppConfigClient {
         &self,
         input: DeleteConfigurationProfileRequest,
     ) -> Result<(), RusotoError<DeleteConfigurationProfileError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/applications/{application_id}/configurationprofiles/{configuration_profile_id}",
             application_id = input.application_id,
@@ -3009,9 +3050,9 @@ impl AppConfig for AppConfigClient {
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 204 {
             let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = ::std::mem::drop(response);
+            let _result = ::std::mem::drop(response);
 
-            Ok(result)
+            Ok(())
         } else {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             Err(DeleteConfigurationProfileError::from_response(response))
@@ -3024,6 +3065,7 @@ impl AppConfig for AppConfigClient {
         &self,
         input: DeleteDeploymentStrategyRequest,
     ) -> Result<(), RusotoError<DeleteDeploymentStrategyError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/deployementstrategies/{deployment_strategy_id}",
             deployment_strategy_id = input.deployment_strategy_id
@@ -3039,9 +3081,9 @@ impl AppConfig for AppConfigClient {
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 204 {
             let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = ::std::mem::drop(response);
+            let _result = ::std::mem::drop(response);
 
-            Ok(result)
+            Ok(())
         } else {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             Err(DeleteDeploymentStrategyError::from_response(response))
@@ -3054,6 +3096,7 @@ impl AppConfig for AppConfigClient {
         &self,
         input: DeleteEnvironmentRequest,
     ) -> Result<(), RusotoError<DeleteEnvironmentError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/applications/{application_id}/environments/{environment_id}",
             application_id = input.application_id,
@@ -3070,9 +3113,9 @@ impl AppConfig for AppConfigClient {
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 204 {
             let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = ::std::mem::drop(response);
+            let _result = ::std::mem::drop(response);
 
-            Ok(result)
+            Ok(())
         } else {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             Err(DeleteEnvironmentError::from_response(response))
@@ -3085,6 +3128,7 @@ impl AppConfig for AppConfigClient {
         &self,
         input: DeleteHostedConfigurationVersionRequest,
     ) -> Result<(), RusotoError<DeleteHostedConfigurationVersionError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!("/applications/{application_id}/configurationprofiles/{configuration_profile_id}/hostedconfigurationversions/{version_number}", application_id = input.application_id, configuration_profile_id = input.configuration_profile_id, version_number = input.version_number);
 
         let mut request = SignedRequest::new("DELETE", "appconfig", &self.region, &request_uri);
@@ -3097,9 +3141,9 @@ impl AppConfig for AppConfigClient {
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 204 {
             let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = ::std::mem::drop(response);
+            let _result = ::std::mem::drop(response);
 
-            Ok(result)
+            Ok(())
         } else {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             Err(DeleteHostedConfigurationVersionError::from_response(
@@ -3114,6 +3158,7 @@ impl AppConfig for AppConfigClient {
         &self,
         input: GetApplicationRequest,
     ) -> Result<Application, RusotoError<GetApplicationError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/applications/{application_id}",
             application_id = input.application_id
@@ -3145,6 +3190,7 @@ impl AppConfig for AppConfigClient {
         &self,
         input: GetConfigurationRequest,
     ) -> Result<Configuration, RusotoError<GetConfigurationError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/applications/{application}/environments/{environment}/configurations/{configuration}",
             application = input.application,
@@ -3170,8 +3216,10 @@ impl AppConfig for AppConfigClient {
         if response.status.as_u16() == 200 {
             let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
 
-            let mut result = Configuration::default();
-            result.content = Some(response.body);
+            let mut result = Configuration {
+                content: Some(response.body),
+                ..Configuration::default()
+            };
 
             result.configuration_version = response.headers.remove("Configuration-Version");
             result.content_type = response.headers.remove("Content-Type");
@@ -3189,6 +3237,7 @@ impl AppConfig for AppConfigClient {
         &self,
         input: GetConfigurationProfileRequest,
     ) -> Result<ConfigurationProfile, RusotoError<GetConfigurationProfileError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/applications/{application_id}/configurationprofiles/{configuration_profile_id}",
             application_id = input.application_id,
@@ -3221,6 +3270,7 @@ impl AppConfig for AppConfigClient {
         &self,
         input: GetDeploymentRequest,
     ) -> Result<Deployment, RusotoError<GetDeploymentError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!("/applications/{application_id}/environments/{environment_id}/deployments/{deployment_number}", application_id = input.application_id, deployment_number = input.deployment_number, environment_id = input.environment_id);
 
         let mut request = SignedRequest::new("GET", "appconfig", &self.region, &request_uri);
@@ -3249,6 +3299,7 @@ impl AppConfig for AppConfigClient {
         &self,
         input: GetDeploymentStrategyRequest,
     ) -> Result<DeploymentStrategy, RusotoError<GetDeploymentStrategyError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/deploymentstrategies/{deployment_strategy_id}",
             deployment_strategy_id = input.deployment_strategy_id
@@ -3280,6 +3331,7 @@ impl AppConfig for AppConfigClient {
         &self,
         input: GetEnvironmentRequest,
     ) -> Result<Environment, RusotoError<GetEnvironmentError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/applications/{application_id}/environments/{environment_id}",
             application_id = input.application_id,
@@ -3312,6 +3364,7 @@ impl AppConfig for AppConfigClient {
         &self,
         input: GetHostedConfigurationVersionRequest,
     ) -> Result<HostedConfigurationVersion, RusotoError<GetHostedConfigurationVersionError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!("/applications/{application_id}/configurationprofiles/{configuration_profile_id}/hostedconfigurationversions/{version_number}", application_id = input.application_id, configuration_profile_id = input.configuration_profile_id, version_number = input.version_number);
 
         let mut request = SignedRequest::new("GET", "appconfig", &self.region, &request_uri);
@@ -3325,8 +3378,10 @@ impl AppConfig for AppConfigClient {
         if response.status.as_u16() == 200 {
             let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
 
-            let mut result = HostedConfigurationVersion::default();
-            result.content = Some(response.body);
+            let mut result = HostedConfigurationVersion {
+                content: Some(response.body),
+                ..HostedConfigurationVersion::default()
+            };
 
             result.application_id = response.headers.remove("Application-Id");
             result.configuration_profile_id = response.headers.remove("Configuration-Profile-Id");
@@ -3350,6 +3405,7 @@ impl AppConfig for AppConfigClient {
         &self,
         input: ListApplicationsRequest,
     ) -> Result<Applications, RusotoError<ListApplicationsError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/applications";
 
         let mut request = SignedRequest::new("GET", "appconfig", &self.region, &request_uri);
@@ -3387,6 +3443,7 @@ impl AppConfig for AppConfigClient {
         &self,
         input: ListConfigurationProfilesRequest,
     ) -> Result<ConfigurationProfiles, RusotoError<ListConfigurationProfilesError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/applications/{application_id}/configurationprofiles",
             application_id = input.application_id
@@ -3427,6 +3484,7 @@ impl AppConfig for AppConfigClient {
         &self,
         input: ListDeploymentStrategiesRequest,
     ) -> Result<DeploymentStrategies, RusotoError<ListDeploymentStrategiesError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/deploymentstrategies";
 
         let mut request = SignedRequest::new("GET", "appconfig", &self.region, &request_uri);
@@ -3464,6 +3522,7 @@ impl AppConfig for AppConfigClient {
         &self,
         input: ListDeploymentsRequest,
     ) -> Result<Deployments, RusotoError<ListDeploymentsError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/applications/{application_id}/environments/{environment_id}/deployments",
             application_id = input.application_id,
@@ -3505,6 +3564,7 @@ impl AppConfig for AppConfigClient {
         &self,
         input: ListEnvironmentsRequest,
     ) -> Result<Environments, RusotoError<ListEnvironmentsError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/applications/{application_id}/environments",
             application_id = input.application_id
@@ -3546,6 +3606,7 @@ impl AppConfig for AppConfigClient {
         input: ListHostedConfigurationVersionsRequest,
     ) -> Result<HostedConfigurationVersions, RusotoError<ListHostedConfigurationVersionsError>>
     {
+        #![allow(clippy::needless_update)]
         let request_uri = format!("/applications/{application_id}/configurationprofiles/{configuration_profile_id}/hostedconfigurationversions", application_id = input.application_id, configuration_profile_id = input.configuration_profile_id);
 
         let mut request = SignedRequest::new("GET", "appconfig", &self.region, &request_uri);
@@ -3585,6 +3646,7 @@ impl AppConfig for AppConfigClient {
         &self,
         input: ListTagsForResourceRequest,
     ) -> Result<ResourceTags, RusotoError<ListTagsForResourceError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!("/tags/{resource_arn}", resource_arn = input.resource_arn);
 
         let mut request = SignedRequest::new("GET", "appconfig", &self.region, &request_uri);
@@ -3613,6 +3675,7 @@ impl AppConfig for AppConfigClient {
         &self,
         input: StartDeploymentRequest,
     ) -> Result<Deployment, RusotoError<StartDeploymentError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/applications/{application_id}/environments/{environment_id}/deployments",
             application_id = input.application_id,
@@ -3648,6 +3711,7 @@ impl AppConfig for AppConfigClient {
         &self,
         input: StopDeploymentRequest,
     ) -> Result<Deployment, RusotoError<StopDeploymentError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!("/applications/{application_id}/environments/{environment_id}/deployments/{deployment_number}", application_id = input.application_id, deployment_number = input.deployment_number, environment_id = input.environment_id);
 
         let mut request = SignedRequest::new("DELETE", "appconfig", &self.region, &request_uri);
@@ -3676,6 +3740,7 @@ impl AppConfig for AppConfigClient {
         &self,
         input: TagResourceRequest,
     ) -> Result<(), RusotoError<TagResourceError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!("/tags/{resource_arn}", resource_arn = input.resource_arn);
 
         let mut request = SignedRequest::new("POST", "appconfig", &self.region, &request_uri);
@@ -3691,9 +3756,9 @@ impl AppConfig for AppConfigClient {
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 204 {
             let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = ::std::mem::drop(response);
+            let _result = ::std::mem::drop(response);
 
-            Ok(result)
+            Ok(())
         } else {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             Err(TagResourceError::from_response(response))
@@ -3706,6 +3771,7 @@ impl AppConfig for AppConfigClient {
         &self,
         input: UntagResourceRequest,
     ) -> Result<(), RusotoError<UntagResourceError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!("/tags/{resource_arn}", resource_arn = input.resource_arn);
 
         let mut request = SignedRequest::new("DELETE", "appconfig", &self.region, &request_uri);
@@ -3724,9 +3790,9 @@ impl AppConfig for AppConfigClient {
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 204 {
             let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = ::std::mem::drop(response);
+            let _result = ::std::mem::drop(response);
 
-            Ok(result)
+            Ok(())
         } else {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             Err(UntagResourceError::from_response(response))
@@ -3739,6 +3805,7 @@ impl AppConfig for AppConfigClient {
         &self,
         input: UpdateApplicationRequest,
     ) -> Result<Application, RusotoError<UpdateApplicationError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/applications/{application_id}",
             application_id = input.application_id
@@ -3773,6 +3840,7 @@ impl AppConfig for AppConfigClient {
         &self,
         input: UpdateConfigurationProfileRequest,
     ) -> Result<ConfigurationProfile, RusotoError<UpdateConfigurationProfileError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/applications/{application_id}/configurationprofiles/{configuration_profile_id}",
             application_id = input.application_id,
@@ -3808,6 +3876,7 @@ impl AppConfig for AppConfigClient {
         &self,
         input: UpdateDeploymentStrategyRequest,
     ) -> Result<DeploymentStrategy, RusotoError<UpdateDeploymentStrategyError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/deploymentstrategies/{deployment_strategy_id}",
             deployment_strategy_id = input.deployment_strategy_id
@@ -3842,6 +3911,7 @@ impl AppConfig for AppConfigClient {
         &self,
         input: UpdateEnvironmentRequest,
     ) -> Result<Environment, RusotoError<UpdateEnvironmentError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/applications/{application_id}/environments/{environment_id}",
             application_id = input.application_id,
@@ -3877,6 +3947,7 @@ impl AppConfig for AppConfigClient {
         &self,
         input: ValidateConfigurationRequest,
     ) -> Result<(), RusotoError<ValidateConfigurationError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!("/applications/{application_id}/configurationprofiles/{configuration_profile_id}/validators", application_id = input.application_id, configuration_profile_id = input.configuration_profile_id);
 
         let mut request = SignedRequest::new("POST", "appconfig", &self.region, &request_uri);
@@ -3893,9 +3964,9 @@ impl AppConfig for AppConfigClient {
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 204 {
             let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = ::std::mem::drop(response);
+            let _result = ::std::mem::drop(response);
 
-            Ok(result)
+            Ok(())
         } else {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             Err(ValidateConfigurationError::from_response(response))

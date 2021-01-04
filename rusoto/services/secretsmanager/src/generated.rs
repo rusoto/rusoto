@@ -50,7 +50,6 @@ impl SecretsManagerClient {
     }
 }
 
-use serde_json;
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CancelRotateSecretRequest {
@@ -876,6 +875,7 @@ pub enum CancelRotateSecretError {
 impl CancelRotateSecretError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CancelRotateSecretError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalServiceError" => {
                     return RusotoError::Service(CancelRotateSecretError::InternalServiceError(
@@ -936,6 +936,7 @@ pub enum CreateSecretError {
 impl CreateSecretError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateSecretError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "EncryptionFailure" => {
                     return RusotoError::Service(CreateSecretError::EncryptionFailure(err.msg))
@@ -1004,6 +1005,7 @@ pub enum DeleteResourcePolicyError {
 impl DeleteResourcePolicyError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteResourcePolicyError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalServiceError" => {
                     return RusotoError::Service(DeleteResourcePolicyError::InternalServiceError(
@@ -1052,6 +1054,7 @@ pub enum DeleteSecretError {
 impl DeleteSecretError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteSecretError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalServiceError" => {
                     return RusotoError::Service(DeleteSecretError::InternalServiceError(err.msg))
@@ -1096,6 +1099,7 @@ pub enum DescribeSecretError {
 impl DescribeSecretError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeSecretError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalServiceError" => {
                     return RusotoError::Service(DescribeSecretError::InternalServiceError(err.msg))
@@ -1134,6 +1138,7 @@ pub enum GetRandomPasswordError {
 impl GetRandomPasswordError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetRandomPasswordError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalServiceError" => {
                     return RusotoError::Service(GetRandomPasswordError::InternalServiceError(
@@ -1178,6 +1183,7 @@ pub enum GetResourcePolicyError {
 impl GetResourcePolicyError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetResourcePolicyError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalServiceError" => {
                     return RusotoError::Service(GetResourcePolicyError::InternalServiceError(
@@ -1226,6 +1232,7 @@ pub enum GetSecretValueError {
 impl GetSecretValueError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetSecretValueError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "DecryptionFailure" => {
                     return RusotoError::Service(GetSecretValueError::DecryptionFailure(err.msg))
@@ -1276,6 +1283,7 @@ pub enum ListSecretVersionIdsError {
 impl ListSecretVersionIdsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListSecretVersionIdsError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalServiceError" => {
                     return RusotoError::Service(ListSecretVersionIdsError::InternalServiceError(
@@ -1324,6 +1332,7 @@ pub enum ListSecretsError {
 impl ListSecretsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListSecretsError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalServiceError" => {
                     return RusotoError::Service(ListSecretsError::InternalServiceError(err.msg))
@@ -1372,6 +1381,7 @@ pub enum PutResourcePolicyError {
 impl PutResourcePolicyError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<PutResourcePolicyError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalServiceError" => {
                     return RusotoError::Service(PutResourcePolicyError::InternalServiceError(
@@ -1438,6 +1448,7 @@ pub enum PutSecretValueError {
 impl PutSecretValueError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<PutSecretValueError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "EncryptionFailure" => {
                     return RusotoError::Service(PutSecretValueError::EncryptionFailure(err.msg))
@@ -1498,6 +1509,7 @@ pub enum RestoreSecretError {
 impl RestoreSecretError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<RestoreSecretError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalServiceError" => {
                     return RusotoError::Service(RestoreSecretError::InternalServiceError(err.msg))
@@ -1546,6 +1558,7 @@ pub enum RotateSecretError {
 impl RotateSecretError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<RotateSecretError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalServiceError" => {
                     return RusotoError::Service(RotateSecretError::InternalServiceError(err.msg))
@@ -1594,6 +1607,7 @@ pub enum TagResourceError {
 impl TagResourceError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<TagResourceError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalServiceError" => {
                     return RusotoError::Service(TagResourceError::InternalServiceError(err.msg))
@@ -1642,6 +1656,7 @@ pub enum UntagResourceError {
 impl UntagResourceError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UntagResourceError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalServiceError" => {
                     return RusotoError::Service(UntagResourceError::InternalServiceError(err.msg))
@@ -1700,6 +1715,7 @@ pub enum UpdateSecretError {
 impl UpdateSecretError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateSecretError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "EncryptionFailure" => {
                     return RusotoError::Service(UpdateSecretError::EncryptionFailure(err.msg))
@@ -1772,6 +1788,7 @@ pub enum UpdateSecretVersionStageError {
 impl UpdateSecretVersionStageError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateSecretVersionStageError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalServiceError" => {
                     return RusotoError::Service(
@@ -1838,6 +1855,7 @@ pub enum ValidateResourcePolicyError {
 impl ValidateResourcePolicyError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ValidateResourcePolicyError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalServiceError" => {
                     return RusotoError::Service(ValidateResourcePolicyError::InternalServiceError(

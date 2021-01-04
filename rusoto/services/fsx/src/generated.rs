@@ -49,7 +49,6 @@ impl FsxClient {
     }
 }
 
-use serde_json;
 /// <p>The Microsoft AD attributes of the Amazon FSx for Windows File Server file system.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
@@ -1333,6 +1332,7 @@ impl AssociateFileSystemAliasesError {
         res: BufferedHttpResponse,
     ) -> RusotoError<AssociateFileSystemAliasesError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequest" => {
                     return RusotoError::Service(AssociateFileSystemAliasesError::BadRequest(
@@ -1389,6 +1389,7 @@ pub enum CancelDataRepositoryTaskError {
 impl CancelDataRepositoryTaskError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CancelDataRepositoryTaskError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequest" => {
                     return RusotoError::Service(CancelDataRepositoryTaskError::BadRequest(err.msg))
@@ -1461,6 +1462,7 @@ pub enum CreateBackupError {
 impl CreateBackupError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateBackupError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BackupInProgress" => {
                     return RusotoError::Service(CreateBackupError::BackupInProgress(err.msg))
@@ -1529,6 +1531,7 @@ pub enum CreateDataRepositoryTaskError {
 impl CreateDataRepositoryTaskError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateDataRepositoryTaskError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequest" => {
                     return RusotoError::Service(CreateDataRepositoryTaskError::BadRequest(err.msg))
@@ -1621,6 +1624,7 @@ pub enum CreateFileSystemError {
 impl CreateFileSystemError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateFileSystemError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ActiveDirectoryError" => {
                     return RusotoError::Service(CreateFileSystemError::ActiveDirectoryError(
@@ -1723,6 +1727,7 @@ impl CreateFileSystemFromBackupError {
         res: BufferedHttpResponse,
     ) -> RusotoError<CreateFileSystemFromBackupError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ActiveDirectoryError" => {
                     return RusotoError::Service(
@@ -1827,6 +1832,7 @@ pub enum DeleteBackupError {
 impl DeleteBackupError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteBackupError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BackupInProgress" => {
                     return RusotoError::Service(DeleteBackupError::BackupInProgress(err.msg))
@@ -1887,6 +1893,7 @@ pub enum DeleteFileSystemError {
 impl DeleteFileSystemError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteFileSystemError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequest" => {
                     return RusotoError::Service(DeleteFileSystemError::BadRequest(err.msg))
@@ -1945,6 +1952,7 @@ pub enum DescribeBackupsError {
 impl DescribeBackupsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeBackupsError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BackupNotFound" => {
                     return RusotoError::Service(DescribeBackupsError::BackupNotFound(err.msg))
@@ -1995,6 +2003,7 @@ impl DescribeDataRepositoryTasksError {
         res: BufferedHttpResponse,
     ) -> RusotoError<DescribeDataRepositoryTasksError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequest" => {
                     return RusotoError::Service(DescribeDataRepositoryTasksError::BadRequest(
@@ -2055,6 +2064,7 @@ pub enum DescribeFileSystemAliasesError {
 impl DescribeFileSystemAliasesError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeFileSystemAliasesError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequest" => {
                     return RusotoError::Service(DescribeFileSystemAliasesError::BadRequest(
@@ -2105,6 +2115,7 @@ pub enum DescribeFileSystemsError {
 impl DescribeFileSystemsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeFileSystemsError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequest" => {
                     return RusotoError::Service(DescribeFileSystemsError::BadRequest(err.msg))
@@ -2153,6 +2164,7 @@ impl DisassociateFileSystemAliasesError {
         res: BufferedHttpResponse,
     ) -> RusotoError<DisassociateFileSystemAliasesError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequest" => {
                     return RusotoError::Service(DisassociateFileSystemAliasesError::BadRequest(
@@ -2209,6 +2221,7 @@ pub enum ListTagsForResourceError {
 impl ListTagsForResourceError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListTagsForResourceError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequest" => {
                     return RusotoError::Service(ListTagsForResourceError::BadRequest(err.msg))
@@ -2273,6 +2286,7 @@ pub enum TagResourceError {
 impl TagResourceError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<TagResourceError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequest" => return RusotoError::Service(TagResourceError::BadRequest(err.msg)),
                 "InternalServerError" => {
@@ -2327,6 +2341,7 @@ pub enum UntagResourceError {
 impl UntagResourceError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UntagResourceError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequest" => {
                     return RusotoError::Service(UntagResourceError::BadRequest(err.msg))
@@ -2389,6 +2404,7 @@ pub enum UpdateFileSystemError {
 impl UpdateFileSystemError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateFileSystemError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequest" => {
                     return RusotoError::Service(UpdateFileSystemError::BadRequest(err.msg))

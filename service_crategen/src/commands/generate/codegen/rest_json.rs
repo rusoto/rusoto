@@ -58,6 +58,7 @@ impl GenerateProtocol for RestJsonGenerator {
                 {documentation}
                 #[allow(unused_mut)]
                 {method_signature} -> Result<{output_type}, RusotoError<{error_type}>> {{
+                    #![allow(clippy::needless_update)]
                     {request_uri_formatter}
 
                     let mut request = SignedRequest::new(\"{http_method}\", \"{endpoint_prefix}\", &self.region, &request_uri);
@@ -74,7 +75,7 @@ impl GenerateProtocol for RestJsonGenerator {
                         {parse_body}
                         {parse_headers}
                         {parse_status_code}
-                        Ok(result)
+                        {wrap_result}
                     }} else {{
                         let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
                         Err({error_type}::from_response(response))
@@ -91,6 +92,7 @@ impl GenerateProtocol for RestJsonGenerator {
                 parse_body = generate_body_parser(operation, service),
                 parse_status_code = generate_status_code_parser(operation, service),
                 output_type = output_type,
+                wrap_result = wrap_result(output_type),
                 load_headers = rest_request_generator::generate_headers(service, operation).unwrap_or_else(|| "".to_string()),
                 parse_headers = rest_response_parser::generate_response_headers_parser(service, operation)
                     .unwrap_or_else(|| "".to_owned()),
@@ -110,6 +112,7 @@ impl GenerateProtocol for RestJsonGenerator {
 
     fn generate_prelude(&self, writer: &mut FileWriter, service: &Service<'_>) -> IoResult {
         // avoid unused imports when building services that don't use params
+
         if service_has_query_parameters(service) {
             writeln!(writer, "use rusoto_core::param::{{Params, ServiceParams}};")?;
         }
@@ -117,14 +120,10 @@ impl GenerateProtocol for RestJsonGenerator {
         writeln!(
             writer,
             "use rusoto_core::signature::SignedRequest;
-                  use rusoto_core::proto;
-                  #[allow(unused_imports)]
-                  use serde::{{Deserialize, Serialize}};"
+            use rusoto_core::proto;
+            #[allow(unused_imports)]
+            use serde::{{Deserialize, Serialize}};"
         )?;
-
-        if service.needs_serde_json_crate() {
-            writeln!(writer, "use serde_json;")?;
-        }
 
         Ok(())
     }
@@ -139,6 +138,13 @@ impl GenerateProtocol for RestJsonGenerator {
 
     fn timestamp_type(&self) -> &'static str {
         "f64"
+    }
+}
+
+fn wrap_result(output_type: &str) -> String {
+    match output_type {
+        "()" => "Ok(())".to_owned(),
+        _ => "Ok(result)".to_owned()
     }
 }
 
@@ -337,7 +343,7 @@ fn generate_status_code_parser(operation: &Operation, service: &Service<'_>) -> 
 /// warnings about unnecessary mutability
 fn generate_body_parser(operation: &Operation, service: &Service<'_>) -> String {
     if operation.output.is_none() {
-        return "let result = ::std::mem::drop(response);".to_string();
+        return "let _result = ::std::mem::drop(response);".to_string();
     }
 
     let shape_name = &operation.output.as_ref().unwrap().shape;
@@ -407,8 +413,10 @@ fn payload_body_parser(
 
     format!(
         "
-        let {mutable} result = {output_shape}::default();
-        result.{payload_member} = {response_body};
+        let {mutable} result = {output_shape} {{
+            {payload_member}: {response_body},
+            ..{output_shape}::default()
+        }};
         ",
         output_shape = output_shape,
         payload_member = payload_member.to_snake_case(),

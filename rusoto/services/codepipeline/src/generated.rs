@@ -50,7 +50,6 @@ impl CodePipelineClient {
     }
 }
 
-use serde_json;
 /// <p>Represents an AWS session credentials object. These credentials are temporary credentials that are issued by AWS Secure Token Service (STS). They can be used to access input and output artifacts in the S3 bucket used to store artifact for the pipeline in AWS CodePipeline.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
@@ -2056,6 +2055,7 @@ pub enum AcknowledgeJobError {
 impl AcknowledgeJobError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<AcknowledgeJobError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidNonceException" => {
                     return RusotoError::Service(AcknowledgeJobError::InvalidNonce(err.msg))
@@ -2094,6 +2094,7 @@ pub enum AcknowledgeThirdPartyJobError {
 impl AcknowledgeThirdPartyJobError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<AcknowledgeThirdPartyJobError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidClientTokenException" => {
                     return RusotoError::Service(AcknowledgeThirdPartyJobError::InvalidClientToken(
@@ -2144,6 +2145,7 @@ pub enum CreateCustomActionTypeError {
 impl CreateCustomActionTypeError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateCustomActionTypeError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ConcurrentModificationException" => {
                     return RusotoError::Service(
@@ -2208,6 +2210,7 @@ pub enum CreatePipelineError {
 impl CreatePipelineError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreatePipelineError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ConcurrentModificationException" => {
                     return RusotoError::Service(CreatePipelineError::ConcurrentModification(
@@ -2278,6 +2281,7 @@ pub enum DeleteCustomActionTypeError {
 impl DeleteCustomActionTypeError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteCustomActionTypeError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ConcurrentModificationException" => {
                     return RusotoError::Service(
@@ -2312,6 +2316,7 @@ pub enum DeletePipelineError {
 impl DeletePipelineError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeletePipelineError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ConcurrentModificationException" => {
                     return RusotoError::Service(DeletePipelineError::ConcurrentModification(
@@ -2344,6 +2349,7 @@ pub enum DeleteWebhookError {
 impl DeleteWebhookError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteWebhookError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ConcurrentModificationException" => {
                     return RusotoError::Service(DeleteWebhookError::ConcurrentModification(
@@ -2378,6 +2384,7 @@ impl DeregisterWebhookWithThirdPartyError {
         res: BufferedHttpResponse,
     ) -> RusotoError<DeregisterWebhookWithThirdPartyError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "WebhookNotFoundException" => {
                     return RusotoError::Service(
@@ -2414,6 +2421,7 @@ pub enum DisableStageTransitionError {
 impl DisableStageTransitionError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DisableStageTransitionError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "PipelineNotFoundException" => {
                     return RusotoError::Service(DisableStageTransitionError::PipelineNotFound(
@@ -2454,6 +2462,7 @@ pub enum EnableStageTransitionError {
 impl EnableStageTransitionError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<EnableStageTransitionError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "PipelineNotFoundException" => {
                     return RusotoError::Service(EnableStageTransitionError::PipelineNotFound(
@@ -2490,6 +2499,7 @@ pub enum GetJobDetailsError {
 impl GetJobDetailsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetJobDetailsError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "JobNotFoundException" => {
                     return RusotoError::Service(GetJobDetailsError::JobNotFound(err.msg))
@@ -2522,6 +2532,7 @@ pub enum GetPipelineError {
 impl GetPipelineError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetPipelineError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "PipelineNotFoundException" => {
                     return RusotoError::Service(GetPipelineError::PipelineNotFound(err.msg))
@@ -2558,6 +2569,7 @@ pub enum GetPipelineExecutionError {
 impl GetPipelineExecutionError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetPipelineExecutionError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "PipelineExecutionNotFoundException" => {
                     return RusotoError::Service(
@@ -2598,6 +2610,7 @@ pub enum GetPipelineStateError {
 impl GetPipelineStateError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetPipelineStateError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "PipelineNotFoundException" => {
                     return RusotoError::Service(GetPipelineStateError::PipelineNotFound(err.msg))
@@ -2632,6 +2645,7 @@ pub enum GetThirdPartyJobDetailsError {
 impl GetThirdPartyJobDetailsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetThirdPartyJobDetailsError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidClientTokenException" => {
                     return RusotoError::Service(GetThirdPartyJobDetailsError::InvalidClientToken(
@@ -2676,6 +2690,7 @@ pub enum ListActionExecutionsError {
 impl ListActionExecutionsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListActionExecutionsError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidNextTokenException" => {
                     return RusotoError::Service(ListActionExecutionsError::InvalidNextToken(
@@ -2722,6 +2737,7 @@ pub enum ListActionTypesError {
 impl ListActionTypesError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListActionTypesError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidNextTokenException" => {
                     return RusotoError::Service(ListActionTypesError::InvalidNextToken(err.msg))
@@ -2754,6 +2770,7 @@ pub enum ListPipelineExecutionsError {
 impl ListPipelineExecutionsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListPipelineExecutionsError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidNextTokenException" => {
                     return RusotoError::Service(ListPipelineExecutionsError::InvalidNextToken(
@@ -2792,6 +2809,7 @@ pub enum ListPipelinesError {
 impl ListPipelinesError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListPipelinesError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidNextTokenException" => {
                     return RusotoError::Service(ListPipelinesError::InvalidNextToken(err.msg))
@@ -2826,6 +2844,7 @@ pub enum ListTagsForResourceError {
 impl ListTagsForResourceError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListTagsForResourceError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidArnException" => {
                     return RusotoError::Service(ListTagsForResourceError::InvalidArn(err.msg))
@@ -2868,6 +2887,7 @@ pub enum ListWebhooksError {
 impl ListWebhooksError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListWebhooksError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidNextTokenException" => {
                     return RusotoError::Service(ListWebhooksError::InvalidNextToken(err.msg))
@@ -2898,6 +2918,7 @@ pub enum PollForJobsError {
 impl PollForJobsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<PollForJobsError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ActionTypeNotFoundException" => {
                     return RusotoError::Service(PollForJobsError::ActionTypeNotFound(err.msg))
@@ -2928,6 +2949,7 @@ pub enum PollForThirdPartyJobsError {
 impl PollForThirdPartyJobsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<PollForThirdPartyJobsError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ActionTypeNotFoundException" => {
                     return RusotoError::Service(PollForThirdPartyJobsError::ActionTypeNotFound(
@@ -2964,6 +2986,7 @@ pub enum PutActionRevisionError {
 impl PutActionRevisionError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<PutActionRevisionError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ActionNotFoundException" => {
                     return RusotoError::Service(PutActionRevisionError::ActionNotFound(err.msg))
@@ -3010,6 +3033,7 @@ pub enum PutApprovalResultError {
 impl PutApprovalResultError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<PutApprovalResultError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ActionNotFoundException" => {
                     return RusotoError::Service(PutApprovalResultError::ActionNotFound(err.msg))
@@ -3062,6 +3086,7 @@ pub enum PutJobFailureResultError {
 impl PutJobFailureResultError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<PutJobFailureResultError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidJobStateException" => {
                     return RusotoError::Service(PutJobFailureResultError::InvalidJobState(err.msg))
@@ -3100,6 +3125,7 @@ pub enum PutJobSuccessResultError {
 impl PutJobSuccessResultError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<PutJobSuccessResultError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidJobStateException" => {
                     return RusotoError::Service(PutJobSuccessResultError::InvalidJobState(err.msg))
@@ -3148,6 +3174,7 @@ impl PutThirdPartyJobFailureResultError {
         res: BufferedHttpResponse,
     ) -> RusotoError<PutThirdPartyJobFailureResultError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidClientTokenException" => {
                     return RusotoError::Service(
@@ -3202,6 +3229,7 @@ impl PutThirdPartyJobSuccessResultError {
         res: BufferedHttpResponse,
     ) -> RusotoError<PutThirdPartyJobSuccessResultError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidClientTokenException" => {
                     return RusotoError::Service(
@@ -3262,6 +3290,7 @@ pub enum PutWebhookError {
 impl PutWebhookError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<PutWebhookError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ConcurrentModificationException" => {
                     return RusotoError::Service(PutWebhookError::ConcurrentModification(err.msg))
@@ -3324,6 +3353,7 @@ impl RegisterWebhookWithThirdPartyError {
         res: BufferedHttpResponse,
     ) -> RusotoError<RegisterWebhookWithThirdPartyError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "WebhookNotFoundException" => {
                     return RusotoError::Service(
@@ -3366,6 +3396,7 @@ pub enum RetryStageExecutionError {
 impl RetryStageExecutionError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<RetryStageExecutionError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ConflictException" => {
                     return RusotoError::Service(RetryStageExecutionError::Conflict(err.msg))
@@ -3422,6 +3453,7 @@ pub enum StartPipelineExecutionError {
 impl StartPipelineExecutionError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<StartPipelineExecutionError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ConflictException" => {
                     return RusotoError::Service(StartPipelineExecutionError::Conflict(err.msg))
@@ -3464,6 +3496,7 @@ pub enum StopPipelineExecutionError {
 impl StopPipelineExecutionError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<StopPipelineExecutionError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ConflictException" => {
                     return RusotoError::Service(StopPipelineExecutionError::Conflict(err.msg))
@@ -3522,6 +3555,7 @@ pub enum TagResourceError {
 impl TagResourceError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<TagResourceError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ConcurrentModificationException" => {
                     return RusotoError::Service(TagResourceError::ConcurrentModification(err.msg))
@@ -3574,6 +3608,7 @@ pub enum UntagResourceError {
 impl UntagResourceError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UntagResourceError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ConcurrentModificationException" => {
                     return RusotoError::Service(UntagResourceError::ConcurrentModification(
@@ -3626,6 +3661,7 @@ pub enum UpdatePipelineError {
 impl UpdatePipelineError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdatePipelineError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidActionDeclarationException" => {
                     return RusotoError::Service(UpdatePipelineError::InvalidActionDeclaration(

@@ -24,7 +24,6 @@ use rusoto_core::proto;
 use rusoto_core::signature::SignedRequest;
 #[allow(unused_imports)]
 use serde::{Deserialize, Serialize};
-use serde_json;
 /// <p>Aac Settings</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct AacSettings {
@@ -6908,6 +6907,7 @@ pub enum AcceptInputDeviceTransferError {
 impl AcceptInputDeviceTransferError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<AcceptInputDeviceTransferError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadGatewayException" => {
                     return RusotoError::Service(AcceptInputDeviceTransferError::BadGateway(
@@ -7000,6 +7000,7 @@ pub enum BatchDeleteError {
 impl BatchDeleteError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<BatchDeleteError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadGatewayException" => {
                     return RusotoError::Service(BatchDeleteError::BadGateway(err.msg))
@@ -7072,6 +7073,7 @@ pub enum BatchStartError {
 impl BatchStartError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<BatchStartError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadGatewayException" => {
                     return RusotoError::Service(BatchStartError::BadGateway(err.msg))
@@ -7144,6 +7146,7 @@ pub enum BatchStopError {
 impl BatchStopError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<BatchStopError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadGatewayException" => {
                     return RusotoError::Service(BatchStopError::BadGateway(err.msg))
@@ -7216,6 +7219,7 @@ pub enum BatchUpdateScheduleError {
 impl BatchUpdateScheduleError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<BatchUpdateScheduleError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadGatewayException" => {
                     return RusotoError::Service(BatchUpdateScheduleError::BadGateway(err.msg))
@@ -7294,6 +7298,7 @@ pub enum CancelInputDeviceTransferError {
 impl CancelInputDeviceTransferError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CancelInputDeviceTransferError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadGatewayException" => {
                     return RusotoError::Service(CancelInputDeviceTransferError::BadGateway(
@@ -7386,6 +7391,7 @@ pub enum CreateChannelError {
 impl CreateChannelError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateChannelError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadGatewayException" => {
                     return RusotoError::Service(CreateChannelError::BadGateway(err.msg))
@@ -7454,6 +7460,7 @@ pub enum CreateInputError {
 impl CreateInputError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateInputError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadGatewayException" => {
                     return RusotoError::Service(CreateInputError::BadGateway(err.msg))
@@ -7514,6 +7521,7 @@ pub enum CreateInputSecurityGroupError {
 impl CreateInputSecurityGroupError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateInputSecurityGroupError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadGatewayException" => {
                     return RusotoError::Service(CreateInputSecurityGroupError::BadGateway(err.msg))
@@ -7584,6 +7592,7 @@ pub enum CreateMultiplexError {
 impl CreateMultiplexError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateMultiplexError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadGatewayException" => {
                     return RusotoError::Service(CreateMultiplexError::BadGateway(err.msg))
@@ -7656,6 +7665,7 @@ pub enum CreateMultiplexProgramError {
 impl CreateMultiplexProgramError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateMultiplexProgramError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadGatewayException" => {
                     return RusotoError::Service(CreateMultiplexProgramError::BadGateway(err.msg))
@@ -7728,6 +7738,7 @@ pub enum CreateTagsError {
 impl CreateTagsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateTagsError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(CreateTagsError::BadRequest(err.msg))
@@ -7784,6 +7795,7 @@ pub enum DeleteChannelError {
 impl DeleteChannelError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteChannelError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadGatewayException" => {
                     return RusotoError::Service(DeleteChannelError::BadGateway(err.msg))
@@ -7856,6 +7868,7 @@ pub enum DeleteInputError {
 impl DeleteInputError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteInputError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadGatewayException" => {
                     return RusotoError::Service(DeleteInputError::BadGateway(err.msg))
@@ -7926,6 +7939,7 @@ pub enum DeleteInputSecurityGroupError {
 impl DeleteInputSecurityGroupError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteInputSecurityGroupError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadGatewayException" => {
                     return RusotoError::Service(DeleteInputSecurityGroupError::BadGateway(err.msg))
@@ -8000,6 +8014,7 @@ pub enum DeleteMultiplexError {
 impl DeleteMultiplexError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteMultiplexError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadGatewayException" => {
                     return RusotoError::Service(DeleteMultiplexError::BadGateway(err.msg))
@@ -8072,6 +8087,7 @@ pub enum DeleteMultiplexProgramError {
 impl DeleteMultiplexProgramError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteMultiplexProgramError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadGatewayException" => {
                     return RusotoError::Service(DeleteMultiplexProgramError::BadGateway(err.msg))
@@ -8150,6 +8166,7 @@ pub enum DeleteReservationError {
 impl DeleteReservationError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteReservationError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadGatewayException" => {
                     return RusotoError::Service(DeleteReservationError::BadGateway(err.msg))
@@ -8222,6 +8239,7 @@ pub enum DeleteScheduleError {
 impl DeleteScheduleError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteScheduleError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadGatewayException" => {
                     return RusotoError::Service(DeleteScheduleError::BadGateway(err.msg))
@@ -8282,6 +8300,7 @@ pub enum DeleteTagsError {
 impl DeleteTagsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteTagsError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(DeleteTagsError::BadRequest(err.msg))
@@ -8336,6 +8355,7 @@ pub enum DescribeChannelError {
 impl DescribeChannelError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeChannelError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadGatewayException" => {
                     return RusotoError::Service(DescribeChannelError::BadGateway(err.msg))
@@ -8402,6 +8422,7 @@ pub enum DescribeInputError {
 impl DescribeInputError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeInputError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadGatewayException" => {
                     return RusotoError::Service(DescribeInputError::BadGateway(err.msg))
@@ -8468,6 +8489,7 @@ pub enum DescribeInputDeviceError {
 impl DescribeInputDeviceError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeInputDeviceError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadGatewayException" => {
                     return RusotoError::Service(DescribeInputDeviceError::BadGateway(err.msg))
@@ -8538,6 +8560,7 @@ impl DescribeInputDeviceThumbnailError {
         res: BufferedHttpResponse,
     ) -> RusotoError<DescribeInputDeviceThumbnailError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadGatewayException" => {
                     return RusotoError::Service(DescribeInputDeviceThumbnailError::BadGateway(
@@ -8622,6 +8645,7 @@ impl DescribeInputSecurityGroupError {
         res: BufferedHttpResponse,
     ) -> RusotoError<DescribeInputSecurityGroupError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadGatewayException" => {
                     return RusotoError::Service(DescribeInputSecurityGroupError::BadGateway(
@@ -8702,6 +8726,7 @@ pub enum DescribeMultiplexError {
 impl DescribeMultiplexError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeMultiplexError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadGatewayException" => {
                     return RusotoError::Service(DescribeMultiplexError::BadGateway(err.msg))
@@ -8770,6 +8795,7 @@ pub enum DescribeMultiplexProgramError {
 impl DescribeMultiplexProgramError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeMultiplexProgramError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadGatewayException" => {
                     return RusotoError::Service(DescribeMultiplexProgramError::BadGateway(err.msg))
@@ -8842,6 +8868,7 @@ pub enum DescribeOfferingError {
 impl DescribeOfferingError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeOfferingError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadGatewayException" => {
                     return RusotoError::Service(DescribeOfferingError::BadGateway(err.msg))
@@ -8910,6 +8937,7 @@ pub enum DescribeReservationError {
 impl DescribeReservationError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeReservationError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadGatewayException" => {
                     return RusotoError::Service(DescribeReservationError::BadGateway(err.msg))
@@ -8978,6 +9006,7 @@ pub enum DescribeScheduleError {
 impl DescribeScheduleError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeScheduleError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadGatewayException" => {
                     return RusotoError::Service(DescribeScheduleError::BadGateway(err.msg))
@@ -9044,6 +9073,7 @@ pub enum ListChannelsError {
 impl ListChannelsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListChannelsError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadGatewayException" => {
                     return RusotoError::Service(ListChannelsError::BadGateway(err.msg))
@@ -9106,6 +9136,7 @@ pub enum ListInputDeviceTransfersError {
 impl ListInputDeviceTransfersError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListInputDeviceTransfersError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadGatewayException" => {
                     return RusotoError::Service(ListInputDeviceTransfersError::BadGateway(err.msg))
@@ -9178,6 +9209,7 @@ pub enum ListInputDevicesError {
 impl ListInputDevicesError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListInputDevicesError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadGatewayException" => {
                     return RusotoError::Service(ListInputDevicesError::BadGateway(err.msg))
@@ -9240,6 +9272,7 @@ pub enum ListInputSecurityGroupsError {
 impl ListInputSecurityGroupsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListInputSecurityGroupsError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadGatewayException" => {
                     return RusotoError::Service(ListInputSecurityGroupsError::BadGateway(err.msg))
@@ -9306,6 +9339,7 @@ pub enum ListInputsError {
 impl ListInputsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListInputsError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadGatewayException" => {
                     return RusotoError::Service(ListInputsError::BadGateway(err.msg))
@@ -9368,6 +9402,7 @@ pub enum ListMultiplexProgramsError {
 impl ListMultiplexProgramsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListMultiplexProgramsError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadGatewayException" => {
                     return RusotoError::Service(ListMultiplexProgramsError::BadGateway(err.msg))
@@ -9438,6 +9473,7 @@ pub enum ListMultiplexesError {
 impl ListMultiplexesError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListMultiplexesError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadGatewayException" => {
                     return RusotoError::Service(ListMultiplexesError::BadGateway(err.msg))
@@ -9498,6 +9534,7 @@ pub enum ListOfferingsError {
 impl ListOfferingsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListOfferingsError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadGatewayException" => {
                     return RusotoError::Service(ListOfferingsError::BadGateway(err.msg))
@@ -9558,6 +9595,7 @@ pub enum ListReservationsError {
 impl ListReservationsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListReservationsError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadGatewayException" => {
                     return RusotoError::Service(ListReservationsError::BadGateway(err.msg))
@@ -9616,6 +9654,7 @@ pub enum ListTagsForResourceError {
 impl ListTagsForResourceError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListTagsForResourceError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(ListTagsForResourceError::BadRequest(err.msg))
@@ -9674,6 +9713,7 @@ pub enum PurchaseOfferingError {
 impl PurchaseOfferingError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<PurchaseOfferingError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadGatewayException" => {
                     return RusotoError::Service(PurchaseOfferingError::BadGateway(err.msg))
@@ -9750,6 +9790,7 @@ pub enum RejectInputDeviceTransferError {
 impl RejectInputDeviceTransferError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<RejectInputDeviceTransferError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadGatewayException" => {
                     return RusotoError::Service(RejectInputDeviceTransferError::BadGateway(
@@ -9842,6 +9883,7 @@ pub enum StartChannelError {
 impl StartChannelError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<StartChannelError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadGatewayException" => {
                     return RusotoError::Service(StartChannelError::BadGateway(err.msg))
@@ -9914,6 +9956,7 @@ pub enum StartMultiplexError {
 impl StartMultiplexError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<StartMultiplexError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadGatewayException" => {
                     return RusotoError::Service(StartMultiplexError::BadGateway(err.msg))
@@ -9986,6 +10029,7 @@ pub enum StopChannelError {
 impl StopChannelError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<StopChannelError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadGatewayException" => {
                     return RusotoError::Service(StopChannelError::BadGateway(err.msg))
@@ -10058,6 +10102,7 @@ pub enum StopMultiplexError {
 impl StopMultiplexError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<StopMultiplexError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadGatewayException" => {
                     return RusotoError::Service(StopMultiplexError::BadGateway(err.msg))
@@ -10132,6 +10177,7 @@ pub enum TransferInputDeviceError {
 impl TransferInputDeviceError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<TransferInputDeviceError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadGatewayException" => {
                     return RusotoError::Service(TransferInputDeviceError::BadGateway(err.msg))
@@ -10210,6 +10256,7 @@ pub enum UpdateChannelError {
 impl UpdateChannelError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateChannelError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadGatewayException" => {
                     return RusotoError::Service(UpdateChannelError::BadGateway(err.msg))
@@ -10280,6 +10327,7 @@ pub enum UpdateChannelClassError {
 impl UpdateChannelClassError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateChannelClassError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadGatewayException" => {
                     return RusotoError::Service(UpdateChannelClassError::BadGateway(err.msg))
@@ -10358,6 +10406,7 @@ pub enum UpdateInputError {
 impl UpdateInputError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateInputError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadGatewayException" => {
                     return RusotoError::Service(UpdateInputError::BadGateway(err.msg))
@@ -10426,6 +10475,7 @@ pub enum UpdateInputDeviceError {
 impl UpdateInputDeviceError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateInputDeviceError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadGatewayException" => {
                     return RusotoError::Service(UpdateInputDeviceError::BadGateway(err.msg))
@@ -10500,6 +10550,7 @@ pub enum UpdateInputSecurityGroupError {
 impl UpdateInputSecurityGroupError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateInputSecurityGroupError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadGatewayException" => {
                     return RusotoError::Service(UpdateInputSecurityGroupError::BadGateway(err.msg))
@@ -10572,6 +10623,7 @@ pub enum UpdateMultiplexError {
 impl UpdateMultiplexError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateMultiplexError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadGatewayException" => {
                     return RusotoError::Service(UpdateMultiplexError::BadGateway(err.msg))
@@ -10644,6 +10696,7 @@ pub enum UpdateMultiplexProgramError {
 impl UpdateMultiplexProgramError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateMultiplexProgramError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadGatewayException" => {
                     return RusotoError::Service(UpdateMultiplexProgramError::BadGateway(err.msg))
@@ -10722,6 +10775,7 @@ pub enum UpdateReservationError {
 impl UpdateReservationError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateReservationError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadGatewayException" => {
                     return RusotoError::Service(UpdateReservationError::BadGateway(err.msg))
@@ -11152,6 +11206,7 @@ impl MediaLive for MediaLiveClient {
         input: AcceptInputDeviceTransferRequest,
     ) -> Result<AcceptInputDeviceTransferResponse, RusotoError<AcceptInputDeviceTransferError>>
     {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/prod/inputDevices/{input_device_id}/accept",
             input_device_id = input.input_device_id
@@ -11183,6 +11238,7 @@ impl MediaLive for MediaLiveClient {
         &self,
         input: BatchDeleteRequest,
     ) -> Result<BatchDeleteResponse, RusotoError<BatchDeleteError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/prod/batch/delete";
 
         let mut request = SignedRequest::new("POST", "medialive", &self.region, &request_uri);
@@ -11214,6 +11270,7 @@ impl MediaLive for MediaLiveClient {
         &self,
         input: BatchStartRequest,
     ) -> Result<BatchStartResponse, RusotoError<BatchStartError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/prod/batch/start";
 
         let mut request = SignedRequest::new("POST", "medialive", &self.region, &request_uri);
@@ -11245,6 +11302,7 @@ impl MediaLive for MediaLiveClient {
         &self,
         input: BatchStopRequest,
     ) -> Result<BatchStopResponse, RusotoError<BatchStopError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/prod/batch/stop";
 
         let mut request = SignedRequest::new("POST", "medialive", &self.region, &request_uri);
@@ -11276,6 +11334,7 @@ impl MediaLive for MediaLiveClient {
         &self,
         input: BatchUpdateScheduleRequest,
     ) -> Result<BatchUpdateScheduleResponse, RusotoError<BatchUpdateScheduleError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/prod/channels/{channel_id}/schedule",
             channel_id = input.channel_id
@@ -11311,6 +11370,7 @@ impl MediaLive for MediaLiveClient {
         input: CancelInputDeviceTransferRequest,
     ) -> Result<CancelInputDeviceTransferResponse, RusotoError<CancelInputDeviceTransferError>>
     {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/prod/inputDevices/{input_device_id}/cancel",
             input_device_id = input.input_device_id
@@ -11342,6 +11402,7 @@ impl MediaLive for MediaLiveClient {
         &self,
         input: CreateChannelRequest,
     ) -> Result<CreateChannelResponse, RusotoError<CreateChannelError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/prod/channels";
 
         let mut request = SignedRequest::new("POST", "medialive", &self.region, &request_uri);
@@ -11373,6 +11434,7 @@ impl MediaLive for MediaLiveClient {
         &self,
         input: CreateInputRequest,
     ) -> Result<CreateInputResponse, RusotoError<CreateInputError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/prod/inputs";
 
         let mut request = SignedRequest::new("POST", "medialive", &self.region, &request_uri);
@@ -11404,6 +11466,7 @@ impl MediaLive for MediaLiveClient {
         &self,
         input: CreateInputSecurityGroupRequest,
     ) -> Result<CreateInputSecurityGroupResponse, RusotoError<CreateInputSecurityGroupError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/prod/inputSecurityGroups";
 
         let mut request = SignedRequest::new("POST", "medialive", &self.region, &request_uri);
@@ -11435,6 +11498,7 @@ impl MediaLive for MediaLiveClient {
         &self,
         input: CreateMultiplexRequest,
     ) -> Result<CreateMultiplexResponse, RusotoError<CreateMultiplexError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/prod/multiplexes";
 
         let mut request = SignedRequest::new("POST", "medialive", &self.region, &request_uri);
@@ -11466,6 +11530,7 @@ impl MediaLive for MediaLiveClient {
         &self,
         input: CreateMultiplexProgramRequest,
     ) -> Result<CreateMultiplexProgramResponse, RusotoError<CreateMultiplexProgramError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/prod/multiplexes/{multiplex_id}/programs",
             multiplex_id = input.multiplex_id
@@ -11500,6 +11565,7 @@ impl MediaLive for MediaLiveClient {
         &self,
         input: CreateTagsRequest,
     ) -> Result<(), RusotoError<CreateTagsError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/prod/tags/{resource_arn}",
             resource_arn = input.resource_arn
@@ -11518,9 +11584,9 @@ impl MediaLive for MediaLiveClient {
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 204 {
             let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = ::std::mem::drop(response);
+            let _result = ::std::mem::drop(response);
 
-            Ok(result)
+            Ok(())
         } else {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             Err(CreateTagsError::from_response(response))
@@ -11533,6 +11599,7 @@ impl MediaLive for MediaLiveClient {
         &self,
         input: DeleteChannelRequest,
     ) -> Result<DeleteChannelResponse, RusotoError<DeleteChannelError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!("/prod/channels/{channel_id}", channel_id = input.channel_id);
 
         let mut request = SignedRequest::new("DELETE", "medialive", &self.region, &request_uri);
@@ -11561,6 +11628,7 @@ impl MediaLive for MediaLiveClient {
         &self,
         input: DeleteInputRequest,
     ) -> Result<DeleteInputResponse, RusotoError<DeleteInputError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!("/prod/inputs/{input_id}", input_id = input.input_id);
 
         let mut request = SignedRequest::new("DELETE", "medialive", &self.region, &request_uri);
@@ -11589,6 +11657,7 @@ impl MediaLive for MediaLiveClient {
         &self,
         input: DeleteInputSecurityGroupRequest,
     ) -> Result<DeleteInputSecurityGroupResponse, RusotoError<DeleteInputSecurityGroupError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/prod/inputSecurityGroups/{input_security_group_id}",
             input_security_group_id = input.input_security_group_id
@@ -11620,6 +11689,7 @@ impl MediaLive for MediaLiveClient {
         &self,
         input: DeleteMultiplexRequest,
     ) -> Result<DeleteMultiplexResponse, RusotoError<DeleteMultiplexError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/prod/multiplexes/{multiplex_id}",
             multiplex_id = input.multiplex_id
@@ -11651,6 +11721,7 @@ impl MediaLive for MediaLiveClient {
         &self,
         input: DeleteMultiplexProgramRequest,
     ) -> Result<DeleteMultiplexProgramResponse, RusotoError<DeleteMultiplexProgramError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/prod/multiplexes/{multiplex_id}/programs/{program_name}",
             multiplex_id = input.multiplex_id,
@@ -11683,6 +11754,7 @@ impl MediaLive for MediaLiveClient {
         &self,
         input: DeleteReservationRequest,
     ) -> Result<DeleteReservationResponse, RusotoError<DeleteReservationError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/prod/reservations/{reservation_id}",
             reservation_id = input.reservation_id
@@ -11714,6 +11786,7 @@ impl MediaLive for MediaLiveClient {
         &self,
         input: DeleteScheduleRequest,
     ) -> Result<DeleteScheduleResponse, RusotoError<DeleteScheduleError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/prod/channels/{channel_id}/schedule",
             channel_id = input.channel_id
@@ -11745,6 +11818,7 @@ impl MediaLive for MediaLiveClient {
         &self,
         input: DeleteTagsRequest,
     ) -> Result<(), RusotoError<DeleteTagsError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/prod/tags/{resource_arn}",
             resource_arn = input.resource_arn
@@ -11766,9 +11840,9 @@ impl MediaLive for MediaLiveClient {
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 204 {
             let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = ::std::mem::drop(response);
+            let _result = ::std::mem::drop(response);
 
-            Ok(result)
+            Ok(())
         } else {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             Err(DeleteTagsError::from_response(response))
@@ -11781,6 +11855,7 @@ impl MediaLive for MediaLiveClient {
         &self,
         input: DescribeChannelRequest,
     ) -> Result<DescribeChannelResponse, RusotoError<DescribeChannelError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!("/prod/channels/{channel_id}", channel_id = input.channel_id);
 
         let mut request = SignedRequest::new("GET", "medialive", &self.region, &request_uri);
@@ -11809,6 +11884,7 @@ impl MediaLive for MediaLiveClient {
         &self,
         input: DescribeInputRequest,
     ) -> Result<DescribeInputResponse, RusotoError<DescribeInputError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!("/prod/inputs/{input_id}", input_id = input.input_id);
 
         let mut request = SignedRequest::new("GET", "medialive", &self.region, &request_uri);
@@ -11837,6 +11913,7 @@ impl MediaLive for MediaLiveClient {
         &self,
         input: DescribeInputDeviceRequest,
     ) -> Result<DescribeInputDeviceResponse, RusotoError<DescribeInputDeviceError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/prod/inputDevices/{input_device_id}",
             input_device_id = input.input_device_id
@@ -11869,6 +11946,7 @@ impl MediaLive for MediaLiveClient {
         input: DescribeInputDeviceThumbnailRequest,
     ) -> Result<DescribeInputDeviceThumbnailResponse, RusotoError<DescribeInputDeviceThumbnailError>>
     {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/prod/inputDevices/{input_device_id}/thumbnailData",
             input_device_id = input.input_device_id
@@ -11887,8 +11965,10 @@ impl MediaLive for MediaLiveClient {
         if response.status.as_u16() == 200 {
             let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
 
-            let mut result = DescribeInputDeviceThumbnailResponse::default();
-            result.body = Some(response.body);
+            let mut result = DescribeInputDeviceThumbnailResponse {
+                body: Some(response.body),
+                ..DescribeInputDeviceThumbnailResponse::default()
+            };
 
             result.content_length = response
                 .headers
@@ -11915,6 +11995,7 @@ impl MediaLive for MediaLiveClient {
         input: DescribeInputSecurityGroupRequest,
     ) -> Result<DescribeInputSecurityGroupResponse, RusotoError<DescribeInputSecurityGroupError>>
     {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/prod/inputSecurityGroups/{input_security_group_id}",
             input_security_group_id = input.input_security_group_id
@@ -11946,6 +12027,7 @@ impl MediaLive for MediaLiveClient {
         &self,
         input: DescribeMultiplexRequest,
     ) -> Result<DescribeMultiplexResponse, RusotoError<DescribeMultiplexError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/prod/multiplexes/{multiplex_id}",
             multiplex_id = input.multiplex_id
@@ -11977,6 +12059,7 @@ impl MediaLive for MediaLiveClient {
         &self,
         input: DescribeMultiplexProgramRequest,
     ) -> Result<DescribeMultiplexProgramResponse, RusotoError<DescribeMultiplexProgramError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/prod/multiplexes/{multiplex_id}/programs/{program_name}",
             multiplex_id = input.multiplex_id,
@@ -12009,6 +12092,7 @@ impl MediaLive for MediaLiveClient {
         &self,
         input: DescribeOfferingRequest,
     ) -> Result<DescribeOfferingResponse, RusotoError<DescribeOfferingError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/prod/offerings/{offering_id}",
             offering_id = input.offering_id
@@ -12040,6 +12124,7 @@ impl MediaLive for MediaLiveClient {
         &self,
         input: DescribeReservationRequest,
     ) -> Result<DescribeReservationResponse, RusotoError<DescribeReservationError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/prod/reservations/{reservation_id}",
             reservation_id = input.reservation_id
@@ -12071,6 +12156,7 @@ impl MediaLive for MediaLiveClient {
         &self,
         input: DescribeScheduleRequest,
     ) -> Result<DescribeScheduleResponse, RusotoError<DescribeScheduleError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/prod/channels/{channel_id}/schedule",
             channel_id = input.channel_id
@@ -12111,6 +12197,7 @@ impl MediaLive for MediaLiveClient {
         &self,
         input: ListChannelsRequest,
     ) -> Result<ListChannelsResponse, RusotoError<ListChannelsError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/prod/channels";
 
         let mut request = SignedRequest::new("GET", "medialive", &self.region, &request_uri);
@@ -12148,6 +12235,7 @@ impl MediaLive for MediaLiveClient {
         &self,
         input: ListInputDeviceTransfersRequest,
     ) -> Result<ListInputDeviceTransfersResponse, RusotoError<ListInputDeviceTransfersError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/prod/inputDeviceTransfers";
 
         let mut request = SignedRequest::new("GET", "medialive", &self.region, &request_uri);
@@ -12186,6 +12274,7 @@ impl MediaLive for MediaLiveClient {
         &self,
         input: ListInputDevicesRequest,
     ) -> Result<ListInputDevicesResponse, RusotoError<ListInputDevicesError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/prod/inputDevices";
 
         let mut request = SignedRequest::new("GET", "medialive", &self.region, &request_uri);
@@ -12223,6 +12312,7 @@ impl MediaLive for MediaLiveClient {
         &self,
         input: ListInputSecurityGroupsRequest,
     ) -> Result<ListInputSecurityGroupsResponse, RusotoError<ListInputSecurityGroupsError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/prod/inputSecurityGroups";
 
         let mut request = SignedRequest::new("GET", "medialive", &self.region, &request_uri);
@@ -12260,6 +12350,7 @@ impl MediaLive for MediaLiveClient {
         &self,
         input: ListInputsRequest,
     ) -> Result<ListInputsResponse, RusotoError<ListInputsError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/prod/inputs";
 
         let mut request = SignedRequest::new("GET", "medialive", &self.region, &request_uri);
@@ -12297,6 +12388,7 @@ impl MediaLive for MediaLiveClient {
         &self,
         input: ListMultiplexProgramsRequest,
     ) -> Result<ListMultiplexProgramsResponse, RusotoError<ListMultiplexProgramsError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/prod/multiplexes/{multiplex_id}/programs",
             multiplex_id = input.multiplex_id
@@ -12337,6 +12429,7 @@ impl MediaLive for MediaLiveClient {
         &self,
         input: ListMultiplexesRequest,
     ) -> Result<ListMultiplexesResponse, RusotoError<ListMultiplexesError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/prod/multiplexes";
 
         let mut request = SignedRequest::new("GET", "medialive", &self.region, &request_uri);
@@ -12374,6 +12467,7 @@ impl MediaLive for MediaLiveClient {
         &self,
         input: ListOfferingsRequest,
     ) -> Result<ListOfferingsResponse, RusotoError<ListOfferingsError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/prod/offerings";
 
         let mut request = SignedRequest::new("GET", "medialive", &self.region, &request_uri);
@@ -12441,6 +12535,7 @@ impl MediaLive for MediaLiveClient {
         &self,
         input: ListReservationsRequest,
     ) -> Result<ListReservationsResponse, RusotoError<ListReservationsError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/prod/reservations";
 
         let mut request = SignedRequest::new("GET", "medialive", &self.region, &request_uri);
@@ -12502,6 +12597,7 @@ impl MediaLive for MediaLiveClient {
         &self,
         input: ListTagsForResourceRequest,
     ) -> Result<ListTagsForResourceResponse, RusotoError<ListTagsForResourceError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/prod/tags/{resource_arn}",
             resource_arn = input.resource_arn
@@ -12533,6 +12629,7 @@ impl MediaLive for MediaLiveClient {
         &self,
         input: PurchaseOfferingRequest,
     ) -> Result<PurchaseOfferingResponse, RusotoError<PurchaseOfferingError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/prod/offerings/{offering_id}/purchase",
             offering_id = input.offering_id
@@ -12568,6 +12665,7 @@ impl MediaLive for MediaLiveClient {
         input: RejectInputDeviceTransferRequest,
     ) -> Result<RejectInputDeviceTransferResponse, RusotoError<RejectInputDeviceTransferError>>
     {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/prod/inputDevices/{input_device_id}/reject",
             input_device_id = input.input_device_id
@@ -12599,6 +12697,7 @@ impl MediaLive for MediaLiveClient {
         &self,
         input: StartChannelRequest,
     ) -> Result<StartChannelResponse, RusotoError<StartChannelError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/prod/channels/{channel_id}/start",
             channel_id = input.channel_id
@@ -12630,6 +12729,7 @@ impl MediaLive for MediaLiveClient {
         &self,
         input: StartMultiplexRequest,
     ) -> Result<StartMultiplexResponse, RusotoError<StartMultiplexError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/prod/multiplexes/{multiplex_id}/start",
             multiplex_id = input.multiplex_id
@@ -12661,6 +12761,7 @@ impl MediaLive for MediaLiveClient {
         &self,
         input: StopChannelRequest,
     ) -> Result<StopChannelResponse, RusotoError<StopChannelError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/prod/channels/{channel_id}/stop",
             channel_id = input.channel_id
@@ -12692,6 +12793,7 @@ impl MediaLive for MediaLiveClient {
         &self,
         input: StopMultiplexRequest,
     ) -> Result<StopMultiplexResponse, RusotoError<StopMultiplexError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/prod/multiplexes/{multiplex_id}/stop",
             multiplex_id = input.multiplex_id
@@ -12723,6 +12825,7 @@ impl MediaLive for MediaLiveClient {
         &self,
         input: TransferInputDeviceRequest,
     ) -> Result<TransferInputDeviceResponse, RusotoError<TransferInputDeviceError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/prod/inputDevices/{input_device_id}/transfer",
             input_device_id = input.input_device_id
@@ -12757,6 +12860,7 @@ impl MediaLive for MediaLiveClient {
         &self,
         input: UpdateChannelRequest,
     ) -> Result<UpdateChannelResponse, RusotoError<UpdateChannelError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!("/prod/channels/{channel_id}", channel_id = input.channel_id);
 
         let mut request = SignedRequest::new("PUT", "medialive", &self.region, &request_uri);
@@ -12788,6 +12892,7 @@ impl MediaLive for MediaLiveClient {
         &self,
         input: UpdateChannelClassRequest,
     ) -> Result<UpdateChannelClassResponse, RusotoError<UpdateChannelClassError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/prod/channels/{channel_id}/channelClass",
             channel_id = input.channel_id
@@ -12822,6 +12927,7 @@ impl MediaLive for MediaLiveClient {
         &self,
         input: UpdateInputRequest,
     ) -> Result<UpdateInputResponse, RusotoError<UpdateInputError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!("/prod/inputs/{input_id}", input_id = input.input_id);
 
         let mut request = SignedRequest::new("PUT", "medialive", &self.region, &request_uri);
@@ -12853,6 +12959,7 @@ impl MediaLive for MediaLiveClient {
         &self,
         input: UpdateInputDeviceRequest,
     ) -> Result<UpdateInputDeviceResponse, RusotoError<UpdateInputDeviceError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/prod/inputDevices/{input_device_id}",
             input_device_id = input.input_device_id
@@ -12887,6 +12994,7 @@ impl MediaLive for MediaLiveClient {
         &self,
         input: UpdateInputSecurityGroupRequest,
     ) -> Result<UpdateInputSecurityGroupResponse, RusotoError<UpdateInputSecurityGroupError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/prod/inputSecurityGroups/{input_security_group_id}",
             input_security_group_id = input.input_security_group_id
@@ -12921,6 +13029,7 @@ impl MediaLive for MediaLiveClient {
         &self,
         input: UpdateMultiplexRequest,
     ) -> Result<UpdateMultiplexResponse, RusotoError<UpdateMultiplexError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/prod/multiplexes/{multiplex_id}",
             multiplex_id = input.multiplex_id
@@ -12955,6 +13064,7 @@ impl MediaLive for MediaLiveClient {
         &self,
         input: UpdateMultiplexProgramRequest,
     ) -> Result<UpdateMultiplexProgramResponse, RusotoError<UpdateMultiplexProgramError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/prod/multiplexes/{multiplex_id}/programs/{program_name}",
             multiplex_id = input.multiplex_id,
@@ -12990,6 +13100,7 @@ impl MediaLive for MediaLiveClient {
         &self,
         input: UpdateReservationRequest,
     ) -> Result<UpdateReservationResponse, RusotoError<UpdateReservationError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/prod/reservations/{reservation_id}",
             reservation_id = input.reservation_id

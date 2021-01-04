@@ -24,7 +24,6 @@ use rusoto_core::proto;
 use rusoto_core::signature::SignedRequest;
 #[allow(unused_imports)]
 use serde::{Deserialize, Serialize};
-use serde_json;
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct AddProfilePermissionRequest {
@@ -1020,6 +1019,7 @@ pub enum AddProfilePermissionError {
 impl AddProfilePermissionError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<AddProfilePermissionError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(AddProfilePermissionError::AccessDenied(err.msg))
@@ -1084,6 +1084,7 @@ pub enum CancelSigningProfileError {
 impl CancelSigningProfileError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CancelSigningProfileError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(CancelSigningProfileError::AccessDenied(err.msg))
@@ -1138,6 +1139,7 @@ pub enum DescribeSigningJobError {
 impl DescribeSigningJobError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeSigningJobError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(DescribeSigningJobError::AccessDenied(err.msg))
@@ -1188,6 +1190,7 @@ pub enum GetSigningPlatformError {
 impl GetSigningPlatformError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetSigningPlatformError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(GetSigningPlatformError::AccessDenied(err.msg))
@@ -1238,6 +1241,7 @@ pub enum GetSigningProfileError {
 impl GetSigningProfileError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetSigningProfileError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(GetSigningProfileError::AccessDenied(err.msg))
@@ -1288,6 +1292,7 @@ pub enum ListProfilePermissionsError {
 impl ListProfilePermissionsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListProfilePermissionsError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(ListProfilePermissionsError::AccessDenied(err.msg))
@@ -1340,6 +1345,7 @@ pub enum ListSigningJobsError {
 impl ListSigningJobsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListSigningJobsError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(ListSigningJobsError::AccessDenied(err.msg))
@@ -1384,6 +1390,7 @@ pub enum ListSigningPlatformsError {
 impl ListSigningPlatformsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListSigningPlatformsError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(ListSigningPlatformsError::AccessDenied(err.msg))
@@ -1430,6 +1437,7 @@ pub enum ListSigningProfilesError {
 impl ListSigningProfilesError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListSigningProfilesError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(ListSigningProfilesError::AccessDenied(err.msg))
@@ -1476,6 +1484,7 @@ pub enum ListTagsForResourceError {
 impl ListTagsForResourceError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListTagsForResourceError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(ListTagsForResourceError::BadRequest(err.msg))
@@ -1526,6 +1535,7 @@ pub enum PutSigningProfileError {
 impl PutSigningProfileError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<PutSigningProfileError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(PutSigningProfileError::AccessDenied(err.msg))
@@ -1578,6 +1588,7 @@ pub enum RemoveProfilePermissionError {
 impl RemoveProfilePermissionError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<RemoveProfilePermissionError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(RemoveProfilePermissionError::AccessDenied(
@@ -1638,6 +1649,7 @@ pub enum RevokeSignatureError {
 impl RevokeSignatureError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<RevokeSignatureError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(RevokeSignatureError::AccessDenied(err.msg))
@@ -1688,6 +1700,7 @@ pub enum RevokeSigningProfileError {
 impl RevokeSigningProfileError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<RevokeSigningProfileError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(RevokeSigningProfileError::AccessDenied(err.msg))
@@ -1744,6 +1757,7 @@ pub enum StartSigningJobError {
 impl StartSigningJobError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<StartSigningJobError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(StartSigningJobError::AccessDenied(err.msg))
@@ -1798,6 +1812,7 @@ pub enum TagResourceError {
 impl TagResourceError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<TagResourceError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(TagResourceError::BadRequest(err.msg))
@@ -1846,6 +1861,7 @@ pub enum UntagResourceError {
 impl UntagResourceError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UntagResourceError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(UntagResourceError::BadRequest(err.msg))
@@ -2029,6 +2045,7 @@ impl Signer for SignerClient {
         &self,
         input: AddProfilePermissionRequest,
     ) -> Result<AddProfilePermissionResponse, RusotoError<AddProfilePermissionError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/signing-profiles/{profile_name}/permissions",
             profile_name = input.profile_name
@@ -2063,6 +2080,7 @@ impl Signer for SignerClient {
         &self,
         input: CancelSigningProfileRequest,
     ) -> Result<(), RusotoError<CancelSigningProfileError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/signing-profiles/{profile_name}",
             profile_name = input.profile_name
@@ -2078,9 +2096,9 @@ impl Signer for SignerClient {
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
             let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = ::std::mem::drop(response);
+            let _result = ::std::mem::drop(response);
 
-            Ok(result)
+            Ok(())
         } else {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             Err(CancelSigningProfileError::from_response(response))
@@ -2093,6 +2111,7 @@ impl Signer for SignerClient {
         &self,
         input: DescribeSigningJobRequest,
     ) -> Result<DescribeSigningJobResponse, RusotoError<DescribeSigningJobError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!("/signing-jobs/{job_id}", job_id = input.job_id);
 
         let mut request = SignedRequest::new("GET", "signer", &self.region, &request_uri);
@@ -2121,6 +2140,7 @@ impl Signer for SignerClient {
         &self,
         input: GetSigningPlatformRequest,
     ) -> Result<GetSigningPlatformResponse, RusotoError<GetSigningPlatformError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/signing-platforms/{platform_id}",
             platform_id = input.platform_id
@@ -2152,6 +2172,7 @@ impl Signer for SignerClient {
         &self,
         input: GetSigningProfileRequest,
     ) -> Result<GetSigningProfileResponse, RusotoError<GetSigningProfileError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/signing-profiles/{profile_name}",
             profile_name = input.profile_name
@@ -2189,6 +2210,7 @@ impl Signer for SignerClient {
         &self,
         input: ListProfilePermissionsRequest,
     ) -> Result<ListProfilePermissionsResponse, RusotoError<ListProfilePermissionsError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/signing-profiles/{profile_name}/permissions",
             profile_name = input.profile_name
@@ -2226,6 +2248,7 @@ impl Signer for SignerClient {
         &self,
         input: ListSigningJobsRequest,
     ) -> Result<ListSigningJobsResponse, RusotoError<ListSigningJobsError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/signing-jobs";
 
         let mut request = SignedRequest::new("GET", "signer", &self.region, &request_uri);
@@ -2284,6 +2307,7 @@ impl Signer for SignerClient {
         &self,
         input: ListSigningPlatformsRequest,
     ) -> Result<ListSigningPlatformsResponse, RusotoError<ListSigningPlatformsError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/signing-platforms";
 
         let mut request = SignedRequest::new("GET", "signer", &self.region, &request_uri);
@@ -2330,6 +2354,7 @@ impl Signer for SignerClient {
         &self,
         input: ListSigningProfilesRequest,
     ) -> Result<ListSigningProfilesResponse, RusotoError<ListSigningProfilesError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/signing-profiles";
 
         let mut request = SignedRequest::new("GET", "signer", &self.region, &request_uri);
@@ -2378,6 +2403,7 @@ impl Signer for SignerClient {
         &self,
         input: ListTagsForResourceRequest,
     ) -> Result<ListTagsForResourceResponse, RusotoError<ListTagsForResourceError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!("/tags/{resource_arn}", resource_arn = input.resource_arn);
 
         let mut request = SignedRequest::new("GET", "signer", &self.region, &request_uri);
@@ -2406,6 +2432,7 @@ impl Signer for SignerClient {
         &self,
         input: PutSigningProfileRequest,
     ) -> Result<PutSigningProfileResponse, RusotoError<PutSigningProfileError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/signing-profiles/{profile_name}",
             profile_name = input.profile_name
@@ -2440,6 +2467,7 @@ impl Signer for SignerClient {
         &self,
         input: RemoveProfilePermissionRequest,
     ) -> Result<RemoveProfilePermissionResponse, RusotoError<RemoveProfilePermissionError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/signing-profiles/{profile_name}/permissions/{statement_id}",
             profile_name = input.profile_name,
@@ -2476,6 +2504,7 @@ impl Signer for SignerClient {
         &self,
         input: RevokeSignatureRequest,
     ) -> Result<(), RusotoError<RevokeSignatureError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!("/signing-jobs/{job_id}/revoke", job_id = input.job_id);
 
         let mut request = SignedRequest::new("PUT", "signer", &self.region, &request_uri);
@@ -2491,9 +2520,9 @@ impl Signer for SignerClient {
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
             let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = ::std::mem::drop(response);
+            let _result = ::std::mem::drop(response);
 
-            Ok(result)
+            Ok(())
         } else {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             Err(RevokeSignatureError::from_response(response))
@@ -2506,6 +2535,7 @@ impl Signer for SignerClient {
         &self,
         input: RevokeSigningProfileRequest,
     ) -> Result<(), RusotoError<RevokeSigningProfileError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/signing-profiles/{profile_name}/revoke",
             profile_name = input.profile_name
@@ -2524,9 +2554,9 @@ impl Signer for SignerClient {
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
             let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = ::std::mem::drop(response);
+            let _result = ::std::mem::drop(response);
 
-            Ok(result)
+            Ok(())
         } else {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             Err(RevokeSigningProfileError::from_response(response))
@@ -2539,6 +2569,7 @@ impl Signer for SignerClient {
         &self,
         input: StartSigningJobRequest,
     ) -> Result<StartSigningJobResponse, RusotoError<StartSigningJobError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/signing-jobs";
 
         let mut request = SignedRequest::new("POST", "signer", &self.region, &request_uri);
@@ -2570,6 +2601,7 @@ impl Signer for SignerClient {
         &self,
         input: TagResourceRequest,
     ) -> Result<TagResourceResponse, RusotoError<TagResourceError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!("/tags/{resource_arn}", resource_arn = input.resource_arn);
 
         let mut request = SignedRequest::new("POST", "signer", &self.region, &request_uri);
@@ -2601,6 +2633,7 @@ impl Signer for SignerClient {
         &self,
         input: UntagResourceRequest,
     ) -> Result<UntagResourceResponse, RusotoError<UntagResourceError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!("/tags/{resource_arn}", resource_arn = input.resource_arn);
 
         let mut request = SignedRequest::new("DELETE", "signer", &self.region, &request_uri);

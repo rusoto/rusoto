@@ -51,7 +51,6 @@ impl MarketplaceMeteringClient {
     }
 }
 
-use serde_json;
 /// <p>A BatchMeterUsageRequest contains UsageRecords, which indicate quantities of usage within your application.</p>
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
@@ -253,6 +252,7 @@ pub enum BatchMeterUsageError {
 impl BatchMeterUsageError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<BatchMeterUsageError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "DisabledApiException" => {
                     return RusotoError::Service(BatchMeterUsageError::DisabledApi(err.msg))
@@ -343,6 +343,7 @@ pub enum MeterUsageError {
 impl MeterUsageError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<MeterUsageError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "CustomerNotEntitledException" => {
                     return RusotoError::Service(MeterUsageError::CustomerNotEntitled(err.msg))
@@ -423,6 +424,7 @@ pub enum RegisterUsageError {
 impl RegisterUsageError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<RegisterUsageError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "CustomerNotEntitledException" => {
                     return RusotoError::Service(RegisterUsageError::CustomerNotEntitled(err.msg))
@@ -491,6 +493,7 @@ pub enum ResolveCustomerError {
 impl ResolveCustomerError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ResolveCustomerError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "DisabledApiException" => {
                     return RusotoError::Service(ResolveCustomerError::DisabledApi(err.msg))

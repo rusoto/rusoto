@@ -24,7 +24,6 @@ use rusoto_core::proto;
 use rusoto_core::signature::SignedRequest;
 #[allow(unused_imports)]
 use serde::{Deserialize, Serialize};
-use serde_json;
 /// <p>An action to be performed when the <code>condition</code> is TRUE.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct Action {
@@ -1030,6 +1029,7 @@ pub enum CreateDetectorModelError {
 impl CreateDetectorModelError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateDetectorModelError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalFailureException" => {
                     return RusotoError::Service(CreateDetectorModelError::InternalFailure(err.msg))
@@ -1096,6 +1096,7 @@ pub enum CreateInputError {
 impl CreateInputError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateInputError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalFailureException" => {
                     return RusotoError::Service(CreateInputError::InternalFailure(err.msg))
@@ -1152,6 +1153,7 @@ pub enum DeleteDetectorModelError {
 impl DeleteDetectorModelError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteDetectorModelError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalFailureException" => {
                     return RusotoError::Service(DeleteDetectorModelError::InternalFailure(err.msg))
@@ -1216,6 +1218,7 @@ pub enum DeleteInputError {
 impl DeleteInputError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteInputError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalFailureException" => {
                     return RusotoError::Service(DeleteInputError::InternalFailure(err.msg))
@@ -1274,6 +1277,7 @@ pub enum DescribeDetectorModelError {
 impl DescribeDetectorModelError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeDetectorModelError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalFailureException" => {
                     return RusotoError::Service(DescribeDetectorModelError::InternalFailure(
@@ -1336,6 +1340,7 @@ pub enum DescribeInputError {
 impl DescribeInputError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeInputError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalFailureException" => {
                     return RusotoError::Service(DescribeInputError::InternalFailure(err.msg))
@@ -1392,6 +1397,7 @@ pub enum DescribeLoggingOptionsError {
 impl DescribeLoggingOptionsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeLoggingOptionsError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalFailureException" => {
                     return RusotoError::Service(DescribeLoggingOptionsError::InternalFailure(
@@ -1460,6 +1466,7 @@ pub enum ListDetectorModelVersionsError {
 impl ListDetectorModelVersionsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListDetectorModelVersionsError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalFailureException" => {
                     return RusotoError::Service(ListDetectorModelVersionsError::InternalFailure(
@@ -1522,6 +1529,7 @@ pub enum ListDetectorModelsError {
 impl ListDetectorModelsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListDetectorModelsError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalFailureException" => {
                     return RusotoError::Service(ListDetectorModelsError::InternalFailure(err.msg))
@@ -1572,6 +1580,7 @@ pub enum ListInputsError {
 impl ListInputsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListInputsError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalFailureException" => {
                     return RusotoError::Service(ListInputsError::InternalFailure(err.msg))
@@ -1622,6 +1631,7 @@ pub enum ListTagsForResourceError {
 impl ListTagsForResourceError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListTagsForResourceError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalFailureException" => {
                     return RusotoError::Service(ListTagsForResourceError::InternalFailure(err.msg))
@@ -1680,6 +1690,7 @@ pub enum PutLoggingOptionsError {
 impl PutLoggingOptionsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<PutLoggingOptionsError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalFailureException" => {
                     return RusotoError::Service(PutLoggingOptionsError::InternalFailure(err.msg))
@@ -1744,6 +1755,7 @@ pub enum TagResourceError {
 impl TagResourceError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<TagResourceError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalFailureException" => {
                     return RusotoError::Service(TagResourceError::InternalFailure(err.msg))
@@ -1802,6 +1814,7 @@ pub enum UntagResourceError {
 impl UntagResourceError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UntagResourceError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalFailureException" => {
                     return RusotoError::Service(UntagResourceError::InternalFailure(err.msg))
@@ -1858,6 +1871,7 @@ pub enum UpdateDetectorModelError {
 impl UpdateDetectorModelError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateDetectorModelError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalFailureException" => {
                     return RusotoError::Service(UpdateDetectorModelError::InternalFailure(err.msg))
@@ -1922,6 +1936,7 @@ pub enum UpdateInputError {
 impl UpdateInputError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateInputError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalFailureException" => {
                     return RusotoError::Service(UpdateInputError::InternalFailure(err.msg))
@@ -2106,6 +2121,7 @@ impl IotEvents for IotEventsClient {
         &self,
         input: CreateDetectorModelRequest,
     ) -> Result<CreateDetectorModelResponse, RusotoError<CreateDetectorModelError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/detector-models";
 
         let mut request = SignedRequest::new("POST", "iotevents", &self.region, &request_uri);
@@ -2137,6 +2153,7 @@ impl IotEvents for IotEventsClient {
         &self,
         input: CreateInputRequest,
     ) -> Result<CreateInputResponse, RusotoError<CreateInputError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/inputs";
 
         let mut request = SignedRequest::new("POST", "iotevents", &self.region, &request_uri);
@@ -2168,6 +2185,7 @@ impl IotEvents for IotEventsClient {
         &self,
         input: DeleteDetectorModelRequest,
     ) -> Result<DeleteDetectorModelResponse, RusotoError<DeleteDetectorModelError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/detector-models/{detector_model_name}",
             detector_model_name = input.detector_model_name
@@ -2199,6 +2217,7 @@ impl IotEvents for IotEventsClient {
         &self,
         input: DeleteInputRequest,
     ) -> Result<DeleteInputResponse, RusotoError<DeleteInputError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!("/inputs/{input_name}", input_name = input.input_name);
 
         let mut request = SignedRequest::new("DELETE", "iotevents", &self.region, &request_uri);
@@ -2227,6 +2246,7 @@ impl IotEvents for IotEventsClient {
         &self,
         input: DescribeDetectorModelRequest,
     ) -> Result<DescribeDetectorModelResponse, RusotoError<DescribeDetectorModelError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/detector-models/{detector_model_name}",
             detector_model_name = input.detector_model_name
@@ -2264,6 +2284,7 @@ impl IotEvents for IotEventsClient {
         &self,
         input: DescribeInputRequest,
     ) -> Result<DescribeInputResponse, RusotoError<DescribeInputError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!("/inputs/{input_name}", input_name = input.input_name);
 
         let mut request = SignedRequest::new("GET", "iotevents", &self.region, &request_uri);
@@ -2291,6 +2312,7 @@ impl IotEvents for IotEventsClient {
     async fn describe_logging_options(
         &self,
     ) -> Result<DescribeLoggingOptionsResponse, RusotoError<DescribeLoggingOptionsError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/logging";
 
         let mut request = SignedRequest::new("GET", "iotevents", &self.region, &request_uri);
@@ -2320,6 +2342,7 @@ impl IotEvents for IotEventsClient {
         input: ListDetectorModelVersionsRequest,
     ) -> Result<ListDetectorModelVersionsResponse, RusotoError<ListDetectorModelVersionsError>>
     {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/detector-models/{detector_model_name}/versions",
             detector_model_name = input.detector_model_name
@@ -2360,6 +2383,7 @@ impl IotEvents for IotEventsClient {
         &self,
         input: ListDetectorModelsRequest,
     ) -> Result<ListDetectorModelsResponse, RusotoError<ListDetectorModelsError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/detector-models";
 
         let mut request = SignedRequest::new("GET", "iotevents", &self.region, &request_uri);
@@ -2397,6 +2421,7 @@ impl IotEvents for IotEventsClient {
         &self,
         input: ListInputsRequest,
     ) -> Result<ListInputsResponse, RusotoError<ListInputsError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/inputs";
 
         let mut request = SignedRequest::new("GET", "iotevents", &self.region, &request_uri);
@@ -2434,6 +2459,7 @@ impl IotEvents for IotEventsClient {
         &self,
         input: ListTagsForResourceRequest,
     ) -> Result<ListTagsForResourceResponse, RusotoError<ListTagsForResourceError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/tags";
 
         let mut request = SignedRequest::new("GET", "iotevents", &self.region, &request_uri);
@@ -2466,6 +2492,7 @@ impl IotEvents for IotEventsClient {
         &self,
         input: PutLoggingOptionsRequest,
     ) -> Result<(), RusotoError<PutLoggingOptionsError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/logging";
 
         let mut request = SignedRequest::new("PUT", "iotevents", &self.region, &request_uri);
@@ -2481,9 +2508,9 @@ impl IotEvents for IotEventsClient {
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
             let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = ::std::mem::drop(response);
+            let _result = ::std::mem::drop(response);
 
-            Ok(result)
+            Ok(())
         } else {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             Err(PutLoggingOptionsError::from_response(response))
@@ -2496,6 +2523,7 @@ impl IotEvents for IotEventsClient {
         &self,
         input: TagResourceRequest,
     ) -> Result<TagResourceResponse, RusotoError<TagResourceError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/tags";
 
         let mut request = SignedRequest::new("POST", "iotevents", &self.region, &request_uri);
@@ -2531,6 +2559,7 @@ impl IotEvents for IotEventsClient {
         &self,
         input: UntagResourceRequest,
     ) -> Result<UntagResourceResponse, RusotoError<UntagResourceError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/tags";
 
         let mut request = SignedRequest::new("DELETE", "iotevents", &self.region, &request_uri);
@@ -2566,6 +2595,7 @@ impl IotEvents for IotEventsClient {
         &self,
         input: UpdateDetectorModelRequest,
     ) -> Result<UpdateDetectorModelResponse, RusotoError<UpdateDetectorModelError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/detector-models/{detector_model_name}",
             detector_model_name = input.detector_model_name
@@ -2600,6 +2630,7 @@ impl IotEvents for IotEventsClient {
         &self,
         input: UpdateInputRequest,
     ) -> Result<UpdateInputResponse, RusotoError<UpdateInputError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!("/inputs/{input_name}", input_name = input.input_name);
 
         let mut request = SignedRequest::new("PUT", "iotevents", &self.region, &request_uri);

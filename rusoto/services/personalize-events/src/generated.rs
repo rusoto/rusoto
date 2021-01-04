@@ -23,7 +23,6 @@ use rusoto_core::proto;
 use rusoto_core::signature::SignedRequest;
 #[allow(unused_imports)]
 use serde::{Deserialize, Serialize};
-use serde_json;
 /// <p>Represents user interaction event information sent using the <code>PutEvents</code> API.</p>
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
@@ -136,6 +135,7 @@ pub enum PutEventsError {
 impl PutEventsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<PutEventsError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidInputException" => {
                     return RusotoError::Service(PutEventsError::InvalidInput(err.msg))
@@ -168,6 +168,7 @@ pub enum PutItemsError {
 impl PutItemsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<PutItemsError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidInputException" => {
                     return RusotoError::Service(PutItemsError::InvalidInput(err.msg))
@@ -204,6 +205,7 @@ pub enum PutUsersError {
 impl PutUsersError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<PutUsersError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidInputException" => {
                     return RusotoError::Service(PutUsersError::InvalidInput(err.msg))
@@ -283,6 +285,7 @@ impl PersonalizeEvents for PersonalizeEventsClient {
     /// <p>Records user interaction event data. For more information see <a>event-record-api</a>.</p>
     #[allow(unused_mut)]
     async fn put_events(&self, input: PutEventsRequest) -> Result<(), RusotoError<PutEventsError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/events";
 
         let mut request = SignedRequest::new("POST", "personalize", &self.region, &request_uri);
@@ -299,9 +302,9 @@ impl PersonalizeEvents for PersonalizeEventsClient {
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
             let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = ::std::mem::drop(response);
+            let _result = ::std::mem::drop(response);
 
-            Ok(result)
+            Ok(())
         } else {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             Err(PutEventsError::from_response(response))
@@ -311,6 +314,7 @@ impl PersonalizeEvents for PersonalizeEventsClient {
     /// <p>Adds one or more items to an Items dataset. For more information see <a>importing-items</a>.</p>
     #[allow(unused_mut)]
     async fn put_items(&self, input: PutItemsRequest) -> Result<(), RusotoError<PutItemsError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/items";
 
         let mut request = SignedRequest::new("POST", "personalize", &self.region, &request_uri);
@@ -327,9 +331,9 @@ impl PersonalizeEvents for PersonalizeEventsClient {
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
             let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = ::std::mem::drop(response);
+            let _result = ::std::mem::drop(response);
 
-            Ok(result)
+            Ok(())
         } else {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             Err(PutItemsError::from_response(response))
@@ -339,6 +343,7 @@ impl PersonalizeEvents for PersonalizeEventsClient {
     /// <p>Adds one or more users to a Users dataset. For more information see <a>importing-users</a>.</p>
     #[allow(unused_mut)]
     async fn put_users(&self, input: PutUsersRequest) -> Result<(), RusotoError<PutUsersError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/users";
 
         let mut request = SignedRequest::new("POST", "personalize", &self.region, &request_uri);
@@ -355,9 +360,9 @@ impl PersonalizeEvents for PersonalizeEventsClient {
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
             let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = ::std::mem::drop(response);
+            let _result = ::std::mem::drop(response);
 
-            Ok(result)
+            Ok(())
         } else {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             Err(PutUsersError::from_response(response))

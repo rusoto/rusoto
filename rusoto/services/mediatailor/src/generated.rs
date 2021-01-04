@@ -24,7 +24,6 @@ use rusoto_core::proto;
 use rusoto_core::signature::SignedRequest;
 #[allow(unused_imports)]
 use serde::{Deserialize, Serialize};
-use serde_json;
 /// <p>The configuration for Ad Marker Passthrough. Ad marker passthrough can be used to pass ad markers from the origin to the customized manifest.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct AdMarkerPassthrough {
@@ -513,6 +512,7 @@ impl DeletePlaybackConfigurationError {
         res: BufferedHttpResponse,
     ) -> RusotoError<DeletePlaybackConfigurationError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
@@ -535,6 +535,7 @@ pub enum GetPlaybackConfigurationError {}
 impl GetPlaybackConfigurationError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetPlaybackConfigurationError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
@@ -559,6 +560,7 @@ impl ListPlaybackConfigurationsError {
         res: BufferedHttpResponse,
     ) -> RusotoError<ListPlaybackConfigurationsError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
@@ -584,6 +586,7 @@ pub enum ListTagsForResourceError {
 impl ListTagsForResourceError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListTagsForResourceError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(ListTagsForResourceError::BadRequest(err.msg))
@@ -611,6 +614,7 @@ pub enum PutPlaybackConfigurationError {}
 impl PutPlaybackConfigurationError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<PutPlaybackConfigurationError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
@@ -636,6 +640,7 @@ pub enum TagResourceError {
 impl TagResourceError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<TagResourceError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(TagResourceError::BadRequest(err.msg))
@@ -666,6 +671,7 @@ pub enum UntagResourceError {
 impl UntagResourceError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UntagResourceError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(UntagResourceError::BadRequest(err.msg))
@@ -778,6 +784,7 @@ impl MediaTailor for MediaTailorClient {
         input: DeletePlaybackConfigurationRequest,
     ) -> Result<DeletePlaybackConfigurationResponse, RusotoError<DeletePlaybackConfigurationError>>
     {
+        #![allow(clippy::needless_update)]
         let request_uri = format!("/playbackConfiguration/{name}", name = input.name);
 
         let mut request = SignedRequest::new("DELETE", "mediatailor", &self.region, &request_uri);
@@ -808,6 +815,7 @@ impl MediaTailor for MediaTailorClient {
         &self,
         input: GetPlaybackConfigurationRequest,
     ) -> Result<GetPlaybackConfigurationResponse, RusotoError<GetPlaybackConfigurationError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!("/playbackConfiguration/{name}", name = input.name);
 
         let mut request = SignedRequest::new("GET", "mediatailor", &self.region, &request_uri);
@@ -839,6 +847,7 @@ impl MediaTailor for MediaTailorClient {
         input: ListPlaybackConfigurationsRequest,
     ) -> Result<ListPlaybackConfigurationsResponse, RusotoError<ListPlaybackConfigurationsError>>
     {
+        #![allow(clippy::needless_update)]
         let request_uri = "/playbackConfigurations";
 
         let mut request = SignedRequest::new("GET", "mediatailor", &self.region, &request_uri);
@@ -878,6 +887,7 @@ impl MediaTailor for MediaTailorClient {
         &self,
         input: ListTagsForResourceRequest,
     ) -> Result<ListTagsForResourceResponse, RusotoError<ListTagsForResourceError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!("/tags/{resource_arn}", resource_arn = input.resource_arn);
 
         let mut request = SignedRequest::new("GET", "mediatailor", &self.region, &request_uri);
@@ -908,6 +918,7 @@ impl MediaTailor for MediaTailorClient {
         &self,
         input: PutPlaybackConfigurationRequest,
     ) -> Result<PutPlaybackConfigurationResponse, RusotoError<PutPlaybackConfigurationError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/playbackConfiguration";
 
         let mut request = SignedRequest::new("PUT", "mediatailor", &self.region, &request_uri);
@@ -940,6 +951,7 @@ impl MediaTailor for MediaTailorClient {
         &self,
         input: TagResourceRequest,
     ) -> Result<(), RusotoError<TagResourceError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!("/tags/{resource_arn}", resource_arn = input.resource_arn);
 
         let mut request = SignedRequest::new("POST", "mediatailor", &self.region, &request_uri);
@@ -956,9 +968,9 @@ impl MediaTailor for MediaTailorClient {
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 204 {
             let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = ::std::mem::drop(response);
+            let _result = ::std::mem::drop(response);
 
-            Ok(result)
+            Ok(())
         } else {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             Err(TagResourceError::from_response(response))
@@ -971,6 +983,7 @@ impl MediaTailor for MediaTailorClient {
         &self,
         input: UntagResourceRequest,
     ) -> Result<(), RusotoError<UntagResourceError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!("/tags/{resource_arn}", resource_arn = input.resource_arn);
 
         let mut request = SignedRequest::new("DELETE", "mediatailor", &self.region, &request_uri);
@@ -991,9 +1004,9 @@ impl MediaTailor for MediaTailorClient {
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 204 {
             let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = ::std::mem::drop(response);
+            let _result = ::std::mem::drop(response);
 
-            Ok(result)
+            Ok(())
         } else {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             Err(UntagResourceError::from_response(response))

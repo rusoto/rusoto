@@ -50,7 +50,6 @@ impl DynamoDbStreamsClient {
     }
 }
 
-use serde_json;
 /// <p>Represents the data for an attribute.</p> <p>Each attribute value is described as a name-value pair. The name is the data type, and the value is the data itself.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/HowItWorks.NamingRulesDataTypes.html#HowItWorks.DataTypes">Data Types</a> in the <i>Amazon DynamoDB Developer Guide</i>.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
@@ -420,6 +419,7 @@ pub enum DescribeStreamError {
 impl DescribeStreamError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeStreamError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalServerError" => {
                     return RusotoError::Service(DescribeStreamError::InternalServerError(err.msg))
@@ -462,6 +462,7 @@ pub enum GetRecordsError {
 impl GetRecordsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetRecordsError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ExpiredIteratorException" => {
                     return RusotoError::Service(GetRecordsError::ExpiredIterator(err.msg))
@@ -512,6 +513,7 @@ pub enum GetShardIteratorError {
 impl GetShardIteratorError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetShardIteratorError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalServerError" => {
                     return RusotoError::Service(GetShardIteratorError::InternalServerError(
@@ -554,6 +556,7 @@ pub enum ListStreamsError {
 impl ListStreamsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListStreamsError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalServerError" => {
                     return RusotoError::Service(ListStreamsError::InternalServerError(err.msg))

@@ -50,7 +50,6 @@ impl WAFRegionalClient {
     }
 }
 
-use serde_json;
 /// <p><note> <p>This is <b>AWS WAF Classic</b> documentation. For more information, see <a href="https://docs.aws.amazon.com/waf/latest/developerguide/classic-waf-chapter.html">AWS WAF Classic</a> in the developer guide.</p> <p> <b>For the latest version of AWS WAF</b>, use the AWS WAFV2 API and see the <a href="https://docs.aws.amazon.com/waf/latest/developerguide/waf-chapter.html">AWS WAF Developer Guide</a>. With the latest version, AWS WAF has a single set of endpoints for regional and global use. </p> </note> <p>The <code>ActivatedRule</code> object in an <a>UpdateWebACL</a> request specifies a <code>Rule</code> that you want to insert or delete, the priority of the <code>Rule</code> in the <code>WebACL</code>, and the action that you want AWS WAF to take when a web request matches the <code>Rule</code> (<code>ALLOW</code>, <code>BLOCK</code>, or <code>COUNT</code>).</p> <p>To specify whether to insert or delete a <code>Rule</code>, use the <code>Action</code> parameter in the <a>WebACLUpdate</a> data type.</p></p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct ActivatedRule {
@@ -2653,6 +2652,7 @@ pub enum AssociateWebACLError {
 impl AssociateWebACLError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<AssociateWebACLError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "WAFInternalErrorException" => {
                     return RusotoError::Service(AssociateWebACLError::WAFInternalError(err.msg))
@@ -2711,6 +2711,7 @@ pub enum CreateByteMatchSetError {
 impl CreateByteMatchSetError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateByteMatchSetError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "WAFDisallowedNameException" => {
                     return RusotoError::Service(CreateByteMatchSetError::WAFDisallowedName(
@@ -2779,6 +2780,7 @@ pub enum CreateGeoMatchSetError {
 impl CreateGeoMatchSetError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateGeoMatchSetError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "WAFDisallowedNameException" => {
                     return RusotoError::Service(CreateGeoMatchSetError::WAFDisallowedName(err.msg))
@@ -2841,6 +2843,7 @@ pub enum CreateIPSetError {
 impl CreateIPSetError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateIPSetError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "WAFDisallowedNameException" => {
                     return RusotoError::Service(CreateIPSetError::WAFDisallowedName(err.msg))
@@ -2905,6 +2908,7 @@ pub enum CreateRateBasedRuleError {
 impl CreateRateBasedRuleError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateRateBasedRuleError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "WAFBadRequestException" => {
                     return RusotoError::Service(CreateRateBasedRuleError::WAFBadRequest(err.msg))
@@ -2981,6 +2985,7 @@ pub enum CreateRegexMatchSetError {
 impl CreateRegexMatchSetError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateRegexMatchSetError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "WAFDisallowedNameException" => {
                     return RusotoError::Service(CreateRegexMatchSetError::WAFDisallowedName(
@@ -3035,6 +3040,7 @@ pub enum CreateRegexPatternSetError {
 impl CreateRegexPatternSetError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateRegexPatternSetError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "WAFDisallowedNameException" => {
                     return RusotoError::Service(CreateRegexPatternSetError::WAFDisallowedName(
@@ -3097,6 +3103,7 @@ pub enum CreateRuleError {
 impl CreateRuleError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateRuleError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "WAFBadRequestException" => {
                     return RusotoError::Service(CreateRuleError::WAFBadRequest(err.msg))
@@ -3169,6 +3176,7 @@ pub enum CreateRuleGroupError {
 impl CreateRuleGroupError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateRuleGroupError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "WAFBadRequestException" => {
                     return RusotoError::Service(CreateRuleGroupError::WAFBadRequest(err.msg))
@@ -3235,6 +3243,7 @@ pub enum CreateSizeConstraintSetError {
 impl CreateSizeConstraintSetError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateSizeConstraintSetError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "WAFDisallowedNameException" => {
                     return RusotoError::Service(CreateSizeConstraintSetError::WAFDisallowedName(
@@ -3309,6 +3318,7 @@ impl CreateSqlInjectionMatchSetError {
         res: BufferedHttpResponse,
     ) -> RusotoError<CreateSqlInjectionMatchSetError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "WAFDisallowedNameException" => {
                     return RusotoError::Service(
@@ -3389,6 +3399,7 @@ pub enum CreateWebACLError {
 impl CreateWebACLError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateWebACLError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "WAFBadRequestException" => {
                     return RusotoError::Service(CreateWebACLError::WAFBadRequest(err.msg))
@@ -3463,6 +3474,7 @@ impl CreateWebACLMigrationStackError {
         res: BufferedHttpResponse,
     ) -> RusotoError<CreateWebACLMigrationStackError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "WAFEntityMigrationException" => {
                     return RusotoError::Service(
@@ -3537,6 +3549,7 @@ pub enum CreateXssMatchSetError {
 impl CreateXssMatchSetError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateXssMatchSetError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "WAFDisallowedNameException" => {
                     return RusotoError::Service(CreateXssMatchSetError::WAFDisallowedName(err.msg))
@@ -3599,6 +3612,7 @@ pub enum DeleteByteMatchSetError {
 impl DeleteByteMatchSetError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteByteMatchSetError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "WAFInternalErrorException" => {
                     return RusotoError::Service(DeleteByteMatchSetError::WAFInternalError(err.msg))
@@ -3667,6 +3681,7 @@ pub enum DeleteGeoMatchSetError {
 impl DeleteGeoMatchSetError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteGeoMatchSetError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "WAFInternalErrorException" => {
                     return RusotoError::Service(DeleteGeoMatchSetError::WAFInternalError(err.msg))
@@ -3729,6 +3744,7 @@ pub enum DeleteIPSetError {
 impl DeleteIPSetError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteIPSetError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "WAFInternalErrorException" => {
                     return RusotoError::Service(DeleteIPSetError::WAFInternalError(err.msg))
@@ -3785,6 +3801,7 @@ impl DeleteLoggingConfigurationError {
         res: BufferedHttpResponse,
     ) -> RusotoError<DeleteLoggingConfigurationError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "WAFInternalErrorException" => {
                     return RusotoError::Service(DeleteLoggingConfigurationError::WAFInternalError(
@@ -3835,6 +3852,7 @@ pub enum DeletePermissionPolicyError {
 impl DeletePermissionPolicyError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeletePermissionPolicyError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "WAFInternalErrorException" => {
                     return RusotoError::Service(DeletePermissionPolicyError::WAFInternalError(
@@ -3891,6 +3909,7 @@ pub enum DeleteRateBasedRuleError {
 impl DeleteRateBasedRuleError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteRateBasedRuleError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "WAFInternalErrorException" => {
                     return RusotoError::Service(DeleteRateBasedRuleError::WAFInternalError(
@@ -3973,6 +3992,7 @@ pub enum DeleteRegexMatchSetError {
 impl DeleteRegexMatchSetError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteRegexMatchSetError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "WAFInternalErrorException" => {
                     return RusotoError::Service(DeleteRegexMatchSetError::WAFInternalError(
@@ -4043,6 +4063,7 @@ pub enum DeleteRegexPatternSetError {
 impl DeleteRegexPatternSetError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteRegexPatternSetError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "WAFInternalErrorException" => {
                     return RusotoError::Service(DeleteRegexPatternSetError::WAFInternalError(
@@ -4117,6 +4138,7 @@ pub enum DeleteRuleError {
 impl DeleteRuleError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteRuleError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "WAFInternalErrorException" => {
                     return RusotoError::Service(DeleteRuleError::WAFInternalError(err.msg))
@@ -4191,6 +4213,7 @@ pub enum DeleteRuleGroupError {
 impl DeleteRuleGroupError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteRuleGroupError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "WAFInternalErrorException" => {
                     return RusotoError::Service(DeleteRuleGroupError::WAFInternalError(err.msg))
@@ -4261,6 +4284,7 @@ pub enum DeleteSizeConstraintSetError {
 impl DeleteSizeConstraintSetError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteSizeConstraintSetError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "WAFInternalErrorException" => {
                     return RusotoError::Service(DeleteSizeConstraintSetError::WAFInternalError(
@@ -4335,6 +4359,7 @@ impl DeleteSqlInjectionMatchSetError {
         res: BufferedHttpResponse,
     ) -> RusotoError<DeleteSqlInjectionMatchSetError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "WAFInternalErrorException" => {
                     return RusotoError::Service(DeleteSqlInjectionMatchSetError::WAFInternalError(
@@ -4413,6 +4438,7 @@ pub enum DeleteWebACLError {
 impl DeleteWebACLError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteWebACLError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "WAFInternalErrorException" => {
                     return RusotoError::Service(DeleteWebACLError::WAFInternalError(err.msg))
@@ -4483,6 +4509,7 @@ pub enum DeleteXssMatchSetError {
 impl DeleteXssMatchSetError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteXssMatchSetError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "WAFInternalErrorException" => {
                     return RusotoError::Service(DeleteXssMatchSetError::WAFInternalError(err.msg))
@@ -4541,6 +4568,7 @@ pub enum DisassociateWebACLError {
 impl DisassociateWebACLError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DisassociateWebACLError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "WAFInternalErrorException" => {
                     return RusotoError::Service(DisassociateWebACLError::WAFInternalError(err.msg))
@@ -4593,6 +4621,7 @@ pub enum GetByteMatchSetError {
 impl GetByteMatchSetError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetByteMatchSetError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "WAFInternalErrorException" => {
                     return RusotoError::Service(GetByteMatchSetError::WAFInternalError(err.msg))
@@ -4631,6 +4660,7 @@ pub enum GetChangeTokenError {
 impl GetChangeTokenError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetChangeTokenError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "WAFInternalErrorException" => {
                     return RusotoError::Service(GetChangeTokenError::WAFInternalError(err.msg))
@@ -4663,6 +4693,7 @@ pub enum GetChangeTokenStatusError {
 impl GetChangeTokenStatusError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetChangeTokenStatusError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "WAFInternalErrorException" => {
                     return RusotoError::Service(GetChangeTokenStatusError::WAFInternalError(
@@ -4705,6 +4736,7 @@ pub enum GetGeoMatchSetError {
 impl GetGeoMatchSetError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetGeoMatchSetError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "WAFInternalErrorException" => {
                     return RusotoError::Service(GetGeoMatchSetError::WAFInternalError(err.msg))
@@ -4747,6 +4779,7 @@ pub enum GetIPSetError {
 impl GetIPSetError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetIPSetError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "WAFInternalErrorException" => {
                     return RusotoError::Service(GetIPSetError::WAFInternalError(err.msg))
@@ -4787,6 +4820,7 @@ pub enum GetLoggingConfigurationError {
 impl GetLoggingConfigurationError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetLoggingConfigurationError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "WAFInternalErrorException" => {
                     return RusotoError::Service(GetLoggingConfigurationError::WAFInternalError(
@@ -4827,6 +4861,7 @@ pub enum GetPermissionPolicyError {
 impl GetPermissionPolicyError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetPermissionPolicyError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "WAFInternalErrorException" => {
                     return RusotoError::Service(GetPermissionPolicyError::WAFInternalError(
@@ -4869,6 +4904,7 @@ pub enum GetRateBasedRuleError {
 impl GetRateBasedRuleError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetRateBasedRuleError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "WAFInternalErrorException" => {
                     return RusotoError::Service(GetRateBasedRuleError::WAFInternalError(err.msg))
@@ -4915,6 +4951,7 @@ impl GetRateBasedRuleManagedKeysError {
         res: BufferedHttpResponse,
     ) -> RusotoError<GetRateBasedRuleManagedKeysError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "WAFInternalErrorException" => {
                     return RusotoError::Service(
@@ -4975,6 +5012,7 @@ pub enum GetRegexMatchSetError {
 impl GetRegexMatchSetError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetRegexMatchSetError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "WAFInternalErrorException" => {
                     return RusotoError::Service(GetRegexMatchSetError::WAFInternalError(err.msg))
@@ -5017,6 +5055,7 @@ pub enum GetRegexPatternSetError {
 impl GetRegexPatternSetError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetRegexPatternSetError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "WAFInternalErrorException" => {
                     return RusotoError::Service(GetRegexPatternSetError::WAFInternalError(err.msg))
@@ -5063,6 +5102,7 @@ pub enum GetRuleError {
 impl GetRuleError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetRuleError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "WAFInternalErrorException" => {
                     return RusotoError::Service(GetRuleError::WAFInternalError(err.msg))
@@ -5103,6 +5143,7 @@ pub enum GetRuleGroupError {
 impl GetRuleGroupError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetRuleGroupError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "WAFInternalErrorException" => {
                     return RusotoError::Service(GetRuleGroupError::WAFInternalError(err.msg))
@@ -5139,6 +5180,7 @@ pub enum GetSampledRequestsError {
 impl GetSampledRequestsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetSampledRequestsError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "WAFInternalErrorException" => {
                     return RusotoError::Service(GetSampledRequestsError::WAFInternalError(err.msg))
@@ -5179,6 +5221,7 @@ pub enum GetSizeConstraintSetError {
 impl GetSizeConstraintSetError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetSizeConstraintSetError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "WAFInternalErrorException" => {
                     return RusotoError::Service(GetSizeConstraintSetError::WAFInternalError(
@@ -5227,6 +5270,7 @@ pub enum GetSqlInjectionMatchSetError {
 impl GetSqlInjectionMatchSetError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetSqlInjectionMatchSetError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "WAFInternalErrorException" => {
                     return RusotoError::Service(GetSqlInjectionMatchSetError::WAFInternalError(
@@ -5275,6 +5319,7 @@ pub enum GetWebACLError {
 impl GetWebACLError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetWebACLError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "WAFInternalErrorException" => {
                     return RusotoError::Service(GetWebACLError::WAFInternalError(err.msg))
@@ -5321,6 +5366,7 @@ pub enum GetWebACLForResourceError {
 impl GetWebACLForResourceError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetWebACLForResourceError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "WAFInternalErrorException" => {
                     return RusotoError::Service(GetWebACLForResourceError::WAFInternalError(
@@ -5381,6 +5427,7 @@ pub enum GetXssMatchSetError {
 impl GetXssMatchSetError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetXssMatchSetError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "WAFInternalErrorException" => {
                     return RusotoError::Service(GetXssMatchSetError::WAFInternalError(err.msg))
@@ -5425,6 +5472,7 @@ impl ListActivatedRulesInRuleGroupError {
         res: BufferedHttpResponse,
     ) -> RusotoError<ListActivatedRulesInRuleGroupError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "WAFInternalErrorException" => {
                     return RusotoError::Service(
@@ -5477,6 +5525,7 @@ pub enum ListByteMatchSetsError {
 impl ListByteMatchSetsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListByteMatchSetsError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "WAFInternalErrorException" => {
                     return RusotoError::Service(ListByteMatchSetsError::WAFInternalError(err.msg))
@@ -5513,6 +5562,7 @@ pub enum ListGeoMatchSetsError {
 impl ListGeoMatchSetsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListGeoMatchSetsError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "WAFInternalErrorException" => {
                     return RusotoError::Service(ListGeoMatchSetsError::WAFInternalError(err.msg))
@@ -5549,6 +5599,7 @@ pub enum ListIPSetsError {
 impl ListIPSetsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListIPSetsError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "WAFInternalErrorException" => {
                     return RusotoError::Service(ListIPSetsError::WAFInternalError(err.msg))
@@ -5587,6 +5638,7 @@ pub enum ListLoggingConfigurationsError {
 impl ListLoggingConfigurationsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListLoggingConfigurationsError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "WAFInternalErrorException" => {
                     return RusotoError::Service(ListLoggingConfigurationsError::WAFInternalError(
@@ -5635,6 +5687,7 @@ pub enum ListRateBasedRulesError {
 impl ListRateBasedRulesError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListRateBasedRulesError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "WAFInternalErrorException" => {
                     return RusotoError::Service(ListRateBasedRulesError::WAFInternalError(err.msg))
@@ -5673,6 +5726,7 @@ pub enum ListRegexMatchSetsError {
 impl ListRegexMatchSetsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListRegexMatchSetsError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "WAFInternalErrorException" => {
                     return RusotoError::Service(ListRegexMatchSetsError::WAFInternalError(err.msg))
@@ -5711,6 +5765,7 @@ pub enum ListRegexPatternSetsError {
 impl ListRegexPatternSetsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListRegexPatternSetsError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "WAFInternalErrorException" => {
                     return RusotoError::Service(ListRegexPatternSetsError::WAFInternalError(
@@ -5755,6 +5810,7 @@ pub enum ListResourcesForWebACLError {
 impl ListResourcesForWebACLError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListResourcesForWebACLError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "WAFInternalErrorException" => {
                     return RusotoError::Service(ListResourcesForWebACLError::WAFInternalError(
@@ -5805,6 +5861,7 @@ pub enum ListRuleGroupsError {
 impl ListRuleGroupsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListRuleGroupsError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "WAFInternalErrorException" => {
                     return RusotoError::Service(ListRuleGroupsError::WAFInternalError(err.msg))
@@ -5837,6 +5894,7 @@ pub enum ListRulesError {
 impl ListRulesError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListRulesError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "WAFInternalErrorException" => {
                     return RusotoError::Service(ListRulesError::WAFInternalError(err.msg))
@@ -5873,6 +5931,7 @@ pub enum ListSizeConstraintSetsError {
 impl ListSizeConstraintSetsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListSizeConstraintSetsError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "WAFInternalErrorException" => {
                     return RusotoError::Service(ListSizeConstraintSetsError::WAFInternalError(
@@ -5913,6 +5972,7 @@ pub enum ListSqlInjectionMatchSetsError {
 impl ListSqlInjectionMatchSetsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListSqlInjectionMatchSetsError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "WAFInternalErrorException" => {
                     return RusotoError::Service(ListSqlInjectionMatchSetsError::WAFInternalError(
@@ -5953,6 +6013,7 @@ pub enum ListSubscribedRuleGroupsError {
 impl ListSubscribedRuleGroupsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListSubscribedRuleGroupsError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "WAFInternalErrorException" => {
                     return RusotoError::Service(ListSubscribedRuleGroupsError::WAFInternalError(
@@ -6001,6 +6062,7 @@ pub enum ListTagsForResourceError {
 impl ListTagsForResourceError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListTagsForResourceError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "WAFBadRequestException" => {
                     return RusotoError::Service(ListTagsForResourceError::WAFBadRequest(err.msg))
@@ -6063,6 +6125,7 @@ pub enum ListWebACLsError {
 impl ListWebACLsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListWebACLsError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "WAFInternalErrorException" => {
                     return RusotoError::Service(ListWebACLsError::WAFInternalError(err.msg))
@@ -6099,6 +6162,7 @@ pub enum ListXssMatchSetsError {
 impl ListXssMatchSetsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListXssMatchSetsError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "WAFInternalErrorException" => {
                     return RusotoError::Service(ListXssMatchSetsError::WAFInternalError(err.msg))
@@ -6139,6 +6203,7 @@ pub enum PutLoggingConfigurationError {
 impl PutLoggingConfigurationError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<PutLoggingConfigurationError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "WAFInternalErrorException" => {
                     return RusotoError::Service(PutLoggingConfigurationError::WAFInternalError(
@@ -6197,6 +6262,7 @@ pub enum PutPermissionPolicyError {
 impl PutPermissionPolicyError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<PutPermissionPolicyError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "WAFInternalErrorException" => {
                     return RusotoError::Service(PutPermissionPolicyError::WAFInternalError(
@@ -6259,6 +6325,7 @@ pub enum TagResourceError {
 impl TagResourceError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<TagResourceError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "WAFBadRequestException" => {
                     return RusotoError::Service(TagResourceError::WAFBadRequest(err.msg))
@@ -6325,6 +6392,7 @@ pub enum UntagResourceError {
 impl UntagResourceError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UntagResourceError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "WAFBadRequestException" => {
                     return RusotoError::Service(UntagResourceError::WAFBadRequest(err.msg))
@@ -6391,6 +6459,7 @@ pub enum UpdateByteMatchSetError {
 impl UpdateByteMatchSetError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateByteMatchSetError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "WAFInternalErrorException" => {
                     return RusotoError::Service(UpdateByteMatchSetError::WAFInternalError(err.msg))
@@ -6477,6 +6546,7 @@ pub enum UpdateGeoMatchSetError {
 impl UpdateGeoMatchSetError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateGeoMatchSetError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "WAFInternalErrorException" => {
                     return RusotoError::Service(UpdateGeoMatchSetError::WAFInternalError(err.msg))
@@ -6563,6 +6633,7 @@ pub enum UpdateIPSetError {
 impl UpdateIPSetError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateIPSetError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "WAFInternalErrorException" => {
                     return RusotoError::Service(UpdateIPSetError::WAFInternalError(err.msg))
@@ -6641,6 +6712,7 @@ pub enum UpdateRateBasedRuleError {
 impl UpdateRateBasedRuleError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateRateBasedRuleError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "WAFInternalErrorException" => {
                     return RusotoError::Service(UpdateRateBasedRuleError::WAFInternalError(
@@ -6733,6 +6805,7 @@ pub enum UpdateRegexMatchSetError {
 impl UpdateRegexMatchSetError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateRegexMatchSetError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "WAFDisallowedNameException" => {
                     return RusotoError::Service(UpdateRegexMatchSetError::WAFDisallowedName(
@@ -6819,6 +6892,7 @@ pub enum UpdateRegexPatternSetError {
 impl UpdateRegexPatternSetError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateRegexPatternSetError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "WAFInternalErrorException" => {
                     return RusotoError::Service(UpdateRegexPatternSetError::WAFInternalError(
@@ -6909,6 +6983,7 @@ pub enum UpdateRuleError {
 impl UpdateRuleError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateRuleError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "WAFInternalErrorException" => {
                     return RusotoError::Service(UpdateRuleError::WAFInternalError(err.msg))
@@ -6983,6 +7058,7 @@ pub enum UpdateRuleGroupError {
 impl UpdateRuleGroupError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateRuleGroupError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "WAFInternalErrorException" => {
                     return RusotoError::Service(UpdateRuleGroupError::WAFInternalError(err.msg))
@@ -7055,6 +7131,7 @@ pub enum UpdateSizeConstraintSetError {
 impl UpdateSizeConstraintSetError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateSizeConstraintSetError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "WAFInternalErrorException" => {
                     return RusotoError::Service(UpdateSizeConstraintSetError::WAFInternalError(
@@ -7153,6 +7230,7 @@ impl UpdateSqlInjectionMatchSetError {
         res: BufferedHttpResponse,
     ) -> RusotoError<UpdateSqlInjectionMatchSetError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "WAFInternalErrorException" => {
                     return RusotoError::Service(UpdateSqlInjectionMatchSetError::WAFInternalError(
@@ -7253,6 +7331,7 @@ pub enum UpdateWebACLError {
 impl UpdateWebACLError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateWebACLError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "WAFInternalErrorException" => {
                     return RusotoError::Service(UpdateWebACLError::WAFInternalError(err.msg))
@@ -7337,6 +7416,7 @@ pub enum UpdateXssMatchSetError {
 impl UpdateXssMatchSetError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateXssMatchSetError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "WAFInternalErrorException" => {
                     return RusotoError::Service(UpdateXssMatchSetError::WAFInternalError(err.msg))

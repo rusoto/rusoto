@@ -366,6 +366,7 @@ pub enum SearchError {
 impl SearchError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<SearchError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "SearchException" => return RusotoError::Service(SearchError::Search(err.msg)),
                 "ValidationException" => return RusotoError::Validation(err.msg),
@@ -394,6 +395,7 @@ pub enum SuggestError {
 impl SuggestError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<SuggestError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "SearchException" => return RusotoError::Service(SuggestError::Search(err.msg)),
                 "ValidationException" => return RusotoError::Validation(err.msg),
@@ -422,6 +424,7 @@ pub enum UploadDocumentsError {
 impl UploadDocumentsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UploadDocumentsError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "DocumentServiceException" => {
                     return RusotoError::Service(UploadDocumentsError::DocumentService(err.msg))
@@ -509,6 +512,7 @@ impl CloudSearchDomain for CloudSearchDomainClient {
         &self,
         input: SearchRequest,
     ) -> Result<SearchResponse, RusotoError<SearchError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/2013-01-01/search";
 
         let mut request = SignedRequest::new("GET", "cloudsearch", &self.region, &request_uri);
@@ -584,6 +588,7 @@ impl CloudSearchDomain for CloudSearchDomainClient {
         &self,
         input: SuggestRequest,
     ) -> Result<SuggestResponse, RusotoError<SuggestError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/2013-01-01/suggest";
 
         let mut request = SignedRequest::new("GET", "cloudsearch", &self.region, &request_uri);
@@ -624,6 +629,7 @@ impl CloudSearchDomain for CloudSearchDomainClient {
         &self,
         input: UploadDocumentsRequest,
     ) -> Result<UploadDocumentsResponse, RusotoError<UploadDocumentsError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/2013-01-01/documents/batch";
 
         let mut request = SignedRequest::new("POST", "cloudsearch", &self.region, &request_uri);

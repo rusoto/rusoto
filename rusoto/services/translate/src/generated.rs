@@ -49,7 +49,6 @@ impl TranslateClient {
     }
 }
 
-use serde_json;
 /// <p>The custom terminology applied to the input text by Amazon Translate for the translated text response. This is optional in the response and will only be present if you specified terminology input in the request. Currently, only one terminology can be applied per TranslateText request.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
@@ -791,6 +790,7 @@ pub enum CreateParallelDataError {
 impl CreateParallelDataError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateParallelDataError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ConflictException" => {
                     return RusotoError::Service(CreateParallelDataError::Conflict(err.msg))
@@ -849,6 +849,7 @@ pub enum DeleteParallelDataError {
 impl DeleteParallelDataError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteParallelDataError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ConcurrentModificationException" => {
                     return RusotoError::Service(DeleteParallelDataError::ConcurrentModification(
@@ -899,6 +900,7 @@ pub enum DeleteTerminologyError {
 impl DeleteTerminologyError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteTerminologyError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalServerException" => {
                     return RusotoError::Service(DeleteTerminologyError::InternalServer(err.msg))
@@ -949,6 +951,7 @@ impl DescribeTextTranslationJobError {
         res: BufferedHttpResponse,
     ) -> RusotoError<DescribeTextTranslationJobError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalServerException" => {
                     return RusotoError::Service(DescribeTextTranslationJobError::InternalServer(
@@ -999,6 +1002,7 @@ pub enum GetParallelDataError {
 impl GetParallelDataError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetParallelDataError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalServerException" => {
                     return RusotoError::Service(GetParallelDataError::InternalServer(err.msg))
@@ -1049,6 +1053,7 @@ pub enum GetTerminologyError {
 impl GetTerminologyError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetTerminologyError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalServerException" => {
                     return RusotoError::Service(GetTerminologyError::InternalServer(err.msg))
@@ -1099,6 +1104,7 @@ pub enum ImportTerminologyError {
 impl ImportTerminologyError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ImportTerminologyError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalServerException" => {
                     return RusotoError::Service(ImportTerminologyError::InternalServer(err.msg))
@@ -1147,6 +1153,7 @@ pub enum ListParallelDataError {
 impl ListParallelDataError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListParallelDataError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalServerException" => {
                     return RusotoError::Service(ListParallelDataError::InternalServer(err.msg))
@@ -1191,6 +1198,7 @@ pub enum ListTerminologiesError {
 impl ListTerminologiesError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListTerminologiesError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalServerException" => {
                     return RusotoError::Service(ListTerminologiesError::InternalServer(err.msg))
@@ -1237,6 +1245,7 @@ pub enum ListTextTranslationJobsError {
 impl ListTextTranslationJobsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListTextTranslationJobsError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalServerException" => {
                     return RusotoError::Service(ListTextTranslationJobsError::InternalServer(
@@ -1295,6 +1304,7 @@ pub enum StartTextTranslationJobError {
 impl StartTextTranslationJobError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<StartTextTranslationJobError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalServerException" => {
                     return RusotoError::Service(StartTextTranslationJobError::InternalServer(
@@ -1357,6 +1367,7 @@ pub enum StopTextTranslationJobError {
 impl StopTextTranslationJobError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<StopTextTranslationJobError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalServerException" => {
                     return RusotoError::Service(StopTextTranslationJobError::InternalServer(
@@ -1415,6 +1426,7 @@ pub enum TranslateTextError {
 impl TranslateTextError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<TranslateTextError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "DetectedLanguageLowConfidenceException" => {
                     return RusotoError::Service(TranslateTextError::DetectedLanguageLowConfidence(
@@ -1491,6 +1503,7 @@ pub enum UpdateParallelDataError {
 impl UpdateParallelDataError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateParallelDataError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ConcurrentModificationException" => {
                     return RusotoError::Service(UpdateParallelDataError::ConcurrentModification(

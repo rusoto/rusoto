@@ -49,7 +49,6 @@ impl SwfClient {
     }
 }
 
-use serde_json;
 /// <p>Unit of work sent to an activity worker.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
@@ -2994,6 +2993,7 @@ impl CountClosedWorkflowExecutionsError {
         res: BufferedHttpResponse,
     ) -> RusotoError<CountClosedWorkflowExecutionsError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "OperationNotPermittedFault" => {
                     return RusotoError::Service(
@@ -3040,6 +3040,7 @@ impl CountOpenWorkflowExecutionsError {
         res: BufferedHttpResponse,
     ) -> RusotoError<CountOpenWorkflowExecutionsError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "OperationNotPermittedFault" => {
                     return RusotoError::Service(
@@ -3084,6 +3085,7 @@ pub enum CountPendingActivityTasksError {
 impl CountPendingActivityTasksError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CountPendingActivityTasksError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "OperationNotPermittedFault" => {
                     return RusotoError::Service(
@@ -3128,6 +3130,7 @@ pub enum CountPendingDecisionTasksError {
 impl CountPendingDecisionTasksError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CountPendingDecisionTasksError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "OperationNotPermittedFault" => {
                     return RusotoError::Service(
@@ -3174,6 +3177,7 @@ pub enum DeprecateActivityTypeError {
 impl DeprecateActivityTypeError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeprecateActivityTypeError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "OperationNotPermittedFault" => {
                     return RusotoError::Service(
@@ -3224,6 +3228,7 @@ pub enum DeprecateDomainError {
 impl DeprecateDomainError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeprecateDomainError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "DomainDeprecatedFault" => {
                     return RusotoError::Service(DeprecateDomainError::DomainDeprecatedFault(
@@ -3272,6 +3277,7 @@ pub enum DeprecateWorkflowTypeError {
 impl DeprecateWorkflowTypeError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeprecateWorkflowTypeError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "OperationNotPermittedFault" => {
                     return RusotoError::Service(
@@ -3320,6 +3326,7 @@ pub enum DescribeActivityTypeError {
 impl DescribeActivityTypeError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeActivityTypeError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "OperationNotPermittedFault" => {
                     return RusotoError::Service(
@@ -3362,6 +3369,7 @@ pub enum DescribeDomainError {
 impl DescribeDomainError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeDomainError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "OperationNotPermittedFault" => {
                     return RusotoError::Service(DescribeDomainError::OperationNotPermittedFault(
@@ -3400,6 +3408,7 @@ pub enum DescribeWorkflowExecutionError {
 impl DescribeWorkflowExecutionError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeWorkflowExecutionError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "OperationNotPermittedFault" => {
                     return RusotoError::Service(
@@ -3444,6 +3453,7 @@ pub enum DescribeWorkflowTypeError {
 impl DescribeWorkflowTypeError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeWorkflowTypeError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "OperationNotPermittedFault" => {
                     return RusotoError::Service(
@@ -3488,6 +3498,7 @@ impl GetWorkflowExecutionHistoryError {
         res: BufferedHttpResponse,
     ) -> RusotoError<GetWorkflowExecutionHistoryError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "OperationNotPermittedFault" => {
                     return RusotoError::Service(
@@ -3532,6 +3543,7 @@ pub enum ListActivityTypesError {
 impl ListActivityTypesError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListActivityTypesError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "OperationNotPermittedFault" => {
                     return RusotoError::Service(
@@ -3574,6 +3586,7 @@ impl ListClosedWorkflowExecutionsError {
         res: BufferedHttpResponse,
     ) -> RusotoError<ListClosedWorkflowExecutionsError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "OperationNotPermittedFault" => {
                     return RusotoError::Service(
@@ -3616,6 +3629,7 @@ pub enum ListDomainsError {
 impl ListDomainsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListDomainsError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "OperationNotPermittedFault" => {
                     return RusotoError::Service(ListDomainsError::OperationNotPermittedFault(
@@ -3652,6 +3666,7 @@ impl ListOpenWorkflowExecutionsError {
         res: BufferedHttpResponse,
     ) -> RusotoError<ListOpenWorkflowExecutionsError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "OperationNotPermittedFault" => {
                     return RusotoError::Service(
@@ -3698,6 +3713,7 @@ pub enum ListTagsForResourceError {
 impl ListTagsForResourceError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListTagsForResourceError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "LimitExceededFault" => {
                     return RusotoError::Service(ListTagsForResourceError::LimitExceededFault(
@@ -3746,6 +3762,7 @@ pub enum ListWorkflowTypesError {
 impl ListWorkflowTypesError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListWorkflowTypesError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "OperationNotPermittedFault" => {
                     return RusotoError::Service(
@@ -3788,6 +3805,7 @@ pub enum PollForActivityTaskError {
 impl PollForActivityTaskError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<PollForActivityTaskError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "LimitExceededFault" => {
                     return RusotoError::Service(PollForActivityTaskError::LimitExceededFault(
@@ -3838,6 +3856,7 @@ pub enum PollForDecisionTaskError {
 impl PollForDecisionTaskError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<PollForDecisionTaskError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "LimitExceededFault" => {
                     return RusotoError::Service(PollForDecisionTaskError::LimitExceededFault(
@@ -3888,6 +3907,7 @@ impl RecordActivityTaskHeartbeatError {
         res: BufferedHttpResponse,
     ) -> RusotoError<RecordActivityTaskHeartbeatError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "OperationNotPermittedFault" => {
                     return RusotoError::Service(
@@ -3936,6 +3956,7 @@ pub enum RegisterActivityTypeError {
 impl RegisterActivityTypeError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<RegisterActivityTypeError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "LimitExceededFault" => {
                     return RusotoError::Service(RegisterActivityTypeError::LimitExceededFault(
@@ -3994,6 +4015,7 @@ pub enum RegisterDomainError {
 impl RegisterDomainError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<RegisterDomainError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "DomainAlreadyExistsFault" => {
                     return RusotoError::Service(RegisterDomainError::DomainAlreadyExistsFault(
@@ -4046,6 +4068,7 @@ pub enum RegisterWorkflowTypeError {
 impl RegisterWorkflowTypeError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<RegisterWorkflowTypeError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "LimitExceededFault" => {
                     return RusotoError::Service(RegisterWorkflowTypeError::LimitExceededFault(
@@ -4102,6 +4125,7 @@ impl RequestCancelWorkflowExecutionError {
         res: BufferedHttpResponse,
     ) -> RusotoError<RequestCancelWorkflowExecutionError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "OperationNotPermittedFault" => {
                     return RusotoError::Service(
@@ -4148,6 +4172,7 @@ impl RespondActivityTaskCanceledError {
         res: BufferedHttpResponse,
     ) -> RusotoError<RespondActivityTaskCanceledError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "OperationNotPermittedFault" => {
                     return RusotoError::Service(
@@ -4194,6 +4219,7 @@ impl RespondActivityTaskCompletedError {
         res: BufferedHttpResponse,
     ) -> RusotoError<RespondActivityTaskCompletedError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "OperationNotPermittedFault" => {
                     return RusotoError::Service(
@@ -4238,6 +4264,7 @@ pub enum RespondActivityTaskFailedError {
 impl RespondActivityTaskFailedError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<RespondActivityTaskFailedError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "OperationNotPermittedFault" => {
                     return RusotoError::Service(
@@ -4284,6 +4311,7 @@ impl RespondDecisionTaskCompletedError {
         res: BufferedHttpResponse,
     ) -> RusotoError<RespondDecisionTaskCompletedError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "OperationNotPermittedFault" => {
                     return RusotoError::Service(
@@ -4328,6 +4356,7 @@ pub enum SignalWorkflowExecutionError {
 impl SignalWorkflowExecutionError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<SignalWorkflowExecutionError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "OperationNotPermittedFault" => {
                     return RusotoError::Service(
@@ -4378,6 +4407,7 @@ pub enum StartWorkflowExecutionError {
 impl StartWorkflowExecutionError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<StartWorkflowExecutionError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "DefaultUndefinedFault" => {
                     return RusotoError::Service(
@@ -4450,6 +4480,7 @@ pub enum TagResourceError {
 impl TagResourceError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<TagResourceError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "LimitExceededFault" => {
                     return RusotoError::Service(TagResourceError::LimitExceededFault(err.msg))
@@ -4498,6 +4529,7 @@ impl TerminateWorkflowExecutionError {
         res: BufferedHttpResponse,
     ) -> RusotoError<TerminateWorkflowExecutionError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "OperationNotPermittedFault" => {
                     return RusotoError::Service(
@@ -4544,6 +4576,7 @@ pub enum UndeprecateActivityTypeError {
 impl UndeprecateActivityTypeError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UndeprecateActivityTypeError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "OperationNotPermittedFault" => {
                     return RusotoError::Service(
@@ -4596,6 +4629,7 @@ pub enum UndeprecateDomainError {
 impl UndeprecateDomainError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UndeprecateDomainError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "DomainAlreadyExistsFault" => {
                     return RusotoError::Service(UndeprecateDomainError::DomainAlreadyExistsFault(
@@ -4644,6 +4678,7 @@ pub enum UndeprecateWorkflowTypeError {
 impl UndeprecateWorkflowTypeError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UndeprecateWorkflowTypeError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "OperationNotPermittedFault" => {
                     return RusotoError::Service(
@@ -4696,6 +4731,7 @@ pub enum UntagResourceError {
 impl UntagResourceError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UntagResourceError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "LimitExceededFault" => {
                     return RusotoError::Service(UntagResourceError::LimitExceededFault(err.msg))

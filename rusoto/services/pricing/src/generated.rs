@@ -50,7 +50,6 @@ impl PricingClient {
     }
 }
 
-use serde_json;
 /// <p>The values of a given attribute, such as <code>Throughput Optimized HDD</code> or <code>Provisioned IOPS</code> for the <code>Amazon EC2</code> <code>volumeType</code> attribute.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
@@ -220,6 +219,7 @@ pub enum DescribeServicesError {
 impl DescribeServicesError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeServicesError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ExpiredNextTokenException" => {
                     return RusotoError::Service(DescribeServicesError::ExpiredNextToken(err.msg))
@@ -274,6 +274,7 @@ pub enum GetAttributeValuesError {
 impl GetAttributeValuesError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetAttributeValuesError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ExpiredNextTokenException" => {
                     return RusotoError::Service(GetAttributeValuesError::ExpiredNextToken(err.msg))
@@ -328,6 +329,7 @@ pub enum GetProductsError {
 impl GetProductsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetProductsError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ExpiredNextTokenException" => {
                     return RusotoError::Service(GetProductsError::ExpiredNextToken(err.msg))

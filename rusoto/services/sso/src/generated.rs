@@ -186,6 +186,7 @@ pub enum GetRoleCredentialsError {
 impl GetRoleCredentialsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetRoleCredentialsError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidRequestException" => {
                     return RusotoError::Service(GetRoleCredentialsError::InvalidRequest(err.msg))
@@ -234,6 +235,7 @@ pub enum ListAccountRolesError {
 impl ListAccountRolesError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListAccountRolesError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidRequestException" => {
                     return RusotoError::Service(ListAccountRolesError::InvalidRequest(err.msg))
@@ -282,6 +284,7 @@ pub enum ListAccountsError {
 impl ListAccountsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListAccountsError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidRequestException" => {
                     return RusotoError::Service(ListAccountsError::InvalidRequest(err.msg))
@@ -328,6 +331,7 @@ pub enum LogoutError {
 impl LogoutError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<LogoutError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidRequestException" => {
                     return RusotoError::Service(LogoutError::InvalidRequest(err.msg))
@@ -426,6 +430,7 @@ impl Sso for SsoClient {
         &self,
         input: GetRoleCredentialsRequest,
     ) -> Result<GetRoleCredentialsResponse, RusotoError<GetRoleCredentialsError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/federation/credentials";
 
         let mut request = SignedRequest::new("GET", "awsssoportal", &self.region, &request_uri);
@@ -462,6 +467,7 @@ impl Sso for SsoClient {
         &self,
         input: ListAccountRolesRequest,
     ) -> Result<ListAccountRolesResponse, RusotoError<ListAccountRolesError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/assignment/roles";
 
         let mut request = SignedRequest::new("GET", "awsssoportal", &self.region, &request_uri);
@@ -503,6 +509,7 @@ impl Sso for SsoClient {
         &self,
         input: ListAccountsRequest,
     ) -> Result<ListAccountsResponse, RusotoError<ListAccountsError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/assignment/accounts";
 
         let mut request = SignedRequest::new("GET", "awsssoportal", &self.region, &request_uri);
@@ -540,6 +547,7 @@ impl Sso for SsoClient {
     /// <p>Removes the client- and server-side session that is associated with the user.</p>
     #[allow(unused_mut)]
     async fn logout(&self, input: LogoutRequest) -> Result<(), RusotoError<LogoutError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/logout";
 
         let mut request = SignedRequest::new("POST", "awsssoportal", &self.region, &request_uri);
@@ -556,9 +564,9 @@ impl Sso for SsoClient {
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
             let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = ::std::mem::drop(response);
+            let _result = ::std::mem::drop(response);
 
-            Ok(result)
+            Ok(())
         } else {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             Err(LogoutError::from_response(response))

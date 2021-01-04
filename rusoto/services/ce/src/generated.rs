@@ -49,7 +49,6 @@ impl CostExplorerClient {
     }
 }
 
-use serde_json;
 /// <p> An unusual cost pattern. This consists of the detailed metadata and the current status of the anomaly object. </p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
@@ -2670,6 +2669,7 @@ pub enum CreateAnomalyMonitorError {
 impl CreateAnomalyMonitorError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateAnomalyMonitorError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "LimitExceededException" => {
                     return RusotoError::Service(CreateAnomalyMonitorError::LimitExceeded(err.msg))
@@ -2702,6 +2702,7 @@ pub enum CreateAnomalySubscriptionError {
 impl CreateAnomalySubscriptionError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateAnomalySubscriptionError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "LimitExceededException" => {
                     return RusotoError::Service(CreateAnomalySubscriptionError::LimitExceeded(
@@ -2744,6 +2745,7 @@ impl CreateCostCategoryDefinitionError {
         res: BufferedHttpResponse,
     ) -> RusotoError<CreateCostCategoryDefinitionError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "LimitExceededException" => {
                     return RusotoError::Service(CreateCostCategoryDefinitionError::LimitExceeded(
@@ -2786,6 +2788,7 @@ pub enum DeleteAnomalyMonitorError {
 impl DeleteAnomalyMonitorError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteAnomalyMonitorError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "LimitExceededException" => {
                     return RusotoError::Service(DeleteAnomalyMonitorError::LimitExceeded(err.msg))
@@ -2822,6 +2825,7 @@ pub enum DeleteAnomalySubscriptionError {
 impl DeleteAnomalySubscriptionError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteAnomalySubscriptionError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "LimitExceededException" => {
                     return RusotoError::Service(DeleteAnomalySubscriptionError::LimitExceeded(
@@ -2866,6 +2870,7 @@ impl DeleteCostCategoryDefinitionError {
         res: BufferedHttpResponse,
     ) -> RusotoError<DeleteCostCategoryDefinitionError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "LimitExceededException" => {
                     return RusotoError::Service(DeleteCostCategoryDefinitionError::LimitExceeded(
@@ -2910,6 +2915,7 @@ impl DescribeCostCategoryDefinitionError {
         res: BufferedHttpResponse,
     ) -> RusotoError<DescribeCostCategoryDefinitionError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "LimitExceededException" => {
                     return RusotoError::Service(
@@ -2952,6 +2958,7 @@ pub enum GetAnomaliesError {
 impl GetAnomaliesError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetAnomaliesError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidNextTokenException" => {
                     return RusotoError::Service(GetAnomaliesError::InvalidNextToken(err.msg))
@@ -2990,6 +2997,7 @@ pub enum GetAnomalyMonitorsError {
 impl GetAnomalyMonitorsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetAnomalyMonitorsError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidNextTokenException" => {
                     return RusotoError::Service(GetAnomalyMonitorsError::InvalidNextToken(err.msg))
@@ -3032,6 +3040,7 @@ pub enum GetAnomalySubscriptionsError {
 impl GetAnomalySubscriptionsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetAnomalySubscriptionsError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidNextTokenException" => {
                     return RusotoError::Service(GetAnomalySubscriptionsError::InvalidNextToken(
@@ -3084,6 +3093,7 @@ pub enum GetCostAndUsageError {
 impl GetCostAndUsageError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetCostAndUsageError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BillExpirationException" => {
                     return RusotoError::Service(GetCostAndUsageError::BillExpiration(err.msg))
@@ -3140,6 +3150,7 @@ impl GetCostAndUsageWithResourcesError {
         res: BufferedHttpResponse,
     ) -> RusotoError<GetCostAndUsageWithResourcesError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BillExpirationException" => {
                     return RusotoError::Service(GetCostAndUsageWithResourcesError::BillExpiration(
@@ -3200,6 +3211,7 @@ pub enum GetCostForecastError {
 impl GetCostForecastError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetCostForecastError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "DataUnavailableException" => {
                     return RusotoError::Service(GetCostForecastError::DataUnavailable(err.msg))
@@ -3242,6 +3254,7 @@ pub enum GetDimensionValuesError {
 impl GetDimensionValuesError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetDimensionValuesError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BillExpirationException" => {
                     return RusotoError::Service(GetDimensionValuesError::BillExpiration(err.msg))
@@ -3292,6 +3305,7 @@ pub enum GetReservationCoverageError {
 impl GetReservationCoverageError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetReservationCoverageError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "DataUnavailableException" => {
                     return RusotoError::Service(GetReservationCoverageError::DataUnavailable(
@@ -3342,6 +3356,7 @@ impl GetReservationPurchaseRecommendationError {
         res: BufferedHttpResponse,
     ) -> RusotoError<GetReservationPurchaseRecommendationError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "DataUnavailableException" => {
                     return RusotoError::Service(
@@ -3396,6 +3411,7 @@ pub enum GetReservationUtilizationError {
 impl GetReservationUtilizationError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetReservationUtilizationError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "DataUnavailableException" => {
                     return RusotoError::Service(GetReservationUtilizationError::DataUnavailable(
@@ -3444,6 +3460,7 @@ impl GetRightsizingRecommendationError {
         res: BufferedHttpResponse,
     ) -> RusotoError<GetRightsizingRecommendationError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidNextTokenException" => {
                     return RusotoError::Service(
@@ -3488,6 +3505,7 @@ pub enum GetSavingsPlansCoverageError {
 impl GetSavingsPlansCoverageError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetSavingsPlansCoverageError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "DataUnavailableException" => {
                     return RusotoError::Service(GetSavingsPlansCoverageError::DataUnavailable(
@@ -3536,6 +3554,7 @@ impl GetSavingsPlansPurchaseRecommendationError {
         res: BufferedHttpResponse,
     ) -> RusotoError<GetSavingsPlansPurchaseRecommendationError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidNextTokenException" => {
                     return RusotoError::Service(
@@ -3582,6 +3601,7 @@ impl GetSavingsPlansUtilizationError {
         res: BufferedHttpResponse,
     ) -> RusotoError<GetSavingsPlansUtilizationError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "DataUnavailableException" => {
                     return RusotoError::Service(GetSavingsPlansUtilizationError::DataUnavailable(
@@ -3626,6 +3646,7 @@ impl GetSavingsPlansUtilizationDetailsError {
         res: BufferedHttpResponse,
     ) -> RusotoError<GetSavingsPlansUtilizationDetailsError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "DataUnavailableException" => {
                     return RusotoError::Service(
@@ -3684,6 +3705,7 @@ pub enum GetTagsError {
 impl GetTagsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetTagsError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BillExpirationException" => {
                     return RusotoError::Service(GetTagsError::BillExpiration(err.msg))
@@ -3734,6 +3756,7 @@ pub enum GetUsageForecastError {
 impl GetUsageForecastError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetUsageForecastError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "DataUnavailableException" => {
                     return RusotoError::Service(GetUsageForecastError::DataUnavailable(err.msg))
@@ -3776,6 +3799,7 @@ impl ListCostCategoryDefinitionsError {
         res: BufferedHttpResponse,
     ) -> RusotoError<ListCostCategoryDefinitionsError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "LimitExceededException" => {
                     return RusotoError::Service(ListCostCategoryDefinitionsError::LimitExceeded(
@@ -3808,6 +3832,7 @@ pub enum ProvideAnomalyFeedbackError {
 impl ProvideAnomalyFeedbackError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ProvideAnomalyFeedbackError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "LimitExceededException" => {
                     return RusotoError::Service(ProvideAnomalyFeedbackError::LimitExceeded(
@@ -3842,6 +3867,7 @@ pub enum UpdateAnomalyMonitorError {
 impl UpdateAnomalyMonitorError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateAnomalyMonitorError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "LimitExceededException" => {
                     return RusotoError::Service(UpdateAnomalyMonitorError::LimitExceeded(err.msg))
@@ -3880,6 +3906,7 @@ pub enum UpdateAnomalySubscriptionError {
 impl UpdateAnomalySubscriptionError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateAnomalySubscriptionError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "LimitExceededException" => {
                     return RusotoError::Service(UpdateAnomalySubscriptionError::LimitExceeded(
@@ -3932,6 +3959,7 @@ impl UpdateCostCategoryDefinitionError {
         res: BufferedHttpResponse,
     ) -> RusotoError<UpdateCostCategoryDefinitionError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "LimitExceededException" => {
                     return RusotoError::Service(UpdateCostCategoryDefinitionError::LimitExceeded(

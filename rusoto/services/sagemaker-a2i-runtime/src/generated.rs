@@ -24,7 +24,6 @@ use rusoto_core::proto;
 use rusoto_core::signature::SignedRequest;
 #[allow(unused_imports)]
 use serde::{Deserialize, Serialize};
-use serde_json;
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteHumanLoopRequest {
@@ -223,6 +222,7 @@ pub enum DeleteHumanLoopError {
 impl DeleteHumanLoopError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteHumanLoopError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalServerException" => {
                     return RusotoError::Service(DeleteHumanLoopError::InternalServer(err.msg))
@@ -265,6 +265,7 @@ pub enum DescribeHumanLoopError {
 impl DescribeHumanLoopError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeHumanLoopError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalServerException" => {
                     return RusotoError::Service(DescribeHumanLoopError::InternalServer(err.msg))
@@ -307,6 +308,7 @@ pub enum ListHumanLoopsError {
 impl ListHumanLoopsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListHumanLoopsError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalServerException" => {
                     return RusotoError::Service(ListHumanLoopsError::InternalServer(err.msg))
@@ -351,6 +353,7 @@ pub enum StartHumanLoopError {
 impl StartHumanLoopError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<StartHumanLoopError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ConflictException" => {
                     return RusotoError::Service(StartHumanLoopError::Conflict(err.msg))
@@ -397,6 +400,7 @@ pub enum StopHumanLoopError {
 impl StopHumanLoopError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<StopHumanLoopError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalServerException" => {
                     return RusotoError::Service(StopHumanLoopError::InternalServer(err.msg))
@@ -504,6 +508,7 @@ impl SagemakerA2iRuntime for SagemakerA2iRuntimeClient {
         &self,
         input: DeleteHumanLoopRequest,
     ) -> Result<DeleteHumanLoopResponse, RusotoError<DeleteHumanLoopError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/human-loops/{human_loop_name}",
             human_loop_name = input.human_loop_name
@@ -537,6 +542,7 @@ impl SagemakerA2iRuntime for SagemakerA2iRuntimeClient {
         &self,
         input: DescribeHumanLoopRequest,
     ) -> Result<DescribeHumanLoopResponse, RusotoError<DescribeHumanLoopError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/human-loops/{human_loop_name}",
             human_loop_name = input.human_loop_name
@@ -570,6 +576,7 @@ impl SagemakerA2iRuntime for SagemakerA2iRuntimeClient {
         &self,
         input: ListHumanLoopsRequest,
     ) -> Result<ListHumanLoopsResponse, RusotoError<ListHumanLoopsError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/human-loops";
 
         let mut request = SignedRequest::new("GET", "sagemaker", &self.region, &request_uri);
@@ -619,6 +626,7 @@ impl SagemakerA2iRuntime for SagemakerA2iRuntimeClient {
         &self,
         input: StartHumanLoopRequest,
     ) -> Result<StartHumanLoopResponse, RusotoError<StartHumanLoopError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/human-loops";
 
         let mut request = SignedRequest::new("POST", "sagemaker", &self.region, &request_uri);
@@ -651,6 +659,7 @@ impl SagemakerA2iRuntime for SagemakerA2iRuntimeClient {
         &self,
         input: StopHumanLoopRequest,
     ) -> Result<StopHumanLoopResponse, RusotoError<StopHumanLoopError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/human-loops/stop";
 
         let mut request = SignedRequest::new("POST", "sagemaker", &self.region, &request_uri);

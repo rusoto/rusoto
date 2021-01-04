@@ -49,7 +49,6 @@ impl ComprehendClient {
     }
 }
 
-use serde_json;
 /// <p>An augmented manifest file that provides training data for your custom model. An augmented manifest file is a labeled dataset that is produced by Amazon SageMaker Ground Truth.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct AugmentedManifestsListItem {
@@ -2990,6 +2989,7 @@ impl BatchDetectDominantLanguageError {
         res: BufferedHttpResponse,
     ) -> RusotoError<BatchDetectDominantLanguageError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BatchSizeLimitExceededException" => {
                     return RusotoError::Service(
@@ -3052,6 +3052,7 @@ pub enum BatchDetectEntitiesError {
 impl BatchDetectEntitiesError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<BatchDetectEntitiesError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BatchSizeLimitExceededException" => {
                     return RusotoError::Service(BatchDetectEntitiesError::BatchSizeLimitExceeded(
@@ -3112,6 +3113,7 @@ pub enum BatchDetectKeyPhrasesError {
 impl BatchDetectKeyPhrasesError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<BatchDetectKeyPhrasesError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BatchSizeLimitExceededException" => {
                     return RusotoError::Service(
@@ -3176,6 +3178,7 @@ pub enum BatchDetectSentimentError {
 impl BatchDetectSentimentError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<BatchDetectSentimentError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BatchSizeLimitExceededException" => {
                     return RusotoError::Service(BatchDetectSentimentError::BatchSizeLimitExceeded(
@@ -3236,6 +3239,7 @@ pub enum BatchDetectSyntaxError {
 impl BatchDetectSyntaxError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<BatchDetectSyntaxError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BatchSizeLimitExceededException" => {
                     return RusotoError::Service(BatchDetectSyntaxError::BatchSizeLimitExceeded(
@@ -3294,6 +3298,7 @@ pub enum ClassifyDocumentError {
 impl ClassifyDocumentError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ClassifyDocumentError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalServerException" => {
                     return RusotoError::Service(ClassifyDocumentError::InternalServer(err.msg))
@@ -3354,6 +3359,7 @@ pub enum CreateDocumentClassifierError {
 impl CreateDocumentClassifierError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateDocumentClassifierError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalServerException" => {
                     return RusotoError::Service(CreateDocumentClassifierError::InternalServer(
@@ -3444,6 +3450,7 @@ pub enum CreateEndpointError {
 impl CreateEndpointError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateEndpointError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalServerException" => {
                     return RusotoError::Service(CreateEndpointError::InternalServer(err.msg))
@@ -3518,6 +3525,7 @@ pub enum CreateEntityRecognizerError {
 impl CreateEntityRecognizerError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateEntityRecognizerError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalServerException" => {
                     return RusotoError::Service(CreateEntityRecognizerError::InternalServer(
@@ -3600,6 +3608,7 @@ pub enum DeleteDocumentClassifierError {
 impl DeleteDocumentClassifierError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteDocumentClassifierError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalServerException" => {
                     return RusotoError::Service(DeleteDocumentClassifierError::InternalServer(
@@ -3670,6 +3679,7 @@ pub enum DeleteEndpointError {
 impl DeleteEndpointError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteEndpointError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalServerException" => {
                     return RusotoError::Service(DeleteEndpointError::InternalServer(err.msg))
@@ -3726,6 +3736,7 @@ pub enum DeleteEntityRecognizerError {
 impl DeleteEntityRecognizerError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteEntityRecognizerError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalServerException" => {
                     return RusotoError::Service(DeleteEntityRecognizerError::InternalServer(
@@ -3796,6 +3807,7 @@ impl DescribeDocumentClassificationJobError {
         res: BufferedHttpResponse,
     ) -> RusotoError<DescribeDocumentClassificationJobError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalServerException" => {
                     return RusotoError::Service(
@@ -3862,6 +3874,7 @@ impl DescribeDocumentClassifierError {
         res: BufferedHttpResponse,
     ) -> RusotoError<DescribeDocumentClassifierError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalServerException" => {
                     return RusotoError::Service(DescribeDocumentClassifierError::InternalServer(
@@ -3920,6 +3933,7 @@ impl DescribeDominantLanguageDetectionJobError {
         res: BufferedHttpResponse,
     ) -> RusotoError<DescribeDominantLanguageDetectionJobError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalServerException" => {
                     return RusotoError::Service(
@@ -3984,6 +3998,7 @@ pub enum DescribeEndpointError {
 impl DescribeEndpointError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeEndpointError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalServerException" => {
                     return RusotoError::Service(DescribeEndpointError::InternalServer(err.msg))
@@ -4034,6 +4049,7 @@ impl DescribeEntitiesDetectionJobError {
         res: BufferedHttpResponse,
     ) -> RusotoError<DescribeEntitiesDetectionJobError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalServerException" => {
                     return RusotoError::Service(DescribeEntitiesDetectionJobError::InternalServer(
@@ -4090,6 +4106,7 @@ pub enum DescribeEntityRecognizerError {
 impl DescribeEntityRecognizerError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeEntityRecognizerError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalServerException" => {
                     return RusotoError::Service(DescribeEntityRecognizerError::InternalServer(
@@ -4148,6 +4165,7 @@ impl DescribeEventsDetectionJobError {
         res: BufferedHttpResponse,
     ) -> RusotoError<DescribeEventsDetectionJobError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalServerException" => {
                     return RusotoError::Service(DescribeEventsDetectionJobError::InternalServer(
@@ -4206,6 +4224,7 @@ impl DescribeKeyPhrasesDetectionJobError {
         res: BufferedHttpResponse,
     ) -> RusotoError<DescribeKeyPhrasesDetectionJobError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalServerException" => {
                     return RusotoError::Service(
@@ -4270,6 +4289,7 @@ impl DescribePiiEntitiesDetectionJobError {
         res: BufferedHttpResponse,
     ) -> RusotoError<DescribePiiEntitiesDetectionJobError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalServerException" => {
                     return RusotoError::Service(
@@ -4334,6 +4354,7 @@ impl DescribeSentimentDetectionJobError {
         res: BufferedHttpResponse,
     ) -> RusotoError<DescribeSentimentDetectionJobError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalServerException" => {
                     return RusotoError::Service(
@@ -4394,6 +4415,7 @@ impl DescribeTopicsDetectionJobError {
         res: BufferedHttpResponse,
     ) -> RusotoError<DescribeTopicsDetectionJobError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalServerException" => {
                     return RusotoError::Service(DescribeTopicsDetectionJobError::InternalServer(
@@ -4448,6 +4470,7 @@ pub enum DetectDominantLanguageError {
 impl DetectDominantLanguageError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DetectDominantLanguageError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalServerException" => {
                     return RusotoError::Service(DetectDominantLanguageError::InternalServer(
@@ -4500,6 +4523,7 @@ pub enum DetectEntitiesError {
 impl DetectEntitiesError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DetectEntitiesError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalServerException" => {
                     return RusotoError::Service(DetectEntitiesError::InternalServer(err.msg))
@@ -4554,6 +4578,7 @@ pub enum DetectKeyPhrasesError {
 impl DetectKeyPhrasesError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DetectKeyPhrasesError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalServerException" => {
                     return RusotoError::Service(DetectKeyPhrasesError::InternalServer(err.msg))
@@ -4606,6 +4631,7 @@ pub enum DetectPiiEntitiesError {
 impl DetectPiiEntitiesError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DetectPiiEntitiesError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalServerException" => {
                     return RusotoError::Service(DetectPiiEntitiesError::InternalServer(err.msg))
@@ -4658,6 +4684,7 @@ pub enum DetectSentimentError {
 impl DetectSentimentError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DetectSentimentError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalServerException" => {
                     return RusotoError::Service(DetectSentimentError::InternalServer(err.msg))
@@ -4708,6 +4735,7 @@ pub enum DetectSyntaxError {
 impl DetectSyntaxError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DetectSyntaxError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalServerException" => {
                     return RusotoError::Service(DetectSyntaxError::InternalServer(err.msg))
@@ -4758,6 +4786,7 @@ impl ListDocumentClassificationJobsError {
         res: BufferedHttpResponse,
     ) -> RusotoError<ListDocumentClassificationJobsError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalServerException" => {
                     return RusotoError::Service(
@@ -4820,6 +4849,7 @@ pub enum ListDocumentClassifiersError {
 impl ListDocumentClassifiersError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListDocumentClassifiersError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalServerException" => {
                     return RusotoError::Service(ListDocumentClassifiersError::InternalServer(
@@ -4878,6 +4908,7 @@ impl ListDominantLanguageDetectionJobsError {
         res: BufferedHttpResponse,
     ) -> RusotoError<ListDominantLanguageDetectionJobsError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalServerException" => {
                     return RusotoError::Service(
@@ -4940,6 +4971,7 @@ pub enum ListEndpointsError {
 impl ListEndpointsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListEndpointsError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalServerException" => {
                     return RusotoError::Service(ListEndpointsError::InternalServer(err.msg))
@@ -4984,6 +5016,7 @@ pub enum ListEntitiesDetectionJobsError {
 impl ListEntitiesDetectionJobsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListEntitiesDetectionJobsError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalServerException" => {
                     return RusotoError::Service(ListEntitiesDetectionJobsError::InternalServer(
@@ -5040,6 +5073,7 @@ pub enum ListEntityRecognizersError {
 impl ListEntityRecognizersError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListEntityRecognizersError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalServerException" => {
                     return RusotoError::Service(ListEntityRecognizersError::InternalServer(
@@ -5094,6 +5128,7 @@ pub enum ListEventsDetectionJobsError {
 impl ListEventsDetectionJobsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListEventsDetectionJobsError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalServerException" => {
                     return RusotoError::Service(ListEventsDetectionJobsError::InternalServer(
@@ -5152,6 +5187,7 @@ impl ListKeyPhrasesDetectionJobsError {
         res: BufferedHttpResponse,
     ) -> RusotoError<ListKeyPhrasesDetectionJobsError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalServerException" => {
                     return RusotoError::Service(ListKeyPhrasesDetectionJobsError::InternalServer(
@@ -5210,6 +5246,7 @@ impl ListPiiEntitiesDetectionJobsError {
         res: BufferedHttpResponse,
     ) -> RusotoError<ListPiiEntitiesDetectionJobsError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalServerException" => {
                     return RusotoError::Service(ListPiiEntitiesDetectionJobsError::InternalServer(
@@ -5268,6 +5305,7 @@ impl ListSentimentDetectionJobsError {
         res: BufferedHttpResponse,
     ) -> RusotoError<ListSentimentDetectionJobsError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalServerException" => {
                     return RusotoError::Service(ListSentimentDetectionJobsError::InternalServer(
@@ -5322,6 +5360,7 @@ pub enum ListTagsForResourceError {
 impl ListTagsForResourceError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListTagsForResourceError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalServerException" => {
                     return RusotoError::Service(ListTagsForResourceError::InternalServer(err.msg))
@@ -5368,6 +5407,7 @@ pub enum ListTopicsDetectionJobsError {
 impl ListTopicsDetectionJobsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListTopicsDetectionJobsError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalServerException" => {
                     return RusotoError::Service(ListTopicsDetectionJobsError::InternalServer(
@@ -5430,6 +5470,7 @@ impl StartDocumentClassificationJobError {
         res: BufferedHttpResponse,
     ) -> RusotoError<StartDocumentClassificationJobError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalServerException" => {
                     return RusotoError::Service(
@@ -5512,6 +5553,7 @@ impl StartDominantLanguageDetectionJobError {
         res: BufferedHttpResponse,
     ) -> RusotoError<StartDominantLanguageDetectionJobError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalServerException" => {
                     return RusotoError::Service(
@@ -5580,6 +5622,7 @@ pub enum StartEntitiesDetectionJobError {
 impl StartEntitiesDetectionJobError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<StartEntitiesDetectionJobError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalServerException" => {
                     return RusotoError::Service(StartEntitiesDetectionJobError::InternalServer(
@@ -5650,6 +5693,7 @@ pub enum StartEventsDetectionJobError {
 impl StartEventsDetectionJobError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<StartEventsDetectionJobError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalServerException" => {
                     return RusotoError::Service(StartEventsDetectionJobError::InternalServer(
@@ -5708,6 +5752,7 @@ impl StartKeyPhrasesDetectionJobError {
         res: BufferedHttpResponse,
     ) -> RusotoError<StartKeyPhrasesDetectionJobError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalServerException" => {
                     return RusotoError::Service(StartKeyPhrasesDetectionJobError::InternalServer(
@@ -5766,6 +5811,7 @@ impl StartPiiEntitiesDetectionJobError {
         res: BufferedHttpResponse,
     ) -> RusotoError<StartPiiEntitiesDetectionJobError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalServerException" => {
                     return RusotoError::Service(StartPiiEntitiesDetectionJobError::InternalServer(
@@ -5826,6 +5872,7 @@ impl StartSentimentDetectionJobError {
         res: BufferedHttpResponse,
     ) -> RusotoError<StartSentimentDetectionJobError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalServerException" => {
                     return RusotoError::Service(StartSentimentDetectionJobError::InternalServer(
@@ -5882,6 +5929,7 @@ pub enum StartTopicsDetectionJobError {
 impl StartTopicsDetectionJobError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<StartTopicsDetectionJobError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalServerException" => {
                     return RusotoError::Service(StartTopicsDetectionJobError::InternalServer(
@@ -5938,6 +5986,7 @@ impl StopDominantLanguageDetectionJobError {
         res: BufferedHttpResponse,
     ) -> RusotoError<StopDominantLanguageDetectionJobError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalServerException" => {
                     return RusotoError::Service(
@@ -5990,6 +6039,7 @@ pub enum StopEntitiesDetectionJobError {
 impl StopEntitiesDetectionJobError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<StopEntitiesDetectionJobError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalServerException" => {
                     return RusotoError::Service(StopEntitiesDetectionJobError::InternalServer(
@@ -6038,6 +6088,7 @@ pub enum StopEventsDetectionJobError {
 impl StopEventsDetectionJobError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<StopEventsDetectionJobError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalServerException" => {
                     return RusotoError::Service(StopEventsDetectionJobError::InternalServer(
@@ -6086,6 +6137,7 @@ impl StopKeyPhrasesDetectionJobError {
         res: BufferedHttpResponse,
     ) -> RusotoError<StopKeyPhrasesDetectionJobError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalServerException" => {
                     return RusotoError::Service(StopKeyPhrasesDetectionJobError::InternalServer(
@@ -6136,6 +6188,7 @@ impl StopPiiEntitiesDetectionJobError {
         res: BufferedHttpResponse,
     ) -> RusotoError<StopPiiEntitiesDetectionJobError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalServerException" => {
                     return RusotoError::Service(StopPiiEntitiesDetectionJobError::InternalServer(
@@ -6184,6 +6237,7 @@ pub enum StopSentimentDetectionJobError {
 impl StopSentimentDetectionJobError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<StopSentimentDetectionJobError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalServerException" => {
                     return RusotoError::Service(StopSentimentDetectionJobError::InternalServer(
@@ -6236,6 +6290,7 @@ impl StopTrainingDocumentClassifierError {
         res: BufferedHttpResponse,
     ) -> RusotoError<StopTrainingDocumentClassifierError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalServerException" => {
                     return RusotoError::Service(
@@ -6302,6 +6357,7 @@ impl StopTrainingEntityRecognizerError {
         res: BufferedHttpResponse,
     ) -> RusotoError<StopTrainingEntityRecognizerError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalServerException" => {
                     return RusotoError::Service(StopTrainingEntityRecognizerError::InternalServer(
@@ -6362,6 +6418,7 @@ pub enum TagResourceError {
 impl TagResourceError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<TagResourceError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ConcurrentModificationException" => {
                     return RusotoError::Service(TagResourceError::ConcurrentModification(err.msg))
@@ -6416,6 +6473,7 @@ pub enum UntagResourceError {
 impl UntagResourceError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UntagResourceError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ConcurrentModificationException" => {
                     return RusotoError::Service(UntagResourceError::ConcurrentModification(
@@ -6476,6 +6534,7 @@ pub enum UpdateEndpointError {
 impl UpdateEndpointError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateEndpointError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalServerException" => {
                     return RusotoError::Service(UpdateEndpointError::InternalServer(err.msg))

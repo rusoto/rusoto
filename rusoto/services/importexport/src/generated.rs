@@ -31,7 +31,6 @@ use rusoto_core::signature::SignedRequest;
 use serde::Deserialize;
 #[cfg(feature = "serialize_structs")]
 use serde::Serialize;
-use serde_urlencoded;
 use std::str::FromStr;
 use xml::EventReader;
 
@@ -71,11 +70,12 @@ pub struct Artifact {
 #[allow(dead_code)]
 struct ArtifactDeserializer;
 impl ArtifactDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Artifact, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, Artifact, _>(tag_name, stack, |name, stack, obj| {
             match name {
                 "Description" => {
@@ -94,11 +94,13 @@ impl ArtifactDeserializer {
 #[allow(dead_code)]
 struct ArtifactListDeserializer;
 impl ArtifactListDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<Artifact>, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
+
         deserialize_elements::<_, Vec<_>, _>(tag_name, stack, |name, stack, obj| {
             if name == "member" {
                 obj.push(ArtifactDeserializer::deserialize("member", stack)?);
@@ -120,10 +122,11 @@ pub struct CancelJobInput {
 /// Serialize `CancelJobInput` contents to a `SignedRequest`.
 struct CancelJobInputSerializer;
 impl CancelJobInputSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &CancelJobInput) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         if let Some(ref field_value) = obj.api_version {
@@ -143,11 +146,12 @@ pub struct CancelJobOutput {
 #[allow(dead_code)]
 struct CancelJobOutputDeserializer;
 impl CancelJobOutputDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<CancelJobOutput, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, CancelJobOutput, _>(tag_name, stack, |name, stack, obj| {
             match name {
                 "Success" => {
@@ -162,8 +166,9 @@ impl CancelJobOutputDeserializer {
 #[allow(dead_code)]
 struct CarrierDeserializer;
 impl CarrierDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
@@ -181,10 +186,11 @@ pub struct CreateJobInput {
 /// Serialize `CreateJobInput` contents to a `SignedRequest`.
 struct CreateJobInputSerializer;
 impl CreateJobInputSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &CreateJobInput) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         if let Some(ref field_value) = obj.api_version {
@@ -214,11 +220,12 @@ pub struct CreateJobOutput {
 #[allow(dead_code)]
 struct CreateJobOutputDeserializer;
 impl CreateJobOutputDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<CreateJobOutput, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, CreateJobOutput, _>(tag_name, stack, |name, stack, obj| {
             match name {
                 "ArtifactList" => {
@@ -257,40 +264,45 @@ impl CreateJobOutputDeserializer {
 #[allow(dead_code)]
 struct CreationDateDeserializer;
 impl CreationDateDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 #[allow(dead_code)]
 struct CurrentManifestDeserializer;
 impl CurrentManifestDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 #[allow(dead_code)]
 struct DescriptionDeserializer;
 impl DescriptionDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 #[allow(dead_code)]
 struct ErrorCountDeserializer;
 impl ErrorCountDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<i64, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::deserialize_primitive(tag_name, stack, |s| Ok(i64::from_str(&s).unwrap()))
     }
 }
 #[allow(dead_code)]
 struct GenericStringDeserializer;
 impl GenericStringDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
@@ -314,10 +326,11 @@ pub struct GetShippingLabelInput {
 /// Serialize `GetShippingLabelInput` contents to a `SignedRequest`.
 struct GetShippingLabelInputSerializer;
 impl GetShippingLabelInputSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &GetShippingLabelInput) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         if let Some(ref field_value) = obj.api_version {
@@ -367,11 +380,12 @@ pub struct GetShippingLabelOutput {
 #[allow(dead_code)]
 struct GetShippingLabelOutputDeserializer;
 impl GetShippingLabelOutputDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<GetShippingLabelOutput, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, GetShippingLabelOutput, _>(tag_name, stack, |name, stack, obj| {
             match name {
                 "ShippingLabelURL" => {
@@ -400,10 +414,11 @@ pub struct GetStatusInput {
 /// Serialize `GetStatusInput` contents to a `SignedRequest`.
 struct GetStatusInputSerializer;
 impl GetStatusInputSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &GetStatusInput) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         if let Some(ref field_value) = obj.api_version {
@@ -438,11 +453,12 @@ pub struct GetStatusOutput {
 #[allow(dead_code)]
 struct GetStatusOutputDeserializer;
 impl GetStatusOutputDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<GetStatusOutput, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, GetStatusOutput, _>(tag_name, stack, |name, stack, obj| {
             match name {
                 "ArtifactList" => {
@@ -529,16 +545,18 @@ impl GetStatusOutputDeserializer {
 #[allow(dead_code)]
 struct IsCanceledDeserializer;
 impl IsCanceledDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<bool, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::deserialize_primitive(tag_name, stack, |s| Ok(bool::from_str(&s).unwrap()))
     }
 }
 #[allow(dead_code)]
 struct IsTruncatedDeserializer;
 impl IsTruncatedDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<bool, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::deserialize_primitive(tag_name, stack, |s| Ok(bool::from_str(&s).unwrap()))
     }
 }
@@ -555,8 +573,9 @@ pub struct Job {
 #[allow(dead_code)]
 struct JobDeserializer;
 impl JobDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<Job, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, Job, _>(tag_name, stack, |name, stack, obj| {
             match name {
                 "CreationDate" => {
@@ -584,8 +603,9 @@ impl JobDeserializer {
 #[allow(dead_code)]
 struct JobIdDeserializer;
 impl JobIdDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
@@ -593,6 +613,7 @@ impl JobIdDeserializer {
 /// Serialize `JobIdList` contents to a `SignedRequest`.
 struct JobIdListSerializer;
 impl JobIdListSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &Vec<String>) {
         for (index, obj) in obj.iter().enumerate() {
             let key = format!("{}.member.{}", name, index + 1);
@@ -604,19 +625,22 @@ impl JobIdListSerializer {
 #[allow(dead_code)]
 struct JobTypeDeserializer;
 impl JobTypeDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 #[allow(dead_code)]
 struct JobsListDeserializer;
 impl JobsListDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<Job>, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
+
         deserialize_elements::<_, Vec<_>, _>(tag_name, stack, |name, stack, obj| {
             if name == "member" {
                 obj.push(JobDeserializer::deserialize("member", stack)?);
@@ -639,10 +663,11 @@ pub struct ListJobsInput {
 /// Serialize `ListJobsInput` contents to a `SignedRequest`.
 struct ListJobsInputSerializer;
 impl ListJobsInputSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &ListJobsInput) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         if let Some(ref field_value) = obj.api_version {
@@ -668,11 +693,12 @@ pub struct ListJobsOutput {
 #[allow(dead_code)]
 struct ListJobsOutputDeserializer;
 impl ListJobsOutputDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<ListJobsOutput, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, ListJobsOutput, _>(tag_name, stack, |name, stack, obj| {
             match name {
                 "IsTruncated" => {
@@ -693,88 +719,99 @@ impl ListJobsOutputDeserializer {
 #[allow(dead_code)]
 struct LocationCodeDeserializer;
 impl LocationCodeDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 #[allow(dead_code)]
 struct LocationMessageDeserializer;
 impl LocationMessageDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 #[allow(dead_code)]
 struct LogBucketDeserializer;
 impl LogBucketDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 #[allow(dead_code)]
 struct LogKeyDeserializer;
 impl LogKeyDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 #[allow(dead_code)]
 struct ProgressCodeDeserializer;
 impl ProgressCodeDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 #[allow(dead_code)]
 struct ProgressMessageDeserializer;
 impl ProgressMessageDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 #[allow(dead_code)]
 struct SignatureDeserializer;
 impl SignatureDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 #[allow(dead_code)]
 struct SignatureFileContentsDeserializer;
 impl SignatureFileContentsDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 #[allow(dead_code)]
 struct SuccessDeserializer;
 impl SuccessDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<bool, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::deserialize_primitive(tag_name, stack, |s| Ok(bool::from_str(&s).unwrap()))
     }
 }
 #[allow(dead_code)]
 struct TrackingNumberDeserializer;
 impl TrackingNumberDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 #[allow(dead_code)]
 struct URLDeserializer;
 impl URLDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
@@ -792,10 +829,11 @@ pub struct UpdateJobInput {
 /// Serialize `UpdateJobInput` contents to a `SignedRequest`.
 struct UpdateJobInputSerializer;
 impl UpdateJobInputSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &UpdateJobInput) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         if let Some(ref field_value) = obj.api_version {
@@ -820,11 +858,12 @@ pub struct UpdateJobOutput {
 #[allow(dead_code)]
 struct UpdateJobOutputDeserializer;
 impl UpdateJobOutputDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<UpdateJobOutput, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, UpdateJobOutput, _>(tag_name, stack, |name, stack, obj| {
             match name {
                 "ArtifactList" => {
@@ -850,8 +889,9 @@ impl UpdateJobOutputDeserializer {
 #[allow(dead_code)]
 struct WarningMessageDeserializer;
 impl WarningMessageDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
@@ -878,39 +918,42 @@ impl CancelJobError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    "CanceledJobIdException" => {
-                        return RusotoError::Service(CancelJobError::CanceledJobId(
-                            parsed_error.message,
-                        ))
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {
+                        "CanceledJobIdException" => {
+                            return RusotoError::Service(CancelJobError::CanceledJobId(
+                                parsed_error.message,
+                            ))
+                        }
+                        "ExpiredJobIdException" => {
+                            return RusotoError::Service(CancelJobError::ExpiredJobId(
+                                parsed_error.message,
+                            ))
+                        }
+                        "InvalidAccessKeyIdException" => {
+                            return RusotoError::Service(CancelJobError::InvalidAccessKeyId(
+                                parsed_error.message,
+                            ))
+                        }
+                        "InvalidJobIdException" => {
+                            return RusotoError::Service(CancelJobError::InvalidJobId(
+                                parsed_error.message,
+                            ))
+                        }
+                        "InvalidVersionException" => {
+                            return RusotoError::Service(CancelJobError::InvalidVersion(
+                                parsed_error.message,
+                            ))
+                        }
+                        "UnableToCancelJobIdException" => {
+                            return RusotoError::Service(CancelJobError::UnableToCancelJobId(
+                                parsed_error.message,
+                            ))
+                        }
+                        _ => {}
                     }
-                    "ExpiredJobIdException" => {
-                        return RusotoError::Service(CancelJobError::ExpiredJobId(
-                            parsed_error.message,
-                        ))
-                    }
-                    "InvalidAccessKeyIdException" => {
-                        return RusotoError::Service(CancelJobError::InvalidAccessKeyId(
-                            parsed_error.message,
-                        ))
-                    }
-                    "InvalidJobIdException" => {
-                        return RusotoError::Service(CancelJobError::InvalidJobId(
-                            parsed_error.message,
-                        ))
-                    }
-                    "InvalidVersionException" => {
-                        return RusotoError::Service(CancelJobError::InvalidVersion(
-                            parsed_error.message,
-                        ))
-                    }
-                    "UnableToCancelJobIdException" => {
-                        return RusotoError::Service(CancelJobError::UnableToCancelJobId(
-                            parsed_error.message,
-                        ))
-                    }
-                    _ => {}
                 }
             }
         }
@@ -982,89 +1025,92 @@ impl CreateJobError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    "BucketPermissionException" => {
-                        return RusotoError::Service(CreateJobError::BucketPermission(
-                            parsed_error.message,
-                        ))
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {
+                        "BucketPermissionException" => {
+                            return RusotoError::Service(CreateJobError::BucketPermission(
+                                parsed_error.message,
+                            ))
+                        }
+                        "CreateJobQuotaExceededException" => {
+                            return RusotoError::Service(CreateJobError::CreateJobQuotaExceeded(
+                                parsed_error.message,
+                            ))
+                        }
+                        "InvalidAccessKeyIdException" => {
+                            return RusotoError::Service(CreateJobError::InvalidAccessKeyId(
+                                parsed_error.message,
+                            ))
+                        }
+                        "InvalidAddressException" => {
+                            return RusotoError::Service(CreateJobError::InvalidAddress(
+                                parsed_error.message,
+                            ))
+                        }
+                        "InvalidCustomsException" => {
+                            return RusotoError::Service(CreateJobError::InvalidCustoms(
+                                parsed_error.message,
+                            ))
+                        }
+                        "InvalidFileSystemException" => {
+                            return RusotoError::Service(CreateJobError::InvalidFileSystem(
+                                parsed_error.message,
+                            ))
+                        }
+                        "InvalidJobIdException" => {
+                            return RusotoError::Service(CreateJobError::InvalidJobId(
+                                parsed_error.message,
+                            ))
+                        }
+                        "InvalidManifestFieldException" => {
+                            return RusotoError::Service(CreateJobError::InvalidManifestField(
+                                parsed_error.message,
+                            ))
+                        }
+                        "InvalidParameterException" => {
+                            return RusotoError::Service(CreateJobError::InvalidParameter(
+                                parsed_error.message,
+                            ))
+                        }
+                        "InvalidVersionException" => {
+                            return RusotoError::Service(CreateJobError::InvalidVersion(
+                                parsed_error.message,
+                            ))
+                        }
+                        "MalformedManifestException" => {
+                            return RusotoError::Service(CreateJobError::MalformedManifest(
+                                parsed_error.message,
+                            ))
+                        }
+                        "MissingCustomsException" => {
+                            return RusotoError::Service(CreateJobError::MissingCustoms(
+                                parsed_error.message,
+                            ))
+                        }
+                        "MissingManifestFieldException" => {
+                            return RusotoError::Service(CreateJobError::MissingManifestField(
+                                parsed_error.message,
+                            ))
+                        }
+                        "MissingParameterException" => {
+                            return RusotoError::Service(CreateJobError::MissingParameter(
+                                parsed_error.message,
+                            ))
+                        }
+                        "MultipleRegionsException" => {
+                            return RusotoError::Service(CreateJobError::MultipleRegions(
+                                parsed_error.message,
+                            ))
+                        }
+                        "NoSuchBucketException" => {
+                            return RusotoError::Service(CreateJobError::NoSuchBucket(
+                                parsed_error.message,
+                            ))
+                        }
+                        _ => {}
                     }
-                    "CreateJobQuotaExceededException" => {
-                        return RusotoError::Service(CreateJobError::CreateJobQuotaExceeded(
-                            parsed_error.message,
-                        ))
-                    }
-                    "InvalidAccessKeyIdException" => {
-                        return RusotoError::Service(CreateJobError::InvalidAccessKeyId(
-                            parsed_error.message,
-                        ))
-                    }
-                    "InvalidAddressException" => {
-                        return RusotoError::Service(CreateJobError::InvalidAddress(
-                            parsed_error.message,
-                        ))
-                    }
-                    "InvalidCustomsException" => {
-                        return RusotoError::Service(CreateJobError::InvalidCustoms(
-                            parsed_error.message,
-                        ))
-                    }
-                    "InvalidFileSystemException" => {
-                        return RusotoError::Service(CreateJobError::InvalidFileSystem(
-                            parsed_error.message,
-                        ))
-                    }
-                    "InvalidJobIdException" => {
-                        return RusotoError::Service(CreateJobError::InvalidJobId(
-                            parsed_error.message,
-                        ))
-                    }
-                    "InvalidManifestFieldException" => {
-                        return RusotoError::Service(CreateJobError::InvalidManifestField(
-                            parsed_error.message,
-                        ))
-                    }
-                    "InvalidParameterException" => {
-                        return RusotoError::Service(CreateJobError::InvalidParameter(
-                            parsed_error.message,
-                        ))
-                    }
-                    "InvalidVersionException" => {
-                        return RusotoError::Service(CreateJobError::InvalidVersion(
-                            parsed_error.message,
-                        ))
-                    }
-                    "MalformedManifestException" => {
-                        return RusotoError::Service(CreateJobError::MalformedManifest(
-                            parsed_error.message,
-                        ))
-                    }
-                    "MissingCustomsException" => {
-                        return RusotoError::Service(CreateJobError::MissingCustoms(
-                            parsed_error.message,
-                        ))
-                    }
-                    "MissingManifestFieldException" => {
-                        return RusotoError::Service(CreateJobError::MissingManifestField(
-                            parsed_error.message,
-                        ))
-                    }
-                    "MissingParameterException" => {
-                        return RusotoError::Service(CreateJobError::MissingParameter(
-                            parsed_error.message,
-                        ))
-                    }
-                    "MultipleRegionsException" => {
-                        return RusotoError::Service(CreateJobError::MultipleRegions(
-                            parsed_error.message,
-                        ))
-                    }
-                    "NoSuchBucketException" => {
-                        return RusotoError::Service(CreateJobError::NoSuchBucket(
-                            parsed_error.message,
-                        ))
-                    }
-                    _ => {}
                 }
             }
         }
@@ -1128,44 +1174,47 @@ impl GetShippingLabelError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    "CanceledJobIdException" => {
-                        return RusotoError::Service(GetShippingLabelError::CanceledJobId(
-                            parsed_error.message,
-                        ))
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {
+                        "CanceledJobIdException" => {
+                            return RusotoError::Service(GetShippingLabelError::CanceledJobId(
+                                parsed_error.message,
+                            ))
+                        }
+                        "ExpiredJobIdException" => {
+                            return RusotoError::Service(GetShippingLabelError::ExpiredJobId(
+                                parsed_error.message,
+                            ))
+                        }
+                        "InvalidAccessKeyIdException" => {
+                            return RusotoError::Service(GetShippingLabelError::InvalidAccessKeyId(
+                                parsed_error.message,
+                            ))
+                        }
+                        "InvalidAddressException" => {
+                            return RusotoError::Service(GetShippingLabelError::InvalidAddress(
+                                parsed_error.message,
+                            ))
+                        }
+                        "InvalidJobIdException" => {
+                            return RusotoError::Service(GetShippingLabelError::InvalidJobId(
+                                parsed_error.message,
+                            ))
+                        }
+                        "InvalidParameterException" => {
+                            return RusotoError::Service(GetShippingLabelError::InvalidParameter(
+                                parsed_error.message,
+                            ))
+                        }
+                        "InvalidVersionException" => {
+                            return RusotoError::Service(GetShippingLabelError::InvalidVersion(
+                                parsed_error.message,
+                            ))
+                        }
+                        _ => {}
                     }
-                    "ExpiredJobIdException" => {
-                        return RusotoError::Service(GetShippingLabelError::ExpiredJobId(
-                            parsed_error.message,
-                        ))
-                    }
-                    "InvalidAccessKeyIdException" => {
-                        return RusotoError::Service(GetShippingLabelError::InvalidAccessKeyId(
-                            parsed_error.message,
-                        ))
-                    }
-                    "InvalidAddressException" => {
-                        return RusotoError::Service(GetShippingLabelError::InvalidAddress(
-                            parsed_error.message,
-                        ))
-                    }
-                    "InvalidJobIdException" => {
-                        return RusotoError::Service(GetShippingLabelError::InvalidJobId(
-                            parsed_error.message,
-                        ))
-                    }
-                    "InvalidParameterException" => {
-                        return RusotoError::Service(GetShippingLabelError::InvalidParameter(
-                            parsed_error.message,
-                        ))
-                    }
-                    "InvalidVersionException" => {
-                        return RusotoError::Service(GetShippingLabelError::InvalidVersion(
-                            parsed_error.message,
-                        ))
-                    }
-                    _ => {}
                 }
             }
         }
@@ -1216,34 +1265,37 @@ impl GetStatusError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    "CanceledJobIdException" => {
-                        return RusotoError::Service(GetStatusError::CanceledJobId(
-                            parsed_error.message,
-                        ))
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {
+                        "CanceledJobIdException" => {
+                            return RusotoError::Service(GetStatusError::CanceledJobId(
+                                parsed_error.message,
+                            ))
+                        }
+                        "ExpiredJobIdException" => {
+                            return RusotoError::Service(GetStatusError::ExpiredJobId(
+                                parsed_error.message,
+                            ))
+                        }
+                        "InvalidAccessKeyIdException" => {
+                            return RusotoError::Service(GetStatusError::InvalidAccessKeyId(
+                                parsed_error.message,
+                            ))
+                        }
+                        "InvalidJobIdException" => {
+                            return RusotoError::Service(GetStatusError::InvalidJobId(
+                                parsed_error.message,
+                            ))
+                        }
+                        "InvalidVersionException" => {
+                            return RusotoError::Service(GetStatusError::InvalidVersion(
+                                parsed_error.message,
+                            ))
+                        }
+                        _ => {}
                     }
-                    "ExpiredJobIdException" => {
-                        return RusotoError::Service(GetStatusError::ExpiredJobId(
-                            parsed_error.message,
-                        ))
-                    }
-                    "InvalidAccessKeyIdException" => {
-                        return RusotoError::Service(GetStatusError::InvalidAccessKeyId(
-                            parsed_error.message,
-                        ))
-                    }
-                    "InvalidJobIdException" => {
-                        return RusotoError::Service(GetStatusError::InvalidJobId(
-                            parsed_error.message,
-                        ))
-                    }
-                    "InvalidVersionException" => {
-                        return RusotoError::Service(GetStatusError::InvalidVersion(
-                            parsed_error.message,
-                        ))
-                    }
-                    _ => {}
                 }
             }
         }
@@ -1288,24 +1340,27 @@ impl ListJobsError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    "InvalidAccessKeyIdException" => {
-                        return RusotoError::Service(ListJobsError::InvalidAccessKeyId(
-                            parsed_error.message,
-                        ))
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {
+                        "InvalidAccessKeyIdException" => {
+                            return RusotoError::Service(ListJobsError::InvalidAccessKeyId(
+                                parsed_error.message,
+                            ))
+                        }
+                        "InvalidParameterException" => {
+                            return RusotoError::Service(ListJobsError::InvalidParameter(
+                                parsed_error.message,
+                            ))
+                        }
+                        "InvalidVersionException" => {
+                            return RusotoError::Service(ListJobsError::InvalidVersion(
+                                parsed_error.message,
+                            ))
+                        }
+                        _ => {}
                     }
-                    "InvalidParameterException" => {
-                        return RusotoError::Service(ListJobsError::InvalidParameter(
-                            parsed_error.message,
-                        ))
-                    }
-                    "InvalidVersionException" => {
-                        return RusotoError::Service(ListJobsError::InvalidVersion(
-                            parsed_error.message,
-                        ))
-                    }
-                    _ => {}
                 }
             }
         }
@@ -1378,99 +1433,102 @@ impl UpdateJobError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    "BucketPermissionException" => {
-                        return RusotoError::Service(UpdateJobError::BucketPermission(
-                            parsed_error.message,
-                        ))
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {
+                        "BucketPermissionException" => {
+                            return RusotoError::Service(UpdateJobError::BucketPermission(
+                                parsed_error.message,
+                            ))
+                        }
+                        "CanceledJobIdException" => {
+                            return RusotoError::Service(UpdateJobError::CanceledJobId(
+                                parsed_error.message,
+                            ))
+                        }
+                        "ExpiredJobIdException" => {
+                            return RusotoError::Service(UpdateJobError::ExpiredJobId(
+                                parsed_error.message,
+                            ))
+                        }
+                        "InvalidAccessKeyIdException" => {
+                            return RusotoError::Service(UpdateJobError::InvalidAccessKeyId(
+                                parsed_error.message,
+                            ))
+                        }
+                        "InvalidAddressException" => {
+                            return RusotoError::Service(UpdateJobError::InvalidAddress(
+                                parsed_error.message,
+                            ))
+                        }
+                        "InvalidCustomsException" => {
+                            return RusotoError::Service(UpdateJobError::InvalidCustoms(
+                                parsed_error.message,
+                            ))
+                        }
+                        "InvalidFileSystemException" => {
+                            return RusotoError::Service(UpdateJobError::InvalidFileSystem(
+                                parsed_error.message,
+                            ))
+                        }
+                        "InvalidJobIdException" => {
+                            return RusotoError::Service(UpdateJobError::InvalidJobId(
+                                parsed_error.message,
+                            ))
+                        }
+                        "InvalidManifestFieldException" => {
+                            return RusotoError::Service(UpdateJobError::InvalidManifestField(
+                                parsed_error.message,
+                            ))
+                        }
+                        "InvalidParameterException" => {
+                            return RusotoError::Service(UpdateJobError::InvalidParameter(
+                                parsed_error.message,
+                            ))
+                        }
+                        "InvalidVersionException" => {
+                            return RusotoError::Service(UpdateJobError::InvalidVersion(
+                                parsed_error.message,
+                            ))
+                        }
+                        "MalformedManifestException" => {
+                            return RusotoError::Service(UpdateJobError::MalformedManifest(
+                                parsed_error.message,
+                            ))
+                        }
+                        "MissingCustomsException" => {
+                            return RusotoError::Service(UpdateJobError::MissingCustoms(
+                                parsed_error.message,
+                            ))
+                        }
+                        "MissingManifestFieldException" => {
+                            return RusotoError::Service(UpdateJobError::MissingManifestField(
+                                parsed_error.message,
+                            ))
+                        }
+                        "MissingParameterException" => {
+                            return RusotoError::Service(UpdateJobError::MissingParameter(
+                                parsed_error.message,
+                            ))
+                        }
+                        "MultipleRegionsException" => {
+                            return RusotoError::Service(UpdateJobError::MultipleRegions(
+                                parsed_error.message,
+                            ))
+                        }
+                        "NoSuchBucketException" => {
+                            return RusotoError::Service(UpdateJobError::NoSuchBucket(
+                                parsed_error.message,
+                            ))
+                        }
+                        "UnableToUpdateJobIdException" => {
+                            return RusotoError::Service(UpdateJobError::UnableToUpdateJobId(
+                                parsed_error.message,
+                            ))
+                        }
+                        _ => {}
                     }
-                    "CanceledJobIdException" => {
-                        return RusotoError::Service(UpdateJobError::CanceledJobId(
-                            parsed_error.message,
-                        ))
-                    }
-                    "ExpiredJobIdException" => {
-                        return RusotoError::Service(UpdateJobError::ExpiredJobId(
-                            parsed_error.message,
-                        ))
-                    }
-                    "InvalidAccessKeyIdException" => {
-                        return RusotoError::Service(UpdateJobError::InvalidAccessKeyId(
-                            parsed_error.message,
-                        ))
-                    }
-                    "InvalidAddressException" => {
-                        return RusotoError::Service(UpdateJobError::InvalidAddress(
-                            parsed_error.message,
-                        ))
-                    }
-                    "InvalidCustomsException" => {
-                        return RusotoError::Service(UpdateJobError::InvalidCustoms(
-                            parsed_error.message,
-                        ))
-                    }
-                    "InvalidFileSystemException" => {
-                        return RusotoError::Service(UpdateJobError::InvalidFileSystem(
-                            parsed_error.message,
-                        ))
-                    }
-                    "InvalidJobIdException" => {
-                        return RusotoError::Service(UpdateJobError::InvalidJobId(
-                            parsed_error.message,
-                        ))
-                    }
-                    "InvalidManifestFieldException" => {
-                        return RusotoError::Service(UpdateJobError::InvalidManifestField(
-                            parsed_error.message,
-                        ))
-                    }
-                    "InvalidParameterException" => {
-                        return RusotoError::Service(UpdateJobError::InvalidParameter(
-                            parsed_error.message,
-                        ))
-                    }
-                    "InvalidVersionException" => {
-                        return RusotoError::Service(UpdateJobError::InvalidVersion(
-                            parsed_error.message,
-                        ))
-                    }
-                    "MalformedManifestException" => {
-                        return RusotoError::Service(UpdateJobError::MalformedManifest(
-                            parsed_error.message,
-                        ))
-                    }
-                    "MissingCustomsException" => {
-                        return RusotoError::Service(UpdateJobError::MissingCustoms(
-                            parsed_error.message,
-                        ))
-                    }
-                    "MissingManifestFieldException" => {
-                        return RusotoError::Service(UpdateJobError::MissingManifestField(
-                            parsed_error.message,
-                        ))
-                    }
-                    "MissingParameterException" => {
-                        return RusotoError::Service(UpdateJobError::MissingParameter(
-                            parsed_error.message,
-                        ))
-                    }
-                    "MultipleRegionsException" => {
-                        return RusotoError::Service(UpdateJobError::MultipleRegions(
-                            parsed_error.message,
-                        ))
-                    }
-                    "NoSuchBucketException" => {
-                        return RusotoError::Service(UpdateJobError::NoSuchBucket(
-                            parsed_error.message,
-                        ))
-                    }
-                    "UnableToUpdateJobIdException" => {
-                        return RusotoError::Service(UpdateJobError::UnableToUpdateJobId(
-                            parsed_error.message,
-                        ))
-                    }
-                    _ => {}
                 }
             }
         }

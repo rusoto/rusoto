@@ -23,7 +23,6 @@ use rusoto_core::proto;
 use rusoto_core::signature::SignedRequest;
 #[allow(unused_imports)]
 use serde::{Deserialize, Serialize};
-use serde_json;
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetIceServerConfigRequest {
@@ -118,6 +117,7 @@ pub enum GetIceServerConfigError {
 impl GetIceServerConfigError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetIceServerConfigError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ClientLimitExceededException" => {
                     return RusotoError::Service(GetIceServerConfigError::ClientLimitExceeded(
@@ -176,6 +176,7 @@ pub enum SendAlexaOfferToMasterError {
 impl SendAlexaOfferToMasterError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<SendAlexaOfferToMasterError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ClientLimitExceededException" => {
                     return RusotoError::Service(SendAlexaOfferToMasterError::ClientLimitExceeded(
@@ -277,6 +278,7 @@ impl KinesisVideoSignaling for KinesisVideoSignalingClient {
         &self,
         input: GetIceServerConfigRequest,
     ) -> Result<GetIceServerConfigResponse, RusotoError<GetIceServerConfigError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/v1/get-ice-server-config";
 
         let mut request = SignedRequest::new("POST", "kinesisvideo", &self.region, &request_uri);
@@ -308,6 +310,7 @@ impl KinesisVideoSignaling for KinesisVideoSignalingClient {
         &self,
         input: SendAlexaOfferToMasterRequest,
     ) -> Result<SendAlexaOfferToMasterResponse, RusotoError<SendAlexaOfferToMasterError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/v1/send-alexa-offer-to-master";
 
         let mut request = SignedRequest::new("POST", "kinesisvideo", &self.region, &request_uri);

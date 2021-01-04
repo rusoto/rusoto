@@ -49,7 +49,6 @@ impl CodeStarClient {
     }
 }
 
-use serde_json;
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct AssociateTeamMemberRequest {
@@ -801,6 +800,7 @@ pub enum AssociateTeamMemberError {
 impl AssociateTeamMemberError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<AssociateTeamMemberError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ConcurrentModificationException" => {
                     return RusotoError::Service(AssociateTeamMemberError::ConcurrentModification(
@@ -871,6 +871,7 @@ pub enum CreateProjectError {
 impl CreateProjectError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateProjectError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ConcurrentModificationException" => {
                     return RusotoError::Service(CreateProjectError::ConcurrentModification(
@@ -923,6 +924,7 @@ pub enum CreateUserProfileError {
 impl CreateUserProfileError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateUserProfileError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "UserProfileAlreadyExistsException" => {
                     return RusotoError::Service(CreateUserProfileError::UserProfileAlreadyExists(
@@ -957,6 +959,7 @@ pub enum DeleteProjectError {
 impl DeleteProjectError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteProjectError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ConcurrentModificationException" => {
                     return RusotoError::Service(DeleteProjectError::ConcurrentModification(
@@ -990,6 +993,7 @@ pub enum DeleteUserProfileError {}
 impl DeleteUserProfileError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteUserProfileError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
@@ -1021,6 +1025,7 @@ pub enum DescribeProjectError {
 impl DescribeProjectError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeProjectError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ConcurrentModificationException" => {
                     return RusotoError::Service(DescribeProjectError::ConcurrentModification(
@@ -1067,6 +1072,7 @@ pub enum DescribeUserProfileError {
 impl DescribeUserProfileError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeUserProfileError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "UserProfileNotFoundException" => {
                     return RusotoError::Service(DescribeUserProfileError::UserProfileNotFound(
@@ -1103,6 +1109,7 @@ pub enum DisassociateTeamMemberError {
 impl DisassociateTeamMemberError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DisassociateTeamMemberError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ConcurrentModificationException" => {
                     return RusotoError::Service(
@@ -1149,6 +1156,7 @@ pub enum ListProjectsError {
 impl ListProjectsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListProjectsError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidNextTokenException" => {
                     return RusotoError::Service(ListProjectsError::InvalidNextToken(err.msg))
@@ -1181,6 +1189,7 @@ pub enum ListResourcesError {
 impl ListResourcesError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListResourcesError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidNextTokenException" => {
                     return RusotoError::Service(ListResourcesError::InvalidNextToken(err.msg))
@@ -1217,6 +1226,7 @@ pub enum ListTagsForProjectError {
 impl ListTagsForProjectError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListTagsForProjectError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidNextTokenException" => {
                     return RusotoError::Service(ListTagsForProjectError::InvalidNextToken(err.msg))
@@ -1253,6 +1263,7 @@ pub enum ListTeamMembersError {
 impl ListTeamMembersError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListTeamMembersError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidNextTokenException" => {
                     return RusotoError::Service(ListTeamMembersError::InvalidNextToken(err.msg))
@@ -1287,6 +1298,7 @@ pub enum ListUserProfilesError {
 impl ListUserProfilesError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListUserProfilesError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidNextTokenException" => {
                     return RusotoError::Service(ListUserProfilesError::InvalidNextToken(err.msg))
@@ -1321,6 +1333,7 @@ pub enum TagProjectError {
 impl TagProjectError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<TagProjectError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ConcurrentModificationException" => {
                     return RusotoError::Service(TagProjectError::ConcurrentModification(err.msg))
@@ -1363,6 +1376,7 @@ pub enum UntagProjectError {
 impl UntagProjectError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UntagProjectError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ConcurrentModificationException" => {
                     return RusotoError::Service(UntagProjectError::ConcurrentModification(err.msg))
@@ -1401,6 +1415,7 @@ pub enum UpdateProjectError {
 impl UpdateProjectError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateProjectError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ProjectNotFoundException" => {
                     return RusotoError::Service(UpdateProjectError::ProjectNotFound(err.msg))
@@ -1441,6 +1456,7 @@ pub enum UpdateTeamMemberError {
 impl UpdateTeamMemberError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateTeamMemberError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ConcurrentModificationException" => {
                     return RusotoError::Service(UpdateTeamMemberError::ConcurrentModification(
@@ -1495,6 +1511,7 @@ pub enum UpdateUserProfileError {
 impl UpdateUserProfileError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateUserProfileError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "UserProfileNotFoundException" => {
                     return RusotoError::Service(UpdateUserProfileError::UserProfileNotFound(

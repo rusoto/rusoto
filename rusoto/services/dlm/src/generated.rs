@@ -24,7 +24,6 @@ use rusoto_core::proto;
 use rusoto_core::signature::SignedRequest;
 #[allow(unused_imports)]
 use serde::{Deserialize, Serialize};
-use serde_json;
 /// <p>Specifies an action for an event-based policy.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct Action {
@@ -550,6 +549,7 @@ pub enum CreateLifecyclePolicyError {
 impl CreateLifecyclePolicyError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateLifecyclePolicyError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalServerException" => {
                     return RusotoError::Service(CreateLifecyclePolicyError::InternalServer(
@@ -596,6 +596,7 @@ pub enum DeleteLifecyclePolicyError {
 impl DeleteLifecyclePolicyError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteLifecyclePolicyError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalServerException" => {
                     return RusotoError::Service(DeleteLifecyclePolicyError::InternalServer(
@@ -644,6 +645,7 @@ pub enum GetLifecyclePoliciesError {
 impl GetLifecyclePoliciesError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetLifecyclePoliciesError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalServerException" => {
                     return RusotoError::Service(GetLifecyclePoliciesError::InternalServer(err.msg))
@@ -692,6 +694,7 @@ pub enum GetLifecyclePolicyError {
 impl GetLifecyclePolicyError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetLifecyclePolicyError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalServerException" => {
                     return RusotoError::Service(GetLifecyclePolicyError::InternalServer(err.msg))
@@ -734,6 +737,7 @@ pub enum ListTagsForResourceError {
 impl ListTagsForResourceError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListTagsForResourceError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalServerException" => {
                     return RusotoError::Service(ListTagsForResourceError::InternalServer(err.msg))
@@ -778,6 +782,7 @@ pub enum TagResourceError {
 impl TagResourceError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<TagResourceError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalServerException" => {
                     return RusotoError::Service(TagResourceError::InternalServer(err.msg))
@@ -820,6 +825,7 @@ pub enum UntagResourceError {
 impl UntagResourceError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UntagResourceError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalServerException" => {
                     return RusotoError::Service(UntagResourceError::InternalServer(err.msg))
@@ -864,6 +870,7 @@ pub enum UpdateLifecyclePolicyError {
 impl UpdateLifecyclePolicyError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateLifecyclePolicyError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalServerException" => {
                     return RusotoError::Service(UpdateLifecyclePolicyError::InternalServer(
@@ -999,6 +1006,7 @@ impl Dlm for DlmClient {
         &self,
         input: CreateLifecyclePolicyRequest,
     ) -> Result<CreateLifecyclePolicyResponse, RusotoError<CreateLifecyclePolicyError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/policies";
 
         let mut request = SignedRequest::new("POST", "dlm", &self.region, &request_uri);
@@ -1030,6 +1038,7 @@ impl Dlm for DlmClient {
         &self,
         input: DeleteLifecyclePolicyRequest,
     ) -> Result<DeleteLifecyclePolicyResponse, RusotoError<DeleteLifecyclePolicyError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!("/policies/{policy_id}/", policy_id = input.policy_id);
 
         let mut request = SignedRequest::new("DELETE", "dlm", &self.region, &request_uri);
@@ -1058,6 +1067,7 @@ impl Dlm for DlmClient {
         &self,
         input: GetLifecyclePoliciesRequest,
     ) -> Result<GetLifecyclePoliciesResponse, RusotoError<GetLifecyclePoliciesError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/policies";
 
         let mut request = SignedRequest::new("GET", "dlm", &self.region, &request_uri);
@@ -1112,6 +1122,7 @@ impl Dlm for DlmClient {
         &self,
         input: GetLifecyclePolicyRequest,
     ) -> Result<GetLifecyclePolicyResponse, RusotoError<GetLifecyclePolicyError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!("/policies/{policy_id}/", policy_id = input.policy_id);
 
         let mut request = SignedRequest::new("GET", "dlm", &self.region, &request_uri);
@@ -1140,6 +1151,7 @@ impl Dlm for DlmClient {
         &self,
         input: ListTagsForResourceRequest,
     ) -> Result<ListTagsForResourceResponse, RusotoError<ListTagsForResourceError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!("/tags/{resource_arn}", resource_arn = input.resource_arn);
 
         let mut request = SignedRequest::new("GET", "dlm", &self.region, &request_uri);
@@ -1168,6 +1180,7 @@ impl Dlm for DlmClient {
         &self,
         input: TagResourceRequest,
     ) -> Result<TagResourceResponse, RusotoError<TagResourceError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!("/tags/{resource_arn}", resource_arn = input.resource_arn);
 
         let mut request = SignedRequest::new("POST", "dlm", &self.region, &request_uri);
@@ -1199,6 +1212,7 @@ impl Dlm for DlmClient {
         &self,
         input: UntagResourceRequest,
     ) -> Result<UntagResourceResponse, RusotoError<UntagResourceError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!("/tags/{resource_arn}", resource_arn = input.resource_arn);
 
         let mut request = SignedRequest::new("DELETE", "dlm", &self.region, &request_uri);
@@ -1233,6 +1247,7 @@ impl Dlm for DlmClient {
         &self,
         input: UpdateLifecyclePolicyRequest,
     ) -> Result<UpdateLifecyclePolicyResponse, RusotoError<UpdateLifecyclePolicyError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!("/policies/{policy_id}", policy_id = input.policy_id);
 
         let mut request = SignedRequest::new("PATCH", "dlm", &self.region, &request_uri);

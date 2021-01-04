@@ -49,7 +49,6 @@ impl MediaStoreClient {
     }
 }
 
-use serde_json;
 /// <p>This section describes operations that you can perform on an AWS Elemental MediaStore container.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
@@ -470,6 +469,7 @@ pub enum CreateContainerError {
 impl CreateContainerError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateContainerError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ContainerInUseException" => {
                     return RusotoError::Service(CreateContainerError::ContainerInUse(err.msg))
@@ -512,6 +512,7 @@ pub enum DeleteContainerError {
 impl DeleteContainerError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteContainerError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ContainerInUseException" => {
                     return RusotoError::Service(DeleteContainerError::ContainerInUse(err.msg))
@@ -556,6 +557,7 @@ pub enum DeleteContainerPolicyError {
 impl DeleteContainerPolicyError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteContainerPolicyError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ContainerInUseException" => {
                     return RusotoError::Service(DeleteContainerPolicyError::ContainerInUse(
@@ -612,6 +614,7 @@ pub enum DeleteCorsPolicyError {
 impl DeleteCorsPolicyError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteCorsPolicyError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ContainerInUseException" => {
                     return RusotoError::Service(DeleteCorsPolicyError::ContainerInUse(err.msg))
@@ -662,6 +665,7 @@ pub enum DeleteLifecyclePolicyError {
 impl DeleteLifecyclePolicyError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteLifecyclePolicyError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ContainerInUseException" => {
                     return RusotoError::Service(DeleteLifecyclePolicyError::ContainerInUse(
@@ -718,6 +722,7 @@ pub enum DeleteMetricPolicyError {
 impl DeleteMetricPolicyError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteMetricPolicyError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ContainerInUseException" => {
                     return RusotoError::Service(DeleteMetricPolicyError::ContainerInUse(err.msg))
@@ -766,6 +771,7 @@ pub enum DescribeContainerError {
 impl DescribeContainerError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeContainerError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ContainerNotFoundException" => {
                     return RusotoError::Service(DescribeContainerError::ContainerNotFound(err.msg))
@@ -808,6 +814,7 @@ pub enum GetContainerPolicyError {
 impl GetContainerPolicyError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetContainerPolicyError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ContainerInUseException" => {
                     return RusotoError::Service(GetContainerPolicyError::ContainerInUse(err.msg))
@@ -860,6 +867,7 @@ pub enum GetCorsPolicyError {
 impl GetCorsPolicyError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetCorsPolicyError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ContainerInUseException" => {
                     return RusotoError::Service(GetCorsPolicyError::ContainerInUse(err.msg))
@@ -908,6 +916,7 @@ pub enum GetLifecyclePolicyError {
 impl GetLifecyclePolicyError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetLifecyclePolicyError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ContainerInUseException" => {
                     return RusotoError::Service(GetLifecyclePolicyError::ContainerInUse(err.msg))
@@ -960,6 +969,7 @@ pub enum GetMetricPolicyError {
 impl GetMetricPolicyError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetMetricPolicyError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ContainerInUseException" => {
                     return RusotoError::Service(GetMetricPolicyError::ContainerInUse(err.msg))
@@ -1002,6 +1012,7 @@ pub enum ListContainersError {
 impl ListContainersError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListContainersError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalServerError" => {
                     return RusotoError::Service(ListContainersError::InternalServerError(err.msg))
@@ -1036,6 +1047,7 @@ pub enum ListTagsForResourceError {
 impl ListTagsForResourceError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListTagsForResourceError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ContainerInUseException" => {
                     return RusotoError::Service(ListTagsForResourceError::ContainerInUse(err.msg))
@@ -1082,6 +1094,7 @@ pub enum PutContainerPolicyError {
 impl PutContainerPolicyError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<PutContainerPolicyError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ContainerInUseException" => {
                     return RusotoError::Service(PutContainerPolicyError::ContainerInUse(err.msg))
@@ -1128,6 +1141,7 @@ pub enum PutCorsPolicyError {
 impl PutCorsPolicyError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<PutCorsPolicyError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ContainerInUseException" => {
                     return RusotoError::Service(PutCorsPolicyError::ContainerInUse(err.msg))
@@ -1170,6 +1184,7 @@ pub enum PutLifecyclePolicyError {
 impl PutLifecyclePolicyError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<PutLifecyclePolicyError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ContainerInUseException" => {
                     return RusotoError::Service(PutLifecyclePolicyError::ContainerInUse(err.msg))
@@ -1216,6 +1231,7 @@ pub enum PutMetricPolicyError {
 impl PutMetricPolicyError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<PutMetricPolicyError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ContainerInUseException" => {
                     return RusotoError::Service(PutMetricPolicyError::ContainerInUse(err.msg))
@@ -1258,6 +1274,7 @@ pub enum StartAccessLoggingError {
 impl StartAccessLoggingError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<StartAccessLoggingError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ContainerInUseException" => {
                     return RusotoError::Service(StartAccessLoggingError::ContainerInUse(err.msg))
@@ -1304,6 +1321,7 @@ pub enum StopAccessLoggingError {
 impl StopAccessLoggingError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<StopAccessLoggingError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ContainerInUseException" => {
                     return RusotoError::Service(StopAccessLoggingError::ContainerInUse(err.msg))
@@ -1348,6 +1366,7 @@ pub enum TagResourceError {
 impl TagResourceError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<TagResourceError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ContainerInUseException" => {
                     return RusotoError::Service(TagResourceError::ContainerInUse(err.msg))
@@ -1390,6 +1409,7 @@ pub enum UntagResourceError {
 impl UntagResourceError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UntagResourceError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ContainerInUseException" => {
                     return RusotoError::Service(UntagResourceError::ContainerInUse(err.msg))

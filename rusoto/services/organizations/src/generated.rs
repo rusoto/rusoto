@@ -50,7 +50,6 @@ impl OrganizationsClient {
     }
 }
 
-use serde_json;
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct AcceptHandshakeRequest {
@@ -1525,6 +1524,7 @@ pub enum AcceptHandshakeError {
 impl AcceptHandshakeError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<AcceptHandshakeError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AWSOrganizationsNotInUseException" => {
                     return RusotoError::Service(AcceptHandshakeError::AWSOrganizationsNotInUse(
@@ -1631,6 +1631,7 @@ pub enum AttachPolicyError {
 impl AttachPolicyError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<AttachPolicyError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AWSOrganizationsNotInUseException" => {
                     return RusotoError::Service(AttachPolicyError::AWSOrganizationsNotInUse(
@@ -1729,6 +1730,7 @@ pub enum CancelHandshakeError {
 impl CancelHandshakeError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CancelHandshakeError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(CancelHandshakeError::AccessDenied(err.msg))
@@ -1809,6 +1811,7 @@ pub enum CreateAccountError {
 impl CreateAccountError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateAccountError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AWSOrganizationsNotInUseException" => {
                     return RusotoError::Service(CreateAccountError::AWSOrganizationsNotInUse(
@@ -1895,6 +1898,7 @@ pub enum CreateGovCloudAccountError {
 impl CreateGovCloudAccountError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateGovCloudAccountError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AWSOrganizationsNotInUseException" => {
                     return RusotoError::Service(
@@ -1985,6 +1989,7 @@ pub enum CreateOrganizationError {
 impl CreateOrganizationError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateOrganizationError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(CreateOrganizationError::AccessDenied(err.msg))
@@ -2067,6 +2072,7 @@ pub enum CreateOrganizationalUnitError {
 impl CreateOrganizationalUnitError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateOrganizationalUnitError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AWSOrganizationsNotInUseException" => {
                     return RusotoError::Service(
@@ -2171,6 +2177,7 @@ pub enum CreatePolicyError {
 impl CreatePolicyError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreatePolicyError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AWSOrganizationsNotInUseException" => {
                     return RusotoError::Service(CreatePolicyError::AWSOrganizationsNotInUse(
@@ -2263,6 +2270,7 @@ pub enum DeclineHandshakeError {
 impl DeclineHandshakeError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeclineHandshakeError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(DeclineHandshakeError::AccessDenied(err.msg))
@@ -2339,6 +2347,7 @@ pub enum DeleteOrganizationError {
 impl DeleteOrganizationError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteOrganizationError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AWSOrganizationsNotInUseException" => {
                     return RusotoError::Service(DeleteOrganizationError::AWSOrganizationsNotInUse(
@@ -2413,6 +2422,7 @@ pub enum DeleteOrganizationalUnitError {
 impl DeleteOrganizationalUnitError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteOrganizationalUnitError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AWSOrganizationsNotInUseException" => {
                     return RusotoError::Service(
@@ -2509,6 +2519,7 @@ pub enum DeletePolicyError {
 impl DeletePolicyError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeletePolicyError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AWSOrganizationsNotInUseException" => {
                     return RusotoError::Service(DeletePolicyError::AWSOrganizationsNotInUse(
@@ -2593,6 +2604,7 @@ impl DeregisterDelegatedAdministratorError {
         res: BufferedHttpResponse,
     ) -> RusotoError<DeregisterDelegatedAdministratorError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AWSOrganizationsNotInUseException" => {
                     return RusotoError::Service(
@@ -2707,6 +2719,7 @@ pub enum DescribeAccountError {
 impl DescribeAccountError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeAccountError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AWSOrganizationsNotInUseException" => {
                     return RusotoError::Service(DescribeAccountError::AWSOrganizationsNotInUse(
@@ -2773,6 +2786,7 @@ impl DescribeCreateAccountStatusError {
         res: BufferedHttpResponse,
     ) -> RusotoError<DescribeCreateAccountStatusError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AWSOrganizationsNotInUseException" => {
                     return RusotoError::Service(
@@ -2861,6 +2875,7 @@ pub enum DescribeEffectivePolicyError {
 impl DescribeEffectivePolicyError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeEffectivePolicyError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AWSOrganizationsNotInUseException" => {
                     return RusotoError::Service(
@@ -2955,6 +2970,7 @@ pub enum DescribeHandshakeError {
 impl DescribeHandshakeError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeHandshakeError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(DescribeHandshakeError::AccessDenied(err.msg))
@@ -3015,6 +3031,7 @@ pub enum DescribeOrganizationError {
 impl DescribeOrganizationError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeOrganizationError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AWSOrganizationsNotInUseException" => {
                     return RusotoError::Service(
@@ -3081,6 +3098,7 @@ impl DescribeOrganizationalUnitError {
         res: BufferedHttpResponse,
     ) -> RusotoError<DescribeOrganizationalUnitError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AWSOrganizationsNotInUseException" => {
                     return RusotoError::Service(
@@ -3157,6 +3175,7 @@ pub enum DescribePolicyError {
 impl DescribePolicyError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribePolicyError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AWSOrganizationsNotInUseException" => {
                     return RusotoError::Service(DescribePolicyError::AWSOrganizationsNotInUse(
@@ -3237,6 +3256,7 @@ pub enum DetachPolicyError {
 impl DetachPolicyError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DetachPolicyError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AWSOrganizationsNotInUseException" => {
                     return RusotoError::Service(DetachPolicyError::AWSOrganizationsNotInUse(
@@ -3329,6 +3349,7 @@ pub enum DisableAWSServiceAccessError {
 impl DisableAWSServiceAccessError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DisableAWSServiceAccessError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AWSOrganizationsNotInUseException" => {
                     return RusotoError::Service(
@@ -3427,6 +3448,7 @@ pub enum DisablePolicyTypeError {
 impl DisablePolicyTypeError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DisablePolicyTypeError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AWSOrganizationsNotInUseException" => {
                     return RusotoError::Service(DisablePolicyTypeError::AWSOrganizationsNotInUse(
@@ -3523,6 +3545,7 @@ pub enum EnableAWSServiceAccessError {
 impl EnableAWSServiceAccessError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<EnableAWSServiceAccessError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AWSOrganizationsNotInUseException" => {
                     return RusotoError::Service(
@@ -3609,6 +3632,7 @@ pub enum EnableAllFeaturesError {
 impl EnableAllFeaturesError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<EnableAllFeaturesError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AWSOrganizationsNotInUseException" => {
                     return RusotoError::Service(EnableAllFeaturesError::AWSOrganizationsNotInUse(
@@ -3693,6 +3717,7 @@ pub enum EnablePolicyTypeError {
 impl EnablePolicyTypeError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<EnablePolicyTypeError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AWSOrganizationsNotInUseException" => {
                     return RusotoError::Service(EnablePolicyTypeError::AWSOrganizationsNotInUse(
@@ -3805,6 +3830,7 @@ impl InviteAccountToOrganizationError {
         res: BufferedHttpResponse,
     ) -> RusotoError<InviteAccountToOrganizationError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AWSOrganizationsNotInUseException" => {
                     return RusotoError::Service(
@@ -3925,6 +3951,7 @@ pub enum LeaveOrganizationError {
 impl LeaveOrganizationError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<LeaveOrganizationError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AWSOrganizationsNotInUseException" => {
                     return RusotoError::Service(LeaveOrganizationError::AWSOrganizationsNotInUse(
@@ -4011,6 +4038,7 @@ impl ListAWSServiceAccessForOrganizationError {
         res: BufferedHttpResponse,
     ) -> RusotoError<ListAWSServiceAccessForOrganizationError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AWSOrganizationsNotInUseException" => {
                     return RusotoError::Service(
@@ -4099,6 +4127,7 @@ pub enum ListAccountsError {
 impl ListAccountsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListAccountsError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AWSOrganizationsNotInUseException" => {
                     return RusotoError::Service(ListAccountsError::AWSOrganizationsNotInUse(
@@ -4157,6 +4186,7 @@ pub enum ListAccountsForParentError {
 impl ListAccountsForParentError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListAccountsForParentError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AWSOrganizationsNotInUseException" => {
                     return RusotoError::Service(
@@ -4225,6 +4255,7 @@ pub enum ListChildrenError {
 impl ListChildrenError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListChildrenError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AWSOrganizationsNotInUseException" => {
                     return RusotoError::Service(ListChildrenError::AWSOrganizationsNotInUse(
@@ -4287,6 +4318,7 @@ pub enum ListCreateAccountStatusError {
 impl ListCreateAccountStatusError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListCreateAccountStatusError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AWSOrganizationsNotInUseException" => {
                     return RusotoError::Service(
@@ -4365,6 +4397,7 @@ impl ListDelegatedAdministratorsError {
         res: BufferedHttpResponse,
     ) -> RusotoError<ListDelegatedAdministratorsError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AWSOrganizationsNotInUseException" => {
                     return RusotoError::Service(
@@ -4455,6 +4488,7 @@ impl ListDelegatedServicesForAccountError {
         res: BufferedHttpResponse,
     ) -> RusotoError<ListDelegatedServicesForAccountError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AWSOrganizationsNotInUseException" => {
                     return RusotoError::Service(
@@ -4555,6 +4589,7 @@ pub enum ListHandshakesForAccountError {
 impl ListHandshakesForAccountError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListHandshakesForAccountError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(ListHandshakesForAccountError::AccessDenied(
@@ -4623,6 +4658,7 @@ impl ListHandshakesForOrganizationError {
         res: BufferedHttpResponse,
     ) -> RusotoError<ListHandshakesForOrganizationError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AWSOrganizationsNotInUseException" => {
                     return RusotoError::Service(
@@ -4703,6 +4739,7 @@ impl ListOrganizationalUnitsForParentError {
         res: BufferedHttpResponse,
     ) -> RusotoError<ListOrganizationalUnitsForParentError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AWSOrganizationsNotInUseException" => {
                     return RusotoError::Service(
@@ -4785,6 +4822,7 @@ pub enum ListParentsError {
 impl ListParentsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListParentsError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AWSOrganizationsNotInUseException" => {
                     return RusotoError::Service(ListParentsError::AWSOrganizationsNotInUse(
@@ -4847,6 +4885,7 @@ pub enum ListPoliciesError {
 impl ListPoliciesError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListPoliciesError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AWSOrganizationsNotInUseException" => {
                     return RusotoError::Service(ListPoliciesError::AWSOrganizationsNotInUse(
@@ -4911,6 +4950,7 @@ pub enum ListPoliciesForTargetError {
 impl ListPoliciesForTargetError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListPoliciesForTargetError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AWSOrganizationsNotInUseException" => {
                     return RusotoError::Service(
@@ -4983,6 +5023,7 @@ pub enum ListRootsError {
 impl ListRootsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListRootsError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AWSOrganizationsNotInUseException" => {
                     return RusotoError::Service(ListRootsError::AWSOrganizationsNotInUse(err.msg))
@@ -5039,6 +5080,7 @@ pub enum ListTagsForResourceError {
 impl ListTagsForResourceError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListTagsForResourceError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AWSOrganizationsNotInUseException" => {
                     return RusotoError::Service(
@@ -5103,6 +5145,7 @@ pub enum ListTargetsForPolicyError {
 impl ListTargetsForPolicyError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListTargetsForPolicyError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AWSOrganizationsNotInUseException" => {
                     return RusotoError::Service(
@@ -5183,6 +5226,7 @@ pub enum MoveAccountError {
 impl MoveAccountError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<MoveAccountError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AWSOrganizationsNotInUseException" => {
                     return RusotoError::Service(MoveAccountError::AWSOrganizationsNotInUse(
@@ -5273,6 +5317,7 @@ impl RegisterDelegatedAdministratorError {
         res: BufferedHttpResponse,
     ) -> RusotoError<RegisterDelegatedAdministratorError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AWSOrganizationsNotInUseException" => {
                     return RusotoError::Service(
@@ -5391,6 +5436,7 @@ impl RemoveAccountFromOrganizationError {
         res: BufferedHttpResponse,
     ) -> RusotoError<RemoveAccountFromOrganizationError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AWSOrganizationsNotInUseException" => {
                     return RusotoError::Service(
@@ -5497,6 +5543,7 @@ pub enum TagResourceError {
 impl TagResourceError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<TagResourceError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AWSOrganizationsNotInUseException" => {
                     return RusotoError::Service(TagResourceError::AWSOrganizationsNotInUse(
@@ -5571,6 +5618,7 @@ pub enum UntagResourceError {
 impl UntagResourceError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UntagResourceError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AWSOrganizationsNotInUseException" => {
                     return RusotoError::Service(UntagResourceError::AWSOrganizationsNotInUse(
@@ -5647,6 +5695,7 @@ pub enum UpdateOrganizationalUnitError {
 impl UpdateOrganizationalUnitError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateOrganizationalUnitError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AWSOrganizationsNotInUseException" => {
                     return RusotoError::Service(
@@ -5749,6 +5798,7 @@ pub enum UpdatePolicyError {
 impl UpdatePolicyError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdatePolicyError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AWSOrganizationsNotInUseException" => {
                     return RusotoError::Service(UpdatePolicyError::AWSOrganizationsNotInUse(

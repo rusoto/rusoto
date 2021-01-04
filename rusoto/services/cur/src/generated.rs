@@ -49,7 +49,6 @@ impl CostAndUsageReportClient {
     }
 }
 
-use serde_json;
 /// <p>Deletes the specified report.</p>
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
@@ -165,6 +164,7 @@ pub enum DeleteReportDefinitionError {
 impl DeleteReportDefinitionError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteReportDefinitionError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalErrorException" => {
                     return RusotoError::Service(DeleteReportDefinitionError::InternalError(
@@ -197,6 +197,7 @@ pub enum DescribeReportDefinitionsError {
 impl DescribeReportDefinitionsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeReportDefinitionsError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalErrorException" => {
                     return RusotoError::Service(DescribeReportDefinitionsError::InternalError(
@@ -229,6 +230,7 @@ pub enum ModifyReportDefinitionError {
 impl ModifyReportDefinitionError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ModifyReportDefinitionError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalErrorException" => {
                     return RusotoError::Service(ModifyReportDefinitionError::InternalError(
@@ -265,6 +267,7 @@ pub enum PutReportDefinitionError {
 impl PutReportDefinitionError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<PutReportDefinitionError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "DuplicateReportNameException" => {
                     return RusotoError::Service(PutReportDefinitionError::DuplicateReportName(

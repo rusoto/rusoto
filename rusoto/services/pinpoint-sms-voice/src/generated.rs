@@ -23,7 +23,6 @@ use rusoto_core::proto;
 use rusoto_core::signature::SignedRequest;
 #[allow(unused_imports)]
 use serde::{Deserialize, Serialize};
-use serde_json;
 /// <p>An object that defines a message that contains text formatted using Amazon Pinpoint Voice Instructions markup.</p>
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
@@ -323,6 +322,7 @@ pub enum CreateConfigurationSetError {
 impl CreateConfigurationSetError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateConfigurationSetError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AlreadyExistsException" => {
                     return RusotoError::Service(CreateConfigurationSetError::AlreadyExists(
@@ -389,6 +389,7 @@ impl CreateConfigurationSetEventDestinationError {
         res: BufferedHttpResponse,
     ) -> RusotoError<CreateConfigurationSetEventDestinationError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AlreadyExistsException" => {
                     return RusotoError::Service(
@@ -469,6 +470,7 @@ pub enum DeleteConfigurationSetError {
 impl DeleteConfigurationSetError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteConfigurationSetError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(DeleteConfigurationSetError::BadRequest(err.msg))
@@ -523,6 +525,7 @@ impl DeleteConfigurationSetEventDestinationError {
         res: BufferedHttpResponse,
     ) -> RusotoError<DeleteConfigurationSetEventDestinationError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(
@@ -589,6 +592,7 @@ impl GetConfigurationSetEventDestinationsError {
         res: BufferedHttpResponse,
     ) -> RusotoError<GetConfigurationSetEventDestinationsError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(
@@ -651,6 +655,7 @@ pub enum SendVoiceMessageError {
 impl SendVoiceMessageError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<SendVoiceMessageError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(SendVoiceMessageError::BadRequest(err.msg))
@@ -699,6 +704,7 @@ impl UpdateConfigurationSetEventDestinationError {
         res: BufferedHttpResponse,
     ) -> RusotoError<UpdateConfigurationSetEventDestinationError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(
@@ -850,6 +856,7 @@ impl PinpointSmsVoice for PinpointSmsVoiceClient {
         &self,
         input: CreateConfigurationSetRequest,
     ) -> Result<CreateConfigurationSetResponse, RusotoError<CreateConfigurationSetError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/v1/sms-voice/configuration-sets";
 
         let mut request = SignedRequest::new("POST", "sms-voice", &self.region, &request_uri);
@@ -885,6 +892,7 @@ impl PinpointSmsVoice for PinpointSmsVoiceClient {
         CreateConfigurationSetEventDestinationResponse,
         RusotoError<CreateConfigurationSetEventDestinationError>,
     > {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/v1/sms-voice/configuration-sets/{configuration_set_name}/event-destinations",
             configuration_set_name = input.configuration_set_name
@@ -922,6 +930,7 @@ impl PinpointSmsVoice for PinpointSmsVoiceClient {
         &self,
         input: DeleteConfigurationSetRequest,
     ) -> Result<DeleteConfigurationSetResponse, RusotoError<DeleteConfigurationSetError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/v1/sms-voice/configuration-sets/{configuration_set_name}",
             configuration_set_name = input.configuration_set_name
@@ -958,6 +967,7 @@ impl PinpointSmsVoice for PinpointSmsVoiceClient {
         DeleteConfigurationSetEventDestinationResponse,
         RusotoError<DeleteConfigurationSetEventDestinationError>,
     > {
+        #![allow(clippy::needless_update)]
         let request_uri = format!("/v1/sms-voice/configuration-sets/{configuration_set_name}/event-destinations/{event_destination_name}", configuration_set_name = input.configuration_set_name, event_destination_name = input.event_destination_name);
 
         let mut request = SignedRequest::new("DELETE", "sms-voice", &self.region, &request_uri);
@@ -993,6 +1003,7 @@ impl PinpointSmsVoice for PinpointSmsVoiceClient {
         GetConfigurationSetEventDestinationsResponse,
         RusotoError<GetConfigurationSetEventDestinationsError>,
     > {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/v1/sms-voice/configuration-sets/{configuration_set_name}/event-destinations",
             configuration_set_name = input.configuration_set_name
@@ -1028,6 +1039,7 @@ impl PinpointSmsVoice for PinpointSmsVoiceClient {
         &self,
         input: SendVoiceMessageRequest,
     ) -> Result<SendVoiceMessageResponse, RusotoError<SendVoiceMessageError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/v1/sms-voice/voice/message";
 
         let mut request = SignedRequest::new("POST", "sms-voice", &self.region, &request_uri);
@@ -1063,6 +1075,7 @@ impl PinpointSmsVoice for PinpointSmsVoiceClient {
         UpdateConfigurationSetEventDestinationResponse,
         RusotoError<UpdateConfigurationSetEventDestinationError>,
     > {
+        #![allow(clippy::needless_update)]
         let request_uri = format!("/v1/sms-voice/configuration-sets/{configuration_set_name}/event-destinations/{event_destination_name}", configuration_set_name = input.configuration_set_name, event_destination_name = input.event_destination_name);
 
         let mut request = SignedRequest::new("PUT", "sms-voice", &self.region, &request_uri);

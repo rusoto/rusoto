@@ -49,7 +49,6 @@ impl AWSSupportClient {
     }
 }
 
-use serde_json;
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct AddAttachmentsToSetRequest {
@@ -759,6 +758,7 @@ pub enum AddAttachmentsToSetError {
 impl AddAttachmentsToSetError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<AddAttachmentsToSetError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AttachmentLimitExceeded" => {
                     return RusotoError::Service(AddAttachmentsToSetError::AttachmentLimitExceeded(
@@ -823,6 +823,7 @@ pub enum AddCommunicationToCaseError {
 impl AddCommunicationToCaseError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<AddCommunicationToCaseError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AttachmentSetExpired" => {
                     return RusotoError::Service(AddCommunicationToCaseError::AttachmentSetExpired(
@@ -881,6 +882,7 @@ pub enum CreateCaseError {
 impl CreateCaseError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateCaseError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AttachmentSetExpired" => {
                     return RusotoError::Service(CreateCaseError::AttachmentSetExpired(err.msg))
@@ -929,6 +931,7 @@ pub enum DescribeAttachmentError {
 impl DescribeAttachmentError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeAttachmentError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AttachmentIdNotFound" => {
                     return RusotoError::Service(DescribeAttachmentError::AttachmentIdNotFound(
@@ -977,6 +980,7 @@ pub enum DescribeCasesError {
 impl DescribeCasesError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeCasesError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "CaseIdNotFound" => {
                     return RusotoError::Service(DescribeCasesError::CaseIdNotFound(err.msg))
@@ -1013,6 +1017,7 @@ pub enum DescribeCommunicationsError {
 impl DescribeCommunicationsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeCommunicationsError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "CaseIdNotFound" => {
                     return RusotoError::Service(DescribeCommunicationsError::CaseIdNotFound(
@@ -1051,6 +1056,7 @@ pub enum DescribeServicesError {
 impl DescribeServicesError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeServicesError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalServerError" => {
                     return RusotoError::Service(DescribeServicesError::InternalServerError(
@@ -1083,6 +1089,7 @@ pub enum DescribeSeverityLevelsError {
 impl DescribeSeverityLevelsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeSeverityLevelsError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalServerError" => {
                     return RusotoError::Service(DescribeSeverityLevelsError::InternalServerError(
@@ -1117,6 +1124,7 @@ impl DescribeTrustedAdvisorCheckRefreshStatusesError {
         res: BufferedHttpResponse,
     ) -> RusotoError<DescribeTrustedAdvisorCheckRefreshStatusesError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalServerError" => {
                     return RusotoError::Service(
@@ -1155,6 +1163,7 @@ impl DescribeTrustedAdvisorCheckResultError {
         res: BufferedHttpResponse,
     ) -> RusotoError<DescribeTrustedAdvisorCheckResultError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalServerError" => {
                     return RusotoError::Service(
@@ -1191,6 +1200,7 @@ impl DescribeTrustedAdvisorCheckSummariesError {
         res: BufferedHttpResponse,
     ) -> RusotoError<DescribeTrustedAdvisorCheckSummariesError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalServerError" => {
                     return RusotoError::Service(
@@ -1227,6 +1237,7 @@ impl DescribeTrustedAdvisorChecksError {
         res: BufferedHttpResponse,
     ) -> RusotoError<DescribeTrustedAdvisorChecksError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalServerError" => {
                     return RusotoError::Service(
@@ -1263,6 +1274,7 @@ impl RefreshTrustedAdvisorCheckError {
         res: BufferedHttpResponse,
     ) -> RusotoError<RefreshTrustedAdvisorCheckError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalServerError" => {
                     return RusotoError::Service(
@@ -1299,6 +1311,7 @@ pub enum ResolveCaseError {
 impl ResolveCaseError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ResolveCaseError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "CaseIdNotFound" => {
                     return RusotoError::Service(ResolveCaseError::CaseIdNotFound(err.msg))

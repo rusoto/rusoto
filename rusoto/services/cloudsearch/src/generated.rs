@@ -31,7 +31,6 @@ use rusoto_core::signature::SignedRequest;
 use serde::Deserialize;
 #[cfg(feature = "serialize_structs")]
 use serde::Serialize;
-use serde_urlencoded;
 use std::str::FromStr;
 use xml::EventReader;
 
@@ -63,16 +62,18 @@ impl CloudSearchClient {
 #[allow(dead_code)]
 struct APIVersionDeserializer;
 impl APIVersionDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 #[allow(dead_code)]
 struct ARNDeserializer;
 impl ARNDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
@@ -87,11 +88,12 @@ pub struct AccessPoliciesStatus {
 #[allow(dead_code)]
 struct AccessPoliciesStatusDeserializer;
 impl AccessPoliciesStatusDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<AccessPoliciesStatus, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, AccessPoliciesStatus, _>(tag_name, stack, |name, stack, obj| {
             match name {
                 "Options" => {
@@ -109,8 +111,9 @@ impl AccessPoliciesStatusDeserializer {
 #[allow(dead_code)]
 struct AlgorithmicStemmingDeserializer;
 impl AlgorithmicStemmingDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
@@ -134,11 +137,12 @@ pub struct AnalysisOptions {
 #[allow(dead_code)]
 struct AnalysisOptionsDeserializer;
 impl AnalysisOptionsDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<AnalysisOptions, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, AnalysisOptions, _>(tag_name, stack, |name, stack, obj| {
             match name {
                 "AlgorithmicStemming" => {
@@ -175,10 +179,11 @@ impl AnalysisOptionsDeserializer {
 /// Serialize `AnalysisOptions` contents to a `SignedRequest`.
 struct AnalysisOptionsSerializer;
 impl AnalysisOptionsSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &AnalysisOptions) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         if let Some(ref field_value) = obj.algorithmic_stemming {
@@ -218,11 +223,12 @@ pub struct AnalysisScheme {
 #[allow(dead_code)]
 struct AnalysisSchemeDeserializer;
 impl AnalysisSchemeDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<AnalysisScheme, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, AnalysisScheme, _>(tag_name, stack, |name, stack, obj| {
             match name {
                 "AnalysisOptions" => {
@@ -251,10 +257,11 @@ impl AnalysisSchemeDeserializer {
 /// Serialize `AnalysisScheme` contents to a `SignedRequest`.
 struct AnalysisSchemeSerializer;
 impl AnalysisSchemeSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &AnalysisScheme) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         if let Some(ref field_value) = obj.analysis_options {
@@ -278,8 +285,9 @@ impl AnalysisSchemeSerializer {
 #[allow(dead_code)]
 struct AnalysisSchemeLanguageDeserializer;
 impl AnalysisSchemeLanguageDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
@@ -294,11 +302,12 @@ pub struct AnalysisSchemeStatus {
 #[allow(dead_code)]
 struct AnalysisSchemeStatusDeserializer;
 impl AnalysisSchemeStatusDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<AnalysisSchemeStatus, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, AnalysisSchemeStatus, _>(tag_name, stack, |name, stack, obj| {
             match name {
                 "Options" => {
@@ -316,11 +325,13 @@ impl AnalysisSchemeStatusDeserializer {
 #[allow(dead_code)]
 struct AnalysisSchemeStatusListDeserializer;
 impl AnalysisSchemeStatusListDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<AnalysisSchemeStatus>, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
+
         deserialize_elements::<_, Vec<_>, _>(tag_name, stack, |name, stack, obj| {
             if name == "member" {
                 obj.push(AnalysisSchemeStatusDeserializer::deserialize(
@@ -345,11 +356,12 @@ pub struct AvailabilityOptionsStatus {
 #[allow(dead_code)]
 struct AvailabilityOptionsStatusDeserializer;
 impl AvailabilityOptionsStatusDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<AvailabilityOptionsStatus, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, AvailabilityOptionsStatus, _>(
             tag_name,
             stack,
@@ -371,8 +383,9 @@ impl AvailabilityOptionsStatusDeserializer {
 #[allow(dead_code)]
 struct BooleanDeserializer;
 impl BooleanDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<bool, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::deserialize_primitive(tag_name, stack, |s| Ok(bool::from_str(&s).unwrap()))
     }
 }
@@ -386,10 +399,11 @@ pub struct BuildSuggestersRequest {
 /// Serialize `BuildSuggestersRequest` contents to a `SignedRequest`.
 struct BuildSuggestersRequestSerializer;
 impl BuildSuggestersRequestSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &BuildSuggestersRequest) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         params.put(&format!("{}{}", prefix, "DomainName"), &obj.domain_name);
@@ -406,11 +420,12 @@ pub struct BuildSuggestersResponse {
 #[allow(dead_code)]
 struct BuildSuggestersResponseDeserializer;
 impl BuildSuggestersResponseDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<BuildSuggestersResponse, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, BuildSuggestersResponse, _>(
             tag_name,
             stack,
@@ -439,10 +454,11 @@ pub struct CreateDomainRequest {
 /// Serialize `CreateDomainRequest` contents to a `SignedRequest`.
 struct CreateDomainRequestSerializer;
 impl CreateDomainRequestSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &CreateDomainRequest) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         params.put(&format!("{}{}", prefix, "DomainName"), &obj.domain_name);
@@ -459,11 +475,12 @@ pub struct CreateDomainResponse {
 #[allow(dead_code)]
 struct CreateDomainResponseDeserializer;
 impl CreateDomainResponseDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<CreateDomainResponse, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, CreateDomainResponse, _>(tag_name, stack, |name, stack, obj| {
             match name {
                 "DomainStatus" => {
@@ -498,11 +515,12 @@ pub struct DateArrayOptions {
 #[allow(dead_code)]
 struct DateArrayOptionsDeserializer;
 impl DateArrayOptionsDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<DateArrayOptions, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, DateArrayOptions, _>(tag_name, stack, |name, stack, obj| {
             match name {
                 "DefaultValue" => {
@@ -537,10 +555,11 @@ impl DateArrayOptionsDeserializer {
 /// Serialize `DateArrayOptions` contents to a `SignedRequest`.
 struct DateArrayOptionsSerializer;
 impl DateArrayOptionsSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &DateArrayOptions) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         if let Some(ref field_value) = obj.default_value {
@@ -582,11 +601,12 @@ pub struct DateOptions {
 #[allow(dead_code)]
 struct DateOptionsDeserializer;
 impl DateOptionsDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<DateOptions, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, DateOptions, _>(tag_name, stack, |name, stack, obj| {
             match name {
                 "DefaultValue" => {
@@ -623,10 +643,11 @@ impl DateOptionsDeserializer {
 /// Serialize `DateOptions` contents to a `SignedRequest`.
 struct DateOptionsSerializer;
 impl DateOptionsSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &DateOptions) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         if let Some(ref field_value) = obj.default_value {
@@ -661,10 +682,11 @@ pub struct DefineAnalysisSchemeRequest {
 /// Serialize `DefineAnalysisSchemeRequest` contents to a `SignedRequest`.
 struct DefineAnalysisSchemeRequestSerializer;
 impl DefineAnalysisSchemeRequestSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &DefineAnalysisSchemeRequest) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         AnalysisSchemeSerializer::serialize(
@@ -686,11 +708,12 @@ pub struct DefineAnalysisSchemeResponse {
 #[allow(dead_code)]
 struct DefineAnalysisSchemeResponseDeserializer;
 impl DefineAnalysisSchemeResponseDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<DefineAnalysisSchemeResponse, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, DefineAnalysisSchemeResponse, _>(
             tag_name,
             stack,
@@ -718,10 +741,11 @@ pub struct DefineExpressionRequest {
 /// Serialize `DefineExpressionRequest` contents to a `SignedRequest`.
 struct DefineExpressionRequestSerializer;
 impl DefineExpressionRequestSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &DefineExpressionRequest) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         params.put(&format!("{}{}", prefix, "DomainName"), &obj.domain_name);
@@ -743,11 +767,12 @@ pub struct DefineExpressionResponse {
 #[allow(dead_code)]
 struct DefineExpressionResponseDeserializer;
 impl DefineExpressionResponseDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<DefineExpressionResponse, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, DefineExpressionResponse, _>(
             tag_name,
             stack,
@@ -776,10 +801,11 @@ pub struct DefineIndexFieldRequest {
 /// Serialize `DefineIndexFieldRequest` contents to a `SignedRequest`.
 struct DefineIndexFieldRequestSerializer;
 impl DefineIndexFieldRequestSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &DefineIndexFieldRequest) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         params.put(&format!("{}{}", prefix, "DomainName"), &obj.domain_name);
@@ -801,11 +827,12 @@ pub struct DefineIndexFieldResponse {
 #[allow(dead_code)]
 struct DefineIndexFieldResponseDeserializer;
 impl DefineIndexFieldResponseDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<DefineIndexFieldResponse, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, DefineIndexFieldResponse, _>(
             tag_name,
             stack,
@@ -833,10 +860,11 @@ pub struct DefineSuggesterRequest {
 /// Serialize `DefineSuggesterRequest` contents to a `SignedRequest`.
 struct DefineSuggesterRequestSerializer;
 impl DefineSuggesterRequestSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &DefineSuggesterRequest) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         params.put(&format!("{}{}", prefix, "DomainName"), &obj.domain_name);
@@ -858,11 +886,12 @@ pub struct DefineSuggesterResponse {
 #[allow(dead_code)]
 struct DefineSuggesterResponseDeserializer;
 impl DefineSuggesterResponseDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<DefineSuggesterResponse, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, DefineSuggesterResponse, _>(
             tag_name,
             stack,
@@ -891,10 +920,11 @@ pub struct DeleteAnalysisSchemeRequest {
 /// Serialize `DeleteAnalysisSchemeRequest` contents to a `SignedRequest`.
 struct DeleteAnalysisSchemeRequestSerializer;
 impl DeleteAnalysisSchemeRequestSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &DeleteAnalysisSchemeRequest) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         params.put(
@@ -916,11 +946,12 @@ pub struct DeleteAnalysisSchemeResponse {
 #[allow(dead_code)]
 struct DeleteAnalysisSchemeResponseDeserializer;
 impl DeleteAnalysisSchemeResponseDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<DeleteAnalysisSchemeResponse, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, DeleteAnalysisSchemeResponse, _>(
             tag_name,
             stack,
@@ -948,10 +979,11 @@ pub struct DeleteDomainRequest {
 /// Serialize `DeleteDomainRequest` contents to a `SignedRequest`.
 struct DeleteDomainRequestSerializer;
 impl DeleteDomainRequestSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &DeleteDomainRequest) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         params.put(&format!("{}{}", prefix, "DomainName"), &obj.domain_name);
@@ -968,11 +1000,12 @@ pub struct DeleteDomainResponse {
 #[allow(dead_code)]
 struct DeleteDomainResponseDeserializer;
 impl DeleteDomainResponseDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<DeleteDomainResponse, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, DeleteDomainResponse, _>(tag_name, stack, |name, stack, obj| {
             match name {
                 "DomainStatus" => {
@@ -999,10 +1032,11 @@ pub struct DeleteExpressionRequest {
 /// Serialize `DeleteExpressionRequest` contents to a `SignedRequest`.
 struct DeleteExpressionRequestSerializer;
 impl DeleteExpressionRequestSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &DeleteExpressionRequest) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         params.put(&format!("{}{}", prefix, "DomainName"), &obj.domain_name);
@@ -1024,11 +1058,12 @@ pub struct DeleteExpressionResponse {
 #[allow(dead_code)]
 struct DeleteExpressionResponseDeserializer;
 impl DeleteExpressionResponseDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<DeleteExpressionResponse, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, DeleteExpressionResponse, _>(
             tag_name,
             stack,
@@ -1057,10 +1092,11 @@ pub struct DeleteIndexFieldRequest {
 /// Serialize `DeleteIndexFieldRequest` contents to a `SignedRequest`.
 struct DeleteIndexFieldRequestSerializer;
 impl DeleteIndexFieldRequestSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &DeleteIndexFieldRequest) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         params.put(&format!("{}{}", prefix, "DomainName"), &obj.domain_name);
@@ -1082,11 +1118,12 @@ pub struct DeleteIndexFieldResponse {
 #[allow(dead_code)]
 struct DeleteIndexFieldResponseDeserializer;
 impl DeleteIndexFieldResponseDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<DeleteIndexFieldResponse, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, DeleteIndexFieldResponse, _>(
             tag_name,
             stack,
@@ -1115,10 +1152,11 @@ pub struct DeleteSuggesterRequest {
 /// Serialize `DeleteSuggesterRequest` contents to a `SignedRequest`.
 struct DeleteSuggesterRequestSerializer;
 impl DeleteSuggesterRequestSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &DeleteSuggesterRequest) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         params.put(&format!("{}{}", prefix, "DomainName"), &obj.domain_name);
@@ -1140,11 +1178,12 @@ pub struct DeleteSuggesterResponse {
 #[allow(dead_code)]
 struct DeleteSuggesterResponseDeserializer;
 impl DeleteSuggesterResponseDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<DeleteSuggesterResponse, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, DeleteSuggesterResponse, _>(
             tag_name,
             stack,
@@ -1176,10 +1215,11 @@ pub struct DescribeAnalysisSchemesRequest {
 /// Serialize `DescribeAnalysisSchemesRequest` contents to a `SignedRequest`.
 struct DescribeAnalysisSchemesRequestSerializer;
 impl DescribeAnalysisSchemesRequestSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &DescribeAnalysisSchemesRequest) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         if let Some(ref field_value) = obj.analysis_scheme_names {
@@ -1207,11 +1247,12 @@ pub struct DescribeAnalysisSchemesResponse {
 #[allow(dead_code)]
 struct DescribeAnalysisSchemesResponseDeserializer;
 impl DescribeAnalysisSchemesResponseDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<DescribeAnalysisSchemesResponse, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, DescribeAnalysisSchemesResponse, _>(
             tag_name,
             stack,
@@ -1245,10 +1286,11 @@ pub struct DescribeAvailabilityOptionsRequest {
 /// Serialize `DescribeAvailabilityOptionsRequest` contents to a `SignedRequest`.
 struct DescribeAvailabilityOptionsRequestSerializer;
 impl DescribeAvailabilityOptionsRequestSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &DescribeAvailabilityOptionsRequest) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         if let Some(ref field_value) = obj.deployed {
@@ -1269,11 +1311,12 @@ pub struct DescribeAvailabilityOptionsResponse {
 #[allow(dead_code)]
 struct DescribeAvailabilityOptionsResponseDeserializer;
 impl DescribeAvailabilityOptionsResponseDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<DescribeAvailabilityOptionsResponse, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, DescribeAvailabilityOptionsResponse, _>(
             tag_name,
             stack,
@@ -1306,10 +1349,11 @@ pub struct DescribeDomainEndpointOptionsRequest {
 /// Serialize `DescribeDomainEndpointOptionsRequest` contents to a `SignedRequest`.
 struct DescribeDomainEndpointOptionsRequestSerializer;
 impl DescribeDomainEndpointOptionsRequestSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &DescribeDomainEndpointOptionsRequest) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         if let Some(ref field_value) = obj.deployed {
@@ -1330,11 +1374,12 @@ pub struct DescribeDomainEndpointOptionsResponse {
 #[allow(dead_code)]
 struct DescribeDomainEndpointOptionsResponseDeserializer;
 impl DescribeDomainEndpointOptionsResponseDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<DescribeDomainEndpointOptionsResponse, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, DescribeDomainEndpointOptionsResponse, _>(
             tag_name,
             stack,
@@ -1365,10 +1410,11 @@ pub struct DescribeDomainsRequest {
 /// Serialize `DescribeDomainsRequest` contents to a `SignedRequest`.
 struct DescribeDomainsRequestSerializer;
 impl DescribeDomainsRequestSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &DescribeDomainsRequest) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         if let Some(ref field_value) = obj.domain_names {
@@ -1391,11 +1437,12 @@ pub struct DescribeDomainsResponse {
 #[allow(dead_code)]
 struct DescribeDomainsResponseDeserializer;
 impl DescribeDomainsResponseDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<DescribeDomainsResponse, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, DescribeDomainsResponse, _>(
             tag_name,
             stack,
@@ -1430,10 +1477,11 @@ pub struct DescribeExpressionsRequest {
 /// Serialize `DescribeExpressionsRequest` contents to a `SignedRequest`.
 struct DescribeExpressionsRequestSerializer;
 impl DescribeExpressionsRequestSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &DescribeExpressionsRequest) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         if let Some(ref field_value) = obj.deployed {
@@ -1461,11 +1509,12 @@ pub struct DescribeExpressionsResponse {
 #[allow(dead_code)]
 struct DescribeExpressionsResponseDeserializer;
 impl DescribeExpressionsResponseDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<DescribeExpressionsResponse, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, DescribeExpressionsResponse, _>(
             tag_name,
             stack,
@@ -1500,10 +1549,11 @@ pub struct DescribeIndexFieldsRequest {
 /// Serialize `DescribeIndexFieldsRequest` contents to a `SignedRequest`.
 struct DescribeIndexFieldsRequestSerializer;
 impl DescribeIndexFieldsRequestSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &DescribeIndexFieldsRequest) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         if let Some(ref field_value) = obj.deployed {
@@ -1531,11 +1581,12 @@ pub struct DescribeIndexFieldsResponse {
 #[allow(dead_code)]
 struct DescribeIndexFieldsResponseDeserializer;
 impl DescribeIndexFieldsResponseDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<DescribeIndexFieldsResponse, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, DescribeIndexFieldsResponse, _>(
             tag_name,
             stack,
@@ -1565,10 +1616,11 @@ pub struct DescribeScalingParametersRequest {
 /// Serialize `DescribeScalingParametersRequest` contents to a `SignedRequest`.
 struct DescribeScalingParametersRequestSerializer;
 impl DescribeScalingParametersRequestSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &DescribeScalingParametersRequest) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         params.put(&format!("{}{}", prefix, "DomainName"), &obj.domain_name);
@@ -1585,11 +1637,12 @@ pub struct DescribeScalingParametersResponse {
 #[allow(dead_code)]
 struct DescribeScalingParametersResponseDeserializer;
 impl DescribeScalingParametersResponseDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<DescribeScalingParametersResponse, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, DescribeScalingParametersResponse, _>(
             tag_name,
             stack,
@@ -1621,10 +1674,11 @@ pub struct DescribeServiceAccessPoliciesRequest {
 /// Serialize `DescribeServiceAccessPoliciesRequest` contents to a `SignedRequest`.
 struct DescribeServiceAccessPoliciesRequestSerializer;
 impl DescribeServiceAccessPoliciesRequestSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &DescribeServiceAccessPoliciesRequest) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         if let Some(ref field_value) = obj.deployed {
@@ -1645,11 +1699,12 @@ pub struct DescribeServiceAccessPoliciesResponse {
 #[allow(dead_code)]
 struct DescribeServiceAccessPoliciesResponseDeserializer;
 impl DescribeServiceAccessPoliciesResponseDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<DescribeServiceAccessPoliciesResponse, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, DescribeServiceAccessPoliciesResponse, _>(
             tag_name,
             stack,
@@ -1681,10 +1736,11 @@ pub struct DescribeSuggestersRequest {
 /// Serialize `DescribeSuggestersRequest` contents to a `SignedRequest`.
 struct DescribeSuggestersRequestSerializer;
 impl DescribeSuggestersRequestSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &DescribeSuggestersRequest) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         if let Some(ref field_value) = obj.deployed {
@@ -1712,11 +1768,12 @@ pub struct DescribeSuggestersResponse {
 #[allow(dead_code)]
 struct DescribeSuggestersResponseDeserializer;
 impl DescribeSuggestersResponseDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<DescribeSuggestersResponse, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, DescribeSuggestersResponse, _>(
             tag_name,
             stack,
@@ -1752,11 +1809,12 @@ pub struct DocumentSuggesterOptions {
 #[allow(dead_code)]
 struct DocumentSuggesterOptionsDeserializer;
 impl DocumentSuggesterOptionsDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<DocumentSuggesterOptions, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, DocumentSuggesterOptions, _>(
             tag_name,
             stack,
@@ -1787,10 +1845,11 @@ impl DocumentSuggesterOptionsDeserializer {
 /// Serialize `DocumentSuggesterOptions` contents to a `SignedRequest`.
 struct DocumentSuggesterOptionsSerializer;
 impl DocumentSuggesterOptionsSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &DocumentSuggesterOptions) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         if let Some(ref field_value) = obj.fuzzy_matching {
@@ -1817,11 +1876,12 @@ pub struct DomainEndpointOptions {
 #[allow(dead_code)]
 struct DomainEndpointOptionsDeserializer;
 impl DomainEndpointOptionsDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<DomainEndpointOptions, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, DomainEndpointOptions, _>(tag_name, stack, |name, stack, obj| {
             match name {
                 "EnforceHTTPS" => {
@@ -1844,10 +1904,11 @@ impl DomainEndpointOptionsDeserializer {
 /// Serialize `DomainEndpointOptions` contents to a `SignedRequest`.
 struct DomainEndpointOptionsSerializer;
 impl DomainEndpointOptionsSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &DomainEndpointOptions) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         if let Some(ref field_value) = obj.enforce_https {
@@ -1872,11 +1933,12 @@ pub struct DomainEndpointOptionsStatus {
 #[allow(dead_code)]
 struct DomainEndpointOptionsStatusDeserializer;
 impl DomainEndpointOptionsStatusDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<DomainEndpointOptionsStatus, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, DomainEndpointOptionsStatus, _>(
             tag_name,
             stack,
@@ -1899,16 +1961,18 @@ impl DomainEndpointOptionsStatusDeserializer {
 #[allow(dead_code)]
 struct DomainIdDeserializer;
 impl DomainIdDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 #[allow(dead_code)]
 struct DomainNameDeserializer;
 impl DomainNameDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
@@ -1916,6 +1980,7 @@ impl DomainNameDeserializer {
 /// Serialize `DomainNameList` contents to a `SignedRequest`.
 struct DomainNameListSerializer;
 impl DomainNameListSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &Vec<String>) {
         for (index, obj) in obj.iter().enumerate() {
             let key = format!("{}.member.{}", name, index + 1);
@@ -1927,11 +1992,12 @@ impl DomainNameListSerializer {
 #[allow(dead_code)]
 struct DomainNameMapDeserializer;
 impl DomainNameMapDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<::std::collections::HashMap<String, String>, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::start_element(tag_name, stack)?;
 
         let mut obj = ::std::collections::HashMap::new();
@@ -1979,11 +2045,12 @@ pub struct DomainStatus {
 #[allow(dead_code)]
 struct DomainStatusDeserializer;
 impl DomainStatusDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<DomainStatus, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, DomainStatus, _>(tag_name, stack, |name, stack, obj| {
             match name {
                 "ARN" => {
@@ -2050,11 +2117,13 @@ impl DomainStatusDeserializer {
 #[allow(dead_code)]
 struct DomainStatusListDeserializer;
 impl DomainStatusListDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<DomainStatus>, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
+
         deserialize_elements::<_, Vec<_>, _>(tag_name, stack, |name, stack, obj| {
             if name == "member" {
                 obj.push(DomainStatusDeserializer::deserialize("member", stack)?);
@@ -2068,8 +2137,9 @@ impl DomainStatusListDeserializer {
 #[allow(dead_code)]
 struct DoubleDeserializer;
 impl DoubleDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<f64, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::deserialize_primitive(tag_name, stack, |s| Ok(f64::from_str(&s).unwrap()))
     }
 }
@@ -2093,11 +2163,12 @@ pub struct DoubleArrayOptions {
 #[allow(dead_code)]
 struct DoubleArrayOptionsDeserializer;
 impl DoubleArrayOptionsDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<DoubleArrayOptions, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, DoubleArrayOptions, _>(tag_name, stack, |name, stack, obj| {
             match name {
                 "DefaultValue" => {
@@ -2132,10 +2203,11 @@ impl DoubleArrayOptionsDeserializer {
 /// Serialize `DoubleArrayOptions` contents to a `SignedRequest`.
 struct DoubleArrayOptionsSerializer;
 impl DoubleArrayOptionsSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &DoubleArrayOptions) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         if let Some(ref field_value) = obj.default_value {
@@ -2178,11 +2250,12 @@ pub struct DoubleOptions {
 #[allow(dead_code)]
 struct DoubleOptionsDeserializer;
 impl DoubleOptionsDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<DoubleOptions, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, DoubleOptions, _>(tag_name, stack, |name, stack, obj| {
             match name {
                 "DefaultValue" => {
@@ -2219,10 +2292,11 @@ impl DoubleOptionsDeserializer {
 /// Serialize `DoubleOptions` contents to a `SignedRequest`.
 struct DoubleOptionsSerializer;
 impl DoubleOptionsSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &DoubleOptions) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         if let Some(ref field_value) = obj.default_value {
@@ -2249,8 +2323,9 @@ impl DoubleOptionsSerializer {
 #[allow(dead_code)]
 struct DynamicFieldNameDeserializer;
 impl DynamicFieldNameDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
@@ -2258,6 +2333,7 @@ impl DynamicFieldNameDeserializer {
 /// Serialize `DynamicFieldNameList` contents to a `SignedRequest`.
 struct DynamicFieldNameListSerializer;
 impl DynamicFieldNameListSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &Vec<String>) {
         for (index, obj) in obj.iter().enumerate() {
             let key = format!("{}.member.{}", name, index + 1);
@@ -2278,11 +2354,12 @@ pub struct Expression {
 #[allow(dead_code)]
 struct ExpressionDeserializer;
 impl ExpressionDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Expression, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, Expression, _>(tag_name, stack, |name, stack, obj| {
             match name {
                 "ExpressionName" => {
@@ -2303,10 +2380,11 @@ impl ExpressionDeserializer {
 /// Serialize `Expression` contents to a `SignedRequest`.
 struct ExpressionSerializer;
 impl ExpressionSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &Expression) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         params.put(
@@ -2332,11 +2410,12 @@ pub struct ExpressionStatus {
 #[allow(dead_code)]
 struct ExpressionStatusDeserializer;
 impl ExpressionStatusDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<ExpressionStatus, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, ExpressionStatus, _>(tag_name, stack, |name, stack, obj| {
             match name {
                 "Options" => {
@@ -2354,11 +2433,13 @@ impl ExpressionStatusDeserializer {
 #[allow(dead_code)]
 struct ExpressionStatusListDeserializer;
 impl ExpressionStatusListDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<ExpressionStatus>, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
+
         deserialize_elements::<_, Vec<_>, _>(tag_name, stack, |name, stack, obj| {
             if name == "member" {
                 obj.push(ExpressionStatusDeserializer::deserialize("member", stack)?);
@@ -2372,35 +2453,40 @@ impl ExpressionStatusListDeserializer {
 #[allow(dead_code)]
 struct ExpressionValueDeserializer;
 impl ExpressionValueDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 #[allow(dead_code)]
 struct FieldNameDeserializer;
 impl FieldNameDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 #[allow(dead_code)]
 struct FieldNameCommaListDeserializer;
 impl FieldNameCommaListDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 #[allow(dead_code)]
 struct FieldNameListDeserializer;
 impl FieldNameListDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<String>, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
+
         deserialize_elements::<_, Vec<_>, _>(tag_name, stack, |name, stack, obj| {
             if name == "member" {
                 obj.push(FieldNameDeserializer::deserialize("member", stack)?);
@@ -2414,8 +2500,9 @@ impl FieldNameListDeserializer {
 #[allow(dead_code)]
 struct FieldValueDeserializer;
 impl FieldValueDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
@@ -2429,10 +2516,11 @@ pub struct IndexDocumentsRequest {
 /// Serialize `IndexDocumentsRequest` contents to a `SignedRequest`.
 struct IndexDocumentsRequestSerializer;
 impl IndexDocumentsRequestSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &IndexDocumentsRequest) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         params.put(&format!("{}{}", prefix, "DomainName"), &obj.domain_name);
@@ -2450,11 +2538,12 @@ pub struct IndexDocumentsResponse {
 #[allow(dead_code)]
 struct IndexDocumentsResponseDeserializer;
 impl IndexDocumentsResponseDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<IndexDocumentsResponse, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, IndexDocumentsResponse, _>(tag_name, stack, |name, stack, obj| {
             match name {
                 "FieldNames" => {
@@ -2492,11 +2581,12 @@ pub struct IndexField {
 #[allow(dead_code)]
 struct IndexFieldDeserializer;
 impl IndexFieldDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<IndexField, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, IndexField, _>(tag_name, stack, |name, stack, obj| {
             match name {
                 "DateArrayOptions" => {
@@ -2577,10 +2667,11 @@ impl IndexFieldDeserializer {
 /// Serialize `IndexField` contents to a `SignedRequest`.
 struct IndexFieldSerializer;
 impl IndexFieldSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &IndexField) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         if let Some(ref field_value) = obj.date_array_options {
@@ -2682,11 +2773,12 @@ pub struct IndexFieldStatus {
 #[allow(dead_code)]
 struct IndexFieldStatusDeserializer;
 impl IndexFieldStatusDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<IndexFieldStatus, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, IndexFieldStatus, _>(tag_name, stack, |name, stack, obj| {
             match name {
                 "Options" => {
@@ -2704,11 +2796,13 @@ impl IndexFieldStatusDeserializer {
 #[allow(dead_code)]
 struct IndexFieldStatusListDeserializer;
 impl IndexFieldStatusListDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<IndexFieldStatus>, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
+
         deserialize_elements::<_, Vec<_>, _>(tag_name, stack, |name, stack, obj| {
             if name == "member" {
                 obj.push(IndexFieldStatusDeserializer::deserialize("member", stack)?);
@@ -2722,16 +2816,18 @@ impl IndexFieldStatusListDeserializer {
 #[allow(dead_code)]
 struct IndexFieldTypeDeserializer;
 impl IndexFieldTypeDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 #[allow(dead_code)]
 struct InstanceCountDeserializer;
 impl InstanceCountDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<i64, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::deserialize_primitive(tag_name, stack, |s| Ok(i64::from_str(&s).unwrap()))
     }
 }
@@ -2755,11 +2851,12 @@ pub struct IntArrayOptions {
 #[allow(dead_code)]
 struct IntArrayOptionsDeserializer;
 impl IntArrayOptionsDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<IntArrayOptions, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, IntArrayOptions, _>(tag_name, stack, |name, stack, obj| {
             match name {
                 "DefaultValue" => {
@@ -2793,10 +2890,11 @@ impl IntArrayOptionsDeserializer {
 /// Serialize `IntArrayOptions` contents to a `SignedRequest`.
 struct IntArrayOptionsSerializer;
 impl IntArrayOptionsSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &IntArrayOptions) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         if let Some(ref field_value) = obj.default_value {
@@ -2839,11 +2937,12 @@ pub struct IntOptions {
 #[allow(dead_code)]
 struct IntOptionsDeserializer;
 impl IntOptionsDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<IntOptions, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, IntOptions, _>(tag_name, stack, |name, stack, obj| {
             match name {
                 "DefaultValue" => {
@@ -2879,10 +2978,11 @@ impl IntOptionsDeserializer {
 /// Serialize `IntOptions` contents to a `SignedRequest`.
 struct IntOptionsSerializer;
 impl IntOptionsSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &IntOptions) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         if let Some(ref field_value) = obj.default_value {
@@ -2927,11 +3027,12 @@ pub struct LatLonOptions {
 #[allow(dead_code)]
 struct LatLonOptionsDeserializer;
 impl LatLonOptionsDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<LatLonOptions, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, LatLonOptions, _>(tag_name, stack, |name, stack, obj| {
             match name {
                 "DefaultValue" => {
@@ -2968,10 +3069,11 @@ impl LatLonOptionsDeserializer {
 /// Serialize `LatLonOptions` contents to a `SignedRequest`.
 struct LatLonOptionsSerializer;
 impl LatLonOptionsSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &LatLonOptions) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         if let Some(ref field_value) = obj.default_value {
@@ -3005,8 +3107,9 @@ pub struct Limits {
 #[allow(dead_code)]
 struct LimitsDeserializer;
 impl LimitsDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<Limits, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, Limits, _>(tag_name, stack, |name, stack, obj| {
             match name {
                 "MaximumPartitionCount" => {
@@ -3039,11 +3142,12 @@ pub struct ListDomainNamesResponse {
 #[allow(dead_code)]
 struct ListDomainNamesResponseDeserializer;
 impl ListDomainNamesResponseDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<ListDomainNamesResponse, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, ListDomainNamesResponse, _>(
             tag_name,
             stack,
@@ -3082,11 +3186,12 @@ pub struct LiteralArrayOptions {
 #[allow(dead_code)]
 struct LiteralArrayOptionsDeserializer;
 impl LiteralArrayOptionsDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<LiteralArrayOptions, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, LiteralArrayOptions, _>(tag_name, stack, |name, stack, obj| {
             match name {
                 "DefaultValue" => {
@@ -3121,10 +3226,11 @@ impl LiteralArrayOptionsDeserializer {
 /// Serialize `LiteralArrayOptions` contents to a `SignedRequest`.
 struct LiteralArrayOptionsSerializer;
 impl LiteralArrayOptionsSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &LiteralArrayOptions) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         if let Some(ref field_value) = obj.default_value {
@@ -3166,11 +3272,12 @@ pub struct LiteralOptions {
 #[allow(dead_code)]
 struct LiteralOptionsDeserializer;
 impl LiteralOptionsDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<LiteralOptions, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, LiteralOptions, _>(tag_name, stack, |name, stack, obj| {
             match name {
                 "DefaultValue" => {
@@ -3207,10 +3314,11 @@ impl LiteralOptionsDeserializer {
 /// Serialize `LiteralOptions` contents to a `SignedRequest`.
 struct LiteralOptionsSerializer;
 impl LiteralOptionsSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &LiteralOptions) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         if let Some(ref field_value) = obj.default_value {
@@ -3237,40 +3345,45 @@ impl LiteralOptionsSerializer {
 #[allow(dead_code)]
 struct LongDeserializer;
 impl LongDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<i64, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::deserialize_primitive(tag_name, stack, |s| Ok(i64::from_str(&s).unwrap()))
     }
 }
 #[allow(dead_code)]
 struct MaximumPartitionCountDeserializer;
 impl MaximumPartitionCountDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<i64, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::deserialize_primitive(tag_name, stack, |s| Ok(i64::from_str(&s).unwrap()))
     }
 }
 #[allow(dead_code)]
 struct MaximumReplicationCountDeserializer;
 impl MaximumReplicationCountDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<i64, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::deserialize_primitive(tag_name, stack, |s| Ok(i64::from_str(&s).unwrap()))
     }
 }
 #[allow(dead_code)]
 struct MultiAZDeserializer;
 impl MultiAZDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<bool, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::deserialize_primitive(tag_name, stack, |s| Ok(bool::from_str(&s).unwrap()))
     }
 }
 #[allow(dead_code)]
 struct OptionStateDeserializer;
 impl OptionStateDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
@@ -3293,11 +3406,12 @@ pub struct OptionStatus {
 #[allow(dead_code)]
 struct OptionStatusDeserializer;
 impl OptionStatusDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<OptionStatus, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, OptionStatus, _>(tag_name, stack, |name, stack, obj| {
             match name {
                 "CreationDate" => {
@@ -3328,24 +3442,27 @@ impl OptionStatusDeserializer {
 #[allow(dead_code)]
 struct PartitionCountDeserializer;
 impl PartitionCountDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<i64, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::deserialize_primitive(tag_name, stack, |s| Ok(i64::from_str(&s).unwrap()))
     }
 }
 #[allow(dead_code)]
 struct PartitionInstanceTypeDeserializer;
 impl PartitionInstanceTypeDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 #[allow(dead_code)]
 struct PolicyDocumentDeserializer;
 impl PolicyDocumentDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
@@ -3365,11 +3482,12 @@ pub struct ScalingParameters {
 #[allow(dead_code)]
 struct ScalingParametersDeserializer;
 impl ScalingParametersDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<ScalingParameters, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, ScalingParameters, _>(tag_name, stack, |name, stack, obj| {
             match name {
                 "DesiredInstanceType" => {
@@ -3401,10 +3519,11 @@ impl ScalingParametersDeserializer {
 /// Serialize `ScalingParameters` contents to a `SignedRequest`.
 struct ScalingParametersSerializer;
 impl ScalingParametersSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &ScalingParameters) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         if let Some(ref field_value) = obj.desired_instance_type {
@@ -3439,11 +3558,12 @@ pub struct ScalingParametersStatus {
 #[allow(dead_code)]
 struct ScalingParametersStatusDeserializer;
 impl ScalingParametersStatusDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<ScalingParametersStatus, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, ScalingParametersStatus, _>(
             tag_name,
             stack,
@@ -3465,8 +3585,9 @@ impl ScalingParametersStatusDeserializer {
 #[allow(dead_code)]
 struct SearchInstanceTypeDeserializer;
 impl SearchInstanceTypeDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
@@ -3480,11 +3601,12 @@ pub struct ServiceEndpoint {
 #[allow(dead_code)]
 struct ServiceEndpointDeserializer;
 impl ServiceEndpointDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<ServiceEndpoint, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, ServiceEndpoint, _>(tag_name, stack, |name, stack, obj| {
             match name {
                 "Endpoint" => {
@@ -3499,16 +3621,18 @@ impl ServiceEndpointDeserializer {
 #[allow(dead_code)]
 struct ServiceUrlDeserializer;
 impl ServiceUrlDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 #[allow(dead_code)]
 struct StandardNameDeserializer;
 impl StandardNameDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
@@ -3516,6 +3640,7 @@ impl StandardNameDeserializer {
 /// Serialize `StandardNameList` contents to a `SignedRequest`.
 struct StandardNameListSerializer;
 impl StandardNameListSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &Vec<String>) {
         for (index, obj) in obj.iter().enumerate() {
             let key = format!("{}.member.{}", name, index + 1);
@@ -3527,8 +3652,9 @@ impl StandardNameListSerializer {
 #[allow(dead_code)]
 struct StringDeserializer;
 impl StringDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
@@ -3544,11 +3670,12 @@ pub struct Suggester {
 #[allow(dead_code)]
 struct SuggesterDeserializer;
 impl SuggesterDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Suggester, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, Suggester, _>(tag_name, stack, |name, stack, obj| {
             match name {
                 "DocumentSuggesterOptions" => {
@@ -3572,10 +3699,11 @@ impl SuggesterDeserializer {
 /// Serialize `Suggester` contents to a `SignedRequest`.
 struct SuggesterSerializer;
 impl SuggesterSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &Suggester) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         DocumentSuggesterOptionsSerializer::serialize(
@@ -3593,8 +3721,9 @@ impl SuggesterSerializer {
 #[allow(dead_code)]
 struct SuggesterFuzzyMatchingDeserializer;
 impl SuggesterFuzzyMatchingDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
@@ -3609,11 +3738,12 @@ pub struct SuggesterStatus {
 #[allow(dead_code)]
 struct SuggesterStatusDeserializer;
 impl SuggesterStatusDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<SuggesterStatus, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, SuggesterStatus, _>(tag_name, stack, |name, stack, obj| {
             match name {
                 "Options" => {
@@ -3631,11 +3761,13 @@ impl SuggesterStatusDeserializer {
 #[allow(dead_code)]
 struct SuggesterStatusListDeserializer;
 impl SuggesterStatusListDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<SuggesterStatus>, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
+
         deserialize_elements::<_, Vec<_>, _>(tag_name, stack, |name, stack, obj| {
             if name == "member" {
                 obj.push(SuggesterStatusDeserializer::deserialize("member", stack)?);
@@ -3649,8 +3781,9 @@ impl SuggesterStatusListDeserializer {
 #[allow(dead_code)]
 struct TLSSecurityPolicyDeserializer;
 impl TLSSecurityPolicyDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
@@ -3674,11 +3807,12 @@ pub struct TextArrayOptions {
 #[allow(dead_code)]
 struct TextArrayOptionsDeserializer;
 impl TextArrayOptionsDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<TextArrayOptions, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, TextArrayOptions, _>(tag_name, stack, |name, stack, obj| {
             match name {
                 "AnalysisScheme" => {
@@ -3713,10 +3847,11 @@ impl TextArrayOptionsDeserializer {
 /// Serialize `TextArrayOptions` contents to a `SignedRequest`.
 struct TextArrayOptionsSerializer;
 impl TextArrayOptionsSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &TextArrayOptions) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         if let Some(ref field_value) = obj.analysis_scheme {
@@ -3758,11 +3893,12 @@ pub struct TextOptions {
 #[allow(dead_code)]
 struct TextOptionsDeserializer;
 impl TextOptionsDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<TextOptions, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, TextOptions, _>(tag_name, stack, |name, stack, obj| {
             match name {
                 "AnalysisScheme" => {
@@ -3799,10 +3935,11 @@ impl TextOptionsDeserializer {
 /// Serialize `TextOptions` contents to a `SignedRequest`.
 struct TextOptionsSerializer;
 impl TextOptionsSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &TextOptions) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         if let Some(ref field_value) = obj.analysis_scheme {
@@ -3829,8 +3966,9 @@ impl TextOptionsSerializer {
 #[allow(dead_code)]
 struct UIntValueDeserializer;
 impl UIntValueDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<i64, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::deserialize_primitive(tag_name, stack, |s| Ok(i64::from_str(&s).unwrap()))
     }
 }
@@ -3846,10 +3984,11 @@ pub struct UpdateAvailabilityOptionsRequest {
 /// Serialize `UpdateAvailabilityOptionsRequest` contents to a `SignedRequest`.
 struct UpdateAvailabilityOptionsRequestSerializer;
 impl UpdateAvailabilityOptionsRequestSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &UpdateAvailabilityOptionsRequest) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         params.put(&format!("{}{}", prefix, "DomainName"), &obj.domain_name);
@@ -3868,11 +4007,12 @@ pub struct UpdateAvailabilityOptionsResponse {
 #[allow(dead_code)]
 struct UpdateAvailabilityOptionsResponseDeserializer;
 impl UpdateAvailabilityOptionsResponseDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<UpdateAvailabilityOptionsResponse, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, UpdateAvailabilityOptionsResponse, _>(
             tag_name,
             stack,
@@ -3905,10 +4045,11 @@ pub struct UpdateDomainEndpointOptionsRequest {
 /// Serialize `UpdateDomainEndpointOptionsRequest` contents to a `SignedRequest`.
 struct UpdateDomainEndpointOptionsRequestSerializer;
 impl UpdateDomainEndpointOptionsRequestSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &UpdateDomainEndpointOptionsRequest) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         DomainEndpointOptionsSerializer::serialize(
@@ -3931,11 +4072,12 @@ pub struct UpdateDomainEndpointOptionsResponse {
 #[allow(dead_code)]
 struct UpdateDomainEndpointOptionsResponseDeserializer;
 impl UpdateDomainEndpointOptionsResponseDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<UpdateDomainEndpointOptionsResponse, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, UpdateDomainEndpointOptionsResponse, _>(
             tag_name,
             stack,
@@ -3966,10 +4108,11 @@ pub struct UpdateScalingParametersRequest {
 /// Serialize `UpdateScalingParametersRequest` contents to a `SignedRequest`.
 struct UpdateScalingParametersRequestSerializer;
 impl UpdateScalingParametersRequestSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &UpdateScalingParametersRequest) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         params.put(&format!("{}{}", prefix, "DomainName"), &obj.domain_name);
@@ -3991,11 +4134,12 @@ pub struct UpdateScalingParametersResponse {
 #[allow(dead_code)]
 struct UpdateScalingParametersResponseDeserializer;
 impl UpdateScalingParametersResponseDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<UpdateScalingParametersResponse, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, UpdateScalingParametersResponse, _>(
             tag_name,
             stack,
@@ -4026,10 +4170,11 @@ pub struct UpdateServiceAccessPoliciesRequest {
 /// Serialize `UpdateServiceAccessPoliciesRequest` contents to a `SignedRequest`.
 struct UpdateServiceAccessPoliciesRequestSerializer;
 impl UpdateServiceAccessPoliciesRequestSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &UpdateServiceAccessPoliciesRequest) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         params.put(
@@ -4051,11 +4196,12 @@ pub struct UpdateServiceAccessPoliciesResponse {
 #[allow(dead_code)]
 struct UpdateServiceAccessPoliciesResponseDeserializer;
 impl UpdateServiceAccessPoliciesResponseDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<UpdateServiceAccessPoliciesResponse, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, UpdateServiceAccessPoliciesResponse, _>(
             tag_name,
             stack,
@@ -4075,16 +4221,18 @@ impl UpdateServiceAccessPoliciesResponseDeserializer {
 #[allow(dead_code)]
 struct UpdateTimestampDeserializer;
 impl UpdateTimestampDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 #[allow(dead_code)]
 struct WordDeserializer;
 impl WordDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
@@ -4105,24 +4253,27 @@ impl BuildSuggestersError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    "BaseException" => {
-                        return RusotoError::Service(BuildSuggestersError::Base(
-                            parsed_error.message,
-                        ))
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {
+                        "BaseException" => {
+                            return RusotoError::Service(BuildSuggestersError::Base(
+                                parsed_error.message,
+                            ))
+                        }
+                        "InternalException" => {
+                            return RusotoError::Service(BuildSuggestersError::Internal(
+                                parsed_error.message,
+                            ))
+                        }
+                        "ResourceNotFound" => {
+                            return RusotoError::Service(BuildSuggestersError::ResourceNotFound(
+                                parsed_error.message,
+                            ))
+                        }
+                        _ => {}
                     }
-                    "InternalException" => {
-                        return RusotoError::Service(BuildSuggestersError::Internal(
-                            parsed_error.message,
-                        ))
-                    }
-                    "ResourceNotFound" => {
-                        return RusotoError::Service(BuildSuggestersError::ResourceNotFound(
-                            parsed_error.message,
-                        ))
-                    }
-                    _ => {}
                 }
             }
         }
@@ -4165,22 +4316,27 @@ impl CreateDomainError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    "BaseException" => {
-                        return RusotoError::Service(CreateDomainError::Base(parsed_error.message))
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {
+                        "BaseException" => {
+                            return RusotoError::Service(CreateDomainError::Base(
+                                parsed_error.message,
+                            ))
+                        }
+                        "InternalException" => {
+                            return RusotoError::Service(CreateDomainError::Internal(
+                                parsed_error.message,
+                            ))
+                        }
+                        "LimitExceeded" => {
+                            return RusotoError::Service(CreateDomainError::LimitExceeded(
+                                parsed_error.message,
+                            ))
+                        }
+                        _ => {}
                     }
-                    "InternalException" => {
-                        return RusotoError::Service(CreateDomainError::Internal(
-                            parsed_error.message,
-                        ))
-                    }
-                    "LimitExceeded" => {
-                        return RusotoError::Service(CreateDomainError::LimitExceeded(
-                            parsed_error.message,
-                        ))
-                    }
-                    _ => {}
                 }
             }
         }
@@ -4227,34 +4383,37 @@ impl DefineAnalysisSchemeError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    "BaseException" => {
-                        return RusotoError::Service(DefineAnalysisSchemeError::Base(
-                            parsed_error.message,
-                        ))
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {
+                        "BaseException" => {
+                            return RusotoError::Service(DefineAnalysisSchemeError::Base(
+                                parsed_error.message,
+                            ))
+                        }
+                        "InternalException" => {
+                            return RusotoError::Service(DefineAnalysisSchemeError::Internal(
+                                parsed_error.message,
+                            ))
+                        }
+                        "InvalidType" => {
+                            return RusotoError::Service(DefineAnalysisSchemeError::InvalidType(
+                                parsed_error.message,
+                            ))
+                        }
+                        "LimitExceeded" => {
+                            return RusotoError::Service(DefineAnalysisSchemeError::LimitExceeded(
+                                parsed_error.message,
+                            ))
+                        }
+                        "ResourceNotFound" => {
+                            return RusotoError::Service(
+                                DefineAnalysisSchemeError::ResourceNotFound(parsed_error.message),
+                            )
+                        }
+                        _ => {}
                     }
-                    "InternalException" => {
-                        return RusotoError::Service(DefineAnalysisSchemeError::Internal(
-                            parsed_error.message,
-                        ))
-                    }
-                    "InvalidType" => {
-                        return RusotoError::Service(DefineAnalysisSchemeError::InvalidType(
-                            parsed_error.message,
-                        ))
-                    }
-                    "LimitExceeded" => {
-                        return RusotoError::Service(DefineAnalysisSchemeError::LimitExceeded(
-                            parsed_error.message,
-                        ))
-                    }
-                    "ResourceNotFound" => {
-                        return RusotoError::Service(DefineAnalysisSchemeError::ResourceNotFound(
-                            parsed_error.message,
-                        ))
-                    }
-                    _ => {}
                 }
             }
         }
@@ -4303,34 +4462,37 @@ impl DefineExpressionError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    "BaseException" => {
-                        return RusotoError::Service(DefineExpressionError::Base(
-                            parsed_error.message,
-                        ))
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {
+                        "BaseException" => {
+                            return RusotoError::Service(DefineExpressionError::Base(
+                                parsed_error.message,
+                            ))
+                        }
+                        "InternalException" => {
+                            return RusotoError::Service(DefineExpressionError::Internal(
+                                parsed_error.message,
+                            ))
+                        }
+                        "InvalidType" => {
+                            return RusotoError::Service(DefineExpressionError::InvalidType(
+                                parsed_error.message,
+                            ))
+                        }
+                        "LimitExceeded" => {
+                            return RusotoError::Service(DefineExpressionError::LimitExceeded(
+                                parsed_error.message,
+                            ))
+                        }
+                        "ResourceNotFound" => {
+                            return RusotoError::Service(DefineExpressionError::ResourceNotFound(
+                                parsed_error.message,
+                            ))
+                        }
+                        _ => {}
                     }
-                    "InternalException" => {
-                        return RusotoError::Service(DefineExpressionError::Internal(
-                            parsed_error.message,
-                        ))
-                    }
-                    "InvalidType" => {
-                        return RusotoError::Service(DefineExpressionError::InvalidType(
-                            parsed_error.message,
-                        ))
-                    }
-                    "LimitExceeded" => {
-                        return RusotoError::Service(DefineExpressionError::LimitExceeded(
-                            parsed_error.message,
-                        ))
-                    }
-                    "ResourceNotFound" => {
-                        return RusotoError::Service(DefineExpressionError::ResourceNotFound(
-                            parsed_error.message,
-                        ))
-                    }
-                    _ => {}
                 }
             }
         }
@@ -4379,34 +4541,37 @@ impl DefineIndexFieldError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    "BaseException" => {
-                        return RusotoError::Service(DefineIndexFieldError::Base(
-                            parsed_error.message,
-                        ))
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {
+                        "BaseException" => {
+                            return RusotoError::Service(DefineIndexFieldError::Base(
+                                parsed_error.message,
+                            ))
+                        }
+                        "InternalException" => {
+                            return RusotoError::Service(DefineIndexFieldError::Internal(
+                                parsed_error.message,
+                            ))
+                        }
+                        "InvalidType" => {
+                            return RusotoError::Service(DefineIndexFieldError::InvalidType(
+                                parsed_error.message,
+                            ))
+                        }
+                        "LimitExceeded" => {
+                            return RusotoError::Service(DefineIndexFieldError::LimitExceeded(
+                                parsed_error.message,
+                            ))
+                        }
+                        "ResourceNotFound" => {
+                            return RusotoError::Service(DefineIndexFieldError::ResourceNotFound(
+                                parsed_error.message,
+                            ))
+                        }
+                        _ => {}
                     }
-                    "InternalException" => {
-                        return RusotoError::Service(DefineIndexFieldError::Internal(
-                            parsed_error.message,
-                        ))
-                    }
-                    "InvalidType" => {
-                        return RusotoError::Service(DefineIndexFieldError::InvalidType(
-                            parsed_error.message,
-                        ))
-                    }
-                    "LimitExceeded" => {
-                        return RusotoError::Service(DefineIndexFieldError::LimitExceeded(
-                            parsed_error.message,
-                        ))
-                    }
-                    "ResourceNotFound" => {
-                        return RusotoError::Service(DefineIndexFieldError::ResourceNotFound(
-                            parsed_error.message,
-                        ))
-                    }
-                    _ => {}
                 }
             }
         }
@@ -4455,34 +4620,37 @@ impl DefineSuggesterError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    "BaseException" => {
-                        return RusotoError::Service(DefineSuggesterError::Base(
-                            parsed_error.message,
-                        ))
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {
+                        "BaseException" => {
+                            return RusotoError::Service(DefineSuggesterError::Base(
+                                parsed_error.message,
+                            ))
+                        }
+                        "InternalException" => {
+                            return RusotoError::Service(DefineSuggesterError::Internal(
+                                parsed_error.message,
+                            ))
+                        }
+                        "InvalidType" => {
+                            return RusotoError::Service(DefineSuggesterError::InvalidType(
+                                parsed_error.message,
+                            ))
+                        }
+                        "LimitExceeded" => {
+                            return RusotoError::Service(DefineSuggesterError::LimitExceeded(
+                                parsed_error.message,
+                            ))
+                        }
+                        "ResourceNotFound" => {
+                            return RusotoError::Service(DefineSuggesterError::ResourceNotFound(
+                                parsed_error.message,
+                            ))
+                        }
+                        _ => {}
                     }
-                    "InternalException" => {
-                        return RusotoError::Service(DefineSuggesterError::Internal(
-                            parsed_error.message,
-                        ))
-                    }
-                    "InvalidType" => {
-                        return RusotoError::Service(DefineSuggesterError::InvalidType(
-                            parsed_error.message,
-                        ))
-                    }
-                    "LimitExceeded" => {
-                        return RusotoError::Service(DefineSuggesterError::LimitExceeded(
-                            parsed_error.message,
-                        ))
-                    }
-                    "ResourceNotFound" => {
-                        return RusotoError::Service(DefineSuggesterError::ResourceNotFound(
-                            parsed_error.message,
-                        ))
-                    }
-                    _ => {}
                 }
             }
         }
@@ -4529,29 +4697,32 @@ impl DeleteAnalysisSchemeError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    "BaseException" => {
-                        return RusotoError::Service(DeleteAnalysisSchemeError::Base(
-                            parsed_error.message,
-                        ))
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {
+                        "BaseException" => {
+                            return RusotoError::Service(DeleteAnalysisSchemeError::Base(
+                                parsed_error.message,
+                            ))
+                        }
+                        "InternalException" => {
+                            return RusotoError::Service(DeleteAnalysisSchemeError::Internal(
+                                parsed_error.message,
+                            ))
+                        }
+                        "InvalidType" => {
+                            return RusotoError::Service(DeleteAnalysisSchemeError::InvalidType(
+                                parsed_error.message,
+                            ))
+                        }
+                        "ResourceNotFound" => {
+                            return RusotoError::Service(
+                                DeleteAnalysisSchemeError::ResourceNotFound(parsed_error.message),
+                            )
+                        }
+                        _ => {}
                     }
-                    "InternalException" => {
-                        return RusotoError::Service(DeleteAnalysisSchemeError::Internal(
-                            parsed_error.message,
-                        ))
-                    }
-                    "InvalidType" => {
-                        return RusotoError::Service(DeleteAnalysisSchemeError::InvalidType(
-                            parsed_error.message,
-                        ))
-                    }
-                    "ResourceNotFound" => {
-                        return RusotoError::Service(DeleteAnalysisSchemeError::ResourceNotFound(
-                            parsed_error.message,
-                        ))
-                    }
-                    _ => {}
                 }
             }
         }
@@ -4593,17 +4764,22 @@ impl DeleteDomainError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    "BaseException" => {
-                        return RusotoError::Service(DeleteDomainError::Base(parsed_error.message))
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {
+                        "BaseException" => {
+                            return RusotoError::Service(DeleteDomainError::Base(
+                                parsed_error.message,
+                            ))
+                        }
+                        "InternalException" => {
+                            return RusotoError::Service(DeleteDomainError::Internal(
+                                parsed_error.message,
+                            ))
+                        }
+                        _ => {}
                     }
-                    "InternalException" => {
-                        return RusotoError::Service(DeleteDomainError::Internal(
-                            parsed_error.message,
-                        ))
-                    }
-                    _ => {}
                 }
             }
         }
@@ -4647,29 +4823,32 @@ impl DeleteExpressionError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    "BaseException" => {
-                        return RusotoError::Service(DeleteExpressionError::Base(
-                            parsed_error.message,
-                        ))
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {
+                        "BaseException" => {
+                            return RusotoError::Service(DeleteExpressionError::Base(
+                                parsed_error.message,
+                            ))
+                        }
+                        "InternalException" => {
+                            return RusotoError::Service(DeleteExpressionError::Internal(
+                                parsed_error.message,
+                            ))
+                        }
+                        "InvalidType" => {
+                            return RusotoError::Service(DeleteExpressionError::InvalidType(
+                                parsed_error.message,
+                            ))
+                        }
+                        "ResourceNotFound" => {
+                            return RusotoError::Service(DeleteExpressionError::ResourceNotFound(
+                                parsed_error.message,
+                            ))
+                        }
+                        _ => {}
                     }
-                    "InternalException" => {
-                        return RusotoError::Service(DeleteExpressionError::Internal(
-                            parsed_error.message,
-                        ))
-                    }
-                    "InvalidType" => {
-                        return RusotoError::Service(DeleteExpressionError::InvalidType(
-                            parsed_error.message,
-                        ))
-                    }
-                    "ResourceNotFound" => {
-                        return RusotoError::Service(DeleteExpressionError::ResourceNotFound(
-                            parsed_error.message,
-                        ))
-                    }
-                    _ => {}
                 }
             }
         }
@@ -4715,29 +4894,32 @@ impl DeleteIndexFieldError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    "BaseException" => {
-                        return RusotoError::Service(DeleteIndexFieldError::Base(
-                            parsed_error.message,
-                        ))
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {
+                        "BaseException" => {
+                            return RusotoError::Service(DeleteIndexFieldError::Base(
+                                parsed_error.message,
+                            ))
+                        }
+                        "InternalException" => {
+                            return RusotoError::Service(DeleteIndexFieldError::Internal(
+                                parsed_error.message,
+                            ))
+                        }
+                        "InvalidType" => {
+                            return RusotoError::Service(DeleteIndexFieldError::InvalidType(
+                                parsed_error.message,
+                            ))
+                        }
+                        "ResourceNotFound" => {
+                            return RusotoError::Service(DeleteIndexFieldError::ResourceNotFound(
+                                parsed_error.message,
+                            ))
+                        }
+                        _ => {}
                     }
-                    "InternalException" => {
-                        return RusotoError::Service(DeleteIndexFieldError::Internal(
-                            parsed_error.message,
-                        ))
-                    }
-                    "InvalidType" => {
-                        return RusotoError::Service(DeleteIndexFieldError::InvalidType(
-                            parsed_error.message,
-                        ))
-                    }
-                    "ResourceNotFound" => {
-                        return RusotoError::Service(DeleteIndexFieldError::ResourceNotFound(
-                            parsed_error.message,
-                        ))
-                    }
-                    _ => {}
                 }
             }
         }
@@ -4783,29 +4965,32 @@ impl DeleteSuggesterError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    "BaseException" => {
-                        return RusotoError::Service(DeleteSuggesterError::Base(
-                            parsed_error.message,
-                        ))
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {
+                        "BaseException" => {
+                            return RusotoError::Service(DeleteSuggesterError::Base(
+                                parsed_error.message,
+                            ))
+                        }
+                        "InternalException" => {
+                            return RusotoError::Service(DeleteSuggesterError::Internal(
+                                parsed_error.message,
+                            ))
+                        }
+                        "InvalidType" => {
+                            return RusotoError::Service(DeleteSuggesterError::InvalidType(
+                                parsed_error.message,
+                            ))
+                        }
+                        "ResourceNotFound" => {
+                            return RusotoError::Service(DeleteSuggesterError::ResourceNotFound(
+                                parsed_error.message,
+                            ))
+                        }
+                        _ => {}
                     }
-                    "InternalException" => {
-                        return RusotoError::Service(DeleteSuggesterError::Internal(
-                            parsed_error.message,
-                        ))
-                    }
-                    "InvalidType" => {
-                        return RusotoError::Service(DeleteSuggesterError::InvalidType(
-                            parsed_error.message,
-                        ))
-                    }
-                    "ResourceNotFound" => {
-                        return RusotoError::Service(DeleteSuggesterError::ResourceNotFound(
-                            parsed_error.message,
-                        ))
-                    }
-                    _ => {}
                 }
             }
         }
@@ -4849,24 +5034,29 @@ impl DescribeAnalysisSchemesError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    "BaseException" => {
-                        return RusotoError::Service(DescribeAnalysisSchemesError::Base(
-                            parsed_error.message,
-                        ))
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {
+                        "BaseException" => {
+                            return RusotoError::Service(DescribeAnalysisSchemesError::Base(
+                                parsed_error.message,
+                            ))
+                        }
+                        "InternalException" => {
+                            return RusotoError::Service(DescribeAnalysisSchemesError::Internal(
+                                parsed_error.message,
+                            ))
+                        }
+                        "ResourceNotFound" => {
+                            return RusotoError::Service(
+                                DescribeAnalysisSchemesError::ResourceNotFound(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        _ => {}
                     }
-                    "InternalException" => {
-                        return RusotoError::Service(DescribeAnalysisSchemesError::Internal(
-                            parsed_error.message,
-                        ))
-                    }
-                    "ResourceNotFound" => {
-                        return RusotoError::Service(
-                            DescribeAnalysisSchemesError::ResourceNotFound(parsed_error.message),
-                        )
-                    }
-                    _ => {}
                 }
             }
         }
@@ -4917,43 +5107,48 @@ impl DescribeAvailabilityOptionsError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    "BaseException" => {
-                        return RusotoError::Service(DescribeAvailabilityOptionsError::Base(
-                            parsed_error.message,
-                        ))
-                    }
-                    "DisabledAction" => {
-                        return RusotoError::Service(
-                            DescribeAvailabilityOptionsError::DisabledOperation(
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {
+                        "BaseException" => {
+                            return RusotoError::Service(DescribeAvailabilityOptionsError::Base(
                                 parsed_error.message,
-                            ),
-                        )
+                            ))
+                        }
+                        "DisabledAction" => {
+                            return RusotoError::Service(
+                                DescribeAvailabilityOptionsError::DisabledOperation(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "InternalException" => {
+                            return RusotoError::Service(
+                                DescribeAvailabilityOptionsError::Internal(parsed_error.message),
+                            )
+                        }
+                        "InvalidType" => {
+                            return RusotoError::Service(
+                                DescribeAvailabilityOptionsError::InvalidType(parsed_error.message),
+                            )
+                        }
+                        "LimitExceeded" => {
+                            return RusotoError::Service(
+                                DescribeAvailabilityOptionsError::LimitExceeded(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "ResourceNotFound" => {
+                            return RusotoError::Service(
+                                DescribeAvailabilityOptionsError::ResourceNotFound(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        _ => {}
                     }
-                    "InternalException" => {
-                        return RusotoError::Service(DescribeAvailabilityOptionsError::Internal(
-                            parsed_error.message,
-                        ))
-                    }
-                    "InvalidType" => {
-                        return RusotoError::Service(DescribeAvailabilityOptionsError::InvalidType(
-                            parsed_error.message,
-                        ))
-                    }
-                    "LimitExceeded" => {
-                        return RusotoError::Service(
-                            DescribeAvailabilityOptionsError::LimitExceeded(parsed_error.message),
-                        )
-                    }
-                    "ResourceNotFound" => {
-                        return RusotoError::Service(
-                            DescribeAvailabilityOptionsError::ResourceNotFound(
-                                parsed_error.message,
-                            ),
-                        )
-                    }
-                    _ => {}
                 }
             }
         }
@@ -5007,38 +5202,43 @@ impl DescribeDomainEndpointOptionsError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    "BaseException" => {
-                        return RusotoError::Service(DescribeDomainEndpointOptionsError::Base(
-                            parsed_error.message,
-                        ))
-                    }
-                    "DisabledAction" => {
-                        return RusotoError::Service(
-                            DescribeDomainEndpointOptionsError::DisabledOperation(
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {
+                        "BaseException" => {
+                            return RusotoError::Service(DescribeDomainEndpointOptionsError::Base(
                                 parsed_error.message,
-                            ),
-                        )
+                            ))
+                        }
+                        "DisabledAction" => {
+                            return RusotoError::Service(
+                                DescribeDomainEndpointOptionsError::DisabledOperation(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "InternalException" => {
+                            return RusotoError::Service(
+                                DescribeDomainEndpointOptionsError::Internal(parsed_error.message),
+                            )
+                        }
+                        "LimitExceeded" => {
+                            return RusotoError::Service(
+                                DescribeDomainEndpointOptionsError::LimitExceeded(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "ResourceNotFound" => {
+                            return RusotoError::Service(
+                                DescribeDomainEndpointOptionsError::ResourceNotFound(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        _ => {}
                     }
-                    "InternalException" => {
-                        return RusotoError::Service(DescribeDomainEndpointOptionsError::Internal(
-                            parsed_error.message,
-                        ))
-                    }
-                    "LimitExceeded" => {
-                        return RusotoError::Service(
-                            DescribeDomainEndpointOptionsError::LimitExceeded(parsed_error.message),
-                        )
-                    }
-                    "ResourceNotFound" => {
-                        return RusotoError::Service(
-                            DescribeDomainEndpointOptionsError::ResourceNotFound(
-                                parsed_error.message,
-                            ),
-                        )
-                    }
-                    _ => {}
                 }
             }
         }
@@ -5085,19 +5285,22 @@ impl DescribeDomainsError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    "BaseException" => {
-                        return RusotoError::Service(DescribeDomainsError::Base(
-                            parsed_error.message,
-                        ))
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {
+                        "BaseException" => {
+                            return RusotoError::Service(DescribeDomainsError::Base(
+                                parsed_error.message,
+                            ))
+                        }
+                        "InternalException" => {
+                            return RusotoError::Service(DescribeDomainsError::Internal(
+                                parsed_error.message,
+                            ))
+                        }
+                        _ => {}
                     }
-                    "InternalException" => {
-                        return RusotoError::Service(DescribeDomainsError::Internal(
-                            parsed_error.message,
-                        ))
-                    }
-                    _ => {}
                 }
             }
         }
@@ -5139,24 +5342,27 @@ impl DescribeExpressionsError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    "BaseException" => {
-                        return RusotoError::Service(DescribeExpressionsError::Base(
-                            parsed_error.message,
-                        ))
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {
+                        "BaseException" => {
+                            return RusotoError::Service(DescribeExpressionsError::Base(
+                                parsed_error.message,
+                            ))
+                        }
+                        "InternalException" => {
+                            return RusotoError::Service(DescribeExpressionsError::Internal(
+                                parsed_error.message,
+                            ))
+                        }
+                        "ResourceNotFound" => {
+                            return RusotoError::Service(
+                                DescribeExpressionsError::ResourceNotFound(parsed_error.message),
+                            )
+                        }
+                        _ => {}
                     }
-                    "InternalException" => {
-                        return RusotoError::Service(DescribeExpressionsError::Internal(
-                            parsed_error.message,
-                        ))
-                    }
-                    "ResourceNotFound" => {
-                        return RusotoError::Service(DescribeExpressionsError::ResourceNotFound(
-                            parsed_error.message,
-                        ))
-                    }
-                    _ => {}
                 }
             }
         }
@@ -5199,24 +5405,27 @@ impl DescribeIndexFieldsError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    "BaseException" => {
-                        return RusotoError::Service(DescribeIndexFieldsError::Base(
-                            parsed_error.message,
-                        ))
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {
+                        "BaseException" => {
+                            return RusotoError::Service(DescribeIndexFieldsError::Base(
+                                parsed_error.message,
+                            ))
+                        }
+                        "InternalException" => {
+                            return RusotoError::Service(DescribeIndexFieldsError::Internal(
+                                parsed_error.message,
+                            ))
+                        }
+                        "ResourceNotFound" => {
+                            return RusotoError::Service(
+                                DescribeIndexFieldsError::ResourceNotFound(parsed_error.message),
+                            )
+                        }
+                        _ => {}
                     }
-                    "InternalException" => {
-                        return RusotoError::Service(DescribeIndexFieldsError::Internal(
-                            parsed_error.message,
-                        ))
-                    }
-                    "ResourceNotFound" => {
-                        return RusotoError::Service(DescribeIndexFieldsError::ResourceNotFound(
-                            parsed_error.message,
-                        ))
-                    }
-                    _ => {}
                 }
             }
         }
@@ -5259,24 +5468,29 @@ impl DescribeScalingParametersError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    "BaseException" => {
-                        return RusotoError::Service(DescribeScalingParametersError::Base(
-                            parsed_error.message,
-                        ))
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {
+                        "BaseException" => {
+                            return RusotoError::Service(DescribeScalingParametersError::Base(
+                                parsed_error.message,
+                            ))
+                        }
+                        "InternalException" => {
+                            return RusotoError::Service(DescribeScalingParametersError::Internal(
+                                parsed_error.message,
+                            ))
+                        }
+                        "ResourceNotFound" => {
+                            return RusotoError::Service(
+                                DescribeScalingParametersError::ResourceNotFound(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        _ => {}
                     }
-                    "InternalException" => {
-                        return RusotoError::Service(DescribeScalingParametersError::Internal(
-                            parsed_error.message,
-                        ))
-                    }
-                    "ResourceNotFound" => {
-                        return RusotoError::Service(
-                            DescribeScalingParametersError::ResourceNotFound(parsed_error.message),
-                        )
-                    }
-                    _ => {}
                 }
             }
         }
@@ -5321,26 +5535,29 @@ impl DescribeServiceAccessPoliciesError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    "BaseException" => {
-                        return RusotoError::Service(DescribeServiceAccessPoliciesError::Base(
-                            parsed_error.message,
-                        ))
-                    }
-                    "InternalException" => {
-                        return RusotoError::Service(DescribeServiceAccessPoliciesError::Internal(
-                            parsed_error.message,
-                        ))
-                    }
-                    "ResourceNotFound" => {
-                        return RusotoError::Service(
-                            DescribeServiceAccessPoliciesError::ResourceNotFound(
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {
+                        "BaseException" => {
+                            return RusotoError::Service(DescribeServiceAccessPoliciesError::Base(
                                 parsed_error.message,
-                            ),
-                        )
+                            ))
+                        }
+                        "InternalException" => {
+                            return RusotoError::Service(
+                                DescribeServiceAccessPoliciesError::Internal(parsed_error.message),
+                            )
+                        }
+                        "ResourceNotFound" => {
+                            return RusotoError::Service(
+                                DescribeServiceAccessPoliciesError::ResourceNotFound(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        _ => {}
                     }
-                    _ => {}
                 }
             }
         }
@@ -5385,24 +5602,27 @@ impl DescribeSuggestersError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    "BaseException" => {
-                        return RusotoError::Service(DescribeSuggestersError::Base(
-                            parsed_error.message,
-                        ))
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {
+                        "BaseException" => {
+                            return RusotoError::Service(DescribeSuggestersError::Base(
+                                parsed_error.message,
+                            ))
+                        }
+                        "InternalException" => {
+                            return RusotoError::Service(DescribeSuggestersError::Internal(
+                                parsed_error.message,
+                            ))
+                        }
+                        "ResourceNotFound" => {
+                            return RusotoError::Service(DescribeSuggestersError::ResourceNotFound(
+                                parsed_error.message,
+                            ))
+                        }
+                        _ => {}
                     }
-                    "InternalException" => {
-                        return RusotoError::Service(DescribeSuggestersError::Internal(
-                            parsed_error.message,
-                        ))
-                    }
-                    "ResourceNotFound" => {
-                        return RusotoError::Service(DescribeSuggestersError::ResourceNotFound(
-                            parsed_error.message,
-                        ))
-                    }
-                    _ => {}
                 }
             }
         }
@@ -5445,24 +5665,27 @@ impl IndexDocumentsError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    "BaseException" => {
-                        return RusotoError::Service(IndexDocumentsError::Base(
-                            parsed_error.message,
-                        ))
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {
+                        "BaseException" => {
+                            return RusotoError::Service(IndexDocumentsError::Base(
+                                parsed_error.message,
+                            ))
+                        }
+                        "InternalException" => {
+                            return RusotoError::Service(IndexDocumentsError::Internal(
+                                parsed_error.message,
+                            ))
+                        }
+                        "ResourceNotFound" => {
+                            return RusotoError::Service(IndexDocumentsError::ResourceNotFound(
+                                parsed_error.message,
+                            ))
+                        }
+                        _ => {}
                     }
-                    "InternalException" => {
-                        return RusotoError::Service(IndexDocumentsError::Internal(
-                            parsed_error.message,
-                        ))
-                    }
-                    "ResourceNotFound" => {
-                        return RusotoError::Service(IndexDocumentsError::ResourceNotFound(
-                            parsed_error.message,
-                        ))
-                    }
-                    _ => {}
                 }
             }
         }
@@ -5501,14 +5724,17 @@ impl ListDomainNamesError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    "BaseException" => {
-                        return RusotoError::Service(ListDomainNamesError::Base(
-                            parsed_error.message,
-                        ))
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {
+                        "BaseException" => {
+                            return RusotoError::Service(ListDomainNamesError::Base(
+                                parsed_error.message,
+                            ))
+                        }
+                        _ => {}
                     }
-                    _ => {}
                 }
             }
         }
@@ -5557,44 +5783,51 @@ impl UpdateAvailabilityOptionsError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    "BaseException" => {
-                        return RusotoError::Service(UpdateAvailabilityOptionsError::Base(
-                            parsed_error.message,
-                        ))
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {
+                        "BaseException" => {
+                            return RusotoError::Service(UpdateAvailabilityOptionsError::Base(
+                                parsed_error.message,
+                            ))
+                        }
+                        "DisabledAction" => {
+                            return RusotoError::Service(
+                                UpdateAvailabilityOptionsError::DisabledOperation(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "InternalException" => {
+                            return RusotoError::Service(UpdateAvailabilityOptionsError::Internal(
+                                parsed_error.message,
+                            ))
+                        }
+                        "InvalidType" => {
+                            return RusotoError::Service(
+                                UpdateAvailabilityOptionsError::InvalidType(parsed_error.message),
+                            )
+                        }
+                        "LimitExceeded" => {
+                            return RusotoError::Service(
+                                UpdateAvailabilityOptionsError::LimitExceeded(parsed_error.message),
+                            )
+                        }
+                        "ResourceNotFound" => {
+                            return RusotoError::Service(
+                                UpdateAvailabilityOptionsError::ResourceNotFound(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "ValidationException" => {
+                            return RusotoError::Service(
+                                UpdateAvailabilityOptionsError::Validation(parsed_error.message),
+                            )
+                        }
+                        _ => {}
                     }
-                    "DisabledAction" => {
-                        return RusotoError::Service(
-                            UpdateAvailabilityOptionsError::DisabledOperation(parsed_error.message),
-                        )
-                    }
-                    "InternalException" => {
-                        return RusotoError::Service(UpdateAvailabilityOptionsError::Internal(
-                            parsed_error.message,
-                        ))
-                    }
-                    "InvalidType" => {
-                        return RusotoError::Service(UpdateAvailabilityOptionsError::InvalidType(
-                            parsed_error.message,
-                        ))
-                    }
-                    "LimitExceeded" => {
-                        return RusotoError::Service(UpdateAvailabilityOptionsError::LimitExceeded(
-                            parsed_error.message,
-                        ))
-                    }
-                    "ResourceNotFound" => {
-                        return RusotoError::Service(
-                            UpdateAvailabilityOptionsError::ResourceNotFound(parsed_error.message),
-                        )
-                    }
-                    "ValidationException" => {
-                        return RusotoError::Service(UpdateAvailabilityOptionsError::Validation(
-                            parsed_error.message,
-                        ))
-                    }
-                    _ => {}
                 }
             }
         }
@@ -5651,48 +5884,53 @@ impl UpdateDomainEndpointOptionsError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    "BaseException" => {
-                        return RusotoError::Service(UpdateDomainEndpointOptionsError::Base(
-                            parsed_error.message,
-                        ))
-                    }
-                    "DisabledAction" => {
-                        return RusotoError::Service(
-                            UpdateDomainEndpointOptionsError::DisabledOperation(
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {
+                        "BaseException" => {
+                            return RusotoError::Service(UpdateDomainEndpointOptionsError::Base(
                                 parsed_error.message,
-                            ),
-                        )
+                            ))
+                        }
+                        "DisabledAction" => {
+                            return RusotoError::Service(
+                                UpdateDomainEndpointOptionsError::DisabledOperation(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "InternalException" => {
+                            return RusotoError::Service(
+                                UpdateDomainEndpointOptionsError::Internal(parsed_error.message),
+                            )
+                        }
+                        "InvalidType" => {
+                            return RusotoError::Service(
+                                UpdateDomainEndpointOptionsError::InvalidType(parsed_error.message),
+                            )
+                        }
+                        "LimitExceeded" => {
+                            return RusotoError::Service(
+                                UpdateDomainEndpointOptionsError::LimitExceeded(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "ResourceNotFound" => {
+                            return RusotoError::Service(
+                                UpdateDomainEndpointOptionsError::ResourceNotFound(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "ValidationException" => {
+                            return RusotoError::Service(
+                                UpdateDomainEndpointOptionsError::Validation(parsed_error.message),
+                            )
+                        }
+                        _ => {}
                     }
-                    "InternalException" => {
-                        return RusotoError::Service(UpdateDomainEndpointOptionsError::Internal(
-                            parsed_error.message,
-                        ))
-                    }
-                    "InvalidType" => {
-                        return RusotoError::Service(UpdateDomainEndpointOptionsError::InvalidType(
-                            parsed_error.message,
-                        ))
-                    }
-                    "LimitExceeded" => {
-                        return RusotoError::Service(
-                            UpdateDomainEndpointOptionsError::LimitExceeded(parsed_error.message),
-                        )
-                    }
-                    "ResourceNotFound" => {
-                        return RusotoError::Service(
-                            UpdateDomainEndpointOptionsError::ResourceNotFound(
-                                parsed_error.message,
-                            ),
-                        )
-                    }
-                    "ValidationException" => {
-                        return RusotoError::Service(UpdateDomainEndpointOptionsError::Validation(
-                            parsed_error.message,
-                        ))
-                    }
-                    _ => {}
                 }
             }
         }
@@ -5745,34 +5983,39 @@ impl UpdateScalingParametersError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    "BaseException" => {
-                        return RusotoError::Service(UpdateScalingParametersError::Base(
-                            parsed_error.message,
-                        ))
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {
+                        "BaseException" => {
+                            return RusotoError::Service(UpdateScalingParametersError::Base(
+                                parsed_error.message,
+                            ))
+                        }
+                        "InternalException" => {
+                            return RusotoError::Service(UpdateScalingParametersError::Internal(
+                                parsed_error.message,
+                            ))
+                        }
+                        "InvalidType" => {
+                            return RusotoError::Service(UpdateScalingParametersError::InvalidType(
+                                parsed_error.message,
+                            ))
+                        }
+                        "LimitExceeded" => {
+                            return RusotoError::Service(
+                                UpdateScalingParametersError::LimitExceeded(parsed_error.message),
+                            )
+                        }
+                        "ResourceNotFound" => {
+                            return RusotoError::Service(
+                                UpdateScalingParametersError::ResourceNotFound(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        _ => {}
                     }
-                    "InternalException" => {
-                        return RusotoError::Service(UpdateScalingParametersError::Internal(
-                            parsed_error.message,
-                        ))
-                    }
-                    "InvalidType" => {
-                        return RusotoError::Service(UpdateScalingParametersError::InvalidType(
-                            parsed_error.message,
-                        ))
-                    }
-                    "LimitExceeded" => {
-                        return RusotoError::Service(UpdateScalingParametersError::LimitExceeded(
-                            parsed_error.message,
-                        ))
-                    }
-                    "ResourceNotFound" => {
-                        return RusotoError::Service(
-                            UpdateScalingParametersError::ResourceNotFound(parsed_error.message),
-                        )
-                    }
-                    _ => {}
                 }
             }
         }
@@ -5823,36 +6066,41 @@ impl UpdateServiceAccessPoliciesError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    "BaseException" => {
-                        return RusotoError::Service(UpdateServiceAccessPoliciesError::Base(
-                            parsed_error.message,
-                        ))
-                    }
-                    "InternalException" => {
-                        return RusotoError::Service(UpdateServiceAccessPoliciesError::Internal(
-                            parsed_error.message,
-                        ))
-                    }
-                    "InvalidType" => {
-                        return RusotoError::Service(UpdateServiceAccessPoliciesError::InvalidType(
-                            parsed_error.message,
-                        ))
-                    }
-                    "LimitExceeded" => {
-                        return RusotoError::Service(
-                            UpdateServiceAccessPoliciesError::LimitExceeded(parsed_error.message),
-                        )
-                    }
-                    "ResourceNotFound" => {
-                        return RusotoError::Service(
-                            UpdateServiceAccessPoliciesError::ResourceNotFound(
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {
+                        "BaseException" => {
+                            return RusotoError::Service(UpdateServiceAccessPoliciesError::Base(
                                 parsed_error.message,
-                            ),
-                        )
+                            ))
+                        }
+                        "InternalException" => {
+                            return RusotoError::Service(
+                                UpdateServiceAccessPoliciesError::Internal(parsed_error.message),
+                            )
+                        }
+                        "InvalidType" => {
+                            return RusotoError::Service(
+                                UpdateServiceAccessPoliciesError::InvalidType(parsed_error.message),
+                            )
+                        }
+                        "LimitExceeded" => {
+                            return RusotoError::Service(
+                                UpdateServiceAccessPoliciesError::LimitExceeded(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "ResourceNotFound" => {
+                            return RusotoError::Service(
+                                UpdateServiceAccessPoliciesError::ResourceNotFound(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        _ => {}
                     }
-                    _ => {}
                 }
             }
         }

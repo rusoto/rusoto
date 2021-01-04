@@ -31,7 +31,6 @@ use rusoto_core::signature::SignedRequest;
 use serde::Deserialize;
 #[cfg(feature = "serialize_structs")]
 use serde::Serialize;
-use serde_urlencoded;
 use std::str::FromStr;
 use xml::EventReader;
 
@@ -74,11 +73,12 @@ pub struct AddHeaderAction {
 #[allow(dead_code)]
 struct AddHeaderActionDeserializer;
 impl AddHeaderActionDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<AddHeaderAction, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, AddHeaderAction, _>(tag_name, stack, |name, stack, obj| {
             match name {
                 "HeaderName" => {
@@ -97,10 +97,11 @@ impl AddHeaderActionDeserializer {
 /// Serialize `AddHeaderAction` contents to a `SignedRequest`.
 struct AddHeaderActionSerializer;
 impl AddHeaderActionSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &AddHeaderAction) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         params.put(&format!("{}{}", prefix, "HeaderName"), &obj.header_name);
@@ -111,19 +112,22 @@ impl AddHeaderActionSerializer {
 #[allow(dead_code)]
 struct AddressDeserializer;
 impl AddressDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 #[allow(dead_code)]
 struct AddressListDeserializer;
 impl AddressListDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<String>, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
+
         deserialize_elements::<_, Vec<_>, _>(tag_name, stack, |name, stack, obj| {
             if name == "member" {
                 obj.push(AddressDeserializer::deserialize("member", stack)?);
@@ -138,6 +142,7 @@ impl AddressListDeserializer {
 /// Serialize `AddressList` contents to a `SignedRequest`.
 struct AddressListSerializer;
 impl AddressListSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &Vec<String>) {
         for (index, obj) in obj.iter().enumerate() {
             let key = format!("{}.member.{}", name, index + 1);
@@ -149,16 +154,18 @@ impl AddressListSerializer {
 #[allow(dead_code)]
 struct AmazonResourceNameDeserializer;
 impl AmazonResourceNameDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 #[allow(dead_code)]
 struct BehaviorOnMXFailureDeserializer;
 impl BehaviorOnMXFailureDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
@@ -175,10 +182,11 @@ pub struct Body {
 /// Serialize `Body` contents to a `SignedRequest`.
 struct BodySerializer;
 impl BodySerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &Body) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         if let Some(ref field_value) = obj.html {
@@ -210,11 +218,12 @@ pub struct BounceAction {
 #[allow(dead_code)]
 struct BounceActionDeserializer;
 impl BounceActionDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<BounceAction, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, BounceAction, _>(tag_name, stack, |name, stack, obj| {
             match name {
                 "Message" => {
@@ -248,10 +257,11 @@ impl BounceActionDeserializer {
 /// Serialize `BounceAction` contents to a `SignedRequest`.
 struct BounceActionSerializer;
 impl BounceActionSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &BounceAction) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         params.put(&format!("{}{}", prefix, "Message"), &obj.message);
@@ -272,24 +282,27 @@ impl BounceActionSerializer {
 #[allow(dead_code)]
 struct BounceMessageDeserializer;
 impl BounceMessageDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 #[allow(dead_code)]
 struct BounceSmtpReplyCodeDeserializer;
 impl BounceSmtpReplyCodeDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 #[allow(dead_code)]
 struct BounceStatusCodeDeserializer;
 impl BounceStatusCodeDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
@@ -310,10 +323,11 @@ pub struct BouncedRecipientInfo {
 /// Serialize `BouncedRecipientInfo` contents to a `SignedRequest`.
 struct BouncedRecipientInfoSerializer;
 impl BouncedRecipientInfoSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &BouncedRecipientInfo) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         if let Some(ref field_value) = obj.bounce_type {
@@ -336,6 +350,7 @@ impl BouncedRecipientInfoSerializer {
 /// Serialize `BouncedRecipientInfoList` contents to a `SignedRequest`.
 struct BouncedRecipientInfoListSerializer;
 impl BouncedRecipientInfoListSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &Vec<BouncedRecipientInfo>) {
         for (index, obj) in obj.iter().enumerate() {
             let key = format!("{}.member.{}", name, index + 1);
@@ -358,10 +373,11 @@ pub struct BulkEmailDestination {
 /// Serialize `BulkEmailDestination` contents to a `SignedRequest`.
 struct BulkEmailDestinationSerializer;
 impl BulkEmailDestinationSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &BulkEmailDestination) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         DestinationSerializer::serialize(
@@ -388,6 +404,7 @@ impl BulkEmailDestinationSerializer {
 /// Serialize `BulkEmailDestinationList` contents to a `SignedRequest`.
 struct BulkEmailDestinationListSerializer;
 impl BulkEmailDestinationListSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &Vec<BulkEmailDestination>) {
         for (index, obj) in obj.iter().enumerate() {
             let key = format!("{}.member.{}", name, index + 1);
@@ -411,11 +428,12 @@ pub struct BulkEmailDestinationStatus {
 #[allow(dead_code)]
 struct BulkEmailDestinationStatusDeserializer;
 impl BulkEmailDestinationStatusDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<BulkEmailDestinationStatus, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, BulkEmailDestinationStatus, _>(
             tag_name,
             stack,
@@ -442,11 +460,13 @@ impl BulkEmailDestinationStatusDeserializer {
 #[allow(dead_code)]
 struct BulkEmailDestinationStatusListDeserializer;
 impl BulkEmailDestinationStatusListDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<BulkEmailDestinationStatus>, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
+
         deserialize_elements::<_, Vec<_>, _>(tag_name, stack, |name, stack, obj| {
             if name == "member" {
                 obj.push(BulkEmailDestinationStatusDeserializer::deserialize(
@@ -462,16 +482,18 @@ impl BulkEmailDestinationStatusListDeserializer {
 #[allow(dead_code)]
 struct BulkEmailStatusDeserializer;
 impl BulkEmailStatusDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 #[allow(dead_code)]
 struct CidrDeserializer;
 impl CidrDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
@@ -488,10 +510,11 @@ pub struct CloneReceiptRuleSetRequest {
 /// Serialize `CloneReceiptRuleSetRequest` contents to a `SignedRequest`.
 struct CloneReceiptRuleSetRequestSerializer;
 impl CloneReceiptRuleSetRequestSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &CloneReceiptRuleSetRequest) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         params.put(
@@ -510,11 +533,12 @@ pub struct CloneReceiptRuleSetResponse {}
 #[allow(dead_code)]
 struct CloneReceiptRuleSetResponseDeserializer;
 impl CloneReceiptRuleSetResponseDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<CloneReceiptRuleSetResponse, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::start_element(tag_name, stack)?;
 
         let obj = CloneReceiptRuleSetResponse::default();
@@ -536,11 +560,12 @@ pub struct CloudWatchDestination {
 #[allow(dead_code)]
 struct CloudWatchDestinationDeserializer;
 impl CloudWatchDestinationDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<CloudWatchDestination, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, CloudWatchDestination, _>(tag_name, stack, |name, stack, obj| {
             match name {
                 "DimensionConfigurations" => {
@@ -561,10 +586,11 @@ impl CloudWatchDestinationDeserializer {
 /// Serialize `CloudWatchDestination` contents to a `SignedRequest`.
 struct CloudWatchDestinationSerializer;
 impl CloudWatchDestinationSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &CloudWatchDestination) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         CloudWatchDimensionConfigurationsSerializer::serialize(
@@ -591,11 +617,12 @@ pub struct CloudWatchDimensionConfiguration {
 #[allow(dead_code)]
 struct CloudWatchDimensionConfigurationDeserializer;
 impl CloudWatchDimensionConfigurationDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<CloudWatchDimensionConfiguration, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, CloudWatchDimensionConfiguration, _>(
             tag_name,
             stack,
@@ -629,10 +656,11 @@ impl CloudWatchDimensionConfigurationDeserializer {
 /// Serialize `CloudWatchDimensionConfiguration` contents to a `SignedRequest`.
 struct CloudWatchDimensionConfigurationSerializer;
 impl CloudWatchDimensionConfigurationSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &CloudWatchDimensionConfiguration) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         params.put(
@@ -653,11 +681,13 @@ impl CloudWatchDimensionConfigurationSerializer {
 #[allow(dead_code)]
 struct CloudWatchDimensionConfigurationsDeserializer;
 impl CloudWatchDimensionConfigurationsDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<CloudWatchDimensionConfiguration>, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
+
         deserialize_elements::<_, Vec<_>, _>(tag_name, stack, |name, stack, obj| {
             if name == "member" {
                 obj.push(CloudWatchDimensionConfigurationDeserializer::deserialize(
@@ -674,6 +704,7 @@ impl CloudWatchDimensionConfigurationsDeserializer {
 /// Serialize `CloudWatchDimensionConfigurations` contents to a `SignedRequest`.
 struct CloudWatchDimensionConfigurationsSerializer;
 impl CloudWatchDimensionConfigurationsSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &Vec<CloudWatchDimensionConfiguration>) {
         for (index, obj) in obj.iter().enumerate() {
             let key = format!("{}.member.{}", name, index + 1);
@@ -694,11 +725,12 @@ pub struct ConfigurationSet {
 #[allow(dead_code)]
 struct ConfigurationSetDeserializer;
 impl ConfigurationSetDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<ConfigurationSet, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, ConfigurationSet, _>(tag_name, stack, |name, stack, obj| {
             match name {
                 "Name" => {
@@ -714,10 +746,11 @@ impl ConfigurationSetDeserializer {
 /// Serialize `ConfigurationSet` contents to a `SignedRequest`.
 struct ConfigurationSetSerializer;
 impl ConfigurationSetSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &ConfigurationSet) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         params.put(&format!("{}{}", prefix, "Name"), &obj.name);
@@ -727,6 +760,7 @@ impl ConfigurationSetSerializer {
 /// Serialize `ConfigurationSetAttributeList` contents to a `SignedRequest`.
 struct ConfigurationSetAttributeListSerializer;
 impl ConfigurationSetAttributeListSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &Vec<String>) {
         for (index, obj) in obj.iter().enumerate() {
             let key = format!("{}.member.{}", name, index + 1);
@@ -738,19 +772,22 @@ impl ConfigurationSetAttributeListSerializer {
 #[allow(dead_code)]
 struct ConfigurationSetNameDeserializer;
 impl ConfigurationSetNameDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 #[allow(dead_code)]
 struct ConfigurationSetsDeserializer;
 impl ConfigurationSetsDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<ConfigurationSet>, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
+
         deserialize_elements::<_, Vec<_>, _>(tag_name, stack, |name, stack, obj| {
             if name == "member" {
                 obj.push(ConfigurationSetDeserializer::deserialize("member", stack)?);
@@ -774,10 +811,11 @@ pub struct Content {
 /// Serialize `Content` contents to a `SignedRequest`.
 struct ContentSerializer;
 impl ContentSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &Content) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         if let Some(ref field_value) = obj.charset {
@@ -790,8 +828,9 @@ impl ContentSerializer {
 #[allow(dead_code)]
 struct CounterDeserializer;
 impl CounterDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<i64, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::deserialize_primitive(tag_name, stack, |s| Ok(i64::from_str(&s).unwrap()))
     }
 }
@@ -808,14 +847,15 @@ pub struct CreateConfigurationSetEventDestinationRequest {
 /// Serialize `CreateConfigurationSetEventDestinationRequest` contents to a `SignedRequest`.
 struct CreateConfigurationSetEventDestinationRequestSerializer;
 impl CreateConfigurationSetEventDestinationRequestSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(
         params: &mut Params,
         name: &str,
         obj: &CreateConfigurationSetEventDestinationRequest,
     ) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         params.put(
@@ -838,11 +878,12 @@ pub struct CreateConfigurationSetEventDestinationResponse {}
 #[allow(dead_code)]
 struct CreateConfigurationSetEventDestinationResponseDeserializer;
 impl CreateConfigurationSetEventDestinationResponseDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<CreateConfigurationSetEventDestinationResponse, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::start_element(tag_name, stack)?;
 
         let obj = CreateConfigurationSetEventDestinationResponse::default();
@@ -863,10 +904,11 @@ pub struct CreateConfigurationSetRequest {
 /// Serialize `CreateConfigurationSetRequest` contents to a `SignedRequest`.
 struct CreateConfigurationSetRequestSerializer;
 impl CreateConfigurationSetRequestSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &CreateConfigurationSetRequest) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         ConfigurationSetSerializer::serialize(
@@ -885,11 +927,12 @@ pub struct CreateConfigurationSetResponse {}
 #[allow(dead_code)]
 struct CreateConfigurationSetResponseDeserializer;
 impl CreateConfigurationSetResponseDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<CreateConfigurationSetResponse, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::start_element(tag_name, stack)?;
 
         let obj = CreateConfigurationSetResponse::default();
@@ -911,14 +954,15 @@ pub struct CreateConfigurationSetTrackingOptionsRequest {
 /// Serialize `CreateConfigurationSetTrackingOptionsRequest` contents to a `SignedRequest`.
 struct CreateConfigurationSetTrackingOptionsRequestSerializer;
 impl CreateConfigurationSetTrackingOptionsRequestSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(
         params: &mut Params,
         name: &str,
         obj: &CreateConfigurationSetTrackingOptionsRequest,
     ) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         params.put(
@@ -941,11 +985,12 @@ pub struct CreateConfigurationSetTrackingOptionsResponse {}
 #[allow(dead_code)]
 struct CreateConfigurationSetTrackingOptionsResponseDeserializer;
 impl CreateConfigurationSetTrackingOptionsResponseDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<CreateConfigurationSetTrackingOptionsResponse, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::start_element(tag_name, stack)?;
 
         let obj = CreateConfigurationSetTrackingOptionsResponse::default();
@@ -976,14 +1021,15 @@ pub struct CreateCustomVerificationEmailTemplateRequest {
 /// Serialize `CreateCustomVerificationEmailTemplateRequest` contents to a `SignedRequest`.
 struct CreateCustomVerificationEmailTemplateRequestSerializer;
 impl CreateCustomVerificationEmailTemplateRequestSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(
         params: &mut Params,
         name: &str,
         obj: &CreateCustomVerificationEmailTemplateRequest,
     ) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         params.put(
@@ -1021,10 +1067,11 @@ pub struct CreateReceiptFilterRequest {
 /// Serialize `CreateReceiptFilterRequest` contents to a `SignedRequest`.
 struct CreateReceiptFilterRequestSerializer;
 impl CreateReceiptFilterRequestSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &CreateReceiptFilterRequest) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         ReceiptFilterSerializer::serialize(params, &format!("{}{}", prefix, "Filter"), &obj.filter);
@@ -1039,11 +1086,12 @@ pub struct CreateReceiptFilterResponse {}
 #[allow(dead_code)]
 struct CreateReceiptFilterResponseDeserializer;
 impl CreateReceiptFilterResponseDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<CreateReceiptFilterResponse, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::start_element(tag_name, stack)?;
 
         let obj = CreateReceiptFilterResponse::default();
@@ -1068,10 +1116,11 @@ pub struct CreateReceiptRuleRequest {
 /// Serialize `CreateReceiptRuleRequest` contents to a `SignedRequest`.
 struct CreateReceiptRuleRequestSerializer;
 impl CreateReceiptRuleRequestSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &CreateReceiptRuleRequest) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         if let Some(ref field_value) = obj.after {
@@ -1090,11 +1139,12 @@ pub struct CreateReceiptRuleResponse {}
 #[allow(dead_code)]
 struct CreateReceiptRuleResponseDeserializer;
 impl CreateReceiptRuleResponseDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<CreateReceiptRuleResponse, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::start_element(tag_name, stack)?;
 
         let obj = CreateReceiptRuleResponse::default();
@@ -1115,10 +1165,11 @@ pub struct CreateReceiptRuleSetRequest {
 /// Serialize `CreateReceiptRuleSetRequest` contents to a `SignedRequest`.
 struct CreateReceiptRuleSetRequestSerializer;
 impl CreateReceiptRuleSetRequestSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &CreateReceiptRuleSetRequest) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         params.put(&format!("{}{}", prefix, "RuleSetName"), &obj.rule_set_name);
@@ -1133,11 +1184,12 @@ pub struct CreateReceiptRuleSetResponse {}
 #[allow(dead_code)]
 struct CreateReceiptRuleSetResponseDeserializer;
 impl CreateReceiptRuleSetResponseDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<CreateReceiptRuleSetResponse, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::start_element(tag_name, stack)?;
 
         let obj = CreateReceiptRuleSetResponse::default();
@@ -1158,10 +1210,11 @@ pub struct CreateTemplateRequest {
 /// Serialize `CreateTemplateRequest` contents to a `SignedRequest`.
 struct CreateTemplateRequestSerializer;
 impl CreateTemplateRequestSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &CreateTemplateRequest) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         TemplateSerializer::serialize(params, &format!("{}{}", prefix, "Template"), &obj.template);
@@ -1175,11 +1228,12 @@ pub struct CreateTemplateResponse {}
 #[allow(dead_code)]
 struct CreateTemplateResponseDeserializer;
 impl CreateTemplateResponseDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<CreateTemplateResponse, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::start_element(tag_name, stack)?;
 
         let obj = CreateTemplateResponse::default();
@@ -1192,16 +1246,18 @@ impl CreateTemplateResponseDeserializer {
 #[allow(dead_code)]
 struct CustomMailFromStatusDeserializer;
 impl CustomMailFromStatusDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 #[allow(dead_code)]
 struct CustomRedirectDomainDeserializer;
 impl CustomRedirectDomainDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
@@ -1224,11 +1280,12 @@ pub struct CustomVerificationEmailTemplate {
 #[allow(dead_code)]
 struct CustomVerificationEmailTemplateDeserializer;
 impl CustomVerificationEmailTemplateDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<CustomVerificationEmailTemplate, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, CustomVerificationEmailTemplate, _>(
             tag_name,
             stack,
@@ -1274,11 +1331,13 @@ impl CustomVerificationEmailTemplateDeserializer {
 #[allow(dead_code)]
 struct CustomVerificationEmailTemplatesDeserializer;
 impl CustomVerificationEmailTemplatesDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<CustomVerificationEmailTemplate>, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
+
         deserialize_elements::<_, Vec<_>, _>(tag_name, stack, |name, stack, obj| {
             if name == "member" {
                 obj.push(CustomVerificationEmailTemplateDeserializer::deserialize(
@@ -1294,8 +1353,9 @@ impl CustomVerificationEmailTemplatesDeserializer {
 #[allow(dead_code)]
 struct DefaultDimensionValueDeserializer;
 impl DefaultDimensionValueDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
@@ -1312,14 +1372,15 @@ pub struct DeleteConfigurationSetEventDestinationRequest {
 /// Serialize `DeleteConfigurationSetEventDestinationRequest` contents to a `SignedRequest`.
 struct DeleteConfigurationSetEventDestinationRequestSerializer;
 impl DeleteConfigurationSetEventDestinationRequestSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(
         params: &mut Params,
         name: &str,
         obj: &DeleteConfigurationSetEventDestinationRequest,
     ) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         params.put(
@@ -1341,11 +1402,12 @@ pub struct DeleteConfigurationSetEventDestinationResponse {}
 #[allow(dead_code)]
 struct DeleteConfigurationSetEventDestinationResponseDeserializer;
 impl DeleteConfigurationSetEventDestinationResponseDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<DeleteConfigurationSetEventDestinationResponse, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::start_element(tag_name, stack)?;
 
         let obj = DeleteConfigurationSetEventDestinationResponse::default();
@@ -1366,10 +1428,11 @@ pub struct DeleteConfigurationSetRequest {
 /// Serialize `DeleteConfigurationSetRequest` contents to a `SignedRequest`.
 struct DeleteConfigurationSetRequestSerializer;
 impl DeleteConfigurationSetRequestSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &DeleteConfigurationSetRequest) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         params.put(
@@ -1387,11 +1450,12 @@ pub struct DeleteConfigurationSetResponse {}
 #[allow(dead_code)]
 struct DeleteConfigurationSetResponseDeserializer;
 impl DeleteConfigurationSetResponseDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<DeleteConfigurationSetResponse, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::start_element(tag_name, stack)?;
 
         let obj = DeleteConfigurationSetResponse::default();
@@ -1412,14 +1476,15 @@ pub struct DeleteConfigurationSetTrackingOptionsRequest {
 /// Serialize `DeleteConfigurationSetTrackingOptionsRequest` contents to a `SignedRequest`.
 struct DeleteConfigurationSetTrackingOptionsRequestSerializer;
 impl DeleteConfigurationSetTrackingOptionsRequestSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(
         params: &mut Params,
         name: &str,
         obj: &DeleteConfigurationSetTrackingOptionsRequest,
     ) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         params.put(
@@ -1437,11 +1502,12 @@ pub struct DeleteConfigurationSetTrackingOptionsResponse {}
 #[allow(dead_code)]
 struct DeleteConfigurationSetTrackingOptionsResponseDeserializer;
 impl DeleteConfigurationSetTrackingOptionsResponseDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<DeleteConfigurationSetTrackingOptionsResponse, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::start_element(tag_name, stack)?;
 
         let obj = DeleteConfigurationSetTrackingOptionsResponse::default();
@@ -1462,14 +1528,15 @@ pub struct DeleteCustomVerificationEmailTemplateRequest {
 /// Serialize `DeleteCustomVerificationEmailTemplateRequest` contents to a `SignedRequest`.
 struct DeleteCustomVerificationEmailTemplateRequestSerializer;
 impl DeleteCustomVerificationEmailTemplateRequestSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(
         params: &mut Params,
         name: &str,
         obj: &DeleteCustomVerificationEmailTemplateRequest,
     ) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         params.put(&format!("{}{}", prefix, "TemplateName"), &obj.template_name);
@@ -1489,10 +1556,11 @@ pub struct DeleteIdentityPolicyRequest {
 /// Serialize `DeleteIdentityPolicyRequest` contents to a `SignedRequest`.
 struct DeleteIdentityPolicyRequestSerializer;
 impl DeleteIdentityPolicyRequestSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &DeleteIdentityPolicyRequest) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         params.put(&format!("{}{}", prefix, "Identity"), &obj.identity);
@@ -1508,11 +1576,12 @@ pub struct DeleteIdentityPolicyResponse {}
 #[allow(dead_code)]
 struct DeleteIdentityPolicyResponseDeserializer;
 impl DeleteIdentityPolicyResponseDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<DeleteIdentityPolicyResponse, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::start_element(tag_name, stack)?;
 
         let obj = DeleteIdentityPolicyResponse::default();
@@ -1533,10 +1602,11 @@ pub struct DeleteIdentityRequest {
 /// Serialize `DeleteIdentityRequest` contents to a `SignedRequest`.
 struct DeleteIdentityRequestSerializer;
 impl DeleteIdentityRequestSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &DeleteIdentityRequest) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         params.put(&format!("{}{}", prefix, "Identity"), &obj.identity);
@@ -1551,11 +1621,12 @@ pub struct DeleteIdentityResponse {}
 #[allow(dead_code)]
 struct DeleteIdentityResponseDeserializer;
 impl DeleteIdentityResponseDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<DeleteIdentityResponse, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::start_element(tag_name, stack)?;
 
         let obj = DeleteIdentityResponse::default();
@@ -1576,10 +1647,11 @@ pub struct DeleteReceiptFilterRequest {
 /// Serialize `DeleteReceiptFilterRequest` contents to a `SignedRequest`.
 struct DeleteReceiptFilterRequestSerializer;
 impl DeleteReceiptFilterRequestSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &DeleteReceiptFilterRequest) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         params.put(&format!("{}{}", prefix, "FilterName"), &obj.filter_name);
@@ -1594,11 +1666,12 @@ pub struct DeleteReceiptFilterResponse {}
 #[allow(dead_code)]
 struct DeleteReceiptFilterResponseDeserializer;
 impl DeleteReceiptFilterResponseDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<DeleteReceiptFilterResponse, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::start_element(tag_name, stack)?;
 
         let obj = DeleteReceiptFilterResponse::default();
@@ -1621,10 +1694,11 @@ pub struct DeleteReceiptRuleRequest {
 /// Serialize `DeleteReceiptRuleRequest` contents to a `SignedRequest`.
 struct DeleteReceiptRuleRequestSerializer;
 impl DeleteReceiptRuleRequestSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &DeleteReceiptRuleRequest) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         params.put(&format!("{}{}", prefix, "RuleName"), &obj.rule_name);
@@ -1640,11 +1714,12 @@ pub struct DeleteReceiptRuleResponse {}
 #[allow(dead_code)]
 struct DeleteReceiptRuleResponseDeserializer;
 impl DeleteReceiptRuleResponseDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<DeleteReceiptRuleResponse, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::start_element(tag_name, stack)?;
 
         let obj = DeleteReceiptRuleResponse::default();
@@ -1665,10 +1740,11 @@ pub struct DeleteReceiptRuleSetRequest {
 /// Serialize `DeleteReceiptRuleSetRequest` contents to a `SignedRequest`.
 struct DeleteReceiptRuleSetRequestSerializer;
 impl DeleteReceiptRuleSetRequestSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &DeleteReceiptRuleSetRequest) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         params.put(&format!("{}{}", prefix, "RuleSetName"), &obj.rule_set_name);
@@ -1683,11 +1759,12 @@ pub struct DeleteReceiptRuleSetResponse {}
 #[allow(dead_code)]
 struct DeleteReceiptRuleSetResponseDeserializer;
 impl DeleteReceiptRuleSetResponseDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<DeleteReceiptRuleSetResponse, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::start_element(tag_name, stack)?;
 
         let obj = DeleteReceiptRuleSetResponse::default();
@@ -1708,10 +1785,11 @@ pub struct DeleteTemplateRequest {
 /// Serialize `DeleteTemplateRequest` contents to a `SignedRequest`.
 struct DeleteTemplateRequestSerializer;
 impl DeleteTemplateRequestSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &DeleteTemplateRequest) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         params.put(&format!("{}{}", prefix, "TemplateName"), &obj.template_name);
@@ -1725,11 +1803,12 @@ pub struct DeleteTemplateResponse {}
 #[allow(dead_code)]
 struct DeleteTemplateResponseDeserializer;
 impl DeleteTemplateResponseDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<DeleteTemplateResponse, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::start_element(tag_name, stack)?;
 
         let obj = DeleteTemplateResponse::default();
@@ -1750,10 +1829,11 @@ pub struct DeleteVerifiedEmailAddressRequest {
 /// Serialize `DeleteVerifiedEmailAddressRequest` contents to a `SignedRequest`.
 struct DeleteVerifiedEmailAddressRequestSerializer;
 impl DeleteVerifiedEmailAddressRequestSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &DeleteVerifiedEmailAddressRequest) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         params.put(&format!("{}{}", prefix, "EmailAddress"), &obj.email_address);
@@ -1772,11 +1852,12 @@ pub struct DeliveryOptions {
 #[allow(dead_code)]
 struct DeliveryOptionsDeserializer;
 impl DeliveryOptionsDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<DeliveryOptions, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, DeliveryOptions, _>(tag_name, stack, |name, stack, obj| {
             match name {
                 "TlsPolicy" => {
@@ -1792,10 +1873,11 @@ impl DeliveryOptionsDeserializer {
 /// Serialize `DeliveryOptions` contents to a `SignedRequest`.
 struct DeliveryOptionsSerializer;
 impl DeliveryOptionsSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &DeliveryOptions) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         if let Some(ref field_value) = obj.tls_policy {
@@ -1814,8 +1896,8 @@ struct DescribeActiveReceiptRuleSetRequestSerializer;
 impl DescribeActiveReceiptRuleSetRequestSerializer {
     fn serialize(_params: &mut Params, name: &str, _obj: &DescribeActiveReceiptRuleSetRequest) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
     }
 }
@@ -1833,11 +1915,12 @@ pub struct DescribeActiveReceiptRuleSetResponse {
 #[allow(dead_code)]
 struct DescribeActiveReceiptRuleSetResponseDeserializer;
 impl DescribeActiveReceiptRuleSetResponseDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<DescribeActiveReceiptRuleSetResponse, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, DescribeActiveReceiptRuleSetResponse, _>(
             tag_name,
             stack,
@@ -1873,10 +1956,11 @@ pub struct DescribeConfigurationSetRequest {
 /// Serialize `DescribeConfigurationSetRequest` contents to a `SignedRequest`.
 struct DescribeConfigurationSetRequestSerializer;
 impl DescribeConfigurationSetRequestSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &DescribeConfigurationSetRequest) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         if let Some(ref field_value) = obj.configuration_set_attribute_names {
@@ -1911,11 +1995,12 @@ pub struct DescribeConfigurationSetResponse {
 #[allow(dead_code)]
 struct DescribeConfigurationSetResponseDeserializer;
 impl DescribeConfigurationSetResponseDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<DescribeConfigurationSetResponse, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, DescribeConfigurationSetResponse, _>(
             tag_name,
             stack,
@@ -1970,10 +2055,11 @@ pub struct DescribeReceiptRuleRequest {
 /// Serialize `DescribeReceiptRuleRequest` contents to a `SignedRequest`.
 struct DescribeReceiptRuleRequestSerializer;
 impl DescribeReceiptRuleRequestSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &DescribeReceiptRuleRequest) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         params.put(&format!("{}{}", prefix, "RuleName"), &obj.rule_name);
@@ -1992,11 +2078,12 @@ pub struct DescribeReceiptRuleResponse {
 #[allow(dead_code)]
 struct DescribeReceiptRuleResponseDeserializer;
 impl DescribeReceiptRuleResponseDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<DescribeReceiptRuleResponse, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, DescribeReceiptRuleResponse, _>(
             tag_name,
             stack,
@@ -2023,10 +2110,11 @@ pub struct DescribeReceiptRuleSetRequest {
 /// Serialize `DescribeReceiptRuleSetRequest` contents to a `SignedRequest`.
 struct DescribeReceiptRuleSetRequestSerializer;
 impl DescribeReceiptRuleSetRequestSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &DescribeReceiptRuleSetRequest) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         params.put(&format!("{}{}", prefix, "RuleSetName"), &obj.rule_set_name);
@@ -2046,11 +2134,12 @@ pub struct DescribeReceiptRuleSetResponse {
 #[allow(dead_code)]
 struct DescribeReceiptRuleSetResponseDeserializer;
 impl DescribeReceiptRuleSetResponseDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<DescribeReceiptRuleSetResponse, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, DescribeReceiptRuleSetResponse, _>(
             tag_name,
             stack,
@@ -2088,10 +2177,11 @@ pub struct Destination {
 /// Serialize `Destination` contents to a `SignedRequest`.
 struct DestinationSerializer;
 impl DestinationSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &Destination) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         if let Some(ref field_value) = obj.bcc_addresses {
@@ -2121,27 +2211,30 @@ impl DestinationSerializer {
 #[allow(dead_code)]
 struct DimensionNameDeserializer;
 impl DimensionNameDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 #[allow(dead_code)]
 struct DimensionValueSourceDeserializer;
 impl DimensionValueSourceDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 #[allow(dead_code)]
 struct DkimAttributesDeserializer;
 impl DkimAttributesDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<::std::collections::HashMap<String, IdentityDkimAttributes>, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::start_element(tag_name, stack)?;
 
         let mut obj = ::std::collections::HashMap::new();
@@ -2161,16 +2254,18 @@ impl DkimAttributesDeserializer {
 #[allow(dead_code)]
 struct EnabledDeserializer;
 impl EnabledDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<bool, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::deserialize_primitive(tag_name, stack, |s| Ok(bool::from_str(&s).unwrap()))
     }
 }
 #[allow(dead_code)]
 struct SesErrorDeserializer;
 impl SesErrorDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
@@ -2196,11 +2291,12 @@ pub struct EventDestination {
 #[allow(dead_code)]
 struct EventDestinationDeserializer;
 impl EventDestinationDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<EventDestination, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, EventDestination, _>(tag_name, stack, |name, stack, obj| {
             match name {
                 "CloudWatchDestination" => {
@@ -2246,10 +2342,11 @@ impl EventDestinationDeserializer {
 /// Serialize `EventDestination` contents to a `SignedRequest`.
 struct EventDestinationSerializer;
 impl EventDestinationSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &EventDestination) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         if let Some(ref field_value) = obj.cloud_watch_destination {
@@ -2288,19 +2385,22 @@ impl EventDestinationSerializer {
 #[allow(dead_code)]
 struct EventDestinationNameDeserializer;
 impl EventDestinationNameDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 #[allow(dead_code)]
 struct EventDestinationsDeserializer;
 impl EventDestinationsDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<EventDestination>, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
+
         deserialize_elements::<_, Vec<_>, _>(tag_name, stack, |name, stack, obj| {
             if name == "member" {
                 obj.push(EventDestinationDeserializer::deserialize("member", stack)?);
@@ -2314,19 +2414,22 @@ impl EventDestinationsDeserializer {
 #[allow(dead_code)]
 struct EventTypeDeserializer;
 impl EventTypeDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 #[allow(dead_code)]
 struct EventTypesDeserializer;
 impl EventTypesDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<String>, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
+
         deserialize_elements::<_, Vec<_>, _>(tag_name, stack, |name, stack, obj| {
             if name == "member" {
                 obj.push(EventTypeDeserializer::deserialize("member", stack)?);
@@ -2341,6 +2444,7 @@ impl EventTypesDeserializer {
 /// Serialize `EventTypes` contents to a `SignedRequest`.
 struct EventTypesSerializer;
 impl EventTypesSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &Vec<String>) {
         for (index, obj) in obj.iter().enumerate() {
             let key = format!("{}.member.{}", name, index + 1);
@@ -2362,10 +2466,11 @@ pub struct ExtensionField {
 /// Serialize `ExtensionField` contents to a `SignedRequest`.
 struct ExtensionFieldSerializer;
 impl ExtensionFieldSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &ExtensionField) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         params.put(&format!("{}{}", prefix, "Name"), &obj.name);
@@ -2376,6 +2481,7 @@ impl ExtensionFieldSerializer {
 /// Serialize `ExtensionFieldList` contents to a `SignedRequest`.
 struct ExtensionFieldListSerializer;
 impl ExtensionFieldListSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &Vec<ExtensionField>) {
         for (index, obj) in obj.iter().enumerate() {
             let key = format!("{}.member.{}", name, index + 1);
@@ -2387,16 +2493,18 @@ impl ExtensionFieldListSerializer {
 #[allow(dead_code)]
 struct FailureRedirectionURLDeserializer;
 impl FailureRedirectionURLDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 #[allow(dead_code)]
 struct FromAddressDeserializer;
 impl FromAddressDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
@@ -2411,11 +2519,12 @@ pub struct GetAccountSendingEnabledResponse {
 #[allow(dead_code)]
 struct GetAccountSendingEnabledResponseDeserializer;
 impl GetAccountSendingEnabledResponseDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<GetAccountSendingEnabledResponse, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, GetAccountSendingEnabledResponse, _>(
             tag_name,
             stack,
@@ -2442,10 +2551,11 @@ pub struct GetCustomVerificationEmailTemplateRequest {
 /// Serialize `GetCustomVerificationEmailTemplateRequest` contents to a `SignedRequest`.
 struct GetCustomVerificationEmailTemplateRequestSerializer;
 impl GetCustomVerificationEmailTemplateRequestSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &GetCustomVerificationEmailTemplateRequest) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         params.put(&format!("{}{}", prefix, "TemplateName"), &obj.template_name);
@@ -2473,11 +2583,12 @@ pub struct GetCustomVerificationEmailTemplateResponse {
 #[allow(dead_code)]
 struct GetCustomVerificationEmailTemplateResponseDeserializer;
 impl GetCustomVerificationEmailTemplateResponseDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<GetCustomVerificationEmailTemplateResponse, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, GetCustomVerificationEmailTemplateResponse, _>(
             tag_name,
             stack,
@@ -2537,10 +2648,11 @@ pub struct GetIdentityDkimAttributesRequest {
 /// Serialize `GetIdentityDkimAttributesRequest` contents to a `SignedRequest`.
 struct GetIdentityDkimAttributesRequestSerializer;
 impl GetIdentityDkimAttributesRequestSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &GetIdentityDkimAttributesRequest) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         IdentityListSerializer::serialize(
@@ -2562,11 +2674,12 @@ pub struct GetIdentityDkimAttributesResponse {
 #[allow(dead_code)]
 struct GetIdentityDkimAttributesResponseDeserializer;
 impl GetIdentityDkimAttributesResponseDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<GetIdentityDkimAttributesResponse, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, GetIdentityDkimAttributesResponse, _>(
             tag_name,
             stack,
@@ -2594,14 +2707,15 @@ pub struct GetIdentityMailFromDomainAttributesRequest {
 /// Serialize `GetIdentityMailFromDomainAttributesRequest` contents to a `SignedRequest`.
 struct GetIdentityMailFromDomainAttributesRequestSerializer;
 impl GetIdentityMailFromDomainAttributesRequestSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(
         params: &mut Params,
         name: &str,
         obj: &GetIdentityMailFromDomainAttributesRequest,
     ) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         IdentityListSerializer::serialize(
@@ -2624,11 +2738,12 @@ pub struct GetIdentityMailFromDomainAttributesResponse {
 #[allow(dead_code)]
 struct GetIdentityMailFromDomainAttributesResponseDeserializer;
 impl GetIdentityMailFromDomainAttributesResponseDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<GetIdentityMailFromDomainAttributesResponse, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, GetIdentityMailFromDomainAttributesResponse, _>(
             tag_name,
             stack,
@@ -2659,10 +2774,11 @@ pub struct GetIdentityNotificationAttributesRequest {
 /// Serialize `GetIdentityNotificationAttributesRequest` contents to a `SignedRequest`.
 struct GetIdentityNotificationAttributesRequestSerializer;
 impl GetIdentityNotificationAttributesRequestSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &GetIdentityNotificationAttributesRequest) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         IdentityListSerializer::serialize(
@@ -2685,11 +2801,12 @@ pub struct GetIdentityNotificationAttributesResponse {
 #[allow(dead_code)]
 struct GetIdentityNotificationAttributesResponseDeserializer;
 impl GetIdentityNotificationAttributesResponseDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<GetIdentityNotificationAttributesResponse, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, GetIdentityNotificationAttributesResponse, _>(
             tag_name,
             stack,
@@ -2722,10 +2839,11 @@ pub struct GetIdentityPoliciesRequest {
 /// Serialize `GetIdentityPoliciesRequest` contents to a `SignedRequest`.
 struct GetIdentityPoliciesRequestSerializer;
 impl GetIdentityPoliciesRequestSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &GetIdentityPoliciesRequest) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         params.put(&format!("{}{}", prefix, "Identity"), &obj.identity);
@@ -2748,11 +2866,12 @@ pub struct GetIdentityPoliciesResponse {
 #[allow(dead_code)]
 struct GetIdentityPoliciesResponseDeserializer;
 impl GetIdentityPoliciesResponseDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<GetIdentityPoliciesResponse, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, GetIdentityPoliciesResponse, _>(
             tag_name,
             stack,
@@ -2779,10 +2898,11 @@ pub struct GetIdentityVerificationAttributesRequest {
 /// Serialize `GetIdentityVerificationAttributesRequest` contents to a `SignedRequest`.
 struct GetIdentityVerificationAttributesRequestSerializer;
 impl GetIdentityVerificationAttributesRequestSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &GetIdentityVerificationAttributesRequest) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         IdentityListSerializer::serialize(
@@ -2805,11 +2925,12 @@ pub struct GetIdentityVerificationAttributesResponse {
 #[allow(dead_code)]
 struct GetIdentityVerificationAttributesResponseDeserializer;
 impl GetIdentityVerificationAttributesResponseDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<GetIdentityVerificationAttributesResponse, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, GetIdentityVerificationAttributesResponse, _>(
             tag_name,
             stack,
@@ -2844,11 +2965,12 @@ pub struct GetSendQuotaResponse {
 #[allow(dead_code)]
 struct GetSendQuotaResponseDeserializer;
 impl GetSendQuotaResponseDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<GetSendQuotaResponse, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, GetSendQuotaResponse, _>(tag_name, stack, |name, stack, obj| {
             match name {
                 "Max24HourSend" => {
@@ -2884,11 +3006,12 @@ pub struct GetSendStatisticsResponse {
 #[allow(dead_code)]
 struct GetSendStatisticsResponseDeserializer;
 impl GetSendStatisticsResponseDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<GetSendStatisticsResponse, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, GetSendStatisticsResponse, _>(
             tag_name,
             stack,
@@ -2916,10 +3039,11 @@ pub struct GetTemplateRequest {
 /// Serialize `GetTemplateRequest` contents to a `SignedRequest`.
 struct GetTemplateRequestSerializer;
 impl GetTemplateRequestSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &GetTemplateRequest) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         params.put(&format!("{}{}", prefix, "TemplateName"), &obj.template_name);
@@ -2935,11 +3059,12 @@ pub struct GetTemplateResponse {
 #[allow(dead_code)]
 struct GetTemplateResponseDeserializer;
 impl GetTemplateResponseDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<GetTemplateResponse, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, GetTemplateResponse, _>(tag_name, stack, |name, stack, obj| {
             match name {
                 "Template" => {
@@ -2954,32 +3079,36 @@ impl GetTemplateResponseDeserializer {
 #[allow(dead_code)]
 struct HeaderNameDeserializer;
 impl HeaderNameDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 #[allow(dead_code)]
 struct HeaderValueDeserializer;
 impl HeaderValueDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 #[allow(dead_code)]
 struct HtmlPartDeserializer;
 impl HtmlPartDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 #[allow(dead_code)]
 struct IdentityDeserializer;
 impl IdentityDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
@@ -2998,11 +3127,12 @@ pub struct IdentityDkimAttributes {
 #[allow(dead_code)]
 struct IdentityDkimAttributesDeserializer;
 impl IdentityDkimAttributesDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<IdentityDkimAttributes, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, IdentityDkimAttributes, _>(tag_name, stack, |name, stack, obj| {
             match name {
                 "DkimEnabled" => {
@@ -3028,11 +3158,13 @@ impl IdentityDkimAttributesDeserializer {
 #[allow(dead_code)]
 struct IdentityListDeserializer;
 impl IdentityListDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<String>, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
+
         deserialize_elements::<_, Vec<_>, _>(tag_name, stack, |name, stack, obj| {
             if name == "member" {
                 obj.push(IdentityDeserializer::deserialize("member", stack)?);
@@ -3047,6 +3179,7 @@ impl IdentityListDeserializer {
 /// Serialize `IdentityList` contents to a `SignedRequest`.
 struct IdentityListSerializer;
 impl IdentityListSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &Vec<String>) {
         for (index, obj) in obj.iter().enumerate() {
             let key = format!("{}.member.{}", name, index + 1);
@@ -3070,11 +3203,12 @@ pub struct IdentityMailFromDomainAttributes {
 #[allow(dead_code)]
 struct IdentityMailFromDomainAttributesDeserializer;
 impl IdentityMailFromDomainAttributesDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<IdentityMailFromDomainAttributes, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, IdentityMailFromDomainAttributes, _>(
             tag_name,
             stack,
@@ -3127,11 +3261,12 @@ pub struct IdentityNotificationAttributes {
 #[allow(dead_code)]
 struct IdentityNotificationAttributesDeserializer;
 impl IdentityNotificationAttributesDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<IdentityNotificationAttributes, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, IdentityNotificationAttributes, _>(
             tag_name,
             stack,
@@ -3194,11 +3329,12 @@ pub struct IdentityVerificationAttributes {
 #[allow(dead_code)]
 struct IdentityVerificationAttributesDeserializer;
 impl IdentityVerificationAttributesDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<IdentityVerificationAttributes, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, IdentityVerificationAttributes, _>(
             tag_name,
             stack,
@@ -3226,8 +3362,9 @@ impl IdentityVerificationAttributesDeserializer {
 #[allow(dead_code)]
 struct InvocationTypeDeserializer;
 impl InvocationTypeDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
@@ -3245,11 +3382,12 @@ pub struct KinesisFirehoseDestination {
 #[allow(dead_code)]
 struct KinesisFirehoseDestinationDeserializer;
 impl KinesisFirehoseDestinationDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<KinesisFirehoseDestination, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, KinesisFirehoseDestination, _>(
             tag_name,
             stack,
@@ -3276,10 +3414,11 @@ impl KinesisFirehoseDestinationDeserializer {
 /// Serialize `KinesisFirehoseDestination` contents to a `SignedRequest`.
 struct KinesisFirehoseDestinationSerializer;
 impl KinesisFirehoseDestinationSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &KinesisFirehoseDestination) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         params.put(
@@ -3306,11 +3445,12 @@ pub struct LambdaAction {
 #[allow(dead_code)]
 struct LambdaActionDeserializer;
 impl LambdaActionDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<LambdaAction, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, LambdaAction, _>(tag_name, stack, |name, stack, obj| {
             match name {
                 "FunctionArn" => {
@@ -3338,10 +3478,11 @@ impl LambdaActionDeserializer {
 /// Serialize `LambdaAction` contents to a `SignedRequest`.
 struct LambdaActionSerializer;
 impl LambdaActionSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &LambdaAction) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         params.put(&format!("{}{}", prefix, "FunctionArn"), &obj.function_arn);
@@ -3357,8 +3498,9 @@ impl LambdaActionSerializer {
 #[allow(dead_code)]
 struct LastFreshStartDeserializer;
 impl LastFreshStartDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
@@ -3375,10 +3517,11 @@ pub struct ListConfigurationSetsRequest {
 /// Serialize `ListConfigurationSetsRequest` contents to a `SignedRequest`.
 struct ListConfigurationSetsRequestSerializer;
 impl ListConfigurationSetsRequestSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &ListConfigurationSetsRequest) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         if let Some(ref field_value) = obj.max_items {
@@ -3403,11 +3546,12 @@ pub struct ListConfigurationSetsResponse {
 #[allow(dead_code)]
 struct ListConfigurationSetsResponseDeserializer;
 impl ListConfigurationSetsResponseDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<ListConfigurationSetsResponse, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, ListConfigurationSetsResponse, _>(
             tag_name,
             stack,
@@ -3442,14 +3586,15 @@ pub struct ListCustomVerificationEmailTemplatesRequest {
 /// Serialize `ListCustomVerificationEmailTemplatesRequest` contents to a `SignedRequest`.
 struct ListCustomVerificationEmailTemplatesRequestSerializer;
 impl ListCustomVerificationEmailTemplatesRequestSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(
         params: &mut Params,
         name: &str,
         obj: &ListCustomVerificationEmailTemplatesRequest,
     ) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         if let Some(ref field_value) = obj.max_results {
@@ -3474,11 +3619,12 @@ pub struct ListCustomVerificationEmailTemplatesResponse {
 #[allow(dead_code)]
 struct ListCustomVerificationEmailTemplatesResponseDeserializer;
 impl ListCustomVerificationEmailTemplatesResponseDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<ListCustomVerificationEmailTemplatesResponse, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, ListCustomVerificationEmailTemplatesResponse, _>(
             tag_name,
             stack,
@@ -3518,10 +3664,11 @@ pub struct ListIdentitiesRequest {
 /// Serialize `ListIdentitiesRequest` contents to a `SignedRequest`.
 struct ListIdentitiesRequestSerializer;
 impl ListIdentitiesRequestSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &ListIdentitiesRequest) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         if let Some(ref field_value) = obj.identity_type {
@@ -3549,11 +3696,12 @@ pub struct ListIdentitiesResponse {
 #[allow(dead_code)]
 struct ListIdentitiesResponseDeserializer;
 impl ListIdentitiesResponseDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<ListIdentitiesResponse, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, ListIdentitiesResponse, _>(tag_name, stack, |name, stack, obj| {
             match name {
                 "Identities" => {
@@ -3580,10 +3728,11 @@ pub struct ListIdentityPoliciesRequest {
 /// Serialize `ListIdentityPoliciesRequest` contents to a `SignedRequest`.
 struct ListIdentityPoliciesRequestSerializer;
 impl ListIdentityPoliciesRequestSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &ListIdentityPoliciesRequest) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         params.put(&format!("{}{}", prefix, "Identity"), &obj.identity);
@@ -3601,11 +3750,12 @@ pub struct ListIdentityPoliciesResponse {
 #[allow(dead_code)]
 struct ListIdentityPoliciesResponseDeserializer;
 impl ListIdentityPoliciesResponseDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<ListIdentityPoliciesResponse, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, ListIdentityPoliciesResponse, _>(
             tag_name,
             stack,
@@ -3635,8 +3785,8 @@ struct ListReceiptFiltersRequestSerializer;
 impl ListReceiptFiltersRequestSerializer {
     fn serialize(_params: &mut Params, name: &str, _obj: &ListReceiptFiltersRequest) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
     }
 }
@@ -3652,11 +3802,12 @@ pub struct ListReceiptFiltersResponse {
 #[allow(dead_code)]
 struct ListReceiptFiltersResponseDeserializer;
 impl ListReceiptFiltersResponseDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<ListReceiptFiltersResponse, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, ListReceiptFiltersResponse, _>(
             tag_name,
             stack,
@@ -3685,10 +3836,11 @@ pub struct ListReceiptRuleSetsRequest {
 /// Serialize `ListReceiptRuleSetsRequest` contents to a `SignedRequest`.
 struct ListReceiptRuleSetsRequestSerializer;
 impl ListReceiptRuleSetsRequestSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &ListReceiptRuleSetsRequest) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         if let Some(ref field_value) = obj.next_token {
@@ -3710,11 +3862,12 @@ pub struct ListReceiptRuleSetsResponse {
 #[allow(dead_code)]
 struct ListReceiptRuleSetsResponseDeserializer;
 impl ListReceiptRuleSetsResponseDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<ListReceiptRuleSetsResponse, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, ListReceiptRuleSetsResponse, _>(
             tag_name,
             stack,
@@ -3748,10 +3901,11 @@ pub struct ListTemplatesRequest {
 /// Serialize `ListTemplatesRequest` contents to a `SignedRequest`.
 struct ListTemplatesRequestSerializer;
 impl ListTemplatesRequestSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &ListTemplatesRequest) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         if let Some(ref field_value) = obj.max_items {
@@ -3775,11 +3929,12 @@ pub struct ListTemplatesResponse {
 #[allow(dead_code)]
 struct ListTemplatesResponseDeserializer;
 impl ListTemplatesResponseDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<ListTemplatesResponse, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, ListTemplatesResponse, _>(tag_name, stack, |name, stack, obj| {
             match name {
                 "NextToken" => {
@@ -3807,11 +3962,12 @@ pub struct ListVerifiedEmailAddressesResponse {
 #[allow(dead_code)]
 struct ListVerifiedEmailAddressesResponseDeserializer;
 impl ListVerifiedEmailAddressesResponseDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<ListVerifiedEmailAddressesResponse, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, ListVerifiedEmailAddressesResponse, _>(
             tag_name,
             stack,
@@ -3832,12 +3988,13 @@ impl ListVerifiedEmailAddressesResponseDeserializer {
 #[allow(dead_code)]
 struct MailFromDomainAttributesDeserializer;
 impl MailFromDomainAttributesDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<::std::collections::HashMap<String, IdentityMailFromDomainAttributes>, XmlParseError>
     {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::start_element(tag_name, stack)?;
 
         let mut obj = ::std::collections::HashMap::new();
@@ -3857,24 +4014,27 @@ impl MailFromDomainAttributesDeserializer {
 #[allow(dead_code)]
 struct MailFromDomainNameDeserializer;
 impl MailFromDomainNameDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 #[allow(dead_code)]
 struct Max24HourSendDeserializer;
 impl Max24HourSendDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<f64, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::deserialize_primitive(tag_name, stack, |s| Ok(f64::from_str(&s).unwrap()))
     }
 }
 #[allow(dead_code)]
 struct MaxSendRateDeserializer;
 impl MaxSendRateDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<f64, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::deserialize_primitive(tag_name, stack, |s| Ok(f64::from_str(&s).unwrap()))
     }
 }
@@ -3891,10 +4051,11 @@ pub struct Message {
 /// Serialize `Message` contents to a `SignedRequest`.
 struct MessageSerializer;
 impl MessageSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &Message) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         BodySerializer::serialize(params, &format!("{}{}", prefix, "Body"), &obj.body);
@@ -3917,10 +4078,11 @@ pub struct MessageDsn {
 /// Serialize `MessageDsn` contents to a `SignedRequest`.
 struct MessageDsnSerializer;
 impl MessageDsnSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &MessageDsn) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         if let Some(ref field_value) = obj.arrival_date {
@@ -3940,8 +4102,9 @@ impl MessageDsnSerializer {
 #[allow(dead_code)]
 struct MessageIdDeserializer;
 impl MessageIdDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
@@ -3958,10 +4121,11 @@ pub struct MessageTag {
 /// Serialize `MessageTag` contents to a `SignedRequest`.
 struct MessageTagSerializer;
 impl MessageTagSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &MessageTag) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         params.put(&format!("{}{}", prefix, "Name"), &obj.name);
@@ -3972,6 +4136,7 @@ impl MessageTagSerializer {
 /// Serialize `MessageTagList` contents to a `SignedRequest`.
 struct MessageTagListSerializer;
 impl MessageTagListSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &Vec<MessageTag>) {
         for (index, obj) in obj.iter().enumerate() {
             let key = format!("{}.member.{}", name, index + 1);
@@ -3983,20 +4148,22 @@ impl MessageTagListSerializer {
 #[allow(dead_code)]
 struct NextTokenDeserializer;
 impl NextTokenDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 #[allow(dead_code)]
 struct NotificationAttributesDeserializer;
 impl NotificationAttributesDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<::std::collections::HashMap<String, IdentityNotificationAttributes>, XmlParseError>
     {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::start_element(tag_name, stack)?;
 
         let mut obj = ::std::collections::HashMap::new();
@@ -4016,27 +4183,30 @@ impl NotificationAttributesDeserializer {
 #[allow(dead_code)]
 struct NotificationTopicDeserializer;
 impl NotificationTopicDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 #[allow(dead_code)]
 struct PolicyDeserializer;
 impl PolicyDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 #[allow(dead_code)]
 struct PolicyMapDeserializer;
 impl PolicyMapDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<::std::collections::HashMap<String, String>, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::start_element(tag_name, stack)?;
 
         let mut obj = ::std::collections::HashMap::new();
@@ -4056,19 +4226,22 @@ impl PolicyMapDeserializer {
 #[allow(dead_code)]
 struct PolicyNameDeserializer;
 impl PolicyNameDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 #[allow(dead_code)]
 struct PolicyNameListDeserializer;
 impl PolicyNameListDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<String>, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
+
         deserialize_elements::<_, Vec<_>, _>(tag_name, stack, |name, stack, obj| {
             if name == "member" {
                 obj.push(PolicyNameDeserializer::deserialize("member", stack)?);
@@ -4083,6 +4256,7 @@ impl PolicyNameListDeserializer {
 /// Serialize `PolicyNameList` contents to a `SignedRequest`.
 struct PolicyNameListSerializer;
 impl PolicyNameListSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &Vec<String>) {
         for (index, obj) in obj.iter().enumerate() {
             let key = format!("{}.member.{}", name, index + 1);
@@ -4104,10 +4278,11 @@ pub struct PutConfigurationSetDeliveryOptionsRequest {
 /// Serialize `PutConfigurationSetDeliveryOptionsRequest` contents to a `SignedRequest`.
 struct PutConfigurationSetDeliveryOptionsRequestSerializer;
 impl PutConfigurationSetDeliveryOptionsRequestSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &PutConfigurationSetDeliveryOptionsRequest) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         params.put(
@@ -4132,11 +4307,12 @@ pub struct PutConfigurationSetDeliveryOptionsResponse {}
 #[allow(dead_code)]
 struct PutConfigurationSetDeliveryOptionsResponseDeserializer;
 impl PutConfigurationSetDeliveryOptionsResponseDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<PutConfigurationSetDeliveryOptionsResponse, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::start_element(tag_name, stack)?;
 
         let obj = PutConfigurationSetDeliveryOptionsResponse::default();
@@ -4161,10 +4337,11 @@ pub struct PutIdentityPolicyRequest {
 /// Serialize `PutIdentityPolicyRequest` contents to a `SignedRequest`.
 struct PutIdentityPolicyRequestSerializer;
 impl PutIdentityPolicyRequestSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &PutIdentityPolicyRequest) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         params.put(&format!("{}{}", prefix, "Identity"), &obj.identity);
@@ -4181,11 +4358,12 @@ pub struct PutIdentityPolicyResponse {}
 #[allow(dead_code)]
 struct PutIdentityPolicyResponseDeserializer;
 impl PutIdentityPolicyResponseDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<PutIdentityPolicyResponse, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::start_element(tag_name, stack)?;
 
         let obj = PutIdentityPolicyResponse::default();
@@ -4206,10 +4384,11 @@ pub struct RawMessage {
 /// Serialize `RawMessage` contents to a `SignedRequest`.
 struct RawMessageSerializer;
 impl RawMessageSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &RawMessage) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         params.put(
@@ -4243,11 +4422,12 @@ pub struct ReceiptAction {
 #[allow(dead_code)]
 struct ReceiptActionDeserializer;
 impl ReceiptActionDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<ReceiptAction, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, ReceiptAction, _>(tag_name, stack, |name, stack, obj| {
             match name {
                 "AddHeaderAction" => {
@@ -4294,10 +4474,11 @@ impl ReceiptActionDeserializer {
 /// Serialize `ReceiptAction` contents to a `SignedRequest`.
 struct ReceiptActionSerializer;
 impl ReceiptActionSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &ReceiptAction) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         if let Some(ref field_value) = obj.add_header_action {
@@ -4355,11 +4536,13 @@ impl ReceiptActionSerializer {
 #[allow(dead_code)]
 struct ReceiptActionsListDeserializer;
 impl ReceiptActionsListDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<ReceiptAction>, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
+
         deserialize_elements::<_, Vec<_>, _>(tag_name, stack, |name, stack, obj| {
             if name == "member" {
                 obj.push(ReceiptActionDeserializer::deserialize("member", stack)?);
@@ -4374,6 +4557,7 @@ impl ReceiptActionsListDeserializer {
 /// Serialize `ReceiptActionsList` contents to a `SignedRequest`.
 struct ReceiptActionsListSerializer;
 impl ReceiptActionsListSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &Vec<ReceiptAction>) {
         for (index, obj) in obj.iter().enumerate() {
             let key = format!("{}.member.{}", name, index + 1);
@@ -4396,11 +4580,12 @@ pub struct ReceiptFilter {
 #[allow(dead_code)]
 struct ReceiptFilterDeserializer;
 impl ReceiptFilterDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<ReceiptFilter, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, ReceiptFilter, _>(tag_name, stack, |name, stack, obj| {
             match name {
                 "IpFilter" => {
@@ -4419,10 +4604,11 @@ impl ReceiptFilterDeserializer {
 /// Serialize `ReceiptFilter` contents to a `SignedRequest`.
 struct ReceiptFilterSerializer;
 impl ReceiptFilterSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &ReceiptFilter) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         ReceiptIpFilterSerializer::serialize(
@@ -4437,11 +4623,13 @@ impl ReceiptFilterSerializer {
 #[allow(dead_code)]
 struct ReceiptFilterListDeserializer;
 impl ReceiptFilterListDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<ReceiptFilter>, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
+
         deserialize_elements::<_, Vec<_>, _>(tag_name, stack, |name, stack, obj| {
             if name == "member" {
                 obj.push(ReceiptFilterDeserializer::deserialize("member", stack)?);
@@ -4455,16 +4643,18 @@ impl ReceiptFilterListDeserializer {
 #[allow(dead_code)]
 struct ReceiptFilterNameDeserializer;
 impl ReceiptFilterNameDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 #[allow(dead_code)]
 struct ReceiptFilterPolicyDeserializer;
 impl ReceiptFilterPolicyDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
@@ -4482,11 +4672,12 @@ pub struct ReceiptIpFilter {
 #[allow(dead_code)]
 struct ReceiptIpFilterDeserializer;
 impl ReceiptIpFilterDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<ReceiptIpFilter, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, ReceiptIpFilter, _>(tag_name, stack, |name, stack, obj| {
             match name {
                 "Cidr" => {
@@ -4505,10 +4696,11 @@ impl ReceiptIpFilterDeserializer {
 /// Serialize `ReceiptIpFilter` contents to a `SignedRequest`.
 struct ReceiptIpFilterSerializer;
 impl ReceiptIpFilterSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &ReceiptIpFilter) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         params.put(&format!("{}{}", prefix, "Cidr"), &obj.cidr);
@@ -4538,11 +4730,12 @@ pub struct ReceiptRule {
 #[allow(dead_code)]
 struct ReceiptRuleDeserializer;
 impl ReceiptRuleDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<ReceiptRule, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, ReceiptRule, _>(tag_name, stack, |name, stack, obj| {
             match name {
                 "Actions" => {
@@ -4578,10 +4771,11 @@ impl ReceiptRuleDeserializer {
 /// Serialize `ReceiptRule` contents to a `SignedRequest`.
 struct ReceiptRuleSerializer;
 impl ReceiptRuleSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &ReceiptRule) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         if let Some(ref field_value) = obj.actions {
@@ -4614,8 +4808,9 @@ impl ReceiptRuleSerializer {
 #[allow(dead_code)]
 struct ReceiptRuleNameDeserializer;
 impl ReceiptRuleNameDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
@@ -4623,6 +4818,7 @@ impl ReceiptRuleNameDeserializer {
 /// Serialize `ReceiptRuleNamesList` contents to a `SignedRequest`.
 struct ReceiptRuleNamesListSerializer;
 impl ReceiptRuleNamesListSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &Vec<String>) {
         for (index, obj) in obj.iter().enumerate() {
             let key = format!("{}.member.{}", name, index + 1);
@@ -4644,11 +4840,12 @@ pub struct ReceiptRuleSetMetadata {
 #[allow(dead_code)]
 struct ReceiptRuleSetMetadataDeserializer;
 impl ReceiptRuleSetMetadataDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<ReceiptRuleSetMetadata, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, ReceiptRuleSetMetadata, _>(tag_name, stack, |name, stack, obj| {
             match name {
                 "CreatedTimestamp" => {
@@ -4669,19 +4866,22 @@ impl ReceiptRuleSetMetadataDeserializer {
 #[allow(dead_code)]
 struct ReceiptRuleSetNameDeserializer;
 impl ReceiptRuleSetNameDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 #[allow(dead_code)]
 struct ReceiptRuleSetsListsDeserializer;
 impl ReceiptRuleSetsListsDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<ReceiptRuleSetMetadata>, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
+
         deserialize_elements::<_, Vec<_>, _>(tag_name, stack, |name, stack, obj| {
             if name == "member" {
                 obj.push(ReceiptRuleSetMetadataDeserializer::deserialize(
@@ -4697,11 +4897,13 @@ impl ReceiptRuleSetsListsDeserializer {
 #[allow(dead_code)]
 struct ReceiptRulesListDeserializer;
 impl ReceiptRulesListDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<ReceiptRule>, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
+
         deserialize_elements::<_, Vec<_>, _>(tag_name, stack, |name, stack, obj| {
             if name == "member" {
                 obj.push(ReceiptRuleDeserializer::deserialize("member", stack)?);
@@ -4715,8 +4917,9 @@ impl ReceiptRulesListDeserializer {
 #[allow(dead_code)]
 struct RecipientDeserializer;
 impl RecipientDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
@@ -4743,10 +4946,11 @@ pub struct RecipientDsnFields {
 /// Serialize `RecipientDsnFields` contents to a `SignedRequest`.
 struct RecipientDsnFieldsSerializer;
 impl RecipientDsnFieldsSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &RecipientDsnFields) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         params.put(&format!("{}{}", prefix, "Action"), &obj.action);
@@ -4776,11 +4980,13 @@ impl RecipientDsnFieldsSerializer {
 #[allow(dead_code)]
 struct RecipientsListDeserializer;
 impl RecipientsListDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<String>, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
+
         deserialize_elements::<_, Vec<_>, _>(tag_name, stack, |name, stack, obj| {
             if name == "member" {
                 obj.push(RecipientDeserializer::deserialize("member", stack)?);
@@ -4795,6 +5001,7 @@ impl RecipientsListDeserializer {
 /// Serialize `RecipientsList` contents to a `SignedRequest`.
 struct RecipientsListSerializer;
 impl RecipientsListSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &Vec<String>) {
         for (index, obj) in obj.iter().enumerate() {
             let key = format!("{}.member.{}", name, index + 1);
@@ -4806,8 +5013,9 @@ impl RecipientsListSerializer {
 #[allow(dead_code)]
 struct RenderedTemplateDeserializer;
 impl RenderedTemplateDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
@@ -4824,10 +5032,11 @@ pub struct ReorderReceiptRuleSetRequest {
 /// Serialize `ReorderReceiptRuleSetRequest` contents to a `SignedRequest`.
 struct ReorderReceiptRuleSetRequestSerializer;
 impl ReorderReceiptRuleSetRequestSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &ReorderReceiptRuleSetRequest) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         ReceiptRuleNamesListSerializer::serialize(
@@ -4847,11 +5056,12 @@ pub struct ReorderReceiptRuleSetResponse {}
 #[allow(dead_code)]
 struct ReorderReceiptRuleSetResponseDeserializer;
 impl ReorderReceiptRuleSetResponseDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<ReorderReceiptRuleSetResponse, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::start_element(tag_name, stack)?;
 
         let obj = ReorderReceiptRuleSetResponse::default();
@@ -4876,11 +5086,12 @@ pub struct ReputationOptions {
 #[allow(dead_code)]
 struct ReputationOptionsDeserializer;
 impl ReputationOptionsDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<ReputationOptions, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, ReputationOptions, _>(tag_name, stack, |name, stack, obj| {
             match name {
                 "LastFreshStart" => {
@@ -4923,11 +5134,12 @@ pub struct S3Action {
 #[allow(dead_code)]
 struct S3ActionDeserializer;
 impl S3ActionDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<S3Action, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, S3Action, _>(tag_name, stack, |name, stack, obj| {
             match name {
                 "BucketName" => {
@@ -4960,10 +5172,11 @@ impl S3ActionDeserializer {
 /// Serialize `S3Action` contents to a `SignedRequest`.
 struct S3ActionSerializer;
 impl S3ActionSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &S3Action) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         params.put(&format!("{}{}", prefix, "BucketName"), &obj.bucket_name);
@@ -4982,16 +5195,18 @@ impl S3ActionSerializer {
 #[allow(dead_code)]
 struct S3BucketNameDeserializer;
 impl S3BucketNameDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 #[allow(dead_code)]
 struct S3KeyPrefixDeserializer;
 impl S3KeyPrefixDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
@@ -5009,11 +5224,12 @@ pub struct SNSAction {
 #[allow(dead_code)]
 struct SNSActionDeserializer;
 impl SNSActionDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<SNSAction, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, SNSAction, _>(tag_name, stack, |name, stack, obj| {
             match name {
                 "Encoding" => {
@@ -5034,10 +5250,11 @@ impl SNSActionDeserializer {
 /// Serialize `SNSAction` contents to a `SignedRequest`.
 struct SNSActionSerializer;
 impl SNSActionSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &SNSAction) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         if let Some(ref field_value) = obj.encoding {
@@ -5050,8 +5267,9 @@ impl SNSActionSerializer {
 #[allow(dead_code)]
 struct SNSActionEncodingDeserializer;
 impl SNSActionEncodingDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
@@ -5067,11 +5285,12 @@ pub struct SNSDestination {
 #[allow(dead_code)]
 struct SNSDestinationDeserializer;
 impl SNSDestinationDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<SNSDestination, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, SNSDestination, _>(tag_name, stack, |name, stack, obj| {
             match name {
                 "TopicARN" => {
@@ -5087,10 +5306,11 @@ impl SNSDestinationDeserializer {
 /// Serialize `SNSDestination` contents to a `SignedRequest`.
 struct SNSDestinationSerializer;
 impl SNSDestinationSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &SNSDestination) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         params.put(&format!("{}{}", prefix, "TopicARN"), &obj.topic_arn);
@@ -5118,10 +5338,11 @@ pub struct SendBounceRequest {
 /// Serialize `SendBounceRequest` contents to a `SignedRequest`.
 struct SendBounceRequestSerializer;
 impl SendBounceRequestSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &SendBounceRequest) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         params.put(&format!("{}{}", prefix, "BounceSender"), &obj.bounce_sender);
@@ -5161,11 +5382,12 @@ pub struct SendBounceResponse {
 #[allow(dead_code)]
 struct SendBounceResponseDeserializer;
 impl SendBounceResponseDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<SendBounceResponse, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, SendBounceResponse, _>(tag_name, stack, |name, stack, obj| {
             match name {
                 "MessageId" => {
@@ -5208,10 +5430,11 @@ pub struct SendBulkTemplatedEmailRequest {
 /// Serialize `SendBulkTemplatedEmailRequest` contents to a `SignedRequest`.
 struct SendBulkTemplatedEmailRequestSerializer;
 impl SendBulkTemplatedEmailRequestSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &SendBulkTemplatedEmailRequest) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         if let Some(ref field_value) = obj.configuration_set_name {
@@ -5272,11 +5495,12 @@ pub struct SendBulkTemplatedEmailResponse {
 #[allow(dead_code)]
 struct SendBulkTemplatedEmailResponseDeserializer;
 impl SendBulkTemplatedEmailResponseDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<SendBulkTemplatedEmailResponse, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, SendBulkTemplatedEmailResponse, _>(
             tag_name,
             stack,
@@ -5310,10 +5534,11 @@ pub struct SendCustomVerificationEmailRequest {
 /// Serialize `SendCustomVerificationEmailRequest` contents to a `SignedRequest`.
 struct SendCustomVerificationEmailRequestSerializer;
 impl SendCustomVerificationEmailRequestSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &SendCustomVerificationEmailRequest) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         if let Some(ref field_value) = obj.configuration_set_name {
@@ -5338,11 +5563,12 @@ pub struct SendCustomVerificationEmailResponse {
 #[allow(dead_code)]
 struct SendCustomVerificationEmailResponseDeserializer;
 impl SendCustomVerificationEmailResponseDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<SendCustomVerificationEmailResponse, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, SendCustomVerificationEmailResponse, _>(
             tag_name,
             stack,
@@ -5378,11 +5604,12 @@ pub struct SendDataPoint {
 #[allow(dead_code)]
 struct SendDataPointDeserializer;
 impl SendDataPointDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<SendDataPoint, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, SendDataPoint, _>(tag_name, stack, |name, stack, obj| {
             match name {
                 "Bounces" => {
@@ -5410,11 +5637,13 @@ impl SendDataPointDeserializer {
 #[allow(dead_code)]
 struct SendDataPointListDeserializer;
 impl SendDataPointListDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<SendDataPoint>, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
+
         deserialize_elements::<_, Vec<_>, _>(tag_name, stack, |name, stack, obj| {
             if name == "member" {
                 obj.push(SendDataPointDeserializer::deserialize("member", stack)?);
@@ -5452,10 +5681,11 @@ pub struct SendEmailRequest {
 /// Serialize `SendEmailRequest` contents to a `SignedRequest`.
 struct SendEmailRequestSerializer;
 impl SendEmailRequestSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &SendEmailRequest) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         if let Some(ref field_value) = obj.configuration_set_name {
@@ -5508,11 +5738,12 @@ pub struct SendEmailResponse {
 #[allow(dead_code)]
 struct SendEmailResponseDeserializer;
 impl SendEmailResponseDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<SendEmailResponse, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, SendEmailResponse, _>(tag_name, stack, |name, stack, obj| {
             match name {
                 "MessageId" => {
@@ -5549,10 +5780,11 @@ pub struct SendRawEmailRequest {
 /// Serialize `SendRawEmailRequest` contents to a `SignedRequest`.
 struct SendRawEmailRequestSerializer;
 impl SendRawEmailRequestSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &SendRawEmailRequest) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         if let Some(ref field_value) = obj.configuration_set_name {
@@ -5606,11 +5838,12 @@ pub struct SendRawEmailResponse {
 #[allow(dead_code)]
 struct SendRawEmailResponseDeserializer;
 impl SendRawEmailResponseDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<SendRawEmailResponse, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, SendRawEmailResponse, _>(tag_name, stack, |name, stack, obj| {
             match name {
                 "MessageId" => {
@@ -5653,10 +5886,11 @@ pub struct SendTemplatedEmailRequest {
 /// Serialize `SendTemplatedEmailRequest` contents to a `SignedRequest`.
 struct SendTemplatedEmailRequestSerializer;
 impl SendTemplatedEmailRequestSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &SendTemplatedEmailRequest) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         if let Some(ref field_value) = obj.configuration_set_name {
@@ -5712,11 +5946,12 @@ pub struct SendTemplatedEmailResponse {
 #[allow(dead_code)]
 struct SendTemplatedEmailResponseDeserializer;
 impl SendTemplatedEmailResponseDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<SendTemplatedEmailResponse, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, SendTemplatedEmailResponse, _>(
             tag_name,
             stack,
@@ -5735,8 +5970,9 @@ impl SendTemplatedEmailResponseDeserializer {
 #[allow(dead_code)]
 struct SentLast24HoursDeserializer;
 impl SentLast24HoursDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<f64, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::deserialize_primitive(tag_name, stack, |s| Ok(f64::from_str(&s).unwrap()))
     }
 }
@@ -5751,10 +5987,11 @@ pub struct SetActiveReceiptRuleSetRequest {
 /// Serialize `SetActiveReceiptRuleSetRequest` contents to a `SignedRequest`.
 struct SetActiveReceiptRuleSetRequestSerializer;
 impl SetActiveReceiptRuleSetRequestSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &SetActiveReceiptRuleSetRequest) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         if let Some(ref field_value) = obj.rule_set_name {
@@ -5771,11 +6008,12 @@ pub struct SetActiveReceiptRuleSetResponse {}
 #[allow(dead_code)]
 struct SetActiveReceiptRuleSetResponseDeserializer;
 impl SetActiveReceiptRuleSetResponseDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<SetActiveReceiptRuleSetResponse, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::start_element(tag_name, stack)?;
 
         let obj = SetActiveReceiptRuleSetResponse::default();
@@ -5798,10 +6036,11 @@ pub struct SetIdentityDkimEnabledRequest {
 /// Serialize `SetIdentityDkimEnabledRequest` contents to a `SignedRequest`.
 struct SetIdentityDkimEnabledRequestSerializer;
 impl SetIdentityDkimEnabledRequestSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &SetIdentityDkimEnabledRequest) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         params.put(&format!("{}{}", prefix, "DkimEnabled"), &obj.dkim_enabled);
@@ -5817,11 +6056,12 @@ pub struct SetIdentityDkimEnabledResponse {}
 #[allow(dead_code)]
 struct SetIdentityDkimEnabledResponseDeserializer;
 impl SetIdentityDkimEnabledResponseDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<SetIdentityDkimEnabledResponse, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::start_element(tag_name, stack)?;
 
         let obj = SetIdentityDkimEnabledResponse::default();
@@ -5844,14 +6084,15 @@ pub struct SetIdentityFeedbackForwardingEnabledRequest {
 /// Serialize `SetIdentityFeedbackForwardingEnabledRequest` contents to a `SignedRequest`.
 struct SetIdentityFeedbackForwardingEnabledRequestSerializer;
 impl SetIdentityFeedbackForwardingEnabledRequestSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(
         params: &mut Params,
         name: &str,
         obj: &SetIdentityFeedbackForwardingEnabledRequest,
     ) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         params.put(
@@ -5870,11 +6111,12 @@ pub struct SetIdentityFeedbackForwardingEnabledResponse {}
 #[allow(dead_code)]
 struct SetIdentityFeedbackForwardingEnabledResponseDeserializer;
 impl SetIdentityFeedbackForwardingEnabledResponseDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<SetIdentityFeedbackForwardingEnabledResponse, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::start_element(tag_name, stack)?;
 
         let obj = SetIdentityFeedbackForwardingEnabledResponse::default();
@@ -5899,14 +6141,15 @@ pub struct SetIdentityHeadersInNotificationsEnabledRequest {
 /// Serialize `SetIdentityHeadersInNotificationsEnabledRequest` contents to a `SignedRequest`.
 struct SetIdentityHeadersInNotificationsEnabledRequestSerializer;
 impl SetIdentityHeadersInNotificationsEnabledRequestSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(
         params: &mut Params,
         name: &str,
         obj: &SetIdentityHeadersInNotificationsEnabledRequest,
     ) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         params.put(&format!("{}{}", prefix, "Enabled"), &obj.enabled);
@@ -5926,11 +6169,12 @@ pub struct SetIdentityHeadersInNotificationsEnabledResponse {}
 #[allow(dead_code)]
 struct SetIdentityHeadersInNotificationsEnabledResponseDeserializer;
 impl SetIdentityHeadersInNotificationsEnabledResponseDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<SetIdentityHeadersInNotificationsEnabledResponse, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::start_element(tag_name, stack)?;
 
         let obj = SetIdentityHeadersInNotificationsEnabledResponse::default();
@@ -5955,10 +6199,11 @@ pub struct SetIdentityMailFromDomainRequest {
 /// Serialize `SetIdentityMailFromDomainRequest` contents to a `SignedRequest`.
 struct SetIdentityMailFromDomainRequestSerializer;
 impl SetIdentityMailFromDomainRequestSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &SetIdentityMailFromDomainRequest) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         if let Some(ref field_value) = obj.behavior_on_mx_failure {
@@ -5982,11 +6227,12 @@ pub struct SetIdentityMailFromDomainResponse {}
 #[allow(dead_code)]
 struct SetIdentityMailFromDomainResponseDeserializer;
 impl SetIdentityMailFromDomainResponseDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<SetIdentityMailFromDomainResponse, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::start_element(tag_name, stack)?;
 
         let obj = SetIdentityMailFromDomainResponse::default();
@@ -6011,10 +6257,11 @@ pub struct SetIdentityNotificationTopicRequest {
 /// Serialize `SetIdentityNotificationTopicRequest` contents to a `SignedRequest`.
 struct SetIdentityNotificationTopicRequestSerializer;
 impl SetIdentityNotificationTopicRequestSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &SetIdentityNotificationTopicRequest) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         params.put(&format!("{}{}", prefix, "Identity"), &obj.identity);
@@ -6036,11 +6283,12 @@ pub struct SetIdentityNotificationTopicResponse {}
 #[allow(dead_code)]
 struct SetIdentityNotificationTopicResponseDeserializer;
 impl SetIdentityNotificationTopicResponseDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<SetIdentityNotificationTopicResponse, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::start_element(tag_name, stack)?;
 
         let obj = SetIdentityNotificationTopicResponse::default();
@@ -6065,10 +6313,11 @@ pub struct SetReceiptRulePositionRequest {
 /// Serialize `SetReceiptRulePositionRequest` contents to a `SignedRequest`.
 struct SetReceiptRulePositionRequestSerializer;
 impl SetReceiptRulePositionRequestSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &SetReceiptRulePositionRequest) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         if let Some(ref field_value) = obj.after {
@@ -6087,11 +6336,12 @@ pub struct SetReceiptRulePositionResponse {}
 #[allow(dead_code)]
 struct SetReceiptRulePositionResponseDeserializer;
 impl SetReceiptRulePositionResponseDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<SetReceiptRulePositionResponse, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::start_element(tag_name, stack)?;
 
         let obj = SetReceiptRulePositionResponse::default();
@@ -6115,11 +6365,12 @@ pub struct StopAction {
 #[allow(dead_code)]
 struct StopActionDeserializer;
 impl StopActionDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<StopAction, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, StopAction, _>(tag_name, stack, |name, stack, obj| {
             match name {
                 "Scope" => {
@@ -6140,10 +6391,11 @@ impl StopActionDeserializer {
 /// Serialize `StopAction` contents to a `SignedRequest`.
 struct StopActionSerializer;
 impl StopActionSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &StopAction) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         params.put(&format!("{}{}", prefix, "Scope"), &obj.scope);
@@ -6156,32 +6408,36 @@ impl StopActionSerializer {
 #[allow(dead_code)]
 struct StopScopeDeserializer;
 impl StopScopeDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 #[allow(dead_code)]
 struct SubjectDeserializer;
 impl SubjectDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 #[allow(dead_code)]
 struct SubjectPartDeserializer;
 impl SubjectPartDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 #[allow(dead_code)]
 struct SuccessRedirectionURLDeserializer;
 impl SuccessRedirectionURLDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
@@ -6203,11 +6459,12 @@ pub struct Template {
 #[allow(dead_code)]
 struct TemplateDeserializer;
 impl TemplateDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Template, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, Template, _>(tag_name, stack, |name, stack, obj| {
             match name {
                 "HtmlPart" => {
@@ -6234,10 +6491,11 @@ impl TemplateDeserializer {
 /// Serialize `Template` contents to a `SignedRequest`.
 struct TemplateSerializer;
 impl TemplateSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &Template) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         if let Some(ref field_value) = obj.html_part {
@@ -6256,8 +6514,9 @@ impl TemplateSerializer {
 #[allow(dead_code)]
 struct TemplateContentDeserializer;
 impl TemplateContentDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
@@ -6274,11 +6533,12 @@ pub struct TemplateMetadata {
 #[allow(dead_code)]
 struct TemplateMetadataDeserializer;
 impl TemplateMetadataDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<TemplateMetadata, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, TemplateMetadata, _>(tag_name, stack, |name, stack, obj| {
             match name {
                 "CreatedTimestamp" => {
@@ -6299,11 +6559,13 @@ impl TemplateMetadataDeserializer {
 #[allow(dead_code)]
 struct TemplateMetadataListDeserializer;
 impl TemplateMetadataListDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<TemplateMetadata>, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
+
         deserialize_elements::<_, Vec<_>, _>(tag_name, stack, |name, stack, obj| {
             if name == "member" {
                 obj.push(TemplateMetadataDeserializer::deserialize("member", stack)?);
@@ -6317,8 +6579,9 @@ impl TemplateMetadataListDeserializer {
 #[allow(dead_code)]
 struct TemplateNameDeserializer;
 impl TemplateNameDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
@@ -6334,10 +6597,11 @@ pub struct TestRenderTemplateRequest {
 /// Serialize `TestRenderTemplateRequest` contents to a `SignedRequest`.
 struct TestRenderTemplateRequestSerializer;
 impl TestRenderTemplateRequestSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &TestRenderTemplateRequest) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         params.put(&format!("{}{}", prefix, "TemplateData"), &obj.template_data);
@@ -6355,11 +6619,12 @@ pub struct TestRenderTemplateResponse {
 #[allow(dead_code)]
 struct TestRenderTemplateResponseDeserializer;
 impl TestRenderTemplateResponseDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<TestRenderTemplateResponse, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, TestRenderTemplateResponse, _>(
             tag_name,
             stack,
@@ -6381,24 +6646,27 @@ impl TestRenderTemplateResponseDeserializer {
 #[allow(dead_code)]
 struct TextPartDeserializer;
 impl TextPartDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 #[allow(dead_code)]
 struct TimestampDeserializer;
 impl TimestampDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 #[allow(dead_code)]
 struct TlsPolicyDeserializer;
 impl TlsPolicyDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
@@ -6414,11 +6682,12 @@ pub struct TrackingOptions {
 #[allow(dead_code)]
 struct TrackingOptionsDeserializer;
 impl TrackingOptionsDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<TrackingOptions, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, TrackingOptions, _>(tag_name, stack, |name, stack, obj| {
             match name {
                 "CustomRedirectDomain" => {
@@ -6438,10 +6707,11 @@ impl TrackingOptionsDeserializer {
 /// Serialize `TrackingOptions` contents to a `SignedRequest`.
 struct TrackingOptionsSerializer;
 impl TrackingOptionsSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &TrackingOptions) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         if let Some(ref field_value) = obj.custom_redirect_domain {
@@ -6464,10 +6734,11 @@ pub struct UpdateAccountSendingEnabledRequest {
 /// Serialize `UpdateAccountSendingEnabledRequest` contents to a `SignedRequest`.
 struct UpdateAccountSendingEnabledRequestSerializer;
 impl UpdateAccountSendingEnabledRequestSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &UpdateAccountSendingEnabledRequest) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         if let Some(ref field_value) = obj.enabled {
@@ -6489,14 +6760,15 @@ pub struct UpdateConfigurationSetEventDestinationRequest {
 /// Serialize `UpdateConfigurationSetEventDestinationRequest` contents to a `SignedRequest`.
 struct UpdateConfigurationSetEventDestinationRequestSerializer;
 impl UpdateConfigurationSetEventDestinationRequestSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(
         params: &mut Params,
         name: &str,
         obj: &UpdateConfigurationSetEventDestinationRequest,
     ) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         params.put(
@@ -6519,11 +6791,12 @@ pub struct UpdateConfigurationSetEventDestinationResponse {}
 #[allow(dead_code)]
 struct UpdateConfigurationSetEventDestinationResponseDeserializer;
 impl UpdateConfigurationSetEventDestinationResponseDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<UpdateConfigurationSetEventDestinationResponse, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::start_element(tag_name, stack)?;
 
         let obj = UpdateConfigurationSetEventDestinationResponse::default();
@@ -6546,14 +6819,15 @@ pub struct UpdateConfigurationSetReputationMetricsEnabledRequest {
 /// Serialize `UpdateConfigurationSetReputationMetricsEnabledRequest` contents to a `SignedRequest`.
 struct UpdateConfigurationSetReputationMetricsEnabledRequestSerializer;
 impl UpdateConfigurationSetReputationMetricsEnabledRequestSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(
         params: &mut Params,
         name: &str,
         obj: &UpdateConfigurationSetReputationMetricsEnabledRequest,
     ) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         params.put(
@@ -6577,14 +6851,15 @@ pub struct UpdateConfigurationSetSendingEnabledRequest {
 /// Serialize `UpdateConfigurationSetSendingEnabledRequest` contents to a `SignedRequest`.
 struct UpdateConfigurationSetSendingEnabledRequestSerializer;
 impl UpdateConfigurationSetSendingEnabledRequestSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(
         params: &mut Params,
         name: &str,
         obj: &UpdateConfigurationSetSendingEnabledRequest,
     ) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         params.put(
@@ -6607,14 +6882,15 @@ pub struct UpdateConfigurationSetTrackingOptionsRequest {
 /// Serialize `UpdateConfigurationSetTrackingOptionsRequest` contents to a `SignedRequest`.
 struct UpdateConfigurationSetTrackingOptionsRequestSerializer;
 impl UpdateConfigurationSetTrackingOptionsRequestSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(
         params: &mut Params,
         name: &str,
         obj: &UpdateConfigurationSetTrackingOptionsRequest,
     ) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         params.put(
@@ -6637,11 +6913,12 @@ pub struct UpdateConfigurationSetTrackingOptionsResponse {}
 #[allow(dead_code)]
 struct UpdateConfigurationSetTrackingOptionsResponseDeserializer;
 impl UpdateConfigurationSetTrackingOptionsResponseDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<UpdateConfigurationSetTrackingOptionsResponse, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::start_element(tag_name, stack)?;
 
         let obj = UpdateConfigurationSetTrackingOptionsResponse::default();
@@ -6672,14 +6949,15 @@ pub struct UpdateCustomVerificationEmailTemplateRequest {
 /// Serialize `UpdateCustomVerificationEmailTemplateRequest` contents to a `SignedRequest`.
 struct UpdateCustomVerificationEmailTemplateRequestSerializer;
 impl UpdateCustomVerificationEmailTemplateRequestSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(
         params: &mut Params,
         name: &str,
         obj: &UpdateCustomVerificationEmailTemplateRequest,
     ) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         if let Some(ref field_value) = obj.failure_redirection_url {
@@ -6720,10 +6998,11 @@ pub struct UpdateReceiptRuleRequest {
 /// Serialize `UpdateReceiptRuleRequest` contents to a `SignedRequest`.
 struct UpdateReceiptRuleRequestSerializer;
 impl UpdateReceiptRuleRequestSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &UpdateReceiptRuleRequest) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         ReceiptRuleSerializer::serialize(params, &format!("{}{}", prefix, "Rule"), &obj.rule);
@@ -6739,11 +7018,12 @@ pub struct UpdateReceiptRuleResponse {}
 #[allow(dead_code)]
 struct UpdateReceiptRuleResponseDeserializer;
 impl UpdateReceiptRuleResponseDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<UpdateReceiptRuleResponse, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::start_element(tag_name, stack)?;
 
         let obj = UpdateReceiptRuleResponse::default();
@@ -6762,10 +7042,11 @@ pub struct UpdateTemplateRequest {
 /// Serialize `UpdateTemplateRequest` contents to a `SignedRequest`.
 struct UpdateTemplateRequestSerializer;
 impl UpdateTemplateRequestSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &UpdateTemplateRequest) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         TemplateSerializer::serialize(params, &format!("{}{}", prefix, "Template"), &obj.template);
@@ -6779,11 +7060,12 @@ pub struct UpdateTemplateResponse {}
 #[allow(dead_code)]
 struct UpdateTemplateResponseDeserializer;
 impl UpdateTemplateResponseDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<UpdateTemplateResponse, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::start_element(tag_name, stack)?;
 
         let obj = UpdateTemplateResponse::default();
@@ -6796,12 +7078,13 @@ impl UpdateTemplateResponseDeserializer {
 #[allow(dead_code)]
 struct VerificationAttributesDeserializer;
 impl VerificationAttributesDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<::std::collections::HashMap<String, IdentityVerificationAttributes>, XmlParseError>
     {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::start_element(tag_name, stack)?;
 
         let mut obj = ::std::collections::HashMap::new();
@@ -6821,27 +7104,31 @@ impl VerificationAttributesDeserializer {
 #[allow(dead_code)]
 struct VerificationStatusDeserializer;
 impl VerificationStatusDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 #[allow(dead_code)]
 struct VerificationTokenDeserializer;
 impl VerificationTokenDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 #[allow(dead_code)]
 struct VerificationTokenListDeserializer;
 impl VerificationTokenListDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<String>, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
+
         deserialize_elements::<_, Vec<_>, _>(tag_name, stack, |name, stack, obj| {
             if name == "member" {
                 obj.push(VerificationTokenDeserializer::deserialize("member", stack)?);
@@ -6863,10 +7150,11 @@ pub struct VerifyDomainDkimRequest {
 /// Serialize `VerifyDomainDkimRequest` contents to a `SignedRequest`.
 struct VerifyDomainDkimRequestSerializer;
 impl VerifyDomainDkimRequestSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &VerifyDomainDkimRequest) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         params.put(&format!("{}{}", prefix, "Domain"), &obj.domain);
@@ -6884,11 +7172,12 @@ pub struct VerifyDomainDkimResponse {
 #[allow(dead_code)]
 struct VerifyDomainDkimResponseDeserializer;
 impl VerifyDomainDkimResponseDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<VerifyDomainDkimResponse, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, VerifyDomainDkimResponse, _>(
             tag_name,
             stack,
@@ -6919,10 +7208,11 @@ pub struct VerifyDomainIdentityRequest {
 /// Serialize `VerifyDomainIdentityRequest` contents to a `SignedRequest`.
 struct VerifyDomainIdentityRequestSerializer;
 impl VerifyDomainIdentityRequestSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &VerifyDomainIdentityRequest) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         params.put(&format!("{}{}", prefix, "Domain"), &obj.domain);
@@ -6940,11 +7230,12 @@ pub struct VerifyDomainIdentityResponse {
 #[allow(dead_code)]
 struct VerifyDomainIdentityResponseDeserializer;
 impl VerifyDomainIdentityResponseDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<VerifyDomainIdentityResponse, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, VerifyDomainIdentityResponse, _>(
             tag_name,
             stack,
@@ -6972,10 +7263,11 @@ pub struct VerifyEmailAddressRequest {
 /// Serialize `VerifyEmailAddressRequest` contents to a `SignedRequest`.
 struct VerifyEmailAddressRequestSerializer;
 impl VerifyEmailAddressRequestSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &VerifyEmailAddressRequest) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         params.put(&format!("{}{}", prefix, "EmailAddress"), &obj.email_address);
@@ -6993,10 +7285,11 @@ pub struct VerifyEmailIdentityRequest {
 /// Serialize `VerifyEmailIdentityRequest` contents to a `SignedRequest`.
 struct VerifyEmailIdentityRequestSerializer;
 impl VerifyEmailIdentityRequestSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &VerifyEmailIdentityRequest) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         params.put(&format!("{}{}", prefix, "EmailAddress"), &obj.email_address);
@@ -7011,11 +7304,12 @@ pub struct VerifyEmailIdentityResponse {}
 #[allow(dead_code)]
 struct VerifyEmailIdentityResponseDeserializer;
 impl VerifyEmailIdentityResponseDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<VerifyEmailIdentityResponse, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::start_element(tag_name, stack)?;
 
         let obj = VerifyEmailIdentityResponse::default();
@@ -7039,11 +7333,12 @@ pub struct WorkmailAction {
 #[allow(dead_code)]
 struct WorkmailActionDeserializer;
 impl WorkmailActionDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<WorkmailAction, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, WorkmailAction, _>(tag_name, stack, |name, stack, obj| {
             match name {
                 "OrganizationArn" => {
@@ -7065,10 +7360,11 @@ impl WorkmailActionDeserializer {
 /// Serialize `WorkmailAction` contents to a `SignedRequest`.
 struct WorkmailActionSerializer;
 impl WorkmailActionSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &WorkmailAction) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         params.put(
@@ -7098,24 +7394,27 @@ impl CloneReceiptRuleSetError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    "AlreadyExists" => {
-                        return RusotoError::Service(CloneReceiptRuleSetError::AlreadyExists(
-                            parsed_error.message,
-                        ))
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {
+                        "AlreadyExists" => {
+                            return RusotoError::Service(CloneReceiptRuleSetError::AlreadyExists(
+                                parsed_error.message,
+                            ))
+                        }
+                        "LimitExceeded" => {
+                            return RusotoError::Service(CloneReceiptRuleSetError::LimitExceeded(
+                                parsed_error.message,
+                            ))
+                        }
+                        "RuleSetDoesNotExist" => {
+                            return RusotoError::Service(
+                                CloneReceiptRuleSetError::RuleSetDoesNotExist(parsed_error.message),
+                            )
+                        }
+                        _ => {}
                     }
-                    "LimitExceeded" => {
-                        return RusotoError::Service(CloneReceiptRuleSetError::LimitExceeded(
-                            parsed_error.message,
-                        ))
-                    }
-                    "RuleSetDoesNotExist" => {
-                        return RusotoError::Service(CloneReceiptRuleSetError::RuleSetDoesNotExist(
-                            parsed_error.message,
-                        ))
-                    }
-                    _ => {}
                 }
             }
         }
@@ -7158,28 +7457,31 @@ impl CreateConfigurationSetError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    "ConfigurationSetAlreadyExists" => {
-                        return RusotoError::Service(
-                            CreateConfigurationSetError::ConfigurationSetAlreadyExists(
-                                parsed_error.message,
-                            ),
-                        )
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {
+                        "ConfigurationSetAlreadyExists" => {
+                            return RusotoError::Service(
+                                CreateConfigurationSetError::ConfigurationSetAlreadyExists(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "InvalidConfigurationSet" => {
+                            return RusotoError::Service(
+                                CreateConfigurationSetError::InvalidConfigurationSet(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "LimitExceeded" => {
+                            return RusotoError::Service(
+                                CreateConfigurationSetError::LimitExceeded(parsed_error.message),
+                            )
+                        }
+                        _ => {}
                     }
-                    "InvalidConfigurationSet" => {
-                        return RusotoError::Service(
-                            CreateConfigurationSetError::InvalidConfigurationSet(
-                                parsed_error.message,
-                            ),
-                        )
-                    }
-                    "LimitExceeded" => {
-                        return RusotoError::Service(CreateConfigurationSetError::LimitExceeded(
-                            parsed_error.message,
-                        ))
-                    }
-                    _ => {}
                 }
             }
         }
@@ -7234,45 +7536,12 @@ impl CreateConfigurationSetEventDestinationError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    "ConfigurationSetDoesNotExist" => return RusotoError::Service(
-                        CreateConfigurationSetEventDestinationError::ConfigurationSetDoesNotExist(
-                            parsed_error.message,
-                        ),
-                    ),
-                    "EventDestinationAlreadyExists" => return RusotoError::Service(
-                        CreateConfigurationSetEventDestinationError::EventDestinationAlreadyExists(
-                            parsed_error.message,
-                        ),
-                    ),
-                    "InvalidCloudWatchDestination" => return RusotoError::Service(
-                        CreateConfigurationSetEventDestinationError::InvalidCloudWatchDestination(
-                            parsed_error.message,
-                        ),
-                    ),
-                    "InvalidFirehoseDestination" => {
-                        return RusotoError::Service(
-                            CreateConfigurationSetEventDestinationError::InvalidFirehoseDestination(
-                                parsed_error.message,
-                            ),
-                        )
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {
+                        "ConfigurationSetDoesNotExist" => return RusotoError::Service(CreateConfigurationSetEventDestinationError::ConfigurationSetDoesNotExist(parsed_error.message)),"EventDestinationAlreadyExists" => return RusotoError::Service(CreateConfigurationSetEventDestinationError::EventDestinationAlreadyExists(parsed_error.message)),"InvalidCloudWatchDestination" => return RusotoError::Service(CreateConfigurationSetEventDestinationError::InvalidCloudWatchDestination(parsed_error.message)),"InvalidFirehoseDestination" => return RusotoError::Service(CreateConfigurationSetEventDestinationError::InvalidFirehoseDestination(parsed_error.message)),"InvalidSNSDestination" => return RusotoError::Service(CreateConfigurationSetEventDestinationError::InvalidSNSDestination(parsed_error.message)),"LimitExceeded" => return RusotoError::Service(CreateConfigurationSetEventDestinationError::LimitExceeded(parsed_error.message)),_ => {}
                     }
-                    "InvalidSNSDestination" => {
-                        return RusotoError::Service(
-                            CreateConfigurationSetEventDestinationError::InvalidSNSDestination(
-                                parsed_error.message,
-                            ),
-                        )
-                    }
-                    "LimitExceeded" => {
-                        return RusotoError::Service(
-                            CreateConfigurationSetEventDestinationError::LimitExceeded(
-                                parsed_error.message,
-                            ),
-                        )
-                    }
-                    _ => {}
                 }
             }
         }
@@ -7332,26 +7601,12 @@ impl CreateConfigurationSetTrackingOptionsError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    "ConfigurationSetDoesNotExist" => return RusotoError::Service(
-                        CreateConfigurationSetTrackingOptionsError::ConfigurationSetDoesNotExist(
-                            parsed_error.message,
-                        ),
-                    ),
-                    "InvalidTrackingOptions" => {
-                        return RusotoError::Service(
-                            CreateConfigurationSetTrackingOptionsError::InvalidTrackingOptions(
-                                parsed_error.message,
-                            ),
-                        )
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {
+                        "ConfigurationSetDoesNotExist" => return RusotoError::Service(CreateConfigurationSetTrackingOptionsError::ConfigurationSetDoesNotExist(parsed_error.message)),"InvalidTrackingOptions" => return RusotoError::Service(CreateConfigurationSetTrackingOptionsError::InvalidTrackingOptions(parsed_error.message)),"TrackingOptionsAlreadyExistsException" => return RusotoError::Service(CreateConfigurationSetTrackingOptionsError::TrackingOptionsAlreadyExists(parsed_error.message)),_ => {}
                     }
-                    "TrackingOptionsAlreadyExistsException" => return RusotoError::Service(
-                        CreateConfigurationSetTrackingOptionsError::TrackingOptionsAlreadyExists(
-                            parsed_error.message,
-                        ),
-                    ),
-                    _ => {}
                 }
             }
         }
@@ -7404,10 +7659,13 @@ impl CreateCustomVerificationEmailTemplateError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                                    "CustomVerificationEmailInvalidContent" => return RusotoError::Service(CreateCustomVerificationEmailTemplateError::CustomVerificationEmailInvalidContent(parsed_error.message)),"CustomVerificationEmailTemplateAlreadyExists" => return RusotoError::Service(CreateCustomVerificationEmailTemplateError::CustomVerificationEmailTemplateAlreadyExists(parsed_error.message)),"FromEmailAddressNotVerified" => return RusotoError::Service(CreateCustomVerificationEmailTemplateError::FromEmailAddressNotVerified(parsed_error.message)),"LimitExceeded" => return RusotoError::Service(CreateCustomVerificationEmailTemplateError::LimitExceeded(parsed_error.message)),_ => {}
-                                }
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {
+                        "CustomVerificationEmailInvalidContent" => return RusotoError::Service(CreateCustomVerificationEmailTemplateError::CustomVerificationEmailInvalidContent(parsed_error.message)),"CustomVerificationEmailTemplateAlreadyExists" => return RusotoError::Service(CreateCustomVerificationEmailTemplateError::CustomVerificationEmailTemplateAlreadyExists(parsed_error.message)),"FromEmailAddressNotVerified" => return RusotoError::Service(CreateCustomVerificationEmailTemplateError::FromEmailAddressNotVerified(parsed_error.message)),"LimitExceeded" => return RusotoError::Service(CreateCustomVerificationEmailTemplateError::LimitExceeded(parsed_error.message)),_ => {}
+                    }
+                }
             }
         }
         RusotoError::Unknown(res)
@@ -7448,19 +7706,22 @@ impl CreateReceiptFilterError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    "AlreadyExists" => {
-                        return RusotoError::Service(CreateReceiptFilterError::AlreadyExists(
-                            parsed_error.message,
-                        ))
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {
+                        "AlreadyExists" => {
+                            return RusotoError::Service(CreateReceiptFilterError::AlreadyExists(
+                                parsed_error.message,
+                            ))
+                        }
+                        "LimitExceeded" => {
+                            return RusotoError::Service(CreateReceiptFilterError::LimitExceeded(
+                                parsed_error.message,
+                            ))
+                        }
+                        _ => {}
                     }
-                    "LimitExceeded" => {
-                        return RusotoError::Service(CreateReceiptFilterError::LimitExceeded(
-                            parsed_error.message,
-                        ))
-                    }
-                    _ => {}
                 }
             }
         }
@@ -7510,44 +7771,49 @@ impl CreateReceiptRuleError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    "AlreadyExists" => {
-                        return RusotoError::Service(CreateReceiptRuleError::AlreadyExists(
-                            parsed_error.message,
-                        ))
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {
+                        "AlreadyExists" => {
+                            return RusotoError::Service(CreateReceiptRuleError::AlreadyExists(
+                                parsed_error.message,
+                            ))
+                        }
+                        "InvalidLambdaFunction" => {
+                            return RusotoError::Service(
+                                CreateReceiptRuleError::InvalidLambdaFunction(parsed_error.message),
+                            )
+                        }
+                        "InvalidS3Configuration" => {
+                            return RusotoError::Service(
+                                CreateReceiptRuleError::InvalidS3Configuration(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "InvalidSnsTopic" => {
+                            return RusotoError::Service(CreateReceiptRuleError::InvalidSnsTopic(
+                                parsed_error.message,
+                            ))
+                        }
+                        "LimitExceeded" => {
+                            return RusotoError::Service(CreateReceiptRuleError::LimitExceeded(
+                                parsed_error.message,
+                            ))
+                        }
+                        "RuleDoesNotExist" => {
+                            return RusotoError::Service(CreateReceiptRuleError::RuleDoesNotExist(
+                                parsed_error.message,
+                            ))
+                        }
+                        "RuleSetDoesNotExist" => {
+                            return RusotoError::Service(
+                                CreateReceiptRuleError::RuleSetDoesNotExist(parsed_error.message),
+                            )
+                        }
+                        _ => {}
                     }
-                    "InvalidLambdaFunction" => {
-                        return RusotoError::Service(CreateReceiptRuleError::InvalidLambdaFunction(
-                            parsed_error.message,
-                        ))
-                    }
-                    "InvalidS3Configuration" => {
-                        return RusotoError::Service(
-                            CreateReceiptRuleError::InvalidS3Configuration(parsed_error.message),
-                        )
-                    }
-                    "InvalidSnsTopic" => {
-                        return RusotoError::Service(CreateReceiptRuleError::InvalidSnsTopic(
-                            parsed_error.message,
-                        ))
-                    }
-                    "LimitExceeded" => {
-                        return RusotoError::Service(CreateReceiptRuleError::LimitExceeded(
-                            parsed_error.message,
-                        ))
-                    }
-                    "RuleDoesNotExist" => {
-                        return RusotoError::Service(CreateReceiptRuleError::RuleDoesNotExist(
-                            parsed_error.message,
-                        ))
-                    }
-                    "RuleSetDoesNotExist" => {
-                        return RusotoError::Service(CreateReceiptRuleError::RuleSetDoesNotExist(
-                            parsed_error.message,
-                        ))
-                    }
-                    _ => {}
                 }
             }
         }
@@ -7592,19 +7858,22 @@ impl CreateReceiptRuleSetError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    "AlreadyExists" => {
-                        return RusotoError::Service(CreateReceiptRuleSetError::AlreadyExists(
-                            parsed_error.message,
-                        ))
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {
+                        "AlreadyExists" => {
+                            return RusotoError::Service(CreateReceiptRuleSetError::AlreadyExists(
+                                parsed_error.message,
+                            ))
+                        }
+                        "LimitExceeded" => {
+                            return RusotoError::Service(CreateReceiptRuleSetError::LimitExceeded(
+                                parsed_error.message,
+                            ))
+                        }
+                        _ => {}
                     }
-                    "LimitExceeded" => {
-                        return RusotoError::Service(CreateReceiptRuleSetError::LimitExceeded(
-                            parsed_error.message,
-                        ))
-                    }
-                    _ => {}
                 }
             }
         }
@@ -7646,24 +7915,27 @@ impl CreateTemplateError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    "AlreadyExists" => {
-                        return RusotoError::Service(CreateTemplateError::AlreadyExists(
-                            parsed_error.message,
-                        ))
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {
+                        "AlreadyExists" => {
+                            return RusotoError::Service(CreateTemplateError::AlreadyExists(
+                                parsed_error.message,
+                            ))
+                        }
+                        "InvalidTemplate" => {
+                            return RusotoError::Service(CreateTemplateError::InvalidTemplate(
+                                parsed_error.message,
+                            ))
+                        }
+                        "LimitExceeded" => {
+                            return RusotoError::Service(CreateTemplateError::LimitExceeded(
+                                parsed_error.message,
+                            ))
+                        }
+                        _ => {}
                     }
-                    "InvalidTemplate" => {
-                        return RusotoError::Service(CreateTemplateError::InvalidTemplate(
-                            parsed_error.message,
-                        ))
-                    }
-                    "LimitExceeded" => {
-                        return RusotoError::Service(CreateTemplateError::LimitExceeded(
-                            parsed_error.message,
-                        ))
-                    }
-                    _ => {}
                 }
             }
         }
@@ -7702,16 +7974,19 @@ impl DeleteConfigurationSetError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    "ConfigurationSetDoesNotExist" => {
-                        return RusotoError::Service(
-                            DeleteConfigurationSetError::ConfigurationSetDoesNotExist(
-                                parsed_error.message,
-                            ),
-                        )
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {
+                        "ConfigurationSetDoesNotExist" => {
+                            return RusotoError::Service(
+                                DeleteConfigurationSetError::ConfigurationSetDoesNotExist(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        _ => {}
                     }
-                    _ => {}
                 }
             }
         }
@@ -7754,19 +8029,12 @@ impl DeleteConfigurationSetEventDestinationError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    "ConfigurationSetDoesNotExist" => return RusotoError::Service(
-                        DeleteConfigurationSetEventDestinationError::ConfigurationSetDoesNotExist(
-                            parsed_error.message,
-                        ),
-                    ),
-                    "EventDestinationDoesNotExist" => return RusotoError::Service(
-                        DeleteConfigurationSetEventDestinationError::EventDestinationDoesNotExist(
-                            parsed_error.message,
-                        ),
-                    ),
-                    _ => {}
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {
+                        "ConfigurationSetDoesNotExist" => return RusotoError::Service(DeleteConfigurationSetEventDestinationError::ConfigurationSetDoesNotExist(parsed_error.message)),"EventDestinationDoesNotExist" => return RusotoError::Service(DeleteConfigurationSetEventDestinationError::EventDestinationDoesNotExist(parsed_error.message)),_ => {}
+                    }
                 }
             }
         }
@@ -7812,21 +8080,12 @@ impl DeleteConfigurationSetTrackingOptionsError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    "ConfigurationSetDoesNotExist" => return RusotoError::Service(
-                        DeleteConfigurationSetTrackingOptionsError::ConfigurationSetDoesNotExist(
-                            parsed_error.message,
-                        ),
-                    ),
-                    "TrackingOptionsDoesNotExistException" => {
-                        return RusotoError::Service(
-                            DeleteConfigurationSetTrackingOptionsError::TrackingOptionsDoesNotExist(
-                                parsed_error.message,
-                            ),
-                        )
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {
+                        "ConfigurationSetDoesNotExist" => return RusotoError::Service(DeleteConfigurationSetTrackingOptionsError::ConfigurationSetDoesNotExist(parsed_error.message)),"TrackingOptionsDoesNotExistException" => return RusotoError::Service(DeleteConfigurationSetTrackingOptionsError::TrackingOptionsDoesNotExist(parsed_error.message)),_ => {}
                     }
-                    _ => {}
                 }
             }
         }
@@ -7867,11 +8126,7 @@ impl DeleteCustomVerificationEmailTemplateError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    _ => {}
-                }
-            }
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {}
         }
         RusotoError::Unknown(res)
     }
@@ -7901,11 +8156,7 @@ impl DeleteIdentityError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    _ => {}
-                }
-            }
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {}
         }
         RusotoError::Unknown(res)
     }
@@ -7935,11 +8186,7 @@ impl DeleteIdentityPolicyError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    _ => {}
-                }
-            }
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {}
         }
         RusotoError::Unknown(res)
     }
@@ -7969,11 +8216,7 @@ impl DeleteReceiptFilterError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    _ => {}
-                }
-            }
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {}
         }
         RusotoError::Unknown(res)
     }
@@ -8006,14 +8249,17 @@ impl DeleteReceiptRuleError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    "RuleSetDoesNotExist" => {
-                        return RusotoError::Service(DeleteReceiptRuleError::RuleSetDoesNotExist(
-                            parsed_error.message,
-                        ))
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {
+                        "RuleSetDoesNotExist" => {
+                            return RusotoError::Service(
+                                DeleteReceiptRuleError::RuleSetDoesNotExist(parsed_error.message),
+                            )
+                        }
+                        _ => {}
                     }
-                    _ => {}
                 }
             }
         }
@@ -8050,14 +8296,17 @@ impl DeleteReceiptRuleSetError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    "CannotDelete" => {
-                        return RusotoError::Service(DeleteReceiptRuleSetError::CannotDelete(
-                            parsed_error.message,
-                        ))
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {
+                        "CannotDelete" => {
+                            return RusotoError::Service(DeleteReceiptRuleSetError::CannotDelete(
+                                parsed_error.message,
+                            ))
+                        }
+                        _ => {}
                     }
-                    _ => {}
                 }
             }
         }
@@ -8091,11 +8340,7 @@ impl DeleteTemplateError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    _ => {}
-                }
-            }
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {}
         }
         RusotoError::Unknown(res)
     }
@@ -8127,11 +8372,7 @@ impl DeleteVerifiedEmailAddressError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    _ => {}
-                }
-            }
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {}
         }
         RusotoError::Unknown(res)
     }
@@ -8163,11 +8404,7 @@ impl DescribeActiveReceiptRuleSetError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    _ => {}
-                }
-            }
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {}
         }
         RusotoError::Unknown(res)
     }
@@ -8200,16 +8437,19 @@ impl DescribeConfigurationSetError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    "ConfigurationSetDoesNotExist" => {
-                        return RusotoError::Service(
-                            DescribeConfigurationSetError::ConfigurationSetDoesNotExist(
-                                parsed_error.message,
-                            ),
-                        )
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {
+                        "ConfigurationSetDoesNotExist" => {
+                            return RusotoError::Service(
+                                DescribeConfigurationSetError::ConfigurationSetDoesNotExist(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        _ => {}
                     }
-                    _ => {}
                 }
             }
         }
@@ -8250,19 +8490,22 @@ impl DescribeReceiptRuleError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    "RuleDoesNotExist" => {
-                        return RusotoError::Service(DescribeReceiptRuleError::RuleDoesNotExist(
-                            parsed_error.message,
-                        ))
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {
+                        "RuleDoesNotExist" => {
+                            return RusotoError::Service(
+                                DescribeReceiptRuleError::RuleDoesNotExist(parsed_error.message),
+                            )
+                        }
+                        "RuleSetDoesNotExist" => {
+                            return RusotoError::Service(
+                                DescribeReceiptRuleError::RuleSetDoesNotExist(parsed_error.message),
+                            )
+                        }
+                        _ => {}
                     }
-                    "RuleSetDoesNotExist" => {
-                        return RusotoError::Service(DescribeReceiptRuleError::RuleSetDoesNotExist(
-                            parsed_error.message,
-                        ))
-                    }
-                    _ => {}
                 }
             }
         }
@@ -8300,14 +8543,19 @@ impl DescribeReceiptRuleSetError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    "RuleSetDoesNotExist" => {
-                        return RusotoError::Service(
-                            DescribeReceiptRuleSetError::RuleSetDoesNotExist(parsed_error.message),
-                        )
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {
+                        "RuleSetDoesNotExist" => {
+                            return RusotoError::Service(
+                                DescribeReceiptRuleSetError::RuleSetDoesNotExist(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        _ => {}
                     }
-                    _ => {}
                 }
             }
         }
@@ -8341,11 +8589,7 @@ impl GetAccountSendingEnabledError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    _ => {}
-                }
-            }
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {}
         }
         RusotoError::Unknown(res)
     }
@@ -8380,10 +8624,13 @@ impl GetCustomVerificationEmailTemplateError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                                    "CustomVerificationEmailTemplateDoesNotExist" => return RusotoError::Service(GetCustomVerificationEmailTemplateError::CustomVerificationEmailTemplateDoesNotExist(parsed_error.message)),_ => {}
-                                }
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {
+                        "CustomVerificationEmailTemplateDoesNotExist" => return RusotoError::Service(GetCustomVerificationEmailTemplateError::CustomVerificationEmailTemplateDoesNotExist(parsed_error.message)),_ => {}
+                    }
+                }
             }
         }
         RusotoError::Unknown(res)
@@ -8416,11 +8663,7 @@ impl GetIdentityDkimAttributesError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    _ => {}
-                }
-            }
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {}
         }
         RusotoError::Unknown(res)
     }
@@ -8452,11 +8695,7 @@ impl GetIdentityMailFromDomainAttributesError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    _ => {}
-                }
-            }
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {}
         }
         RusotoError::Unknown(res)
     }
@@ -8488,11 +8727,7 @@ impl GetIdentityNotificationAttributesError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    _ => {}
-                }
-            }
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {}
         }
         RusotoError::Unknown(res)
     }
@@ -8522,11 +8757,7 @@ impl GetIdentityPoliciesError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    _ => {}
-                }
-            }
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {}
         }
         RusotoError::Unknown(res)
     }
@@ -8558,11 +8789,7 @@ impl GetIdentityVerificationAttributesError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    _ => {}
-                }
-            }
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {}
         }
         RusotoError::Unknown(res)
     }
@@ -8592,11 +8819,7 @@ impl GetSendQuotaError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    _ => {}
-                }
-            }
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {}
         }
         RusotoError::Unknown(res)
     }
@@ -8626,11 +8849,7 @@ impl GetSendStatisticsError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    _ => {}
-                }
-            }
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {}
         }
         RusotoError::Unknown(res)
     }
@@ -8663,14 +8882,17 @@ impl GetTemplateError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    "TemplateDoesNotExist" => {
-                        return RusotoError::Service(GetTemplateError::TemplateDoesNotExist(
-                            parsed_error.message,
-                        ))
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {
+                        "TemplateDoesNotExist" => {
+                            return RusotoError::Service(GetTemplateError::TemplateDoesNotExist(
+                                parsed_error.message,
+                            ))
+                        }
+                        _ => {}
                     }
-                    _ => {}
                 }
             }
         }
@@ -8704,11 +8926,7 @@ impl ListConfigurationSetsError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    _ => {}
-                }
-            }
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {}
         }
         RusotoError::Unknown(res)
     }
@@ -8740,11 +8958,7 @@ impl ListCustomVerificationEmailTemplatesError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    _ => {}
-                }
-            }
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {}
         }
         RusotoError::Unknown(res)
     }
@@ -8774,11 +8988,7 @@ impl ListIdentitiesError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    _ => {}
-                }
-            }
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {}
         }
         RusotoError::Unknown(res)
     }
@@ -8808,11 +9018,7 @@ impl ListIdentityPoliciesError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    _ => {}
-                }
-            }
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {}
         }
         RusotoError::Unknown(res)
     }
@@ -8842,11 +9048,7 @@ impl ListReceiptFiltersError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    _ => {}
-                }
-            }
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {}
         }
         RusotoError::Unknown(res)
     }
@@ -8876,11 +9078,7 @@ impl ListReceiptRuleSetsError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    _ => {}
-                }
-            }
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {}
         }
         RusotoError::Unknown(res)
     }
@@ -8910,11 +9108,7 @@ impl ListTemplatesError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    _ => {}
-                }
-            }
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {}
         }
         RusotoError::Unknown(res)
     }
@@ -8946,11 +9140,7 @@ impl ListVerifiedEmailAddressesError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    _ => {}
-                }
-            }
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {}
         }
         RusotoError::Unknown(res)
     }
@@ -8987,23 +9177,24 @@ impl PutConfigurationSetDeliveryOptionsError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    "ConfigurationSetDoesNotExist" => {
-                        return RusotoError::Service(
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {
+                        "ConfigurationSetDoesNotExist" => return RusotoError::Service(
                             PutConfigurationSetDeliveryOptionsError::ConfigurationSetDoesNotExist(
                                 parsed_error.message,
                             ),
-                        )
+                        ),
+                        "InvalidDeliveryOptions" => {
+                            return RusotoError::Service(
+                                PutConfigurationSetDeliveryOptionsError::InvalidDeliveryOptions(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        _ => {}
                     }
-                    "InvalidDeliveryOptions" => {
-                        return RusotoError::Service(
-                            PutConfigurationSetDeliveryOptionsError::InvalidDeliveryOptions(
-                                parsed_error.message,
-                            ),
-                        )
-                    }
-                    _ => {}
                 }
             }
         }
@@ -9045,14 +9236,17 @@ impl PutIdentityPolicyError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    "InvalidPolicy" => {
-                        return RusotoError::Service(PutIdentityPolicyError::InvalidPolicy(
-                            parsed_error.message,
-                        ))
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {
+                        "InvalidPolicy" => {
+                            return RusotoError::Service(PutIdentityPolicyError::InvalidPolicy(
+                                parsed_error.message,
+                            ))
+                        }
+                        _ => {}
                     }
-                    _ => {}
                 }
             }
         }
@@ -9091,19 +9285,24 @@ impl ReorderReceiptRuleSetError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    "RuleDoesNotExist" => {
-                        return RusotoError::Service(ReorderReceiptRuleSetError::RuleDoesNotExist(
-                            parsed_error.message,
-                        ))
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {
+                        "RuleDoesNotExist" => {
+                            return RusotoError::Service(
+                                ReorderReceiptRuleSetError::RuleDoesNotExist(parsed_error.message),
+                            )
+                        }
+                        "RuleSetDoesNotExist" => {
+                            return RusotoError::Service(
+                                ReorderReceiptRuleSetError::RuleSetDoesNotExist(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        _ => {}
                     }
-                    "RuleSetDoesNotExist" => {
-                        return RusotoError::Service(
-                            ReorderReceiptRuleSetError::RuleSetDoesNotExist(parsed_error.message),
-                        )
-                    }
-                    _ => {}
                 }
             }
         }
@@ -9141,14 +9340,17 @@ impl SendBounceError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    "MessageRejected" => {
-                        return RusotoError::Service(SendBounceError::MessageRejected(
-                            parsed_error.message,
-                        ))
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {
+                        "MessageRejected" => {
+                            return RusotoError::Service(SendBounceError::MessageRejected(
+                                parsed_error.message,
+                            ))
+                        }
+                        _ => {}
                     }
-                    _ => {}
                 }
             }
         }
@@ -9195,45 +9397,52 @@ impl SendBulkTemplatedEmailError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    "AccountSendingPausedException" => {
-                        return RusotoError::Service(
-                            SendBulkTemplatedEmailError::AccountSendingPaused(parsed_error.message),
-                        )
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {
+                        "AccountSendingPausedException" => {
+                            return RusotoError::Service(
+                                SendBulkTemplatedEmailError::AccountSendingPaused(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "ConfigurationSetDoesNotExist" => {
+                            return RusotoError::Service(
+                                SendBulkTemplatedEmailError::ConfigurationSetDoesNotExist(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "ConfigurationSetSendingPausedException" => {
+                            return RusotoError::Service(
+                                SendBulkTemplatedEmailError::ConfigurationSetSendingPaused(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "MailFromDomainNotVerifiedException" => {
+                            return RusotoError::Service(
+                                SendBulkTemplatedEmailError::MailFromDomainNotVerified(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "MessageRejected" => {
+                            return RusotoError::Service(
+                                SendBulkTemplatedEmailError::MessageRejected(parsed_error.message),
+                            )
+                        }
+                        "TemplateDoesNotExist" => {
+                            return RusotoError::Service(
+                                SendBulkTemplatedEmailError::TemplateDoesNotExist(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        _ => {}
                     }
-                    "ConfigurationSetDoesNotExist" => {
-                        return RusotoError::Service(
-                            SendBulkTemplatedEmailError::ConfigurationSetDoesNotExist(
-                                parsed_error.message,
-                            ),
-                        )
-                    }
-                    "ConfigurationSetSendingPausedException" => {
-                        return RusotoError::Service(
-                            SendBulkTemplatedEmailError::ConfigurationSetSendingPaused(
-                                parsed_error.message,
-                            ),
-                        )
-                    }
-                    "MailFromDomainNotVerifiedException" => {
-                        return RusotoError::Service(
-                            SendBulkTemplatedEmailError::MailFromDomainNotVerified(
-                                parsed_error.message,
-                            ),
-                        )
-                    }
-                    "MessageRejected" => {
-                        return RusotoError::Service(SendBulkTemplatedEmailError::MessageRejected(
-                            parsed_error.message,
-                        ))
-                    }
-                    "TemplateDoesNotExist" => {
-                        return RusotoError::Service(
-                            SendBulkTemplatedEmailError::TemplateDoesNotExist(parsed_error.message),
-                        )
-                    }
-                    _ => {}
                 }
             }
         }
@@ -9291,10 +9500,13 @@ impl SendCustomVerificationEmailError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                                    "ConfigurationSetDoesNotExist" => return RusotoError::Service(SendCustomVerificationEmailError::ConfigurationSetDoesNotExist(parsed_error.message)),"CustomVerificationEmailTemplateDoesNotExist" => return RusotoError::Service(SendCustomVerificationEmailError::CustomVerificationEmailTemplateDoesNotExist(parsed_error.message)),"FromEmailAddressNotVerified" => return RusotoError::Service(SendCustomVerificationEmailError::FromEmailAddressNotVerified(parsed_error.message)),"MessageRejected" => return RusotoError::Service(SendCustomVerificationEmailError::MessageRejected(parsed_error.message)),"ProductionAccessNotGranted" => return RusotoError::Service(SendCustomVerificationEmailError::ProductionAccessNotGranted(parsed_error.message)),_ => {}
-                                }
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {
+                        "ConfigurationSetDoesNotExist" => return RusotoError::Service(SendCustomVerificationEmailError::ConfigurationSetDoesNotExist(parsed_error.message)),"CustomVerificationEmailTemplateDoesNotExist" => return RusotoError::Service(SendCustomVerificationEmailError::CustomVerificationEmailTemplateDoesNotExist(parsed_error.message)),"FromEmailAddressNotVerified" => return RusotoError::Service(SendCustomVerificationEmailError::FromEmailAddressNotVerified(parsed_error.message)),"MessageRejected" => return RusotoError::Service(SendCustomVerificationEmailError::MessageRejected(parsed_error.message)),"ProductionAccessNotGranted" => return RusotoError::Service(SendCustomVerificationEmailError::ProductionAccessNotGranted(parsed_error.message)),_ => {}
+                    }
+                }
             }
         }
         RusotoError::Unknown(res)
@@ -9350,34 +9562,37 @@ impl SendEmailError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    "AccountSendingPausedException" => {
-                        return RusotoError::Service(SendEmailError::AccountSendingPaused(
-                            parsed_error.message,
-                        ))
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {
+                        "AccountSendingPausedException" => {
+                            return RusotoError::Service(SendEmailError::AccountSendingPaused(
+                                parsed_error.message,
+                            ))
+                        }
+                        "ConfigurationSetDoesNotExist" => {
+                            return RusotoError::Service(
+                                SendEmailError::ConfigurationSetDoesNotExist(parsed_error.message),
+                            )
+                        }
+                        "ConfigurationSetSendingPausedException" => {
+                            return RusotoError::Service(
+                                SendEmailError::ConfigurationSetSendingPaused(parsed_error.message),
+                            )
+                        }
+                        "MailFromDomainNotVerifiedException" => {
+                            return RusotoError::Service(SendEmailError::MailFromDomainNotVerified(
+                                parsed_error.message,
+                            ))
+                        }
+                        "MessageRejected" => {
+                            return RusotoError::Service(SendEmailError::MessageRejected(
+                                parsed_error.message,
+                            ))
+                        }
+                        _ => {}
                     }
-                    "ConfigurationSetDoesNotExist" => {
-                        return RusotoError::Service(SendEmailError::ConfigurationSetDoesNotExist(
-                            parsed_error.message,
-                        ))
-                    }
-                    "ConfigurationSetSendingPausedException" => {
-                        return RusotoError::Service(SendEmailError::ConfigurationSetSendingPaused(
-                            parsed_error.message,
-                        ))
-                    }
-                    "MailFromDomainNotVerifiedException" => {
-                        return RusotoError::Service(SendEmailError::MailFromDomainNotVerified(
-                            parsed_error.message,
-                        ))
-                    }
-                    "MessageRejected" => {
-                        return RusotoError::Service(SendEmailError::MessageRejected(
-                            parsed_error.message,
-                        ))
-                    }
-                    _ => {}
                 }
             }
         }
@@ -9426,34 +9641,41 @@ impl SendRawEmailError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    "AccountSendingPausedException" => {
-                        return RusotoError::Service(SendRawEmailError::AccountSendingPaused(
-                            parsed_error.message,
-                        ))
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {
+                        "AccountSendingPausedException" => {
+                            return RusotoError::Service(SendRawEmailError::AccountSendingPaused(
+                                parsed_error.message,
+                            ))
+                        }
+                        "ConfigurationSetDoesNotExist" => {
+                            return RusotoError::Service(
+                                SendRawEmailError::ConfigurationSetDoesNotExist(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "ConfigurationSetSendingPausedException" => {
+                            return RusotoError::Service(
+                                SendRawEmailError::ConfigurationSetSendingPaused(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "MailFromDomainNotVerifiedException" => {
+                            return RusotoError::Service(
+                                SendRawEmailError::MailFromDomainNotVerified(parsed_error.message),
+                            )
+                        }
+                        "MessageRejected" => {
+                            return RusotoError::Service(SendRawEmailError::MessageRejected(
+                                parsed_error.message,
+                            ))
+                        }
+                        _ => {}
                     }
-                    "ConfigurationSetDoesNotExist" => {
-                        return RusotoError::Service(
-                            SendRawEmailError::ConfigurationSetDoesNotExist(parsed_error.message),
-                        )
-                    }
-                    "ConfigurationSetSendingPausedException" => {
-                        return RusotoError::Service(
-                            SendRawEmailError::ConfigurationSetSendingPaused(parsed_error.message),
-                        )
-                    }
-                    "MailFromDomainNotVerifiedException" => {
-                        return RusotoError::Service(SendRawEmailError::MailFromDomainNotVerified(
-                            parsed_error.message,
-                        ))
-                    }
-                    "MessageRejected" => {
-                        return RusotoError::Service(SendRawEmailError::MessageRejected(
-                            parsed_error.message,
-                        ))
-                    }
-                    _ => {}
                 }
             }
         }
@@ -9504,45 +9726,48 @@ impl SendTemplatedEmailError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    "AccountSendingPausedException" => {
-                        return RusotoError::Service(SendTemplatedEmailError::AccountSendingPaused(
-                            parsed_error.message,
-                        ))
-                    }
-                    "ConfigurationSetDoesNotExist" => {
-                        return RusotoError::Service(
-                            SendTemplatedEmailError::ConfigurationSetDoesNotExist(
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {
+                        "AccountSendingPausedException" => {
+                            return RusotoError::Service(
+                                SendTemplatedEmailError::AccountSendingPaused(parsed_error.message),
+                            )
+                        }
+                        "ConfigurationSetDoesNotExist" => {
+                            return RusotoError::Service(
+                                SendTemplatedEmailError::ConfigurationSetDoesNotExist(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "ConfigurationSetSendingPausedException" => {
+                            return RusotoError::Service(
+                                SendTemplatedEmailError::ConfigurationSetSendingPaused(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "MailFromDomainNotVerifiedException" => {
+                            return RusotoError::Service(
+                                SendTemplatedEmailError::MailFromDomainNotVerified(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "MessageRejected" => {
+                            return RusotoError::Service(SendTemplatedEmailError::MessageRejected(
                                 parsed_error.message,
-                            ),
-                        )
+                            ))
+                        }
+                        "TemplateDoesNotExist" => {
+                            return RusotoError::Service(
+                                SendTemplatedEmailError::TemplateDoesNotExist(parsed_error.message),
+                            )
+                        }
+                        _ => {}
                     }
-                    "ConfigurationSetSendingPausedException" => {
-                        return RusotoError::Service(
-                            SendTemplatedEmailError::ConfigurationSetSendingPaused(
-                                parsed_error.message,
-                            ),
-                        )
-                    }
-                    "MailFromDomainNotVerifiedException" => {
-                        return RusotoError::Service(
-                            SendTemplatedEmailError::MailFromDomainNotVerified(
-                                parsed_error.message,
-                            ),
-                        )
-                    }
-                    "MessageRejected" => {
-                        return RusotoError::Service(SendTemplatedEmailError::MessageRejected(
-                            parsed_error.message,
-                        ))
-                    }
-                    "TemplateDoesNotExist" => {
-                        return RusotoError::Service(SendTemplatedEmailError::TemplateDoesNotExist(
-                            parsed_error.message,
-                        ))
-                    }
-                    _ => {}
                 }
             }
         }
@@ -9588,14 +9813,19 @@ impl SetActiveReceiptRuleSetError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    "RuleSetDoesNotExist" => {
-                        return RusotoError::Service(
-                            SetActiveReceiptRuleSetError::RuleSetDoesNotExist(parsed_error.message),
-                        )
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {
+                        "RuleSetDoesNotExist" => {
+                            return RusotoError::Service(
+                                SetActiveReceiptRuleSetError::RuleSetDoesNotExist(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        _ => {}
                     }
-                    _ => {}
                 }
             }
         }
@@ -9629,11 +9859,7 @@ impl SetIdentityDkimEnabledError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    _ => {}
-                }
-            }
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {}
         }
         RusotoError::Unknown(res)
     }
@@ -9665,11 +9891,7 @@ impl SetIdentityFeedbackForwardingEnabledError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    _ => {}
-                }
-            }
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {}
         }
         RusotoError::Unknown(res)
     }
@@ -9701,11 +9923,7 @@ impl SetIdentityHeadersInNotificationsEnabledError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    _ => {}
-                }
-            }
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {}
         }
         RusotoError::Unknown(res)
     }
@@ -9735,11 +9953,7 @@ impl SetIdentityMailFromDomainError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    _ => {}
-                }
-            }
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {}
         }
         RusotoError::Unknown(res)
     }
@@ -9771,11 +9985,7 @@ impl SetIdentityNotificationTopicError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    _ => {}
-                }
-            }
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {}
         }
         RusotoError::Unknown(res)
     }
@@ -9810,19 +10020,24 @@ impl SetReceiptRulePositionError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    "RuleDoesNotExist" => {
-                        return RusotoError::Service(SetReceiptRulePositionError::RuleDoesNotExist(
-                            parsed_error.message,
-                        ))
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {
+                        "RuleDoesNotExist" => {
+                            return RusotoError::Service(
+                                SetReceiptRulePositionError::RuleDoesNotExist(parsed_error.message),
+                            )
+                        }
+                        "RuleSetDoesNotExist" => {
+                            return RusotoError::Service(
+                                SetReceiptRulePositionError::RuleSetDoesNotExist(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        _ => {}
                     }
-                    "RuleSetDoesNotExist" => {
-                        return RusotoError::Service(
-                            SetReceiptRulePositionError::RuleSetDoesNotExist(parsed_error.message),
-                        )
-                    }
-                    _ => {}
                 }
             }
         }
@@ -9864,28 +10079,31 @@ impl TestRenderTemplateError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    "InvalidRenderingParameter" => {
-                        return RusotoError::Service(
-                            TestRenderTemplateError::InvalidRenderingParameter(
-                                parsed_error.message,
-                            ),
-                        )
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {
+                        "InvalidRenderingParameter" => {
+                            return RusotoError::Service(
+                                TestRenderTemplateError::InvalidRenderingParameter(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "MissingRenderingAttribute" => {
+                            return RusotoError::Service(
+                                TestRenderTemplateError::MissingRenderingAttribute(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "TemplateDoesNotExist" => {
+                            return RusotoError::Service(
+                                TestRenderTemplateError::TemplateDoesNotExist(parsed_error.message),
+                            )
+                        }
+                        _ => {}
                     }
-                    "MissingRenderingAttribute" => {
-                        return RusotoError::Service(
-                            TestRenderTemplateError::MissingRenderingAttribute(
-                                parsed_error.message,
-                            ),
-                        )
-                    }
-                    "TemplateDoesNotExist" => {
-                        return RusotoError::Service(TestRenderTemplateError::TemplateDoesNotExist(
-                            parsed_error.message,
-                        ))
-                    }
-                    _ => {}
                 }
             }
         }
@@ -9923,11 +10141,7 @@ impl UpdateAccountSendingEnabledError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    _ => {}
-                }
-            }
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {}
         }
         RusotoError::Unknown(res)
     }
@@ -9970,38 +10184,12 @@ impl UpdateConfigurationSetEventDestinationError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    "ConfigurationSetDoesNotExist" => return RusotoError::Service(
-                        UpdateConfigurationSetEventDestinationError::ConfigurationSetDoesNotExist(
-                            parsed_error.message,
-                        ),
-                    ),
-                    "EventDestinationDoesNotExist" => return RusotoError::Service(
-                        UpdateConfigurationSetEventDestinationError::EventDestinationDoesNotExist(
-                            parsed_error.message,
-                        ),
-                    ),
-                    "InvalidCloudWatchDestination" => return RusotoError::Service(
-                        UpdateConfigurationSetEventDestinationError::InvalidCloudWatchDestination(
-                            parsed_error.message,
-                        ),
-                    ),
-                    "InvalidFirehoseDestination" => {
-                        return RusotoError::Service(
-                            UpdateConfigurationSetEventDestinationError::InvalidFirehoseDestination(
-                                parsed_error.message,
-                            ),
-                        )
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {
+                        "ConfigurationSetDoesNotExist" => return RusotoError::Service(UpdateConfigurationSetEventDestinationError::ConfigurationSetDoesNotExist(parsed_error.message)),"EventDestinationDoesNotExist" => return RusotoError::Service(UpdateConfigurationSetEventDestinationError::EventDestinationDoesNotExist(parsed_error.message)),"InvalidCloudWatchDestination" => return RusotoError::Service(UpdateConfigurationSetEventDestinationError::InvalidCloudWatchDestination(parsed_error.message)),"InvalidFirehoseDestination" => return RusotoError::Service(UpdateConfigurationSetEventDestinationError::InvalidFirehoseDestination(parsed_error.message)),"InvalidSNSDestination" => return RusotoError::Service(UpdateConfigurationSetEventDestinationError::InvalidSNSDestination(parsed_error.message)),_ => {}
                     }
-                    "InvalidSNSDestination" => {
-                        return RusotoError::Service(
-                            UpdateConfigurationSetEventDestinationError::InvalidSNSDestination(
-                                parsed_error.message,
-                            ),
-                        )
-                    }
-                    _ => {}
                 }
             }
         }
@@ -10054,10 +10242,13 @@ impl UpdateConfigurationSetReputationMetricsEnabledError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                                    "ConfigurationSetDoesNotExist" => return RusotoError::Service(UpdateConfigurationSetReputationMetricsEnabledError::ConfigurationSetDoesNotExist(parsed_error.message)),_ => {}
-                                }
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {
+                        "ConfigurationSetDoesNotExist" => return RusotoError::Service(UpdateConfigurationSetReputationMetricsEnabledError::ConfigurationSetDoesNotExist(parsed_error.message)),_ => {}
+                    }
+                }
             }
         }
         RusotoError::Unknown(res)
@@ -10097,16 +10288,17 @@ impl UpdateConfigurationSetSendingEnabledError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    "ConfigurationSetDoesNotExist" => {
-                        return RusotoError::Service(
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {
+                        "ConfigurationSetDoesNotExist" => return RusotoError::Service(
                             UpdateConfigurationSetSendingEnabledError::ConfigurationSetDoesNotExist(
                                 parsed_error.message,
                             ),
-                        )
+                        ),
+                        _ => {}
                     }
-                    _ => {}
                 }
             }
         }
@@ -10151,28 +10343,12 @@ impl UpdateConfigurationSetTrackingOptionsError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    "ConfigurationSetDoesNotExist" => return RusotoError::Service(
-                        UpdateConfigurationSetTrackingOptionsError::ConfigurationSetDoesNotExist(
-                            parsed_error.message,
-                        ),
-                    ),
-                    "InvalidTrackingOptions" => {
-                        return RusotoError::Service(
-                            UpdateConfigurationSetTrackingOptionsError::InvalidTrackingOptions(
-                                parsed_error.message,
-                            ),
-                        )
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {
+                        "ConfigurationSetDoesNotExist" => return RusotoError::Service(UpdateConfigurationSetTrackingOptionsError::ConfigurationSetDoesNotExist(parsed_error.message)),"InvalidTrackingOptions" => return RusotoError::Service(UpdateConfigurationSetTrackingOptionsError::InvalidTrackingOptions(parsed_error.message)),"TrackingOptionsDoesNotExistException" => return RusotoError::Service(UpdateConfigurationSetTrackingOptionsError::TrackingOptionsDoesNotExist(parsed_error.message)),_ => {}
                     }
-                    "TrackingOptionsDoesNotExistException" => {
-                        return RusotoError::Service(
-                            UpdateConfigurationSetTrackingOptionsError::TrackingOptionsDoesNotExist(
-                                parsed_error.message,
-                            ),
-                        )
-                    }
-                    _ => {}
                 }
             }
         }
@@ -10223,10 +10399,13 @@ impl UpdateCustomVerificationEmailTemplateError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                                    "CustomVerificationEmailInvalidContent" => return RusotoError::Service(UpdateCustomVerificationEmailTemplateError::CustomVerificationEmailInvalidContent(parsed_error.message)),"CustomVerificationEmailTemplateDoesNotExist" => return RusotoError::Service(UpdateCustomVerificationEmailTemplateError::CustomVerificationEmailTemplateDoesNotExist(parsed_error.message)),"FromEmailAddressNotVerified" => return RusotoError::Service(UpdateCustomVerificationEmailTemplateError::FromEmailAddressNotVerified(parsed_error.message)),_ => {}
-                                }
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {
+                        "CustomVerificationEmailInvalidContent" => return RusotoError::Service(UpdateCustomVerificationEmailTemplateError::CustomVerificationEmailInvalidContent(parsed_error.message)),"CustomVerificationEmailTemplateDoesNotExist" => return RusotoError::Service(UpdateCustomVerificationEmailTemplateError::CustomVerificationEmailTemplateDoesNotExist(parsed_error.message)),"FromEmailAddressNotVerified" => return RusotoError::Service(UpdateCustomVerificationEmailTemplateError::FromEmailAddressNotVerified(parsed_error.message)),_ => {}
+                    }
+                }
             }
         }
         RusotoError::Unknown(res)
@@ -10274,39 +10453,44 @@ impl UpdateReceiptRuleError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    "InvalidLambdaFunction" => {
-                        return RusotoError::Service(UpdateReceiptRuleError::InvalidLambdaFunction(
-                            parsed_error.message,
-                        ))
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {
+                        "InvalidLambdaFunction" => {
+                            return RusotoError::Service(
+                                UpdateReceiptRuleError::InvalidLambdaFunction(parsed_error.message),
+                            )
+                        }
+                        "InvalidS3Configuration" => {
+                            return RusotoError::Service(
+                                UpdateReceiptRuleError::InvalidS3Configuration(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "InvalidSnsTopic" => {
+                            return RusotoError::Service(UpdateReceiptRuleError::InvalidSnsTopic(
+                                parsed_error.message,
+                            ))
+                        }
+                        "LimitExceeded" => {
+                            return RusotoError::Service(UpdateReceiptRuleError::LimitExceeded(
+                                parsed_error.message,
+                            ))
+                        }
+                        "RuleDoesNotExist" => {
+                            return RusotoError::Service(UpdateReceiptRuleError::RuleDoesNotExist(
+                                parsed_error.message,
+                            ))
+                        }
+                        "RuleSetDoesNotExist" => {
+                            return RusotoError::Service(
+                                UpdateReceiptRuleError::RuleSetDoesNotExist(parsed_error.message),
+                            )
+                        }
+                        _ => {}
                     }
-                    "InvalidS3Configuration" => {
-                        return RusotoError::Service(
-                            UpdateReceiptRuleError::InvalidS3Configuration(parsed_error.message),
-                        )
-                    }
-                    "InvalidSnsTopic" => {
-                        return RusotoError::Service(UpdateReceiptRuleError::InvalidSnsTopic(
-                            parsed_error.message,
-                        ))
-                    }
-                    "LimitExceeded" => {
-                        return RusotoError::Service(UpdateReceiptRuleError::LimitExceeded(
-                            parsed_error.message,
-                        ))
-                    }
-                    "RuleDoesNotExist" => {
-                        return RusotoError::Service(UpdateReceiptRuleError::RuleDoesNotExist(
-                            parsed_error.message,
-                        ))
-                    }
-                    "RuleSetDoesNotExist" => {
-                        return RusotoError::Service(UpdateReceiptRuleError::RuleSetDoesNotExist(
-                            parsed_error.message,
-                        ))
-                    }
-                    _ => {}
                 }
             }
         }
@@ -10350,19 +10534,22 @@ impl UpdateTemplateError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    "InvalidTemplate" => {
-                        return RusotoError::Service(UpdateTemplateError::InvalidTemplate(
-                            parsed_error.message,
-                        ))
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {
+                        "InvalidTemplate" => {
+                            return RusotoError::Service(UpdateTemplateError::InvalidTemplate(
+                                parsed_error.message,
+                            ))
+                        }
+                        "TemplateDoesNotExist" => {
+                            return RusotoError::Service(UpdateTemplateError::TemplateDoesNotExist(
+                                parsed_error.message,
+                            ))
+                        }
+                        _ => {}
                     }
-                    "TemplateDoesNotExist" => {
-                        return RusotoError::Service(UpdateTemplateError::TemplateDoesNotExist(
-                            parsed_error.message,
-                        ))
-                    }
-                    _ => {}
                 }
             }
         }
@@ -10397,11 +10584,7 @@ impl VerifyDomainDkimError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    _ => {}
-                }
-            }
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {}
         }
         RusotoError::Unknown(res)
     }
@@ -10431,11 +10614,7 @@ impl VerifyDomainIdentityError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    _ => {}
-                }
-            }
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {}
         }
         RusotoError::Unknown(res)
     }
@@ -10465,11 +10644,7 @@ impl VerifyEmailAddressError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    _ => {}
-                }
-            }
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {}
         }
         RusotoError::Unknown(res)
     }
@@ -10499,11 +10674,7 @@ impl VerifyEmailIdentityError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    _ => {}
-                }
-            }
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {}
         }
         RusotoError::Unknown(res)
     }

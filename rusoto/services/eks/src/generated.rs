@@ -24,7 +24,6 @@ use rusoto_core::proto;
 use rusoto_core::signature::SignedRequest;
 #[allow(unused_imports)]
 use serde::{Deserialize, Serialize};
-use serde_json;
 /// <p>An Amazon EKS add-on.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
@@ -1483,6 +1482,7 @@ pub enum CreateAddonError {
 impl CreateAddonError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateAddonError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ClientException" => {
                     return RusotoError::Service(CreateAddonError::Client(err.msg))
@@ -1545,6 +1545,7 @@ pub enum CreateClusterError {
 impl CreateClusterError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateClusterError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ClientException" => {
                     return RusotoError::Service(CreateClusterError::Client(err.msg))
@@ -1611,6 +1612,7 @@ pub enum CreateFargateProfileError {
 impl CreateFargateProfileError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateFargateProfileError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ClientException" => {
                     return RusotoError::Service(CreateFargateProfileError::Client(err.msg))
@@ -1681,6 +1683,7 @@ pub enum CreateNodegroupError {
 impl CreateNodegroupError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateNodegroupError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ClientException" => {
                     return RusotoError::Service(CreateNodegroupError::Client(err.msg))
@@ -1745,6 +1748,7 @@ pub enum DeleteAddonError {
 impl DeleteAddonError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteAddonError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ClientException" => {
                     return RusotoError::Service(DeleteAddonError::Client(err.msg))
@@ -1799,6 +1803,7 @@ pub enum DeleteClusterError {
 impl DeleteClusterError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteClusterError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ClientException" => {
                     return RusotoError::Service(DeleteClusterError::Client(err.msg))
@@ -1851,6 +1856,7 @@ pub enum DeleteFargateProfileError {
 impl DeleteFargateProfileError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteFargateProfileError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ClientException" => {
                     return RusotoError::Service(DeleteFargateProfileError::Client(err.msg))
@@ -1907,6 +1913,7 @@ pub enum DeleteNodegroupError {
 impl DeleteNodegroupError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteNodegroupError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ClientException" => {
                     return RusotoError::Service(DeleteNodegroupError::Client(err.msg))
@@ -1965,6 +1972,7 @@ pub enum DescribeAddonError {
 impl DescribeAddonError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeAddonError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ClientException" => {
                     return RusotoError::Service(DescribeAddonError::Client(err.msg))
@@ -2015,6 +2023,7 @@ pub enum DescribeAddonVersionsError {
 impl DescribeAddonVersionsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeAddonVersionsError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidParameterException" => {
                     return RusotoError::Service(DescribeAddonVersionsError::InvalidParameter(
@@ -2063,6 +2072,7 @@ pub enum DescribeClusterError {
 impl DescribeClusterError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeClusterError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ClientException" => {
                     return RusotoError::Service(DescribeClusterError::Client(err.msg))
@@ -2111,6 +2121,7 @@ pub enum DescribeFargateProfileError {
 impl DescribeFargateProfileError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeFargateProfileError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ClientException" => {
                     return RusotoError::Service(DescribeFargateProfileError::Client(err.msg))
@@ -2165,6 +2176,7 @@ pub enum DescribeNodegroupError {
 impl DescribeNodegroupError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeNodegroupError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ClientException" => {
                     return RusotoError::Service(DescribeNodegroupError::Client(err.msg))
@@ -2219,6 +2231,7 @@ pub enum DescribeUpdateError {
 impl DescribeUpdateError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeUpdateError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ClientException" => {
                     return RusotoError::Service(DescribeUpdateError::Client(err.msg))
@@ -2269,6 +2282,7 @@ pub enum ListAddonsError {
 impl ListAddonsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListAddonsError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ClientException" => return RusotoError::Service(ListAddonsError::Client(err.msg)),
                 "InvalidParameterException" => {
@@ -2317,6 +2331,7 @@ pub enum ListClustersError {
 impl ListClustersError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListClustersError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ClientException" => {
                     return RusotoError::Service(ListClustersError::Client(err.msg))
@@ -2365,6 +2380,7 @@ pub enum ListFargateProfilesError {
 impl ListFargateProfilesError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListFargateProfilesError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ClientException" => {
                     return RusotoError::Service(ListFargateProfilesError::Client(err.msg))
@@ -2419,6 +2435,7 @@ pub enum ListNodegroupsError {
 impl ListNodegroupsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListNodegroupsError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ClientException" => {
                     return RusotoError::Service(ListNodegroupsError::Client(err.msg))
@@ -2467,6 +2484,7 @@ pub enum ListTagsForResourceError {
 impl ListTagsForResourceError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListTagsForResourceError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(ListTagsForResourceError::BadRequest(err.msg))
@@ -2507,6 +2525,7 @@ pub enum ListUpdatesError {
 impl ListUpdatesError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListUpdatesError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ClientException" => {
                     return RusotoError::Service(ListUpdatesError::Client(err.msg))
@@ -2551,6 +2570,7 @@ pub enum TagResourceError {
 impl TagResourceError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<TagResourceError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(TagResourceError::BadRequest(err.msg))
@@ -2587,6 +2607,7 @@ pub enum UntagResourceError {
 impl UntagResourceError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UntagResourceError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(UntagResourceError::BadRequest(err.msg))
@@ -2631,6 +2652,7 @@ pub enum UpdateAddonError {
 impl UpdateAddonError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateAddonError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ClientException" => {
                     return RusotoError::Service(UpdateAddonError::Client(err.msg))
@@ -2691,6 +2713,7 @@ pub enum UpdateClusterConfigError {
 impl UpdateClusterConfigError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateClusterConfigError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ClientException" => {
                     return RusotoError::Service(UpdateClusterConfigError::Client(err.msg))
@@ -2755,6 +2778,7 @@ pub enum UpdateClusterVersionError {
 impl UpdateClusterVersionError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateClusterVersionError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ClientException" => {
                     return RusotoError::Service(UpdateClusterVersionError::Client(err.msg))
@@ -2819,6 +2843,7 @@ pub enum UpdateNodegroupConfigError {
 impl UpdateNodegroupConfigError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateNodegroupConfigError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ClientException" => {
                     return RusotoError::Service(UpdateNodegroupConfigError::Client(err.msg))
@@ -2885,6 +2910,7 @@ pub enum UpdateNodegroupVersionError {
 impl UpdateNodegroupVersionError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateNodegroupVersionError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ClientException" => {
                     return RusotoError::Service(UpdateNodegroupVersionError::Client(err.msg))
@@ -3144,6 +3170,7 @@ impl Eks for EksClient {
         &self,
         input: CreateAddonRequest,
     ) -> Result<CreateAddonResponse, RusotoError<CreateAddonError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!("/clusters/{name}/addons", name = input.cluster_name);
 
         let mut request = SignedRequest::new("POST", "eks", &self.region, &request_uri);
@@ -3175,6 +3202,7 @@ impl Eks for EksClient {
         &self,
         input: CreateClusterRequest,
     ) -> Result<CreateClusterResponse, RusotoError<CreateClusterError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/clusters";
 
         let mut request = SignedRequest::new("POST", "eks", &self.region, &request_uri);
@@ -3206,6 +3234,7 @@ impl Eks for EksClient {
         &self,
         input: CreateFargateProfileRequest,
     ) -> Result<CreateFargateProfileResponse, RusotoError<CreateFargateProfileError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/clusters/{name}/fargate-profiles",
             name = input.cluster_name
@@ -3240,6 +3269,7 @@ impl Eks for EksClient {
         &self,
         input: CreateNodegroupRequest,
     ) -> Result<CreateNodegroupResponse, RusotoError<CreateNodegroupError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!("/clusters/{name}/node-groups", name = input.cluster_name);
 
         let mut request = SignedRequest::new("POST", "eks", &self.region, &request_uri);
@@ -3271,6 +3301,7 @@ impl Eks for EksClient {
         &self,
         input: DeleteAddonRequest,
     ) -> Result<DeleteAddonResponse, RusotoError<DeleteAddonError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/clusters/{name}/addons/{addon_name}",
             addon_name = input.addon_name,
@@ -3303,6 +3334,7 @@ impl Eks for EksClient {
         &self,
         input: DeleteClusterRequest,
     ) -> Result<DeleteClusterResponse, RusotoError<DeleteClusterError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!("/clusters/{name}", name = input.name);
 
         let mut request = SignedRequest::new("DELETE", "eks", &self.region, &request_uri);
@@ -3331,6 +3363,7 @@ impl Eks for EksClient {
         &self,
         input: DeleteFargateProfileRequest,
     ) -> Result<DeleteFargateProfileResponse, RusotoError<DeleteFargateProfileError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/clusters/{name}/fargate-profiles/{fargate_profile_name}",
             name = input.cluster_name,
@@ -3363,6 +3396,7 @@ impl Eks for EksClient {
         &self,
         input: DeleteNodegroupRequest,
     ) -> Result<DeleteNodegroupResponse, RusotoError<DeleteNodegroupError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/clusters/{name}/node-groups/{nodegroup_name}",
             name = input.cluster_name,
@@ -3395,6 +3429,7 @@ impl Eks for EksClient {
         &self,
         input: DescribeAddonRequest,
     ) -> Result<DescribeAddonResponse, RusotoError<DescribeAddonError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/clusters/{name}/addons/{addon_name}",
             addon_name = input.addon_name,
@@ -3427,6 +3462,7 @@ impl Eks for EksClient {
         &self,
         input: DescribeAddonVersionsRequest,
     ) -> Result<DescribeAddonVersionsResponse, RusotoError<DescribeAddonVersionsError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/addons/supported-versions";
 
         let mut request = SignedRequest::new("GET", "eks", &self.region, &request_uri);
@@ -3470,6 +3506,7 @@ impl Eks for EksClient {
         &self,
         input: DescribeClusterRequest,
     ) -> Result<DescribeClusterResponse, RusotoError<DescribeClusterError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!("/clusters/{name}", name = input.name);
 
         let mut request = SignedRequest::new("GET", "eks", &self.region, &request_uri);
@@ -3498,6 +3535,7 @@ impl Eks for EksClient {
         &self,
         input: DescribeFargateProfileRequest,
     ) -> Result<DescribeFargateProfileResponse, RusotoError<DescribeFargateProfileError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/clusters/{name}/fargate-profiles/{fargate_profile_name}",
             name = input.cluster_name,
@@ -3530,6 +3568,7 @@ impl Eks for EksClient {
         &self,
         input: DescribeNodegroupRequest,
     ) -> Result<DescribeNodegroupResponse, RusotoError<DescribeNodegroupError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/clusters/{name}/node-groups/{nodegroup_name}",
             name = input.cluster_name,
@@ -3562,6 +3601,7 @@ impl Eks for EksClient {
         &self,
         input: DescribeUpdateRequest,
     ) -> Result<DescribeUpdateResponse, RusotoError<DescribeUpdateError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/clusters/{name}/updates/{update_id}",
             name = input.name,
@@ -3603,6 +3643,7 @@ impl Eks for EksClient {
         &self,
         input: ListAddonsRequest,
     ) -> Result<ListAddonsResponse, RusotoError<ListAddonsError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!("/clusters/{name}/addons", name = input.cluster_name);
 
         let mut request = SignedRequest::new("GET", "eks", &self.region, &request_uri);
@@ -3640,6 +3681,7 @@ impl Eks for EksClient {
         &self,
         input: ListClustersRequest,
     ) -> Result<ListClustersResponse, RusotoError<ListClustersError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/clusters";
 
         let mut request = SignedRequest::new("GET", "eks", &self.region, &request_uri);
@@ -3677,6 +3719,7 @@ impl Eks for EksClient {
         &self,
         input: ListFargateProfilesRequest,
     ) -> Result<ListFargateProfilesResponse, RusotoError<ListFargateProfilesError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/clusters/{name}/fargate-profiles",
             name = input.cluster_name
@@ -3717,6 +3760,7 @@ impl Eks for EksClient {
         &self,
         input: ListNodegroupsRequest,
     ) -> Result<ListNodegroupsResponse, RusotoError<ListNodegroupsError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!("/clusters/{name}/node-groups", name = input.cluster_name);
 
         let mut request = SignedRequest::new("GET", "eks", &self.region, &request_uri);
@@ -3754,6 +3798,7 @@ impl Eks for EksClient {
         &self,
         input: ListTagsForResourceRequest,
     ) -> Result<ListTagsForResourceResponse, RusotoError<ListTagsForResourceError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!("/tags/{resource_arn}", resource_arn = input.resource_arn);
 
         let mut request = SignedRequest::new("GET", "eks", &self.region, &request_uri);
@@ -3782,6 +3827,7 @@ impl Eks for EksClient {
         &self,
         input: ListUpdatesRequest,
     ) -> Result<ListUpdatesResponse, RusotoError<ListUpdatesError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!("/clusters/{name}/updates", name = input.name);
 
         let mut request = SignedRequest::new("GET", "eks", &self.region, &request_uri);
@@ -3825,6 +3871,7 @@ impl Eks for EksClient {
         &self,
         input: TagResourceRequest,
     ) -> Result<TagResourceResponse, RusotoError<TagResourceError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!("/tags/{resource_arn}", resource_arn = input.resource_arn);
 
         let mut request = SignedRequest::new("POST", "eks", &self.region, &request_uri);
@@ -3856,6 +3903,7 @@ impl Eks for EksClient {
         &self,
         input: UntagResourceRequest,
     ) -> Result<UntagResourceResponse, RusotoError<UntagResourceError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!("/tags/{resource_arn}", resource_arn = input.resource_arn);
 
         let mut request = SignedRequest::new("DELETE", "eks", &self.region, &request_uri);
@@ -3890,6 +3938,7 @@ impl Eks for EksClient {
         &self,
         input: UpdateAddonRequest,
     ) -> Result<UpdateAddonResponse, RusotoError<UpdateAddonError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/clusters/{name}/addons/{addon_name}/update",
             addon_name = input.addon_name,
@@ -3925,6 +3974,7 @@ impl Eks for EksClient {
         &self,
         input: UpdateClusterConfigRequest,
     ) -> Result<UpdateClusterConfigResponse, RusotoError<UpdateClusterConfigError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!("/clusters/{name}/update-config", name = input.name);
 
         let mut request = SignedRequest::new("POST", "eks", &self.region, &request_uri);
@@ -3956,6 +4006,7 @@ impl Eks for EksClient {
         &self,
         input: UpdateClusterVersionRequest,
     ) -> Result<UpdateClusterVersionResponse, RusotoError<UpdateClusterVersionError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!("/clusters/{name}/updates", name = input.name);
 
         let mut request = SignedRequest::new("POST", "eks", &self.region, &request_uri);
@@ -3987,6 +4038,7 @@ impl Eks for EksClient {
         &self,
         input: UpdateNodegroupConfigRequest,
     ) -> Result<UpdateNodegroupConfigResponse, RusotoError<UpdateNodegroupConfigError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/clusters/{name}/node-groups/{nodegroup_name}/update-config",
             name = input.cluster_name,
@@ -4022,6 +4074,7 @@ impl Eks for EksClient {
         &self,
         input: UpdateNodegroupVersionRequest,
     ) -> Result<UpdateNodegroupVersionResponse, RusotoError<UpdateNodegroupVersionError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/clusters/{name}/node-groups/{nodegroup_name}/update-version",
             name = input.cluster_name,

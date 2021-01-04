@@ -24,7 +24,6 @@ use rusoto_core::proto;
 use rusoto_core::signature::SignedRequest;
 #[allow(unused_imports)]
 use serde::{Deserialize, Serialize};
-use serde_json;
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateOutpostInput {
@@ -297,6 +296,7 @@ pub enum CreateOutpostError {
 impl CreateOutpostError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateOutpostError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(CreateOutpostError::AccessDenied(err.msg))
@@ -343,6 +343,7 @@ pub enum DeleteOutpostError {
 impl DeleteOutpostError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteOutpostError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(DeleteOutpostError::AccessDenied(err.msg))
@@ -385,6 +386,7 @@ pub enum DeleteSiteError {
 impl DeleteSiteError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteSiteError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(DeleteSiteError::AccessDenied(err.msg))
@@ -427,6 +429,7 @@ pub enum GetOutpostError {
 impl GetOutpostError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetOutpostError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(GetOutpostError::AccessDenied(err.msg))
@@ -469,6 +472,7 @@ pub enum GetOutpostInstanceTypesError {
 impl GetOutpostInstanceTypesError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetOutpostInstanceTypesError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(GetOutpostInstanceTypesError::AccessDenied(
@@ -513,6 +517,7 @@ pub enum ListOutpostsError {
 impl ListOutpostsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListOutpostsError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(ListOutpostsError::AccessDenied(err.msg))
@@ -549,6 +554,7 @@ pub enum ListSitesError {
 impl ListSitesError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListSitesError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(ListSitesError::AccessDenied(err.msg))
@@ -585,6 +591,7 @@ pub enum ListTagsForResourceError {
 impl ListTagsForResourceError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListTagsForResourceError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalServerException" => {
                     return RusotoError::Service(ListTagsForResourceError::InternalServer(err.msg))
@@ -621,6 +628,7 @@ pub enum TagResourceError {
 impl TagResourceError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<TagResourceError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalServerException" => {
                     return RusotoError::Service(TagResourceError::InternalServer(err.msg))
@@ -657,6 +665,7 @@ pub enum UntagResourceError {
 impl UntagResourceError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UntagResourceError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalServerException" => {
                     return RusotoError::Service(UntagResourceError::InternalServer(err.msg))
@@ -790,6 +799,7 @@ impl Outposts for OutpostsClient {
         &self,
         input: CreateOutpostInput,
     ) -> Result<CreateOutpostOutput, RusotoError<CreateOutpostError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/outposts";
 
         let mut request = SignedRequest::new("POST", "outposts", &self.region, &request_uri);
@@ -821,6 +831,7 @@ impl Outposts for OutpostsClient {
         &self,
         input: DeleteOutpostInput,
     ) -> Result<DeleteOutpostOutput, RusotoError<DeleteOutpostError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!("/outposts/{outpost_id}", outpost_id = input.outpost_id);
 
         let mut request = SignedRequest::new("DELETE", "outposts", &self.region, &request_uri);
@@ -849,6 +860,7 @@ impl Outposts for OutpostsClient {
         &self,
         input: DeleteSiteInput,
     ) -> Result<DeleteSiteOutput, RusotoError<DeleteSiteError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!("/sites/{site_id}", site_id = input.site_id);
 
         let mut request = SignedRequest::new("DELETE", "outposts", &self.region, &request_uri);
@@ -877,6 +889,7 @@ impl Outposts for OutpostsClient {
         &self,
         input: GetOutpostInput,
     ) -> Result<GetOutpostOutput, RusotoError<GetOutpostError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!("/outposts/{outpost_id}", outpost_id = input.outpost_id);
 
         let mut request = SignedRequest::new("GET", "outposts", &self.region, &request_uri);
@@ -905,6 +918,7 @@ impl Outposts for OutpostsClient {
         &self,
         input: GetOutpostInstanceTypesInput,
     ) -> Result<GetOutpostInstanceTypesOutput, RusotoError<GetOutpostInstanceTypesError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/outposts/{outpost_id}/instanceTypes",
             outpost_id = input.outpost_id
@@ -945,6 +959,7 @@ impl Outposts for OutpostsClient {
         &self,
         input: ListOutpostsInput,
     ) -> Result<ListOutpostsOutput, RusotoError<ListOutpostsError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/outposts";
 
         let mut request = SignedRequest::new("GET", "outposts", &self.region, &request_uri);
@@ -982,6 +997,7 @@ impl Outposts for OutpostsClient {
         &self,
         input: ListSitesInput,
     ) -> Result<ListSitesOutput, RusotoError<ListSitesError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/sites";
 
         let mut request = SignedRequest::new("GET", "outposts", &self.region, &request_uri);
@@ -1019,6 +1035,7 @@ impl Outposts for OutpostsClient {
         &self,
         input: ListTagsForResourceRequest,
     ) -> Result<ListTagsForResourceResponse, RusotoError<ListTagsForResourceError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!("/tags/{resource_arn}", resource_arn = input.resource_arn);
 
         let mut request = SignedRequest::new("GET", "outposts", &self.region, &request_uri);
@@ -1047,6 +1064,7 @@ impl Outposts for OutpostsClient {
         &self,
         input: TagResourceRequest,
     ) -> Result<TagResourceResponse, RusotoError<TagResourceError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!("/tags/{resource_arn}", resource_arn = input.resource_arn);
 
         let mut request = SignedRequest::new("POST", "outposts", &self.region, &request_uri);
@@ -1078,6 +1096,7 @@ impl Outposts for OutpostsClient {
         &self,
         input: UntagResourceRequest,
     ) -> Result<UntagResourceResponse, RusotoError<UntagResourceError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!("/tags/{resource_arn}", resource_arn = input.resource_arn);
 
         let mut request = SignedRequest::new("DELETE", "outposts", &self.region, &request_uri);

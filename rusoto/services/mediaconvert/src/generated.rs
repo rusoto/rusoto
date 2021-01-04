@@ -24,7 +24,6 @@ use rusoto_core::proto;
 use rusoto_core::signature::SignedRequest;
 #[allow(unused_imports)]
 use serde::{Deserialize, Serialize};
-use serde_json;
 /// <p>Required when you set (Codec) under (AudioDescriptions)&gt;(CodecSettings) to the value AAC. The service accepts one of two mutually exclusive groups of AAC settings--VBR and CBR. To select one of these modes, set the value of Bitrate control mode (rateControlMode) to &quot;VBR&quot; or &quot;CBR&quot;.  In VBR mode, you control the audio quality with the setting VBR quality (vbrQuality). In CBR mode, you use the setting Bitrate (bitrate). Defaults and valid values depend on the rate control mode.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct AacSettings {
@@ -5128,6 +5127,7 @@ pub enum AssociateCertificateError {
 impl AssociateCertificateError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<AssociateCertificateError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(AssociateCertificateError::BadRequest(err.msg))
@@ -5192,6 +5192,7 @@ pub enum CancelJobError {
 impl CancelJobError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CancelJobError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(CancelJobError::BadRequest(err.msg))
@@ -5252,6 +5253,7 @@ pub enum CreateJobError {
 impl CreateJobError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateJobError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(CreateJobError::BadRequest(err.msg))
@@ -5312,6 +5314,7 @@ pub enum CreateJobTemplateError {
 impl CreateJobTemplateError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateJobTemplateError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(CreateJobTemplateError::BadRequest(err.msg))
@@ -5374,6 +5377,7 @@ pub enum CreatePresetError {
 impl CreatePresetError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreatePresetError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(CreatePresetError::BadRequest(err.msg))
@@ -5434,6 +5438,7 @@ pub enum CreateQueueError {
 impl CreateQueueError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateQueueError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(CreateQueueError::BadRequest(err.msg))
@@ -5494,6 +5499,7 @@ pub enum DeleteJobTemplateError {
 impl DeleteJobTemplateError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteJobTemplateError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(DeleteJobTemplateError::BadRequest(err.msg))
@@ -5556,6 +5562,7 @@ pub enum DeletePresetError {
 impl DeletePresetError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeletePresetError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(DeletePresetError::BadRequest(err.msg))
@@ -5616,6 +5623,7 @@ pub enum DeleteQueueError {
 impl DeleteQueueError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteQueueError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(DeleteQueueError::BadRequest(err.msg))
@@ -5676,6 +5684,7 @@ pub enum DescribeEndpointsError {
 impl DescribeEndpointsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeEndpointsError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(DescribeEndpointsError::BadRequest(err.msg))
@@ -5738,6 +5747,7 @@ pub enum DisassociateCertificateError {
 impl DisassociateCertificateError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DisassociateCertificateError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(DisassociateCertificateError::BadRequest(err.msg))
@@ -5802,6 +5812,7 @@ pub enum GetJobError {
 impl GetJobError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetJobError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(GetJobError::BadRequest(err.msg))
@@ -5858,6 +5869,7 @@ pub enum GetJobTemplateError {
 impl GetJobTemplateError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetJobTemplateError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(GetJobTemplateError::BadRequest(err.msg))
@@ -5918,6 +5930,7 @@ pub enum GetPresetError {
 impl GetPresetError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetPresetError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(GetPresetError::BadRequest(err.msg))
@@ -5978,6 +5991,7 @@ pub enum GetQueueError {
 impl GetQueueError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetQueueError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(GetQueueError::BadRequest(err.msg))
@@ -6038,6 +6052,7 @@ pub enum ListJobTemplatesError {
 impl ListJobTemplatesError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListJobTemplatesError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(ListJobTemplatesError::BadRequest(err.msg))
@@ -6100,6 +6115,7 @@ pub enum ListJobsError {
 impl ListJobsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListJobsError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(ListJobsError::BadRequest(err.msg))
@@ -6160,6 +6176,7 @@ pub enum ListPresetsError {
 impl ListPresetsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListPresetsError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(ListPresetsError::BadRequest(err.msg))
@@ -6220,6 +6237,7 @@ pub enum ListQueuesError {
 impl ListQueuesError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListQueuesError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(ListQueuesError::BadRequest(err.msg))
@@ -6280,6 +6298,7 @@ pub enum ListTagsForResourceError {
 impl ListTagsForResourceError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListTagsForResourceError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(ListTagsForResourceError::BadRequest(err.msg))
@@ -6342,6 +6361,7 @@ pub enum TagResourceError {
 impl TagResourceError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<TagResourceError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(TagResourceError::BadRequest(err.msg))
@@ -6402,6 +6422,7 @@ pub enum UntagResourceError {
 impl UntagResourceError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UntagResourceError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(UntagResourceError::BadRequest(err.msg))
@@ -6462,6 +6483,7 @@ pub enum UpdateJobTemplateError {
 impl UpdateJobTemplateError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateJobTemplateError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(UpdateJobTemplateError::BadRequest(err.msg))
@@ -6524,6 +6546,7 @@ pub enum UpdatePresetError {
 impl UpdatePresetError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdatePresetError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(UpdatePresetError::BadRequest(err.msg))
@@ -6584,6 +6607,7 @@ pub enum UpdateQueueError {
 impl UpdateQueueError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateQueueError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(UpdateQueueError::BadRequest(err.msg))
@@ -6823,6 +6847,7 @@ impl MediaConvert for MediaConvertClient {
         &self,
         input: AssociateCertificateRequest,
     ) -> Result<AssociateCertificateResponse, RusotoError<AssociateCertificateError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/2017-08-29/certificates";
 
         let mut request = SignedRequest::new("POST", "mediaconvert", &self.region, &request_uri);
@@ -6854,6 +6879,7 @@ impl MediaConvert for MediaConvertClient {
         &self,
         input: CancelJobRequest,
     ) -> Result<CancelJobResponse, RusotoError<CancelJobError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!("/2017-08-29/jobs/{id}", id = input.id);
 
         let mut request = SignedRequest::new("DELETE", "mediaconvert", &self.region, &request_uri);
@@ -6882,6 +6908,7 @@ impl MediaConvert for MediaConvertClient {
         &self,
         input: CreateJobRequest,
     ) -> Result<CreateJobResponse, RusotoError<CreateJobError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/2017-08-29/jobs";
 
         let mut request = SignedRequest::new("POST", "mediaconvert", &self.region, &request_uri);
@@ -6913,6 +6940,7 @@ impl MediaConvert for MediaConvertClient {
         &self,
         input: CreateJobTemplateRequest,
     ) -> Result<CreateJobTemplateResponse, RusotoError<CreateJobTemplateError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/2017-08-29/jobTemplates";
 
         let mut request = SignedRequest::new("POST", "mediaconvert", &self.region, &request_uri);
@@ -6944,6 +6972,7 @@ impl MediaConvert for MediaConvertClient {
         &self,
         input: CreatePresetRequest,
     ) -> Result<CreatePresetResponse, RusotoError<CreatePresetError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/2017-08-29/presets";
 
         let mut request = SignedRequest::new("POST", "mediaconvert", &self.region, &request_uri);
@@ -6975,6 +7004,7 @@ impl MediaConvert for MediaConvertClient {
         &self,
         input: CreateQueueRequest,
     ) -> Result<CreateQueueResponse, RusotoError<CreateQueueError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/2017-08-29/queues";
 
         let mut request = SignedRequest::new("POST", "mediaconvert", &self.region, &request_uri);
@@ -7006,6 +7036,7 @@ impl MediaConvert for MediaConvertClient {
         &self,
         input: DeleteJobTemplateRequest,
     ) -> Result<DeleteJobTemplateResponse, RusotoError<DeleteJobTemplateError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!("/2017-08-29/jobTemplates/{name}", name = input.name);
 
         let mut request = SignedRequest::new("DELETE", "mediaconvert", &self.region, &request_uri);
@@ -7034,6 +7065,7 @@ impl MediaConvert for MediaConvertClient {
         &self,
         input: DeletePresetRequest,
     ) -> Result<DeletePresetResponse, RusotoError<DeletePresetError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!("/2017-08-29/presets/{name}", name = input.name);
 
         let mut request = SignedRequest::new("DELETE", "mediaconvert", &self.region, &request_uri);
@@ -7062,6 +7094,7 @@ impl MediaConvert for MediaConvertClient {
         &self,
         input: DeleteQueueRequest,
     ) -> Result<DeleteQueueResponse, RusotoError<DeleteQueueError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!("/2017-08-29/queues/{name}", name = input.name);
 
         let mut request = SignedRequest::new("DELETE", "mediaconvert", &self.region, &request_uri);
@@ -7090,6 +7123,7 @@ impl MediaConvert for MediaConvertClient {
         &self,
         input: DescribeEndpointsRequest,
     ) -> Result<DescribeEndpointsResponse, RusotoError<DescribeEndpointsError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/2017-08-29/endpoints";
 
         let mut request = SignedRequest::new("POST", "mediaconvert", &self.region, &request_uri);
@@ -7121,6 +7155,7 @@ impl MediaConvert for MediaConvertClient {
         &self,
         input: DisassociateCertificateRequest,
     ) -> Result<DisassociateCertificateResponse, RusotoError<DisassociateCertificateError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!("/2017-08-29/certificates/{arn}", arn = input.arn);
 
         let mut request = SignedRequest::new("DELETE", "mediaconvert", &self.region, &request_uri);
@@ -7149,6 +7184,7 @@ impl MediaConvert for MediaConvertClient {
         &self,
         input: GetJobRequest,
     ) -> Result<GetJobResponse, RusotoError<GetJobError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!("/2017-08-29/jobs/{id}", id = input.id);
 
         let mut request = SignedRequest::new("GET", "mediaconvert", &self.region, &request_uri);
@@ -7177,6 +7213,7 @@ impl MediaConvert for MediaConvertClient {
         &self,
         input: GetJobTemplateRequest,
     ) -> Result<GetJobTemplateResponse, RusotoError<GetJobTemplateError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!("/2017-08-29/jobTemplates/{name}", name = input.name);
 
         let mut request = SignedRequest::new("GET", "mediaconvert", &self.region, &request_uri);
@@ -7205,6 +7242,7 @@ impl MediaConvert for MediaConvertClient {
         &self,
         input: GetPresetRequest,
     ) -> Result<GetPresetResponse, RusotoError<GetPresetError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!("/2017-08-29/presets/{name}", name = input.name);
 
         let mut request = SignedRequest::new("GET", "mediaconvert", &self.region, &request_uri);
@@ -7233,6 +7271,7 @@ impl MediaConvert for MediaConvertClient {
         &self,
         input: GetQueueRequest,
     ) -> Result<GetQueueResponse, RusotoError<GetQueueError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!("/2017-08-29/queues/{name}", name = input.name);
 
         let mut request = SignedRequest::new("GET", "mediaconvert", &self.region, &request_uri);
@@ -7261,6 +7300,7 @@ impl MediaConvert for MediaConvertClient {
         &self,
         input: ListJobTemplatesRequest,
     ) -> Result<ListJobTemplatesResponse, RusotoError<ListJobTemplatesError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/2017-08-29/jobTemplates";
 
         let mut request = SignedRequest::new("GET", "mediaconvert", &self.region, &request_uri);
@@ -7307,6 +7347,7 @@ impl MediaConvert for MediaConvertClient {
         &self,
         input: ListJobsRequest,
     ) -> Result<ListJobsResponse, RusotoError<ListJobsError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/2017-08-29/jobs";
 
         let mut request = SignedRequest::new("GET", "mediaconvert", &self.region, &request_uri);
@@ -7353,6 +7394,7 @@ impl MediaConvert for MediaConvertClient {
         &self,
         input: ListPresetsRequest,
     ) -> Result<ListPresetsResponse, RusotoError<ListPresetsError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/2017-08-29/presets";
 
         let mut request = SignedRequest::new("GET", "mediaconvert", &self.region, &request_uri);
@@ -7399,6 +7441,7 @@ impl MediaConvert for MediaConvertClient {
         &self,
         input: ListQueuesRequest,
     ) -> Result<ListQueuesResponse, RusotoError<ListQueuesError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/2017-08-29/queues";
 
         let mut request = SignedRequest::new("GET", "mediaconvert", &self.region, &request_uri);
@@ -7442,6 +7485,7 @@ impl MediaConvert for MediaConvertClient {
         &self,
         input: ListTagsForResourceRequest,
     ) -> Result<ListTagsForResourceResponse, RusotoError<ListTagsForResourceError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!("/2017-08-29/tags/{arn}", arn = input.arn);
 
         let mut request = SignedRequest::new("GET", "mediaconvert", &self.region, &request_uri);
@@ -7470,6 +7514,7 @@ impl MediaConvert for MediaConvertClient {
         &self,
         input: TagResourceRequest,
     ) -> Result<TagResourceResponse, RusotoError<TagResourceError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/2017-08-29/tags";
 
         let mut request = SignedRequest::new("POST", "mediaconvert", &self.region, &request_uri);
@@ -7501,6 +7546,7 @@ impl MediaConvert for MediaConvertClient {
         &self,
         input: UntagResourceRequest,
     ) -> Result<UntagResourceResponse, RusotoError<UntagResourceError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!("/2017-08-29/tags/{arn}", arn = input.arn);
 
         let mut request = SignedRequest::new("PUT", "mediaconvert", &self.region, &request_uri);
@@ -7532,6 +7578,7 @@ impl MediaConvert for MediaConvertClient {
         &self,
         input: UpdateJobTemplateRequest,
     ) -> Result<UpdateJobTemplateResponse, RusotoError<UpdateJobTemplateError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!("/2017-08-29/jobTemplates/{name}", name = input.name);
 
         let mut request = SignedRequest::new("PUT", "mediaconvert", &self.region, &request_uri);
@@ -7563,6 +7610,7 @@ impl MediaConvert for MediaConvertClient {
         &self,
         input: UpdatePresetRequest,
     ) -> Result<UpdatePresetResponse, RusotoError<UpdatePresetError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!("/2017-08-29/presets/{name}", name = input.name);
 
         let mut request = SignedRequest::new("PUT", "mediaconvert", &self.region, &request_uri);
@@ -7594,6 +7642,7 @@ impl MediaConvert for MediaConvertClient {
         &self,
         input: UpdateQueueRequest,
     ) -> Result<UpdateQueueResponse, RusotoError<UpdateQueueError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!("/2017-08-29/queues/{name}", name = input.name);
 
         let mut request = SignedRequest::new("PUT", "mediaconvert", &self.region, &request_uri);

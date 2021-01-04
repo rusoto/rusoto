@@ -24,7 +24,6 @@ use rusoto_core::proto;
 use rusoto_core::signature::SignedRequest;
 #[allow(unused_imports)]
 use serde::{Deserialize, Serialize};
-use serde_json;
 /// <p>Contains information about the errors encountered.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
@@ -352,6 +351,7 @@ pub enum BatchPutMessageError {
 impl BatchPutMessageError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<BatchPutMessageError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalFailureException" => {
                     return RusotoError::Service(BatchPutMessageError::InternalFailure(err.msg))
@@ -400,6 +400,7 @@ pub enum BatchUpdateDetectorError {
 impl BatchUpdateDetectorError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<BatchUpdateDetectorError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalFailureException" => {
                     return RusotoError::Service(BatchUpdateDetectorError::InternalFailure(err.msg))
@@ -452,6 +453,7 @@ pub enum DescribeDetectorError {
 impl DescribeDetectorError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeDetectorError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalFailureException" => {
                     return RusotoError::Service(DescribeDetectorError::InternalFailure(err.msg))
@@ -506,6 +508,7 @@ pub enum ListDetectorsError {
 impl ListDetectorsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListDetectorsError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalFailureException" => {
                     return RusotoError::Service(ListDetectorsError::InternalFailure(err.msg))
@@ -615,6 +618,7 @@ impl IotEventsData for IotEventsDataClient {
         &self,
         input: BatchPutMessageRequest,
     ) -> Result<BatchPutMessageResponse, RusotoError<BatchPutMessageError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/inputs/messages";
 
         let mut request = SignedRequest::new("POST", "ioteventsdata", &self.region, &request_uri);
@@ -647,6 +651,7 @@ impl IotEventsData for IotEventsDataClient {
         &self,
         input: BatchUpdateDetectorRequest,
     ) -> Result<BatchUpdateDetectorResponse, RusotoError<BatchUpdateDetectorError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/detectors";
 
         let mut request = SignedRequest::new("POST", "ioteventsdata", &self.region, &request_uri);
@@ -679,6 +684,7 @@ impl IotEventsData for IotEventsDataClient {
         &self,
         input: DescribeDetectorRequest,
     ) -> Result<DescribeDetectorResponse, RusotoError<DescribeDetectorError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/detectors/{detector_model_name}/keyValues/",
             detector_model_name = input.detector_model_name
@@ -718,6 +724,7 @@ impl IotEventsData for IotEventsDataClient {
         &self,
         input: ListDetectorsRequest,
     ) -> Result<ListDetectorsResponse, RusotoError<ListDetectorsError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/detectors/{detector_model_name}",
             detector_model_name = input.detector_model_name

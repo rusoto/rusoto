@@ -322,7 +322,7 @@ fn eventstream_field_name(service: &Service<'_>, shape: &Shape) -> Option<String
         .map(|map| map.iter())
         .flatten()
         .filter_map(|(name, member)| {
-            service.get_shape(&member.shape).map_or(None, |s| {
+            service.get_shape(&member.shape).and_then(|s| {
                 if s.eventstream() {
                     Some(generate_field_name(name))
                 } else {
@@ -633,7 +633,7 @@ where
         }
     }
 
-    derived.sort();
+    derived.sort_unstable();
 
     let attributes = format!("#[derive({})]", derived.join(","));
     let mut test_attributes = String::new();

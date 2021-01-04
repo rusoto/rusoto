@@ -24,7 +24,6 @@ use rusoto_core::proto;
 use rusoto_core::signature::SignedRequest;
 #[allow(unused_imports)]
 use serde::{Deserialize, Serialize};
-use serde_json;
 /// <pre><code>        &lt;p&gt;Associates sasl scram secrets to cluster.&lt;/p&gt;
 /// </code></pre>
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
@@ -1842,6 +1841,7 @@ pub enum BatchAssociateScramSecretError {
 impl BatchAssociateScramSecretError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<BatchAssociateScramSecretError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(BatchAssociateScramSecretError::BadRequest(
@@ -1929,6 +1929,7 @@ impl BatchDisassociateScramSecretError {
         res: BufferedHttpResponse,
     ) -> RusotoError<BatchDisassociateScramSecretError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(BatchDisassociateScramSecretError::BadRequest(
@@ -2020,6 +2021,7 @@ pub enum CreateClusterError {
 impl CreateClusterError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateClusterError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(CreateClusterError::BadRequest(err.msg))
@@ -2093,6 +2095,7 @@ pub enum CreateConfigurationError {
 impl CreateConfigurationError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateConfigurationError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(CreateConfigurationError::BadRequest(err.msg))
@@ -2161,6 +2164,7 @@ pub enum DeleteClusterError {
 impl DeleteClusterError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteClusterError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(DeleteClusterError::BadRequest(err.msg))
@@ -2213,6 +2217,7 @@ pub enum DeleteConfigurationError {
 impl DeleteConfigurationError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteConfigurationError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(DeleteConfigurationError::BadRequest(err.msg))
@@ -2270,6 +2275,7 @@ pub enum DescribeClusterError {
 impl DescribeClusterError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeClusterError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(DescribeClusterError::BadRequest(err.msg))
@@ -2329,6 +2335,7 @@ pub enum DescribeClusterOperationError {
 impl DescribeClusterOperationError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeClusterOperationError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(DescribeClusterOperationError::BadRequest(err.msg))
@@ -2395,6 +2402,7 @@ pub enum DescribeConfigurationError {
 impl DescribeConfigurationError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeConfigurationError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(DescribeConfigurationError::BadRequest(err.msg))
@@ -2467,6 +2475,7 @@ impl DescribeConfigurationRevisionError {
         res: BufferedHttpResponse,
     ) -> RusotoError<DescribeConfigurationRevisionError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(DescribeConfigurationRevisionError::BadRequest(
@@ -2546,6 +2555,7 @@ pub enum GetBootstrapBrokersError {
 impl GetBootstrapBrokersError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetBootstrapBrokersError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(GetBootstrapBrokersError::BadRequest(err.msg))
@@ -2615,6 +2625,7 @@ impl GetCompatibleKafkaVersionsError {
         res: BufferedHttpResponse,
     ) -> RusotoError<GetCompatibleKafkaVersionsError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(GetCompatibleKafkaVersionsError::BadRequest(
@@ -2695,6 +2706,7 @@ pub enum ListClusterOperationsError {
 impl ListClusterOperationsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListClusterOperationsError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(ListClusterOperationsError::BadRequest(err.msg))
@@ -2749,6 +2761,7 @@ pub enum ListClustersError {
 impl ListClustersError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListClustersError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(ListClustersError::BadRequest(err.msg))
@@ -2809,6 +2822,7 @@ impl ListConfigurationRevisionsError {
         res: BufferedHttpResponse,
     ) -> RusotoError<ListConfigurationRevisionsError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(ListConfigurationRevisionsError::BadRequest(
@@ -2886,6 +2900,7 @@ pub enum ListConfigurationsError {
 impl ListConfigurationsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListConfigurationsError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(ListConfigurationsError::BadRequest(err.msg))
@@ -2946,6 +2961,7 @@ pub enum ListKafkaVersionsError {
 impl ListKafkaVersionsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListKafkaVersionsError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(ListKafkaVersionsError::BadRequest(err.msg))
@@ -3000,6 +3016,7 @@ pub enum ListNodesError {
 impl ListNodesError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListNodesError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(ListNodesError::BadRequest(err.msg))
@@ -3061,6 +3078,7 @@ pub enum ListScramSecretsError {
 impl ListScramSecretsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListScramSecretsError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(ListScramSecretsError::BadRequest(err.msg))
@@ -3124,6 +3142,7 @@ pub enum ListTagsForResourceError {
 impl ListTagsForResourceError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListTagsForResourceError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(ListTagsForResourceError::BadRequest(err.msg))
@@ -3183,6 +3202,7 @@ pub enum RebootBrokerError {
 impl RebootBrokerError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<RebootBrokerError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(RebootBrokerError::BadRequest(err.msg))
@@ -3244,6 +3264,7 @@ pub enum TagResourceError {
 impl TagResourceError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<TagResourceError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(TagResourceError::BadRequest(err.msg))
@@ -3289,6 +3310,7 @@ pub enum UntagResourceError {
 impl UntagResourceError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UntagResourceError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(UntagResourceError::BadRequest(err.msg))
@@ -3340,6 +3362,7 @@ pub enum UpdateBrokerCountError {
 impl UpdateBrokerCountError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateBrokerCountError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(UpdateBrokerCountError::BadRequest(err.msg))
@@ -3403,6 +3426,7 @@ pub enum UpdateBrokerStorageError {
 impl UpdateBrokerStorageError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateBrokerStorageError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(UpdateBrokerStorageError::BadRequest(err.msg))
@@ -3471,6 +3495,7 @@ impl UpdateClusterConfigurationError {
         res: BufferedHttpResponse,
     ) -> RusotoError<UpdateClusterConfigurationError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(UpdateClusterConfigurationError::BadRequest(
@@ -3554,6 +3579,7 @@ pub enum UpdateClusterKafkaVersionError {
 impl UpdateClusterKafkaVersionError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateClusterKafkaVersionError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(UpdateClusterKafkaVersionError::BadRequest(
@@ -3636,6 +3662,7 @@ pub enum UpdateConfigurationError {
 impl UpdateConfigurationError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateConfigurationError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(UpdateConfigurationError::BadRequest(err.msg))
@@ -3703,6 +3730,7 @@ pub enum UpdateMonitoringError {
 impl UpdateMonitoringError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateMonitoringError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(UpdateMonitoringError::BadRequest(err.msg))
@@ -3997,6 +4025,7 @@ impl Kafka for KafkaClient {
         input: BatchAssociateScramSecretRequest,
     ) -> Result<BatchAssociateScramSecretResponse, RusotoError<BatchAssociateScramSecretError>>
     {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/v1/clusters/{cluster_arn}/scram-secrets",
             cluster_arn = input.cluster_arn
@@ -4033,6 +4062,7 @@ impl Kafka for KafkaClient {
         input: BatchDisassociateScramSecretRequest,
     ) -> Result<BatchDisassociateScramSecretResponse, RusotoError<BatchDisassociateScramSecretError>>
     {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/v1/clusters/{cluster_arn}/scram-secrets",
             cluster_arn = input.cluster_arn
@@ -4068,6 +4098,7 @@ impl Kafka for KafkaClient {
         &self,
         input: CreateClusterRequest,
     ) -> Result<CreateClusterResponse, RusotoError<CreateClusterError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/v1/clusters";
 
         let mut request = SignedRequest::new("POST", "kafka", &self.region, &request_uri);
@@ -4100,6 +4131,7 @@ impl Kafka for KafkaClient {
         &self,
         input: CreateConfigurationRequest,
     ) -> Result<CreateConfigurationResponse, RusotoError<CreateConfigurationError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/v1/configurations";
 
         let mut request = SignedRequest::new("POST", "kafka", &self.region, &request_uri);
@@ -4132,6 +4164,7 @@ impl Kafka for KafkaClient {
         &self,
         input: DeleteClusterRequest,
     ) -> Result<DeleteClusterResponse, RusotoError<DeleteClusterError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/v1/clusters/{cluster_arn}",
             cluster_arn = input.cluster_arn
@@ -4170,6 +4203,7 @@ impl Kafka for KafkaClient {
         &self,
         input: DeleteConfigurationRequest,
     ) -> Result<DeleteConfigurationResponse, RusotoError<DeleteConfigurationError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!("/v1/configurations/{arn}", arn = input.arn);
 
         let mut request = SignedRequest::new("DELETE", "kafka", &self.region, &request_uri);
@@ -4199,6 +4233,7 @@ impl Kafka for KafkaClient {
         &self,
         input: DescribeClusterRequest,
     ) -> Result<DescribeClusterResponse, RusotoError<DescribeClusterError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/v1/clusters/{cluster_arn}",
             cluster_arn = input.cluster_arn
@@ -4231,6 +4266,7 @@ impl Kafka for KafkaClient {
         &self,
         input: DescribeClusterOperationRequest,
     ) -> Result<DescribeClusterOperationResponse, RusotoError<DescribeClusterOperationError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/v1/operations/{cluster_operation_arn}",
             cluster_operation_arn = input.cluster_operation_arn
@@ -4263,6 +4299,7 @@ impl Kafka for KafkaClient {
         &self,
         input: DescribeConfigurationRequest,
     ) -> Result<DescribeConfigurationResponse, RusotoError<DescribeConfigurationError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!("/v1/configurations/{arn}", arn = input.arn);
 
         let mut request = SignedRequest::new("GET", "kafka", &self.region, &request_uri);
@@ -4295,6 +4332,7 @@ impl Kafka for KafkaClient {
         DescribeConfigurationRevisionResponse,
         RusotoError<DescribeConfigurationRevisionError>,
     > {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/v1/configurations/{arn}/revisions/{revision}",
             arn = input.arn,
@@ -4328,6 +4366,7 @@ impl Kafka for KafkaClient {
         &self,
         input: GetBootstrapBrokersRequest,
     ) -> Result<GetBootstrapBrokersResponse, RusotoError<GetBootstrapBrokersError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/v1/clusters/{cluster_arn}/bootstrap-brokers",
             cluster_arn = input.cluster_arn
@@ -4361,6 +4400,7 @@ impl Kafka for KafkaClient {
         input: GetCompatibleKafkaVersionsRequest,
     ) -> Result<GetCompatibleKafkaVersionsResponse, RusotoError<GetCompatibleKafkaVersionsError>>
     {
+        #![allow(clippy::needless_update)]
         let request_uri = "/v1/compatible-kafka-versions";
 
         let mut request = SignedRequest::new("GET", "kafka", &self.region, &request_uri);
@@ -4396,6 +4436,7 @@ impl Kafka for KafkaClient {
         &self,
         input: ListClusterOperationsRequest,
     ) -> Result<ListClusterOperationsResponse, RusotoError<ListClusterOperationsError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/v1/clusters/{cluster_arn}/operations",
             cluster_arn = input.cluster_arn
@@ -4437,6 +4478,7 @@ impl Kafka for KafkaClient {
         &self,
         input: ListClustersRequest,
     ) -> Result<ListClustersResponse, RusotoError<ListClustersError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/v1/clusters";
 
         let mut request = SignedRequest::new("GET", "kafka", &self.region, &request_uri);
@@ -4479,6 +4521,7 @@ impl Kafka for KafkaClient {
         input: ListConfigurationRevisionsRequest,
     ) -> Result<ListConfigurationRevisionsResponse, RusotoError<ListConfigurationRevisionsError>>
     {
+        #![allow(clippy::needless_update)]
         let request_uri = format!("/v1/configurations/{arn}/revisions", arn = input.arn);
 
         let mut request = SignedRequest::new("GET", "kafka", &self.region, &request_uri);
@@ -4517,6 +4560,7 @@ impl Kafka for KafkaClient {
         &self,
         input: ListConfigurationsRequest,
     ) -> Result<ListConfigurationsResponse, RusotoError<ListConfigurationsError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/v1/configurations";
 
         let mut request = SignedRequest::new("GET", "kafka", &self.region, &request_uri);
@@ -4555,6 +4599,7 @@ impl Kafka for KafkaClient {
         &self,
         input: ListKafkaVersionsRequest,
     ) -> Result<ListKafkaVersionsResponse, RusotoError<ListKafkaVersionsError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/v1/kafka-versions";
 
         let mut request = SignedRequest::new("GET", "kafka", &self.region, &request_uri);
@@ -4593,6 +4638,7 @@ impl Kafka for KafkaClient {
         &self,
         input: ListNodesRequest,
     ) -> Result<ListNodesResponse, RusotoError<ListNodesError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/v1/clusters/{cluster_arn}/nodes",
             cluster_arn = input.cluster_arn
@@ -4634,6 +4680,7 @@ impl Kafka for KafkaClient {
         &self,
         input: ListScramSecretsRequest,
     ) -> Result<ListScramSecretsResponse, RusotoError<ListScramSecretsError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/v1/clusters/{cluster_arn}/scram-secrets",
             cluster_arn = input.cluster_arn
@@ -4675,6 +4722,7 @@ impl Kafka for KafkaClient {
         &self,
         input: ListTagsForResourceRequest,
     ) -> Result<ListTagsForResourceResponse, RusotoError<ListTagsForResourceError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!("/v1/tags/{resource_arn}", resource_arn = input.resource_arn);
 
         let mut request = SignedRequest::new("GET", "kafka", &self.region, &request_uri);
@@ -4703,6 +4751,7 @@ impl Kafka for KafkaClient {
         &self,
         input: RebootBrokerRequest,
     ) -> Result<RebootBrokerResponse, RusotoError<RebootBrokerError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/v1/clusters/{cluster_arn}/reboot-broker",
             cluster_arn = input.cluster_arn
@@ -4738,6 +4787,7 @@ impl Kafka for KafkaClient {
         &self,
         input: TagResourceRequest,
     ) -> Result<(), RusotoError<TagResourceError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!("/v1/tags/{resource_arn}", resource_arn = input.resource_arn);
 
         let mut request = SignedRequest::new("POST", "kafka", &self.region, &request_uri);
@@ -4753,9 +4803,9 @@ impl Kafka for KafkaClient {
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 204 {
             let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = ::std::mem::drop(response);
+            let _result = ::std::mem::drop(response);
 
-            Ok(result)
+            Ok(())
         } else {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             Err(TagResourceError::from_response(response))
@@ -4769,6 +4819,7 @@ impl Kafka for KafkaClient {
         &self,
         input: UntagResourceRequest,
     ) -> Result<(), RusotoError<UntagResourceError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!("/v1/tags/{resource_arn}", resource_arn = input.resource_arn);
 
         let mut request = SignedRequest::new("DELETE", "kafka", &self.region, &request_uri);
@@ -4787,9 +4838,9 @@ impl Kafka for KafkaClient {
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 204 {
             let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = ::std::mem::drop(response);
+            let _result = ::std::mem::drop(response);
 
-            Ok(result)
+            Ok(())
         } else {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             Err(UntagResourceError::from_response(response))
@@ -4803,6 +4854,7 @@ impl Kafka for KafkaClient {
         &self,
         input: UpdateBrokerCountRequest,
     ) -> Result<UpdateBrokerCountResponse, RusotoError<UpdateBrokerCountError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/v1/clusters/{cluster_arn}/nodes/count",
             cluster_arn = input.cluster_arn
@@ -4838,6 +4890,7 @@ impl Kafka for KafkaClient {
         &self,
         input: UpdateBrokerStorageRequest,
     ) -> Result<UpdateBrokerStorageResponse, RusotoError<UpdateBrokerStorageError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/v1/clusters/{cluster_arn}/nodes/storage",
             cluster_arn = input.cluster_arn
@@ -4874,6 +4927,7 @@ impl Kafka for KafkaClient {
         input: UpdateClusterConfigurationRequest,
     ) -> Result<UpdateClusterConfigurationResponse, RusotoError<UpdateClusterConfigurationError>>
     {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/v1/clusters/{cluster_arn}/configuration",
             cluster_arn = input.cluster_arn
@@ -4910,6 +4964,7 @@ impl Kafka for KafkaClient {
         input: UpdateClusterKafkaVersionRequest,
     ) -> Result<UpdateClusterKafkaVersionResponse, RusotoError<UpdateClusterKafkaVersionError>>
     {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/v1/clusters/{cluster_arn}/version",
             cluster_arn = input.cluster_arn
@@ -4945,6 +5000,7 @@ impl Kafka for KafkaClient {
         &self,
         input: UpdateConfigurationRequest,
     ) -> Result<UpdateConfigurationResponse, RusotoError<UpdateConfigurationError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!("/v1/configurations/{arn}", arn = input.arn);
 
         let mut request = SignedRequest::new("PUT", "kafka", &self.region, &request_uri);
@@ -4977,6 +5033,7 @@ impl Kafka for KafkaClient {
         &self,
         input: UpdateMonitoringRequest,
     ) -> Result<UpdateMonitoringResponse, RusotoError<UpdateMonitoringError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/v1/clusters/{cluster_arn}/monitoring",
             cluster_arn = input.cluster_arn

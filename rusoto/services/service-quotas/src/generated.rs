@@ -50,7 +50,6 @@ impl ServiceQuotasClient {
     }
 }
 
-use serde_json;
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct AssociateServiceQuotaTemplateRequest {}
@@ -718,6 +717,7 @@ impl AssociateServiceQuotaTemplateError {
         res: BufferedHttpResponse,
     ) -> RusotoError<AssociateServiceQuotaTemplateError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AWSServiceAccessNotEnabledException" => {
                     return RusotoError::Service(
@@ -824,8 +824,9 @@ impl DeleteServiceQuotaIncreaseRequestFromTemplateError {
         res: BufferedHttpResponse,
     ) -> RusotoError<DeleteServiceQuotaIncreaseRequestFromTemplateError> {
         if let Some(err) = proto::json::Error::parse(&res) {
-            match err.typ.as_str() {
-                                "AWSServiceAccessNotEnabledException" => return RusotoError::Service(DeleteServiceQuotaIncreaseRequestFromTemplateError::AWSServiceAccessNotEnabled(err.msg)),
+            #[allow(clippy::single_match)]
+                match err.typ.as_str() {
+                    "AWSServiceAccessNotEnabledException" => return RusotoError::Service(DeleteServiceQuotaIncreaseRequestFromTemplateError::AWSServiceAccessNotEnabled(err.msg)),
 "AccessDeniedException" => return RusotoError::Service(DeleteServiceQuotaIncreaseRequestFromTemplateError::AccessDenied(err.msg)),
 "DependencyAccessDeniedException" => return RusotoError::Service(DeleteServiceQuotaIncreaseRequestFromTemplateError::DependencyAccessDenied(err.msg)),
 "IllegalArgumentException" => return RusotoError::Service(DeleteServiceQuotaIncreaseRequestFromTemplateError::IllegalArgument(err.msg)),
@@ -836,7 +837,7 @@ impl DeleteServiceQuotaIncreaseRequestFromTemplateError {
 "TooManyRequestsException" => return RusotoError::Service(DeleteServiceQuotaIncreaseRequestFromTemplateError::TooManyRequests(err.msg)),
 "ValidationException" => return RusotoError::Validation(err.msg),
 _ => {}
-                            }
+                }
         }
         RusotoError::Unknown(res)
     }
@@ -902,6 +903,7 @@ impl DisassociateServiceQuotaTemplateError {
         res: BufferedHttpResponse,
     ) -> RusotoError<DisassociateServiceQuotaTemplateError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AWSServiceAccessNotEnabledException" => {
                     return RusotoError::Service(
@@ -1002,6 +1004,7 @@ pub enum GetAWSDefaultServiceQuotaError {
 impl GetAWSDefaultServiceQuotaError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetAWSDefaultServiceQuotaError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(GetAWSDefaultServiceQuotaError::AccessDenied(
@@ -1072,6 +1075,7 @@ impl GetAssociationForServiceQuotaTemplateError {
         res: BufferedHttpResponse,
     ) -> RusotoError<GetAssociationForServiceQuotaTemplateError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AWSServiceAccessNotEnabledException" => {
                     return RusotoError::Service(
@@ -1180,6 +1184,7 @@ impl GetRequestedServiceQuotaChangeError {
         res: BufferedHttpResponse,
     ) -> RusotoError<GetRequestedServiceQuotaChangeError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(GetRequestedServiceQuotaChangeError::AccessDenied(
@@ -1250,6 +1255,7 @@ pub enum GetServiceQuotaError {
 impl GetServiceQuotaError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetServiceQuotaError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(GetServiceQuotaError::AccessDenied(err.msg))
@@ -1314,6 +1320,7 @@ impl GetServiceQuotaIncreaseRequestFromTemplateError {
         res: BufferedHttpResponse,
     ) -> RusotoError<GetServiceQuotaIncreaseRequestFromTemplateError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AWSServiceAccessNotEnabledException" => {
                     return RusotoError::Service(
@@ -1430,6 +1437,7 @@ impl ListAWSDefaultServiceQuotasError {
         res: BufferedHttpResponse,
     ) -> RusotoError<ListAWSDefaultServiceQuotasError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(ListAWSDefaultServiceQuotasError::AccessDenied(
@@ -1504,6 +1512,7 @@ impl ListRequestedServiceQuotaChangeHistoryError {
         res: BufferedHttpResponse,
     ) -> RusotoError<ListRequestedServiceQuotaChangeHistoryError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(
@@ -1592,6 +1601,7 @@ impl ListRequestedServiceQuotaChangeHistoryByQuotaError {
         res: BufferedHttpResponse,
     ) -> RusotoError<ListRequestedServiceQuotaChangeHistoryByQuotaError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(
@@ -1688,6 +1698,7 @@ impl ListServiceQuotaIncreaseRequestsInTemplateError {
         res: BufferedHttpResponse,
     ) -> RusotoError<ListServiceQuotaIncreaseRequestsInTemplateError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AWSServiceAccessNotEnabledException" => {
                     return RusotoError::Service(
@@ -1794,6 +1805,7 @@ pub enum ListServiceQuotasError {
 impl ListServiceQuotasError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListServiceQuotasError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(ListServiceQuotasError::AccessDenied(err.msg))
@@ -1854,6 +1866,7 @@ pub enum ListServicesError {
 impl ListServicesError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListServicesError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(ListServicesError::AccessDenied(err.msg))
@@ -1908,6 +1921,7 @@ pub enum ListTagsForResourceError {
 impl ListTagsForResourceError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListTagsForResourceError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(ListTagsForResourceError::AccessDenied(err.msg))
@@ -1974,6 +1988,7 @@ impl PutServiceQuotaIncreaseRequestIntoTemplateError {
         res: BufferedHttpResponse,
     ) -> RusotoError<PutServiceQuotaIncreaseRequestIntoTemplateError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AWSServiceAccessNotEnabledException" => {
                     return RusotoError::Service(
@@ -2104,6 +2119,7 @@ impl RequestServiceQuotaIncreaseError {
         res: BufferedHttpResponse,
     ) -> RusotoError<RequestServiceQuotaIncreaseError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(RequestServiceQuotaIncreaseError::AccessDenied(
@@ -2200,6 +2216,7 @@ pub enum TagResourceError {
 impl TagResourceError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<TagResourceError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(TagResourceError::AccessDenied(err.msg))
@@ -2262,6 +2279,7 @@ pub enum UntagResourceError {
 impl UntagResourceError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UntagResourceError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(UntagResourceError::AccessDenied(err.msg))

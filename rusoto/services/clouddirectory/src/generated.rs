@@ -23,7 +23,6 @@ use rusoto_core::proto;
 use rusoto_core::signature::SignedRequest;
 #[allow(unused_imports)]
 use serde::{Deserialize, Serialize};
-use serde_json;
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct AddFacetToObjectRequest {
@@ -3239,6 +3238,7 @@ pub enum AddFacetToObjectError {
 impl AddFacetToObjectError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<AddFacetToObjectError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(AddFacetToObjectError::AccessDenied(err.msg))
@@ -3313,6 +3313,7 @@ pub enum ApplySchemaError {
 impl ApplySchemaError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ApplySchemaError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(ApplySchemaError::AccessDenied(err.msg))
@@ -3389,6 +3390,7 @@ pub enum AttachObjectError {
 impl AttachObjectError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<AttachObjectError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(AttachObjectError::AccessDenied(err.msg))
@@ -3469,6 +3471,7 @@ pub enum AttachPolicyError {
 impl AttachPolicyError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<AttachPolicyError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(AttachPolicyError::AccessDenied(err.msg))
@@ -3547,6 +3550,7 @@ pub enum AttachToIndexError {
 impl AttachToIndexError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<AttachToIndexError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(AttachToIndexError::AccessDenied(err.msg))
@@ -3635,6 +3639,7 @@ pub enum AttachTypedLinkError {
 impl AttachTypedLinkError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<AttachTypedLinkError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(AttachTypedLinkError::AccessDenied(err.msg))
@@ -3707,6 +3712,7 @@ pub enum BatchReadError {
 impl BatchReadError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<BatchReadError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(BatchReadError::AccessDenied(err.msg))
@@ -3769,6 +3775,7 @@ pub enum BatchWriteError {
 impl BatchWriteError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<BatchWriteError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(BatchWriteError::AccessDenied(err.msg))
@@ -3835,6 +3842,7 @@ pub enum CreateDirectoryError {
 impl CreateDirectoryError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateDirectoryError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(CreateDirectoryError::AccessDenied(err.msg))
@@ -3907,6 +3915,7 @@ pub enum CreateFacetError {
 impl CreateFacetError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateFacetError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(CreateFacetError::AccessDenied(err.msg))
@@ -3987,6 +3996,7 @@ pub enum CreateIndexError {
 impl CreateIndexError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateIndexError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(CreateIndexError::AccessDenied(err.msg))
@@ -4071,6 +4081,7 @@ pub enum CreateObjectError {
 impl CreateObjectError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateObjectError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(CreateObjectError::AccessDenied(err.msg))
@@ -4147,6 +4158,7 @@ pub enum CreateSchemaError {
 impl CreateSchemaError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateSchemaError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(CreateSchemaError::AccessDenied(err.msg))
@@ -4213,6 +4225,7 @@ pub enum CreateTypedLinkFacetError {
 impl CreateTypedLinkFacetError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateTypedLinkFacetError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(CreateTypedLinkFacetError::AccessDenied(err.msg))
@@ -4299,6 +4312,7 @@ pub enum DeleteDirectoryError {
 impl DeleteDirectoryError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteDirectoryError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(DeleteDirectoryError::AccessDenied(err.msg))
@@ -4373,6 +4387,7 @@ pub enum DeleteFacetError {
 impl DeleteFacetError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteFacetError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(DeleteFacetError::AccessDenied(err.msg))
@@ -4445,6 +4460,7 @@ pub enum DeleteObjectError {
 impl DeleteObjectError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteObjectError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(DeleteObjectError::AccessDenied(err.msg))
@@ -4515,6 +4531,7 @@ pub enum DeleteSchemaError {
 impl DeleteSchemaError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteSchemaError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(DeleteSchemaError::AccessDenied(err.msg))
@@ -4581,6 +4598,7 @@ pub enum DeleteTypedLinkFacetError {
 impl DeleteTypedLinkFacetError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteTypedLinkFacetError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(DeleteTypedLinkFacetError::AccessDenied(err.msg))
@@ -4657,6 +4675,7 @@ pub enum DetachFromIndexError {
 impl DetachFromIndexError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DetachFromIndexError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(DetachFromIndexError::AccessDenied(err.msg))
@@ -4735,6 +4754,7 @@ pub enum DetachObjectError {
 impl DetachObjectError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DetachObjectError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(DetachObjectError::AccessDenied(err.msg))
@@ -4807,6 +4827,7 @@ pub enum DetachPolicyError {
 impl DetachPolicyError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DetachPolicyError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(DetachPolicyError::AccessDenied(err.msg))
@@ -4879,6 +4900,7 @@ pub enum DetachTypedLinkError {
 impl DetachTypedLinkError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DetachTypedLinkError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(DetachTypedLinkError::AccessDenied(err.msg))
@@ -4949,6 +4971,7 @@ pub enum DisableDirectoryError {
 impl DisableDirectoryError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DisableDirectoryError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(DisableDirectoryError::AccessDenied(err.msg))
@@ -5015,6 +5038,7 @@ pub enum EnableDirectoryError {
 impl EnableDirectoryError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<EnableDirectoryError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(EnableDirectoryError::AccessDenied(err.msg))
@@ -5079,6 +5103,7 @@ pub enum GetAppliedSchemaVersionError {
 impl GetAppliedSchemaVersionError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetAppliedSchemaVersionError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(GetAppliedSchemaVersionError::AccessDenied(
@@ -5147,6 +5172,7 @@ pub enum GetDirectoryError {
 impl GetDirectoryError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetDirectoryError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(GetDirectoryError::AccessDenied(err.msg))
@@ -5205,6 +5231,7 @@ pub enum GetFacetError {
 impl GetFacetError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetFacetError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(GetFacetError::AccessDenied(err.msg))
@@ -5273,6 +5300,7 @@ pub enum GetLinkAttributesError {
 impl GetLinkAttributesError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetLinkAttributesError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(GetLinkAttributesError::AccessDenied(err.msg))
@@ -5347,6 +5375,7 @@ pub enum GetObjectAttributesError {
 impl GetObjectAttributesError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetObjectAttributesError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(GetObjectAttributesError::AccessDenied(err.msg))
@@ -5423,6 +5452,7 @@ pub enum GetObjectInformationError {
 impl GetObjectInformationError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetObjectInformationError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(GetObjectInformationError::AccessDenied(err.msg))
@@ -5495,6 +5525,7 @@ pub enum GetSchemaAsJsonError {
 impl GetSchemaAsJsonError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetSchemaAsJsonError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(GetSchemaAsJsonError::AccessDenied(err.msg))
@@ -5561,6 +5592,7 @@ impl GetTypedLinkFacetInformationError {
         res: BufferedHttpResponse,
     ) -> RusotoError<GetTypedLinkFacetInformationError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(GetTypedLinkFacetInformationError::AccessDenied(
@@ -5653,6 +5685,7 @@ pub enum ListAppliedSchemaArnsError {
 impl ListAppliedSchemaArnsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListAppliedSchemaArnsError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(ListAppliedSchemaArnsError::AccessDenied(err.msg))
@@ -5727,6 +5760,7 @@ pub enum ListAttachedIndicesError {
 impl ListAttachedIndicesError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListAttachedIndicesError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(ListAttachedIndicesError::AccessDenied(err.msg))
@@ -5799,6 +5833,7 @@ pub enum ListDevelopmentSchemaArnsError {
 impl ListDevelopmentSchemaArnsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListDevelopmentSchemaArnsError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(ListDevelopmentSchemaArnsError::AccessDenied(
@@ -5877,6 +5912,7 @@ pub enum ListDirectoriesError {
 impl ListDirectoriesError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListDirectoriesError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(ListDirectoriesError::AccessDenied(err.msg))
@@ -5941,6 +5977,7 @@ pub enum ListFacetAttributesError {
 impl ListFacetAttributesError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListFacetAttributesError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(ListFacetAttributesError::AccessDenied(err.msg))
@@ -6017,6 +6054,7 @@ pub enum ListFacetNamesError {
 impl ListFacetNamesError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListFacetNamesError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(ListFacetNamesError::AccessDenied(err.msg))
@@ -6087,6 +6125,7 @@ pub enum ListIncomingTypedLinksError {
 impl ListIncomingTypedLinksError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListIncomingTypedLinksError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(ListIncomingTypedLinksError::AccessDenied(err.msg))
@@ -6181,6 +6220,7 @@ pub enum ListIndexError {
 impl ListIndexError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListIndexError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(ListIndexError::AccessDenied(err.msg))
@@ -6255,6 +6295,7 @@ pub enum ListManagedSchemaArnsError {
 impl ListManagedSchemaArnsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListManagedSchemaArnsError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(ListManagedSchemaArnsError::AccessDenied(err.msg))
@@ -6323,6 +6364,7 @@ pub enum ListObjectAttributesError {
 impl ListObjectAttributesError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListObjectAttributesError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(ListObjectAttributesError::AccessDenied(err.msg))
@@ -6413,6 +6455,7 @@ pub enum ListObjectChildrenError {
 impl ListObjectChildrenError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListObjectChildrenError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(ListObjectChildrenError::AccessDenied(err.msg))
@@ -6493,6 +6536,7 @@ pub enum ListObjectParentPathsError {
 impl ListObjectParentPathsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListObjectParentPathsError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(ListObjectParentPathsError::AccessDenied(err.msg))
@@ -6577,6 +6621,7 @@ pub enum ListObjectParentsError {
 impl ListObjectParentsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListObjectParentsError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(ListObjectParentsError::AccessDenied(err.msg))
@@ -6657,6 +6702,7 @@ pub enum ListObjectPoliciesError {
 impl ListObjectPoliciesError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListObjectPoliciesError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(ListObjectPoliciesError::AccessDenied(err.msg))
@@ -6735,6 +6781,7 @@ pub enum ListOutgoingTypedLinksError {
 impl ListOutgoingTypedLinksError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListOutgoingTypedLinksError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(ListOutgoingTypedLinksError::AccessDenied(err.msg))
@@ -6827,6 +6874,7 @@ pub enum ListPolicyAttachmentsError {
 impl ListPolicyAttachmentsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListPolicyAttachmentsError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(ListPolicyAttachmentsError::AccessDenied(err.msg))
@@ -6911,6 +6959,7 @@ pub enum ListPublishedSchemaArnsError {
 impl ListPublishedSchemaArnsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListPublishedSchemaArnsError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(ListPublishedSchemaArnsError::AccessDenied(
@@ -6989,6 +7038,7 @@ pub enum ListTagsForResourceError {
 impl ListTagsForResourceError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListTagsForResourceError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(ListTagsForResourceError::AccessDenied(err.msg))
@@ -7065,6 +7115,7 @@ impl ListTypedLinkFacetAttributesError {
         res: BufferedHttpResponse,
     ) -> RusotoError<ListTypedLinkFacetAttributesError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(ListTypedLinkFacetAttributesError::AccessDenied(
@@ -7157,6 +7208,7 @@ pub enum ListTypedLinkFacetNamesError {
 impl ListTypedLinkFacetNamesError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListTypedLinkFacetNamesError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(ListTypedLinkFacetNamesError::AccessDenied(
@@ -7237,6 +7289,7 @@ pub enum LookupPolicyError {
 impl LookupPolicyError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<LookupPolicyError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(LookupPolicyError::AccessDenied(err.msg))
@@ -7307,6 +7360,7 @@ pub enum PublishSchemaError {
 impl PublishSchemaError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<PublishSchemaError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(PublishSchemaError::AccessDenied(err.msg))
@@ -7375,6 +7429,7 @@ pub enum PutSchemaFromJsonError {
 impl PutSchemaFromJsonError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<PutSchemaFromJsonError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(PutSchemaFromJsonError::AccessDenied(err.msg))
@@ -7443,6 +7498,7 @@ pub enum RemoveFacetFromObjectError {
 impl RemoveFacetFromObjectError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<RemoveFacetFromObjectError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(RemoveFacetFromObjectError::AccessDenied(err.msg))
@@ -7523,6 +7579,7 @@ pub enum TagResourceError {
 impl TagResourceError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<TagResourceError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(TagResourceError::AccessDenied(err.msg))
@@ -7589,6 +7646,7 @@ pub enum UntagResourceError {
 impl UntagResourceError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UntagResourceError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(UntagResourceError::AccessDenied(err.msg))
@@ -7661,6 +7719,7 @@ pub enum UpdateFacetError {
 impl UpdateFacetError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateFacetError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(UpdateFacetError::AccessDenied(err.msg))
@@ -7741,6 +7800,7 @@ pub enum UpdateLinkAttributesError {
 impl UpdateLinkAttributesError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateLinkAttributesError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(UpdateLinkAttributesError::AccessDenied(err.msg))
@@ -7825,6 +7885,7 @@ pub enum UpdateObjectAttributesError {
 impl UpdateObjectAttributesError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateObjectAttributesError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(UpdateObjectAttributesError::AccessDenied(err.msg))
@@ -7911,6 +7972,7 @@ pub enum UpdateSchemaError {
 impl UpdateSchemaError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateSchemaError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(UpdateSchemaError::AccessDenied(err.msg))
@@ -7979,6 +8041,7 @@ pub enum UpdateTypedLinkFacetError {
 impl UpdateTypedLinkFacetError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateTypedLinkFacetError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(UpdateTypedLinkFacetError::AccessDenied(err.msg))
@@ -8069,6 +8132,7 @@ pub enum UpgradeAppliedSchemaError {
 impl UpgradeAppliedSchemaError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpgradeAppliedSchemaError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(UpgradeAppliedSchemaError::AccessDenied(err.msg))
@@ -8153,6 +8217,7 @@ pub enum UpgradePublishedSchemaError {
 impl UpgradePublishedSchemaError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpgradePublishedSchemaError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(UpgradePublishedSchemaError::AccessDenied(err.msg))
@@ -8658,6 +8723,7 @@ impl CloudDirectory for CloudDirectoryClient {
         &self,
         input: AddFacetToObjectRequest,
     ) -> Result<AddFacetToObjectResponse, RusotoError<AddFacetToObjectError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/amazonclouddirectory/2017-01-11/object/facets";
 
         let mut request = SignedRequest::new("PUT", "clouddirectory", &self.region, &request_uri);
@@ -8690,6 +8756,7 @@ impl CloudDirectory for CloudDirectoryClient {
         &self,
         input: ApplySchemaRequest,
     ) -> Result<ApplySchemaResponse, RusotoError<ApplySchemaError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/amazonclouddirectory/2017-01-11/schema/apply";
 
         let mut request = SignedRequest::new("PUT", "clouddirectory", &self.region, &request_uri);
@@ -8722,6 +8789,7 @@ impl CloudDirectory for CloudDirectoryClient {
         &self,
         input: AttachObjectRequest,
     ) -> Result<AttachObjectResponse, RusotoError<AttachObjectError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/amazonclouddirectory/2017-01-11/object/attach";
 
         let mut request = SignedRequest::new("PUT", "clouddirectory", &self.region, &request_uri);
@@ -8754,6 +8822,7 @@ impl CloudDirectory for CloudDirectoryClient {
         &self,
         input: AttachPolicyRequest,
     ) -> Result<AttachPolicyResponse, RusotoError<AttachPolicyError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/amazonclouddirectory/2017-01-11/policy/attach";
 
         let mut request = SignedRequest::new("PUT", "clouddirectory", &self.region, &request_uri);
@@ -8786,6 +8855,7 @@ impl CloudDirectory for CloudDirectoryClient {
         &self,
         input: AttachToIndexRequest,
     ) -> Result<AttachToIndexResponse, RusotoError<AttachToIndexError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/amazonclouddirectory/2017-01-11/index/attach";
 
         let mut request = SignedRequest::new("PUT", "clouddirectory", &self.region, &request_uri);
@@ -8818,6 +8888,7 @@ impl CloudDirectory for CloudDirectoryClient {
         &self,
         input: AttachTypedLinkRequest,
     ) -> Result<AttachTypedLinkResponse, RusotoError<AttachTypedLinkError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/amazonclouddirectory/2017-01-11/typedlink/attach";
 
         let mut request = SignedRequest::new("PUT", "clouddirectory", &self.region, &request_uri);
@@ -8850,6 +8921,7 @@ impl CloudDirectory for CloudDirectoryClient {
         &self,
         input: BatchReadRequest,
     ) -> Result<BatchReadResponse, RusotoError<BatchReadError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/amazonclouddirectory/2017-01-11/batchread";
 
         let mut request = SignedRequest::new("POST", "clouddirectory", &self.region, &request_uri);
@@ -8883,6 +8955,7 @@ impl CloudDirectory for CloudDirectoryClient {
         &self,
         input: BatchWriteRequest,
     ) -> Result<BatchWriteResponse, RusotoError<BatchWriteError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/amazonclouddirectory/2017-01-11/batchwrite";
 
         let mut request = SignedRequest::new("PUT", "clouddirectory", &self.region, &request_uri);
@@ -8915,6 +8988,7 @@ impl CloudDirectory for CloudDirectoryClient {
         &self,
         input: CreateDirectoryRequest,
     ) -> Result<CreateDirectoryResponse, RusotoError<CreateDirectoryError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/amazonclouddirectory/2017-01-11/directory/create";
 
         let mut request = SignedRequest::new("PUT", "clouddirectory", &self.region, &request_uri);
@@ -8947,6 +9021,7 @@ impl CloudDirectory for CloudDirectoryClient {
         &self,
         input: CreateFacetRequest,
     ) -> Result<CreateFacetResponse, RusotoError<CreateFacetError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/amazonclouddirectory/2017-01-11/facet/create";
 
         let mut request = SignedRequest::new("PUT", "clouddirectory", &self.region, &request_uri);
@@ -8979,6 +9054,7 @@ impl CloudDirectory for CloudDirectoryClient {
         &self,
         input: CreateIndexRequest,
     ) -> Result<CreateIndexResponse, RusotoError<CreateIndexError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/amazonclouddirectory/2017-01-11/index";
 
         let mut request = SignedRequest::new("PUT", "clouddirectory", &self.region, &request_uri);
@@ -9011,6 +9087,7 @@ impl CloudDirectory for CloudDirectoryClient {
         &self,
         input: CreateObjectRequest,
     ) -> Result<CreateObjectResponse, RusotoError<CreateObjectError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/amazonclouddirectory/2017-01-11/object";
 
         let mut request = SignedRequest::new("PUT", "clouddirectory", &self.region, &request_uri);
@@ -9043,6 +9120,7 @@ impl CloudDirectory for CloudDirectoryClient {
         &self,
         input: CreateSchemaRequest,
     ) -> Result<CreateSchemaResponse, RusotoError<CreateSchemaError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/amazonclouddirectory/2017-01-11/schema/create";
 
         let mut request = SignedRequest::new("PUT", "clouddirectory", &self.region, &request_uri);
@@ -9074,6 +9152,7 @@ impl CloudDirectory for CloudDirectoryClient {
         &self,
         input: CreateTypedLinkFacetRequest,
     ) -> Result<CreateTypedLinkFacetResponse, RusotoError<CreateTypedLinkFacetError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/amazonclouddirectory/2017-01-11/typedlink/facet/create";
 
         let mut request = SignedRequest::new("PUT", "clouddirectory", &self.region, &request_uri);
@@ -9106,6 +9185,7 @@ impl CloudDirectory for CloudDirectoryClient {
         &self,
         input: DeleteDirectoryRequest,
     ) -> Result<DeleteDirectoryResponse, RusotoError<DeleteDirectoryError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/amazonclouddirectory/2017-01-11/directory";
 
         let mut request = SignedRequest::new("PUT", "clouddirectory", &self.region, &request_uri);
@@ -9136,6 +9216,7 @@ impl CloudDirectory for CloudDirectoryClient {
         &self,
         input: DeleteFacetRequest,
     ) -> Result<DeleteFacetResponse, RusotoError<DeleteFacetError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/amazonclouddirectory/2017-01-11/facet/delete";
 
         let mut request = SignedRequest::new("PUT", "clouddirectory", &self.region, &request_uri);
@@ -9168,6 +9249,7 @@ impl CloudDirectory for CloudDirectoryClient {
         &self,
         input: DeleteObjectRequest,
     ) -> Result<DeleteObjectResponse, RusotoError<DeleteObjectError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/amazonclouddirectory/2017-01-11/object/delete";
 
         let mut request = SignedRequest::new("PUT", "clouddirectory", &self.region, &request_uri);
@@ -9200,6 +9282,7 @@ impl CloudDirectory for CloudDirectoryClient {
         &self,
         input: DeleteSchemaRequest,
     ) -> Result<DeleteSchemaResponse, RusotoError<DeleteSchemaError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/amazonclouddirectory/2017-01-11/schema";
 
         let mut request = SignedRequest::new("PUT", "clouddirectory", &self.region, &request_uri);
@@ -9230,6 +9313,7 @@ impl CloudDirectory for CloudDirectoryClient {
         &self,
         input: DeleteTypedLinkFacetRequest,
     ) -> Result<DeleteTypedLinkFacetResponse, RusotoError<DeleteTypedLinkFacetError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/amazonclouddirectory/2017-01-11/typedlink/facet/delete";
 
         let mut request = SignedRequest::new("PUT", "clouddirectory", &self.region, &request_uri);
@@ -9262,6 +9346,7 @@ impl CloudDirectory for CloudDirectoryClient {
         &self,
         input: DetachFromIndexRequest,
     ) -> Result<DetachFromIndexResponse, RusotoError<DetachFromIndexError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/amazonclouddirectory/2017-01-11/index/detach";
 
         let mut request = SignedRequest::new("PUT", "clouddirectory", &self.region, &request_uri);
@@ -9294,6 +9379,7 @@ impl CloudDirectory for CloudDirectoryClient {
         &self,
         input: DetachObjectRequest,
     ) -> Result<DetachObjectResponse, RusotoError<DetachObjectError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/amazonclouddirectory/2017-01-11/object/detach";
 
         let mut request = SignedRequest::new("PUT", "clouddirectory", &self.region, &request_uri);
@@ -9326,6 +9412,7 @@ impl CloudDirectory for CloudDirectoryClient {
         &self,
         input: DetachPolicyRequest,
     ) -> Result<DetachPolicyResponse, RusotoError<DetachPolicyError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/amazonclouddirectory/2017-01-11/policy/detach";
 
         let mut request = SignedRequest::new("PUT", "clouddirectory", &self.region, &request_uri);
@@ -9358,6 +9445,7 @@ impl CloudDirectory for CloudDirectoryClient {
         &self,
         input: DetachTypedLinkRequest,
     ) -> Result<(), RusotoError<DetachTypedLinkError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/amazonclouddirectory/2017-01-11/typedlink/detach";
 
         let mut request = SignedRequest::new("PUT", "clouddirectory", &self.region, &request_uri);
@@ -9374,9 +9462,9 @@ impl CloudDirectory for CloudDirectoryClient {
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
             let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = ::std::mem::drop(response);
+            let _result = ::std::mem::drop(response);
 
-            Ok(result)
+            Ok(())
         } else {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             Err(DetachTypedLinkError::from_response(response))
@@ -9389,6 +9477,7 @@ impl CloudDirectory for CloudDirectoryClient {
         &self,
         input: DisableDirectoryRequest,
     ) -> Result<DisableDirectoryResponse, RusotoError<DisableDirectoryError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/amazonclouddirectory/2017-01-11/directory/disable";
 
         let mut request = SignedRequest::new("PUT", "clouddirectory", &self.region, &request_uri);
@@ -9419,6 +9508,7 @@ impl CloudDirectory for CloudDirectoryClient {
         &self,
         input: EnableDirectoryRequest,
     ) -> Result<EnableDirectoryResponse, RusotoError<EnableDirectoryError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/amazonclouddirectory/2017-01-11/directory/enable";
 
         let mut request = SignedRequest::new("PUT", "clouddirectory", &self.region, &request_uri);
@@ -9449,6 +9539,7 @@ impl CloudDirectory for CloudDirectoryClient {
         &self,
         input: GetAppliedSchemaVersionRequest,
     ) -> Result<GetAppliedSchemaVersionResponse, RusotoError<GetAppliedSchemaVersionError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/amazonclouddirectory/2017-01-11/schema/getappliedschema";
 
         let mut request = SignedRequest::new("POST", "clouddirectory", &self.region, &request_uri);
@@ -9480,6 +9571,7 @@ impl CloudDirectory for CloudDirectoryClient {
         &self,
         input: GetDirectoryRequest,
     ) -> Result<GetDirectoryResponse, RusotoError<GetDirectoryError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/amazonclouddirectory/2017-01-11/directory/get";
 
         let mut request = SignedRequest::new("POST", "clouddirectory", &self.region, &request_uri);
@@ -9510,6 +9602,7 @@ impl CloudDirectory for CloudDirectoryClient {
         &self,
         input: GetFacetRequest,
     ) -> Result<GetFacetResponse, RusotoError<GetFacetError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/amazonclouddirectory/2017-01-11/facet";
 
         let mut request = SignedRequest::new("POST", "clouddirectory", &self.region, &request_uri);
@@ -9542,6 +9635,7 @@ impl CloudDirectory for CloudDirectoryClient {
         &self,
         input: GetLinkAttributesRequest,
     ) -> Result<GetLinkAttributesResponse, RusotoError<GetLinkAttributesError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/amazonclouddirectory/2017-01-11/typedlink/attributes/get";
 
         let mut request = SignedRequest::new("POST", "clouddirectory", &self.region, &request_uri);
@@ -9574,6 +9668,7 @@ impl CloudDirectory for CloudDirectoryClient {
         &self,
         input: GetObjectAttributesRequest,
     ) -> Result<GetObjectAttributesResponse, RusotoError<GetObjectAttributesError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/amazonclouddirectory/2017-01-11/object/attributes/get";
 
         let mut request = SignedRequest::new("POST", "clouddirectory", &self.region, &request_uri);
@@ -9607,6 +9702,7 @@ impl CloudDirectory for CloudDirectoryClient {
         &self,
         input: GetObjectInformationRequest,
     ) -> Result<GetObjectInformationResponse, RusotoError<GetObjectInformationError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/amazonclouddirectory/2017-01-11/object/information";
 
         let mut request = SignedRequest::new("POST", "clouddirectory", &self.region, &request_uri);
@@ -9640,6 +9736,7 @@ impl CloudDirectory for CloudDirectoryClient {
         &self,
         input: GetSchemaAsJsonRequest,
     ) -> Result<GetSchemaAsJsonResponse, RusotoError<GetSchemaAsJsonError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/amazonclouddirectory/2017-01-11/schema/json";
 
         let mut request = SignedRequest::new("POST", "clouddirectory", &self.region, &request_uri);
@@ -9671,6 +9768,7 @@ impl CloudDirectory for CloudDirectoryClient {
         input: GetTypedLinkFacetInformationRequest,
     ) -> Result<GetTypedLinkFacetInformationResponse, RusotoError<GetTypedLinkFacetInformationError>>
     {
+        #![allow(clippy::needless_update)]
         let request_uri = "/amazonclouddirectory/2017-01-11/typedlink/facet/get";
 
         let mut request = SignedRequest::new("POST", "clouddirectory", &self.region, &request_uri);
@@ -9703,6 +9801,7 @@ impl CloudDirectory for CloudDirectoryClient {
         &self,
         input: ListAppliedSchemaArnsRequest,
     ) -> Result<ListAppliedSchemaArnsResponse, RusotoError<ListAppliedSchemaArnsError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/amazonclouddirectory/2017-01-11/schema/applied";
 
         let mut request = SignedRequest::new("POST", "clouddirectory", &self.region, &request_uri);
@@ -9734,6 +9833,7 @@ impl CloudDirectory for CloudDirectoryClient {
         &self,
         input: ListAttachedIndicesRequest,
     ) -> Result<ListAttachedIndicesResponse, RusotoError<ListAttachedIndicesError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/amazonclouddirectory/2017-01-11/object/indices";
 
         let mut request = SignedRequest::new("POST", "clouddirectory", &self.region, &request_uri);
@@ -9768,6 +9868,7 @@ impl CloudDirectory for CloudDirectoryClient {
         input: ListDevelopmentSchemaArnsRequest,
     ) -> Result<ListDevelopmentSchemaArnsResponse, RusotoError<ListDevelopmentSchemaArnsError>>
     {
+        #![allow(clippy::needless_update)]
         let request_uri = "/amazonclouddirectory/2017-01-11/schema/development";
 
         let mut request = SignedRequest::new("POST", "clouddirectory", &self.region, &request_uri);
@@ -9799,6 +9900,7 @@ impl CloudDirectory for CloudDirectoryClient {
         &self,
         input: ListDirectoriesRequest,
     ) -> Result<ListDirectoriesResponse, RusotoError<ListDirectoriesError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/amazonclouddirectory/2017-01-11/directory/list";
 
         let mut request = SignedRequest::new("POST", "clouddirectory", &self.region, &request_uri);
@@ -9830,6 +9932,7 @@ impl CloudDirectory for CloudDirectoryClient {
         &self,
         input: ListFacetAttributesRequest,
     ) -> Result<ListFacetAttributesResponse, RusotoError<ListFacetAttributesError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/amazonclouddirectory/2017-01-11/facet/attributes";
 
         let mut request = SignedRequest::new("POST", "clouddirectory", &self.region, &request_uri);
@@ -9862,6 +9965,7 @@ impl CloudDirectory for CloudDirectoryClient {
         &self,
         input: ListFacetNamesRequest,
     ) -> Result<ListFacetNamesResponse, RusotoError<ListFacetNamesError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/amazonclouddirectory/2017-01-11/facet/list";
 
         let mut request = SignedRequest::new("POST", "clouddirectory", &self.region, &request_uri);
@@ -9894,6 +9998,7 @@ impl CloudDirectory for CloudDirectoryClient {
         &self,
         input: ListIncomingTypedLinksRequest,
     ) -> Result<ListIncomingTypedLinksResponse, RusotoError<ListIncomingTypedLinksError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/amazonclouddirectory/2017-01-11/typedlink/incoming";
 
         let mut request = SignedRequest::new("POST", "clouddirectory", &self.region, &request_uri);
@@ -9926,6 +10031,7 @@ impl CloudDirectory for CloudDirectoryClient {
         &self,
         input: ListIndexRequest,
     ) -> Result<ListIndexResponse, RusotoError<ListIndexError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/amazonclouddirectory/2017-01-11/index/targets";
 
         let mut request = SignedRequest::new("POST", "clouddirectory", &self.region, &request_uri);
@@ -9959,6 +10065,7 @@ impl CloudDirectory for CloudDirectoryClient {
         &self,
         input: ListManagedSchemaArnsRequest,
     ) -> Result<ListManagedSchemaArnsResponse, RusotoError<ListManagedSchemaArnsError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/amazonclouddirectory/2017-01-11/schema/managed";
 
         let mut request = SignedRequest::new("POST", "clouddirectory", &self.region, &request_uri);
@@ -9990,6 +10097,7 @@ impl CloudDirectory for CloudDirectoryClient {
         &self,
         input: ListObjectAttributesRequest,
     ) -> Result<ListObjectAttributesResponse, RusotoError<ListObjectAttributesError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/amazonclouddirectory/2017-01-11/object/attributes";
 
         let mut request = SignedRequest::new("POST", "clouddirectory", &self.region, &request_uri);
@@ -10023,6 +10131,7 @@ impl CloudDirectory for CloudDirectoryClient {
         &self,
         input: ListObjectChildrenRequest,
     ) -> Result<ListObjectChildrenResponse, RusotoError<ListObjectChildrenError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/amazonclouddirectory/2017-01-11/object/children";
 
         let mut request = SignedRequest::new("POST", "clouddirectory", &self.region, &request_uri);
@@ -10056,6 +10165,7 @@ impl CloudDirectory for CloudDirectoryClient {
         &self,
         input: ListObjectParentPathsRequest,
     ) -> Result<ListObjectParentPathsResponse, RusotoError<ListObjectParentPathsError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/amazonclouddirectory/2017-01-11/object/parentpaths";
 
         let mut request = SignedRequest::new("POST", "clouddirectory", &self.region, &request_uri);
@@ -10088,6 +10198,7 @@ impl CloudDirectory for CloudDirectoryClient {
         &self,
         input: ListObjectParentsRequest,
     ) -> Result<ListObjectParentsResponse, RusotoError<ListObjectParentsError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/amazonclouddirectory/2017-01-11/object/parent";
 
         let mut request = SignedRequest::new("POST", "clouddirectory", &self.region, &request_uri);
@@ -10121,6 +10232,7 @@ impl CloudDirectory for CloudDirectoryClient {
         &self,
         input: ListObjectPoliciesRequest,
     ) -> Result<ListObjectPoliciesResponse, RusotoError<ListObjectPoliciesError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/amazonclouddirectory/2017-01-11/object/policy";
 
         let mut request = SignedRequest::new("POST", "clouddirectory", &self.region, &request_uri);
@@ -10154,6 +10266,7 @@ impl CloudDirectory for CloudDirectoryClient {
         &self,
         input: ListOutgoingTypedLinksRequest,
     ) -> Result<ListOutgoingTypedLinksResponse, RusotoError<ListOutgoingTypedLinksError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/amazonclouddirectory/2017-01-11/typedlink/outgoing";
 
         let mut request = SignedRequest::new("POST", "clouddirectory", &self.region, &request_uri);
@@ -10186,6 +10299,7 @@ impl CloudDirectory for CloudDirectoryClient {
         &self,
         input: ListPolicyAttachmentsRequest,
     ) -> Result<ListPolicyAttachmentsResponse, RusotoError<ListPolicyAttachmentsError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/amazonclouddirectory/2017-01-11/policy/attachment";
 
         let mut request = SignedRequest::new("POST", "clouddirectory", &self.region, &request_uri);
@@ -10219,6 +10333,7 @@ impl CloudDirectory for CloudDirectoryClient {
         &self,
         input: ListPublishedSchemaArnsRequest,
     ) -> Result<ListPublishedSchemaArnsResponse, RusotoError<ListPublishedSchemaArnsError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/amazonclouddirectory/2017-01-11/schema/published";
 
         let mut request = SignedRequest::new("POST", "clouddirectory", &self.region, &request_uri);
@@ -10250,6 +10365,7 @@ impl CloudDirectory for CloudDirectoryClient {
         &self,
         input: ListTagsForResourceRequest,
     ) -> Result<ListTagsForResourceResponse, RusotoError<ListTagsForResourceError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/amazonclouddirectory/2017-01-11/tags";
 
         let mut request = SignedRequest::new("POST", "clouddirectory", &self.region, &request_uri);
@@ -10282,6 +10398,7 @@ impl CloudDirectory for CloudDirectoryClient {
         input: ListTypedLinkFacetAttributesRequest,
     ) -> Result<ListTypedLinkFacetAttributesResponse, RusotoError<ListTypedLinkFacetAttributesError>>
     {
+        #![allow(clippy::needless_update)]
         let request_uri = "/amazonclouddirectory/2017-01-11/typedlink/facet/attributes";
 
         let mut request = SignedRequest::new("POST", "clouddirectory", &self.region, &request_uri);
@@ -10314,6 +10431,7 @@ impl CloudDirectory for CloudDirectoryClient {
         &self,
         input: ListTypedLinkFacetNamesRequest,
     ) -> Result<ListTypedLinkFacetNamesResponse, RusotoError<ListTypedLinkFacetNamesError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/amazonclouddirectory/2017-01-11/typedlink/facet/list";
 
         let mut request = SignedRequest::new("POST", "clouddirectory", &self.region, &request_uri);
@@ -10346,6 +10464,7 @@ impl CloudDirectory for CloudDirectoryClient {
         &self,
         input: LookupPolicyRequest,
     ) -> Result<LookupPolicyResponse, RusotoError<LookupPolicyError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/amazonclouddirectory/2017-01-11/policy/lookup";
 
         let mut request = SignedRequest::new("POST", "clouddirectory", &self.region, &request_uri);
@@ -10378,6 +10497,7 @@ impl CloudDirectory for CloudDirectoryClient {
         &self,
         input: PublishSchemaRequest,
     ) -> Result<PublishSchemaResponse, RusotoError<PublishSchemaError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/amazonclouddirectory/2017-01-11/schema/publish";
 
         let mut request = SignedRequest::new("PUT", "clouddirectory", &self.region, &request_uri);
@@ -10413,6 +10533,7 @@ impl CloudDirectory for CloudDirectoryClient {
         &self,
         input: PutSchemaFromJsonRequest,
     ) -> Result<PutSchemaFromJsonResponse, RusotoError<PutSchemaFromJsonError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/amazonclouddirectory/2017-01-11/schema/json";
 
         let mut request = SignedRequest::new("PUT", "clouddirectory", &self.region, &request_uri);
@@ -10445,6 +10566,7 @@ impl CloudDirectory for CloudDirectoryClient {
         &self,
         input: RemoveFacetFromObjectRequest,
     ) -> Result<RemoveFacetFromObjectResponse, RusotoError<RemoveFacetFromObjectError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/amazonclouddirectory/2017-01-11/object/facets/delete";
 
         let mut request = SignedRequest::new("PUT", "clouddirectory", &self.region, &request_uri);
@@ -10477,6 +10599,7 @@ impl CloudDirectory for CloudDirectoryClient {
         &self,
         input: TagResourceRequest,
     ) -> Result<TagResourceResponse, RusotoError<TagResourceError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/amazonclouddirectory/2017-01-11/tags/add";
 
         let mut request = SignedRequest::new("PUT", "clouddirectory", &self.region, &request_uri);
@@ -10508,6 +10631,7 @@ impl CloudDirectory for CloudDirectoryClient {
         &self,
         input: UntagResourceRequest,
     ) -> Result<UntagResourceResponse, RusotoError<UntagResourceError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/amazonclouddirectory/2017-01-11/tags/remove";
 
         let mut request = SignedRequest::new("PUT", "clouddirectory", &self.region, &request_uri);
@@ -10539,6 +10663,7 @@ impl CloudDirectory for CloudDirectoryClient {
         &self,
         input: UpdateFacetRequest,
     ) -> Result<UpdateFacetResponse, RusotoError<UpdateFacetError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/amazonclouddirectory/2017-01-11/facet";
 
         let mut request = SignedRequest::new("PUT", "clouddirectory", &self.region, &request_uri);
@@ -10571,6 +10696,7 @@ impl CloudDirectory for CloudDirectoryClient {
         &self,
         input: UpdateLinkAttributesRequest,
     ) -> Result<UpdateLinkAttributesResponse, RusotoError<UpdateLinkAttributesError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/amazonclouddirectory/2017-01-11/typedlink/attributes/update";
 
         let mut request = SignedRequest::new("POST", "clouddirectory", &self.region, &request_uri);
@@ -10603,6 +10729,7 @@ impl CloudDirectory for CloudDirectoryClient {
         &self,
         input: UpdateObjectAttributesRequest,
     ) -> Result<UpdateObjectAttributesResponse, RusotoError<UpdateObjectAttributesError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/amazonclouddirectory/2017-01-11/object/update";
 
         let mut request = SignedRequest::new("PUT", "clouddirectory", &self.region, &request_uri);
@@ -10635,6 +10762,7 @@ impl CloudDirectory for CloudDirectoryClient {
         &self,
         input: UpdateSchemaRequest,
     ) -> Result<UpdateSchemaResponse, RusotoError<UpdateSchemaError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/amazonclouddirectory/2017-01-11/schema/update";
 
         let mut request = SignedRequest::new("PUT", "clouddirectory", &self.region, &request_uri);
@@ -10667,6 +10795,7 @@ impl CloudDirectory for CloudDirectoryClient {
         &self,
         input: UpdateTypedLinkFacetRequest,
     ) -> Result<UpdateTypedLinkFacetResponse, RusotoError<UpdateTypedLinkFacetError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/amazonclouddirectory/2017-01-11/typedlink/facet";
 
         let mut request = SignedRequest::new("PUT", "clouddirectory", &self.region, &request_uri);
@@ -10699,6 +10828,7 @@ impl CloudDirectory for CloudDirectoryClient {
         &self,
         input: UpgradeAppliedSchemaRequest,
     ) -> Result<UpgradeAppliedSchemaResponse, RusotoError<UpgradeAppliedSchemaError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/amazonclouddirectory/2017-01-11/schema/upgradeapplied";
 
         let mut request = SignedRequest::new("PUT", "clouddirectory", &self.region, &request_uri);
@@ -10730,6 +10860,7 @@ impl CloudDirectory for CloudDirectoryClient {
         &self,
         input: UpgradePublishedSchemaRequest,
     ) -> Result<UpgradePublishedSchemaResponse, RusotoError<UpgradePublishedSchemaError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/amazonclouddirectory/2017-01-11/schema/upgradepublished";
 
         let mut request = SignedRequest::new("PUT", "clouddirectory", &self.region, &request_uri);

@@ -49,7 +49,6 @@ impl DataSyncClient {
     }
 }
 
-use serde_json;
 /// <p>Represents a single entry in a list of agents. <code>AgentListEntry</code> returns an array that contains a list of agents when the <a>ListAgents</a> operation is called.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
@@ -1403,6 +1402,7 @@ pub enum CancelTaskExecutionError {
 impl CancelTaskExecutionError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CancelTaskExecutionError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalException" => {
                     return RusotoError::Service(CancelTaskExecutionError::Internal(err.msg))
@@ -1439,6 +1439,7 @@ pub enum CreateAgentError {
 impl CreateAgentError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateAgentError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalException" => {
                     return RusotoError::Service(CreateAgentError::Internal(err.msg))
@@ -1475,6 +1476,7 @@ pub enum CreateLocationEfsError {
 impl CreateLocationEfsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateLocationEfsError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalException" => {
                     return RusotoError::Service(CreateLocationEfsError::Internal(err.msg))
@@ -1511,6 +1513,7 @@ pub enum CreateLocationFsxWindowsError {
 impl CreateLocationFsxWindowsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateLocationFsxWindowsError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalException" => {
                     return RusotoError::Service(CreateLocationFsxWindowsError::Internal(err.msg))
@@ -1549,6 +1552,7 @@ pub enum CreateLocationNfsError {
 impl CreateLocationNfsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateLocationNfsError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalException" => {
                     return RusotoError::Service(CreateLocationNfsError::Internal(err.msg))
@@ -1587,6 +1591,7 @@ impl CreateLocationObjectStorageError {
         res: BufferedHttpResponse,
     ) -> RusotoError<CreateLocationObjectStorageError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalException" => {
                     return RusotoError::Service(CreateLocationObjectStorageError::Internal(
@@ -1627,6 +1632,7 @@ pub enum CreateLocationS3Error {
 impl CreateLocationS3Error {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateLocationS3Error> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalException" => {
                     return RusotoError::Service(CreateLocationS3Error::Internal(err.msg))
@@ -1663,6 +1669,7 @@ pub enum CreateLocationSmbError {
 impl CreateLocationSmbError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateLocationSmbError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalException" => {
                     return RusotoError::Service(CreateLocationSmbError::Internal(err.msg))
@@ -1699,6 +1706,7 @@ pub enum CreateTaskError {
 impl CreateTaskError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateTaskError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalException" => {
                     return RusotoError::Service(CreateTaskError::Internal(err.msg))
@@ -1735,6 +1743,7 @@ pub enum DeleteAgentError {
 impl DeleteAgentError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteAgentError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalException" => {
                     return RusotoError::Service(DeleteAgentError::Internal(err.msg))
@@ -1771,6 +1780,7 @@ pub enum DeleteLocationError {
 impl DeleteLocationError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteLocationError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalException" => {
                     return RusotoError::Service(DeleteLocationError::Internal(err.msg))
@@ -1807,6 +1817,7 @@ pub enum DeleteTaskError {
 impl DeleteTaskError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteTaskError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalException" => {
                     return RusotoError::Service(DeleteTaskError::Internal(err.msg))
@@ -1843,6 +1854,7 @@ pub enum DescribeAgentError {
 impl DescribeAgentError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeAgentError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalException" => {
                     return RusotoError::Service(DescribeAgentError::Internal(err.msg))
@@ -1879,6 +1891,7 @@ pub enum DescribeLocationEfsError {
 impl DescribeLocationEfsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeLocationEfsError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalException" => {
                     return RusotoError::Service(DescribeLocationEfsError::Internal(err.msg))
@@ -1917,6 +1930,7 @@ impl DescribeLocationFsxWindowsError {
         res: BufferedHttpResponse,
     ) -> RusotoError<DescribeLocationFsxWindowsError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalException" => {
                     return RusotoError::Service(DescribeLocationFsxWindowsError::Internal(err.msg))
@@ -1955,6 +1969,7 @@ pub enum DescribeLocationNfsError {
 impl DescribeLocationNfsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeLocationNfsError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalException" => {
                     return RusotoError::Service(DescribeLocationNfsError::Internal(err.msg))
@@ -1993,6 +2008,7 @@ impl DescribeLocationObjectStorageError {
         res: BufferedHttpResponse,
     ) -> RusotoError<DescribeLocationObjectStorageError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalException" => {
                     return RusotoError::Service(DescribeLocationObjectStorageError::Internal(
@@ -2033,6 +2049,7 @@ pub enum DescribeLocationS3Error {
 impl DescribeLocationS3Error {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeLocationS3Error> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalException" => {
                     return RusotoError::Service(DescribeLocationS3Error::Internal(err.msg))
@@ -2069,6 +2086,7 @@ pub enum DescribeLocationSmbError {
 impl DescribeLocationSmbError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeLocationSmbError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalException" => {
                     return RusotoError::Service(DescribeLocationSmbError::Internal(err.msg))
@@ -2105,6 +2123,7 @@ pub enum DescribeTaskError {
 impl DescribeTaskError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeTaskError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalException" => {
                     return RusotoError::Service(DescribeTaskError::Internal(err.msg))
@@ -2141,6 +2160,7 @@ pub enum DescribeTaskExecutionError {
 impl DescribeTaskExecutionError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeTaskExecutionError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalException" => {
                     return RusotoError::Service(DescribeTaskExecutionError::Internal(err.msg))
@@ -2179,6 +2199,7 @@ pub enum ListAgentsError {
 impl ListAgentsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListAgentsError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalException" => {
                     return RusotoError::Service(ListAgentsError::Internal(err.msg))
@@ -2215,6 +2236,7 @@ pub enum ListLocationsError {
 impl ListLocationsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListLocationsError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalException" => {
                     return RusotoError::Service(ListLocationsError::Internal(err.msg))
@@ -2251,6 +2273,7 @@ pub enum ListTagsForResourceError {
 impl ListTagsForResourceError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListTagsForResourceError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalException" => {
                     return RusotoError::Service(ListTagsForResourceError::Internal(err.msg))
@@ -2287,6 +2310,7 @@ pub enum ListTaskExecutionsError {
 impl ListTaskExecutionsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListTaskExecutionsError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalException" => {
                     return RusotoError::Service(ListTaskExecutionsError::Internal(err.msg))
@@ -2323,6 +2347,7 @@ pub enum ListTasksError {
 impl ListTasksError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListTasksError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalException" => {
                     return RusotoError::Service(ListTasksError::Internal(err.msg))
@@ -2359,6 +2384,7 @@ pub enum StartTaskExecutionError {
 impl StartTaskExecutionError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<StartTaskExecutionError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalException" => {
                     return RusotoError::Service(StartTaskExecutionError::Internal(err.msg))
@@ -2395,6 +2421,7 @@ pub enum TagResourceError {
 impl TagResourceError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<TagResourceError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalException" => {
                     return RusotoError::Service(TagResourceError::Internal(err.msg))
@@ -2431,6 +2458,7 @@ pub enum UntagResourceError {
 impl UntagResourceError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UntagResourceError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalException" => {
                     return RusotoError::Service(UntagResourceError::Internal(err.msg))
@@ -2467,6 +2495,7 @@ pub enum UpdateAgentError {
 impl UpdateAgentError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateAgentError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalException" => {
                     return RusotoError::Service(UpdateAgentError::Internal(err.msg))
@@ -2503,6 +2532,7 @@ pub enum UpdateTaskError {
 impl UpdateTaskError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateTaskError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalException" => {
                     return RusotoError::Service(UpdateTaskError::Internal(err.msg))
@@ -2539,6 +2569,7 @@ pub enum UpdateTaskExecutionError {
 impl UpdateTaskExecutionError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateTaskExecutionError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalException" => {
                     return RusotoError::Service(UpdateTaskExecutionError::Internal(err.msg))

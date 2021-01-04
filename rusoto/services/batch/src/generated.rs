@@ -24,7 +24,6 @@ use rusoto_core::proto;
 use rusoto_core::signature::SignedRequest;
 #[allow(unused_imports)]
 use serde::{Deserialize, Serialize};
-use serde_json;
 /// <p>An object representing an AWS Batch array job.</p>
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
@@ -1636,6 +1635,7 @@ pub enum CancelJobError {
 impl CancelJobError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CancelJobError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ClientException" => return RusotoError::Service(CancelJobError::Client(err.msg)),
                 "ServerException" => return RusotoError::Service(CancelJobError::Server(err.msg)),
@@ -1668,6 +1668,7 @@ pub enum CreateComputeEnvironmentError {
 impl CreateComputeEnvironmentError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateComputeEnvironmentError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ClientException" => {
                     return RusotoError::Service(CreateComputeEnvironmentError::Client(err.msg))
@@ -1704,6 +1705,7 @@ pub enum CreateJobQueueError {
 impl CreateJobQueueError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateJobQueueError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ClientException" => {
                     return RusotoError::Service(CreateJobQueueError::Client(err.msg))
@@ -1740,6 +1742,7 @@ pub enum DeleteComputeEnvironmentError {
 impl DeleteComputeEnvironmentError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteComputeEnvironmentError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ClientException" => {
                     return RusotoError::Service(DeleteComputeEnvironmentError::Client(err.msg))
@@ -1776,6 +1779,7 @@ pub enum DeleteJobQueueError {
 impl DeleteJobQueueError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteJobQueueError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ClientException" => {
                     return RusotoError::Service(DeleteJobQueueError::Client(err.msg))
@@ -1812,6 +1816,7 @@ pub enum DeregisterJobDefinitionError {
 impl DeregisterJobDefinitionError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeregisterJobDefinitionError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ClientException" => {
                     return RusotoError::Service(DeregisterJobDefinitionError::Client(err.msg))
@@ -1850,6 +1855,7 @@ impl DescribeComputeEnvironmentsError {
         res: BufferedHttpResponse,
     ) -> RusotoError<DescribeComputeEnvironmentsError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ClientException" => {
                     return RusotoError::Service(DescribeComputeEnvironmentsError::Client(err.msg))
@@ -1886,6 +1892,7 @@ pub enum DescribeJobDefinitionsError {
 impl DescribeJobDefinitionsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeJobDefinitionsError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ClientException" => {
                     return RusotoError::Service(DescribeJobDefinitionsError::Client(err.msg))
@@ -1922,6 +1929,7 @@ pub enum DescribeJobQueuesError {
 impl DescribeJobQueuesError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeJobQueuesError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ClientException" => {
                     return RusotoError::Service(DescribeJobQueuesError::Client(err.msg))
@@ -1958,6 +1966,7 @@ pub enum DescribeJobsError {
 impl DescribeJobsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeJobsError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ClientException" => {
                     return RusotoError::Service(DescribeJobsError::Client(err.msg))
@@ -1994,6 +2003,7 @@ pub enum ListJobsError {
 impl ListJobsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListJobsError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ClientException" => return RusotoError::Service(ListJobsError::Client(err.msg)),
                 "ServerException" => return RusotoError::Service(ListJobsError::Server(err.msg)),
@@ -2026,6 +2036,7 @@ pub enum ListTagsForResourceError {
 impl ListTagsForResourceError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListTagsForResourceError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ClientException" => {
                     return RusotoError::Service(ListTagsForResourceError::Client(err.msg))
@@ -2062,6 +2073,7 @@ pub enum RegisterJobDefinitionError {
 impl RegisterJobDefinitionError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<RegisterJobDefinitionError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ClientException" => {
                     return RusotoError::Service(RegisterJobDefinitionError::Client(err.msg))
@@ -2098,6 +2110,7 @@ pub enum SubmitJobError {
 impl SubmitJobError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<SubmitJobError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ClientException" => return RusotoError::Service(SubmitJobError::Client(err.msg)),
                 "ServerException" => return RusotoError::Service(SubmitJobError::Server(err.msg)),
@@ -2130,6 +2143,7 @@ pub enum TagResourceError {
 impl TagResourceError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<TagResourceError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ClientException" => {
                     return RusotoError::Service(TagResourceError::Client(err.msg))
@@ -2166,6 +2180,7 @@ pub enum TerminateJobError {
 impl TerminateJobError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<TerminateJobError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ClientException" => {
                     return RusotoError::Service(TerminateJobError::Client(err.msg))
@@ -2202,6 +2217,7 @@ pub enum UntagResourceError {
 impl UntagResourceError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UntagResourceError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ClientException" => {
                     return RusotoError::Service(UntagResourceError::Client(err.msg))
@@ -2238,6 +2254,7 @@ pub enum UpdateComputeEnvironmentError {
 impl UpdateComputeEnvironmentError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateComputeEnvironmentError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ClientException" => {
                     return RusotoError::Service(UpdateComputeEnvironmentError::Client(err.msg))
@@ -2274,6 +2291,7 @@ pub enum UpdateJobQueueError {
 impl UpdateJobQueueError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateJobQueueError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ClientException" => {
                     return RusotoError::Service(UpdateJobQueueError::Client(err.msg))
@@ -2461,6 +2479,7 @@ impl Batch for BatchClient {
         &self,
         input: CancelJobRequest,
     ) -> Result<CancelJobResponse, RusotoError<CancelJobError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/v1/canceljob";
 
         let mut request = SignedRequest::new("POST", "batch", &self.region, &request_uri);
@@ -2492,6 +2511,7 @@ impl Batch for BatchClient {
         &self,
         input: CreateComputeEnvironmentRequest,
     ) -> Result<CreateComputeEnvironmentResponse, RusotoError<CreateComputeEnvironmentError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/v1/createcomputeenvironment";
 
         let mut request = SignedRequest::new("POST", "batch", &self.region, &request_uri);
@@ -2523,6 +2543,7 @@ impl Batch for BatchClient {
         &self,
         input: CreateJobQueueRequest,
     ) -> Result<CreateJobQueueResponse, RusotoError<CreateJobQueueError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/v1/createjobqueue";
 
         let mut request = SignedRequest::new("POST", "batch", &self.region, &request_uri);
@@ -2554,6 +2575,7 @@ impl Batch for BatchClient {
         &self,
         input: DeleteComputeEnvironmentRequest,
     ) -> Result<DeleteComputeEnvironmentResponse, RusotoError<DeleteComputeEnvironmentError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/v1/deletecomputeenvironment";
 
         let mut request = SignedRequest::new("POST", "batch", &self.region, &request_uri);
@@ -2585,6 +2607,7 @@ impl Batch for BatchClient {
         &self,
         input: DeleteJobQueueRequest,
     ) -> Result<DeleteJobQueueResponse, RusotoError<DeleteJobQueueError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/v1/deletejobqueue";
 
         let mut request = SignedRequest::new("POST", "batch", &self.region, &request_uri);
@@ -2616,6 +2639,7 @@ impl Batch for BatchClient {
         &self,
         input: DeregisterJobDefinitionRequest,
     ) -> Result<DeregisterJobDefinitionResponse, RusotoError<DeregisterJobDefinitionError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/v1/deregisterjobdefinition";
 
         let mut request = SignedRequest::new("POST", "batch", &self.region, &request_uri);
@@ -2648,6 +2672,7 @@ impl Batch for BatchClient {
         input: DescribeComputeEnvironmentsRequest,
     ) -> Result<DescribeComputeEnvironmentsResponse, RusotoError<DescribeComputeEnvironmentsError>>
     {
+        #![allow(clippy::needless_update)]
         let request_uri = "/v1/describecomputeenvironments";
 
         let mut request = SignedRequest::new("POST", "batch", &self.region, &request_uri);
@@ -2679,6 +2704,7 @@ impl Batch for BatchClient {
         &self,
         input: DescribeJobDefinitionsRequest,
     ) -> Result<DescribeJobDefinitionsResponse, RusotoError<DescribeJobDefinitionsError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/v1/describejobdefinitions";
 
         let mut request = SignedRequest::new("POST", "batch", &self.region, &request_uri);
@@ -2710,6 +2736,7 @@ impl Batch for BatchClient {
         &self,
         input: DescribeJobQueuesRequest,
     ) -> Result<DescribeJobQueuesResponse, RusotoError<DescribeJobQueuesError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/v1/describejobqueues";
 
         let mut request = SignedRequest::new("POST", "batch", &self.region, &request_uri);
@@ -2741,6 +2768,7 @@ impl Batch for BatchClient {
         &self,
         input: DescribeJobsRequest,
     ) -> Result<DescribeJobsResponse, RusotoError<DescribeJobsError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/v1/describejobs";
 
         let mut request = SignedRequest::new("POST", "batch", &self.region, &request_uri);
@@ -2772,6 +2800,7 @@ impl Batch for BatchClient {
         &self,
         input: ListJobsRequest,
     ) -> Result<ListJobsResponse, RusotoError<ListJobsError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/v1/listjobs";
 
         let mut request = SignedRequest::new("POST", "batch", &self.region, &request_uri);
@@ -2803,6 +2832,7 @@ impl Batch for BatchClient {
         &self,
         input: ListTagsForResourceRequest,
     ) -> Result<ListTagsForResourceResponse, RusotoError<ListTagsForResourceError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!("/v1/tags/{resource_arn}", resource_arn = input.resource_arn);
 
         let mut request = SignedRequest::new("GET", "batch", &self.region, &request_uri);
@@ -2831,6 +2861,7 @@ impl Batch for BatchClient {
         &self,
         input: RegisterJobDefinitionRequest,
     ) -> Result<RegisterJobDefinitionResponse, RusotoError<RegisterJobDefinitionError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/v1/registerjobdefinition";
 
         let mut request = SignedRequest::new("POST", "batch", &self.region, &request_uri);
@@ -2862,6 +2893,7 @@ impl Batch for BatchClient {
         &self,
         input: SubmitJobRequest,
     ) -> Result<SubmitJobResponse, RusotoError<SubmitJobError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/v1/submitjob";
 
         let mut request = SignedRequest::new("POST", "batch", &self.region, &request_uri);
@@ -2893,6 +2925,7 @@ impl Batch for BatchClient {
         &self,
         input: TagResourceRequest,
     ) -> Result<TagResourceResponse, RusotoError<TagResourceError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!("/v1/tags/{resource_arn}", resource_arn = input.resource_arn);
 
         let mut request = SignedRequest::new("POST", "batch", &self.region, &request_uri);
@@ -2924,6 +2957,7 @@ impl Batch for BatchClient {
         &self,
         input: TerminateJobRequest,
     ) -> Result<TerminateJobResponse, RusotoError<TerminateJobError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/v1/terminatejob";
 
         let mut request = SignedRequest::new("POST", "batch", &self.region, &request_uri);
@@ -2955,6 +2989,7 @@ impl Batch for BatchClient {
         &self,
         input: UntagResourceRequest,
     ) -> Result<UntagResourceResponse, RusotoError<UntagResourceError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!("/v1/tags/{resource_arn}", resource_arn = input.resource_arn);
 
         let mut request = SignedRequest::new("DELETE", "batch", &self.region, &request_uri);
@@ -2989,6 +3024,7 @@ impl Batch for BatchClient {
         &self,
         input: UpdateComputeEnvironmentRequest,
     ) -> Result<UpdateComputeEnvironmentResponse, RusotoError<UpdateComputeEnvironmentError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/v1/updatecomputeenvironment";
 
         let mut request = SignedRequest::new("POST", "batch", &self.region, &request_uri);
@@ -3020,6 +3056,7 @@ impl Batch for BatchClient {
         &self,
         input: UpdateJobQueueRequest,
     ) -> Result<UpdateJobQueueResponse, RusotoError<UpdateJobQueueError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/v1/updatejobqueue";
 
         let mut request = SignedRequest::new("POST", "batch", &self.region, &request_uri);

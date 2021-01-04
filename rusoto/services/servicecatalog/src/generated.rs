@@ -50,7 +50,6 @@ impl ServiceCatalogClient {
     }
 }
 
-use serde_json;
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct AcceptPortfolioShareInput {
@@ -4082,6 +4081,7 @@ pub enum AcceptPortfolioShareError {
 impl AcceptPortfolioShareError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<AcceptPortfolioShareError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidParametersException" => {
                     return RusotoError::Service(AcceptPortfolioShareError::InvalidParameters(
@@ -4132,6 +4132,7 @@ impl AssociateBudgetWithResourceError {
         res: BufferedHttpResponse,
     ) -> RusotoError<AssociateBudgetWithResourceError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "DuplicateResourceException" => {
                     return RusotoError::Service(
@@ -4192,6 +4193,7 @@ impl AssociatePrincipalWithPortfolioError {
         res: BufferedHttpResponse,
     ) -> RusotoError<AssociatePrincipalWithPortfolioError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidParametersException" => {
                     return RusotoError::Service(
@@ -4248,6 +4250,7 @@ impl AssociateProductWithPortfolioError {
         res: BufferedHttpResponse,
     ) -> RusotoError<AssociateProductWithPortfolioError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidParametersException" => {
                     return RusotoError::Service(
@@ -4302,6 +4305,7 @@ impl AssociateServiceActionWithProvisioningArtifactError {
         res: BufferedHttpResponse,
     ) -> RusotoError<AssociateServiceActionWithProvisioningArtifactError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "DuplicateResourceException" => {
                     return RusotoError::Service(
@@ -4368,6 +4372,7 @@ impl AssociateTagOptionWithResourceError {
         res: BufferedHttpResponse,
     ) -> RusotoError<AssociateTagOptionWithResourceError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "DuplicateResourceException" => {
                     return RusotoError::Service(
@@ -4440,6 +4445,7 @@ impl BatchAssociateServiceActionWithProvisioningArtifactError {
         res: BufferedHttpResponse,
     ) -> RusotoError<BatchAssociateServiceActionWithProvisioningArtifactError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidParametersException" => {
                     return RusotoError::Service(
@@ -4478,6 +4484,7 @@ impl BatchDisassociateServiceActionFromProvisioningArtifactError {
         res: BufferedHttpResponse,
     ) -> RusotoError<BatchDisassociateServiceActionFromProvisioningArtifactError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidParametersException" => return RusotoError::Service(
                     BatchDisassociateServiceActionFromProvisioningArtifactError::InvalidParameters(
@@ -4514,6 +4521,7 @@ pub enum CopyProductError {
 impl CopyProductError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CopyProductError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidParametersException" => {
                     return RusotoError::Service(CopyProductError::InvalidParameters(err.msg))
@@ -4554,6 +4562,7 @@ pub enum CreateConstraintError {
 impl CreateConstraintError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateConstraintError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "DuplicateResourceException" => {
                     return RusotoError::Service(CreateConstraintError::DuplicateResource(err.msg))
@@ -4600,6 +4609,7 @@ pub enum CreatePortfolioError {
 impl CreatePortfolioError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreatePortfolioError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidParametersException" => {
                     return RusotoError::Service(CreatePortfolioError::InvalidParameters(err.msg))
@@ -4648,6 +4658,7 @@ pub enum CreatePortfolioShareError {
 impl CreatePortfolioShareError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreatePortfolioShareError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidParametersException" => {
                     return RusotoError::Service(CreatePortfolioShareError::InvalidParameters(
@@ -4704,6 +4715,7 @@ pub enum CreateProductError {
 impl CreateProductError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateProductError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidParametersException" => {
                     return RusotoError::Service(CreateProductError::InvalidParameters(err.msg))
@@ -4748,6 +4760,7 @@ impl CreateProvisionedProductPlanError {
         res: BufferedHttpResponse,
     ) -> RusotoError<CreateProvisionedProductPlanError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidParametersException" => {
                     return RusotoError::Service(
@@ -4802,6 +4815,7 @@ impl CreateProvisioningArtifactError {
         res: BufferedHttpResponse,
     ) -> RusotoError<CreateProvisioningArtifactError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidParametersException" => {
                     return RusotoError::Service(
@@ -4848,6 +4862,7 @@ pub enum CreateServiceActionError {
 impl CreateServiceActionError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateServiceActionError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidParametersException" => {
                     return RusotoError::Service(CreateServiceActionError::InvalidParameters(
@@ -4888,6 +4903,7 @@ pub enum CreateTagOptionError {
 impl CreateTagOptionError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateTagOptionError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "DuplicateResourceException" => {
                     return RusotoError::Service(CreateTagOptionError::DuplicateResource(err.msg))
@@ -4930,6 +4946,7 @@ pub enum DeleteConstraintError {
 impl DeleteConstraintError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteConstraintError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidParametersException" => {
                     return RusotoError::Service(DeleteConstraintError::InvalidParameters(err.msg))
@@ -4970,6 +4987,7 @@ pub enum DeletePortfolioError {
 impl DeletePortfolioError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeletePortfolioError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidParametersException" => {
                     return RusotoError::Service(DeletePortfolioError::InvalidParameters(err.msg))
@@ -5020,6 +5038,7 @@ pub enum DeletePortfolioShareError {
 impl DeletePortfolioShareError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeletePortfolioShareError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidParametersException" => {
                     return RusotoError::Service(DeletePortfolioShareError::InvalidParameters(
@@ -5074,6 +5093,7 @@ pub enum DeleteProductError {
 impl DeleteProductError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteProductError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidParametersException" => {
                     return RusotoError::Service(DeleteProductError::InvalidParameters(err.msg))
@@ -5120,6 +5140,7 @@ impl DeleteProvisionedProductPlanError {
         res: BufferedHttpResponse,
     ) -> RusotoError<DeleteProvisionedProductPlanError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidParametersException" => {
                     return RusotoError::Service(
@@ -5168,6 +5189,7 @@ impl DeleteProvisioningArtifactError {
         res: BufferedHttpResponse,
     ) -> RusotoError<DeleteProvisioningArtifactError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidParametersException" => {
                     return RusotoError::Service(
@@ -5214,6 +5236,7 @@ pub enum DeleteServiceActionError {
 impl DeleteServiceActionError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteServiceActionError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ResourceInUseException" => {
                     return RusotoError::Service(DeleteServiceActionError::ResourceInUse(err.msg))
@@ -5254,6 +5277,7 @@ pub enum DeleteTagOptionError {
 impl DeleteTagOptionError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteTagOptionError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ResourceInUseException" => {
                     return RusotoError::Service(DeleteTagOptionError::ResourceInUse(err.msg))
@@ -5294,6 +5318,7 @@ pub enum DescribeConstraintError {
 impl DescribeConstraintError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeConstraintError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(DescribeConstraintError::ResourceNotFound(err.msg))
@@ -5324,6 +5349,7 @@ pub enum DescribeCopyProductStatusError {
 impl DescribeCopyProductStatusError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeCopyProductStatusError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(DescribeCopyProductStatusError::ResourceNotFound(
@@ -5356,6 +5382,7 @@ pub enum DescribePortfolioError {
 impl DescribePortfolioError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribePortfolioError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(DescribePortfolioError::ResourceNotFound(err.msg))
@@ -5392,6 +5419,7 @@ impl DescribePortfolioShareStatusError {
         res: BufferedHttpResponse,
     ) -> RusotoError<DescribePortfolioShareStatusError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidParametersException" => {
                     return RusotoError::Service(
@@ -5444,6 +5472,7 @@ pub enum DescribePortfolioSharesError {
 impl DescribePortfolioSharesError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribePortfolioSharesError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidParametersException" => {
                     return RusotoError::Service(DescribePortfolioSharesError::InvalidParameters(
@@ -5484,6 +5513,7 @@ pub enum DescribeProductError {
 impl DescribeProductError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeProductError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidParametersException" => {
                     return RusotoError::Service(DescribeProductError::InvalidParameters(err.msg))
@@ -5520,6 +5550,7 @@ pub enum DescribeProductAsAdminError {
 impl DescribeProductAsAdminError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeProductAsAdminError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidParametersException" => {
                     return RusotoError::Service(DescribeProductAsAdminError::InvalidParameters(
@@ -5560,6 +5591,7 @@ pub enum DescribeProductViewError {
 impl DescribeProductViewError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeProductViewError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidParametersException" => {
                     return RusotoError::Service(DescribeProductViewError::InvalidParameters(
@@ -5602,6 +5634,7 @@ impl DescribeProvisionedProductError {
         res: BufferedHttpResponse,
     ) -> RusotoError<DescribeProvisionedProductError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidParametersException" => {
                     return RusotoError::Service(
@@ -5644,6 +5677,7 @@ impl DescribeProvisionedProductPlanError {
         res: BufferedHttpResponse,
     ) -> RusotoError<DescribeProvisionedProductPlanError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidParametersException" => {
                     return RusotoError::Service(
@@ -5690,6 +5724,7 @@ impl DescribeProvisioningArtifactError {
         res: BufferedHttpResponse,
     ) -> RusotoError<DescribeProvisioningArtifactError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidParametersException" => {
                     return RusotoError::Service(
@@ -5736,6 +5771,7 @@ impl DescribeProvisioningParametersError {
         res: BufferedHttpResponse,
     ) -> RusotoError<DescribeProvisioningParametersError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidParametersException" => {
                     return RusotoError::Service(
@@ -5778,6 +5814,7 @@ pub enum DescribeRecordError {
 impl DescribeRecordError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeRecordError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(DescribeRecordError::ResourceNotFound(err.msg))
@@ -5808,6 +5845,7 @@ pub enum DescribeServiceActionError {
 impl DescribeServiceActionError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeServiceActionError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(DescribeServiceActionError::ResourceNotFound(
@@ -5844,6 +5882,7 @@ impl DescribeServiceActionExecutionParametersError {
         res: BufferedHttpResponse,
     ) -> RusotoError<DescribeServiceActionExecutionParametersError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidParametersException" => {
                     return RusotoError::Service(
@@ -5888,6 +5927,7 @@ pub enum DescribeTagOptionError {
 impl DescribeTagOptionError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeTagOptionError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(DescribeTagOptionError::ResourceNotFound(err.msg))
@@ -5930,6 +5970,7 @@ impl DisableAWSOrganizationsAccessError {
         res: BufferedHttpResponse,
     ) -> RusotoError<DisableAWSOrganizationsAccessError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidStateException" => {
                     return RusotoError::Service(DisableAWSOrganizationsAccessError::InvalidState(
@@ -5980,6 +6021,7 @@ impl DisassociateBudgetFromResourceError {
         res: BufferedHttpResponse,
     ) -> RusotoError<DisassociateBudgetFromResourceError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(
@@ -6018,6 +6060,7 @@ impl DisassociatePrincipalFromPortfolioError {
         res: BufferedHttpResponse,
     ) -> RusotoError<DisassociatePrincipalFromPortfolioError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidParametersException" => {
                     return RusotoError::Service(
@@ -6066,6 +6109,7 @@ impl DisassociateProductFromPortfolioError {
         res: BufferedHttpResponse,
     ) -> RusotoError<DisassociateProductFromPortfolioError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidParametersException" => {
                     return RusotoError::Service(
@@ -6118,6 +6162,7 @@ impl DisassociateServiceActionFromProvisioningArtifactError {
         res: BufferedHttpResponse,
     ) -> RusotoError<DisassociateServiceActionFromProvisioningArtifactError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(
@@ -6158,6 +6203,7 @@ impl DisassociateTagOptionFromResourceError {
         res: BufferedHttpResponse,
     ) -> RusotoError<DisassociateTagOptionFromResourceError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(
@@ -6206,6 +6252,7 @@ impl EnableAWSOrganizationsAccessError {
         res: BufferedHttpResponse,
     ) -> RusotoError<EnableAWSOrganizationsAccessError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidStateException" => {
                     return RusotoError::Service(EnableAWSOrganizationsAccessError::InvalidState(
@@ -6260,6 +6307,7 @@ impl ExecuteProvisionedProductPlanError {
         res: BufferedHttpResponse,
     ) -> RusotoError<ExecuteProvisionedProductPlanError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidParametersException" => {
                     return RusotoError::Service(
@@ -6314,6 +6362,7 @@ impl ExecuteProvisionedProductServiceActionError {
         res: BufferedHttpResponse,
     ) -> RusotoError<ExecuteProvisionedProductServiceActionError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidParametersException" => {
                     return RusotoError::Service(
@@ -6368,6 +6417,7 @@ impl GetAWSOrganizationsAccessStatusError {
         res: BufferedHttpResponse,
     ) -> RusotoError<GetAWSOrganizationsAccessStatusError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "OperationNotSupportedException" => {
                     return RusotoError::Service(
@@ -6414,6 +6464,7 @@ impl GetProvisionedProductOutputsError {
         res: BufferedHttpResponse,
     ) -> RusotoError<GetProvisionedProductOutputsError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidParametersException" => {
                     return RusotoError::Service(
@@ -6464,6 +6515,7 @@ impl ImportAsProvisionedProductError {
         res: BufferedHttpResponse,
     ) -> RusotoError<ImportAsProvisionedProductError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "DuplicateResourceException" => {
                     return RusotoError::Service(
@@ -6518,6 +6570,7 @@ impl ListAcceptedPortfolioSharesError {
         res: BufferedHttpResponse,
     ) -> RusotoError<ListAcceptedPortfolioSharesError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidParametersException" => {
                     return RusotoError::Service(
@@ -6562,6 +6615,7 @@ pub enum ListBudgetsForResourceError {
 impl ListBudgetsForResourceError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListBudgetsForResourceError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidParametersException" => {
                     return RusotoError::Service(ListBudgetsForResourceError::InvalidParameters(
@@ -6604,6 +6658,7 @@ impl ListConstraintsForPortfolioError {
         res: BufferedHttpResponse,
     ) -> RusotoError<ListConstraintsForPortfolioError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidParametersException" => {
                     return RusotoError::Service(
@@ -6646,6 +6701,7 @@ pub enum ListLaunchPathsError {
 impl ListLaunchPathsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListLaunchPathsError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidParametersException" => {
                     return RusotoError::Service(ListLaunchPathsError::InvalidParameters(err.msg))
@@ -6686,6 +6742,7 @@ impl ListOrganizationPortfolioAccessError {
         res: BufferedHttpResponse,
     ) -> RusotoError<ListOrganizationPortfolioAccessError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidParametersException" => {
                     return RusotoError::Service(
@@ -6738,6 +6795,7 @@ pub enum ListPortfolioAccessError {
 impl ListPortfolioAccessError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListPortfolioAccessError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidParametersException" => {
                     return RusotoError::Service(ListPortfolioAccessError::InvalidParameters(
@@ -6776,6 +6834,7 @@ pub enum ListPortfoliosError {
 impl ListPortfoliosError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListPortfoliosError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidParametersException" => {
                     return RusotoError::Service(ListPortfoliosError::InvalidParameters(err.msg))
@@ -6808,6 +6867,7 @@ pub enum ListPortfoliosForProductError {
 impl ListPortfoliosForProductError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListPortfoliosForProductError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidParametersException" => {
                     return RusotoError::Service(ListPortfoliosForProductError::InvalidParameters(
@@ -6850,6 +6910,7 @@ impl ListPrincipalsForPortfolioError {
         res: BufferedHttpResponse,
     ) -> RusotoError<ListPrincipalsForPortfolioError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidParametersException" => {
                     return RusotoError::Service(
@@ -6892,6 +6953,7 @@ impl ListProvisionedProductPlansError {
         res: BufferedHttpResponse,
     ) -> RusotoError<ListProvisionedProductPlansError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidParametersException" => {
                     return RusotoError::Service(
@@ -6934,6 +6996,7 @@ pub enum ListProvisioningArtifactsError {
 impl ListProvisioningArtifactsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListProvisioningArtifactsError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidParametersException" => {
                     return RusotoError::Service(ListProvisioningArtifactsError::InvalidParameters(
@@ -6976,6 +7039,7 @@ impl ListProvisioningArtifactsForServiceActionError {
         res: BufferedHttpResponse,
     ) -> RusotoError<ListProvisioningArtifactsForServiceActionError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidParametersException" => {
                     return RusotoError::Service(
@@ -7018,6 +7082,7 @@ pub enum ListRecordHistoryError {
 impl ListRecordHistoryError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListRecordHistoryError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidParametersException" => {
                     return RusotoError::Service(ListRecordHistoryError::InvalidParameters(err.msg))
@@ -7052,6 +7117,7 @@ pub enum ListResourcesForTagOptionError {
 impl ListResourcesForTagOptionError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListResourcesForTagOptionError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidParametersException" => {
                     return RusotoError::Service(ListResourcesForTagOptionError::InvalidParameters(
@@ -7098,6 +7164,7 @@ pub enum ListServiceActionsError {
 impl ListServiceActionsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListServiceActionsError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidParametersException" => {
                     return RusotoError::Service(ListServiceActionsError::InvalidParameters(
@@ -7134,6 +7201,7 @@ impl ListServiceActionsForProvisioningArtifactError {
         res: BufferedHttpResponse,
     ) -> RusotoError<ListServiceActionsForProvisioningArtifactError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidParametersException" => {
                     return RusotoError::Service(
@@ -7180,6 +7248,7 @@ impl ListStackInstancesForProvisionedProductError {
         res: BufferedHttpResponse,
     ) -> RusotoError<ListStackInstancesForProvisionedProductError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidParametersException" => {
                     return RusotoError::Service(
@@ -7224,6 +7293,7 @@ pub enum ListTagOptionsError {
 impl ListTagOptionsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListTagOptionsError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidParametersException" => {
                     return RusotoError::Service(ListTagOptionsError::InvalidParameters(err.msg))
@@ -7262,6 +7332,7 @@ pub enum ProvisionProductError {
 impl ProvisionProductError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ProvisionProductError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "DuplicateResourceException" => {
                     return RusotoError::Service(ProvisionProductError::DuplicateResource(err.msg))
@@ -7300,6 +7371,7 @@ pub enum RejectPortfolioShareError {
 impl RejectPortfolioShareError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<RejectPortfolioShareError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(RejectPortfolioShareError::ResourceNotFound(
@@ -7332,6 +7404,7 @@ pub enum ScanProvisionedProductsError {
 impl ScanProvisionedProductsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ScanProvisionedProductsError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidParametersException" => {
                     return RusotoError::Service(ScanProvisionedProductsError::InvalidParameters(
@@ -7364,6 +7437,7 @@ pub enum SearchProductsError {
 impl SearchProductsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<SearchProductsError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidParametersException" => {
                     return RusotoError::Service(SearchProductsError::InvalidParameters(err.msg))
@@ -7396,6 +7470,7 @@ pub enum SearchProductsAsAdminError {
 impl SearchProductsAsAdminError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<SearchProductsAsAdminError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidParametersException" => {
                     return RusotoError::Service(SearchProductsAsAdminError::InvalidParameters(
@@ -7434,6 +7509,7 @@ pub enum SearchProvisionedProductsError {
 impl SearchProvisionedProductsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<SearchProvisionedProductsError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidParametersException" => {
                     return RusotoError::Service(SearchProvisionedProductsError::InvalidParameters(
@@ -7468,6 +7544,7 @@ impl TerminateProvisionedProductError {
         res: BufferedHttpResponse,
     ) -> RusotoError<TerminateProvisionedProductError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(
@@ -7502,6 +7579,7 @@ pub enum UpdateConstraintError {
 impl UpdateConstraintError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateConstraintError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidParametersException" => {
                     return RusotoError::Service(UpdateConstraintError::InvalidParameters(err.msg))
@@ -7542,6 +7620,7 @@ pub enum UpdatePortfolioError {
 impl UpdatePortfolioError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdatePortfolioError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidParametersException" => {
                     return RusotoError::Service(UpdatePortfolioError::InvalidParameters(err.msg))
@@ -7592,6 +7671,7 @@ pub enum UpdatePortfolioShareError {
 impl UpdatePortfolioShareError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdatePortfolioShareError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidParametersException" => {
                     return RusotoError::Service(UpdatePortfolioShareError::InvalidParameters(
@@ -7644,6 +7724,7 @@ pub enum UpdateProductError {
 impl UpdateProductError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateProductError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidParametersException" => {
                     return RusotoError::Service(UpdateProductError::InvalidParameters(err.msg))
@@ -7684,6 +7765,7 @@ pub enum UpdateProvisionedProductError {
 impl UpdateProvisionedProductError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateProvisionedProductError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidParametersException" => {
                     return RusotoError::Service(UpdateProvisionedProductError::InvalidParameters(
@@ -7728,6 +7810,7 @@ impl UpdateProvisionedProductPropertiesError {
         res: BufferedHttpResponse,
     ) -> RusotoError<UpdateProvisionedProductPropertiesError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidParametersException" => {
                     return RusotoError::Service(
@@ -7782,6 +7865,7 @@ impl UpdateProvisioningArtifactError {
         res: BufferedHttpResponse,
     ) -> RusotoError<UpdateProvisioningArtifactError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidParametersException" => {
                     return RusotoError::Service(
@@ -7822,6 +7906,7 @@ pub enum UpdateServiceActionError {
 impl UpdateServiceActionError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateServiceActionError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidParametersException" => {
                     return RusotoError::Service(UpdateServiceActionError::InvalidParameters(
@@ -7866,6 +7951,7 @@ pub enum UpdateTagOptionError {
 impl UpdateTagOptionError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateTagOptionError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "DuplicateResourceException" => {
                     return RusotoError::Service(UpdateTagOptionError::DuplicateResource(err.msg))

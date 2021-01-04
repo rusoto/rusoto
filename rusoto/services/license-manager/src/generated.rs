@@ -50,7 +50,6 @@ impl LicenseManagerClient {
     }
 }
 
-use serde_json;
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct AcceptGrantRequest {
@@ -2054,6 +2053,7 @@ pub enum AcceptGrantError {
 impl AcceptGrantError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<AcceptGrantError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(AcceptGrantError::AccessDenied(err.msg))
@@ -2114,6 +2114,7 @@ pub enum CheckInLicenseError {
 impl CheckInLicenseError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CheckInLicenseError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(CheckInLicenseError::AccessDenied(err.msg))
@@ -2180,6 +2181,7 @@ pub enum CheckoutBorrowLicenseError {
 impl CheckoutBorrowLicenseError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CheckoutBorrowLicenseError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(CheckoutBorrowLicenseError::AccessDenied(err.msg))
@@ -2270,6 +2272,7 @@ pub enum CheckoutLicenseError {
 impl CheckoutLicenseError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CheckoutLicenseError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(CheckoutLicenseError::AccessDenied(err.msg))
@@ -2344,6 +2347,7 @@ pub enum CreateGrantError {
 impl CreateGrantError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateGrantError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(CreateGrantError::AccessDenied(err.msg))
@@ -2404,6 +2408,7 @@ pub enum CreateGrantVersionError {
 impl CreateGrantVersionError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateGrantVersionError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(CreateGrantVersionError::AccessDenied(err.msg))
@@ -2470,6 +2475,7 @@ pub enum CreateLicenseError {
 impl CreateLicenseError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateLicenseError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(CreateLicenseError::AccessDenied(err.msg))
@@ -2532,6 +2538,7 @@ impl CreateLicenseConfigurationError {
         res: BufferedHttpResponse,
     ) -> RusotoError<CreateLicenseConfigurationError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(CreateLicenseConfigurationError::AccessDenied(
@@ -2610,6 +2617,7 @@ pub enum CreateLicenseVersionError {
 impl CreateLicenseVersionError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateLicenseVersionError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(CreateLicenseVersionError::AccessDenied(err.msg))
@@ -2680,6 +2688,7 @@ pub enum CreateTokenError {
 impl CreateTokenError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateTokenError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(CreateTokenError::AccessDenied(err.msg))
@@ -2744,6 +2753,7 @@ pub enum DeleteGrantError {
 impl DeleteGrantError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteGrantError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(DeleteGrantError::AccessDenied(err.msg))
@@ -2806,6 +2816,7 @@ pub enum DeleteLicenseError {
 impl DeleteLicenseError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteLicenseError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(DeleteLicenseError::AccessDenied(err.msg))
@@ -2870,6 +2881,7 @@ impl DeleteLicenseConfigurationError {
         res: BufferedHttpResponse,
     ) -> RusotoError<DeleteLicenseConfigurationError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(DeleteLicenseConfigurationError::AccessDenied(
@@ -2938,6 +2950,7 @@ pub enum DeleteTokenError {
 impl DeleteTokenError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteTokenError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(DeleteTokenError::AccessDenied(err.msg))
@@ -2998,6 +3011,7 @@ pub enum ExtendLicenseConsumptionError {
 impl ExtendLicenseConsumptionError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ExtendLicenseConsumptionError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(ExtendLicenseConsumptionError::AccessDenied(
@@ -3068,6 +3082,7 @@ pub enum GetAccessTokenError {
 impl GetAccessTokenError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetAccessTokenError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(GetAccessTokenError::AccessDenied(err.msg))
@@ -3120,6 +3135,7 @@ pub enum GetGrantError {
 impl GetGrantError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetGrantError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(GetGrantError::AccessDenied(err.msg))
@@ -3178,6 +3194,7 @@ pub enum GetLicenseError {
 impl GetLicenseError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetLicenseError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(GetLicenseError::AccessDenied(err.msg))
@@ -3232,6 +3249,7 @@ pub enum GetLicenseConfigurationError {
 impl GetLicenseConfigurationError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetLicenseConfigurationError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(GetLicenseConfigurationError::AccessDenied(
@@ -3298,6 +3316,7 @@ pub enum GetLicenseUsageError {
 impl GetLicenseUsageError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetLicenseUsageError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(GetLicenseUsageError::AccessDenied(err.msg))
@@ -3352,6 +3371,7 @@ pub enum GetServiceSettingsError {
 impl GetServiceSettingsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetServiceSettingsError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(GetServiceSettingsError::AccessDenied(err.msg))
@@ -3408,6 +3428,7 @@ impl ListAssociationsForLicenseConfigurationError {
         res: BufferedHttpResponse,
     ) -> RusotoError<ListAssociationsForLicenseConfigurationError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(
@@ -3494,6 +3515,7 @@ pub enum ListDistributedGrantsError {
 impl ListDistributedGrantsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListDistributedGrantsError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(ListDistributedGrantsError::AccessDenied(err.msg))
@@ -3562,6 +3584,7 @@ impl ListFailuresForLicenseConfigurationOperationsError {
         res: BufferedHttpResponse,
     ) -> RusotoError<ListFailuresForLicenseConfigurationOperationsError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(
@@ -3642,6 +3665,7 @@ pub enum ListLicenseConfigurationsError {
 impl ListLicenseConfigurationsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListLicenseConfigurationsError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(ListLicenseConfigurationsError::AccessDenied(
@@ -3718,6 +3742,7 @@ impl ListLicenseSpecificationsForResourceError {
         res: BufferedHttpResponse,
     ) -> RusotoError<ListLicenseSpecificationsForResourceError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(
@@ -3792,6 +3817,7 @@ pub enum ListLicenseVersionsError {
 impl ListLicenseVersionsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListLicenseVersionsError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(ListLicenseVersionsError::AccessDenied(err.msg))
@@ -3850,6 +3876,7 @@ pub enum ListLicensesError {
 impl ListLicensesError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListLicensesError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(ListLicensesError::AccessDenied(err.msg))
@@ -3906,6 +3933,7 @@ pub enum ListReceivedGrantsError {
 impl ListReceivedGrantsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListReceivedGrantsError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(ListReceivedGrantsError::AccessDenied(err.msg))
@@ -3972,6 +4000,7 @@ pub enum ListReceivedLicensesError {
 impl ListReceivedLicensesError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListReceivedLicensesError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(ListReceivedLicensesError::AccessDenied(err.msg))
@@ -4040,6 +4069,7 @@ pub enum ListResourceInventoryError {
 impl ListResourceInventoryError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListResourceInventoryError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(ListResourceInventoryError::AccessDenied(err.msg))
@@ -4112,6 +4142,7 @@ pub enum ListTagsForResourceError {
 impl ListTagsForResourceError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListTagsForResourceError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(ListTagsForResourceError::AccessDenied(err.msg))
@@ -4168,6 +4199,7 @@ pub enum ListTokensError {
 impl ListTokensError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListTokensError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(ListTokensError::AccessDenied(err.msg))
@@ -4222,6 +4254,7 @@ impl ListUsageForLicenseConfigurationError {
         res: BufferedHttpResponse,
     ) -> RusotoError<ListUsageForLicenseConfigurationError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(
@@ -4306,6 +4339,7 @@ pub enum RejectGrantError {
 impl RejectGrantError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<RejectGrantError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(RejectGrantError::AccessDenied(err.msg))
@@ -4364,6 +4398,7 @@ pub enum TagResourceError {
 impl TagResourceError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<TagResourceError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(TagResourceError::AccessDenied(err.msg))
@@ -4418,6 +4453,7 @@ pub enum UntagResourceError {
 impl UntagResourceError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UntagResourceError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(UntagResourceError::AccessDenied(err.msg))
@@ -4476,6 +4512,7 @@ impl UpdateLicenseConfigurationError {
         res: BufferedHttpResponse,
     ) -> RusotoError<UpdateLicenseConfigurationError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(UpdateLicenseConfigurationError::AccessDenied(
@@ -4556,6 +4593,7 @@ impl UpdateLicenseSpecificationsForResourceError {
         res: BufferedHttpResponse,
     ) -> RusotoError<UpdateLicenseSpecificationsForResourceError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(
@@ -4646,6 +4684,7 @@ pub enum UpdateServiceSettingsError {
 impl UpdateServiceSettingsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateServiceSettingsError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(UpdateServiceSettingsError::AccessDenied(err.msg))

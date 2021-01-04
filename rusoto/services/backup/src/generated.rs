@@ -24,7 +24,6 @@ use rusoto_core::proto;
 use rusoto_core::signature::SignedRequest;
 #[allow(unused_imports)]
 use serde::{Deserialize, Serialize};
-use serde_json;
 /// <p>A list of backup options for each resource type.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct AdvancedBackupSetting {
@@ -2167,6 +2166,7 @@ pub enum CreateBackupPlanError {
 impl CreateBackupPlanError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateBackupPlanError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AlreadyExistsException" => {
                     return RusotoError::Service(CreateBackupPlanError::AlreadyExists(err.msg))
@@ -2225,6 +2225,7 @@ pub enum CreateBackupSelectionError {
 impl CreateBackupSelectionError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateBackupSelectionError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AlreadyExistsException" => {
                     return RusotoError::Service(CreateBackupSelectionError::AlreadyExists(err.msg))
@@ -2285,6 +2286,7 @@ pub enum CreateBackupVaultError {
 impl CreateBackupVaultError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateBackupVaultError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AlreadyExistsException" => {
                     return RusotoError::Service(CreateBackupVaultError::AlreadyExists(err.msg))
@@ -2345,6 +2347,7 @@ pub enum DeleteBackupPlanError {
 impl DeleteBackupPlanError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteBackupPlanError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidParameterValueException" => {
                     return RusotoError::Service(DeleteBackupPlanError::InvalidParameterValue(
@@ -2401,6 +2404,7 @@ pub enum DeleteBackupSelectionError {
 impl DeleteBackupSelectionError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteBackupSelectionError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidParameterValueException" => {
                     return RusotoError::Service(DeleteBackupSelectionError::InvalidParameterValue(
@@ -2459,6 +2463,7 @@ pub enum DeleteBackupVaultError {
 impl DeleteBackupVaultError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteBackupVaultError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidParameterValueException" => {
                     return RusotoError::Service(DeleteBackupVaultError::InvalidParameterValue(
@@ -2519,6 +2524,7 @@ impl DeleteBackupVaultAccessPolicyError {
         res: BufferedHttpResponse,
     ) -> RusotoError<DeleteBackupVaultAccessPolicyError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidParameterValueException" => {
                     return RusotoError::Service(
@@ -2585,6 +2591,7 @@ impl DeleteBackupVaultNotificationsError {
         res: BufferedHttpResponse,
     ) -> RusotoError<DeleteBackupVaultNotificationsError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidParameterValueException" => {
                     return RusotoError::Service(
@@ -2651,6 +2658,7 @@ pub enum DeleteRecoveryPointError {
 impl DeleteRecoveryPointError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteRecoveryPointError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidParameterValueException" => {
                     return RusotoError::Service(DeleteRecoveryPointError::InvalidParameterValue(
@@ -2713,6 +2721,7 @@ pub enum DescribeBackupJobError {
 impl DescribeBackupJobError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeBackupJobError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "DependencyFailureException" => {
                     return RusotoError::Service(DescribeBackupJobError::DependencyFailure(err.msg))
@@ -2771,6 +2780,7 @@ pub enum DescribeBackupVaultError {
 impl DescribeBackupVaultError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeBackupVaultError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidParameterValueException" => {
                     return RusotoError::Service(DescribeBackupVaultError::InvalidParameterValue(
@@ -2827,6 +2837,7 @@ pub enum DescribeCopyJobError {
 impl DescribeCopyJobError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeCopyJobError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidParameterValueException" => {
                     return RusotoError::Service(DescribeCopyJobError::InvalidParameterValue(
@@ -2873,6 +2884,7 @@ pub enum DescribeGlobalSettingsError {
 impl DescribeGlobalSettingsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeGlobalSettingsError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ServiceUnavailableException" => {
                     return RusotoError::Service(DescribeGlobalSettingsError::ServiceUnavailable(
@@ -2911,6 +2923,7 @@ pub enum DescribeProtectedResourceError {
 impl DescribeProtectedResourceError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeProtectedResourceError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidParameterValueException" => {
                     return RusotoError::Service(
@@ -2971,6 +2984,7 @@ pub enum DescribeRecoveryPointError {
 impl DescribeRecoveryPointError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeRecoveryPointError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidParameterValueException" => {
                     return RusotoError::Service(DescribeRecoveryPointError::InvalidParameterValue(
@@ -3021,6 +3035,7 @@ pub enum DescribeRegionSettingsError {
 impl DescribeRegionSettingsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeRegionSettingsError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ServiceUnavailableException" => {
                     return RusotoError::Service(DescribeRegionSettingsError::ServiceUnavailable(
@@ -3061,6 +3076,7 @@ pub enum DescribeRestoreJobError {
 impl DescribeRestoreJobError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeRestoreJobError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "DependencyFailureException" => {
                     return RusotoError::Service(DescribeRestoreJobError::DependencyFailure(
@@ -3121,6 +3137,7 @@ pub enum ExportBackupPlanTemplateError {
 impl ExportBackupPlanTemplateError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ExportBackupPlanTemplateError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidParameterValueException" => {
                     return RusotoError::Service(
@@ -3181,6 +3198,7 @@ pub enum GetBackupPlanError {
 impl GetBackupPlanError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetBackupPlanError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidParameterValueException" => {
                     return RusotoError::Service(GetBackupPlanError::InvalidParameterValue(err.msg))
@@ -3231,6 +3249,7 @@ pub enum GetBackupPlanFromJSONError {
 impl GetBackupPlanFromJSONError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetBackupPlanFromJSONError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidParameterValueException" => {
                     return RusotoError::Service(GetBackupPlanFromJSONError::InvalidParameterValue(
@@ -3291,6 +3310,7 @@ pub enum GetBackupPlanFromTemplateError {
 impl GetBackupPlanFromTemplateError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetBackupPlanFromTemplateError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidParameterValueException" => {
                     return RusotoError::Service(
@@ -3351,6 +3371,7 @@ pub enum GetBackupSelectionError {
 impl GetBackupSelectionError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetBackupSelectionError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidParameterValueException" => {
                     return RusotoError::Service(GetBackupSelectionError::InvalidParameterValue(
@@ -3407,6 +3428,7 @@ impl GetBackupVaultAccessPolicyError {
         res: BufferedHttpResponse,
     ) -> RusotoError<GetBackupVaultAccessPolicyError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidParameterValueException" => {
                     return RusotoError::Service(
@@ -3471,6 +3493,7 @@ impl GetBackupVaultNotificationsError {
         res: BufferedHttpResponse,
     ) -> RusotoError<GetBackupVaultNotificationsError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidParameterValueException" => {
                     return RusotoError::Service(
@@ -3535,6 +3558,7 @@ impl GetRecoveryPointRestoreMetadataError {
         res: BufferedHttpResponse,
     ) -> RusotoError<GetRecoveryPointRestoreMetadataError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidParameterValueException" => {
                     return RusotoError::Service(
@@ -3593,6 +3617,7 @@ pub enum GetSupportedResourceTypesError {
 impl GetSupportedResourceTypesError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetSupportedResourceTypesError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ServiceUnavailableException" => {
                     return RusotoError::Service(
@@ -3627,6 +3652,7 @@ pub enum ListBackupJobsError {
 impl ListBackupJobsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListBackupJobsError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidParameterValueException" => {
                     return RusotoError::Service(ListBackupJobsError::InvalidParameterValue(
@@ -3669,6 +3695,7 @@ pub enum ListBackupPlanTemplatesError {
 impl ListBackupPlanTemplatesError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListBackupPlanTemplatesError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidParameterValueException" => {
                     return RusotoError::Service(
@@ -3729,6 +3756,7 @@ pub enum ListBackupPlanVersionsError {
 impl ListBackupPlanVersionsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListBackupPlanVersionsError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidParameterValueException" => {
                     return RusotoError::Service(
@@ -3785,6 +3813,7 @@ pub enum ListBackupPlansError {
 impl ListBackupPlansError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListBackupPlansError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidParameterValueException" => {
                     return RusotoError::Service(ListBackupPlansError::InvalidParameterValue(
@@ -3837,6 +3866,7 @@ pub enum ListBackupSelectionsError {
 impl ListBackupSelectionsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListBackupSelectionsError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidParameterValueException" => {
                     return RusotoError::Service(ListBackupSelectionsError::InvalidParameterValue(
@@ -3893,6 +3923,7 @@ pub enum ListBackupVaultsError {
 impl ListBackupVaultsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListBackupVaultsError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidParameterValueException" => {
                     return RusotoError::Service(ListBackupVaultsError::InvalidParameterValue(
@@ -3941,6 +3972,7 @@ pub enum ListCopyJobsError {
 impl ListCopyJobsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListCopyJobsError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidParameterValueException" => {
                     return RusotoError::Service(ListCopyJobsError::InvalidParameterValue(err.msg))
@@ -3977,6 +4009,7 @@ pub enum ListProtectedResourcesError {
 impl ListProtectedResourcesError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListProtectedResourcesError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidParameterValueException" => {
                     return RusotoError::Service(
@@ -4023,6 +4056,7 @@ impl ListRecoveryPointsByBackupVaultError {
         res: BufferedHttpResponse,
     ) -> RusotoError<ListRecoveryPointsByBackupVaultError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidParameterValueException" => {
                     return RusotoError::Service(
@@ -4089,6 +4123,7 @@ impl ListRecoveryPointsByResourceError {
         res: BufferedHttpResponse,
     ) -> RusotoError<ListRecoveryPointsByResourceError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidParameterValueException" => {
                     return RusotoError::Service(
@@ -4153,6 +4188,7 @@ pub enum ListRestoreJobsError {
 impl ListRestoreJobsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListRestoreJobsError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidParameterValueException" => {
                     return RusotoError::Service(ListRestoreJobsError::InvalidParameterValue(
@@ -4205,6 +4241,7 @@ pub enum ListTagsError {
 impl ListTagsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListTagsError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidParameterValueException" => {
                     return RusotoError::Service(ListTagsError::InvalidParameterValue(err.msg))
@@ -4255,6 +4292,7 @@ impl PutBackupVaultAccessPolicyError {
         res: BufferedHttpResponse,
     ) -> RusotoError<PutBackupVaultAccessPolicyError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidParameterValueException" => {
                     return RusotoError::Service(
@@ -4319,6 +4357,7 @@ impl PutBackupVaultNotificationsError {
         res: BufferedHttpResponse,
     ) -> RusotoError<PutBackupVaultNotificationsError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidParameterValueException" => {
                     return RusotoError::Service(
@@ -4385,6 +4424,7 @@ pub enum StartBackupJobError {
 impl StartBackupJobError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<StartBackupJobError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidParameterValueException" => {
                     return RusotoError::Service(StartBackupJobError::InvalidParameterValue(
@@ -4447,6 +4487,7 @@ pub enum StartCopyJobError {
 impl StartCopyJobError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<StartCopyJobError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidParameterValueException" => {
                     return RusotoError::Service(StartCopyJobError::InvalidParameterValue(err.msg))
@@ -4499,6 +4540,7 @@ pub enum StartRestoreJobError {
 impl StartRestoreJobError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<StartRestoreJobError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidParameterValueException" => {
                     return RusotoError::Service(StartRestoreJobError::InvalidParameterValue(
@@ -4553,6 +4595,7 @@ pub enum StopBackupJobError {
 impl StopBackupJobError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<StopBackupJobError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidParameterValueException" => {
                     return RusotoError::Service(StopBackupJobError::InvalidParameterValue(err.msg))
@@ -4607,6 +4650,7 @@ pub enum TagResourceError {
 impl TagResourceError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<TagResourceError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidParameterValueException" => {
                     return RusotoError::Service(TagResourceError::InvalidParameterValue(err.msg))
@@ -4659,6 +4703,7 @@ pub enum UntagResourceError {
 impl UntagResourceError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UntagResourceError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidParameterValueException" => {
                     return RusotoError::Service(UntagResourceError::InvalidParameterValue(err.msg))
@@ -4707,6 +4752,7 @@ pub enum UpdateBackupPlanError {
 impl UpdateBackupPlanError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateBackupPlanError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidParameterValueException" => {
                     return RusotoError::Service(UpdateBackupPlanError::InvalidParameterValue(
@@ -4759,6 +4805,7 @@ pub enum UpdateGlobalSettingsError {
 impl UpdateGlobalSettingsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateGlobalSettingsError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidParameterValueException" => {
                     return RusotoError::Service(UpdateGlobalSettingsError::InvalidParameterValue(
@@ -4815,6 +4862,7 @@ impl UpdateRecoveryPointLifecycleError {
         res: BufferedHttpResponse,
     ) -> RusotoError<UpdateRecoveryPointLifecycleError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidParameterValueException" => {
                     return RusotoError::Service(
@@ -4877,6 +4925,7 @@ pub enum UpdateRegionSettingsError {
 impl UpdateRegionSettingsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateRegionSettingsError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidParameterValueException" => {
                     return RusotoError::Service(UpdateRegionSettingsError::InvalidParameterValue(
@@ -5263,6 +5312,7 @@ impl Backup for BackupClient {
         &self,
         input: CreateBackupPlanInput,
     ) -> Result<CreateBackupPlanOutput, RusotoError<CreateBackupPlanError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/backup/plans/";
 
         let mut request = SignedRequest::new("PUT", "backup", &self.region, &request_uri);
@@ -5294,6 +5344,7 @@ impl Backup for BackupClient {
         &self,
         input: CreateBackupSelectionInput,
     ) -> Result<CreateBackupSelectionOutput, RusotoError<CreateBackupSelectionError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/backup/plans/{backup_plan_id}/selections/",
             backup_plan_id = input.backup_plan_id
@@ -5328,6 +5379,7 @@ impl Backup for BackupClient {
         &self,
         input: CreateBackupVaultInput,
     ) -> Result<CreateBackupVaultOutput, RusotoError<CreateBackupVaultError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/backup-vaults/{backup_vault_name}",
             backup_vault_name = input.backup_vault_name
@@ -5362,6 +5414,7 @@ impl Backup for BackupClient {
         &self,
         input: DeleteBackupPlanInput,
     ) -> Result<DeleteBackupPlanOutput, RusotoError<DeleteBackupPlanError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/backup/plans/{backup_plan_id}",
             backup_plan_id = input.backup_plan_id
@@ -5393,6 +5446,7 @@ impl Backup for BackupClient {
         &self,
         input: DeleteBackupSelectionInput,
     ) -> Result<(), RusotoError<DeleteBackupSelectionError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/backup/plans/{backup_plan_id}/selections/{selection_id}",
             backup_plan_id = input.backup_plan_id,
@@ -5409,9 +5463,9 @@ impl Backup for BackupClient {
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
             let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = ::std::mem::drop(response);
+            let _result = ::std::mem::drop(response);
 
-            Ok(result)
+            Ok(())
         } else {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             Err(DeleteBackupSelectionError::from_response(response))
@@ -5424,6 +5478,7 @@ impl Backup for BackupClient {
         &self,
         input: DeleteBackupVaultInput,
     ) -> Result<(), RusotoError<DeleteBackupVaultError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/backup-vaults/{backup_vault_name}",
             backup_vault_name = input.backup_vault_name
@@ -5439,9 +5494,9 @@ impl Backup for BackupClient {
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
             let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = ::std::mem::drop(response);
+            let _result = ::std::mem::drop(response);
 
-            Ok(result)
+            Ok(())
         } else {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             Err(DeleteBackupVaultError::from_response(response))
@@ -5454,6 +5509,7 @@ impl Backup for BackupClient {
         &self,
         input: DeleteBackupVaultAccessPolicyInput,
     ) -> Result<(), RusotoError<DeleteBackupVaultAccessPolicyError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/backup-vaults/{backup_vault_name}/access-policy",
             backup_vault_name = input.backup_vault_name
@@ -5469,9 +5525,9 @@ impl Backup for BackupClient {
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
             let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = ::std::mem::drop(response);
+            let _result = ::std::mem::drop(response);
 
-            Ok(result)
+            Ok(())
         } else {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             Err(DeleteBackupVaultAccessPolicyError::from_response(response))
@@ -5484,6 +5540,7 @@ impl Backup for BackupClient {
         &self,
         input: DeleteBackupVaultNotificationsInput,
     ) -> Result<(), RusotoError<DeleteBackupVaultNotificationsError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/backup-vaults/{backup_vault_name}/notification-configuration",
             backup_vault_name = input.backup_vault_name
@@ -5499,9 +5556,9 @@ impl Backup for BackupClient {
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
             let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = ::std::mem::drop(response);
+            let _result = ::std::mem::drop(response);
 
-            Ok(result)
+            Ok(())
         } else {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             Err(DeleteBackupVaultNotificationsError::from_response(response))
@@ -5514,6 +5571,7 @@ impl Backup for BackupClient {
         &self,
         input: DeleteRecoveryPointInput,
     ) -> Result<(), RusotoError<DeleteRecoveryPointError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/backup-vaults/{backup_vault_name}/recovery-points/{recovery_point_arn}",
             backup_vault_name = input.backup_vault_name,
@@ -5530,9 +5588,9 @@ impl Backup for BackupClient {
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
             let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = ::std::mem::drop(response);
+            let _result = ::std::mem::drop(response);
 
-            Ok(result)
+            Ok(())
         } else {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             Err(DeleteRecoveryPointError::from_response(response))
@@ -5545,6 +5603,7 @@ impl Backup for BackupClient {
         &self,
         input: DescribeBackupJobInput,
     ) -> Result<DescribeBackupJobOutput, RusotoError<DescribeBackupJobError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/backup-jobs/{backup_job_id}",
             backup_job_id = input.backup_job_id
@@ -5576,6 +5635,7 @@ impl Backup for BackupClient {
         &self,
         input: DescribeBackupVaultInput,
     ) -> Result<DescribeBackupVaultOutput, RusotoError<DescribeBackupVaultError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/backup-vaults/{backup_vault_name}",
             backup_vault_name = input.backup_vault_name
@@ -5607,6 +5667,7 @@ impl Backup for BackupClient {
         &self,
         input: DescribeCopyJobInput,
     ) -> Result<DescribeCopyJobOutput, RusotoError<DescribeCopyJobError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!("/copy-jobs/{copy_job_id}", copy_job_id = input.copy_job_id);
 
         let mut request = SignedRequest::new("GET", "backup", &self.region, &request_uri);
@@ -5634,6 +5695,7 @@ impl Backup for BackupClient {
     async fn describe_global_settings(
         &self,
     ) -> Result<DescribeGlobalSettingsOutput, RusotoError<DescribeGlobalSettingsError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/global-settings";
 
         let mut request = SignedRequest::new("GET", "backup", &self.region, &request_uri);
@@ -5662,6 +5724,7 @@ impl Backup for BackupClient {
         &self,
         input: DescribeProtectedResourceInput,
     ) -> Result<DescribeProtectedResourceOutput, RusotoError<DescribeProtectedResourceError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/resources/{resource_arn}",
             resource_arn = input.resource_arn
@@ -5693,6 +5756,7 @@ impl Backup for BackupClient {
         &self,
         input: DescribeRecoveryPointInput,
     ) -> Result<DescribeRecoveryPointOutput, RusotoError<DescribeRecoveryPointError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/backup-vaults/{backup_vault_name}/recovery-points/{recovery_point_arn}",
             backup_vault_name = input.backup_vault_name,
@@ -5724,6 +5788,7 @@ impl Backup for BackupClient {
     async fn describe_region_settings(
         &self,
     ) -> Result<DescribeRegionSettingsOutput, RusotoError<DescribeRegionSettingsError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/account-settings";
 
         let mut request = SignedRequest::new("GET", "backup", &self.region, &request_uri);
@@ -5752,6 +5817,7 @@ impl Backup for BackupClient {
         &self,
         input: DescribeRestoreJobInput,
     ) -> Result<DescribeRestoreJobOutput, RusotoError<DescribeRestoreJobError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/restore-jobs/{restore_job_id}",
             restore_job_id = input.restore_job_id
@@ -5783,6 +5849,7 @@ impl Backup for BackupClient {
         &self,
         input: ExportBackupPlanTemplateInput,
     ) -> Result<ExportBackupPlanTemplateOutput, RusotoError<ExportBackupPlanTemplateError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/backup/plans/{backup_plan_id}/toTemplate/",
             backup_plan_id = input.backup_plan_id
@@ -5814,6 +5881,7 @@ impl Backup for BackupClient {
         &self,
         input: GetBackupPlanInput,
     ) -> Result<GetBackupPlanOutput, RusotoError<GetBackupPlanError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/backup/plans/{backup_plan_id}/",
             backup_plan_id = input.backup_plan_id
@@ -5851,6 +5919,7 @@ impl Backup for BackupClient {
         &self,
         input: GetBackupPlanFromJSONInput,
     ) -> Result<GetBackupPlanFromJSONOutput, RusotoError<GetBackupPlanFromJSONError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/backup/template/json/toPlan";
 
         let mut request = SignedRequest::new("POST", "backup", &self.region, &request_uri);
@@ -5882,6 +5951,7 @@ impl Backup for BackupClient {
         &self,
         input: GetBackupPlanFromTemplateInput,
     ) -> Result<GetBackupPlanFromTemplateOutput, RusotoError<GetBackupPlanFromTemplateError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/backup/template/plans/{template_id}/toPlan",
             template_id = input.backup_plan_template_id
@@ -5913,6 +5983,7 @@ impl Backup for BackupClient {
         &self,
         input: GetBackupSelectionInput,
     ) -> Result<GetBackupSelectionOutput, RusotoError<GetBackupSelectionError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/backup/plans/{backup_plan_id}/selections/{selection_id}",
             backup_plan_id = input.backup_plan_id,
@@ -5946,6 +6017,7 @@ impl Backup for BackupClient {
         input: GetBackupVaultAccessPolicyInput,
     ) -> Result<GetBackupVaultAccessPolicyOutput, RusotoError<GetBackupVaultAccessPolicyError>>
     {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/backup-vaults/{backup_vault_name}/access-policy",
             backup_vault_name = input.backup_vault_name
@@ -5978,6 +6050,7 @@ impl Backup for BackupClient {
         input: GetBackupVaultNotificationsInput,
     ) -> Result<GetBackupVaultNotificationsOutput, RusotoError<GetBackupVaultNotificationsError>>
     {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/backup-vaults/{backup_vault_name}/notification-configuration",
             backup_vault_name = input.backup_vault_name
@@ -6012,6 +6085,7 @@ impl Backup for BackupClient {
         GetRecoveryPointRestoreMetadataOutput,
         RusotoError<GetRecoveryPointRestoreMetadataError>,
     > {
+        #![allow(clippy::needless_update)]
         let request_uri = format!("/backup-vaults/{backup_vault_name}/recovery-points/{recovery_point_arn}/restore-metadata", backup_vault_name = input.backup_vault_name, recovery_point_arn = input.recovery_point_arn);
 
         let mut request = SignedRequest::new("GET", "backup", &self.region, &request_uri);
@@ -6041,6 +6115,7 @@ impl Backup for BackupClient {
     async fn get_supported_resource_types(
         &self,
     ) -> Result<GetSupportedResourceTypesOutput, RusotoError<GetSupportedResourceTypesError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/supported-resource-types";
 
         let mut request = SignedRequest::new("GET", "backup", &self.region, &request_uri);
@@ -6069,6 +6144,7 @@ impl Backup for BackupClient {
         &self,
         input: ListBackupJobsInput,
     ) -> Result<ListBackupJobsOutput, RusotoError<ListBackupJobsError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/backup-jobs/";
 
         let mut request = SignedRequest::new("GET", "backup", &self.region, &request_uri);
@@ -6127,6 +6203,7 @@ impl Backup for BackupClient {
         &self,
         input: ListBackupPlanTemplatesInput,
     ) -> Result<ListBackupPlanTemplatesOutput, RusotoError<ListBackupPlanTemplatesError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/backup/template/plans";
 
         let mut request = SignedRequest::new("GET", "backup", &self.region, &request_uri);
@@ -6164,6 +6241,7 @@ impl Backup for BackupClient {
         &self,
         input: ListBackupPlanVersionsInput,
     ) -> Result<ListBackupPlanVersionsOutput, RusotoError<ListBackupPlanVersionsError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/backup/plans/{backup_plan_id}/versions/",
             backup_plan_id = input.backup_plan_id
@@ -6204,6 +6282,7 @@ impl Backup for BackupClient {
         &self,
         input: ListBackupPlansInput,
     ) -> Result<ListBackupPlansOutput, RusotoError<ListBackupPlansError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/backup/plans/";
 
         let mut request = SignedRequest::new("GET", "backup", &self.region, &request_uri);
@@ -6244,6 +6323,7 @@ impl Backup for BackupClient {
         &self,
         input: ListBackupSelectionsInput,
     ) -> Result<ListBackupSelectionsOutput, RusotoError<ListBackupSelectionsError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/backup/plans/{backup_plan_id}/selections/",
             backup_plan_id = input.backup_plan_id
@@ -6284,6 +6364,7 @@ impl Backup for BackupClient {
         &self,
         input: ListBackupVaultsInput,
     ) -> Result<ListBackupVaultsOutput, RusotoError<ListBackupVaultsError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/backup-vaults/";
 
         let mut request = SignedRequest::new("GET", "backup", &self.region, &request_uri);
@@ -6321,6 +6402,7 @@ impl Backup for BackupClient {
         &self,
         input: ListCopyJobsInput,
     ) -> Result<ListCopyJobsOutput, RusotoError<ListCopyJobsError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/copy-jobs/";
 
         let mut request = SignedRequest::new("GET", "backup", &self.region, &request_uri);
@@ -6379,6 +6461,7 @@ impl Backup for BackupClient {
         &self,
         input: ListProtectedResourcesInput,
     ) -> Result<ListProtectedResourcesOutput, RusotoError<ListProtectedResourcesError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/resources/";
 
         let mut request = SignedRequest::new("GET", "backup", &self.region, &request_uri);
@@ -6419,6 +6502,7 @@ impl Backup for BackupClient {
         ListRecoveryPointsByBackupVaultOutput,
         RusotoError<ListRecoveryPointsByBackupVaultError>,
     > {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/backup-vaults/{backup_vault_name}/recovery-points/",
             backup_vault_name = input.backup_vault_name
@@ -6477,6 +6561,7 @@ impl Backup for BackupClient {
         input: ListRecoveryPointsByResourceInput,
     ) -> Result<ListRecoveryPointsByResourceOutput, RusotoError<ListRecoveryPointsByResourceError>>
     {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/resources/{resource_arn}/recovery-points/",
             resource_arn = input.resource_arn
@@ -6517,6 +6602,7 @@ impl Backup for BackupClient {
         &self,
         input: ListRestoreJobsInput,
     ) -> Result<ListRestoreJobsOutput, RusotoError<ListRestoreJobsError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/restore-jobs/";
 
         let mut request = SignedRequest::new("GET", "backup", &self.region, &request_uri);
@@ -6566,6 +6652,7 @@ impl Backup for BackupClient {
         &self,
         input: ListTagsInput,
     ) -> Result<ListTagsOutput, RusotoError<ListTagsError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!("/tags/{resource_arn}/", resource_arn = input.resource_arn);
 
         let mut request = SignedRequest::new("GET", "backup", &self.region, &request_uri);
@@ -6603,6 +6690,7 @@ impl Backup for BackupClient {
         &self,
         input: PutBackupVaultAccessPolicyInput,
     ) -> Result<(), RusotoError<PutBackupVaultAccessPolicyError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/backup-vaults/{backup_vault_name}/access-policy",
             backup_vault_name = input.backup_vault_name
@@ -6621,9 +6709,9 @@ impl Backup for BackupClient {
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
             let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = ::std::mem::drop(response);
+            let _result = ::std::mem::drop(response);
 
-            Ok(result)
+            Ok(())
         } else {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             Err(PutBackupVaultAccessPolicyError::from_response(response))
@@ -6636,6 +6724,7 @@ impl Backup for BackupClient {
         &self,
         input: PutBackupVaultNotificationsInput,
     ) -> Result<(), RusotoError<PutBackupVaultNotificationsError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/backup-vaults/{backup_vault_name}/notification-configuration",
             backup_vault_name = input.backup_vault_name
@@ -6654,9 +6743,9 @@ impl Backup for BackupClient {
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
             let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = ::std::mem::drop(response);
+            let _result = ::std::mem::drop(response);
 
-            Ok(result)
+            Ok(())
         } else {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             Err(PutBackupVaultNotificationsError::from_response(response))
@@ -6669,6 +6758,7 @@ impl Backup for BackupClient {
         &self,
         input: StartBackupJobInput,
     ) -> Result<StartBackupJobOutput, RusotoError<StartBackupJobError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/backup-jobs";
 
         let mut request = SignedRequest::new("PUT", "backup", &self.region, &request_uri);
@@ -6700,6 +6790,7 @@ impl Backup for BackupClient {
         &self,
         input: StartCopyJobInput,
     ) -> Result<StartCopyJobOutput, RusotoError<StartCopyJobError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/copy-jobs";
 
         let mut request = SignedRequest::new("PUT", "backup", &self.region, &request_uri);
@@ -6731,6 +6822,7 @@ impl Backup for BackupClient {
         &self,
         input: StartRestoreJobInput,
     ) -> Result<StartRestoreJobOutput, RusotoError<StartRestoreJobError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/restore-jobs";
 
         let mut request = SignedRequest::new("PUT", "backup", &self.region, &request_uri);
@@ -6762,6 +6854,7 @@ impl Backup for BackupClient {
         &self,
         input: StopBackupJobInput,
     ) -> Result<(), RusotoError<StopBackupJobError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/backup-jobs/{backup_job_id}",
             backup_job_id = input.backup_job_id
@@ -6777,9 +6870,9 @@ impl Backup for BackupClient {
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
             let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = ::std::mem::drop(response);
+            let _result = ::std::mem::drop(response);
 
-            Ok(result)
+            Ok(())
         } else {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             Err(StopBackupJobError::from_response(response))
@@ -6792,6 +6885,7 @@ impl Backup for BackupClient {
         &self,
         input: TagResourceInput,
     ) -> Result<(), RusotoError<TagResourceError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!("/tags/{resource_arn}", resource_arn = input.resource_arn);
 
         let mut request = SignedRequest::new("POST", "backup", &self.region, &request_uri);
@@ -6807,9 +6901,9 @@ impl Backup for BackupClient {
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
             let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = ::std::mem::drop(response);
+            let _result = ::std::mem::drop(response);
 
-            Ok(result)
+            Ok(())
         } else {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             Err(TagResourceError::from_response(response))
@@ -6822,6 +6916,7 @@ impl Backup for BackupClient {
         &self,
         input: UntagResourceInput,
     ) -> Result<(), RusotoError<UntagResourceError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!("/untag/{resource_arn}", resource_arn = input.resource_arn);
 
         let mut request = SignedRequest::new("POST", "backup", &self.region, &request_uri);
@@ -6837,9 +6932,9 @@ impl Backup for BackupClient {
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
             let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = ::std::mem::drop(response);
+            let _result = ::std::mem::drop(response);
 
-            Ok(result)
+            Ok(())
         } else {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             Err(UntagResourceError::from_response(response))
@@ -6852,6 +6947,7 @@ impl Backup for BackupClient {
         &self,
         input: UpdateBackupPlanInput,
     ) -> Result<UpdateBackupPlanOutput, RusotoError<UpdateBackupPlanError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/backup/plans/{backup_plan_id}",
             backup_plan_id = input.backup_plan_id
@@ -6886,6 +6982,7 @@ impl Backup for BackupClient {
         &self,
         input: UpdateGlobalSettingsInput,
     ) -> Result<(), RusotoError<UpdateGlobalSettingsError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/global-settings";
 
         let mut request = SignedRequest::new("PUT", "backup", &self.region, &request_uri);
@@ -6901,9 +6998,9 @@ impl Backup for BackupClient {
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
             let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = ::std::mem::drop(response);
+            let _result = ::std::mem::drop(response);
 
-            Ok(result)
+            Ok(())
         } else {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             Err(UpdateGlobalSettingsError::from_response(response))
@@ -6917,6 +7014,7 @@ impl Backup for BackupClient {
         input: UpdateRecoveryPointLifecycleInput,
     ) -> Result<UpdateRecoveryPointLifecycleOutput, RusotoError<UpdateRecoveryPointLifecycleError>>
     {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/backup-vaults/{backup_vault_name}/recovery-points/{recovery_point_arn}",
             backup_vault_name = input.backup_vault_name,
@@ -6952,6 +7050,7 @@ impl Backup for BackupClient {
         &self,
         input: UpdateRegionSettingsInput,
     ) -> Result<(), RusotoError<UpdateRegionSettingsError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/account-settings";
 
         let mut request = SignedRequest::new("PUT", "backup", &self.region, &request_uri);
@@ -6967,9 +7066,9 @@ impl Backup for BackupClient {
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
             let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = ::std::mem::drop(response);
+            let _result = ::std::mem::drop(response);
 
-            Ok(result)
+            Ok(())
         } else {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             Err(UpdateRegionSettingsError::from_response(response))

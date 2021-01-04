@@ -24,7 +24,6 @@ use rusoto_core::proto;
 use rusoto_core::signature::SignedRequest;
 #[allow(unused_imports)]
 use serde::{Deserialize, Serialize};
-use serde_json;
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeJobExecutionRequest {
@@ -268,6 +267,7 @@ pub enum DescribeJobExecutionError {
 impl DescribeJobExecutionError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeJobExecutionError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "CertificateValidationException" => {
                     return RusotoError::Service(DescribeJobExecutionError::CertificateValidation(
@@ -332,6 +332,7 @@ pub enum GetPendingJobExecutionsError {
 impl GetPendingJobExecutionsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetPendingJobExecutionsError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "CertificateValidationException" => {
                     return RusotoError::Service(
@@ -398,6 +399,7 @@ impl StartNextPendingJobExecutionError {
         res: BufferedHttpResponse,
     ) -> RusotoError<StartNextPendingJobExecutionError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "CertificateValidationException" => {
                     return RusotoError::Service(
@@ -470,6 +472,7 @@ pub enum UpdateJobExecutionError {
 impl UpdateJobExecutionError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateJobExecutionError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "CertificateValidationException" => {
                     return RusotoError::Service(UpdateJobExecutionError::CertificateValidation(
@@ -589,6 +592,7 @@ impl IotJobsData for IotJobsDataClient {
         &self,
         input: DescribeJobExecutionRequest,
     ) -> Result<DescribeJobExecutionResponse, RusotoError<DescribeJobExecutionError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/things/{thing_name}/jobs/{job_id}",
             job_id = input.job_id,
@@ -632,6 +636,7 @@ impl IotJobsData for IotJobsDataClient {
         &self,
         input: GetPendingJobExecutionsRequest,
     ) -> Result<GetPendingJobExecutionsResponse, RusotoError<GetPendingJobExecutionsError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!("/things/{thing_name}/jobs", thing_name = input.thing_name);
 
         let mut request = SignedRequest::new("GET", "iot-jobs-data", &self.region, &request_uri);
@@ -663,6 +668,7 @@ impl IotJobsData for IotJobsDataClient {
         input: StartNextPendingJobExecutionRequest,
     ) -> Result<StartNextPendingJobExecutionResponse, RusotoError<StartNextPendingJobExecutionError>>
     {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/things/{thing_name}/jobs/$next",
             thing_name = input.thing_name
@@ -698,6 +704,7 @@ impl IotJobsData for IotJobsDataClient {
         &self,
         input: UpdateJobExecutionRequest,
     ) -> Result<UpdateJobExecutionResponse, RusotoError<UpdateJobExecutionError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/things/{thing_name}/jobs/{job_id}",
             job_id = input.job_id,

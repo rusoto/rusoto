@@ -24,7 +24,6 @@ use rusoto_core::proto;
 use rusoto_core::signature::SignedRequest;
 #[allow(unused_imports)]
 use serde::{Deserialize, Serialize};
-use serde_json;
 /// <p>A policy type that defines the voting rules for the network. The rules decide if a proposal is approved. Approval may be based on criteria such as the percentage of <code>YES</code> votes and the duration of the proposal. The policy applies to all proposals and is specified when the network is created.</p> <p>Applies only to Hyperledger Fabric.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct ApprovalThresholdPolicy {
@@ -1219,6 +1218,7 @@ pub enum CreateMemberError {
 impl CreateMemberError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateMemberError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(CreateMemberError::AccessDenied(err.msg))
@@ -1287,6 +1287,7 @@ pub enum CreateNetworkError {
 impl CreateNetworkError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateNetworkError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(CreateNetworkError::AccessDenied(err.msg))
@@ -1351,6 +1352,7 @@ pub enum CreateNodeError {
 impl CreateNodeError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateNodeError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(CreateNodeError::AccessDenied(err.msg))
@@ -1419,6 +1421,7 @@ pub enum CreateProposalError {
 impl CreateProposalError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateProposalError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(CreateProposalError::AccessDenied(err.msg))
@@ -1479,6 +1482,7 @@ pub enum DeleteMemberError {
 impl DeleteMemberError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteMemberError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(DeleteMemberError::AccessDenied(err.msg))
@@ -1539,6 +1543,7 @@ pub enum DeleteNodeError {
 impl DeleteNodeError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteNodeError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(DeleteNodeError::AccessDenied(err.msg))
@@ -1597,6 +1602,7 @@ pub enum GetMemberError {
 impl GetMemberError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetMemberError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(GetMemberError::AccessDenied(err.msg))
@@ -1651,6 +1657,7 @@ pub enum GetNetworkError {
 impl GetNetworkError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetNetworkError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(GetNetworkError::AccessDenied(err.msg))
@@ -1705,6 +1712,7 @@ pub enum GetNodeError {
 impl GetNodeError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetNodeError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(GetNodeError::AccessDenied(err.msg))
@@ -1759,6 +1767,7 @@ pub enum GetProposalError {
 impl GetProposalError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetProposalError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(GetProposalError::AccessDenied(err.msg))
@@ -1815,6 +1824,7 @@ pub enum ListInvitationsError {
 impl ListInvitationsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListInvitationsError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(ListInvitationsError::AccessDenied(err.msg))
@@ -1875,6 +1885,7 @@ pub enum ListMembersError {
 impl ListMembersError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListMembersError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(ListMembersError::AccessDenied(err.msg))
@@ -1923,6 +1934,7 @@ pub enum ListNetworksError {
 impl ListNetworksError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListNetworksError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(ListNetworksError::AccessDenied(err.msg))
@@ -1971,6 +1983,7 @@ pub enum ListNodesError {
 impl ListNodesError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListNodesError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(ListNodesError::AccessDenied(err.msg))
@@ -2019,6 +2032,7 @@ pub enum ListProposalVotesError {
 impl ListProposalVotesError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListProposalVotesError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(ListProposalVotesError::AccessDenied(err.msg))
@@ -2071,6 +2085,7 @@ pub enum ListProposalsError {
 impl ListProposalsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListProposalsError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(ListProposalsError::AccessDenied(err.msg))
@@ -2127,6 +2142,7 @@ pub enum RejectInvitationError {
 impl RejectInvitationError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<RejectInvitationError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(RejectInvitationError::AccessDenied(err.msg))
@@ -2187,6 +2203,7 @@ pub enum UpdateMemberError {
 impl UpdateMemberError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateMemberError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(UpdateMemberError::AccessDenied(err.msg))
@@ -2241,6 +2258,7 @@ pub enum UpdateNodeError {
 impl UpdateNodeError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateNodeError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(UpdateNodeError::AccessDenied(err.msg))
@@ -2297,6 +2315,7 @@ pub enum VoteOnProposalError {
 impl VoteOnProposalError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<VoteOnProposalError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(VoteOnProposalError::AccessDenied(err.msg))
@@ -2506,6 +2525,7 @@ impl ManagedBlockchain for ManagedBlockchainClient {
         &self,
         input: CreateMemberInput,
     ) -> Result<CreateMemberOutput, RusotoError<CreateMemberError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/networks/{network_id}/members",
             network_id = input.network_id
@@ -2541,6 +2561,7 @@ impl ManagedBlockchain for ManagedBlockchainClient {
         &self,
         input: CreateNetworkInput,
     ) -> Result<CreateNetworkOutput, RusotoError<CreateNetworkError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/networks";
 
         let mut request =
@@ -2573,6 +2594,7 @@ impl ManagedBlockchain for ManagedBlockchainClient {
         &self,
         input: CreateNodeInput,
     ) -> Result<CreateNodeOutput, RusotoError<CreateNodeError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/networks/{network_id}/nodes",
             network_id = input.network_id
@@ -2608,6 +2630,7 @@ impl ManagedBlockchain for ManagedBlockchainClient {
         &self,
         input: CreateProposalInput,
     ) -> Result<CreateProposalOutput, RusotoError<CreateProposalError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/networks/{network_id}/proposals",
             network_id = input.network_id
@@ -2643,6 +2666,7 @@ impl ManagedBlockchain for ManagedBlockchainClient {
         &self,
         input: DeleteMemberInput,
     ) -> Result<DeleteMemberOutput, RusotoError<DeleteMemberError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/networks/{network_id}/members/{member_id}",
             member_id = input.member_id,
@@ -2676,6 +2700,7 @@ impl ManagedBlockchain for ManagedBlockchainClient {
         &self,
         input: DeleteNodeInput,
     ) -> Result<DeleteNodeOutput, RusotoError<DeleteNodeError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/networks/{network_id}/nodes/{node_id}",
             network_id = input.network_id,
@@ -2715,6 +2740,7 @@ impl ManagedBlockchain for ManagedBlockchainClient {
         &self,
         input: GetMemberInput,
     ) -> Result<GetMemberOutput, RusotoError<GetMemberError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/networks/{network_id}/members/{member_id}",
             member_id = input.member_id,
@@ -2748,6 +2774,7 @@ impl ManagedBlockchain for ManagedBlockchainClient {
         &self,
         input: GetNetworkInput,
     ) -> Result<GetNetworkOutput, RusotoError<GetNetworkError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!("/networks/{network_id}", network_id = input.network_id);
 
         let mut request =
@@ -2777,6 +2804,7 @@ impl ManagedBlockchain for ManagedBlockchainClient {
         &self,
         input: GetNodeInput,
     ) -> Result<GetNodeOutput, RusotoError<GetNodeError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/networks/{network_id}/nodes/{node_id}",
             network_id = input.network_id,
@@ -2816,6 +2844,7 @@ impl ManagedBlockchain for ManagedBlockchainClient {
         &self,
         input: GetProposalInput,
     ) -> Result<GetProposalOutput, RusotoError<GetProposalError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/networks/{network_id}/proposals/{proposal_id}",
             network_id = input.network_id,
@@ -2849,6 +2878,7 @@ impl ManagedBlockchain for ManagedBlockchainClient {
         &self,
         input: ListInvitationsInput,
     ) -> Result<ListInvitationsOutput, RusotoError<ListInvitationsError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/invitations";
 
         let mut request =
@@ -2887,6 +2917,7 @@ impl ManagedBlockchain for ManagedBlockchainClient {
         &self,
         input: ListMembersInput,
     ) -> Result<ListMembersOutput, RusotoError<ListMembersError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/networks/{network_id}/members",
             network_id = input.network_id
@@ -2937,6 +2968,7 @@ impl ManagedBlockchain for ManagedBlockchainClient {
         &self,
         input: ListNetworksInput,
     ) -> Result<ListNetworksOutput, RusotoError<ListNetworksError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/networks";
 
         let mut request =
@@ -2984,6 +3016,7 @@ impl ManagedBlockchain for ManagedBlockchainClient {
         &self,
         input: ListNodesInput,
     ) -> Result<ListNodesOutput, RusotoError<ListNodesError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/networks/{network_id}/nodes",
             network_id = input.network_id
@@ -3031,6 +3064,7 @@ impl ManagedBlockchain for ManagedBlockchainClient {
         &self,
         input: ListProposalVotesInput,
     ) -> Result<ListProposalVotesOutput, RusotoError<ListProposalVotesError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/networks/{network_id}/proposals/{proposal_id}/votes",
             network_id = input.network_id,
@@ -3073,6 +3107,7 @@ impl ManagedBlockchain for ManagedBlockchainClient {
         &self,
         input: ListProposalsInput,
     ) -> Result<ListProposalsOutput, RusotoError<ListProposalsError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/networks/{network_id}/proposals",
             network_id = input.network_id
@@ -3114,6 +3149,7 @@ impl ManagedBlockchain for ManagedBlockchainClient {
         &self,
         input: RejectInvitationInput,
     ) -> Result<RejectInvitationOutput, RusotoError<RejectInvitationError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/invitations/{invitation_id}",
             invitation_id = input.invitation_id
@@ -3146,6 +3182,7 @@ impl ManagedBlockchain for ManagedBlockchainClient {
         &self,
         input: UpdateMemberInput,
     ) -> Result<UpdateMemberOutput, RusotoError<UpdateMemberError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/networks/{network_id}/members/{member_id}",
             member_id = input.member_id,
@@ -3182,6 +3219,7 @@ impl ManagedBlockchain for ManagedBlockchainClient {
         &self,
         input: UpdateNodeInput,
     ) -> Result<UpdateNodeOutput, RusotoError<UpdateNodeError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/networks/{network_id}/nodes/{node_id}",
             network_id = input.network_id,
@@ -3218,6 +3256,7 @@ impl ManagedBlockchain for ManagedBlockchainClient {
         &self,
         input: VoteOnProposalInput,
     ) -> Result<VoteOnProposalOutput, RusotoError<VoteOnProposalError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/networks/{network_id}/proposals/{proposal_id}/votes",
             network_id = input.network_id,

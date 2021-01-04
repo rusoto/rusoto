@@ -31,7 +31,6 @@ use rusoto_core::signature::SignedRequest;
 use serde::Deserialize;
 #[cfg(feature = "serialize_structs")]
 use serde::Serialize;
-use serde_urlencoded;
 use std::str::FromStr;
 use xml::EventReader;
 
@@ -73,10 +72,11 @@ pub struct AddTagsToResourceMessage {
 /// Serialize `AddTagsToResourceMessage` contents to a `SignedRequest`.
 struct AddTagsToResourceMessageSerializer;
 impl AddTagsToResourceMessageSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &AddTagsToResourceMessage) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         params.put(&format!("{}{}", prefix, "ResourceName"), &obj.resource_name);
@@ -87,8 +87,9 @@ impl AddTagsToResourceMessageSerializer {
 #[allow(dead_code)]
 struct AllowedNodeGroupIdDeserializer;
 impl AllowedNodeGroupIdDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
@@ -105,11 +106,12 @@ pub struct AllowedNodeTypeModificationsMessage {
 #[allow(dead_code)]
 struct AllowedNodeTypeModificationsMessageDeserializer;
 impl AllowedNodeTypeModificationsMessageDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<AllowedNodeTypeModificationsMessage, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, AllowedNodeTypeModificationsMessage, _>(
             tag_name,
             stack,
@@ -135,8 +137,9 @@ impl AllowedNodeTypeModificationsMessageDeserializer {
 #[allow(dead_code)]
 struct AuthTokenUpdateStatusDeserializer;
 impl AuthTokenUpdateStatusDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
@@ -153,11 +156,12 @@ pub struct Authentication {
 #[allow(dead_code)]
 struct AuthenticationDeserializer;
 impl AuthenticationDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Authentication, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, Authentication, _>(tag_name, stack, |name, stack, obj| {
             match name {
                 "PasswordCount" => {
@@ -178,8 +182,9 @@ impl AuthenticationDeserializer {
 #[allow(dead_code)]
 struct AuthenticationTypeDeserializer;
 impl AuthenticationTypeDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
@@ -198,10 +203,11 @@ pub struct AuthorizeCacheSecurityGroupIngressMessage {
 /// Serialize `AuthorizeCacheSecurityGroupIngressMessage` contents to a `SignedRequest`.
 struct AuthorizeCacheSecurityGroupIngressMessageSerializer;
 impl AuthorizeCacheSecurityGroupIngressMessageSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &AuthorizeCacheSecurityGroupIngressMessage) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         params.put(
@@ -228,11 +234,12 @@ pub struct AuthorizeCacheSecurityGroupIngressResult {
 #[allow(dead_code)]
 struct AuthorizeCacheSecurityGroupIngressResultDeserializer;
 impl AuthorizeCacheSecurityGroupIngressResultDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<AuthorizeCacheSecurityGroupIngressResult, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, AuthorizeCacheSecurityGroupIngressResult, _>(
             tag_name,
             stack,
@@ -255,8 +262,9 @@ impl AuthorizeCacheSecurityGroupIngressResultDeserializer {
 #[allow(dead_code)]
 struct AutomaticFailoverStatusDeserializer;
 impl AutomaticFailoverStatusDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
@@ -271,11 +279,12 @@ pub struct AvailabilityZone {
 #[allow(dead_code)]
 struct AvailabilityZoneDeserializer;
 impl AvailabilityZoneDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<AvailabilityZone, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, AvailabilityZone, _>(tag_name, stack, |name, stack, obj| {
             match name {
                 "Name" => {
@@ -290,11 +299,13 @@ impl AvailabilityZoneDeserializer {
 #[allow(dead_code)]
 struct AvailabilityZonesListDeserializer;
 impl AvailabilityZonesListDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<String>, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
+
         deserialize_elements::<_, Vec<_>, _>(tag_name, stack, |name, stack, obj| {
             if name == "AvailabilityZone" {
                 obj.push(StringDeserializer::deserialize("AvailabilityZone", stack)?);
@@ -309,6 +320,7 @@ impl AvailabilityZonesListDeserializer {
 /// Serialize `AvailabilityZonesList` contents to a `SignedRequest`.
 struct AvailabilityZonesListSerializer;
 impl AvailabilityZonesListSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &Vec<String>) {
         for (index, obj) in obj.iter().enumerate() {
             let key = format!("{}.member.{}", name, index + 1);
@@ -331,10 +343,11 @@ pub struct BatchApplyUpdateActionMessage {
 /// Serialize `BatchApplyUpdateActionMessage` contents to a `SignedRequest`.
 struct BatchApplyUpdateActionMessageSerializer;
 impl BatchApplyUpdateActionMessageSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &BatchApplyUpdateActionMessage) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         if let Some(ref field_value) = obj.cache_cluster_ids {
@@ -372,10 +385,11 @@ pub struct BatchStopUpdateActionMessage {
 /// Serialize `BatchStopUpdateActionMessage` contents to a `SignedRequest`.
 struct BatchStopUpdateActionMessageSerializer;
 impl BatchStopUpdateActionMessageSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &BatchStopUpdateActionMessage) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         if let Some(ref field_value) = obj.cache_cluster_ids {
@@ -402,16 +416,18 @@ impl BatchStopUpdateActionMessageSerializer {
 #[allow(dead_code)]
 struct BooleanDeserializer;
 impl BooleanDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<bool, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::deserialize_primitive(tag_name, stack, |s| Ok(bool::from_str(&s).unwrap()))
     }
 }
 #[allow(dead_code)]
 struct BooleanOptionalDeserializer;
 impl BooleanOptionalDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<bool, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::deserialize_primitive(tag_name, stack, |s| Ok(bool::from_str(&s).unwrap()))
     }
 }
@@ -479,11 +495,12 @@ pub struct CacheCluster {
 #[allow(dead_code)]
 struct CacheClusterDeserializer;
 impl CacheClusterDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<CacheCluster, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, CacheCluster, _>(tag_name, stack, |name, stack, obj| {
             match name {
                 "ARN" => {
@@ -656,6 +673,7 @@ impl CacheClusterDeserializer {
 /// Serialize `CacheClusterIdList` contents to a `SignedRequest`.
 struct CacheClusterIdListSerializer;
 impl CacheClusterIdListSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &Vec<String>) {
         for (index, obj) in obj.iter().enumerate() {
             let key = format!("{}.member.{}", name, index + 1);
@@ -667,11 +685,13 @@ impl CacheClusterIdListSerializer {
 #[allow(dead_code)]
 struct CacheClusterListDeserializer;
 impl CacheClusterListDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<CacheCluster>, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
+
         deserialize_elements::<_, Vec<_>, _>(tag_name, stack, |name, stack, obj| {
             if name == "CacheCluster" {
                 obj.push(CacheClusterDeserializer::deserialize(
@@ -698,11 +718,12 @@ pub struct CacheClusterMessage {
 #[allow(dead_code)]
 struct CacheClusterMessageDeserializer;
 impl CacheClusterMessageDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<CacheClusterMessage, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, CacheClusterMessage, _>(tag_name, stack, |name, stack, obj| {
             match name {
                 "CacheClusters" => {
@@ -738,11 +759,12 @@ pub struct CacheEngineVersion {
 #[allow(dead_code)]
 struct CacheEngineVersionDeserializer;
 impl CacheEngineVersionDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<CacheEngineVersion, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, CacheEngineVersion, _>(tag_name, stack, |name, stack, obj| {
             match name {
                 "CacheEngineDescription" => {
@@ -779,11 +801,13 @@ impl CacheEngineVersionDeserializer {
 #[allow(dead_code)]
 struct CacheEngineVersionListDeserializer;
 impl CacheEngineVersionListDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<CacheEngineVersion>, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
+
         deserialize_elements::<_, Vec<_>, _>(tag_name, stack, |name, stack, obj| {
             if name == "CacheEngineVersion" {
                 obj.push(CacheEngineVersionDeserializer::deserialize(
@@ -810,11 +834,12 @@ pub struct CacheEngineVersionMessage {
 #[allow(dead_code)]
 struct CacheEngineVersionMessageDeserializer;
 impl CacheEngineVersionMessageDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<CacheEngineVersionMessage, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, CacheEngineVersionMessage, _>(
             tag_name,
             stack,
@@ -863,11 +888,12 @@ pub struct CacheNode {
 #[allow(dead_code)]
 struct CacheNodeDeserializer;
 impl CacheNodeDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<CacheNode, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, CacheNode, _>(tag_name, stack, |name, stack, obj| {
             match name {
                 "CacheNodeCreateTime" => {
@@ -918,11 +944,13 @@ impl CacheNodeDeserializer {
 #[allow(dead_code)]
 struct CacheNodeIdsListDeserializer;
 impl CacheNodeIdsListDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<String>, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
+
         deserialize_elements::<_, Vec<_>, _>(tag_name, stack, |name, stack, obj| {
             if name == "CacheNodeId" {
                 obj.push(StringDeserializer::deserialize("CacheNodeId", stack)?);
@@ -937,6 +965,7 @@ impl CacheNodeIdsListDeserializer {
 /// Serialize `CacheNodeIdsList` contents to a `SignedRequest`.
 struct CacheNodeIdsListSerializer;
 impl CacheNodeIdsListSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &Vec<String>) {
         for (index, obj) in obj.iter().enumerate() {
             let key = format!("{}.member.{}", name, index + 1);
@@ -948,11 +977,13 @@ impl CacheNodeIdsListSerializer {
 #[allow(dead_code)]
 struct CacheNodeListDeserializer;
 impl CacheNodeListDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<CacheNode>, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
+
         deserialize_elements::<_, Vec<_>, _>(tag_name, stack, |name, stack, obj| {
             if name == "CacheNode" {
                 obj.push(CacheNodeDeserializer::deserialize("CacheNode", stack)?);
@@ -990,11 +1021,12 @@ pub struct CacheNodeTypeSpecificParameter {
 #[allow(dead_code)]
 struct CacheNodeTypeSpecificParameterDeserializer;
 impl CacheNodeTypeSpecificParameterDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<CacheNodeTypeSpecificParameter, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, CacheNodeTypeSpecificParameter, _>(
             tag_name,
             stack,
@@ -1050,11 +1082,13 @@ impl CacheNodeTypeSpecificParameterDeserializer {
 #[allow(dead_code)]
 struct CacheNodeTypeSpecificParametersListDeserializer;
 impl CacheNodeTypeSpecificParametersListDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<CacheNodeTypeSpecificParameter>, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
+
         deserialize_elements::<_, Vec<_>, _>(tag_name, stack, |name, stack, obj| {
             if name == "CacheNodeTypeSpecificParameter" {
                 obj.push(CacheNodeTypeSpecificParameterDeserializer::deserialize(
@@ -1081,11 +1115,12 @@ pub struct CacheNodeTypeSpecificValue {
 #[allow(dead_code)]
 struct CacheNodeTypeSpecificValueDeserializer;
 impl CacheNodeTypeSpecificValueDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<CacheNodeTypeSpecificValue, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, CacheNodeTypeSpecificValue, _>(
             tag_name,
             stack,
@@ -1108,11 +1143,13 @@ impl CacheNodeTypeSpecificValueDeserializer {
 #[allow(dead_code)]
 struct CacheNodeTypeSpecificValueListDeserializer;
 impl CacheNodeTypeSpecificValueListDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<CacheNodeTypeSpecificValue>, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
+
         deserialize_elements::<_, Vec<_>, _>(tag_name, stack, |name, stack, obj| {
             if name == "CacheNodeTypeSpecificValue" {
                 obj.push(CacheNodeTypeSpecificValueDeserializer::deserialize(
@@ -1151,11 +1188,12 @@ pub struct CacheNodeUpdateStatus {
 #[allow(dead_code)]
 struct CacheNodeUpdateStatusDeserializer;
 impl CacheNodeUpdateStatusDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<CacheNodeUpdateStatus, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, CacheNodeUpdateStatus, _>(tag_name, stack, |name, stack, obj| {
             match name {
                 "CacheNodeId" => {
@@ -1210,11 +1248,13 @@ impl CacheNodeUpdateStatusDeserializer {
 #[allow(dead_code)]
 struct CacheNodeUpdateStatusListDeserializer;
 impl CacheNodeUpdateStatusListDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<CacheNodeUpdateStatus>, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
+
         deserialize_elements::<_, Vec<_>, _>(tag_name, stack, |name, stack, obj| {
             if name == "CacheNodeUpdateStatus" {
                 obj.push(CacheNodeUpdateStatusDeserializer::deserialize(
@@ -1247,11 +1287,12 @@ pub struct CacheParameterGroup {
 #[allow(dead_code)]
 struct CacheParameterGroupDeserializer;
 impl CacheParameterGroupDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<CacheParameterGroup, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, CacheParameterGroup, _>(tag_name, stack, |name, stack, obj| {
             match name {
                 "ARN" => {
@@ -1296,11 +1337,12 @@ pub struct CacheParameterGroupDetails {
 #[allow(dead_code)]
 struct CacheParameterGroupDetailsDeserializer;
 impl CacheParameterGroupDetailsDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<CacheParameterGroupDetails, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, CacheParameterGroupDetails, _>(
             tag_name,
             stack,
@@ -1334,11 +1376,13 @@ impl CacheParameterGroupDetailsDeserializer {
 #[allow(dead_code)]
 struct CacheParameterGroupListDeserializer;
 impl CacheParameterGroupListDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<CacheParameterGroup>, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
+
         deserialize_elements::<_, Vec<_>, _>(tag_name, stack, |name, stack, obj| {
             if name == "CacheParameterGroup" {
                 obj.push(CacheParameterGroupDeserializer::deserialize(
@@ -1363,11 +1407,12 @@ pub struct CacheParameterGroupNameMessage {
 #[allow(dead_code)]
 struct CacheParameterGroupNameMessageDeserializer;
 impl CacheParameterGroupNameMessageDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<CacheParameterGroupNameMessage, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, CacheParameterGroupNameMessage, _>(
             tag_name,
             stack,
@@ -1401,11 +1446,12 @@ pub struct CacheParameterGroupStatus {
 #[allow(dead_code)]
 struct CacheParameterGroupStatusDeserializer;
 impl CacheParameterGroupStatusDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<CacheParameterGroupStatus, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, CacheParameterGroupStatus, _>(
             tag_name,
             stack,
@@ -1451,11 +1497,12 @@ pub struct CacheParameterGroupsMessage {
 #[allow(dead_code)]
 struct CacheParameterGroupsMessageDeserializer;
 impl CacheParameterGroupsMessageDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<CacheParameterGroupsMessage, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, CacheParameterGroupsMessage, _>(
             tag_name,
             stack,
@@ -1498,11 +1545,12 @@ pub struct CacheSecurityGroup {
 #[allow(dead_code)]
 struct CacheSecurityGroupDeserializer;
 impl CacheSecurityGroupDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<CacheSecurityGroup, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, CacheSecurityGroup, _>(tag_name, stack, |name, stack, obj| {
             match name {
                 "ARN" => {
@@ -1544,11 +1592,12 @@ pub struct CacheSecurityGroupMembership {
 #[allow(dead_code)]
 struct CacheSecurityGroupMembershipDeserializer;
 impl CacheSecurityGroupMembershipDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<CacheSecurityGroupMembership, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, CacheSecurityGroupMembership, _>(
             tag_name,
             stack,
@@ -1573,11 +1622,13 @@ impl CacheSecurityGroupMembershipDeserializer {
 #[allow(dead_code)]
 struct CacheSecurityGroupMembershipListDeserializer;
 impl CacheSecurityGroupMembershipListDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<CacheSecurityGroupMembership>, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
+
         deserialize_elements::<_, Vec<_>, _>(tag_name, stack, |name, stack, obj| {
             if name == "CacheSecurityGroup" {
                 obj.push(CacheSecurityGroupMembershipDeserializer::deserialize(
@@ -1604,11 +1655,12 @@ pub struct CacheSecurityGroupMessage {
 #[allow(dead_code)]
 struct CacheSecurityGroupMessageDeserializer;
 impl CacheSecurityGroupMessageDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<CacheSecurityGroupMessage, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, CacheSecurityGroupMessage, _>(
             tag_name,
             stack,
@@ -1636,6 +1688,7 @@ impl CacheSecurityGroupMessageDeserializer {
 /// Serialize `CacheSecurityGroupNameList` contents to a `SignedRequest`.
 struct CacheSecurityGroupNameListSerializer;
 impl CacheSecurityGroupNameListSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &Vec<String>) {
         for (index, obj) in obj.iter().enumerate() {
             let key = format!("{}.member.{}", name, index + 1);
@@ -1647,11 +1700,13 @@ impl CacheSecurityGroupNameListSerializer {
 #[allow(dead_code)]
 struct CacheSecurityGroupsDeserializer;
 impl CacheSecurityGroupsDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<CacheSecurityGroup>, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
+
         deserialize_elements::<_, Vec<_>, _>(tag_name, stack, |name, stack, obj| {
             if name == "CacheSecurityGroup" {
                 obj.push(CacheSecurityGroupDeserializer::deserialize(
@@ -1684,11 +1739,12 @@ pub struct CacheSubnetGroup {
 #[allow(dead_code)]
 struct CacheSubnetGroupDeserializer;
 impl CacheSubnetGroupDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<CacheSubnetGroup, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, CacheSubnetGroup, _>(tag_name, stack, |name, stack, obj| {
             match name {
                 "ARN" => {
@@ -1733,11 +1789,12 @@ pub struct CacheSubnetGroupMessage {
 #[allow(dead_code)]
 struct CacheSubnetGroupMessageDeserializer;
 impl CacheSubnetGroupMessageDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<CacheSubnetGroupMessage, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, CacheSubnetGroupMessage, _>(
             tag_name,
             stack,
@@ -1761,11 +1818,13 @@ impl CacheSubnetGroupMessageDeserializer {
 #[allow(dead_code)]
 struct CacheSubnetGroupsDeserializer;
 impl CacheSubnetGroupsDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<CacheSubnetGroup>, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
+
         deserialize_elements::<_, Vec<_>, _>(tag_name, stack, |name, stack, obj| {
             if name == "CacheSubnetGroup" {
                 obj.push(CacheSubnetGroupDeserializer::deserialize(
@@ -1782,19 +1841,22 @@ impl CacheSubnetGroupsDeserializer {
 #[allow(dead_code)]
 struct ChangeTypeDeserializer;
 impl ChangeTypeDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 #[allow(dead_code)]
 struct ClusterIdListDeserializer;
 impl ClusterIdListDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<String>, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
+
         deserialize_elements::<_, Vec<_>, _>(tag_name, stack, |name, stack, obj| {
             if name == "ClusterId" {
                 obj.push(StringDeserializer::deserialize("ClusterId", stack)?);
@@ -1817,10 +1879,11 @@ pub struct CompleteMigrationMessage {
 /// Serialize `CompleteMigrationMessage` contents to a `SignedRequest`.
 struct CompleteMigrationMessageSerializer;
 impl CompleteMigrationMessageSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &CompleteMigrationMessage) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         if let Some(ref field_value) = obj.force {
@@ -1842,11 +1905,12 @@ pub struct CompleteMigrationResponse {
 #[allow(dead_code)]
 struct CompleteMigrationResponseDeserializer;
 impl CompleteMigrationResponseDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<CompleteMigrationResponse, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, CompleteMigrationResponse, _>(
             tag_name,
             stack,
@@ -1882,10 +1946,11 @@ pub struct ConfigureShard {
 /// Serialize `ConfigureShard` contents to a `SignedRequest`.
 struct ConfigureShardSerializer;
 impl ConfigureShardSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &ConfigureShard) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         params.put(
@@ -1927,10 +1992,11 @@ pub struct CopySnapshotMessage {
 /// Serialize `CopySnapshotMessage` contents to a `SignedRequest`.
 struct CopySnapshotMessageSerializer;
 impl CopySnapshotMessageSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &CopySnapshotMessage) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         if let Some(ref field_value) = obj.kms_key_id {
@@ -1959,11 +2025,12 @@ pub struct CopySnapshotResult {
 #[allow(dead_code)]
 struct CopySnapshotResultDeserializer;
 impl CopySnapshotResultDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<CopySnapshotResult, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, CopySnapshotResult, _>(tag_name, stack, |name, stack, obj| {
             match name {
                 "Snapshot" => {
@@ -2036,10 +2103,11 @@ pub struct CreateCacheClusterMessage {
 /// Serialize `CreateCacheClusterMessage` contents to a `SignedRequest`.
 struct CreateCacheClusterMessageSerializer;
 impl CreateCacheClusterMessageSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &CreateCacheClusterMessage) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         if let Some(ref field_value) = obj.az_mode {
@@ -2177,11 +2245,12 @@ pub struct CreateCacheClusterResult {
 #[allow(dead_code)]
 struct CreateCacheClusterResultDeserializer;
 impl CreateCacheClusterResultDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<CreateCacheClusterResult, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, CreateCacheClusterResult, _>(
             tag_name,
             stack,
@@ -2215,10 +2284,11 @@ pub struct CreateCacheParameterGroupMessage {
 /// Serialize `CreateCacheParameterGroupMessage` contents to a `SignedRequest`.
 struct CreateCacheParameterGroupMessageSerializer;
 impl CreateCacheParameterGroupMessageSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &CreateCacheParameterGroupMessage) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         params.put(
@@ -2242,11 +2312,12 @@ pub struct CreateCacheParameterGroupResult {
 #[allow(dead_code)]
 struct CreateCacheParameterGroupResultDeserializer;
 impl CreateCacheParameterGroupResultDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<CreateCacheParameterGroupResult, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, CreateCacheParameterGroupResult, _>(
             tag_name,
             stack,
@@ -2279,10 +2350,11 @@ pub struct CreateCacheSecurityGroupMessage {
 /// Serialize `CreateCacheSecurityGroupMessage` contents to a `SignedRequest`.
 struct CreateCacheSecurityGroupMessageSerializer;
 impl CreateCacheSecurityGroupMessageSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &CreateCacheSecurityGroupMessage) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         params.put(
@@ -2302,11 +2374,12 @@ pub struct CreateCacheSecurityGroupResult {
 #[allow(dead_code)]
 struct CreateCacheSecurityGroupResultDeserializer;
 impl CreateCacheSecurityGroupResultDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<CreateCacheSecurityGroupResult, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, CreateCacheSecurityGroupResult, _>(
             tag_name,
             stack,
@@ -2341,10 +2414,11 @@ pub struct CreateCacheSubnetGroupMessage {
 /// Serialize `CreateCacheSubnetGroupMessage` contents to a `SignedRequest`.
 struct CreateCacheSubnetGroupMessageSerializer;
 impl CreateCacheSubnetGroupMessageSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &CreateCacheSubnetGroupMessage) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         params.put(
@@ -2372,11 +2446,12 @@ pub struct CreateCacheSubnetGroupResult {
 #[allow(dead_code)]
 struct CreateCacheSubnetGroupResultDeserializer;
 impl CreateCacheSubnetGroupResultDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<CreateCacheSubnetGroupResult, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, CreateCacheSubnetGroupResult, _>(
             tag_name,
             stack,
@@ -2409,10 +2484,11 @@ pub struct CreateGlobalReplicationGroupMessage {
 /// Serialize `CreateGlobalReplicationGroupMessage` contents to a `SignedRequest`.
 struct CreateGlobalReplicationGroupMessageSerializer;
 impl CreateGlobalReplicationGroupMessageSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &CreateGlobalReplicationGroupMessage) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         if let Some(ref field_value) = obj.global_replication_group_description {
@@ -2441,11 +2517,12 @@ pub struct CreateGlobalReplicationGroupResult {
 #[allow(dead_code)]
 struct CreateGlobalReplicationGroupResultDeserializer;
 impl CreateGlobalReplicationGroupResultDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<CreateGlobalReplicationGroupResult, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, CreateGlobalReplicationGroupResult, _>(
             tag_name,
             stack,
@@ -2538,10 +2615,11 @@ pub struct CreateReplicationGroupMessage {
 /// Serialize `CreateReplicationGroupMessage` contents to a `SignedRequest`.
 struct CreateReplicationGroupMessageSerializer;
 impl CreateReplicationGroupMessageSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &CreateReplicationGroupMessage) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         if let Some(ref field_value) = obj.at_rest_encryption_enabled {
@@ -2711,11 +2789,12 @@ pub struct CreateReplicationGroupResult {
 #[allow(dead_code)]
 struct CreateReplicationGroupResultDeserializer;
 impl CreateReplicationGroupResultDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<CreateReplicationGroupResult, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, CreateReplicationGroupResult, _>(
             tag_name,
             stack,
@@ -2751,10 +2830,11 @@ pub struct CreateSnapshotMessage {
 /// Serialize `CreateSnapshotMessage` contents to a `SignedRequest`.
 struct CreateSnapshotMessageSerializer;
 impl CreateSnapshotMessageSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &CreateSnapshotMessage) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         if let Some(ref field_value) = obj.cache_cluster_id {
@@ -2779,11 +2859,12 @@ pub struct CreateSnapshotResult {
 #[allow(dead_code)]
 struct CreateSnapshotResultDeserializer;
 impl CreateSnapshotResultDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<CreateSnapshotResult, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, CreateSnapshotResult, _>(tag_name, stack, |name, stack, obj| {
             match name {
                 "Snapshot" => {
@@ -2809,10 +2890,11 @@ pub struct CreateUserGroupMessage {
 /// Serialize `CreateUserGroupMessage` contents to a `SignedRequest`.
 struct CreateUserGroupMessageSerializer;
 impl CreateUserGroupMessageSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &CreateUserGroupMessage) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         params.put(&format!("{}{}", prefix, "Engine"), &obj.engine);
@@ -2847,10 +2929,11 @@ pub struct CreateUserMessage {
 /// Serialize `CreateUserMessage` contents to a `SignedRequest`.
 struct CreateUserMessageSerializer;
 impl CreateUserMessageSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &CreateUserMessage) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         params.put(&format!("{}{}", prefix, "AccessString"), &obj.access_string);
@@ -2883,10 +2966,11 @@ pub struct CustomerNodeEndpoint {
 /// Serialize `CustomerNodeEndpoint` contents to a `SignedRequest`.
 struct CustomerNodeEndpointSerializer;
 impl CustomerNodeEndpointSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &CustomerNodeEndpoint) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         if let Some(ref field_value) = obj.address {
@@ -2901,6 +2985,7 @@ impl CustomerNodeEndpointSerializer {
 /// Serialize `CustomerNodeEndpointList` contents to a `SignedRequest`.
 struct CustomerNodeEndpointListSerializer;
 impl CustomerNodeEndpointListSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &Vec<CustomerNodeEndpoint>) {
         for (index, obj) in obj.iter().enumerate() {
             let key = format!("{}.member.{}", name, index + 1);
@@ -2927,14 +3012,15 @@ pub struct DecreaseNodeGroupsInGlobalReplicationGroupMessage {
 /// Serialize `DecreaseNodeGroupsInGlobalReplicationGroupMessage` contents to a `SignedRequest`.
 struct DecreaseNodeGroupsInGlobalReplicationGroupMessageSerializer;
 impl DecreaseNodeGroupsInGlobalReplicationGroupMessageSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(
         params: &mut Params,
         name: &str,
         obj: &DecreaseNodeGroupsInGlobalReplicationGroupMessage,
     ) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         params.put(
@@ -2975,11 +3061,12 @@ pub struct DecreaseNodeGroupsInGlobalReplicationGroupResult {
 #[allow(dead_code)]
 struct DecreaseNodeGroupsInGlobalReplicationGroupResultDeserializer;
 impl DecreaseNodeGroupsInGlobalReplicationGroupResultDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<DecreaseNodeGroupsInGlobalReplicationGroupResult, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, DecreaseNodeGroupsInGlobalReplicationGroupResult, _>(
             tag_name,
             stack,
@@ -3017,10 +3104,11 @@ pub struct DecreaseReplicaCountMessage {
 /// Serialize `DecreaseReplicaCountMessage` contents to a `SignedRequest`.
 struct DecreaseReplicaCountMessageSerializer;
 impl DecreaseReplicaCountMessageSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &DecreaseReplicaCountMessage) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         params.put(
@@ -3060,11 +3148,12 @@ pub struct DecreaseReplicaCountResult {
 #[allow(dead_code)]
 struct DecreaseReplicaCountResultDeserializer;
 impl DecreaseReplicaCountResultDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<DecreaseReplicaCountResult, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, DecreaseReplicaCountResult, _>(
             tag_name,
             stack,
@@ -3096,10 +3185,11 @@ pub struct DeleteCacheClusterMessage {
 /// Serialize `DeleteCacheClusterMessage` contents to a `SignedRequest`.
 struct DeleteCacheClusterMessageSerializer;
 impl DeleteCacheClusterMessageSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &DeleteCacheClusterMessage) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         params.put(
@@ -3124,11 +3214,12 @@ pub struct DeleteCacheClusterResult {
 #[allow(dead_code)]
 struct DeleteCacheClusterResultDeserializer;
 impl DeleteCacheClusterResultDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<DeleteCacheClusterResult, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, DeleteCacheClusterResult, _>(
             tag_name,
             stack,
@@ -3158,10 +3249,11 @@ pub struct DeleteCacheParameterGroupMessage {
 /// Serialize `DeleteCacheParameterGroupMessage` contents to a `SignedRequest`.
 struct DeleteCacheParameterGroupMessageSerializer;
 impl DeleteCacheParameterGroupMessageSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &DeleteCacheParameterGroupMessage) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         params.put(
@@ -3182,10 +3274,11 @@ pub struct DeleteCacheSecurityGroupMessage {
 /// Serialize `DeleteCacheSecurityGroupMessage` contents to a `SignedRequest`.
 struct DeleteCacheSecurityGroupMessageSerializer;
 impl DeleteCacheSecurityGroupMessageSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &DeleteCacheSecurityGroupMessage) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         params.put(
@@ -3206,10 +3299,11 @@ pub struct DeleteCacheSubnetGroupMessage {
 /// Serialize `DeleteCacheSubnetGroupMessage` contents to a `SignedRequest`.
 struct DeleteCacheSubnetGroupMessageSerializer;
 impl DeleteCacheSubnetGroupMessageSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &DeleteCacheSubnetGroupMessage) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         params.put(
@@ -3231,10 +3325,11 @@ pub struct DeleteGlobalReplicationGroupMessage {
 /// Serialize `DeleteGlobalReplicationGroupMessage` contents to a `SignedRequest`.
 struct DeleteGlobalReplicationGroupMessageSerializer;
 impl DeleteGlobalReplicationGroupMessageSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &DeleteGlobalReplicationGroupMessage) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         params.put(
@@ -3257,11 +3352,12 @@ pub struct DeleteGlobalReplicationGroupResult {
 #[allow(dead_code)]
 struct DeleteGlobalReplicationGroupResultDeserializer;
 impl DeleteGlobalReplicationGroupResultDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<DeleteGlobalReplicationGroupResult, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, DeleteGlobalReplicationGroupResult, _>(
             tag_name,
             stack,
@@ -3296,10 +3392,11 @@ pub struct DeleteReplicationGroupMessage {
 /// Serialize `DeleteReplicationGroupMessage` contents to a `SignedRequest`.
 struct DeleteReplicationGroupMessageSerializer;
 impl DeleteReplicationGroupMessageSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &DeleteReplicationGroupMessage) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         if let Some(ref field_value) = obj.final_snapshot_identifier {
@@ -3330,11 +3427,12 @@ pub struct DeleteReplicationGroupResult {
 #[allow(dead_code)]
 struct DeleteReplicationGroupResultDeserializer;
 impl DeleteReplicationGroupResultDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<DeleteReplicationGroupResult, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, DeleteReplicationGroupResult, _>(
             tag_name,
             stack,
@@ -3364,10 +3462,11 @@ pub struct DeleteSnapshotMessage {
 /// Serialize `DeleteSnapshotMessage` contents to a `SignedRequest`.
 struct DeleteSnapshotMessageSerializer;
 impl DeleteSnapshotMessageSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &DeleteSnapshotMessage) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         params.put(&format!("{}{}", prefix, "SnapshotName"), &obj.snapshot_name);
@@ -3383,11 +3482,12 @@ pub struct DeleteSnapshotResult {
 #[allow(dead_code)]
 struct DeleteSnapshotResultDeserializer;
 impl DeleteSnapshotResultDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<DeleteSnapshotResult, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, DeleteSnapshotResult, _>(tag_name, stack, |name, stack, obj| {
             match name {
                 "Snapshot" => {
@@ -3409,10 +3509,11 @@ pub struct DeleteUserGroupMessage {
 /// Serialize `DeleteUserGroupMessage` contents to a `SignedRequest`.
 struct DeleteUserGroupMessageSerializer;
 impl DeleteUserGroupMessageSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &DeleteUserGroupMessage) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         params.put(&format!("{}{}", prefix, "UserGroupId"), &obj.user_group_id);
@@ -3429,10 +3530,11 @@ pub struct DeleteUserMessage {
 /// Serialize `DeleteUserMessage` contents to a `SignedRequest`.
 struct DeleteUserMessageSerializer;
 impl DeleteUserMessageSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &DeleteUserMessage) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         params.put(&format!("{}{}", prefix, "UserId"), &obj.user_id);
@@ -3458,10 +3560,11 @@ pub struct DescribeCacheClustersMessage {
 /// Serialize `DescribeCacheClustersMessage` contents to a `SignedRequest`.
 struct DescribeCacheClustersMessageSerializer;
 impl DescribeCacheClustersMessageSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &DescribeCacheClustersMessage) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         if let Some(ref field_value) = obj.cache_cluster_id {
@@ -3506,10 +3609,11 @@ pub struct DescribeCacheEngineVersionsMessage {
 /// Serialize `DescribeCacheEngineVersionsMessage` contents to a `SignedRequest`.
 struct DescribeCacheEngineVersionsMessageSerializer;
 impl DescribeCacheEngineVersionsMessageSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &DescribeCacheEngineVersionsMessage) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         if let Some(ref field_value) = obj.cache_parameter_group_family {
@@ -3551,10 +3655,11 @@ pub struct DescribeCacheParameterGroupsMessage {
 /// Serialize `DescribeCacheParameterGroupsMessage` contents to a `SignedRequest`.
 struct DescribeCacheParameterGroupsMessageSerializer;
 impl DescribeCacheParameterGroupsMessageSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &DescribeCacheParameterGroupsMessage) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         if let Some(ref field_value) = obj.cache_parameter_group_name {
@@ -3589,10 +3694,11 @@ pub struct DescribeCacheParametersMessage {
 /// Serialize `DescribeCacheParametersMessage` contents to a `SignedRequest`.
 struct DescribeCacheParametersMessageSerializer;
 impl DescribeCacheParametersMessageSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &DescribeCacheParametersMessage) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         params.put(
@@ -3626,10 +3732,11 @@ pub struct DescribeCacheSecurityGroupsMessage {
 /// Serialize `DescribeCacheSecurityGroupsMessage` contents to a `SignedRequest`.
 struct DescribeCacheSecurityGroupsMessageSerializer;
 impl DescribeCacheSecurityGroupsMessageSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &DescribeCacheSecurityGroupsMessage) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         if let Some(ref field_value) = obj.cache_security_group_name {
@@ -3662,10 +3769,11 @@ pub struct DescribeCacheSubnetGroupsMessage {
 /// Serialize `DescribeCacheSubnetGroupsMessage` contents to a `SignedRequest`.
 struct DescribeCacheSubnetGroupsMessageSerializer;
 impl DescribeCacheSubnetGroupsMessageSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &DescribeCacheSubnetGroupsMessage) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         if let Some(ref field_value) = obj.cache_subnet_group_name {
@@ -3698,10 +3806,11 @@ pub struct DescribeEngineDefaultParametersMessage {
 /// Serialize `DescribeEngineDefaultParametersMessage` contents to a `SignedRequest`.
 struct DescribeEngineDefaultParametersMessageSerializer;
 impl DescribeEngineDefaultParametersMessageSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &DescribeEngineDefaultParametersMessage) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         params.put(
@@ -3726,11 +3835,12 @@ pub struct DescribeEngineDefaultParametersResult {
 #[allow(dead_code)]
 struct DescribeEngineDefaultParametersResultDeserializer;
 impl DescribeEngineDefaultParametersResultDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<DescribeEngineDefaultParametersResult, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, DescribeEngineDefaultParametersResult, _>(
             tag_name,
             stack,
@@ -3772,10 +3882,11 @@ pub struct DescribeEventsMessage {
 /// Serialize `DescribeEventsMessage` contents to a `SignedRequest`.
 struct DescribeEventsMessageSerializer;
 impl DescribeEventsMessageSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &DescribeEventsMessage) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         if let Some(ref field_value) = obj.duration {
@@ -3818,10 +3929,11 @@ pub struct DescribeGlobalReplicationGroupsMessage {
 /// Serialize `DescribeGlobalReplicationGroupsMessage` contents to a `SignedRequest`.
 struct DescribeGlobalReplicationGroupsMessageSerializer;
 impl DescribeGlobalReplicationGroupsMessageSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &DescribeGlobalReplicationGroupsMessage) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         if let Some(ref field_value) = obj.global_replication_group_id {
@@ -3854,11 +3966,12 @@ pub struct DescribeGlobalReplicationGroupsResult {
 #[allow(dead_code)]
 struct DescribeGlobalReplicationGroupsResultDeserializer;
 impl DescribeGlobalReplicationGroupsResultDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<DescribeGlobalReplicationGroupsResult, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, DescribeGlobalReplicationGroupsResult, _>(
             tag_name,
             stack,
@@ -3897,10 +4010,11 @@ pub struct DescribeReplicationGroupsMessage {
 /// Serialize `DescribeReplicationGroupsMessage` contents to a `SignedRequest`.
 struct DescribeReplicationGroupsMessageSerializer;
 impl DescribeReplicationGroupsMessageSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &DescribeReplicationGroupsMessage) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         if let Some(ref field_value) = obj.marker {
@@ -3940,10 +4054,11 @@ pub struct DescribeReservedCacheNodesMessage {
 /// Serialize `DescribeReservedCacheNodesMessage` contents to a `SignedRequest`.
 struct DescribeReservedCacheNodesMessageSerializer;
 impl DescribeReservedCacheNodesMessageSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &DescribeReservedCacheNodesMessage) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         if let Some(ref field_value) = obj.cache_node_type {
@@ -4002,14 +4117,15 @@ pub struct DescribeReservedCacheNodesOfferingsMessage {
 /// Serialize `DescribeReservedCacheNodesOfferingsMessage` contents to a `SignedRequest`.
 struct DescribeReservedCacheNodesOfferingsMessageSerializer;
 impl DescribeReservedCacheNodesOfferingsMessageSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(
         params: &mut Params,
         name: &str,
         obj: &DescribeReservedCacheNodesOfferingsMessage,
     ) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         if let Some(ref field_value) = obj.cache_node_type {
@@ -4055,10 +4171,11 @@ pub struct DescribeServiceUpdatesMessage {
 /// Serialize `DescribeServiceUpdatesMessage` contents to a `SignedRequest`.
 struct DescribeServiceUpdatesMessageSerializer;
 impl DescribeServiceUpdatesMessageSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &DescribeServiceUpdatesMessage) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         if let Some(ref field_value) = obj.marker {
@@ -4093,11 +4210,12 @@ pub struct DescribeSnapshotsListMessage {
 #[allow(dead_code)]
 struct DescribeSnapshotsListMessageDeserializer;
 impl DescribeSnapshotsListMessageDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<DescribeSnapshotsListMessage, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, DescribeSnapshotsListMessage, _>(
             tag_name,
             stack,
@@ -4141,10 +4259,11 @@ pub struct DescribeSnapshotsMessage {
 /// Serialize `DescribeSnapshotsMessage` contents to a `SignedRequest`.
 struct DescribeSnapshotsMessageSerializer;
 impl DescribeSnapshotsMessageSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &DescribeSnapshotsMessage) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         if let Some(ref field_value) = obj.cache_cluster_id {
@@ -4202,10 +4321,11 @@ pub struct DescribeUpdateActionsMessage {
 /// Serialize `DescribeUpdateActionsMessage` contents to a `SignedRequest`.
 struct DescribeUpdateActionsMessageSerializer;
 impl DescribeUpdateActionsMessageSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &DescribeUpdateActionsMessage) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         if let Some(ref field_value) = obj.cache_cluster_ids {
@@ -4278,10 +4398,11 @@ pub struct DescribeUserGroupsMessage {
 /// Serialize `DescribeUserGroupsMessage` contents to a `SignedRequest`.
 struct DescribeUserGroupsMessageSerializer;
 impl DescribeUserGroupsMessageSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &DescribeUserGroupsMessage) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         if let Some(ref field_value) = obj.marker {
@@ -4308,11 +4429,12 @@ pub struct DescribeUserGroupsResult {
 #[allow(dead_code)]
 struct DescribeUserGroupsResultDeserializer;
 impl DescribeUserGroupsResultDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<DescribeUserGroupsResult, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, DescribeUserGroupsResult, _>(
             tag_name,
             stack,
@@ -4351,10 +4473,11 @@ pub struct DescribeUsersMessage {
 /// Serialize `DescribeUsersMessage` contents to a `SignedRequest`.
 struct DescribeUsersMessageSerializer;
 impl DescribeUsersMessageSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &DescribeUsersMessage) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         if let Some(ref field_value) = obj.engine {
@@ -4391,11 +4514,12 @@ pub struct DescribeUsersResult {
 #[allow(dead_code)]
 struct DescribeUsersResultDeserializer;
 impl DescribeUsersResultDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<DescribeUsersResult, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, DescribeUsersResult, _>(tag_name, stack, |name, stack, obj| {
             match name {
                 "Marker" => {
@@ -4426,10 +4550,11 @@ pub struct DisassociateGlobalReplicationGroupMessage {
 /// Serialize `DisassociateGlobalReplicationGroupMessage` contents to a `SignedRequest`.
 struct DisassociateGlobalReplicationGroupMessageSerializer;
 impl DisassociateGlobalReplicationGroupMessageSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &DisassociateGlobalReplicationGroupMessage) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         params.put(
@@ -4456,11 +4581,12 @@ pub struct DisassociateGlobalReplicationGroupResult {
 #[allow(dead_code)]
 struct DisassociateGlobalReplicationGroupResultDeserializer;
 impl DisassociateGlobalReplicationGroupResultDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<DisassociateGlobalReplicationGroupResult, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, DisassociateGlobalReplicationGroupResult, _>(
             tag_name,
             stack,
@@ -4483,8 +4609,9 @@ impl DisassociateGlobalReplicationGroupResultDeserializer {
 #[allow(dead_code)]
 struct DoubleDeserializer;
 impl DoubleDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<f64, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::deserialize_primitive(tag_name, stack, |s| Ok(f64::from_str(&s).unwrap()))
     }
 }
@@ -4503,11 +4630,12 @@ pub struct EC2SecurityGroup {
 #[allow(dead_code)]
 struct EC2SecurityGroupDeserializer;
 impl EC2SecurityGroupDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<EC2SecurityGroup, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, EC2SecurityGroup, _>(tag_name, stack, |name, stack, obj| {
             match name {
                 "EC2SecurityGroupName" => {
@@ -4534,11 +4662,13 @@ impl EC2SecurityGroupDeserializer {
 #[allow(dead_code)]
 struct EC2SecurityGroupListDeserializer;
 impl EC2SecurityGroupListDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<EC2SecurityGroup>, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
+
         deserialize_elements::<_, Vec<_>, _>(tag_name, stack, |name, stack, obj| {
             if name == "EC2SecurityGroup" {
                 obj.push(EC2SecurityGroupDeserializer::deserialize(
@@ -4565,11 +4695,12 @@ pub struct Endpoint {
 #[allow(dead_code)]
 struct EndpointDeserializer;
 impl EndpointDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Endpoint, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, Endpoint, _>(tag_name, stack, |name, stack, obj| {
             match name {
                 "Address" => {
@@ -4601,11 +4732,12 @@ pub struct EngineDefaults {
 #[allow(dead_code)]
 struct EngineDefaultsDeserializer;
 impl EngineDefaultsDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<EngineDefaults, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, EngineDefaults, _>(tag_name, stack, |name, stack, obj| {
             match name {
                 "CacheNodeTypeSpecificParameters" => {
@@ -4641,8 +4773,9 @@ impl EngineDefaultsDeserializer {
 #[allow(dead_code)]
 struct EngineTypeDeserializer;
 impl EngineTypeDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
@@ -4663,8 +4796,9 @@ pub struct Event {
 #[allow(dead_code)]
 struct EventDeserializer;
 impl EventDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<Event, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, Event, _>(tag_name, stack, |name, stack, obj| {
             match name {
                 "Date" => {
@@ -4690,11 +4824,13 @@ impl EventDeserializer {
 #[allow(dead_code)]
 struct EventListDeserializer;
 impl EventListDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<Event>, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
+
         deserialize_elements::<_, Vec<_>, _>(tag_name, stack, |name, stack, obj| {
             if name == "Event" {
                 obj.push(EventDeserializer::deserialize("Event", stack)?);
@@ -4718,11 +4854,12 @@ pub struct EventsMessage {
 #[allow(dead_code)]
 struct EventsMessageDeserializer;
 impl EventsMessageDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<EventsMessage, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, EventsMessage, _>(tag_name, stack, |name, stack, obj| {
             match name {
                 "Events" => {
@@ -4753,10 +4890,11 @@ pub struct FailoverGlobalReplicationGroupMessage {
 /// Serialize `FailoverGlobalReplicationGroupMessage` contents to a `SignedRequest`.
 struct FailoverGlobalReplicationGroupMessageSerializer;
 impl FailoverGlobalReplicationGroupMessageSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &FailoverGlobalReplicationGroupMessage) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         params.put(
@@ -4783,11 +4921,12 @@ pub struct FailoverGlobalReplicationGroupResult {
 #[allow(dead_code)]
 struct FailoverGlobalReplicationGroupResultDeserializer;
 impl FailoverGlobalReplicationGroupResultDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<FailoverGlobalReplicationGroupResult, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, FailoverGlobalReplicationGroupResult, _>(
             tag_name,
             stack,
@@ -4820,10 +4959,11 @@ pub struct Filter {
 /// Serialize `Filter` contents to a `SignedRequest`.
 struct FilterSerializer;
 impl FilterSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &Filter) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         params.put(&format!("{}{}", prefix, "Name"), &obj.name);
@@ -4838,6 +4978,7 @@ impl FilterSerializer {
 /// Serialize `FilterList` contents to a `SignedRequest`.
 struct FilterListSerializer;
 impl FilterListSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &Vec<Filter>) {
         for (index, obj) in obj.iter().enumerate() {
             let key = format!("{}.member.{}", name, index + 1);
@@ -4849,6 +4990,7 @@ impl FilterListSerializer {
 /// Serialize `FilterValueList` contents to a `SignedRequest`.
 struct FilterValueListSerializer;
 impl FilterValueListSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &Vec<String>) {
         for (index, obj) in obj.iter().enumerate() {
             let key = format!("{}.member.{}", name, index + 1);
@@ -4870,11 +5012,12 @@ pub struct GlobalNodeGroup {
 #[allow(dead_code)]
 struct GlobalNodeGroupDeserializer;
 impl GlobalNodeGroupDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<GlobalNodeGroup, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, GlobalNodeGroup, _>(tag_name, stack, |name, stack, obj| {
             match name {
                 "GlobalNodeGroupId" => {
@@ -4894,6 +5037,7 @@ impl GlobalNodeGroupDeserializer {
 /// Serialize `GlobalNodeGroupIdList` contents to a `SignedRequest`.
 struct GlobalNodeGroupIdListSerializer;
 impl GlobalNodeGroupIdListSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &Vec<String>) {
         for (index, obj) in obj.iter().enumerate() {
             let key = format!("{}.member.{}", name, index + 1);
@@ -4905,11 +5049,13 @@ impl GlobalNodeGroupIdListSerializer {
 #[allow(dead_code)]
 struct GlobalNodeGroupListDeserializer;
 impl GlobalNodeGroupListDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<GlobalNodeGroup>, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
+
         deserialize_elements::<_, Vec<_>, _>(tag_name, stack, |name, stack, obj| {
             if name == "GlobalNodeGroup" {
                 obj.push(GlobalNodeGroupDeserializer::deserialize(
@@ -4958,11 +5104,12 @@ pub struct GlobalReplicationGroup {
 #[allow(dead_code)]
 struct GlobalReplicationGroupDeserializer;
 impl GlobalReplicationGroupDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<GlobalReplicationGroup, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, GlobalReplicationGroup, _>(tag_name, stack, |name, stack, obj| {
             match name {
                 "ARN" => {
@@ -5050,11 +5197,12 @@ pub struct GlobalReplicationGroupInfo {
 #[allow(dead_code)]
 struct GlobalReplicationGroupInfoDeserializer;
 impl GlobalReplicationGroupInfoDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<GlobalReplicationGroupInfo, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, GlobalReplicationGroupInfo, _>(
             tag_name,
             stack,
@@ -5083,11 +5231,13 @@ impl GlobalReplicationGroupInfoDeserializer {
 #[allow(dead_code)]
 struct GlobalReplicationGroupListDeserializer;
 impl GlobalReplicationGroupListDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<GlobalReplicationGroup>, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
+
         deserialize_elements::<_, Vec<_>, _>(tag_name, stack, |name, stack, obj| {
             if name == "GlobalReplicationGroup" {
                 obj.push(GlobalReplicationGroupDeserializer::deserialize(
@@ -5120,11 +5270,12 @@ pub struct GlobalReplicationGroupMember {
 #[allow(dead_code)]
 struct GlobalReplicationGroupMemberDeserializer;
 impl GlobalReplicationGroupMemberDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<GlobalReplicationGroupMember, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, GlobalReplicationGroupMember, _>(
             tag_name,
             stack,
@@ -5165,11 +5316,13 @@ impl GlobalReplicationGroupMemberDeserializer {
 #[allow(dead_code)]
 struct GlobalReplicationGroupMemberListDeserializer;
 impl GlobalReplicationGroupMemberListDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<GlobalReplicationGroupMember>, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
+
         deserialize_elements::<_, Vec<_>, _>(tag_name, stack, |name, stack, obj| {
             if name == "GlobalReplicationGroupMember" {
                 obj.push(GlobalReplicationGroupMemberDeserializer::deserialize(
@@ -5199,14 +5352,15 @@ pub struct IncreaseNodeGroupsInGlobalReplicationGroupMessage {
 /// Serialize `IncreaseNodeGroupsInGlobalReplicationGroupMessage` contents to a `SignedRequest`.
 struct IncreaseNodeGroupsInGlobalReplicationGroupMessageSerializer;
 impl IncreaseNodeGroupsInGlobalReplicationGroupMessageSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(
         params: &mut Params,
         name: &str,
         obj: &IncreaseNodeGroupsInGlobalReplicationGroupMessage,
     ) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         params.put(
@@ -5240,11 +5394,12 @@ pub struct IncreaseNodeGroupsInGlobalReplicationGroupResult {
 #[allow(dead_code)]
 struct IncreaseNodeGroupsInGlobalReplicationGroupResultDeserializer;
 impl IncreaseNodeGroupsInGlobalReplicationGroupResultDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<IncreaseNodeGroupsInGlobalReplicationGroupResult, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, IncreaseNodeGroupsInGlobalReplicationGroupResult, _>(
             tag_name,
             stack,
@@ -5280,10 +5435,11 @@ pub struct IncreaseReplicaCountMessage {
 /// Serialize `IncreaseReplicaCountMessage` contents to a `SignedRequest`.
 struct IncreaseReplicaCountMessageSerializer;
 impl IncreaseReplicaCountMessageSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &IncreaseReplicaCountMessage) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         params.put(
@@ -5316,11 +5472,12 @@ pub struct IncreaseReplicaCountResult {
 #[allow(dead_code)]
 struct IncreaseReplicaCountResultDeserializer;
 impl IncreaseReplicaCountResultDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<IncreaseReplicaCountResult, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, IncreaseReplicaCountResult, _>(
             tag_name,
             stack,
@@ -5342,16 +5499,18 @@ impl IncreaseReplicaCountResultDeserializer {
 #[allow(dead_code)]
 struct IntegerDeserializer;
 impl IntegerDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<i64, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::deserialize_primitive(tag_name, stack, |s| Ok(i64::from_str(&s).unwrap()))
     }
 }
 #[allow(dead_code)]
 struct IntegerOptionalDeserializer;
 impl IntegerOptionalDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<i64, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::deserialize_primitive(tag_name, stack, |s| Ok(i64::from_str(&s).unwrap()))
     }
 }
@@ -5359,6 +5518,7 @@ impl IntegerOptionalDeserializer {
 /// Serialize `KeyList` contents to a `SignedRequest`.
 struct KeyListSerializer;
 impl KeyListSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &Vec<String>) {
         for (index, obj) in obj.iter().enumerate() {
             let key = format!("{}.member.{}", name, index + 1);
@@ -5380,10 +5540,11 @@ pub struct ListAllowedNodeTypeModificationsMessage {
 /// Serialize `ListAllowedNodeTypeModificationsMessage` contents to a `SignedRequest`.
 struct ListAllowedNodeTypeModificationsMessageSerializer;
 impl ListAllowedNodeTypeModificationsMessageSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &ListAllowedNodeTypeModificationsMessage) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         if let Some(ref field_value) = obj.cache_cluster_id {
@@ -5406,10 +5567,11 @@ pub struct ListTagsForResourceMessage {
 /// Serialize `ListTagsForResourceMessage` contents to a `SignedRequest`.
 struct ListTagsForResourceMessageSerializer;
 impl ListTagsForResourceMessageSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &ListTagsForResourceMessage) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         params.put(&format!("{}{}", prefix, "ResourceName"), &obj.resource_name);
@@ -5463,10 +5625,11 @@ pub struct ModifyCacheClusterMessage {
 /// Serialize `ModifyCacheClusterMessage` contents to a `SignedRequest`.
 struct ModifyCacheClusterMessageSerializer;
 impl ModifyCacheClusterMessageSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &ModifyCacheClusterMessage) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         if let Some(ref field_value) = obj.az_mode {
@@ -5576,11 +5739,12 @@ pub struct ModifyCacheClusterResult {
 #[allow(dead_code)]
 struct ModifyCacheClusterResultDeserializer;
 impl ModifyCacheClusterResultDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<ModifyCacheClusterResult, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, ModifyCacheClusterResult, _>(
             tag_name,
             stack,
@@ -5612,10 +5776,11 @@ pub struct ModifyCacheParameterGroupMessage {
 /// Serialize `ModifyCacheParameterGroupMessage` contents to a `SignedRequest`.
 struct ModifyCacheParameterGroupMessageSerializer;
 impl ModifyCacheParameterGroupMessageSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &ModifyCacheParameterGroupMessage) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         params.put(
@@ -5645,10 +5810,11 @@ pub struct ModifyCacheSubnetGroupMessage {
 /// Serialize `ModifyCacheSubnetGroupMessage` contents to a `SignedRequest`.
 struct ModifyCacheSubnetGroupMessageSerializer;
 impl ModifyCacheSubnetGroupMessageSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &ModifyCacheSubnetGroupMessage) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         if let Some(ref field_value) = obj.cache_subnet_group_description {
@@ -5680,11 +5846,12 @@ pub struct ModifyCacheSubnetGroupResult {
 #[allow(dead_code)]
 struct ModifyCacheSubnetGroupResultDeserializer;
 impl ModifyCacheSubnetGroupResultDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<ModifyCacheSubnetGroupResult, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, ModifyCacheSubnetGroupResult, _>(
             tag_name,
             stack,
@@ -5723,10 +5890,11 @@ pub struct ModifyGlobalReplicationGroupMessage {
 /// Serialize `ModifyGlobalReplicationGroupMessage` contents to a `SignedRequest`.
 struct ModifyGlobalReplicationGroupMessageSerializer;
 impl ModifyGlobalReplicationGroupMessageSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &ModifyGlobalReplicationGroupMessage) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         params.put(
@@ -5767,11 +5935,12 @@ pub struct ModifyGlobalReplicationGroupResult {
 #[allow(dead_code)]
 struct ModifyGlobalReplicationGroupResultDeserializer;
 impl ModifyGlobalReplicationGroupResultDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<ModifyGlobalReplicationGroupResult, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, ModifyGlobalReplicationGroupResult, _>(
             tag_name,
             stack,
@@ -5846,10 +6015,11 @@ pub struct ModifyReplicationGroupMessage {
 /// Serialize `ModifyReplicationGroupMessage` contents to a `SignedRequest`.
 struct ModifyReplicationGroupMessageSerializer;
 impl ModifyReplicationGroupMessageSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &ModifyReplicationGroupMessage) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         if let Some(ref field_value) = obj.apply_immediately {
@@ -5981,11 +6151,12 @@ pub struct ModifyReplicationGroupResult {
 #[allow(dead_code)]
 struct ModifyReplicationGroupResultDeserializer;
 impl ModifyReplicationGroupResultDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<ModifyReplicationGroupResult, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, ModifyReplicationGroupResult, _>(
             tag_name,
             stack,
@@ -6025,14 +6196,15 @@ pub struct ModifyReplicationGroupShardConfigurationMessage {
 /// Serialize `ModifyReplicationGroupShardConfigurationMessage` contents to a `SignedRequest`.
 struct ModifyReplicationGroupShardConfigurationMessageSerializer;
 impl ModifyReplicationGroupShardConfigurationMessageSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(
         params: &mut Params,
         name: &str,
         obj: &ModifyReplicationGroupShardConfigurationMessage,
     ) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         params.put(
@@ -6080,11 +6252,12 @@ pub struct ModifyReplicationGroupShardConfigurationResult {
 #[allow(dead_code)]
 struct ModifyReplicationGroupShardConfigurationResultDeserializer;
 impl ModifyReplicationGroupShardConfigurationResultDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<ModifyReplicationGroupShardConfigurationResult, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, ModifyReplicationGroupShardConfigurationResult, _>(
             tag_name,
             stack,
@@ -6117,10 +6290,11 @@ pub struct ModifyUserGroupMessage {
 /// Serialize `ModifyUserGroupMessage` contents to a `SignedRequest`.
 struct ModifyUserGroupMessageSerializer;
 impl ModifyUserGroupMessageSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &ModifyUserGroupMessage) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         params.put(&format!("{}{}", prefix, "UserGroupId"), &obj.user_group_id);
@@ -6159,10 +6333,11 @@ pub struct ModifyUserMessage {
 /// Serialize `ModifyUserMessage` contents to a `SignedRequest`.
 struct ModifyUserMessageSerializer;
 impl ModifyUserMessageSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &ModifyUserMessage) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         if let Some(ref field_value) = obj.access_string {
@@ -6188,8 +6363,9 @@ impl ModifyUserMessageSerializer {
 #[allow(dead_code)]
 struct MultiAZStatusDeserializer;
 impl MultiAZStatusDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
@@ -6214,11 +6390,12 @@ pub struct NodeGroup {
 #[allow(dead_code)]
 struct NodeGroupDeserializer;
 impl NodeGroupDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<NodeGroup, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, NodeGroup, _>(tag_name, stack, |name, stack, obj| {
             match name {
                 "NodeGroupId" => {
@@ -6274,11 +6451,12 @@ pub struct NodeGroupConfiguration {
 #[allow(dead_code)]
 struct NodeGroupConfigurationDeserializer;
 impl NodeGroupConfigurationDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<NodeGroupConfiguration, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, NodeGroupConfiguration, _>(tag_name, stack, |name, stack, obj| {
             match name {
                 "NodeGroupId" => {
@@ -6329,10 +6507,11 @@ impl NodeGroupConfigurationDeserializer {
 /// Serialize `NodeGroupConfiguration` contents to a `SignedRequest`.
 struct NodeGroupConfigurationSerializer;
 impl NodeGroupConfigurationSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &NodeGroupConfiguration) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         if let Some(ref field_value) = obj.node_group_id {
@@ -6373,6 +6552,7 @@ impl NodeGroupConfigurationSerializer {
 /// Serialize `NodeGroupConfigurationList` contents to a `SignedRequest`.
 struct NodeGroupConfigurationListSerializer;
 impl NodeGroupConfigurationListSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &Vec<NodeGroupConfiguration>) {
         for (index, obj) in obj.iter().enumerate() {
             let key = format!("{}.member.{}", name, index + 1);
@@ -6384,11 +6564,13 @@ impl NodeGroupConfigurationListSerializer {
 #[allow(dead_code)]
 struct NodeGroupListDeserializer;
 impl NodeGroupListDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<NodeGroup>, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
+
         deserialize_elements::<_, Vec<_>, _>(tag_name, stack, |name, stack, obj| {
             if name == "NodeGroup" {
                 obj.push(NodeGroupDeserializer::deserialize("NodeGroup", stack)?);
@@ -6420,11 +6602,12 @@ pub struct NodeGroupMember {
 #[allow(dead_code)]
 struct NodeGroupMemberDeserializer;
 impl NodeGroupMemberDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<NodeGroupMember, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, NodeGroupMember, _>(tag_name, stack, |name, stack, obj| {
             match name {
                 "CacheClusterId" => {
@@ -6463,11 +6646,13 @@ impl NodeGroupMemberDeserializer {
 #[allow(dead_code)]
 struct NodeGroupMemberListDeserializer;
 impl NodeGroupMemberListDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<NodeGroupMember>, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
+
         deserialize_elements::<_, Vec<_>, _>(tag_name, stack, |name, stack, obj| {
             if name == "NodeGroupMember" {
                 obj.push(NodeGroupMemberDeserializer::deserialize(
@@ -6508,11 +6693,12 @@ pub struct NodeGroupMemberUpdateStatus {
 #[allow(dead_code)]
 struct NodeGroupMemberUpdateStatusDeserializer;
 impl NodeGroupMemberUpdateStatusDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<NodeGroupMemberUpdateStatus, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, NodeGroupMemberUpdateStatus, _>(
             tag_name,
             stack,
@@ -6574,11 +6760,13 @@ impl NodeGroupMemberUpdateStatusDeserializer {
 #[allow(dead_code)]
 struct NodeGroupMemberUpdateStatusListDeserializer;
 impl NodeGroupMemberUpdateStatusListDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<NodeGroupMemberUpdateStatus>, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
+
         deserialize_elements::<_, Vec<_>, _>(tag_name, stack, |name, stack, obj| {
             if name == "NodeGroupMemberUpdateStatus" {
                 obj.push(NodeGroupMemberUpdateStatusDeserializer::deserialize(
@@ -6605,11 +6793,12 @@ pub struct NodeGroupUpdateStatus {
 #[allow(dead_code)]
 struct NodeGroupUpdateStatusDeserializer;
 impl NodeGroupUpdateStatusDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<NodeGroupUpdateStatus, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, NodeGroupUpdateStatus, _>(tag_name, stack, |name, stack, obj| {
             match name {
                 "NodeGroupId" => {
@@ -6633,11 +6822,13 @@ impl NodeGroupUpdateStatusDeserializer {
 #[allow(dead_code)]
 struct NodeGroupUpdateStatusListDeserializer;
 impl NodeGroupUpdateStatusListDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<NodeGroupUpdateStatus>, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
+
         deserialize_elements::<_, Vec<_>, _>(tag_name, stack, |name, stack, obj| {
             if name == "NodeGroupUpdateStatus" {
                 obj.push(NodeGroupUpdateStatusDeserializer::deserialize(
@@ -6655,6 +6846,7 @@ impl NodeGroupUpdateStatusListDeserializer {
 /// Serialize `NodeGroupsToRemoveList` contents to a `SignedRequest`.
 struct NodeGroupsToRemoveListSerializer;
 impl NodeGroupsToRemoveListSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &Vec<String>) {
         for (index, obj) in obj.iter().enumerate() {
             let key = format!("{}.member.{}", name, index + 1);
@@ -6666,6 +6858,7 @@ impl NodeGroupsToRemoveListSerializer {
 /// Serialize `NodeGroupsToRetainList` contents to a `SignedRequest`.
 struct NodeGroupsToRetainListSerializer;
 impl NodeGroupsToRetainListSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &Vec<String>) {
         for (index, obj) in obj.iter().enumerate() {
             let key = format!("{}.member.{}", name, index + 1);
@@ -6697,11 +6890,12 @@ pub struct NodeSnapshot {
 #[allow(dead_code)]
 struct NodeSnapshotDeserializer;
 impl NodeSnapshotDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<NodeSnapshot, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, NodeSnapshot, _>(tag_name, stack, |name, stack, obj| {
             match name {
                 "CacheClusterId" => {
@@ -6747,11 +6941,13 @@ impl NodeSnapshotDeserializer {
 #[allow(dead_code)]
 struct NodeSnapshotListDeserializer;
 impl NodeSnapshotListDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<NodeSnapshot>, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
+
         deserialize_elements::<_, Vec<_>, _>(tag_name, stack, |name, stack, obj| {
             if name == "NodeSnapshot" {
                 obj.push(NodeSnapshotDeserializer::deserialize(
@@ -6768,11 +6964,13 @@ impl NodeSnapshotListDeserializer {
 #[allow(dead_code)]
 struct NodeTypeListDeserializer;
 impl NodeTypeListDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<String>, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
+
         deserialize_elements::<_, Vec<_>, _>(tag_name, stack, |name, stack, obj| {
             if name == "member" {
                 obj.push(StringDeserializer::deserialize("member", stack)?);
@@ -6786,16 +6984,18 @@ impl NodeTypeListDeserializer {
 #[allow(dead_code)]
 struct NodeUpdateInitiatedByDeserializer;
 impl NodeUpdateInitiatedByDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 #[allow(dead_code)]
 struct NodeUpdateStatusDeserializer;
 impl NodeUpdateStatusDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
@@ -6812,11 +7012,12 @@ pub struct NotificationConfiguration {
 #[allow(dead_code)]
 struct NotificationConfigurationDeserializer;
 impl NotificationConfigurationDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<NotificationConfiguration, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, NotificationConfiguration, _>(
             tag_name,
             stack,
@@ -6839,11 +7040,13 @@ impl NotificationConfigurationDeserializer {
 #[allow(dead_code)]
 struct OutpostArnsListDeserializer;
 impl OutpostArnsListDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<String>, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
+
         deserialize_elements::<_, Vec<_>, _>(tag_name, stack, |name, stack, obj| {
             if name == "OutpostArn" {
                 obj.push(StringDeserializer::deserialize("OutpostArn", stack)?);
@@ -6858,6 +7061,7 @@ impl OutpostArnsListDeserializer {
 /// Serialize `OutpostArnsList` contents to a `SignedRequest`.
 struct OutpostArnsListSerializer;
 impl OutpostArnsListSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &Vec<String>) {
         for (index, obj) in obj.iter().enumerate() {
             let key = format!("{}.member.{}", name, index + 1);
@@ -6893,11 +7097,12 @@ pub struct Parameter {
 #[allow(dead_code)]
 struct ParameterDeserializer;
 impl ParameterDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Parameter, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, Parameter, _>(tag_name, stack, |name, stack, obj| {
             match name {
                 "AllowedValues" => {
@@ -6954,10 +7159,11 @@ pub struct ParameterNameValue {
 /// Serialize `ParameterNameValue` contents to a `SignedRequest`.
 struct ParameterNameValueSerializer;
 impl ParameterNameValueSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &ParameterNameValue) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         if let Some(ref field_value) = obj.parameter_name {
@@ -6972,6 +7178,7 @@ impl ParameterNameValueSerializer {
 /// Serialize `ParameterNameValueList` contents to a `SignedRequest`.
 struct ParameterNameValueListSerializer;
 impl ParameterNameValueListSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &Vec<ParameterNameValue>) {
         for (index, obj) in obj.iter().enumerate() {
             let key = format!("{}.member.{}", name, index + 1);
@@ -6983,11 +7190,13 @@ impl ParameterNameValueListSerializer {
 #[allow(dead_code)]
 struct ParametersListDeserializer;
 impl ParametersListDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<Parameter>, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
+
         deserialize_elements::<_, Vec<_>, _>(tag_name, stack, |name, stack, obj| {
             if name == "Parameter" {
                 obj.push(ParameterDeserializer::deserialize("Parameter", stack)?);
@@ -7002,6 +7211,7 @@ impl ParametersListDeserializer {
 /// Serialize `PasswordListInput` contents to a `SignedRequest`.
 struct PasswordListInputSerializer;
 impl PasswordListInputSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &Vec<String>) {
         for (index, obj) in obj.iter().enumerate() {
             let key = format!("{}.member.{}", name, index + 1);
@@ -7013,8 +7223,9 @@ impl PasswordListInputSerializer {
 #[allow(dead_code)]
 struct PendingAutomaticFailoverStatusDeserializer;
 impl PendingAutomaticFailoverStatusDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
@@ -7037,11 +7248,12 @@ pub struct PendingModifiedValues {
 #[allow(dead_code)]
 struct PendingModifiedValuesDeserializer;
 impl PendingModifiedValuesDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<PendingModifiedValues, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, PendingModifiedValues, _>(tag_name, stack, |name, stack, obj| {
             match name {
                 "AuthTokenStatus" => {
@@ -7079,6 +7291,7 @@ impl PendingModifiedValuesDeserializer {
 /// Serialize `PreferredAvailabilityZoneList` contents to a `SignedRequest`.
 struct PreferredAvailabilityZoneListSerializer;
 impl PreferredAvailabilityZoneListSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &Vec<String>) {
         for (index, obj) in obj.iter().enumerate() {
             let key = format!("{}.member.{}", name, index + 1);
@@ -7090,6 +7303,7 @@ impl PreferredAvailabilityZoneListSerializer {
 /// Serialize `PreferredOutpostArnList` contents to a `SignedRequest`.
 struct PreferredOutpostArnListSerializer;
 impl PreferredOutpostArnListSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &Vec<String>) {
         for (index, obj) in obj.iter().enumerate() {
             let key = format!("{}.member.{}", name, index + 1);
@@ -7115,11 +7329,12 @@ pub struct ProcessedUpdateAction {
 #[allow(dead_code)]
 struct ProcessedUpdateActionDeserializer;
 impl ProcessedUpdateActionDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<ProcessedUpdateAction, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, ProcessedUpdateAction, _>(tag_name, stack, |name, stack, obj| {
             match name {
                 "CacheClusterId" => {
@@ -7151,11 +7366,13 @@ impl ProcessedUpdateActionDeserializer {
 #[allow(dead_code)]
 struct ProcessedUpdateActionListDeserializer;
 impl ProcessedUpdateActionListDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<ProcessedUpdateAction>, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
+
         deserialize_elements::<_, Vec<_>, _>(tag_name, stack, |name, stack, obj| {
             if name == "ProcessedUpdateAction" {
                 obj.push(ProcessedUpdateActionDeserializer::deserialize(
@@ -7184,10 +7401,11 @@ pub struct PurchaseReservedCacheNodesOfferingMessage {
 /// Serialize `PurchaseReservedCacheNodesOfferingMessage` contents to a `SignedRequest`.
 struct PurchaseReservedCacheNodesOfferingMessageSerializer;
 impl PurchaseReservedCacheNodesOfferingMessageSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &PurchaseReservedCacheNodesOfferingMessage) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         if let Some(ref field_value) = obj.cache_node_count {
@@ -7215,11 +7433,12 @@ pub struct PurchaseReservedCacheNodesOfferingResult {
 #[allow(dead_code)]
 struct PurchaseReservedCacheNodesOfferingResultDeserializer;
 impl PurchaseReservedCacheNodesOfferingResultDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<PurchaseReservedCacheNodesOfferingResult, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, PurchaseReservedCacheNodesOfferingResult, _>(
             tag_name,
             stack,
@@ -7250,14 +7469,15 @@ pub struct RebalanceSlotsInGlobalReplicationGroupMessage {
 /// Serialize `RebalanceSlotsInGlobalReplicationGroupMessage` contents to a `SignedRequest`.
 struct RebalanceSlotsInGlobalReplicationGroupMessageSerializer;
 impl RebalanceSlotsInGlobalReplicationGroupMessageSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(
         params: &mut Params,
         name: &str,
         obj: &RebalanceSlotsInGlobalReplicationGroupMessage,
     ) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         params.put(
@@ -7280,11 +7500,12 @@ pub struct RebalanceSlotsInGlobalReplicationGroupResult {
 #[allow(dead_code)]
 struct RebalanceSlotsInGlobalReplicationGroupResultDeserializer;
 impl RebalanceSlotsInGlobalReplicationGroupResultDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<RebalanceSlotsInGlobalReplicationGroupResult, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, RebalanceSlotsInGlobalReplicationGroupResult, _>(
             tag_name,
             stack,
@@ -7317,10 +7538,11 @@ pub struct RebootCacheClusterMessage {
 /// Serialize `RebootCacheClusterMessage` contents to a `SignedRequest`.
 struct RebootCacheClusterMessageSerializer;
 impl RebootCacheClusterMessageSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &RebootCacheClusterMessage) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         params.put(
@@ -7344,11 +7566,12 @@ pub struct RebootCacheClusterResult {
 #[allow(dead_code)]
 struct RebootCacheClusterResultDeserializer;
 impl RebootCacheClusterResultDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<RebootCacheClusterResult, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, RebootCacheClusterResult, _>(
             tag_name,
             stack,
@@ -7380,11 +7603,12 @@ pub struct RecurringCharge {
 #[allow(dead_code)]
 struct RecurringChargeDeserializer;
 impl RecurringChargeDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<RecurringCharge, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, RecurringCharge, _>(tag_name, stack, |name, stack, obj| {
             match name {
                 "RecurringChargeAmount" => {
@@ -7408,11 +7632,13 @@ impl RecurringChargeDeserializer {
 #[allow(dead_code)]
 struct RecurringChargeListDeserializer;
 impl RecurringChargeListDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<RecurringCharge>, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
+
         deserialize_elements::<_, Vec<_>, _>(tag_name, stack, |name, stack, obj| {
             if name == "RecurringCharge" {
                 obj.push(RecurringChargeDeserializer::deserialize(
@@ -7441,10 +7667,11 @@ pub struct RegionalConfiguration {
 /// Serialize `RegionalConfiguration` contents to a `SignedRequest`.
 struct RegionalConfigurationSerializer;
 impl RegionalConfigurationSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &RegionalConfiguration) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         params.put(
@@ -7466,6 +7693,7 @@ impl RegionalConfigurationSerializer {
 /// Serialize `RegionalConfigurationList` contents to a `SignedRequest`.
 struct RegionalConfigurationListSerializer;
 impl RegionalConfigurationListSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &Vec<RegionalConfiguration>) {
         for (index, obj) in obj.iter().enumerate() {
             let key = format!("{}.member.{}", name, index + 1);
@@ -7477,6 +7705,7 @@ impl RegionalConfigurationListSerializer {
 /// Serialize `RemoveReplicasList` contents to a `SignedRequest`.
 struct RemoveReplicasListSerializer;
 impl RemoveReplicasListSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &Vec<String>) {
         for (index, obj) in obj.iter().enumerate() {
             let key = format!("{}.member.{}", name, index + 1);
@@ -7498,10 +7727,11 @@ pub struct RemoveTagsFromResourceMessage {
 /// Serialize `RemoveTagsFromResourceMessage` contents to a `SignedRequest`.
 struct RemoveTagsFromResourceMessageSerializer;
 impl RemoveTagsFromResourceMessageSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &RemoveTagsFromResourceMessage) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         params.put(&format!("{}{}", prefix, "ResourceName"), &obj.resource_name);
@@ -7512,6 +7742,7 @@ impl RemoveTagsFromResourceMessageSerializer {
 /// Serialize `ReplicaConfigurationList` contents to a `SignedRequest`.
 struct ReplicaConfigurationListSerializer;
 impl ReplicaConfigurationListSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &Vec<ConfigureShard>) {
         for (index, obj) in obj.iter().enumerate() {
             let key = format!("{}.member.{}", name, index + 1);
@@ -7575,11 +7806,12 @@ pub struct ReplicationGroup {
 #[allow(dead_code)]
 struct ReplicationGroupDeserializer;
 impl ReplicationGroupDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<ReplicationGroup, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, ReplicationGroup, _>(tag_name, stack, |name, stack, obj| {
             match name {
                 "ARN" => {
@@ -7714,6 +7946,7 @@ impl ReplicationGroupDeserializer {
 /// Serialize `ReplicationGroupIdList` contents to a `SignedRequest`.
 struct ReplicationGroupIdListSerializer;
 impl ReplicationGroupIdListSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &Vec<String>) {
         for (index, obj) in obj.iter().enumerate() {
             let key = format!("{}.member.{}", name, index + 1);
@@ -7725,11 +7958,13 @@ impl ReplicationGroupIdListSerializer {
 #[allow(dead_code)]
 struct ReplicationGroupListDeserializer;
 impl ReplicationGroupListDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<ReplicationGroup>, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
+
         deserialize_elements::<_, Vec<_>, _>(tag_name, stack, |name, stack, obj| {
             if name == "ReplicationGroup" {
                 obj.push(ReplicationGroupDeserializer::deserialize(
@@ -7756,11 +7991,12 @@ pub struct ReplicationGroupMessage {
 #[allow(dead_code)]
 struct ReplicationGroupMessageDeserializer;
 impl ReplicationGroupMessageDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<ReplicationGroupMessage, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, ReplicationGroupMessage, _>(
             tag_name,
             stack,
@@ -7787,11 +8023,13 @@ impl ReplicationGroupMessageDeserializer {
 #[allow(dead_code)]
 struct ReplicationGroupOutpostArnListDeserializer;
 impl ReplicationGroupOutpostArnListDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<String>, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
+
         deserialize_elements::<_, Vec<_>, _>(tag_name, stack, |name, stack, obj| {
             if name == "ReplicationGroupOutpostArn" {
                 obj.push(StringDeserializer::deserialize(
@@ -7824,11 +8062,12 @@ pub struct ReplicationGroupPendingModifiedValues {
 #[allow(dead_code)]
 struct ReplicationGroupPendingModifiedValuesDeserializer;
 impl ReplicationGroupPendingModifiedValuesDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<ReplicationGroupPendingModifiedValues, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, ReplicationGroupPendingModifiedValues, _>(
             tag_name,
             stack,
@@ -7906,11 +8145,12 @@ pub struct ReservedCacheNode {
 #[allow(dead_code)]
 struct ReservedCacheNodeDeserializer;
 impl ReservedCacheNodeDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<ReservedCacheNode, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, ReservedCacheNode, _>(tag_name, stack, |name, stack, obj| {
             match name {
                 "CacheNodeCount" => {
@@ -7976,11 +8216,13 @@ impl ReservedCacheNodeDeserializer {
 #[allow(dead_code)]
 struct ReservedCacheNodeListDeserializer;
 impl ReservedCacheNodeListDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<ReservedCacheNode>, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
+
         deserialize_elements::<_, Vec<_>, _>(tag_name, stack, |name, stack, obj| {
             if name == "ReservedCacheNode" {
                 obj.push(ReservedCacheNodeDeserializer::deserialize(
@@ -8007,11 +8249,12 @@ pub struct ReservedCacheNodeMessage {
 #[allow(dead_code)]
 struct ReservedCacheNodeMessageDeserializer;
 impl ReservedCacheNodeMessageDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<ReservedCacheNodeMessage, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, ReservedCacheNodeMessage, _>(
             tag_name,
             stack,
@@ -8060,11 +8303,12 @@ pub struct ReservedCacheNodesOffering {
 #[allow(dead_code)]
 struct ReservedCacheNodesOfferingDeserializer;
 impl ReservedCacheNodesOfferingDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<ReservedCacheNodesOffering, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, ReservedCacheNodesOffering, _>(
             tag_name,
             stack,
@@ -8118,11 +8362,13 @@ impl ReservedCacheNodesOfferingDeserializer {
 #[allow(dead_code)]
 struct ReservedCacheNodesOfferingListDeserializer;
 impl ReservedCacheNodesOfferingListDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<ReservedCacheNodesOffering>, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
+
         deserialize_elements::<_, Vec<_>, _>(tag_name, stack, |name, stack, obj| {
             if name == "ReservedCacheNodesOffering" {
                 obj.push(ReservedCacheNodesOfferingDeserializer::deserialize(
@@ -8149,11 +8395,12 @@ pub struct ReservedCacheNodesOfferingMessage {
 #[allow(dead_code)]
 struct ReservedCacheNodesOfferingMessageDeserializer;
 impl ReservedCacheNodesOfferingMessageDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<ReservedCacheNodesOfferingMessage, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, ReservedCacheNodesOfferingMessage, _>(
             tag_name,
             stack,
@@ -8192,10 +8439,11 @@ pub struct ResetCacheParameterGroupMessage {
 /// Serialize `ResetCacheParameterGroupMessage` contents to a `SignedRequest`.
 struct ResetCacheParameterGroupMessageSerializer;
 impl ResetCacheParameterGroupMessageSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &ResetCacheParameterGroupMessage) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         params.put(
@@ -8228,10 +8476,11 @@ pub struct ReshardingConfiguration {
 /// Serialize `ReshardingConfiguration` contents to a `SignedRequest`.
 struct ReshardingConfigurationSerializer;
 impl ReshardingConfigurationSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &ReshardingConfiguration) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         if let Some(ref field_value) = obj.node_group_id {
@@ -8250,6 +8499,7 @@ impl ReshardingConfigurationSerializer {
 /// Serialize `ReshardingConfigurationList` contents to a `SignedRequest`.
 struct ReshardingConfigurationListSerializer;
 impl ReshardingConfigurationListSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &Vec<ReshardingConfiguration>) {
         for (index, obj) in obj.iter().enumerate() {
             let key = format!("{}.member.{}", name, index + 1);
@@ -8269,11 +8519,12 @@ pub struct ReshardingStatus {
 #[allow(dead_code)]
 struct ReshardingStatusDeserializer;
 impl ReshardingStatusDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<ReshardingStatus, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, ReshardingStatus, _>(tag_name, stack, |name, stack, obj| {
             match name {
                 "SlotMigration" => {
@@ -8303,10 +8554,11 @@ pub struct RevokeCacheSecurityGroupIngressMessage {
 /// Serialize `RevokeCacheSecurityGroupIngressMessage` contents to a `SignedRequest`.
 struct RevokeCacheSecurityGroupIngressMessageSerializer;
 impl RevokeCacheSecurityGroupIngressMessageSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &RevokeCacheSecurityGroupIngressMessage) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         params.put(
@@ -8333,11 +8585,12 @@ pub struct RevokeCacheSecurityGroupIngressResult {
 #[allow(dead_code)]
 struct RevokeCacheSecurityGroupIngressResultDeserializer;
 impl RevokeCacheSecurityGroupIngressResultDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<RevokeCacheSecurityGroupIngressResult, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, RevokeCacheSecurityGroupIngressResult, _>(
             tag_name,
             stack,
@@ -8361,6 +8614,7 @@ impl RevokeCacheSecurityGroupIngressResultDeserializer {
 /// Serialize `SecurityGroupIdsList` contents to a `SignedRequest`.
 struct SecurityGroupIdsListSerializer;
 impl SecurityGroupIdsListSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &Vec<String>) {
         for (index, obj) in obj.iter().enumerate() {
             let key = format!("{}.member.{}", name, index + 1);
@@ -8382,11 +8636,12 @@ pub struct SecurityGroupMembership {
 #[allow(dead_code)]
 struct SecurityGroupMembershipDeserializer;
 impl SecurityGroupMembershipDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<SecurityGroupMembership, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, SecurityGroupMembership, _>(
             tag_name,
             stack,
@@ -8409,11 +8664,13 @@ impl SecurityGroupMembershipDeserializer {
 #[allow(dead_code)]
 struct SecurityGroupMembershipListDeserializer;
 impl SecurityGroupMembershipListDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<SecurityGroupMembership>, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
+
         deserialize_elements::<_, Vec<_>, _>(tag_name, stack, |name, stack, obj| {
             if name == "member" {
                 obj.push(SecurityGroupMembershipDeserializer::deserialize(
@@ -8459,11 +8716,12 @@ pub struct ServiceUpdate {
 #[allow(dead_code)]
 struct ServiceUpdateDeserializer;
 impl ServiceUpdateDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<ServiceUpdate, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, ServiceUpdate, _>(tag_name, stack, |name, stack, obj| {
             match name {
                 "AutoUpdateAfterRecommendedApplyByDate" => {
@@ -8543,11 +8801,13 @@ impl ServiceUpdateDeserializer {
 #[allow(dead_code)]
 struct ServiceUpdateListDeserializer;
 impl ServiceUpdateListDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<ServiceUpdate>, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
+
         deserialize_elements::<_, Vec<_>, _>(tag_name, stack, |name, stack, obj| {
             if name == "ServiceUpdate" {
                 obj.push(ServiceUpdateDeserializer::deserialize(
@@ -8564,16 +8824,18 @@ impl ServiceUpdateListDeserializer {
 #[allow(dead_code)]
 struct ServiceUpdateSeverityDeserializer;
 impl ServiceUpdateSeverityDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 #[allow(dead_code)]
 struct ServiceUpdateStatusDeserializer;
 impl ServiceUpdateStatusDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
@@ -8581,6 +8843,7 @@ impl ServiceUpdateStatusDeserializer {
 /// Serialize `ServiceUpdateStatusList` contents to a `SignedRequest`.
 struct ServiceUpdateStatusListSerializer;
 impl ServiceUpdateStatusListSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &Vec<String>) {
         for (index, obj) in obj.iter().enumerate() {
             let key = format!("{}.member.{}", name, index + 1);
@@ -8592,8 +8855,9 @@ impl ServiceUpdateStatusListSerializer {
 #[allow(dead_code)]
 struct ServiceUpdateTypeDeserializer;
 impl ServiceUpdateTypeDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
@@ -8609,11 +8873,12 @@ pub struct ServiceUpdatesMessage {
 #[allow(dead_code)]
 struct ServiceUpdatesMessageDeserializer;
 impl ServiceUpdatesMessageDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<ServiceUpdatesMessage, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, ServiceUpdatesMessage, _>(tag_name, stack, |name, stack, obj| {
             match name {
                 "Marker" => {
@@ -8633,8 +8898,9 @@ impl ServiceUpdatesMessageDeserializer {
 #[allow(dead_code)]
 struct SlaMetDeserializer;
 impl SlaMetDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
@@ -8649,11 +8915,12 @@ pub struct SlotMigration {
 #[allow(dead_code)]
 struct SlotMigrationDeserializer;
 impl SlotMigrationDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<SlotMigration, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, SlotMigration, _>(tag_name, stack, |name, stack, obj| {
             match name {
                 "ProgressPercentage" => {
@@ -8731,11 +8998,12 @@ pub struct Snapshot {
 #[allow(dead_code)]
 struct SnapshotDeserializer;
 impl SnapshotDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Snapshot, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, Snapshot, _>(tag_name, stack, |name, stack, obj| {
             match name {
                 "ARN" => {
@@ -8878,6 +9146,7 @@ impl SnapshotDeserializer {
 /// Serialize `SnapshotArnsList` contents to a `SignedRequest`.
 struct SnapshotArnsListSerializer;
 impl SnapshotArnsListSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &Vec<String>) {
         for (index, obj) in obj.iter().enumerate() {
             let key = format!("{}.member.{}", name, index + 1);
@@ -8889,11 +9158,13 @@ impl SnapshotArnsListSerializer {
 #[allow(dead_code)]
 struct SnapshotListDeserializer;
 impl SnapshotListDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<Snapshot>, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
+
         deserialize_elements::<_, Vec<_>, _>(tag_name, stack, |name, stack, obj| {
             if name == "Snapshot" {
                 obj.push(SnapshotDeserializer::deserialize("Snapshot", stack)?);
@@ -8907,8 +9178,9 @@ impl SnapshotListDeserializer {
 #[allow(dead_code)]
 struct SourceTypeDeserializer;
 impl SourceTypeDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
@@ -8924,10 +9196,11 @@ pub struct StartMigrationMessage {
 /// Serialize `StartMigrationMessage` contents to a `SignedRequest`.
 struct StartMigrationMessageSerializer;
 impl StartMigrationMessageSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &StartMigrationMessage) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         CustomerNodeEndpointListSerializer::serialize(
@@ -8951,11 +9224,12 @@ pub struct StartMigrationResponse {
 #[allow(dead_code)]
 struct StartMigrationResponseDeserializer;
 impl StartMigrationResponseDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<StartMigrationResponse, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, StartMigrationResponse, _>(tag_name, stack, |name, stack, obj| {
             match name {
                 "ReplicationGroup" => {
@@ -8973,8 +9247,9 @@ impl StartMigrationResponseDeserializer {
 #[allow(dead_code)]
 struct StringDeserializer;
 impl StringDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
@@ -8993,8 +9268,9 @@ pub struct Subnet {
 #[allow(dead_code)]
 struct SubnetDeserializer;
 impl SubnetDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<Subnet, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, Subnet, _>(tag_name, stack, |name, stack, obj| {
             match name {
                 "SubnetAvailabilityZone" => {
@@ -9023,6 +9299,7 @@ impl SubnetDeserializer {
 /// Serialize `SubnetIdentifierList` contents to a `SignedRequest`.
 struct SubnetIdentifierListSerializer;
 impl SubnetIdentifierListSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &Vec<String>) {
         for (index, obj) in obj.iter().enumerate() {
             let key = format!("{}.member.{}", name, index + 1);
@@ -9034,11 +9311,13 @@ impl SubnetIdentifierListSerializer {
 #[allow(dead_code)]
 struct SubnetListDeserializer;
 impl SubnetListDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<Subnet>, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
+
         deserialize_elements::<_, Vec<_>, _>(tag_name, stack, |name, stack, obj| {
             if name == "Subnet" {
                 obj.push(SubnetDeserializer::deserialize("Subnet", stack)?);
@@ -9060,11 +9339,12 @@ pub struct SubnetOutpost {
 #[allow(dead_code)]
 struct SubnetOutpostDeserializer;
 impl SubnetOutpostDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<SubnetOutpost, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, SubnetOutpost, _>(tag_name, stack, |name, stack, obj| {
             match name {
                 "SubnetOutpostArn" => {
@@ -9080,8 +9360,9 @@ impl SubnetOutpostDeserializer {
 #[allow(dead_code)]
 struct TStampDeserializer;
 impl TStampDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
@@ -9099,8 +9380,9 @@ pub struct Tag {
 #[allow(dead_code)]
 struct TagDeserializer;
 impl TagDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<Tag, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, Tag, _>(tag_name, stack, |name, stack, obj| {
             match name {
                 "Key" => {
@@ -9119,10 +9401,11 @@ impl TagDeserializer {
 /// Serialize `Tag` contents to a `SignedRequest`.
 struct TagSerializer;
 impl TagSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &Tag) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         if let Some(ref field_value) = obj.key {
@@ -9137,11 +9420,13 @@ impl TagSerializer {
 #[allow(dead_code)]
 struct TagListDeserializer;
 impl TagListDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<Tag>, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
+
         deserialize_elements::<_, Vec<_>, _>(tag_name, stack, |name, stack, obj| {
             if name == "Tag" {
                 obj.push(TagDeserializer::deserialize("Tag", stack)?);
@@ -9156,6 +9441,7 @@ impl TagListDeserializer {
 /// Serialize `TagList` contents to a `SignedRequest`.
 struct TagListSerializer;
 impl TagListSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &Vec<Tag>) {
         for (index, obj) in obj.iter().enumerate() {
             let key = format!("{}.member.{}", name, index + 1);
@@ -9175,11 +9461,12 @@ pub struct TagListMessage {
 #[allow(dead_code)]
 struct TagListMessageDeserializer;
 impl TagListMessageDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<TagListMessage, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, TagListMessage, _>(tag_name, stack, |name, stack, obj| {
             match name {
                 "TagList" => {
@@ -9205,10 +9492,11 @@ pub struct TestFailoverMessage {
 /// Serialize `TestFailoverMessage` contents to a `SignedRequest`.
 struct TestFailoverMessageSerializer;
 impl TestFailoverMessageSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &TestFailoverMessage) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         params.put(&format!("{}{}", prefix, "NodeGroupId"), &obj.node_group_id);
@@ -9228,11 +9516,12 @@ pub struct TestFailoverResult {
 #[allow(dead_code)]
 struct TestFailoverResultDeserializer;
 impl TestFailoverResultDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<TestFailoverResult, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, TestFailoverResult, _>(tag_name, stack, |name, stack, obj| {
             match name {
                 "ReplicationGroup" => {
@@ -9260,10 +9549,11 @@ pub struct TimeRangeFilter {
 /// Serialize `TimeRangeFilter` contents to a `SignedRequest`.
 struct TimeRangeFilterSerializer;
 impl TimeRangeFilterSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &TimeRangeFilter) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         if let Some(ref field_value) = obj.end_time {
@@ -9278,11 +9568,13 @@ impl TimeRangeFilterSerializer {
 #[allow(dead_code)]
 struct UGReplicationGroupIdListDeserializer;
 impl UGReplicationGroupIdListDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<String>, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
+
         deserialize_elements::<_, Vec<_>, _>(tag_name, stack, |name, stack, obj| {
             if name == "member" {
                 obj.push(StringDeserializer::deserialize("member", stack)?);
@@ -9312,11 +9604,12 @@ pub struct UnprocessedUpdateAction {
 #[allow(dead_code)]
 struct UnprocessedUpdateActionDeserializer;
 impl UnprocessedUpdateActionDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<UnprocessedUpdateAction, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, UnprocessedUpdateAction, _>(
             tag_name,
             stack,
@@ -9353,11 +9646,13 @@ impl UnprocessedUpdateActionDeserializer {
 #[allow(dead_code)]
 struct UnprocessedUpdateActionListDeserializer;
 impl UnprocessedUpdateActionListDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<UnprocessedUpdateAction>, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
+
         deserialize_elements::<_, Vec<_>, _>(tag_name, stack, |name, stack, obj| {
             if name == "UnprocessedUpdateAction" {
                 obj.push(UnprocessedUpdateActionDeserializer::deserialize(
@@ -9414,11 +9709,12 @@ pub struct UpdateAction {
 #[allow(dead_code)]
 struct UpdateActionDeserializer;
 impl UpdateActionDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<UpdateAction, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, UpdateAction, _>(tag_name, stack, |name, stack, obj| {
             match name {
                 "CacheClusterId" => {
@@ -9526,11 +9822,13 @@ impl UpdateActionDeserializer {
 #[allow(dead_code)]
 struct UpdateActionListDeserializer;
 impl UpdateActionListDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<UpdateAction>, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
+
         deserialize_elements::<_, Vec<_>, _>(tag_name, stack, |name, stack, obj| {
             if name == "UpdateAction" {
                 obj.push(UpdateActionDeserializer::deserialize(
@@ -9556,11 +9854,12 @@ pub struct UpdateActionResultsMessage {
 #[allow(dead_code)]
 struct UpdateActionResultsMessageDeserializer;
 impl UpdateActionResultsMessageDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<UpdateActionResultsMessage, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, UpdateActionResultsMessage, _>(
             tag_name,
             stack,
@@ -9592,8 +9891,9 @@ impl UpdateActionResultsMessageDeserializer {
 #[allow(dead_code)]
 struct UpdateActionStatusDeserializer;
 impl UpdateActionStatusDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
@@ -9601,6 +9901,7 @@ impl UpdateActionStatusDeserializer {
 /// Serialize `UpdateActionStatusList` contents to a `SignedRequest`.
 struct UpdateActionStatusListSerializer;
 impl UpdateActionStatusListSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &Vec<String>) {
         for (index, obj) in obj.iter().enumerate() {
             let key = format!("{}.member.{}", name, index + 1);
@@ -9621,11 +9922,12 @@ pub struct UpdateActionsMessage {
 #[allow(dead_code)]
 struct UpdateActionsMessageDeserializer;
 impl UpdateActionsMessageDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<UpdateActionsMessage, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, UpdateActionsMessage, _>(tag_name, stack, |name, stack, obj| {
             match name {
                 "Marker" => {
@@ -9666,8 +9968,9 @@ pub struct User {
 #[allow(dead_code)]
 struct UserDeserializer;
 impl UserDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<User, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, User, _>(tag_name, stack, |name, stack, obj| {
             match name {
                 "ARN" => {
@@ -9728,11 +10031,12 @@ pub struct UserGroup {
 #[allow(dead_code)]
 struct UserGroupDeserializer;
 impl UserGroupDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<UserGroup, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, UserGroup, _>(tag_name, stack, |name, stack, obj| {
             match name {
                 "ARN" => {
@@ -9776,19 +10080,22 @@ impl UserGroupDeserializer {
 #[allow(dead_code)]
 struct UserGroupIdDeserializer;
 impl UserGroupIdDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 #[allow(dead_code)]
 struct UserGroupIdListDeserializer;
 impl UserGroupIdListDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<String>, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
+
         deserialize_elements::<_, Vec<_>, _>(tag_name, stack, |name, stack, obj| {
             if name == "member" {
                 obj.push(UserGroupIdDeserializer::deserialize("member", stack)?);
@@ -9803,6 +10110,7 @@ impl UserGroupIdListDeserializer {
 /// Serialize `UserGroupIdList` contents to a `SignedRequest`.
 struct UserGroupIdListSerializer;
 impl UserGroupIdListSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &Vec<String>) {
         for (index, obj) in obj.iter().enumerate() {
             let key = format!("{}.member.{}", name, index + 1);
@@ -9814,6 +10122,7 @@ impl UserGroupIdListSerializer {
 /// Serialize `UserGroupIdListInput` contents to a `SignedRequest`.
 struct UserGroupIdListInputSerializer;
 impl UserGroupIdListInputSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &Vec<String>) {
         for (index, obj) in obj.iter().enumerate() {
             let key = format!("{}.member.{}", name, index + 1);
@@ -9825,11 +10134,13 @@ impl UserGroupIdListInputSerializer {
 #[allow(dead_code)]
 struct UserGroupListDeserializer;
 impl UserGroupListDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<UserGroup>, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
+
         deserialize_elements::<_, Vec<_>, _>(tag_name, stack, |name, stack, obj| {
             if name == "member" {
                 obj.push(UserGroupDeserializer::deserialize("member", stack)?);
@@ -9853,11 +10164,12 @@ pub struct UserGroupPendingChanges {
 #[allow(dead_code)]
 struct UserGroupPendingChangesDeserializer;
 impl UserGroupPendingChangesDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<UserGroupPendingChanges, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, UserGroupPendingChanges, _>(
             tag_name,
             stack,
@@ -9893,11 +10205,12 @@ pub struct UserGroupsUpdateStatus {
 #[allow(dead_code)]
 struct UserGroupsUpdateStatusDeserializer;
 impl UserGroupsUpdateStatusDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<UserGroupsUpdateStatus, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, UserGroupsUpdateStatus, _>(tag_name, stack, |name, stack, obj| {
             match name {
                 "UserGroupIdsToAdd" => {
@@ -9919,19 +10232,22 @@ impl UserGroupsUpdateStatusDeserializer {
 #[allow(dead_code)]
 struct UserIdDeserializer;
 impl UserIdDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 #[allow(dead_code)]
 struct UserIdListDeserializer;
 impl UserIdListDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<String>, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
+
         deserialize_elements::<_, Vec<_>, _>(tag_name, stack, |name, stack, obj| {
             if name == "member" {
                 obj.push(UserIdDeserializer::deserialize("member", stack)?);
@@ -9946,6 +10262,7 @@ impl UserIdListDeserializer {
 /// Serialize `UserIdListInput` contents to a `SignedRequest`.
 struct UserIdListInputSerializer;
 impl UserIdListInputSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &Vec<String>) {
         for (index, obj) in obj.iter().enumerate() {
             let key = format!("{}.member.{}", name, index + 1);
@@ -9957,11 +10274,13 @@ impl UserIdListInputSerializer {
 #[allow(dead_code)]
 struct UserListDeserializer;
 impl UserListDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<User>, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
+
         deserialize_elements::<_, Vec<_>, _>(tag_name, stack, |name, stack, obj| {
             if name == "member" {
                 obj.push(UserDeserializer::deserialize("member", stack)?);
@@ -9991,31 +10310,36 @@ impl AddTagsToResourceError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    "CacheClusterNotFound" => {
-                        return RusotoError::Service(
-                            AddTagsToResourceError::CacheClusterNotFoundFault(parsed_error.message),
-                        )
-                    }
-                    "InvalidARN" => {
-                        return RusotoError::Service(AddTagsToResourceError::InvalidARNFault(
-                            parsed_error.message,
-                        ))
-                    }
-                    "SnapshotNotFoundFault" => {
-                        return RusotoError::Service(AddTagsToResourceError::SnapshotNotFoundFault(
-                            parsed_error.message,
-                        ))
-                    }
-                    "TagQuotaPerResourceExceeded" => {
-                        return RusotoError::Service(
-                            AddTagsToResourceError::TagQuotaPerResourceExceeded(
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {
+                        "CacheClusterNotFound" => {
+                            return RusotoError::Service(
+                                AddTagsToResourceError::CacheClusterNotFoundFault(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "InvalidARN" => {
+                            return RusotoError::Service(AddTagsToResourceError::InvalidARNFault(
                                 parsed_error.message,
-                            ),
-                        )
+                            ))
+                        }
+                        "SnapshotNotFoundFault" => {
+                            return RusotoError::Service(
+                                AddTagsToResourceError::SnapshotNotFoundFault(parsed_error.message),
+                            )
+                        }
+                        "TagQuotaPerResourceExceeded" => {
+                            return RusotoError::Service(
+                                AddTagsToResourceError::TagQuotaPerResourceExceeded(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        _ => {}
                     }
-                    _ => {}
                 }
             }
         }
@@ -10067,10 +10391,13 @@ impl AuthorizeCacheSecurityGroupIngressError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                                    "AuthorizationAlreadyExists" => return RusotoError::Service(AuthorizeCacheSecurityGroupIngressError::AuthorizationAlreadyExistsFault(parsed_error.message)),"CacheSecurityGroupNotFound" => return RusotoError::Service(AuthorizeCacheSecurityGroupIngressError::CacheSecurityGroupNotFoundFault(parsed_error.message)),"InvalidCacheSecurityGroupState" => return RusotoError::Service(AuthorizeCacheSecurityGroupIngressError::InvalidCacheSecurityGroupStateFault(parsed_error.message)),"InvalidParameterCombination" => return RusotoError::Service(AuthorizeCacheSecurityGroupIngressError::InvalidParameterCombination(parsed_error.message)),"InvalidParameterValue" => return RusotoError::Service(AuthorizeCacheSecurityGroupIngressError::InvalidParameterValue(parsed_error.message)),_ => {}
-                                }
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {
+                        "AuthorizationAlreadyExists" => return RusotoError::Service(AuthorizeCacheSecurityGroupIngressError::AuthorizationAlreadyExistsFault(parsed_error.message)),"CacheSecurityGroupNotFound" => return RusotoError::Service(AuthorizeCacheSecurityGroupIngressError::CacheSecurityGroupNotFoundFault(parsed_error.message)),"InvalidCacheSecurityGroupState" => return RusotoError::Service(AuthorizeCacheSecurityGroupIngressError::InvalidCacheSecurityGroupStateFault(parsed_error.message)),"InvalidParameterCombination" => return RusotoError::Service(AuthorizeCacheSecurityGroupIngressError::InvalidParameterCombination(parsed_error.message)),"InvalidParameterValue" => return RusotoError::Service(AuthorizeCacheSecurityGroupIngressError::InvalidParameterValue(parsed_error.message)),_ => {}
+                    }
+                }
             }
         }
         RusotoError::Unknown(res)
@@ -10122,23 +10449,26 @@ impl BatchApplyUpdateActionError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    "InvalidParameterValue" => {
-                        return RusotoError::Service(
-                            BatchApplyUpdateActionError::InvalidParameterValue(
-                                parsed_error.message,
-                            ),
-                        )
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {
+                        "InvalidParameterValue" => {
+                            return RusotoError::Service(
+                                BatchApplyUpdateActionError::InvalidParameterValue(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "ServiceUpdateNotFoundFault" => {
+                            return RusotoError::Service(
+                                BatchApplyUpdateActionError::ServiceUpdateNotFoundFault(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        _ => {}
                     }
-                    "ServiceUpdateNotFoundFault" => {
-                        return RusotoError::Service(
-                            BatchApplyUpdateActionError::ServiceUpdateNotFoundFault(
-                                parsed_error.message,
-                            ),
-                        )
-                    }
-                    _ => {}
                 }
             }
         }
@@ -10180,21 +10510,26 @@ impl BatchStopUpdateActionError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    "InvalidParameterValue" => {
-                        return RusotoError::Service(
-                            BatchStopUpdateActionError::InvalidParameterValue(parsed_error.message),
-                        )
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {
+                        "InvalidParameterValue" => {
+                            return RusotoError::Service(
+                                BatchStopUpdateActionError::InvalidParameterValue(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "ServiceUpdateNotFoundFault" => {
+                            return RusotoError::Service(
+                                BatchStopUpdateActionError::ServiceUpdateNotFoundFault(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        _ => {}
                     }
-                    "ServiceUpdateNotFoundFault" => {
-                        return RusotoError::Service(
-                            BatchStopUpdateActionError::ServiceUpdateNotFoundFault(
-                                parsed_error.message,
-                            ),
-                        )
-                    }
-                    _ => {}
                 }
             }
         }
@@ -10238,30 +10573,33 @@ impl CompleteMigrationError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    "InvalidReplicationGroupState" => {
-                        return RusotoError::Service(
-                            CompleteMigrationError::InvalidReplicationGroupStateFault(
-                                parsed_error.message,
-                            ),
-                        )
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {
+                        "InvalidReplicationGroupState" => {
+                            return RusotoError::Service(
+                                CompleteMigrationError::InvalidReplicationGroupStateFault(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "ReplicationGroupNotFoundFault" => {
+                            return RusotoError::Service(
+                                CompleteMigrationError::ReplicationGroupNotFoundFault(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "ReplicationGroupNotUnderMigrationFault" => {
+                            return RusotoError::Service(
+                                CompleteMigrationError::ReplicationGroupNotUnderMigrationFault(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        _ => {}
                     }
-                    "ReplicationGroupNotFoundFault" => {
-                        return RusotoError::Service(
-                            CompleteMigrationError::ReplicationGroupNotFoundFault(
-                                parsed_error.message,
-                            ),
-                        )
-                    }
-                    "ReplicationGroupNotUnderMigrationFault" => {
-                        return RusotoError::Service(
-                            CompleteMigrationError::ReplicationGroupNotUnderMigrationFault(
-                                parsed_error.message,
-                            ),
-                        )
-                    }
-                    _ => {}
                 }
             }
         }
@@ -10316,39 +10654,44 @@ impl CopySnapshotError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    "InvalidParameterCombination" => {
-                        return RusotoError::Service(
-                            CopySnapshotError::InvalidParameterCombination(parsed_error.message),
-                        )
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {
+                        "InvalidParameterCombination" => {
+                            return RusotoError::Service(
+                                CopySnapshotError::InvalidParameterCombination(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "InvalidParameterValue" => {
+                            return RusotoError::Service(CopySnapshotError::InvalidParameterValue(
+                                parsed_error.message,
+                            ))
+                        }
+                        "InvalidSnapshotState" => {
+                            return RusotoError::Service(
+                                CopySnapshotError::InvalidSnapshotStateFault(parsed_error.message),
+                            )
+                        }
+                        "SnapshotAlreadyExistsFault" => {
+                            return RusotoError::Service(
+                                CopySnapshotError::SnapshotAlreadyExistsFault(parsed_error.message),
+                            )
+                        }
+                        "SnapshotNotFoundFault" => {
+                            return RusotoError::Service(CopySnapshotError::SnapshotNotFoundFault(
+                                parsed_error.message,
+                            ))
+                        }
+                        "SnapshotQuotaExceededFault" => {
+                            return RusotoError::Service(
+                                CopySnapshotError::SnapshotQuotaExceededFault(parsed_error.message),
+                            )
+                        }
+                        _ => {}
                     }
-                    "InvalidParameterValue" => {
-                        return RusotoError::Service(CopySnapshotError::InvalidParameterValue(
-                            parsed_error.message,
-                        ))
-                    }
-                    "InvalidSnapshotState" => {
-                        return RusotoError::Service(CopySnapshotError::InvalidSnapshotStateFault(
-                            parsed_error.message,
-                        ))
-                    }
-                    "SnapshotAlreadyExistsFault" => {
-                        return RusotoError::Service(CopySnapshotError::SnapshotAlreadyExistsFault(
-                            parsed_error.message,
-                        ))
-                    }
-                    "SnapshotNotFoundFault" => {
-                        return RusotoError::Service(CopySnapshotError::SnapshotNotFoundFault(
-                            parsed_error.message,
-                        ))
-                    }
-                    "SnapshotQuotaExceededFault" => {
-                        return RusotoError::Service(CopySnapshotError::SnapshotQuotaExceededFault(
-                            parsed_error.message,
-                        ))
-                    }
-                    _ => {}
                 }
             }
         }
@@ -10416,105 +10759,110 @@ impl CreateCacheClusterError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    "CacheClusterAlreadyExists" => {
-                        return RusotoError::Service(
-                            CreateCacheClusterError::CacheClusterAlreadyExistsFault(
-                                parsed_error.message,
-                            ),
-                        )
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {
+                        "CacheClusterAlreadyExists" => {
+                            return RusotoError::Service(
+                                CreateCacheClusterError::CacheClusterAlreadyExistsFault(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "CacheParameterGroupNotFound" => {
+                            return RusotoError::Service(
+                                CreateCacheClusterError::CacheParameterGroupNotFoundFault(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "CacheSecurityGroupNotFound" => {
+                            return RusotoError::Service(
+                                CreateCacheClusterError::CacheSecurityGroupNotFoundFault(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "CacheSubnetGroupNotFoundFault" => {
+                            return RusotoError::Service(
+                                CreateCacheClusterError::CacheSubnetGroupNotFoundFault(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "ClusterQuotaForCustomerExceeded" => {
+                            return RusotoError::Service(
+                                CreateCacheClusterError::ClusterQuotaForCustomerExceededFault(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "InsufficientCacheClusterCapacity" => {
+                            return RusotoError::Service(
+                                CreateCacheClusterError::InsufficientCacheClusterCapacityFault(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "InvalidParameterCombination" => {
+                            return RusotoError::Service(
+                                CreateCacheClusterError::InvalidParameterCombination(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "InvalidParameterValue" => {
+                            return RusotoError::Service(
+                                CreateCacheClusterError::InvalidParameterValue(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "InvalidReplicationGroupState" => {
+                            return RusotoError::Service(
+                                CreateCacheClusterError::InvalidReplicationGroupStateFault(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "InvalidVPCNetworkStateFault" => {
+                            return RusotoError::Service(
+                                CreateCacheClusterError::InvalidVPCNetworkStateFault(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "NodeQuotaForClusterExceeded" => {
+                            return RusotoError::Service(
+                                CreateCacheClusterError::NodeQuotaForClusterExceededFault(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "NodeQuotaForCustomerExceeded" => {
+                            return RusotoError::Service(
+                                CreateCacheClusterError::NodeQuotaForCustomerExceededFault(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "ReplicationGroupNotFoundFault" => {
+                            return RusotoError::Service(
+                                CreateCacheClusterError::ReplicationGroupNotFoundFault(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "TagQuotaPerResourceExceeded" => {
+                            return RusotoError::Service(
+                                CreateCacheClusterError::TagQuotaPerResourceExceeded(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        _ => {}
                     }
-                    "CacheParameterGroupNotFound" => {
-                        return RusotoError::Service(
-                            CreateCacheClusterError::CacheParameterGroupNotFoundFault(
-                                parsed_error.message,
-                            ),
-                        )
-                    }
-                    "CacheSecurityGroupNotFound" => {
-                        return RusotoError::Service(
-                            CreateCacheClusterError::CacheSecurityGroupNotFoundFault(
-                                parsed_error.message,
-                            ),
-                        )
-                    }
-                    "CacheSubnetGroupNotFoundFault" => {
-                        return RusotoError::Service(
-                            CreateCacheClusterError::CacheSubnetGroupNotFoundFault(
-                                parsed_error.message,
-                            ),
-                        )
-                    }
-                    "ClusterQuotaForCustomerExceeded" => {
-                        return RusotoError::Service(
-                            CreateCacheClusterError::ClusterQuotaForCustomerExceededFault(
-                                parsed_error.message,
-                            ),
-                        )
-                    }
-                    "InsufficientCacheClusterCapacity" => {
-                        return RusotoError::Service(
-                            CreateCacheClusterError::InsufficientCacheClusterCapacityFault(
-                                parsed_error.message,
-                            ),
-                        )
-                    }
-                    "InvalidParameterCombination" => {
-                        return RusotoError::Service(
-                            CreateCacheClusterError::InvalidParameterCombination(
-                                parsed_error.message,
-                            ),
-                        )
-                    }
-                    "InvalidParameterValue" => {
-                        return RusotoError::Service(
-                            CreateCacheClusterError::InvalidParameterValue(parsed_error.message),
-                        )
-                    }
-                    "InvalidReplicationGroupState" => {
-                        return RusotoError::Service(
-                            CreateCacheClusterError::InvalidReplicationGroupStateFault(
-                                parsed_error.message,
-                            ),
-                        )
-                    }
-                    "InvalidVPCNetworkStateFault" => {
-                        return RusotoError::Service(
-                            CreateCacheClusterError::InvalidVPCNetworkStateFault(
-                                parsed_error.message,
-                            ),
-                        )
-                    }
-                    "NodeQuotaForClusterExceeded" => {
-                        return RusotoError::Service(
-                            CreateCacheClusterError::NodeQuotaForClusterExceededFault(
-                                parsed_error.message,
-                            ),
-                        )
-                    }
-                    "NodeQuotaForCustomerExceeded" => {
-                        return RusotoError::Service(
-                            CreateCacheClusterError::NodeQuotaForCustomerExceededFault(
-                                parsed_error.message,
-                            ),
-                        )
-                    }
-                    "ReplicationGroupNotFoundFault" => {
-                        return RusotoError::Service(
-                            CreateCacheClusterError::ReplicationGroupNotFoundFault(
-                                parsed_error.message,
-                            ),
-                        )
-                    }
-                    "TagQuotaPerResourceExceeded" => {
-                        return RusotoError::Service(
-                            CreateCacheClusterError::TagQuotaPerResourceExceeded(
-                                parsed_error.message,
-                            ),
-                        )
-                    }
-                    _ => {}
                 }
             }
         }
@@ -10598,44 +10946,41 @@ impl CreateCacheParameterGroupError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    "CacheParameterGroupAlreadyExists" => {
-                        return RusotoError::Service(
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {
+                        "CacheParameterGroupAlreadyExists" => return RusotoError::Service(
                             CreateCacheParameterGroupError::CacheParameterGroupAlreadyExistsFault(
                                 parsed_error.message,
                             ),
-                        )
-                    }
-                    "CacheParameterGroupQuotaExceeded" => {
-                        return RusotoError::Service(
+                        ),
+                        "CacheParameterGroupQuotaExceeded" => return RusotoError::Service(
                             CreateCacheParameterGroupError::CacheParameterGroupQuotaExceededFault(
                                 parsed_error.message,
                             ),
-                        )
-                    }
-                    "InvalidCacheParameterGroupState" => {
-                        return RusotoError::Service(
+                        ),
+                        "InvalidCacheParameterGroupState" => return RusotoError::Service(
                             CreateCacheParameterGroupError::InvalidCacheParameterGroupStateFault(
                                 parsed_error.message,
                             ),
-                        )
+                        ),
+                        "InvalidParameterCombination" => {
+                            return RusotoError::Service(
+                                CreateCacheParameterGroupError::InvalidParameterCombination(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "InvalidParameterValue" => {
+                            return RusotoError::Service(
+                                CreateCacheParameterGroupError::InvalidParameterValue(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        _ => {}
                     }
-                    "InvalidParameterCombination" => {
-                        return RusotoError::Service(
-                            CreateCacheParameterGroupError::InvalidParameterCombination(
-                                parsed_error.message,
-                            ),
-                        )
-                    }
-                    "InvalidParameterValue" => {
-                        return RusotoError::Service(
-                            CreateCacheParameterGroupError::InvalidParameterValue(
-                                parsed_error.message,
-                            ),
-                        )
-                    }
-                    _ => {}
                 }
             }
         }
@@ -10692,37 +11037,40 @@ impl CreateCacheSecurityGroupError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    "CacheSecurityGroupAlreadyExists" => {
-                        return RusotoError::Service(
-                            CreateCacheSecurityGroupError::CacheSecurityGroupAlreadyExistsFault(
-                                parsed_error.message,
-                            ),
-                        )
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {
+                        "CacheSecurityGroupAlreadyExists" => {
+                            return RusotoError::Service(
+                                CreateCacheSecurityGroupError::CacheSecurityGroupAlreadyExistsFault(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "QuotaExceeded.CacheSecurityGroup" => {
+                            return RusotoError::Service(
+                                CreateCacheSecurityGroupError::CacheSecurityGroupQuotaExceededFault(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "InvalidParameterCombination" => {
+                            return RusotoError::Service(
+                                CreateCacheSecurityGroupError::InvalidParameterCombination(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "InvalidParameterValue" => {
+                            return RusotoError::Service(
+                                CreateCacheSecurityGroupError::InvalidParameterValue(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        _ => {}
                     }
-                    "QuotaExceeded.CacheSecurityGroup" => {
-                        return RusotoError::Service(
-                            CreateCacheSecurityGroupError::CacheSecurityGroupQuotaExceededFault(
-                                parsed_error.message,
-                            ),
-                        )
-                    }
-                    "InvalidParameterCombination" => {
-                        return RusotoError::Service(
-                            CreateCacheSecurityGroupError::InvalidParameterCombination(
-                                parsed_error.message,
-                            ),
-                        )
-                    }
-                    "InvalidParameterValue" => {
-                        return RusotoError::Service(
-                            CreateCacheSecurityGroupError::InvalidParameterValue(
-                                parsed_error.message,
-                            ),
-                        )
-                    }
-                    _ => {}
                 }
             }
         }
@@ -10778,42 +11126,45 @@ impl CreateCacheSubnetGroupError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    "CacheSubnetGroupAlreadyExists" => {
-                        return RusotoError::Service(
-                            CreateCacheSubnetGroupError::CacheSubnetGroupAlreadyExistsFault(
-                                parsed_error.message,
-                            ),
-                        )
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {
+                        "CacheSubnetGroupAlreadyExists" => {
+                            return RusotoError::Service(
+                                CreateCacheSubnetGroupError::CacheSubnetGroupAlreadyExistsFault(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "CacheSubnetGroupQuotaExceeded" => {
+                            return RusotoError::Service(
+                                CreateCacheSubnetGroupError::CacheSubnetGroupQuotaExceededFault(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "CacheSubnetQuotaExceededFault" => {
+                            return RusotoError::Service(
+                                CreateCacheSubnetGroupError::CacheSubnetQuotaExceededFault(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "InvalidSubnet" => {
+                            return RusotoError::Service(
+                                CreateCacheSubnetGroupError::InvalidSubnet(parsed_error.message),
+                            )
+                        }
+                        "SubnetNotAllowedFault" => {
+                            return RusotoError::Service(
+                                CreateCacheSubnetGroupError::SubnetNotAllowedFault(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        _ => {}
                     }
-                    "CacheSubnetGroupQuotaExceeded" => {
-                        return RusotoError::Service(
-                            CreateCacheSubnetGroupError::CacheSubnetGroupQuotaExceededFault(
-                                parsed_error.message,
-                            ),
-                        )
-                    }
-                    "CacheSubnetQuotaExceededFault" => {
-                        return RusotoError::Service(
-                            CreateCacheSubnetGroupError::CacheSubnetQuotaExceededFault(
-                                parsed_error.message,
-                            ),
-                        )
-                    }
-                    "InvalidSubnet" => {
-                        return RusotoError::Service(CreateCacheSubnetGroupError::InvalidSubnet(
-                            parsed_error.message,
-                        ))
-                    }
-                    "SubnetNotAllowedFault" => {
-                        return RusotoError::Service(
-                            CreateCacheSubnetGroupError::SubnetNotAllowedFault(
-                                parsed_error.message,
-                            ),
-                        )
-                    }
-                    _ => {}
                 }
             }
         }
@@ -10870,42 +11221,12 @@ impl CreateGlobalReplicationGroupError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    "GlobalReplicationGroupAlreadyExistsFault" => return RusotoError::Service(
-                        CreateGlobalReplicationGroupError::GlobalReplicationGroupAlreadyExistsFault(
-                            parsed_error.message,
-                        ),
-                    ),
-                    "InvalidParameterValue" => {
-                        return RusotoError::Service(
-                            CreateGlobalReplicationGroupError::InvalidParameterValue(
-                                parsed_error.message,
-                            ),
-                        )
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {
+                        "GlobalReplicationGroupAlreadyExistsFault" => return RusotoError::Service(CreateGlobalReplicationGroupError::GlobalReplicationGroupAlreadyExistsFault(parsed_error.message)),"InvalidParameterValue" => return RusotoError::Service(CreateGlobalReplicationGroupError::InvalidParameterValue(parsed_error.message)),"InvalidReplicationGroupState" => return RusotoError::Service(CreateGlobalReplicationGroupError::InvalidReplicationGroupStateFault(parsed_error.message)),"ReplicationGroupNotFoundFault" => return RusotoError::Service(CreateGlobalReplicationGroupError::ReplicationGroupNotFoundFault(parsed_error.message)),"ServiceLinkedRoleNotFoundFault" => return RusotoError::Service(CreateGlobalReplicationGroupError::ServiceLinkedRoleNotFoundFault(parsed_error.message)),_ => {}
                     }
-                    "InvalidReplicationGroupState" => {
-                        return RusotoError::Service(
-                            CreateGlobalReplicationGroupError::InvalidReplicationGroupStateFault(
-                                parsed_error.message,
-                            ),
-                        )
-                    }
-                    "ReplicationGroupNotFoundFault" => {
-                        return RusotoError::Service(
-                            CreateGlobalReplicationGroupError::ReplicationGroupNotFoundFault(
-                                parsed_error.message,
-                            ),
-                        )
-                    }
-                    "ServiceLinkedRoleNotFoundFault" => {
-                        return RusotoError::Service(
-                            CreateGlobalReplicationGroupError::ServiceLinkedRoleNotFoundFault(
-                                parsed_error.message,
-                            ),
-                        )
-                    }
-                    _ => {}
                 }
             }
         }
@@ -10992,10 +11313,13 @@ impl CreateReplicationGroupError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                                    "CacheClusterNotFound" => return RusotoError::Service(CreateReplicationGroupError::CacheClusterNotFoundFault(parsed_error.message)),"CacheParameterGroupNotFound" => return RusotoError::Service(CreateReplicationGroupError::CacheParameterGroupNotFoundFault(parsed_error.message)),"CacheSecurityGroupNotFound" => return RusotoError::Service(CreateReplicationGroupError::CacheSecurityGroupNotFoundFault(parsed_error.message)),"CacheSubnetGroupNotFoundFault" => return RusotoError::Service(CreateReplicationGroupError::CacheSubnetGroupNotFoundFault(parsed_error.message)),"ClusterQuotaForCustomerExceeded" => return RusotoError::Service(CreateReplicationGroupError::ClusterQuotaForCustomerExceededFault(parsed_error.message)),"GlobalReplicationGroupNotFoundFault" => return RusotoError::Service(CreateReplicationGroupError::GlobalReplicationGroupNotFoundFault(parsed_error.message)),"InsufficientCacheClusterCapacity" => return RusotoError::Service(CreateReplicationGroupError::InsufficientCacheClusterCapacityFault(parsed_error.message)),"InvalidCacheClusterState" => return RusotoError::Service(CreateReplicationGroupError::InvalidCacheClusterStateFault(parsed_error.message)),"InvalidGlobalReplicationGroupState" => return RusotoError::Service(CreateReplicationGroupError::InvalidGlobalReplicationGroupStateFault(parsed_error.message)),"InvalidParameterCombination" => return RusotoError::Service(CreateReplicationGroupError::InvalidParameterCombination(parsed_error.message)),"InvalidParameterValue" => return RusotoError::Service(CreateReplicationGroupError::InvalidParameterValue(parsed_error.message)),"InvalidUserGroupState" => return RusotoError::Service(CreateReplicationGroupError::InvalidUserGroupStateFault(parsed_error.message)),"InvalidVPCNetworkStateFault" => return RusotoError::Service(CreateReplicationGroupError::InvalidVPCNetworkStateFault(parsed_error.message)),"NodeGroupsPerReplicationGroupQuotaExceeded" => return RusotoError::Service(CreateReplicationGroupError::NodeGroupsPerReplicationGroupQuotaExceededFault(parsed_error.message)),"NodeQuotaForClusterExceeded" => return RusotoError::Service(CreateReplicationGroupError::NodeQuotaForClusterExceededFault(parsed_error.message)),"NodeQuotaForCustomerExceeded" => return RusotoError::Service(CreateReplicationGroupError::NodeQuotaForCustomerExceededFault(parsed_error.message)),"ReplicationGroupAlreadyExists" => return RusotoError::Service(CreateReplicationGroupError::ReplicationGroupAlreadyExistsFault(parsed_error.message)),"TagQuotaPerResourceExceeded" => return RusotoError::Service(CreateReplicationGroupError::TagQuotaPerResourceExceeded(parsed_error.message)),"UserGroupNotFound" => return RusotoError::Service(CreateReplicationGroupError::UserGroupNotFoundFault(parsed_error.message)),_ => {}
-                                }
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {
+                        "CacheClusterNotFound" => return RusotoError::Service(CreateReplicationGroupError::CacheClusterNotFoundFault(parsed_error.message)),"CacheParameterGroupNotFound" => return RusotoError::Service(CreateReplicationGroupError::CacheParameterGroupNotFoundFault(parsed_error.message)),"CacheSecurityGroupNotFound" => return RusotoError::Service(CreateReplicationGroupError::CacheSecurityGroupNotFoundFault(parsed_error.message)),"CacheSubnetGroupNotFoundFault" => return RusotoError::Service(CreateReplicationGroupError::CacheSubnetGroupNotFoundFault(parsed_error.message)),"ClusterQuotaForCustomerExceeded" => return RusotoError::Service(CreateReplicationGroupError::ClusterQuotaForCustomerExceededFault(parsed_error.message)),"GlobalReplicationGroupNotFoundFault" => return RusotoError::Service(CreateReplicationGroupError::GlobalReplicationGroupNotFoundFault(parsed_error.message)),"InsufficientCacheClusterCapacity" => return RusotoError::Service(CreateReplicationGroupError::InsufficientCacheClusterCapacityFault(parsed_error.message)),"InvalidCacheClusterState" => return RusotoError::Service(CreateReplicationGroupError::InvalidCacheClusterStateFault(parsed_error.message)),"InvalidGlobalReplicationGroupState" => return RusotoError::Service(CreateReplicationGroupError::InvalidGlobalReplicationGroupStateFault(parsed_error.message)),"InvalidParameterCombination" => return RusotoError::Service(CreateReplicationGroupError::InvalidParameterCombination(parsed_error.message)),"InvalidParameterValue" => return RusotoError::Service(CreateReplicationGroupError::InvalidParameterValue(parsed_error.message)),"InvalidUserGroupState" => return RusotoError::Service(CreateReplicationGroupError::InvalidUserGroupStateFault(parsed_error.message)),"InvalidVPCNetworkStateFault" => return RusotoError::Service(CreateReplicationGroupError::InvalidVPCNetworkStateFault(parsed_error.message)),"NodeGroupsPerReplicationGroupQuotaExceeded" => return RusotoError::Service(CreateReplicationGroupError::NodeGroupsPerReplicationGroupQuotaExceededFault(parsed_error.message)),"NodeQuotaForClusterExceeded" => return RusotoError::Service(CreateReplicationGroupError::NodeQuotaForClusterExceededFault(parsed_error.message)),"NodeQuotaForCustomerExceeded" => return RusotoError::Service(CreateReplicationGroupError::NodeQuotaForCustomerExceededFault(parsed_error.message)),"ReplicationGroupAlreadyExists" => return RusotoError::Service(CreateReplicationGroupError::ReplicationGroupAlreadyExistsFault(parsed_error.message)),"TagQuotaPerResourceExceeded" => return RusotoError::Service(CreateReplicationGroupError::TagQuotaPerResourceExceeded(parsed_error.message)),"UserGroupNotFound" => return RusotoError::Service(CreateReplicationGroupError::UserGroupNotFoundFault(parsed_error.message)),_ => {}
+                    }
+                }
             }
         }
         RusotoError::Unknown(res)
@@ -11101,62 +11425,73 @@ impl CreateSnapshotError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    "CacheClusterNotFound" => {
-                        return RusotoError::Service(
-                            CreateSnapshotError::CacheClusterNotFoundFault(parsed_error.message),
-                        )
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {
+                        "CacheClusterNotFound" => {
+                            return RusotoError::Service(
+                                CreateSnapshotError::CacheClusterNotFoundFault(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "InvalidCacheClusterState" => {
+                            return RusotoError::Service(
+                                CreateSnapshotError::InvalidCacheClusterStateFault(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "InvalidParameterCombination" => {
+                            return RusotoError::Service(
+                                CreateSnapshotError::InvalidParameterCombination(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "InvalidParameterValue" => {
+                            return RusotoError::Service(
+                                CreateSnapshotError::InvalidParameterValue(parsed_error.message),
+                            )
+                        }
+                        "InvalidReplicationGroupState" => {
+                            return RusotoError::Service(
+                                CreateSnapshotError::InvalidReplicationGroupStateFault(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "ReplicationGroupNotFoundFault" => {
+                            return RusotoError::Service(
+                                CreateSnapshotError::ReplicationGroupNotFoundFault(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "SnapshotAlreadyExistsFault" => {
+                            return RusotoError::Service(
+                                CreateSnapshotError::SnapshotAlreadyExistsFault(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "SnapshotFeatureNotSupportedFault" => {
+                            return RusotoError::Service(
+                                CreateSnapshotError::SnapshotFeatureNotSupportedFault(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "SnapshotQuotaExceededFault" => {
+                            return RusotoError::Service(
+                                CreateSnapshotError::SnapshotQuotaExceededFault(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        _ => {}
                     }
-                    "InvalidCacheClusterState" => {
-                        return RusotoError::Service(
-                            CreateSnapshotError::InvalidCacheClusterStateFault(
-                                parsed_error.message,
-                            ),
-                        )
-                    }
-                    "InvalidParameterCombination" => {
-                        return RusotoError::Service(
-                            CreateSnapshotError::InvalidParameterCombination(parsed_error.message),
-                        )
-                    }
-                    "InvalidParameterValue" => {
-                        return RusotoError::Service(CreateSnapshotError::InvalidParameterValue(
-                            parsed_error.message,
-                        ))
-                    }
-                    "InvalidReplicationGroupState" => {
-                        return RusotoError::Service(
-                            CreateSnapshotError::InvalidReplicationGroupStateFault(
-                                parsed_error.message,
-                            ),
-                        )
-                    }
-                    "ReplicationGroupNotFoundFault" => {
-                        return RusotoError::Service(
-                            CreateSnapshotError::ReplicationGroupNotFoundFault(
-                                parsed_error.message,
-                            ),
-                        )
-                    }
-                    "SnapshotAlreadyExistsFault" => {
-                        return RusotoError::Service(
-                            CreateSnapshotError::SnapshotAlreadyExistsFault(parsed_error.message),
-                        )
-                    }
-                    "SnapshotFeatureNotSupportedFault" => {
-                        return RusotoError::Service(
-                            CreateSnapshotError::SnapshotFeatureNotSupportedFault(
-                                parsed_error.message,
-                            ),
-                        )
-                    }
-                    "SnapshotQuotaExceededFault" => {
-                        return RusotoError::Service(
-                            CreateSnapshotError::SnapshotQuotaExceededFault(parsed_error.message),
-                        )
-                    }
-                    _ => {}
                 }
             }
         }
@@ -11213,34 +11548,37 @@ impl CreateUserError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    "DuplicateUserName" => {
-                        return RusotoError::Service(CreateUserError::DuplicateUserNameFault(
-                            parsed_error.message,
-                        ))
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {
+                        "DuplicateUserName" => {
+                            return RusotoError::Service(CreateUserError::DuplicateUserNameFault(
+                                parsed_error.message,
+                            ))
+                        }
+                        "InvalidParameterCombination" => {
+                            return RusotoError::Service(
+                                CreateUserError::InvalidParameterCombination(parsed_error.message),
+                            )
+                        }
+                        "InvalidParameterValue" => {
+                            return RusotoError::Service(CreateUserError::InvalidParameterValue(
+                                parsed_error.message,
+                            ))
+                        }
+                        "UserAlreadyExists" => {
+                            return RusotoError::Service(CreateUserError::UserAlreadyExistsFault(
+                                parsed_error.message,
+                            ))
+                        }
+                        "UserQuotaExceeded" => {
+                            return RusotoError::Service(CreateUserError::UserQuotaExceededFault(
+                                parsed_error.message,
+                            ))
+                        }
+                        _ => {}
                     }
-                    "InvalidParameterCombination" => {
-                        return RusotoError::Service(CreateUserError::InvalidParameterCombination(
-                            parsed_error.message,
-                        ))
-                    }
-                    "InvalidParameterValue" => {
-                        return RusotoError::Service(CreateUserError::InvalidParameterValue(
-                            parsed_error.message,
-                        ))
-                    }
-                    "UserAlreadyExists" => {
-                        return RusotoError::Service(CreateUserError::UserAlreadyExistsFault(
-                            parsed_error.message,
-                        ))
-                    }
-                    "UserQuotaExceeded" => {
-                        return RusotoError::Service(CreateUserError::UserQuotaExceededFault(
-                            parsed_error.message,
-                        ))
-                    }
-                    _ => {}
                 }
             }
         }
@@ -11291,39 +11629,46 @@ impl CreateUserGroupError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    "DefaultUserRequired" => {
-                        return RusotoError::Service(CreateUserGroupError::DefaultUserRequired(
-                            parsed_error.message,
-                        ))
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {
+                        "DefaultUserRequired" => {
+                            return RusotoError::Service(CreateUserGroupError::DefaultUserRequired(
+                                parsed_error.message,
+                            ))
+                        }
+                        "DuplicateUserName" => {
+                            return RusotoError::Service(
+                                CreateUserGroupError::DuplicateUserNameFault(parsed_error.message),
+                            )
+                        }
+                        "InvalidParameterValue" => {
+                            return RusotoError::Service(
+                                CreateUserGroupError::InvalidParameterValue(parsed_error.message),
+                            )
+                        }
+                        "UserGroupAlreadyExists" => {
+                            return RusotoError::Service(
+                                CreateUserGroupError::UserGroupAlreadyExistsFault(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "UserGroupQuotaExceeded" => {
+                            return RusotoError::Service(
+                                CreateUserGroupError::UserGroupQuotaExceededFault(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "UserNotFound" => {
+                            return RusotoError::Service(CreateUserGroupError::UserNotFoundFault(
+                                parsed_error.message,
+                            ))
+                        }
+                        _ => {}
                     }
-                    "DuplicateUserName" => {
-                        return RusotoError::Service(CreateUserGroupError::DuplicateUserNameFault(
-                            parsed_error.message,
-                        ))
-                    }
-                    "InvalidParameterValue" => {
-                        return RusotoError::Service(CreateUserGroupError::InvalidParameterValue(
-                            parsed_error.message,
-                        ))
-                    }
-                    "UserGroupAlreadyExists" => {
-                        return RusotoError::Service(
-                            CreateUserGroupError::UserGroupAlreadyExistsFault(parsed_error.message),
-                        )
-                    }
-                    "UserGroupQuotaExceeded" => {
-                        return RusotoError::Service(
-                            CreateUserGroupError::UserGroupQuotaExceededFault(parsed_error.message),
-                        )
-                    }
-                    "UserNotFound" => {
-                        return RusotoError::Service(CreateUserGroupError::UserNotFoundFault(
-                            parsed_error.message,
-                        ))
-                    }
-                    _ => {}
                 }
             }
         }
@@ -11373,10 +11718,13 @@ impl DecreaseNodeGroupsInGlobalReplicationGroupError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                                    "GlobalReplicationGroupNotFoundFault" => return RusotoError::Service(DecreaseNodeGroupsInGlobalReplicationGroupError::GlobalReplicationGroupNotFoundFault(parsed_error.message)),"InvalidGlobalReplicationGroupState" => return RusotoError::Service(DecreaseNodeGroupsInGlobalReplicationGroupError::InvalidGlobalReplicationGroupStateFault(parsed_error.message)),"InvalidParameterCombination" => return RusotoError::Service(DecreaseNodeGroupsInGlobalReplicationGroupError::InvalidParameterCombination(parsed_error.message)),"InvalidParameterValue" => return RusotoError::Service(DecreaseNodeGroupsInGlobalReplicationGroupError::InvalidParameterValue(parsed_error.message)),_ => {}
-                                }
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {
+                        "GlobalReplicationGroupNotFoundFault" => return RusotoError::Service(DecreaseNodeGroupsInGlobalReplicationGroupError::GlobalReplicationGroupNotFoundFault(parsed_error.message)),"InvalidGlobalReplicationGroupState" => return RusotoError::Service(DecreaseNodeGroupsInGlobalReplicationGroupError::InvalidGlobalReplicationGroupStateFault(parsed_error.message)),"InvalidParameterCombination" => return RusotoError::Service(DecreaseNodeGroupsInGlobalReplicationGroupError::InvalidParameterCombination(parsed_error.message)),"InvalidParameterValue" => return RusotoError::Service(DecreaseNodeGroupsInGlobalReplicationGroupError::InvalidParameterValue(parsed_error.message)),_ => {}
+                    }
+                }
             }
         }
         RusotoError::Unknown(res)
@@ -11437,87 +11785,12 @@ impl DecreaseReplicaCountError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    "ClusterQuotaForCustomerExceeded" => {
-                        return RusotoError::Service(
-                            DecreaseReplicaCountError::ClusterQuotaForCustomerExceededFault(
-                                parsed_error.message,
-                            ),
-                        )
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {
+                        "ClusterQuotaForCustomerExceeded" => return RusotoError::Service(DecreaseReplicaCountError::ClusterQuotaForCustomerExceededFault(parsed_error.message)),"InsufficientCacheClusterCapacity" => return RusotoError::Service(DecreaseReplicaCountError::InsufficientCacheClusterCapacityFault(parsed_error.message)),"InvalidCacheClusterState" => return RusotoError::Service(DecreaseReplicaCountError::InvalidCacheClusterStateFault(parsed_error.message)),"InvalidParameterCombination" => return RusotoError::Service(DecreaseReplicaCountError::InvalidParameterCombination(parsed_error.message)),"InvalidParameterValue" => return RusotoError::Service(DecreaseReplicaCountError::InvalidParameterValue(parsed_error.message)),"InvalidReplicationGroupState" => return RusotoError::Service(DecreaseReplicaCountError::InvalidReplicationGroupStateFault(parsed_error.message)),"InvalidVPCNetworkStateFault" => return RusotoError::Service(DecreaseReplicaCountError::InvalidVPCNetworkStateFault(parsed_error.message)),"NoOperationFault" => return RusotoError::Service(DecreaseReplicaCountError::NoOperationFault(parsed_error.message)),"NodeGroupsPerReplicationGroupQuotaExceeded" => return RusotoError::Service(DecreaseReplicaCountError::NodeGroupsPerReplicationGroupQuotaExceededFault(parsed_error.message)),"NodeQuotaForCustomerExceeded" => return RusotoError::Service(DecreaseReplicaCountError::NodeQuotaForCustomerExceededFault(parsed_error.message)),"ReplicationGroupNotFoundFault" => return RusotoError::Service(DecreaseReplicaCountError::ReplicationGroupNotFoundFault(parsed_error.message)),"ServiceLinkedRoleNotFoundFault" => return RusotoError::Service(DecreaseReplicaCountError::ServiceLinkedRoleNotFoundFault(parsed_error.message)),_ => {}
                     }
-                    "InsufficientCacheClusterCapacity" => {
-                        return RusotoError::Service(
-                            DecreaseReplicaCountError::InsufficientCacheClusterCapacityFault(
-                                parsed_error.message,
-                            ),
-                        )
-                    }
-                    "InvalidCacheClusterState" => {
-                        return RusotoError::Service(
-                            DecreaseReplicaCountError::InvalidCacheClusterStateFault(
-                                parsed_error.message,
-                            ),
-                        )
-                    }
-                    "InvalidParameterCombination" => {
-                        return RusotoError::Service(
-                            DecreaseReplicaCountError::InvalidParameterCombination(
-                                parsed_error.message,
-                            ),
-                        )
-                    }
-                    "InvalidParameterValue" => {
-                        return RusotoError::Service(
-                            DecreaseReplicaCountError::InvalidParameterValue(parsed_error.message),
-                        )
-                    }
-                    "InvalidReplicationGroupState" => {
-                        return RusotoError::Service(
-                            DecreaseReplicaCountError::InvalidReplicationGroupStateFault(
-                                parsed_error.message,
-                            ),
-                        )
-                    }
-                    "InvalidVPCNetworkStateFault" => {
-                        return RusotoError::Service(
-                            DecreaseReplicaCountError::InvalidVPCNetworkStateFault(
-                                parsed_error.message,
-                            ),
-                        )
-                    }
-                    "NoOperationFault" => {
-                        return RusotoError::Service(DecreaseReplicaCountError::NoOperationFault(
-                            parsed_error.message,
-                        ))
-                    }
-                    "NodeGroupsPerReplicationGroupQuotaExceeded" => return RusotoError::Service(
-                        DecreaseReplicaCountError::NodeGroupsPerReplicationGroupQuotaExceededFault(
-                            parsed_error.message,
-                        ),
-                    ),
-                    "NodeQuotaForCustomerExceeded" => {
-                        return RusotoError::Service(
-                            DecreaseReplicaCountError::NodeQuotaForCustomerExceededFault(
-                                parsed_error.message,
-                            ),
-                        )
-                    }
-                    "ReplicationGroupNotFoundFault" => {
-                        return RusotoError::Service(
-                            DecreaseReplicaCountError::ReplicationGroupNotFoundFault(
-                                parsed_error.message,
-                            ),
-                        )
-                    }
-                    "ServiceLinkedRoleNotFoundFault" => {
-                        return RusotoError::Service(
-                            DecreaseReplicaCountError::ServiceLinkedRoleNotFoundFault(
-                                parsed_error.message,
-                            ),
-                        )
-                    }
-                    _ => {}
                 }
             }
         }
@@ -11597,56 +11870,61 @@ impl DeleteCacheClusterError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    "CacheClusterNotFound" => {
-                        return RusotoError::Service(
-                            DeleteCacheClusterError::CacheClusterNotFoundFault(
-                                parsed_error.message,
-                            ),
-                        )
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {
+                        "CacheClusterNotFound" => {
+                            return RusotoError::Service(
+                                DeleteCacheClusterError::CacheClusterNotFoundFault(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "InvalidCacheClusterState" => {
+                            return RusotoError::Service(
+                                DeleteCacheClusterError::InvalidCacheClusterStateFault(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "InvalidParameterCombination" => {
+                            return RusotoError::Service(
+                                DeleteCacheClusterError::InvalidParameterCombination(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "InvalidParameterValue" => {
+                            return RusotoError::Service(
+                                DeleteCacheClusterError::InvalidParameterValue(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "SnapshotAlreadyExistsFault" => {
+                            return RusotoError::Service(
+                                DeleteCacheClusterError::SnapshotAlreadyExistsFault(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "SnapshotFeatureNotSupportedFault" => {
+                            return RusotoError::Service(
+                                DeleteCacheClusterError::SnapshotFeatureNotSupportedFault(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "SnapshotQuotaExceededFault" => {
+                            return RusotoError::Service(
+                                DeleteCacheClusterError::SnapshotQuotaExceededFault(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        _ => {}
                     }
-                    "InvalidCacheClusterState" => {
-                        return RusotoError::Service(
-                            DeleteCacheClusterError::InvalidCacheClusterStateFault(
-                                parsed_error.message,
-                            ),
-                        )
-                    }
-                    "InvalidParameterCombination" => {
-                        return RusotoError::Service(
-                            DeleteCacheClusterError::InvalidParameterCombination(
-                                parsed_error.message,
-                            ),
-                        )
-                    }
-                    "InvalidParameterValue" => {
-                        return RusotoError::Service(
-                            DeleteCacheClusterError::InvalidParameterValue(parsed_error.message),
-                        )
-                    }
-                    "SnapshotAlreadyExistsFault" => {
-                        return RusotoError::Service(
-                            DeleteCacheClusterError::SnapshotAlreadyExistsFault(
-                                parsed_error.message,
-                            ),
-                        )
-                    }
-                    "SnapshotFeatureNotSupportedFault" => {
-                        return RusotoError::Service(
-                            DeleteCacheClusterError::SnapshotFeatureNotSupportedFault(
-                                parsed_error.message,
-                            ),
-                        )
-                    }
-                    "SnapshotQuotaExceededFault" => {
-                        return RusotoError::Service(
-                            DeleteCacheClusterError::SnapshotQuotaExceededFault(
-                                parsed_error.message,
-                            ),
-                        )
-                    }
-                    _ => {}
                 }
             }
         }
@@ -11705,37 +11983,38 @@ impl DeleteCacheParameterGroupError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    "CacheParameterGroupNotFound" => {
-                        return RusotoError::Service(
-                            DeleteCacheParameterGroupError::CacheParameterGroupNotFoundFault(
-                                parsed_error.message,
-                            ),
-                        )
-                    }
-                    "InvalidCacheParameterGroupState" => {
-                        return RusotoError::Service(
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {
+                        "CacheParameterGroupNotFound" => {
+                            return RusotoError::Service(
+                                DeleteCacheParameterGroupError::CacheParameterGroupNotFoundFault(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "InvalidCacheParameterGroupState" => return RusotoError::Service(
                             DeleteCacheParameterGroupError::InvalidCacheParameterGroupStateFault(
                                 parsed_error.message,
                             ),
-                        )
+                        ),
+                        "InvalidParameterCombination" => {
+                            return RusotoError::Service(
+                                DeleteCacheParameterGroupError::InvalidParameterCombination(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "InvalidParameterValue" => {
+                            return RusotoError::Service(
+                                DeleteCacheParameterGroupError::InvalidParameterValue(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        _ => {}
                     }
-                    "InvalidParameterCombination" => {
-                        return RusotoError::Service(
-                            DeleteCacheParameterGroupError::InvalidParameterCombination(
-                                parsed_error.message,
-                            ),
-                        )
-                    }
-                    "InvalidParameterValue" => {
-                        return RusotoError::Service(
-                            DeleteCacheParameterGroupError::InvalidParameterValue(
-                                parsed_error.message,
-                            ),
-                        )
-                    }
-                    _ => {}
                 }
             }
         }
@@ -11789,37 +12068,40 @@ impl DeleteCacheSecurityGroupError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    "CacheSecurityGroupNotFound" => {
-                        return RusotoError::Service(
-                            DeleteCacheSecurityGroupError::CacheSecurityGroupNotFoundFault(
-                                parsed_error.message,
-                            ),
-                        )
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {
+                        "CacheSecurityGroupNotFound" => {
+                            return RusotoError::Service(
+                                DeleteCacheSecurityGroupError::CacheSecurityGroupNotFoundFault(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "InvalidCacheSecurityGroupState" => {
+                            return RusotoError::Service(
+                                DeleteCacheSecurityGroupError::InvalidCacheSecurityGroupStateFault(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "InvalidParameterCombination" => {
+                            return RusotoError::Service(
+                                DeleteCacheSecurityGroupError::InvalidParameterCombination(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "InvalidParameterValue" => {
+                            return RusotoError::Service(
+                                DeleteCacheSecurityGroupError::InvalidParameterValue(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        _ => {}
                     }
-                    "InvalidCacheSecurityGroupState" => {
-                        return RusotoError::Service(
-                            DeleteCacheSecurityGroupError::InvalidCacheSecurityGroupStateFault(
-                                parsed_error.message,
-                            ),
-                        )
-                    }
-                    "InvalidParameterCombination" => {
-                        return RusotoError::Service(
-                            DeleteCacheSecurityGroupError::InvalidParameterCombination(
-                                parsed_error.message,
-                            ),
-                        )
-                    }
-                    "InvalidParameterValue" => {
-                        return RusotoError::Service(
-                            DeleteCacheSecurityGroupError::InvalidParameterValue(
-                                parsed_error.message,
-                            ),
-                        )
-                    }
-                    _ => {}
                 }
             }
         }
@@ -11869,23 +12151,26 @@ impl DeleteCacheSubnetGroupError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    "CacheSubnetGroupInUse" => {
-                        return RusotoError::Service(
-                            DeleteCacheSubnetGroupError::CacheSubnetGroupInUse(
-                                parsed_error.message,
-                            ),
-                        )
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {
+                        "CacheSubnetGroupInUse" => {
+                            return RusotoError::Service(
+                                DeleteCacheSubnetGroupError::CacheSubnetGroupInUse(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "CacheSubnetGroupNotFoundFault" => {
+                            return RusotoError::Service(
+                                DeleteCacheSubnetGroupError::CacheSubnetGroupNotFoundFault(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        _ => {}
                     }
-                    "CacheSubnetGroupNotFoundFault" => {
-                        return RusotoError::Service(
-                            DeleteCacheSubnetGroupError::CacheSubnetGroupNotFoundFault(
-                                parsed_error.message,
-                            ),
-                        )
-                    }
-                    _ => {}
                 }
             }
         }
@@ -11931,28 +12216,12 @@ impl DeleteGlobalReplicationGroupError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    "GlobalReplicationGroupNotFoundFault" => {
-                        return RusotoError::Service(
-                            DeleteGlobalReplicationGroupError::GlobalReplicationGroupNotFoundFault(
-                                parsed_error.message,
-                            ),
-                        )
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {
+                        "GlobalReplicationGroupNotFoundFault" => return RusotoError::Service(DeleteGlobalReplicationGroupError::GlobalReplicationGroupNotFoundFault(parsed_error.message)),"InvalidGlobalReplicationGroupState" => return RusotoError::Service(DeleteGlobalReplicationGroupError::InvalidGlobalReplicationGroupStateFault(parsed_error.message)),"InvalidParameterValue" => return RusotoError::Service(DeleteGlobalReplicationGroupError::InvalidParameterValue(parsed_error.message)),_ => {}
                     }
-                    "InvalidGlobalReplicationGroupState" => return RusotoError::Service(
-                        DeleteGlobalReplicationGroupError::InvalidGlobalReplicationGroupStateFault(
-                            parsed_error.message,
-                        ),
-                    ),
-                    "InvalidParameterValue" => {
-                        return RusotoError::Service(
-                            DeleteGlobalReplicationGroupError::InvalidParameterValue(
-                                parsed_error.message,
-                            ),
-                        )
-                    }
-                    _ => {}
                 }
             }
         }
@@ -12009,58 +12278,61 @@ impl DeleteReplicationGroupError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    "InvalidParameterCombination" => {
-                        return RusotoError::Service(
-                            DeleteReplicationGroupError::InvalidParameterCombination(
-                                parsed_error.message,
-                            ),
-                        )
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {
+                        "InvalidParameterCombination" => {
+                            return RusotoError::Service(
+                                DeleteReplicationGroupError::InvalidParameterCombination(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "InvalidParameterValue" => {
+                            return RusotoError::Service(
+                                DeleteReplicationGroupError::InvalidParameterValue(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "InvalidReplicationGroupState" => {
+                            return RusotoError::Service(
+                                DeleteReplicationGroupError::InvalidReplicationGroupStateFault(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "ReplicationGroupNotFoundFault" => {
+                            return RusotoError::Service(
+                                DeleteReplicationGroupError::ReplicationGroupNotFoundFault(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "SnapshotAlreadyExistsFault" => {
+                            return RusotoError::Service(
+                                DeleteReplicationGroupError::SnapshotAlreadyExistsFault(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "SnapshotFeatureNotSupportedFault" => {
+                            return RusotoError::Service(
+                                DeleteReplicationGroupError::SnapshotFeatureNotSupportedFault(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "SnapshotQuotaExceededFault" => {
+                            return RusotoError::Service(
+                                DeleteReplicationGroupError::SnapshotQuotaExceededFault(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        _ => {}
                     }
-                    "InvalidParameterValue" => {
-                        return RusotoError::Service(
-                            DeleteReplicationGroupError::InvalidParameterValue(
-                                parsed_error.message,
-                            ),
-                        )
-                    }
-                    "InvalidReplicationGroupState" => {
-                        return RusotoError::Service(
-                            DeleteReplicationGroupError::InvalidReplicationGroupStateFault(
-                                parsed_error.message,
-                            ),
-                        )
-                    }
-                    "ReplicationGroupNotFoundFault" => {
-                        return RusotoError::Service(
-                            DeleteReplicationGroupError::ReplicationGroupNotFoundFault(
-                                parsed_error.message,
-                            ),
-                        )
-                    }
-                    "SnapshotAlreadyExistsFault" => {
-                        return RusotoError::Service(
-                            DeleteReplicationGroupError::SnapshotAlreadyExistsFault(
-                                parsed_error.message,
-                            ),
-                        )
-                    }
-                    "SnapshotFeatureNotSupportedFault" => {
-                        return RusotoError::Service(
-                            DeleteReplicationGroupError::SnapshotFeatureNotSupportedFault(
-                                parsed_error.message,
-                            ),
-                        )
-                    }
-                    "SnapshotQuotaExceededFault" => {
-                        return RusotoError::Service(
-                            DeleteReplicationGroupError::SnapshotQuotaExceededFault(
-                                parsed_error.message,
-                            ),
-                        )
-                    }
-                    _ => {}
                 }
             }
         }
@@ -12121,29 +12393,36 @@ impl DeleteSnapshotError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    "InvalidParameterCombination" => {
-                        return RusotoError::Service(
-                            DeleteSnapshotError::InvalidParameterCombination(parsed_error.message),
-                        )
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {
+                        "InvalidParameterCombination" => {
+                            return RusotoError::Service(
+                                DeleteSnapshotError::InvalidParameterCombination(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "InvalidParameterValue" => {
+                            return RusotoError::Service(
+                                DeleteSnapshotError::InvalidParameterValue(parsed_error.message),
+                            )
+                        }
+                        "InvalidSnapshotState" => {
+                            return RusotoError::Service(
+                                DeleteSnapshotError::InvalidSnapshotStateFault(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "SnapshotNotFoundFault" => {
+                            return RusotoError::Service(
+                                DeleteSnapshotError::SnapshotNotFoundFault(parsed_error.message),
+                            )
+                        }
+                        _ => {}
                     }
-                    "InvalidParameterValue" => {
-                        return RusotoError::Service(DeleteSnapshotError::InvalidParameterValue(
-                            parsed_error.message,
-                        ))
-                    }
-                    "InvalidSnapshotState" => {
-                        return RusotoError::Service(
-                            DeleteSnapshotError::InvalidSnapshotStateFault(parsed_error.message),
-                        )
-                    }
-                    "SnapshotNotFoundFault" => {
-                        return RusotoError::Service(DeleteSnapshotError::SnapshotNotFoundFault(
-                            parsed_error.message,
-                        ))
-                    }
-                    _ => {}
                 }
             }
         }
@@ -12189,31 +12468,34 @@ impl DeleteUserError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    "DefaultUserAssociatedToUserGroup" => {
-                        return RusotoError::Service(
-                            DeleteUserError::DefaultUserAssociatedToUserGroupFault(
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {
+                        "DefaultUserAssociatedToUserGroup" => {
+                            return RusotoError::Service(
+                                DeleteUserError::DefaultUserAssociatedToUserGroupFault(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "InvalidParameterValue" => {
+                            return RusotoError::Service(DeleteUserError::InvalidParameterValue(
                                 parsed_error.message,
-                            ),
-                        )
+                            ))
+                        }
+                        "InvalidUserState" => {
+                            return RusotoError::Service(DeleteUserError::InvalidUserStateFault(
+                                parsed_error.message,
+                            ))
+                        }
+                        "UserNotFound" => {
+                            return RusotoError::Service(DeleteUserError::UserNotFoundFault(
+                                parsed_error.message,
+                            ))
+                        }
+                        _ => {}
                     }
-                    "InvalidParameterValue" => {
-                        return RusotoError::Service(DeleteUserError::InvalidParameterValue(
-                            parsed_error.message,
-                        ))
-                    }
-                    "InvalidUserState" => {
-                        return RusotoError::Service(DeleteUserError::InvalidUserStateFault(
-                            parsed_error.message,
-                        ))
-                    }
-                    "UserNotFound" => {
-                        return RusotoError::Service(DeleteUserError::UserNotFoundFault(
-                            parsed_error.message,
-                        ))
-                    }
-                    _ => {}
                 }
             }
         }
@@ -12259,24 +12541,29 @@ impl DeleteUserGroupError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    "InvalidParameterValue" => {
-                        return RusotoError::Service(DeleteUserGroupError::InvalidParameterValue(
-                            parsed_error.message,
-                        ))
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {
+                        "InvalidParameterValue" => {
+                            return RusotoError::Service(
+                                DeleteUserGroupError::InvalidParameterValue(parsed_error.message),
+                            )
+                        }
+                        "InvalidUserGroupState" => {
+                            return RusotoError::Service(
+                                DeleteUserGroupError::InvalidUserGroupStateFault(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "UserGroupNotFound" => {
+                            return RusotoError::Service(
+                                DeleteUserGroupError::UserGroupNotFoundFault(parsed_error.message),
+                            )
+                        }
+                        _ => {}
                     }
-                    "InvalidUserGroupState" => {
-                        return RusotoError::Service(
-                            DeleteUserGroupError::InvalidUserGroupStateFault(parsed_error.message),
-                        )
-                    }
-                    "UserGroupNotFound" => {
-                        return RusotoError::Service(DeleteUserGroupError::UserGroupNotFoundFault(
-                            parsed_error.message,
-                        ))
-                    }
-                    _ => {}
                 }
             }
         }
@@ -12319,28 +12606,33 @@ impl DescribeCacheClustersError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    "CacheClusterNotFound" => {
-                        return RusotoError::Service(
-                            DescribeCacheClustersError::CacheClusterNotFoundFault(
-                                parsed_error.message,
-                            ),
-                        )
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {
+                        "CacheClusterNotFound" => {
+                            return RusotoError::Service(
+                                DescribeCacheClustersError::CacheClusterNotFoundFault(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "InvalidParameterCombination" => {
+                            return RusotoError::Service(
+                                DescribeCacheClustersError::InvalidParameterCombination(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "InvalidParameterValue" => {
+                            return RusotoError::Service(
+                                DescribeCacheClustersError::InvalidParameterValue(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        _ => {}
                     }
-                    "InvalidParameterCombination" => {
-                        return RusotoError::Service(
-                            DescribeCacheClustersError::InvalidParameterCombination(
-                                parsed_error.message,
-                            ),
-                        )
-                    }
-                    "InvalidParameterValue" => {
-                        return RusotoError::Service(
-                            DescribeCacheClustersError::InvalidParameterValue(parsed_error.message),
-                        )
-                    }
-                    _ => {}
                 }
             }
         }
@@ -12382,11 +12674,7 @@ impl DescribeCacheEngineVersionsError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    _ => {}
-                }
-            }
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {}
         }
         RusotoError::Unknown(res)
     }
@@ -12425,30 +12713,33 @@ impl DescribeCacheParameterGroupsError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    "CacheParameterGroupNotFound" => {
-                        return RusotoError::Service(
-                            DescribeCacheParameterGroupsError::CacheParameterGroupNotFoundFault(
-                                parsed_error.message,
-                            ),
-                        )
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {
+                        "CacheParameterGroupNotFound" => {
+                            return RusotoError::Service(
+                                DescribeCacheParameterGroupsError::CacheParameterGroupNotFoundFault(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "InvalidParameterCombination" => {
+                            return RusotoError::Service(
+                                DescribeCacheParameterGroupsError::InvalidParameterCombination(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "InvalidParameterValue" => {
+                            return RusotoError::Service(
+                                DescribeCacheParameterGroupsError::InvalidParameterValue(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        _ => {}
                     }
-                    "InvalidParameterCombination" => {
-                        return RusotoError::Service(
-                            DescribeCacheParameterGroupsError::InvalidParameterCombination(
-                                parsed_error.message,
-                            ),
-                        )
-                    }
-                    "InvalidParameterValue" => {
-                        return RusotoError::Service(
-                            DescribeCacheParameterGroupsError::InvalidParameterValue(
-                                parsed_error.message,
-                            ),
-                        )
-                    }
-                    _ => {}
                 }
             }
         }
@@ -12497,30 +12788,33 @@ impl DescribeCacheParametersError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    "CacheParameterGroupNotFound" => {
-                        return RusotoError::Service(
-                            DescribeCacheParametersError::CacheParameterGroupNotFoundFault(
-                                parsed_error.message,
-                            ),
-                        )
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {
+                        "CacheParameterGroupNotFound" => {
+                            return RusotoError::Service(
+                                DescribeCacheParametersError::CacheParameterGroupNotFoundFault(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "InvalidParameterCombination" => {
+                            return RusotoError::Service(
+                                DescribeCacheParametersError::InvalidParameterCombination(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "InvalidParameterValue" => {
+                            return RusotoError::Service(
+                                DescribeCacheParametersError::InvalidParameterValue(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        _ => {}
                     }
-                    "InvalidParameterCombination" => {
-                        return RusotoError::Service(
-                            DescribeCacheParametersError::InvalidParameterCombination(
-                                parsed_error.message,
-                            ),
-                        )
-                    }
-                    "InvalidParameterValue" => {
-                        return RusotoError::Service(
-                            DescribeCacheParametersError::InvalidParameterValue(
-                                parsed_error.message,
-                            ),
-                        )
-                    }
-                    _ => {}
                 }
             }
         }
@@ -12571,30 +12865,33 @@ impl DescribeCacheSecurityGroupsError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    "CacheSecurityGroupNotFound" => {
-                        return RusotoError::Service(
-                            DescribeCacheSecurityGroupsError::CacheSecurityGroupNotFoundFault(
-                                parsed_error.message,
-                            ),
-                        )
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {
+                        "CacheSecurityGroupNotFound" => {
+                            return RusotoError::Service(
+                                DescribeCacheSecurityGroupsError::CacheSecurityGroupNotFoundFault(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "InvalidParameterCombination" => {
+                            return RusotoError::Service(
+                                DescribeCacheSecurityGroupsError::InvalidParameterCombination(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "InvalidParameterValue" => {
+                            return RusotoError::Service(
+                                DescribeCacheSecurityGroupsError::InvalidParameterValue(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        _ => {}
                     }
-                    "InvalidParameterCombination" => {
-                        return RusotoError::Service(
-                            DescribeCacheSecurityGroupsError::InvalidParameterCombination(
-                                parsed_error.message,
-                            ),
-                        )
-                    }
-                    "InvalidParameterValue" => {
-                        return RusotoError::Service(
-                            DescribeCacheSecurityGroupsError::InvalidParameterValue(
-                                parsed_error.message,
-                            ),
-                        )
-                    }
-                    _ => {}
                 }
             }
         }
@@ -12639,16 +12936,19 @@ impl DescribeCacheSubnetGroupsError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    "CacheSubnetGroupNotFoundFault" => {
-                        return RusotoError::Service(
-                            DescribeCacheSubnetGroupsError::CacheSubnetGroupNotFoundFault(
-                                parsed_error.message,
-                            ),
-                        )
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {
+                        "CacheSubnetGroupNotFoundFault" => {
+                            return RusotoError::Service(
+                                DescribeCacheSubnetGroupsError::CacheSubnetGroupNotFoundFault(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        _ => {}
                     }
-                    _ => {}
                 }
             }
         }
@@ -12691,23 +12991,26 @@ impl DescribeEngineDefaultParametersError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    "InvalidParameterCombination" => {
-                        return RusotoError::Service(
-                            DescribeEngineDefaultParametersError::InvalidParameterCombination(
-                                parsed_error.message,
-                            ),
-                        )
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {
+                        "InvalidParameterCombination" => {
+                            return RusotoError::Service(
+                                DescribeEngineDefaultParametersError::InvalidParameterCombination(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "InvalidParameterValue" => {
+                            return RusotoError::Service(
+                                DescribeEngineDefaultParametersError::InvalidParameterValue(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        _ => {}
                     }
-                    "InvalidParameterValue" => {
-                        return RusotoError::Service(
-                            DescribeEngineDefaultParametersError::InvalidParameterValue(
-                                parsed_error.message,
-                            ),
-                        )
-                    }
-                    _ => {}
                 }
             }
         }
@@ -12751,19 +13054,24 @@ impl DescribeEventsError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    "InvalidParameterCombination" => {
-                        return RusotoError::Service(
-                            DescribeEventsError::InvalidParameterCombination(parsed_error.message),
-                        )
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {
+                        "InvalidParameterCombination" => {
+                            return RusotoError::Service(
+                                DescribeEventsError::InvalidParameterCombination(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "InvalidParameterValue" => {
+                            return RusotoError::Service(
+                                DescribeEventsError::InvalidParameterValue(parsed_error.message),
+                            )
+                        }
+                        _ => {}
                     }
-                    "InvalidParameterValue" => {
-                        return RusotoError::Service(DescribeEventsError::InvalidParameterValue(
-                            parsed_error.message,
-                        ))
-                    }
-                    _ => {}
                 }
             }
         }
@@ -12807,28 +13115,12 @@ impl DescribeGlobalReplicationGroupsError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    "GlobalReplicationGroupNotFoundFault" => return RusotoError::Service(
-                        DescribeGlobalReplicationGroupsError::GlobalReplicationGroupNotFoundFault(
-                            parsed_error.message,
-                        ),
-                    ),
-                    "InvalidParameterCombination" => {
-                        return RusotoError::Service(
-                            DescribeGlobalReplicationGroupsError::InvalidParameterCombination(
-                                parsed_error.message,
-                            ),
-                        )
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {
+                        "GlobalReplicationGroupNotFoundFault" => return RusotoError::Service(DescribeGlobalReplicationGroupsError::GlobalReplicationGroupNotFoundFault(parsed_error.message)),"InvalidParameterCombination" => return RusotoError::Service(DescribeGlobalReplicationGroupsError::InvalidParameterCombination(parsed_error.message)),"InvalidParameterValue" => return RusotoError::Service(DescribeGlobalReplicationGroupsError::InvalidParameterValue(parsed_error.message)),_ => {}
                     }
-                    "InvalidParameterValue" => {
-                        return RusotoError::Service(
-                            DescribeGlobalReplicationGroupsError::InvalidParameterValue(
-                                parsed_error.message,
-                            ),
-                        )
-                    }
-                    _ => {}
                 }
             }
         }
@@ -12877,30 +13169,33 @@ impl DescribeReplicationGroupsError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    "InvalidParameterCombination" => {
-                        return RusotoError::Service(
-                            DescribeReplicationGroupsError::InvalidParameterCombination(
-                                parsed_error.message,
-                            ),
-                        )
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {
+                        "InvalidParameterCombination" => {
+                            return RusotoError::Service(
+                                DescribeReplicationGroupsError::InvalidParameterCombination(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "InvalidParameterValue" => {
+                            return RusotoError::Service(
+                                DescribeReplicationGroupsError::InvalidParameterValue(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "ReplicationGroupNotFoundFault" => {
+                            return RusotoError::Service(
+                                DescribeReplicationGroupsError::ReplicationGroupNotFoundFault(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        _ => {}
                     }
-                    "InvalidParameterValue" => {
-                        return RusotoError::Service(
-                            DescribeReplicationGroupsError::InvalidParameterValue(
-                                parsed_error.message,
-                            ),
-                        )
-                    }
-                    "ReplicationGroupNotFoundFault" => {
-                        return RusotoError::Service(
-                            DescribeReplicationGroupsError::ReplicationGroupNotFoundFault(
-                                parsed_error.message,
-                            ),
-                        )
-                    }
-                    _ => {}
                 }
             }
         }
@@ -12951,30 +13246,33 @@ impl DescribeReservedCacheNodesError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    "InvalidParameterCombination" => {
-                        return RusotoError::Service(
-                            DescribeReservedCacheNodesError::InvalidParameterCombination(
-                                parsed_error.message,
-                            ),
-                        )
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {
+                        "InvalidParameterCombination" => {
+                            return RusotoError::Service(
+                                DescribeReservedCacheNodesError::InvalidParameterCombination(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "InvalidParameterValue" => {
+                            return RusotoError::Service(
+                                DescribeReservedCacheNodesError::InvalidParameterValue(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "ReservedCacheNodeNotFound" => {
+                            return RusotoError::Service(
+                                DescribeReservedCacheNodesError::ReservedCacheNodeNotFoundFault(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        _ => {}
                     }
-                    "InvalidParameterValue" => {
-                        return RusotoError::Service(
-                            DescribeReservedCacheNodesError::InvalidParameterValue(
-                                parsed_error.message,
-                            ),
-                        )
-                    }
-                    "ReservedCacheNodeNotFound" => {
-                        return RusotoError::Service(
-                            DescribeReservedCacheNodesError::ReservedCacheNodeNotFoundFault(
-                                parsed_error.message,
-                            ),
-                        )
-                    }
-                    _ => {}
                 }
             }
         }
@@ -13025,10 +13323,13 @@ impl DescribeReservedCacheNodesOfferingsError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                                    "InvalidParameterCombination" => return RusotoError::Service(DescribeReservedCacheNodesOfferingsError::InvalidParameterCombination(parsed_error.message)),"InvalidParameterValue" => return RusotoError::Service(DescribeReservedCacheNodesOfferingsError::InvalidParameterValue(parsed_error.message)),"ReservedCacheNodesOfferingNotFound" => return RusotoError::Service(DescribeReservedCacheNodesOfferingsError::ReservedCacheNodesOfferingNotFoundFault(parsed_error.message)),_ => {}
-                                }
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {
+                        "InvalidParameterCombination" => return RusotoError::Service(DescribeReservedCacheNodesOfferingsError::InvalidParameterCombination(parsed_error.message)),"InvalidParameterValue" => return RusotoError::Service(DescribeReservedCacheNodesOfferingsError::InvalidParameterValue(parsed_error.message)),"ReservedCacheNodesOfferingNotFound" => return RusotoError::Service(DescribeReservedCacheNodesOfferingsError::ReservedCacheNodesOfferingNotFoundFault(parsed_error.message)),_ => {}
+                    }
+                }
             }
         }
         RusotoError::Unknown(res)
@@ -13076,30 +13377,33 @@ impl DescribeServiceUpdatesError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    "InvalidParameterCombination" => {
-                        return RusotoError::Service(
-                            DescribeServiceUpdatesError::InvalidParameterCombination(
-                                parsed_error.message,
-                            ),
-                        )
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {
+                        "InvalidParameterCombination" => {
+                            return RusotoError::Service(
+                                DescribeServiceUpdatesError::InvalidParameterCombination(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "InvalidParameterValue" => {
+                            return RusotoError::Service(
+                                DescribeServiceUpdatesError::InvalidParameterValue(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "ServiceUpdateNotFoundFault" => {
+                            return RusotoError::Service(
+                                DescribeServiceUpdatesError::ServiceUpdateNotFoundFault(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        _ => {}
                     }
-                    "InvalidParameterValue" => {
-                        return RusotoError::Service(
-                            DescribeServiceUpdatesError::InvalidParameterValue(
-                                parsed_error.message,
-                            ),
-                        )
-                    }
-                    "ServiceUpdateNotFoundFault" => {
-                        return RusotoError::Service(
-                            DescribeServiceUpdatesError::ServiceUpdateNotFoundFault(
-                                parsed_error.message,
-                            ),
-                        )
-                    }
-                    _ => {}
                 }
             }
         }
@@ -13148,31 +13452,36 @@ impl DescribeSnapshotsError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    "CacheClusterNotFound" => {
-                        return RusotoError::Service(
-                            DescribeSnapshotsError::CacheClusterNotFoundFault(parsed_error.message),
-                        )
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {
+                        "CacheClusterNotFound" => {
+                            return RusotoError::Service(
+                                DescribeSnapshotsError::CacheClusterNotFoundFault(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "InvalidParameterCombination" => {
+                            return RusotoError::Service(
+                                DescribeSnapshotsError::InvalidParameterCombination(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "InvalidParameterValue" => {
+                            return RusotoError::Service(
+                                DescribeSnapshotsError::InvalidParameterValue(parsed_error.message),
+                            )
+                        }
+                        "SnapshotNotFoundFault" => {
+                            return RusotoError::Service(
+                                DescribeSnapshotsError::SnapshotNotFoundFault(parsed_error.message),
+                            )
+                        }
+                        _ => {}
                     }
-                    "InvalidParameterCombination" => {
-                        return RusotoError::Service(
-                            DescribeSnapshotsError::InvalidParameterCombination(
-                                parsed_error.message,
-                            ),
-                        )
-                    }
-                    "InvalidParameterValue" => {
-                        return RusotoError::Service(DescribeSnapshotsError::InvalidParameterValue(
-                            parsed_error.message,
-                        ))
-                    }
-                    "SnapshotNotFoundFault" => {
-                        return RusotoError::Service(DescribeSnapshotsError::SnapshotNotFoundFault(
-                            parsed_error.message,
-                        ))
-                    }
-                    _ => {}
                 }
             }
         }
@@ -13216,21 +13525,26 @@ impl DescribeUpdateActionsError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    "InvalidParameterCombination" => {
-                        return RusotoError::Service(
-                            DescribeUpdateActionsError::InvalidParameterCombination(
-                                parsed_error.message,
-                            ),
-                        )
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {
+                        "InvalidParameterCombination" => {
+                            return RusotoError::Service(
+                                DescribeUpdateActionsError::InvalidParameterCombination(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "InvalidParameterValue" => {
+                            return RusotoError::Service(
+                                DescribeUpdateActionsError::InvalidParameterValue(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        _ => {}
                     }
-                    "InvalidParameterValue" => {
-                        return RusotoError::Service(
-                            DescribeUpdateActionsError::InvalidParameterValue(parsed_error.message),
-                        )
-                    }
-                    _ => {}
                 }
             }
         }
@@ -13272,21 +13586,26 @@ impl DescribeUserGroupsError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    "InvalidParameterCombination" => {
-                        return RusotoError::Service(
-                            DescribeUserGroupsError::InvalidParameterCombination(
-                                parsed_error.message,
-                            ),
-                        )
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {
+                        "InvalidParameterCombination" => {
+                            return RusotoError::Service(
+                                DescribeUserGroupsError::InvalidParameterCombination(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "UserGroupNotFound" => {
+                            return RusotoError::Service(
+                                DescribeUserGroupsError::UserGroupNotFoundFault(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        _ => {}
                     }
-                    "UserGroupNotFound" => {
-                        return RusotoError::Service(
-                            DescribeUserGroupsError::UserGroupNotFoundFault(parsed_error.message),
-                        )
-                    }
-                    _ => {}
                 }
             }
         }
@@ -13328,19 +13647,24 @@ impl DescribeUsersError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    "InvalidParameterCombination" => {
-                        return RusotoError::Service(
-                            DescribeUsersError::InvalidParameterCombination(parsed_error.message),
-                        )
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {
+                        "InvalidParameterCombination" => {
+                            return RusotoError::Service(
+                                DescribeUsersError::InvalidParameterCombination(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "UserNotFound" => {
+                            return RusotoError::Service(DescribeUsersError::UserNotFoundFault(
+                                parsed_error.message,
+                            ))
+                        }
+                        _ => {}
                     }
-                    "UserNotFound" => {
-                        return RusotoError::Service(DescribeUsersError::UserNotFoundFault(
-                            parsed_error.message,
-                        ))
-                    }
-                    _ => {}
                 }
             }
         }
@@ -13386,10 +13710,13 @@ impl DisassociateGlobalReplicationGroupError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                                    "GlobalReplicationGroupNotFoundFault" => return RusotoError::Service(DisassociateGlobalReplicationGroupError::GlobalReplicationGroupNotFoundFault(parsed_error.message)),"InvalidGlobalReplicationGroupState" => return RusotoError::Service(DisassociateGlobalReplicationGroupError::InvalidGlobalReplicationGroupStateFault(parsed_error.message)),"InvalidParameterCombination" => return RusotoError::Service(DisassociateGlobalReplicationGroupError::InvalidParameterCombination(parsed_error.message)),"InvalidParameterValue" => return RusotoError::Service(DisassociateGlobalReplicationGroupError::InvalidParameterValue(parsed_error.message)),_ => {}
-                                }
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {
+                        "GlobalReplicationGroupNotFoundFault" => return RusotoError::Service(DisassociateGlobalReplicationGroupError::GlobalReplicationGroupNotFoundFault(parsed_error.message)),"InvalidGlobalReplicationGroupState" => return RusotoError::Service(DisassociateGlobalReplicationGroupError::InvalidGlobalReplicationGroupStateFault(parsed_error.message)),"InvalidParameterCombination" => return RusotoError::Service(DisassociateGlobalReplicationGroupError::InvalidParameterCombination(parsed_error.message)),"InvalidParameterValue" => return RusotoError::Service(DisassociateGlobalReplicationGroupError::InvalidParameterValue(parsed_error.message)),_ => {}
+                    }
+                }
             }
         }
         RusotoError::Unknown(res)
@@ -13444,10 +13771,13 @@ impl FailoverGlobalReplicationGroupError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                                    "GlobalReplicationGroupNotFoundFault" => return RusotoError::Service(FailoverGlobalReplicationGroupError::GlobalReplicationGroupNotFoundFault(parsed_error.message)),"InvalidGlobalReplicationGroupState" => return RusotoError::Service(FailoverGlobalReplicationGroupError::InvalidGlobalReplicationGroupStateFault(parsed_error.message)),"InvalidParameterCombination" => return RusotoError::Service(FailoverGlobalReplicationGroupError::InvalidParameterCombination(parsed_error.message)),"InvalidParameterValue" => return RusotoError::Service(FailoverGlobalReplicationGroupError::InvalidParameterValue(parsed_error.message)),_ => {}
-                                }
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {
+                        "GlobalReplicationGroupNotFoundFault" => return RusotoError::Service(FailoverGlobalReplicationGroupError::GlobalReplicationGroupNotFoundFault(parsed_error.message)),"InvalidGlobalReplicationGroupState" => return RusotoError::Service(FailoverGlobalReplicationGroupError::InvalidGlobalReplicationGroupStateFault(parsed_error.message)),"InvalidParameterCombination" => return RusotoError::Service(FailoverGlobalReplicationGroupError::InvalidParameterCombination(parsed_error.message)),"InvalidParameterValue" => return RusotoError::Service(FailoverGlobalReplicationGroupError::InvalidParameterValue(parsed_error.message)),_ => {}
+                    }
+                }
             }
         }
         RusotoError::Unknown(res)
@@ -13500,10 +13830,13 @@ impl IncreaseNodeGroupsInGlobalReplicationGroupError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                                    "GlobalReplicationGroupNotFoundFault" => return RusotoError::Service(IncreaseNodeGroupsInGlobalReplicationGroupError::GlobalReplicationGroupNotFoundFault(parsed_error.message)),"InvalidGlobalReplicationGroupState" => return RusotoError::Service(IncreaseNodeGroupsInGlobalReplicationGroupError::InvalidGlobalReplicationGroupStateFault(parsed_error.message)),"InvalidParameterValue" => return RusotoError::Service(IncreaseNodeGroupsInGlobalReplicationGroupError::InvalidParameterValue(parsed_error.message)),_ => {}
-                                }
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {
+                        "GlobalReplicationGroupNotFoundFault" => return RusotoError::Service(IncreaseNodeGroupsInGlobalReplicationGroupError::GlobalReplicationGroupNotFoundFault(parsed_error.message)),"InvalidGlobalReplicationGroupState" => return RusotoError::Service(IncreaseNodeGroupsInGlobalReplicationGroupError::InvalidGlobalReplicationGroupStateFault(parsed_error.message)),"InvalidParameterValue" => return RusotoError::Service(IncreaseNodeGroupsInGlobalReplicationGroupError::InvalidParameterValue(parsed_error.message)),_ => {}
+                    }
+                }
             }
         }
         RusotoError::Unknown(res)
@@ -13563,85 +13896,12 @@ impl IncreaseReplicaCountError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    "ClusterQuotaForCustomerExceeded" => {
-                        return RusotoError::Service(
-                            IncreaseReplicaCountError::ClusterQuotaForCustomerExceededFault(
-                                parsed_error.message,
-                            ),
-                        )
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {
+                        "ClusterQuotaForCustomerExceeded" => return RusotoError::Service(IncreaseReplicaCountError::ClusterQuotaForCustomerExceededFault(parsed_error.message)),"InsufficientCacheClusterCapacity" => return RusotoError::Service(IncreaseReplicaCountError::InsufficientCacheClusterCapacityFault(parsed_error.message)),"InvalidCacheClusterState" => return RusotoError::Service(IncreaseReplicaCountError::InvalidCacheClusterStateFault(parsed_error.message)),"InvalidKMSKeyFault" => return RusotoError::Service(IncreaseReplicaCountError::InvalidKMSKeyFault(parsed_error.message)),"InvalidParameterCombination" => return RusotoError::Service(IncreaseReplicaCountError::InvalidParameterCombination(parsed_error.message)),"InvalidParameterValue" => return RusotoError::Service(IncreaseReplicaCountError::InvalidParameterValue(parsed_error.message)),"InvalidReplicationGroupState" => return RusotoError::Service(IncreaseReplicaCountError::InvalidReplicationGroupStateFault(parsed_error.message)),"InvalidVPCNetworkStateFault" => return RusotoError::Service(IncreaseReplicaCountError::InvalidVPCNetworkStateFault(parsed_error.message)),"NoOperationFault" => return RusotoError::Service(IncreaseReplicaCountError::NoOperationFault(parsed_error.message)),"NodeGroupsPerReplicationGroupQuotaExceeded" => return RusotoError::Service(IncreaseReplicaCountError::NodeGroupsPerReplicationGroupQuotaExceededFault(parsed_error.message)),"NodeQuotaForCustomerExceeded" => return RusotoError::Service(IncreaseReplicaCountError::NodeQuotaForCustomerExceededFault(parsed_error.message)),"ReplicationGroupNotFoundFault" => return RusotoError::Service(IncreaseReplicaCountError::ReplicationGroupNotFoundFault(parsed_error.message)),_ => {}
                     }
-                    "InsufficientCacheClusterCapacity" => {
-                        return RusotoError::Service(
-                            IncreaseReplicaCountError::InsufficientCacheClusterCapacityFault(
-                                parsed_error.message,
-                            ),
-                        )
-                    }
-                    "InvalidCacheClusterState" => {
-                        return RusotoError::Service(
-                            IncreaseReplicaCountError::InvalidCacheClusterStateFault(
-                                parsed_error.message,
-                            ),
-                        )
-                    }
-                    "InvalidKMSKeyFault" => {
-                        return RusotoError::Service(IncreaseReplicaCountError::InvalidKMSKeyFault(
-                            parsed_error.message,
-                        ))
-                    }
-                    "InvalidParameterCombination" => {
-                        return RusotoError::Service(
-                            IncreaseReplicaCountError::InvalidParameterCombination(
-                                parsed_error.message,
-                            ),
-                        )
-                    }
-                    "InvalidParameterValue" => {
-                        return RusotoError::Service(
-                            IncreaseReplicaCountError::InvalidParameterValue(parsed_error.message),
-                        )
-                    }
-                    "InvalidReplicationGroupState" => {
-                        return RusotoError::Service(
-                            IncreaseReplicaCountError::InvalidReplicationGroupStateFault(
-                                parsed_error.message,
-                            ),
-                        )
-                    }
-                    "InvalidVPCNetworkStateFault" => {
-                        return RusotoError::Service(
-                            IncreaseReplicaCountError::InvalidVPCNetworkStateFault(
-                                parsed_error.message,
-                            ),
-                        )
-                    }
-                    "NoOperationFault" => {
-                        return RusotoError::Service(IncreaseReplicaCountError::NoOperationFault(
-                            parsed_error.message,
-                        ))
-                    }
-                    "NodeGroupsPerReplicationGroupQuotaExceeded" => return RusotoError::Service(
-                        IncreaseReplicaCountError::NodeGroupsPerReplicationGroupQuotaExceededFault(
-                            parsed_error.message,
-                        ),
-                    ),
-                    "NodeQuotaForCustomerExceeded" => {
-                        return RusotoError::Service(
-                            IncreaseReplicaCountError::NodeQuotaForCustomerExceededFault(
-                                parsed_error.message,
-                            ),
-                        )
-                    }
-                    "ReplicationGroupNotFoundFault" => {
-                        return RusotoError::Service(
-                            IncreaseReplicaCountError::ReplicationGroupNotFoundFault(
-                                parsed_error.message,
-                            ),
-                        )
-                    }
-                    _ => {}
                 }
             }
         }
@@ -13715,37 +13975,38 @@ impl ListAllowedNodeTypeModificationsError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    "CacheClusterNotFound" => {
-                        return RusotoError::Service(
-                            ListAllowedNodeTypeModificationsError::CacheClusterNotFoundFault(
-                                parsed_error.message,
-                            ),
-                        )
-                    }
-                    "InvalidParameterCombination" => {
-                        return RusotoError::Service(
-                            ListAllowedNodeTypeModificationsError::InvalidParameterCombination(
-                                parsed_error.message,
-                            ),
-                        )
-                    }
-                    "InvalidParameterValue" => {
-                        return RusotoError::Service(
-                            ListAllowedNodeTypeModificationsError::InvalidParameterValue(
-                                parsed_error.message,
-                            ),
-                        )
-                    }
-                    "ReplicationGroupNotFoundFault" => {
-                        return RusotoError::Service(
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {
+                        "CacheClusterNotFound" => {
+                            return RusotoError::Service(
+                                ListAllowedNodeTypeModificationsError::CacheClusterNotFoundFault(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "InvalidParameterCombination" => {
+                            return RusotoError::Service(
+                                ListAllowedNodeTypeModificationsError::InvalidParameterCombination(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "InvalidParameterValue" => {
+                            return RusotoError::Service(
+                                ListAllowedNodeTypeModificationsError::InvalidParameterValue(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "ReplicationGroupNotFoundFault" => return RusotoError::Service(
                             ListAllowedNodeTypeModificationsError::ReplicationGroupNotFoundFault(
                                 parsed_error.message,
                             ),
-                        )
+                        ),
+                        _ => {}
                     }
-                    _ => {}
                 }
             }
         }
@@ -13797,26 +14058,31 @@ impl ListTagsForResourceError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    "CacheClusterNotFound" => {
-                        return RusotoError::Service(
-                            ListTagsForResourceError::CacheClusterNotFoundFault(
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {
+                        "CacheClusterNotFound" => {
+                            return RusotoError::Service(
+                                ListTagsForResourceError::CacheClusterNotFoundFault(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "InvalidARN" => {
+                            return RusotoError::Service(ListTagsForResourceError::InvalidARNFault(
                                 parsed_error.message,
-                            ),
-                        )
+                            ))
+                        }
+                        "SnapshotNotFoundFault" => {
+                            return RusotoError::Service(
+                                ListTagsForResourceError::SnapshotNotFoundFault(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        _ => {}
                     }
-                    "InvalidARN" => {
-                        return RusotoError::Service(ListTagsForResourceError::InvalidARNFault(
-                            parsed_error.message,
-                        ))
-                    }
-                    "SnapshotNotFoundFault" => {
-                        return RusotoError::Service(
-                            ListTagsForResourceError::SnapshotNotFoundFault(parsed_error.message),
-                        )
-                    }
-                    _ => {}
                 }
             }
         }
@@ -13877,84 +14143,89 @@ impl ModifyCacheClusterError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    "CacheClusterNotFound" => {
-                        return RusotoError::Service(
-                            ModifyCacheClusterError::CacheClusterNotFoundFault(
-                                parsed_error.message,
-                            ),
-                        )
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {
+                        "CacheClusterNotFound" => {
+                            return RusotoError::Service(
+                                ModifyCacheClusterError::CacheClusterNotFoundFault(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "CacheParameterGroupNotFound" => {
+                            return RusotoError::Service(
+                                ModifyCacheClusterError::CacheParameterGroupNotFoundFault(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "CacheSecurityGroupNotFound" => {
+                            return RusotoError::Service(
+                                ModifyCacheClusterError::CacheSecurityGroupNotFoundFault(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "InsufficientCacheClusterCapacity" => {
+                            return RusotoError::Service(
+                                ModifyCacheClusterError::InsufficientCacheClusterCapacityFault(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "InvalidCacheClusterState" => {
+                            return RusotoError::Service(
+                                ModifyCacheClusterError::InvalidCacheClusterStateFault(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "InvalidCacheSecurityGroupState" => {
+                            return RusotoError::Service(
+                                ModifyCacheClusterError::InvalidCacheSecurityGroupStateFault(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "InvalidParameterCombination" => {
+                            return RusotoError::Service(
+                                ModifyCacheClusterError::InvalidParameterCombination(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "InvalidParameterValue" => {
+                            return RusotoError::Service(
+                                ModifyCacheClusterError::InvalidParameterValue(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "InvalidVPCNetworkStateFault" => {
+                            return RusotoError::Service(
+                                ModifyCacheClusterError::InvalidVPCNetworkStateFault(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "NodeQuotaForClusterExceeded" => {
+                            return RusotoError::Service(
+                                ModifyCacheClusterError::NodeQuotaForClusterExceededFault(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "NodeQuotaForCustomerExceeded" => {
+                            return RusotoError::Service(
+                                ModifyCacheClusterError::NodeQuotaForCustomerExceededFault(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        _ => {}
                     }
-                    "CacheParameterGroupNotFound" => {
-                        return RusotoError::Service(
-                            ModifyCacheClusterError::CacheParameterGroupNotFoundFault(
-                                parsed_error.message,
-                            ),
-                        )
-                    }
-                    "CacheSecurityGroupNotFound" => {
-                        return RusotoError::Service(
-                            ModifyCacheClusterError::CacheSecurityGroupNotFoundFault(
-                                parsed_error.message,
-                            ),
-                        )
-                    }
-                    "InsufficientCacheClusterCapacity" => {
-                        return RusotoError::Service(
-                            ModifyCacheClusterError::InsufficientCacheClusterCapacityFault(
-                                parsed_error.message,
-                            ),
-                        )
-                    }
-                    "InvalidCacheClusterState" => {
-                        return RusotoError::Service(
-                            ModifyCacheClusterError::InvalidCacheClusterStateFault(
-                                parsed_error.message,
-                            ),
-                        )
-                    }
-                    "InvalidCacheSecurityGroupState" => {
-                        return RusotoError::Service(
-                            ModifyCacheClusterError::InvalidCacheSecurityGroupStateFault(
-                                parsed_error.message,
-                            ),
-                        )
-                    }
-                    "InvalidParameterCombination" => {
-                        return RusotoError::Service(
-                            ModifyCacheClusterError::InvalidParameterCombination(
-                                parsed_error.message,
-                            ),
-                        )
-                    }
-                    "InvalidParameterValue" => {
-                        return RusotoError::Service(
-                            ModifyCacheClusterError::InvalidParameterValue(parsed_error.message),
-                        )
-                    }
-                    "InvalidVPCNetworkStateFault" => {
-                        return RusotoError::Service(
-                            ModifyCacheClusterError::InvalidVPCNetworkStateFault(
-                                parsed_error.message,
-                            ),
-                        )
-                    }
-                    "NodeQuotaForClusterExceeded" => {
-                        return RusotoError::Service(
-                            ModifyCacheClusterError::NodeQuotaForClusterExceededFault(
-                                parsed_error.message,
-                            ),
-                        )
-                    }
-                    "NodeQuotaForCustomerExceeded" => {
-                        return RusotoError::Service(
-                            ModifyCacheClusterError::NodeQuotaForCustomerExceededFault(
-                                parsed_error.message,
-                            ),
-                        )
-                    }
-                    _ => {}
                 }
             }
         }
@@ -14027,44 +14298,43 @@ impl ModifyCacheParameterGroupError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    "CacheParameterGroupNotFound" => {
-                        return RusotoError::Service(
-                            ModifyCacheParameterGroupError::CacheParameterGroupNotFoundFault(
-                                parsed_error.message,
-                            ),
-                        )
-                    }
-                    "InvalidCacheParameterGroupState" => {
-                        return RusotoError::Service(
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {
+                        "CacheParameterGroupNotFound" => {
+                            return RusotoError::Service(
+                                ModifyCacheParameterGroupError::CacheParameterGroupNotFoundFault(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "InvalidCacheParameterGroupState" => return RusotoError::Service(
                             ModifyCacheParameterGroupError::InvalidCacheParameterGroupStateFault(
                                 parsed_error.message,
                             ),
-                        )
-                    }
-                    "InvalidGlobalReplicationGroupState" => {
-                        return RusotoError::Service(
+                        ),
+                        "InvalidGlobalReplicationGroupState" => return RusotoError::Service(
                             ModifyCacheParameterGroupError::InvalidGlobalReplicationGroupStateFault(
                                 parsed_error.message,
                             ),
-                        )
+                        ),
+                        "InvalidParameterCombination" => {
+                            return RusotoError::Service(
+                                ModifyCacheParameterGroupError::InvalidParameterCombination(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "InvalidParameterValue" => {
+                            return RusotoError::Service(
+                                ModifyCacheParameterGroupError::InvalidParameterValue(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        _ => {}
                     }
-                    "InvalidParameterCombination" => {
-                        return RusotoError::Service(
-                            ModifyCacheParameterGroupError::InvalidParameterCombination(
-                                parsed_error.message,
-                            ),
-                        )
-                    }
-                    "InvalidParameterValue" => {
-                        return RusotoError::Service(
-                            ModifyCacheParameterGroupError::InvalidParameterValue(
-                                parsed_error.message,
-                            ),
-                        )
-                    }
-                    _ => {}
                 }
             }
         }
@@ -14123,40 +14393,43 @@ impl ModifyCacheSubnetGroupError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    "CacheSubnetGroupNotFoundFault" => {
-                        return RusotoError::Service(
-                            ModifyCacheSubnetGroupError::CacheSubnetGroupNotFoundFault(
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {
+                        "CacheSubnetGroupNotFoundFault" => {
+                            return RusotoError::Service(
+                                ModifyCacheSubnetGroupError::CacheSubnetGroupNotFoundFault(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "CacheSubnetQuotaExceededFault" => {
+                            return RusotoError::Service(
+                                ModifyCacheSubnetGroupError::CacheSubnetQuotaExceededFault(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "InvalidSubnet" => {
+                            return RusotoError::Service(
+                                ModifyCacheSubnetGroupError::InvalidSubnet(parsed_error.message),
+                            )
+                        }
+                        "SubnetInUse" => {
+                            return RusotoError::Service(ModifyCacheSubnetGroupError::SubnetInUse(
                                 parsed_error.message,
-                            ),
-                        )
+                            ))
+                        }
+                        "SubnetNotAllowedFault" => {
+                            return RusotoError::Service(
+                                ModifyCacheSubnetGroupError::SubnetNotAllowedFault(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        _ => {}
                     }
-                    "CacheSubnetQuotaExceededFault" => {
-                        return RusotoError::Service(
-                            ModifyCacheSubnetGroupError::CacheSubnetQuotaExceededFault(
-                                parsed_error.message,
-                            ),
-                        )
-                    }
-                    "InvalidSubnet" => {
-                        return RusotoError::Service(ModifyCacheSubnetGroupError::InvalidSubnet(
-                            parsed_error.message,
-                        ))
-                    }
-                    "SubnetInUse" => {
-                        return RusotoError::Service(ModifyCacheSubnetGroupError::SubnetInUse(
-                            parsed_error.message,
-                        ))
-                    }
-                    "SubnetNotAllowedFault" => {
-                        return RusotoError::Service(
-                            ModifyCacheSubnetGroupError::SubnetNotAllowedFault(
-                                parsed_error.message,
-                            ),
-                        )
-                    }
-                    _ => {}
                 }
             }
         }
@@ -14207,28 +14480,12 @@ impl ModifyGlobalReplicationGroupError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    "GlobalReplicationGroupNotFoundFault" => {
-                        return RusotoError::Service(
-                            ModifyGlobalReplicationGroupError::GlobalReplicationGroupNotFoundFault(
-                                parsed_error.message,
-                            ),
-                        )
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {
+                        "GlobalReplicationGroupNotFoundFault" => return RusotoError::Service(ModifyGlobalReplicationGroupError::GlobalReplicationGroupNotFoundFault(parsed_error.message)),"InvalidGlobalReplicationGroupState" => return RusotoError::Service(ModifyGlobalReplicationGroupError::InvalidGlobalReplicationGroupStateFault(parsed_error.message)),"InvalidParameterValue" => return RusotoError::Service(ModifyGlobalReplicationGroupError::InvalidParameterValue(parsed_error.message)),_ => {}
                     }
-                    "InvalidGlobalReplicationGroupState" => return RusotoError::Service(
-                        ModifyGlobalReplicationGroupError::InvalidGlobalReplicationGroupStateFault(
-                            parsed_error.message,
-                        ),
-                    ),
-                    "InvalidParameterValue" => {
-                        return RusotoError::Service(
-                            ModifyGlobalReplicationGroupError::InvalidParameterValue(
-                                parsed_error.message,
-                            ),
-                        )
-                    }
-                    _ => {}
                 }
             }
         }
@@ -14303,119 +14560,124 @@ impl ModifyReplicationGroupError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    "CacheClusterNotFound" => {
-                        return RusotoError::Service(
-                            ModifyReplicationGroupError::CacheClusterNotFoundFault(
-                                parsed_error.message,
-                            ),
-                        )
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {
+                        "CacheClusterNotFound" => {
+                            return RusotoError::Service(
+                                ModifyReplicationGroupError::CacheClusterNotFoundFault(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "CacheParameterGroupNotFound" => {
+                            return RusotoError::Service(
+                                ModifyReplicationGroupError::CacheParameterGroupNotFoundFault(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "CacheSecurityGroupNotFound" => {
+                            return RusotoError::Service(
+                                ModifyReplicationGroupError::CacheSecurityGroupNotFoundFault(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "InsufficientCacheClusterCapacity" => {
+                            return RusotoError::Service(
+                                ModifyReplicationGroupError::InsufficientCacheClusterCapacityFault(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "InvalidCacheClusterState" => {
+                            return RusotoError::Service(
+                                ModifyReplicationGroupError::InvalidCacheClusterStateFault(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "InvalidCacheSecurityGroupState" => {
+                            return RusotoError::Service(
+                                ModifyReplicationGroupError::InvalidCacheSecurityGroupStateFault(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "InvalidKMSKeyFault" => {
+                            return RusotoError::Service(
+                                ModifyReplicationGroupError::InvalidKMSKeyFault(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "InvalidParameterCombination" => {
+                            return RusotoError::Service(
+                                ModifyReplicationGroupError::InvalidParameterCombination(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "InvalidParameterValue" => {
+                            return RusotoError::Service(
+                                ModifyReplicationGroupError::InvalidParameterValue(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "InvalidReplicationGroupState" => {
+                            return RusotoError::Service(
+                                ModifyReplicationGroupError::InvalidReplicationGroupStateFault(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "InvalidUserGroupState" => {
+                            return RusotoError::Service(
+                                ModifyReplicationGroupError::InvalidUserGroupStateFault(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "InvalidVPCNetworkStateFault" => {
+                            return RusotoError::Service(
+                                ModifyReplicationGroupError::InvalidVPCNetworkStateFault(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "NodeQuotaForClusterExceeded" => {
+                            return RusotoError::Service(
+                                ModifyReplicationGroupError::NodeQuotaForClusterExceededFault(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "NodeQuotaForCustomerExceeded" => {
+                            return RusotoError::Service(
+                                ModifyReplicationGroupError::NodeQuotaForCustomerExceededFault(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "ReplicationGroupNotFoundFault" => {
+                            return RusotoError::Service(
+                                ModifyReplicationGroupError::ReplicationGroupNotFoundFault(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "UserGroupNotFound" => {
+                            return RusotoError::Service(
+                                ModifyReplicationGroupError::UserGroupNotFoundFault(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        _ => {}
                     }
-                    "CacheParameterGroupNotFound" => {
-                        return RusotoError::Service(
-                            ModifyReplicationGroupError::CacheParameterGroupNotFoundFault(
-                                parsed_error.message,
-                            ),
-                        )
-                    }
-                    "CacheSecurityGroupNotFound" => {
-                        return RusotoError::Service(
-                            ModifyReplicationGroupError::CacheSecurityGroupNotFoundFault(
-                                parsed_error.message,
-                            ),
-                        )
-                    }
-                    "InsufficientCacheClusterCapacity" => {
-                        return RusotoError::Service(
-                            ModifyReplicationGroupError::InsufficientCacheClusterCapacityFault(
-                                parsed_error.message,
-                            ),
-                        )
-                    }
-                    "InvalidCacheClusterState" => {
-                        return RusotoError::Service(
-                            ModifyReplicationGroupError::InvalidCacheClusterStateFault(
-                                parsed_error.message,
-                            ),
-                        )
-                    }
-                    "InvalidCacheSecurityGroupState" => {
-                        return RusotoError::Service(
-                            ModifyReplicationGroupError::InvalidCacheSecurityGroupStateFault(
-                                parsed_error.message,
-                            ),
-                        )
-                    }
-                    "InvalidKMSKeyFault" => {
-                        return RusotoError::Service(
-                            ModifyReplicationGroupError::InvalidKMSKeyFault(parsed_error.message),
-                        )
-                    }
-                    "InvalidParameterCombination" => {
-                        return RusotoError::Service(
-                            ModifyReplicationGroupError::InvalidParameterCombination(
-                                parsed_error.message,
-                            ),
-                        )
-                    }
-                    "InvalidParameterValue" => {
-                        return RusotoError::Service(
-                            ModifyReplicationGroupError::InvalidParameterValue(
-                                parsed_error.message,
-                            ),
-                        )
-                    }
-                    "InvalidReplicationGroupState" => {
-                        return RusotoError::Service(
-                            ModifyReplicationGroupError::InvalidReplicationGroupStateFault(
-                                parsed_error.message,
-                            ),
-                        )
-                    }
-                    "InvalidUserGroupState" => {
-                        return RusotoError::Service(
-                            ModifyReplicationGroupError::InvalidUserGroupStateFault(
-                                parsed_error.message,
-                            ),
-                        )
-                    }
-                    "InvalidVPCNetworkStateFault" => {
-                        return RusotoError::Service(
-                            ModifyReplicationGroupError::InvalidVPCNetworkStateFault(
-                                parsed_error.message,
-                            ),
-                        )
-                    }
-                    "NodeQuotaForClusterExceeded" => {
-                        return RusotoError::Service(
-                            ModifyReplicationGroupError::NodeQuotaForClusterExceededFault(
-                                parsed_error.message,
-                            ),
-                        )
-                    }
-                    "NodeQuotaForCustomerExceeded" => {
-                        return RusotoError::Service(
-                            ModifyReplicationGroupError::NodeQuotaForCustomerExceededFault(
-                                parsed_error.message,
-                            ),
-                        )
-                    }
-                    "ReplicationGroupNotFoundFault" => {
-                        return RusotoError::Service(
-                            ModifyReplicationGroupError::ReplicationGroupNotFoundFault(
-                                parsed_error.message,
-                            ),
-                        )
-                    }
-                    "UserGroupNotFound" => {
-                        return RusotoError::Service(
-                            ModifyReplicationGroupError::UserGroupNotFoundFault(
-                                parsed_error.message,
-                            ),
-                        )
-                    }
-                    _ => {}
                 }
             }
         }
@@ -14515,10 +14777,13 @@ impl ModifyReplicationGroupShardConfigurationError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                                    "InsufficientCacheClusterCapacity" => return RusotoError::Service(ModifyReplicationGroupShardConfigurationError::InsufficientCacheClusterCapacityFault(parsed_error.message)),"InvalidCacheClusterState" => return RusotoError::Service(ModifyReplicationGroupShardConfigurationError::InvalidCacheClusterStateFault(parsed_error.message)),"InvalidKMSKeyFault" => return RusotoError::Service(ModifyReplicationGroupShardConfigurationError::InvalidKMSKeyFault(parsed_error.message)),"InvalidParameterCombination" => return RusotoError::Service(ModifyReplicationGroupShardConfigurationError::InvalidParameterCombination(parsed_error.message)),"InvalidParameterValue" => return RusotoError::Service(ModifyReplicationGroupShardConfigurationError::InvalidParameterValue(parsed_error.message)),"InvalidReplicationGroupState" => return RusotoError::Service(ModifyReplicationGroupShardConfigurationError::InvalidReplicationGroupStateFault(parsed_error.message)),"InvalidVPCNetworkStateFault" => return RusotoError::Service(ModifyReplicationGroupShardConfigurationError::InvalidVPCNetworkStateFault(parsed_error.message)),"NodeGroupsPerReplicationGroupQuotaExceeded" => return RusotoError::Service(ModifyReplicationGroupShardConfigurationError::NodeGroupsPerReplicationGroupQuotaExceededFault(parsed_error.message)),"NodeQuotaForCustomerExceeded" => return RusotoError::Service(ModifyReplicationGroupShardConfigurationError::NodeQuotaForCustomerExceededFault(parsed_error.message)),"ReplicationGroupNotFoundFault" => return RusotoError::Service(ModifyReplicationGroupShardConfigurationError::ReplicationGroupNotFoundFault(parsed_error.message)),_ => {}
-                                }
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {
+                        "InsufficientCacheClusterCapacity" => return RusotoError::Service(ModifyReplicationGroupShardConfigurationError::InsufficientCacheClusterCapacityFault(parsed_error.message)),"InvalidCacheClusterState" => return RusotoError::Service(ModifyReplicationGroupShardConfigurationError::InvalidCacheClusterStateFault(parsed_error.message)),"InvalidKMSKeyFault" => return RusotoError::Service(ModifyReplicationGroupShardConfigurationError::InvalidKMSKeyFault(parsed_error.message)),"InvalidParameterCombination" => return RusotoError::Service(ModifyReplicationGroupShardConfigurationError::InvalidParameterCombination(parsed_error.message)),"InvalidParameterValue" => return RusotoError::Service(ModifyReplicationGroupShardConfigurationError::InvalidParameterValue(parsed_error.message)),"InvalidReplicationGroupState" => return RusotoError::Service(ModifyReplicationGroupShardConfigurationError::InvalidReplicationGroupStateFault(parsed_error.message)),"InvalidVPCNetworkStateFault" => return RusotoError::Service(ModifyReplicationGroupShardConfigurationError::InvalidVPCNetworkStateFault(parsed_error.message)),"NodeGroupsPerReplicationGroupQuotaExceeded" => return RusotoError::Service(ModifyReplicationGroupShardConfigurationError::NodeGroupsPerReplicationGroupQuotaExceededFault(parsed_error.message)),"NodeQuotaForCustomerExceeded" => return RusotoError::Service(ModifyReplicationGroupShardConfigurationError::NodeQuotaForCustomerExceededFault(parsed_error.message)),"ReplicationGroupNotFoundFault" => return RusotoError::Service(ModifyReplicationGroupShardConfigurationError::ReplicationGroupNotFoundFault(parsed_error.message)),_ => {}
+                    }
+                }
             }
         }
         RusotoError::Unknown(res)
@@ -14569,29 +14834,32 @@ impl ModifyUserError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    "InvalidParameterCombination" => {
-                        return RusotoError::Service(ModifyUserError::InvalidParameterCombination(
-                            parsed_error.message,
-                        ))
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {
+                        "InvalidParameterCombination" => {
+                            return RusotoError::Service(
+                                ModifyUserError::InvalidParameterCombination(parsed_error.message),
+                            )
+                        }
+                        "InvalidParameterValue" => {
+                            return RusotoError::Service(ModifyUserError::InvalidParameterValue(
+                                parsed_error.message,
+                            ))
+                        }
+                        "InvalidUserState" => {
+                            return RusotoError::Service(ModifyUserError::InvalidUserStateFault(
+                                parsed_error.message,
+                            ))
+                        }
+                        "UserNotFound" => {
+                            return RusotoError::Service(ModifyUserError::UserNotFoundFault(
+                                parsed_error.message,
+                            ))
+                        }
+                        _ => {}
                     }
-                    "InvalidParameterValue" => {
-                        return RusotoError::Service(ModifyUserError::InvalidParameterValue(
-                            parsed_error.message,
-                        ))
-                    }
-                    "InvalidUserState" => {
-                        return RusotoError::Service(ModifyUserError::InvalidUserStateFault(
-                            parsed_error.message,
-                        ))
-                    }
-                    "UserNotFound" => {
-                        return RusotoError::Service(ModifyUserError::UserNotFoundFault(
-                            parsed_error.message,
-                        ))
-                    }
-                    _ => {}
                 }
             }
         }
@@ -14643,44 +14911,51 @@ impl ModifyUserGroupError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    "DefaultUserRequired" => {
-                        return RusotoError::Service(ModifyUserGroupError::DefaultUserRequired(
-                            parsed_error.message,
-                        ))
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {
+                        "DefaultUserRequired" => {
+                            return RusotoError::Service(ModifyUserGroupError::DefaultUserRequired(
+                                parsed_error.message,
+                            ))
+                        }
+                        "DuplicateUserName" => {
+                            return RusotoError::Service(
+                                ModifyUserGroupError::DuplicateUserNameFault(parsed_error.message),
+                            )
+                        }
+                        "InvalidParameterCombination" => {
+                            return RusotoError::Service(
+                                ModifyUserGroupError::InvalidParameterCombination(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "InvalidParameterValue" => {
+                            return RusotoError::Service(
+                                ModifyUserGroupError::InvalidParameterValue(parsed_error.message),
+                            )
+                        }
+                        "InvalidUserGroupState" => {
+                            return RusotoError::Service(
+                                ModifyUserGroupError::InvalidUserGroupStateFault(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "UserGroupNotFound" => {
+                            return RusotoError::Service(
+                                ModifyUserGroupError::UserGroupNotFoundFault(parsed_error.message),
+                            )
+                        }
+                        "UserNotFound" => {
+                            return RusotoError::Service(ModifyUserGroupError::UserNotFoundFault(
+                                parsed_error.message,
+                            ))
+                        }
+                        _ => {}
                     }
-                    "DuplicateUserName" => {
-                        return RusotoError::Service(ModifyUserGroupError::DuplicateUserNameFault(
-                            parsed_error.message,
-                        ))
-                    }
-                    "InvalidParameterCombination" => {
-                        return RusotoError::Service(
-                            ModifyUserGroupError::InvalidParameterCombination(parsed_error.message),
-                        )
-                    }
-                    "InvalidParameterValue" => {
-                        return RusotoError::Service(ModifyUserGroupError::InvalidParameterValue(
-                            parsed_error.message,
-                        ))
-                    }
-                    "InvalidUserGroupState" => {
-                        return RusotoError::Service(
-                            ModifyUserGroupError::InvalidUserGroupStateFault(parsed_error.message),
-                        )
-                    }
-                    "UserGroupNotFound" => {
-                        return RusotoError::Service(ModifyUserGroupError::UserGroupNotFoundFault(
-                            parsed_error.message,
-                        ))
-                    }
-                    "UserNotFound" => {
-                        return RusotoError::Service(ModifyUserGroupError::UserNotFoundFault(
-                            parsed_error.message,
-                        ))
-                    }
-                    _ => {}
                 }
             }
         }
@@ -14733,10 +15008,13 @@ impl PurchaseReservedCacheNodesOfferingError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                                    "InvalidParameterCombination" => return RusotoError::Service(PurchaseReservedCacheNodesOfferingError::InvalidParameterCombination(parsed_error.message)),"InvalidParameterValue" => return RusotoError::Service(PurchaseReservedCacheNodesOfferingError::InvalidParameterValue(parsed_error.message)),"ReservedCacheNodeAlreadyExists" => return RusotoError::Service(PurchaseReservedCacheNodesOfferingError::ReservedCacheNodeAlreadyExistsFault(parsed_error.message)),"ReservedCacheNodeQuotaExceeded" => return RusotoError::Service(PurchaseReservedCacheNodesOfferingError::ReservedCacheNodeQuotaExceededFault(parsed_error.message)),"ReservedCacheNodesOfferingNotFound" => return RusotoError::Service(PurchaseReservedCacheNodesOfferingError::ReservedCacheNodesOfferingNotFoundFault(parsed_error.message)),_ => {}
-                                }
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {
+                        "InvalidParameterCombination" => return RusotoError::Service(PurchaseReservedCacheNodesOfferingError::InvalidParameterCombination(parsed_error.message)),"InvalidParameterValue" => return RusotoError::Service(PurchaseReservedCacheNodesOfferingError::InvalidParameterValue(parsed_error.message)),"ReservedCacheNodeAlreadyExists" => return RusotoError::Service(PurchaseReservedCacheNodesOfferingError::ReservedCacheNodeAlreadyExistsFault(parsed_error.message)),"ReservedCacheNodeQuotaExceeded" => return RusotoError::Service(PurchaseReservedCacheNodesOfferingError::ReservedCacheNodeQuotaExceededFault(parsed_error.message)),"ReservedCacheNodesOfferingNotFound" => return RusotoError::Service(PurchaseReservedCacheNodesOfferingError::ReservedCacheNodesOfferingNotFoundFault(parsed_error.message)),_ => {}
+                    }
+                }
             }
         }
         RusotoError::Unknown(res)
@@ -14792,10 +15070,13 @@ impl RebalanceSlotsInGlobalReplicationGroupError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                                    "GlobalReplicationGroupNotFoundFault" => return RusotoError::Service(RebalanceSlotsInGlobalReplicationGroupError::GlobalReplicationGroupNotFoundFault(parsed_error.message)),"InvalidGlobalReplicationGroupState" => return RusotoError::Service(RebalanceSlotsInGlobalReplicationGroupError::InvalidGlobalReplicationGroupStateFault(parsed_error.message)),"InvalidParameterValue" => return RusotoError::Service(RebalanceSlotsInGlobalReplicationGroupError::InvalidParameterValue(parsed_error.message)),_ => {}
-                                }
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {
+                        "GlobalReplicationGroupNotFoundFault" => return RusotoError::Service(RebalanceSlotsInGlobalReplicationGroupError::GlobalReplicationGroupNotFoundFault(parsed_error.message)),"InvalidGlobalReplicationGroupState" => return RusotoError::Service(RebalanceSlotsInGlobalReplicationGroupError::InvalidGlobalReplicationGroupStateFault(parsed_error.message)),"InvalidParameterValue" => return RusotoError::Service(RebalanceSlotsInGlobalReplicationGroupError::InvalidParameterValue(parsed_error.message)),_ => {}
+                    }
+                }
             }
         }
         RusotoError::Unknown(res)
@@ -14835,23 +15116,26 @@ impl RebootCacheClusterError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    "CacheClusterNotFound" => {
-                        return RusotoError::Service(
-                            RebootCacheClusterError::CacheClusterNotFoundFault(
-                                parsed_error.message,
-                            ),
-                        )
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {
+                        "CacheClusterNotFound" => {
+                            return RusotoError::Service(
+                                RebootCacheClusterError::CacheClusterNotFoundFault(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "InvalidCacheClusterState" => {
+                            return RusotoError::Service(
+                                RebootCacheClusterError::InvalidCacheClusterStateFault(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        _ => {}
                     }
-                    "InvalidCacheClusterState" => {
-                        return RusotoError::Service(
-                            RebootCacheClusterError::InvalidCacheClusterStateFault(
-                                parsed_error.message,
-                            ),
-                        )
-                    }
-                    _ => {}
                 }
             }
         }
@@ -14897,33 +15181,36 @@ impl RemoveTagsFromResourceError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    "CacheClusterNotFound" => {
-                        return RusotoError::Service(
-                            RemoveTagsFromResourceError::CacheClusterNotFoundFault(
-                                parsed_error.message,
-                            ),
-                        )
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {
+                        "CacheClusterNotFound" => {
+                            return RusotoError::Service(
+                                RemoveTagsFromResourceError::CacheClusterNotFoundFault(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "InvalidARN" => {
+                            return RusotoError::Service(
+                                RemoveTagsFromResourceError::InvalidARNFault(parsed_error.message),
+                            )
+                        }
+                        "SnapshotNotFoundFault" => {
+                            return RusotoError::Service(
+                                RemoveTagsFromResourceError::SnapshotNotFoundFault(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "TagNotFound" => {
+                            return RusotoError::Service(
+                                RemoveTagsFromResourceError::TagNotFoundFault(parsed_error.message),
+                            )
+                        }
+                        _ => {}
                     }
-                    "InvalidARN" => {
-                        return RusotoError::Service(RemoveTagsFromResourceError::InvalidARNFault(
-                            parsed_error.message,
-                        ))
-                    }
-                    "SnapshotNotFoundFault" => {
-                        return RusotoError::Service(
-                            RemoveTagsFromResourceError::SnapshotNotFoundFault(
-                                parsed_error.message,
-                            ),
-                        )
-                    }
-                    "TagNotFound" => {
-                        return RusotoError::Service(RemoveTagsFromResourceError::TagNotFoundFault(
-                            parsed_error.message,
-                        ))
-                    }
-                    _ => {}
                 }
             }
         }
@@ -14973,44 +15260,45 @@ impl ResetCacheParameterGroupError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    "CacheParameterGroupNotFound" => {
-                        return RusotoError::Service(
-                            ResetCacheParameterGroupError::CacheParameterGroupNotFoundFault(
-                                parsed_error.message,
-                            ),
-                        )
-                    }
-                    "InvalidCacheParameterGroupState" => {
-                        return RusotoError::Service(
-                            ResetCacheParameterGroupError::InvalidCacheParameterGroupStateFault(
-                                parsed_error.message,
-                            ),
-                        )
-                    }
-                    "InvalidGlobalReplicationGroupState" => {
-                        return RusotoError::Service(
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {
+                        "CacheParameterGroupNotFound" => {
+                            return RusotoError::Service(
+                                ResetCacheParameterGroupError::CacheParameterGroupNotFoundFault(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "InvalidCacheParameterGroupState" => {
+                            return RusotoError::Service(
+                                ResetCacheParameterGroupError::InvalidCacheParameterGroupStateFault(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "InvalidGlobalReplicationGroupState" => return RusotoError::Service(
                             ResetCacheParameterGroupError::InvalidGlobalReplicationGroupStateFault(
                                 parsed_error.message,
                             ),
-                        )
+                        ),
+                        "InvalidParameterCombination" => {
+                            return RusotoError::Service(
+                                ResetCacheParameterGroupError::InvalidParameterCombination(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "InvalidParameterValue" => {
+                            return RusotoError::Service(
+                                ResetCacheParameterGroupError::InvalidParameterValue(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        _ => {}
                     }
-                    "InvalidParameterCombination" => {
-                        return RusotoError::Service(
-                            ResetCacheParameterGroupError::InvalidParameterCombination(
-                                parsed_error.message,
-                            ),
-                        )
-                    }
-                    "InvalidParameterValue" => {
-                        return RusotoError::Service(
-                            ResetCacheParameterGroupError::InvalidParameterValue(
-                                parsed_error.message,
-                            ),
-                        )
-                    }
-                    _ => {}
                 }
             }
         }
@@ -15071,42 +15359,12 @@ impl RevokeCacheSecurityGroupIngressError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    "AuthorizationNotFound" => {
-                        return RusotoError::Service(
-                            RevokeCacheSecurityGroupIngressError::AuthorizationNotFoundFault(
-                                parsed_error.message,
-                            ),
-                        )
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {
+                        "AuthorizationNotFound" => return RusotoError::Service(RevokeCacheSecurityGroupIngressError::AuthorizationNotFoundFault(parsed_error.message)),"CacheSecurityGroupNotFound" => return RusotoError::Service(RevokeCacheSecurityGroupIngressError::CacheSecurityGroupNotFoundFault(parsed_error.message)),"InvalidCacheSecurityGroupState" => return RusotoError::Service(RevokeCacheSecurityGroupIngressError::InvalidCacheSecurityGroupStateFault(parsed_error.message)),"InvalidParameterCombination" => return RusotoError::Service(RevokeCacheSecurityGroupIngressError::InvalidParameterCombination(parsed_error.message)),"InvalidParameterValue" => return RusotoError::Service(RevokeCacheSecurityGroupIngressError::InvalidParameterValue(parsed_error.message)),_ => {}
                     }
-                    "CacheSecurityGroupNotFound" => {
-                        return RusotoError::Service(
-                            RevokeCacheSecurityGroupIngressError::CacheSecurityGroupNotFoundFault(
-                                parsed_error.message,
-                            ),
-                        )
-                    }
-                    "InvalidCacheSecurityGroupState" => return RusotoError::Service(
-                        RevokeCacheSecurityGroupIngressError::InvalidCacheSecurityGroupStateFault(
-                            parsed_error.message,
-                        ),
-                    ),
-                    "InvalidParameterCombination" => {
-                        return RusotoError::Service(
-                            RevokeCacheSecurityGroupIngressError::InvalidParameterCombination(
-                                parsed_error.message,
-                            ),
-                        )
-                    }
-                    "InvalidParameterValue" => {
-                        return RusotoError::Service(
-                            RevokeCacheSecurityGroupIngressError::InvalidParameterValue(
-                                parsed_error.message,
-                            ),
-                        )
-                    }
-                    _ => {}
                 }
             }
         }
@@ -15163,35 +15421,38 @@ impl StartMigrationError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    "InvalidParameterValue" => {
-                        return RusotoError::Service(StartMigrationError::InvalidParameterValue(
-                            parsed_error.message,
-                        ))
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {
+                        "InvalidParameterValue" => {
+                            return RusotoError::Service(
+                                StartMigrationError::InvalidParameterValue(parsed_error.message),
+                            )
+                        }
+                        "InvalidReplicationGroupState" => {
+                            return RusotoError::Service(
+                                StartMigrationError::InvalidReplicationGroupStateFault(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "ReplicationGroupAlreadyUnderMigrationFault" => {
+                            return RusotoError::Service(
+                                StartMigrationError::ReplicationGroupAlreadyUnderMigrationFault(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "ReplicationGroupNotFoundFault" => {
+                            return RusotoError::Service(
+                                StartMigrationError::ReplicationGroupNotFoundFault(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        _ => {}
                     }
-                    "InvalidReplicationGroupState" => {
-                        return RusotoError::Service(
-                            StartMigrationError::InvalidReplicationGroupStateFault(
-                                parsed_error.message,
-                            ),
-                        )
-                    }
-                    "ReplicationGroupAlreadyUnderMigrationFault" => {
-                        return RusotoError::Service(
-                            StartMigrationError::ReplicationGroupAlreadyUnderMigrationFault(
-                                parsed_error.message,
-                            ),
-                        )
-                    }
-                    "ReplicationGroupNotFoundFault" => {
-                        return RusotoError::Service(
-                            StartMigrationError::ReplicationGroupNotFoundFault(
-                                parsed_error.message,
-                            ),
-                        )
-                    }
-                    _ => {}
                 }
             }
         }
@@ -15251,58 +15512,69 @@ impl TestFailoverError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    "APICallRateForCustomerExceeded" => {
-                        return RusotoError::Service(
-                            TestFailoverError::APICallRateForCustomerExceededFault(
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {
+                        "APICallRateForCustomerExceeded" => {
+                            return RusotoError::Service(
+                                TestFailoverError::APICallRateForCustomerExceededFault(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "InvalidCacheClusterState" => {
+                            return RusotoError::Service(
+                                TestFailoverError::InvalidCacheClusterStateFault(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "InvalidKMSKeyFault" => {
+                            return RusotoError::Service(TestFailoverError::InvalidKMSKeyFault(
                                 parsed_error.message,
-                            ),
-                        )
-                    }
-                    "InvalidCacheClusterState" => {
-                        return RusotoError::Service(
-                            TestFailoverError::InvalidCacheClusterStateFault(parsed_error.message),
-                        )
-                    }
-                    "InvalidKMSKeyFault" => {
-                        return RusotoError::Service(TestFailoverError::InvalidKMSKeyFault(
-                            parsed_error.message,
-                        ))
-                    }
-                    "InvalidParameterCombination" => {
-                        return RusotoError::Service(
-                            TestFailoverError::InvalidParameterCombination(parsed_error.message),
-                        )
-                    }
-                    "InvalidParameterValue" => {
-                        return RusotoError::Service(TestFailoverError::InvalidParameterValue(
-                            parsed_error.message,
-                        ))
-                    }
-                    "InvalidReplicationGroupState" => {
-                        return RusotoError::Service(
-                            TestFailoverError::InvalidReplicationGroupStateFault(
+                            ))
+                        }
+                        "InvalidParameterCombination" => {
+                            return RusotoError::Service(
+                                TestFailoverError::InvalidParameterCombination(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "InvalidParameterValue" => {
+                            return RusotoError::Service(TestFailoverError::InvalidParameterValue(
                                 parsed_error.message,
-                            ),
-                        )
+                            ))
+                        }
+                        "InvalidReplicationGroupState" => {
+                            return RusotoError::Service(
+                                TestFailoverError::InvalidReplicationGroupStateFault(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "NodeGroupNotFoundFault" => {
+                            return RusotoError::Service(TestFailoverError::NodeGroupNotFoundFault(
+                                parsed_error.message,
+                            ))
+                        }
+                        "ReplicationGroupNotFoundFault" => {
+                            return RusotoError::Service(
+                                TestFailoverError::ReplicationGroupNotFoundFault(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "TestFailoverNotAvailableFault" => {
+                            return RusotoError::Service(
+                                TestFailoverError::TestFailoverNotAvailableFault(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        _ => {}
                     }
-                    "NodeGroupNotFoundFault" => {
-                        return RusotoError::Service(TestFailoverError::NodeGroupNotFoundFault(
-                            parsed_error.message,
-                        ))
-                    }
-                    "ReplicationGroupNotFoundFault" => {
-                        return RusotoError::Service(
-                            TestFailoverError::ReplicationGroupNotFoundFault(parsed_error.message),
-                        )
-                    }
-                    "TestFailoverNotAvailableFault" => {
-                        return RusotoError::Service(
-                            TestFailoverError::TestFailoverNotAvailableFault(parsed_error.message),
-                        )
-                    }
-                    _ => {}
                 }
             }
         }

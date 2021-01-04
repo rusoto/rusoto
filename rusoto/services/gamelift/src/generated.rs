@@ -49,7 +49,6 @@ impl GameLiftClient {
     }
 }
 
-use serde_json;
 /// <p>Represents the input for a request operation.</p>
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
@@ -3981,6 +3980,7 @@ pub enum AcceptMatchError {
 impl AcceptMatchError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<AcceptMatchError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalServiceException" => {
                     return RusotoError::Service(AcceptMatchError::InternalService(err.msg))
@@ -4033,6 +4033,7 @@ pub enum ClaimGameServerError {
 impl ClaimGameServerError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ClaimGameServerError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ConflictException" => {
                     return RusotoError::Service(ClaimGameServerError::Conflict(err.msg))
@@ -4093,6 +4094,7 @@ pub enum CreateAliasError {
 impl CreateAliasError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateAliasError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ConflictException" => {
                     return RusotoError::Service(CreateAliasError::Conflict(err.msg))
@@ -4151,6 +4153,7 @@ pub enum CreateBuildError {
 impl CreateBuildError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateBuildError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ConflictException" => {
                     return RusotoError::Service(CreateBuildError::Conflict(err.msg))
@@ -4209,6 +4212,7 @@ pub enum CreateFleetError {
 impl CreateFleetError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateFleetError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ConflictException" => {
                     return RusotoError::Service(CreateFleetError::Conflict(err.msg))
@@ -4271,6 +4275,7 @@ pub enum CreateGameServerGroupError {
 impl CreateGameServerGroupError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateGameServerGroupError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ConflictException" => {
                     return RusotoError::Service(CreateGameServerGroupError::Conflict(err.msg))
@@ -4339,6 +4344,7 @@ pub enum CreateGameSessionError {
 impl CreateGameSessionError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateGameSessionError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ConflictException" => {
                     return RusotoError::Service(CreateGameSessionError::Conflict(err.msg))
@@ -4423,6 +4429,7 @@ pub enum CreateGameSessionQueueError {
 impl CreateGameSessionQueueError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateGameSessionQueueError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalServiceException" => {
                     return RusotoError::Service(CreateGameSessionQueueError::InternalService(
@@ -4489,6 +4496,7 @@ impl CreateMatchmakingConfigurationError {
         res: BufferedHttpResponse,
     ) -> RusotoError<CreateMatchmakingConfigurationError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalServiceException" => {
                     return RusotoError::Service(
@@ -4563,6 +4571,7 @@ pub enum CreateMatchmakingRuleSetError {
 impl CreateMatchmakingRuleSetError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateMatchmakingRuleSetError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalServiceException" => {
                     return RusotoError::Service(CreateMatchmakingRuleSetError::InternalService(
@@ -4625,6 +4634,7 @@ pub enum CreatePlayerSessionError {
 impl CreatePlayerSessionError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreatePlayerSessionError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "GameSessionFullException" => {
                     return RusotoError::Service(CreatePlayerSessionError::GameSessionFull(err.msg))
@@ -4695,6 +4705,7 @@ pub enum CreatePlayerSessionsError {
 impl CreatePlayerSessionsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreatePlayerSessionsError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "GameSessionFullException" => {
                     return RusotoError::Service(CreatePlayerSessionsError::GameSessionFull(
@@ -4767,6 +4778,7 @@ pub enum CreateScriptError {
 impl CreateScriptError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateScriptError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ConflictException" => {
                     return RusotoError::Service(CreateScriptError::Conflict(err.msg))
@@ -4821,6 +4833,7 @@ impl CreateVpcPeeringAuthorizationError {
         res: BufferedHttpResponse,
     ) -> RusotoError<CreateVpcPeeringAuthorizationError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalServiceException" => {
                     return RusotoError::Service(
@@ -4881,6 +4894,7 @@ impl CreateVpcPeeringConnectionError {
         res: BufferedHttpResponse,
     ) -> RusotoError<CreateVpcPeeringConnectionError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalServiceException" => {
                     return RusotoError::Service(CreateVpcPeeringConnectionError::InternalService(
@@ -4937,6 +4951,7 @@ pub enum DeleteAliasError {
 impl DeleteAliasError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteAliasError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalServiceException" => {
                     return RusotoError::Service(DeleteAliasError::InternalService(err.msg))
@@ -4991,6 +5006,7 @@ pub enum DeleteBuildError {
 impl DeleteBuildError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteBuildError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalServiceException" => {
                     return RusotoError::Service(DeleteBuildError::InternalService(err.msg))
@@ -5047,6 +5063,7 @@ pub enum DeleteFleetError {
 impl DeleteFleetError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteFleetError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalServiceException" => {
                     return RusotoError::Service(DeleteFleetError::InternalService(err.msg))
@@ -5103,6 +5120,7 @@ pub enum DeleteGameServerGroupError {
 impl DeleteGameServerGroupError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteGameServerGroupError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalServiceException" => {
                     return RusotoError::Service(DeleteGameServerGroupError::InternalService(
@@ -5157,6 +5175,7 @@ pub enum DeleteGameSessionQueueError {
 impl DeleteGameSessionQueueError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteGameSessionQueueError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalServiceException" => {
                     return RusotoError::Service(DeleteGameSessionQueueError::InternalService(
@@ -5219,6 +5238,7 @@ impl DeleteMatchmakingConfigurationError {
         res: BufferedHttpResponse,
     ) -> RusotoError<DeleteMatchmakingConfigurationError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalServiceException" => {
                     return RusotoError::Service(
@@ -5289,6 +5309,7 @@ pub enum DeleteMatchmakingRuleSetError {
 impl DeleteMatchmakingRuleSetError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteMatchmakingRuleSetError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalServiceException" => {
                     return RusotoError::Service(DeleteMatchmakingRuleSetError::InternalService(
@@ -5349,6 +5370,7 @@ pub enum DeleteScalingPolicyError {
 impl DeleteScalingPolicyError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteScalingPolicyError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalServiceException" => {
                     return RusotoError::Service(DeleteScalingPolicyError::InternalService(err.msg))
@@ -5399,6 +5421,7 @@ pub enum DeleteScriptError {
 impl DeleteScriptError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteScriptError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalServiceException" => {
                     return RusotoError::Service(DeleteScriptError::InternalService(err.msg))
@@ -5453,6 +5476,7 @@ impl DeleteVpcPeeringAuthorizationError {
         res: BufferedHttpResponse,
     ) -> RusotoError<DeleteVpcPeeringAuthorizationError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalServiceException" => {
                     return RusotoError::Service(
@@ -5513,6 +5537,7 @@ impl DeleteVpcPeeringConnectionError {
         res: BufferedHttpResponse,
     ) -> RusotoError<DeleteVpcPeeringConnectionError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalServiceException" => {
                     return RusotoError::Service(DeleteVpcPeeringConnectionError::InternalService(
@@ -5567,6 +5592,7 @@ pub enum DeregisterGameServerError {
 impl DeregisterGameServerError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeregisterGameServerError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalServiceException" => {
                     return RusotoError::Service(DeregisterGameServerError::InternalService(
@@ -5617,6 +5643,7 @@ pub enum DescribeAliasError {
 impl DescribeAliasError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeAliasError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalServiceException" => {
                     return RusotoError::Service(DescribeAliasError::InternalService(err.msg))
@@ -5665,6 +5692,7 @@ pub enum DescribeBuildError {
 impl DescribeBuildError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeBuildError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalServiceException" => {
                     return RusotoError::Service(DescribeBuildError::InternalService(err.msg))
@@ -5711,6 +5739,7 @@ pub enum DescribeEC2InstanceLimitsError {
 impl DescribeEC2InstanceLimitsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeEC2InstanceLimitsError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalServiceException" => {
                     return RusotoError::Service(DescribeEC2InstanceLimitsError::InternalService(
@@ -5761,6 +5790,7 @@ pub enum DescribeFleetAttributesError {
 impl DescribeFleetAttributesError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeFleetAttributesError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalServiceException" => {
                     return RusotoError::Service(DescribeFleetAttributesError::InternalService(
@@ -5815,6 +5845,7 @@ pub enum DescribeFleetCapacityError {
 impl DescribeFleetCapacityError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeFleetCapacityError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalServiceException" => {
                     return RusotoError::Service(DescribeFleetCapacityError::InternalService(
@@ -5867,6 +5898,7 @@ pub enum DescribeFleetEventsError {
 impl DescribeFleetEventsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeFleetEventsError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalServiceException" => {
                     return RusotoError::Service(DescribeFleetEventsError::InternalService(err.msg))
@@ -5915,6 +5947,7 @@ pub enum DescribeFleetPortSettingsError {
 impl DescribeFleetPortSettingsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeFleetPortSettingsError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalServiceException" => {
                     return RusotoError::Service(DescribeFleetPortSettingsError::InternalService(
@@ -5969,6 +6002,7 @@ pub enum DescribeFleetUtilizationError {
 impl DescribeFleetUtilizationError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeFleetUtilizationError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalServiceException" => {
                     return RusotoError::Service(DescribeFleetUtilizationError::InternalService(
@@ -6023,6 +6057,7 @@ pub enum DescribeGameServerError {
 impl DescribeGameServerError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeGameServerError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalServiceException" => {
                     return RusotoError::Service(DescribeGameServerError::InternalService(err.msg))
@@ -6071,6 +6106,7 @@ pub enum DescribeGameServerGroupError {
 impl DescribeGameServerGroupError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeGameServerGroupError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalServiceException" => {
                     return RusotoError::Service(DescribeGameServerGroupError::InternalService(
@@ -6127,6 +6163,7 @@ impl DescribeGameServerInstancesError {
         res: BufferedHttpResponse,
     ) -> RusotoError<DescribeGameServerInstancesError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalServiceException" => {
                     return RusotoError::Service(DescribeGameServerInstancesError::InternalService(
@@ -6187,6 +6224,7 @@ impl DescribeGameSessionDetailsError {
         res: BufferedHttpResponse,
     ) -> RusotoError<DescribeGameSessionDetailsError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalServiceException" => {
                     return RusotoError::Service(DescribeGameSessionDetailsError::InternalService(
@@ -6251,6 +6289,7 @@ impl DescribeGameSessionPlacementError {
         res: BufferedHttpResponse,
     ) -> RusotoError<DescribeGameSessionPlacementError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalServiceException" => {
                     return RusotoError::Service(
@@ -6307,6 +6346,7 @@ pub enum DescribeGameSessionQueuesError {
 impl DescribeGameSessionQueuesError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeGameSessionQueuesError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalServiceException" => {
                     return RusotoError::Service(DescribeGameSessionQueuesError::InternalService(
@@ -6363,6 +6403,7 @@ pub enum DescribeGameSessionsError {
 impl DescribeGameSessionsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeGameSessionsError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalServiceException" => {
                     return RusotoError::Service(DescribeGameSessionsError::InternalService(
@@ -6419,6 +6460,7 @@ pub enum DescribeInstancesError {
 impl DescribeInstancesError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeInstancesError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalServiceException" => {
                     return RusotoError::Service(DescribeInstancesError::InternalService(err.msg))
@@ -6465,6 +6507,7 @@ pub enum DescribeMatchmakingError {
 impl DescribeMatchmakingError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeMatchmakingError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalServiceException" => {
                     return RusotoError::Service(DescribeMatchmakingError::InternalService(err.msg))
@@ -6511,6 +6554,7 @@ impl DescribeMatchmakingConfigurationsError {
         res: BufferedHttpResponse,
     ) -> RusotoError<DescribeMatchmakingConfigurationsError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalServiceException" => {
                     return RusotoError::Service(
@@ -6569,6 +6613,7 @@ impl DescribeMatchmakingRuleSetsError {
         res: BufferedHttpResponse,
     ) -> RusotoError<DescribeMatchmakingRuleSetsError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalServiceException" => {
                     return RusotoError::Service(DescribeMatchmakingRuleSetsError::InternalService(
@@ -6627,6 +6672,7 @@ pub enum DescribePlayerSessionsError {
 impl DescribePlayerSessionsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribePlayerSessionsError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalServiceException" => {
                     return RusotoError::Service(DescribePlayerSessionsError::InternalService(
@@ -6681,6 +6727,7 @@ impl DescribeRuntimeConfigurationError {
         res: BufferedHttpResponse,
     ) -> RusotoError<DescribeRuntimeConfigurationError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalServiceException" => {
                     return RusotoError::Service(
@@ -6737,6 +6784,7 @@ pub enum DescribeScalingPoliciesError {
 impl DescribeScalingPoliciesError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeScalingPoliciesError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalServiceException" => {
                     return RusotoError::Service(DescribeScalingPoliciesError::InternalService(
@@ -6791,6 +6839,7 @@ pub enum DescribeScriptError {
 impl DescribeScriptError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeScriptError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalServiceException" => {
                     return RusotoError::Service(DescribeScriptError::InternalService(err.msg))
@@ -6839,6 +6888,7 @@ impl DescribeVpcPeeringAuthorizationsError {
         res: BufferedHttpResponse,
     ) -> RusotoError<DescribeVpcPeeringAuthorizationsError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalServiceException" => {
                     return RusotoError::Service(
@@ -6897,6 +6947,7 @@ impl DescribeVpcPeeringConnectionsError {
         res: BufferedHttpResponse,
     ) -> RusotoError<DescribeVpcPeeringConnectionsError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalServiceException" => {
                     return RusotoError::Service(
@@ -6955,6 +7006,7 @@ pub enum GetGameSessionLogUrlError {
 impl GetGameSessionLogUrlError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetGameSessionLogUrlError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalServiceException" => {
                     return RusotoError::Service(GetGameSessionLogUrlError::InternalService(
@@ -7005,6 +7057,7 @@ pub enum GetInstanceAccessError {
 impl GetInstanceAccessError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetInstanceAccessError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalServiceException" => {
                     return RusotoError::Service(GetInstanceAccessError::InternalService(err.msg))
@@ -7051,6 +7104,7 @@ pub enum ListAliasesError {
 impl ListAliasesError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListAliasesError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalServiceException" => {
                     return RusotoError::Service(ListAliasesError::InternalService(err.msg))
@@ -7093,6 +7147,7 @@ pub enum ListBuildsError {
 impl ListBuildsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListBuildsError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalServiceException" => {
                     return RusotoError::Service(ListBuildsError::InternalService(err.msg))
@@ -7137,6 +7192,7 @@ pub enum ListFleetsError {
 impl ListFleetsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListFleetsError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalServiceException" => {
                     return RusotoError::Service(ListFleetsError::InternalService(err.msg))
@@ -7183,6 +7239,7 @@ pub enum ListGameServerGroupsError {
 impl ListGameServerGroupsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListGameServerGroupsError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalServiceException" => {
                     return RusotoError::Service(ListGameServerGroupsError::InternalService(
@@ -7227,6 +7284,7 @@ pub enum ListGameServersError {
 impl ListGameServersError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListGameServersError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalServiceException" => {
                     return RusotoError::Service(ListGameServersError::InternalService(err.msg))
@@ -7269,6 +7327,7 @@ pub enum ListScriptsError {
 impl ListScriptsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListScriptsError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalServiceException" => {
                     return RusotoError::Service(ListScriptsError::InternalService(err.msg))
@@ -7313,6 +7372,7 @@ pub enum ListTagsForResourceError {
 impl ListTagsForResourceError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListTagsForResourceError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalServiceException" => {
                     return RusotoError::Service(ListTagsForResourceError::InternalService(err.msg))
@@ -7361,6 +7421,7 @@ pub enum PutScalingPolicyError {
 impl PutScalingPolicyError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<PutScalingPolicyError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalServiceException" => {
                     return RusotoError::Service(PutScalingPolicyError::InternalService(err.msg))
@@ -7411,6 +7472,7 @@ pub enum RegisterGameServerError {
 impl RegisterGameServerError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<RegisterGameServerError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ConflictException" => {
                     return RusotoError::Service(RegisterGameServerError::Conflict(err.msg))
@@ -7463,6 +7525,7 @@ pub enum RequestUploadCredentialsError {
 impl RequestUploadCredentialsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<RequestUploadCredentialsError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalServiceException" => {
                     return RusotoError::Service(RequestUploadCredentialsError::InternalService(
@@ -7519,6 +7582,7 @@ pub enum ResolveAliasError {
 impl ResolveAliasError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ResolveAliasError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalServiceException" => {
                     return RusotoError::Service(ResolveAliasError::InternalService(err.msg))
@@ -7573,6 +7637,7 @@ pub enum ResumeGameServerGroupError {
 impl ResumeGameServerGroupError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ResumeGameServerGroupError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalServiceException" => {
                     return RusotoError::Service(ResumeGameServerGroupError::InternalService(
@@ -7627,6 +7692,7 @@ pub enum SearchGameSessionsError {
 impl SearchGameSessionsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<SearchGameSessionsError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalServiceException" => {
                     return RusotoError::Service(SearchGameSessionsError::InternalService(err.msg))
@@ -7681,6 +7747,7 @@ pub enum StartFleetActionsError {
 impl StartFleetActionsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<StartFleetActionsError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalServiceException" => {
                     return RusotoError::Service(StartFleetActionsError::InternalService(err.msg))
@@ -7729,6 +7796,7 @@ pub enum StartGameSessionPlacementError {
 impl StartGameSessionPlacementError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<StartGameSessionPlacementError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalServiceException" => {
                     return RusotoError::Service(StartGameSessionPlacementError::InternalService(
@@ -7783,6 +7851,7 @@ pub enum StartMatchBackfillError {
 impl StartMatchBackfillError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<StartMatchBackfillError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalServiceException" => {
                     return RusotoError::Service(StartMatchBackfillError::InternalService(err.msg))
@@ -7833,6 +7902,7 @@ pub enum StartMatchmakingError {
 impl StartMatchmakingError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<StartMatchmakingError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalServiceException" => {
                     return RusotoError::Service(StartMatchmakingError::InternalService(err.msg))
@@ -7881,6 +7951,7 @@ pub enum StopFleetActionsError {
 impl StopFleetActionsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<StopFleetActionsError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalServiceException" => {
                     return RusotoError::Service(StopFleetActionsError::InternalService(err.msg))
@@ -7929,6 +8000,7 @@ pub enum StopGameSessionPlacementError {
 impl StopGameSessionPlacementError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<StopGameSessionPlacementError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalServiceException" => {
                     return RusotoError::Service(StopGameSessionPlacementError::InternalService(
@@ -7983,6 +8055,7 @@ pub enum StopMatchmakingError {
 impl StopMatchmakingError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<StopMatchmakingError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalServiceException" => {
                     return RusotoError::Service(StopMatchmakingError::InternalService(err.msg))
@@ -8031,6 +8104,7 @@ pub enum SuspendGameServerGroupError {
 impl SuspendGameServerGroupError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<SuspendGameServerGroupError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalServiceException" => {
                     return RusotoError::Service(SuspendGameServerGroupError::InternalService(
@@ -8083,6 +8157,7 @@ pub enum TagResourceError {
 impl TagResourceError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<TagResourceError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalServiceException" => {
                     return RusotoError::Service(TagResourceError::InternalService(err.msg))
@@ -8131,6 +8206,7 @@ pub enum UntagResourceError {
 impl UntagResourceError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UntagResourceError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalServiceException" => {
                     return RusotoError::Service(UntagResourceError::InternalService(err.msg))
@@ -8179,6 +8255,7 @@ pub enum UpdateAliasError {
 impl UpdateAliasError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateAliasError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalServiceException" => {
                     return RusotoError::Service(UpdateAliasError::InternalService(err.msg))
@@ -8227,6 +8304,7 @@ pub enum UpdateBuildError {
 impl UpdateBuildError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateBuildError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalServiceException" => {
                     return RusotoError::Service(UpdateBuildError::InternalService(err.msg))
@@ -8281,6 +8359,7 @@ pub enum UpdateFleetAttributesError {
 impl UpdateFleetAttributesError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateFleetAttributesError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ConflictException" => {
                     return RusotoError::Service(UpdateFleetAttributesError::Conflict(err.msg))
@@ -8353,6 +8432,7 @@ pub enum UpdateFleetCapacityError {
 impl UpdateFleetCapacityError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateFleetCapacityError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ConflictException" => {
                     return RusotoError::Service(UpdateFleetCapacityError::Conflict(err.msg))
@@ -8421,6 +8501,7 @@ pub enum UpdateFleetPortSettingsError {
 impl UpdateFleetPortSettingsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateFleetPortSettingsError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ConflictException" => {
                     return RusotoError::Service(UpdateFleetPortSettingsError::Conflict(err.msg))
@@ -8491,6 +8572,7 @@ pub enum UpdateGameServerError {
 impl UpdateGameServerError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateGameServerError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalServiceException" => {
                     return RusotoError::Service(UpdateGameServerError::InternalService(err.msg))
@@ -8539,6 +8621,7 @@ pub enum UpdateGameServerGroupError {
 impl UpdateGameServerGroupError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateGameServerGroupError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalServiceException" => {
                     return RusotoError::Service(UpdateGameServerGroupError::InternalService(
@@ -8595,6 +8678,7 @@ pub enum UpdateGameSessionError {
 impl UpdateGameSessionError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateGameSessionError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ConflictException" => {
                     return RusotoError::Service(UpdateGameSessionError::Conflict(err.msg))
@@ -8653,6 +8737,7 @@ pub enum UpdateGameSessionQueueError {
 impl UpdateGameSessionQueueError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateGameSessionQueueError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalServiceException" => {
                     return RusotoError::Service(UpdateGameSessionQueueError::InternalService(
@@ -8707,6 +8792,7 @@ impl UpdateMatchmakingConfigurationError {
         res: BufferedHttpResponse,
     ) -> RusotoError<UpdateMatchmakingConfigurationError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalServiceException" => {
                     return RusotoError::Service(
@@ -8773,6 +8859,7 @@ impl UpdateRuntimeConfigurationError {
         res: BufferedHttpResponse,
     ) -> RusotoError<UpdateRuntimeConfigurationError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalServiceException" => {
                     return RusotoError::Service(UpdateRuntimeConfigurationError::InternalService(
@@ -8835,6 +8922,7 @@ pub enum UpdateScriptError {
 impl UpdateScriptError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateScriptError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalServiceException" => {
                     return RusotoError::Service(UpdateScriptError::InternalService(err.msg))
@@ -8883,6 +8971,7 @@ impl ValidateMatchmakingRuleSetError {
         res: BufferedHttpResponse,
     ) -> RusotoError<ValidateMatchmakingRuleSetError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalServiceException" => {
                     return RusotoError::Service(ValidateMatchmakingRuleSetError::InternalService(

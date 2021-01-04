@@ -49,7 +49,6 @@ impl AWSHealthClient {
     }
 }
 
-use serde_json;
 /// <p>Information about an entity that is affected by a Health event.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
@@ -818,6 +817,7 @@ impl DescribeAffectedAccountsForOrganizationError {
         res: BufferedHttpResponse,
     ) -> RusotoError<DescribeAffectedAccountsForOrganizationError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidPaginationToken" => {
                     return RusotoError::Service(
@@ -856,6 +856,7 @@ pub enum DescribeAffectedEntitiesError {
 impl DescribeAffectedEntitiesError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeAffectedEntitiesError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidPaginationToken" => {
                     return RusotoError::Service(
@@ -900,6 +901,7 @@ impl DescribeAffectedEntitiesForOrganizationError {
         res: BufferedHttpResponse,
     ) -> RusotoError<DescribeAffectedEntitiesForOrganizationError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidPaginationToken" => {
                     return RusotoError::Service(
@@ -941,6 +943,7 @@ pub enum DescribeEntityAggregatesError {}
 impl DescribeEntityAggregatesError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeEntityAggregatesError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
@@ -966,6 +969,7 @@ pub enum DescribeEventAggregatesError {
 impl DescribeEventAggregatesError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeEventAggregatesError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidPaginationToken" => {
                     return RusotoError::Service(
@@ -1000,6 +1004,7 @@ pub enum DescribeEventDetailsError {
 impl DescribeEventDetailsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeEventDetailsError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "UnsupportedLocale" => {
                     return RusotoError::Service(DescribeEventDetailsError::UnsupportedLocale(
@@ -1034,6 +1039,7 @@ impl DescribeEventDetailsForOrganizationError {
         res: BufferedHttpResponse,
     ) -> RusotoError<DescribeEventDetailsForOrganizationError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "UnsupportedLocale" => {
                     return RusotoError::Service(
@@ -1070,6 +1076,7 @@ pub enum DescribeEventTypesError {
 impl DescribeEventTypesError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeEventTypesError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidPaginationToken" => {
                     return RusotoError::Service(DescribeEventTypesError::InvalidPaginationToken(
@@ -1110,6 +1117,7 @@ pub enum DescribeEventsError {
 impl DescribeEventsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeEventsError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidPaginationToken" => {
                     return RusotoError::Service(DescribeEventsError::InvalidPaginationToken(
@@ -1150,6 +1158,7 @@ impl DescribeEventsForOrganizationError {
         res: BufferedHttpResponse,
     ) -> RusotoError<DescribeEventsForOrganizationError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidPaginationToken" => {
                     return RusotoError::Service(
@@ -1191,6 +1200,7 @@ impl DescribeHealthServiceStatusForOrganizationError {
         res: BufferedHttpResponse,
     ) -> RusotoError<DescribeHealthServiceStatusForOrganizationError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
@@ -1218,6 +1228,7 @@ impl DisableHealthServiceAccessForOrganizationError {
         res: BufferedHttpResponse,
     ) -> RusotoError<DisableHealthServiceAccessForOrganizationError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ConcurrentModificationException" => {
                     return RusotoError::Service(
@@ -1256,6 +1267,7 @@ impl EnableHealthServiceAccessForOrganizationError {
         res: BufferedHttpResponse,
     ) -> RusotoError<EnableHealthServiceAccessForOrganizationError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ConcurrentModificationException" => {
                     return RusotoError::Service(

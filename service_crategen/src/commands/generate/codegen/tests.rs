@@ -76,7 +76,6 @@ fn generate_response_tests(
     let our_responses: Vec<Response> = responses
         .into_iter()
         .filter(|r| r.service.to_lowercase() == service.service_type_name().to_lowercase())
-        .map(|r| r.to_owned())
         .collect();
 
     let test_bodies: Vec<String> = our_responses

@@ -50,7 +50,6 @@ impl DirectConnectClient {
     }
 }
 
-use serde_json;
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct AcceptDirectConnectGatewayAssociationProposalRequest {
@@ -2114,6 +2113,7 @@ impl AcceptDirectConnectGatewayAssociationProposalError {
         res: BufferedHttpResponse,
     ) -> RusotoError<AcceptDirectConnectGatewayAssociationProposalError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "DirectConnectClientException" => {
                     return RusotoError::Service(
@@ -2164,6 +2164,7 @@ impl AllocateConnectionOnInterconnectError {
         res: BufferedHttpResponse,
     ) -> RusotoError<AllocateConnectionOnInterconnectError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "DirectConnectClientException" => {
                     return RusotoError::Service(
@@ -2212,6 +2213,7 @@ pub enum AllocateHostedConnectionError {
 impl AllocateHostedConnectionError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<AllocateHostedConnectionError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "DirectConnectClientException" => {
                     return RusotoError::Service(
@@ -2270,6 +2272,7 @@ impl AllocatePrivateVirtualInterfaceError {
         res: BufferedHttpResponse,
     ) -> RusotoError<AllocatePrivateVirtualInterfaceError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "DirectConnectClientException" => {
                     return RusotoError::Service(
@@ -2334,6 +2337,7 @@ impl AllocatePublicVirtualInterfaceError {
         res: BufferedHttpResponse,
     ) -> RusotoError<AllocatePublicVirtualInterfaceError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "DirectConnectClientException" => {
                     return RusotoError::Service(
@@ -2398,6 +2402,7 @@ impl AllocateTransitVirtualInterfaceError {
         res: BufferedHttpResponse,
     ) -> RusotoError<AllocateTransitVirtualInterfaceError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "DirectConnectClientException" => {
                     return RusotoError::Service(
@@ -2458,6 +2463,7 @@ impl AssociateConnectionWithLagError {
         res: BufferedHttpResponse,
     ) -> RusotoError<AssociateConnectionWithLagError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "DirectConnectClientException" => {
                     return RusotoError::Service(
@@ -2502,6 +2508,7 @@ pub enum AssociateHostedConnectionError {
 impl AssociateHostedConnectionError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<AssociateHostedConnectionError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "DirectConnectClientException" => {
                     return RusotoError::Service(
@@ -2546,6 +2553,7 @@ pub enum AssociateVirtualInterfaceError {
 impl AssociateVirtualInterfaceError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<AssociateVirtualInterfaceError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "DirectConnectClientException" => {
                     return RusotoError::Service(
@@ -2590,6 +2598,7 @@ pub enum ConfirmConnectionError {
 impl ConfirmConnectionError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ConfirmConnectionError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "DirectConnectClientException" => {
                     return RusotoError::Service(ConfirmConnectionError::DirectConnectClient(
@@ -2632,6 +2641,7 @@ impl ConfirmPrivateVirtualInterfaceError {
         res: BufferedHttpResponse,
     ) -> RusotoError<ConfirmPrivateVirtualInterfaceError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "DirectConnectClientException" => {
                     return RusotoError::Service(
@@ -2678,6 +2688,7 @@ impl ConfirmPublicVirtualInterfaceError {
         res: BufferedHttpResponse,
     ) -> RusotoError<ConfirmPublicVirtualInterfaceError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "DirectConnectClientException" => {
                     return RusotoError::Service(
@@ -2724,6 +2735,7 @@ impl ConfirmTransitVirtualInterfaceError {
         res: BufferedHttpResponse,
     ) -> RusotoError<ConfirmTransitVirtualInterfaceError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "DirectConnectClientException" => {
                     return RusotoError::Service(
@@ -2768,6 +2780,7 @@ pub enum CreateBGPPeerError {
 impl CreateBGPPeerError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateBGPPeerError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "DirectConnectClientException" => {
                     return RusotoError::Service(CreateBGPPeerError::DirectConnectClient(err.msg))
@@ -2808,6 +2821,7 @@ pub enum CreateConnectionError {
 impl CreateConnectionError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateConnectionError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "DirectConnectClientException" => {
                     return RusotoError::Service(CreateConnectionError::DirectConnectClient(
@@ -2858,6 +2872,7 @@ impl CreateDirectConnectGatewayError {
         res: BufferedHttpResponse,
     ) -> RusotoError<CreateDirectConnectGatewayError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "DirectConnectClientException" => {
                     return RusotoError::Service(
@@ -2904,6 +2919,7 @@ impl CreateDirectConnectGatewayAssociationError {
         res: BufferedHttpResponse,
     ) -> RusotoError<CreateDirectConnectGatewayAssociationError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "DirectConnectClientException" => {
                     return RusotoError::Service(
@@ -2950,6 +2966,7 @@ impl CreateDirectConnectGatewayAssociationProposalError {
         res: BufferedHttpResponse,
     ) -> RusotoError<CreateDirectConnectGatewayAssociationProposalError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "DirectConnectClientException" => {
                     return RusotoError::Service(
@@ -3002,6 +3019,7 @@ pub enum CreateInterconnectError {
 impl CreateInterconnectError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateInterconnectError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "DirectConnectClientException" => {
                     return RusotoError::Service(CreateInterconnectError::DirectConnectClient(
@@ -3054,6 +3072,7 @@ pub enum CreateLagError {
 impl CreateLagError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateLagError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "DirectConnectClientException" => {
                     return RusotoError::Service(CreateLagError::DirectConnectClient(err.msg))
@@ -3104,6 +3123,7 @@ impl CreatePrivateVirtualInterfaceError {
         res: BufferedHttpResponse,
     ) -> RusotoError<CreatePrivateVirtualInterfaceError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "DirectConnectClientException" => {
                     return RusotoError::Service(
@@ -3168,6 +3188,7 @@ impl CreatePublicVirtualInterfaceError {
         res: BufferedHttpResponse,
     ) -> RusotoError<CreatePublicVirtualInterfaceError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "DirectConnectClientException" => {
                     return RusotoError::Service(
@@ -3232,6 +3253,7 @@ impl CreateTransitVirtualInterfaceError {
         res: BufferedHttpResponse,
     ) -> RusotoError<CreateTransitVirtualInterfaceError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "DirectConnectClientException" => {
                     return RusotoError::Service(
@@ -3290,6 +3312,7 @@ pub enum DeleteBGPPeerError {
 impl DeleteBGPPeerError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteBGPPeerError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "DirectConnectClientException" => {
                     return RusotoError::Service(DeleteBGPPeerError::DirectConnectClient(err.msg))
@@ -3326,6 +3349,7 @@ pub enum DeleteConnectionError {
 impl DeleteConnectionError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteConnectionError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "DirectConnectClientException" => {
                     return RusotoError::Service(DeleteConnectionError::DirectConnectClient(
@@ -3368,6 +3392,7 @@ impl DeleteDirectConnectGatewayError {
         res: BufferedHttpResponse,
     ) -> RusotoError<DeleteDirectConnectGatewayError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "DirectConnectClientException" => {
                     return RusotoError::Service(
@@ -3414,6 +3439,7 @@ impl DeleteDirectConnectGatewayAssociationError {
         res: BufferedHttpResponse,
     ) -> RusotoError<DeleteDirectConnectGatewayAssociationError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "DirectConnectClientException" => {
                     return RusotoError::Service(
@@ -3460,6 +3486,7 @@ impl DeleteDirectConnectGatewayAssociationProposalError {
         res: BufferedHttpResponse,
     ) -> RusotoError<DeleteDirectConnectGatewayAssociationProposalError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "DirectConnectClientException" => {
                     return RusotoError::Service(
@@ -3508,6 +3535,7 @@ pub enum DeleteInterconnectError {
 impl DeleteInterconnectError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteInterconnectError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "DirectConnectClientException" => {
                     return RusotoError::Service(DeleteInterconnectError::DirectConnectClient(
@@ -3548,6 +3576,7 @@ pub enum DeleteLagError {
 impl DeleteLagError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteLagError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "DirectConnectClientException" => {
                     return RusotoError::Service(DeleteLagError::DirectConnectClient(err.msg))
@@ -3584,6 +3613,7 @@ pub enum DeleteVirtualInterfaceError {
 impl DeleteVirtualInterfaceError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteVirtualInterfaceError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "DirectConnectClientException" => {
                     return RusotoError::Service(DeleteVirtualInterfaceError::DirectConnectClient(
@@ -3624,6 +3654,7 @@ pub enum DescribeConnectionLoaError {
 impl DescribeConnectionLoaError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeConnectionLoaError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "DirectConnectClientException" => {
                     return RusotoError::Service(DescribeConnectionLoaError::DirectConnectClient(
@@ -3664,6 +3695,7 @@ pub enum DescribeConnectionsError {
 impl DescribeConnectionsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeConnectionsError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "DirectConnectClientException" => {
                     return RusotoError::Service(DescribeConnectionsError::DirectConnectClient(
@@ -3706,6 +3738,7 @@ impl DescribeConnectionsOnInterconnectError {
         res: BufferedHttpResponse,
     ) -> RusotoError<DescribeConnectionsOnInterconnectError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "DirectConnectClientException" => {
                     return RusotoError::Service(
@@ -3752,6 +3785,7 @@ impl DescribeDirectConnectGatewayAssociationProposalsError {
         res: BufferedHttpResponse,
     ) -> RusotoError<DescribeDirectConnectGatewayAssociationProposalsError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "DirectConnectClientException" => {
                     return RusotoError::Service(
@@ -3802,6 +3836,7 @@ impl DescribeDirectConnectGatewayAssociationsError {
         res: BufferedHttpResponse,
     ) -> RusotoError<DescribeDirectConnectGatewayAssociationsError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "DirectConnectClientException" => {
                     return RusotoError::Service(
@@ -3848,6 +3883,7 @@ impl DescribeDirectConnectGatewayAttachmentsError {
         res: BufferedHttpResponse,
     ) -> RusotoError<DescribeDirectConnectGatewayAttachmentsError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "DirectConnectClientException" => {
                     return RusotoError::Service(
@@ -3894,6 +3930,7 @@ impl DescribeDirectConnectGatewaysError {
         res: BufferedHttpResponse,
     ) -> RusotoError<DescribeDirectConnectGatewaysError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "DirectConnectClientException" => {
                     return RusotoError::Service(
@@ -3938,6 +3975,7 @@ pub enum DescribeHostedConnectionsError {
 impl DescribeHostedConnectionsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeHostedConnectionsError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "DirectConnectClientException" => {
                     return RusotoError::Service(
@@ -3982,6 +4020,7 @@ pub enum DescribeInterconnectLoaError {
 impl DescribeInterconnectLoaError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeInterconnectLoaError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "DirectConnectClientException" => {
                     return RusotoError::Service(DescribeInterconnectLoaError::DirectConnectClient(
@@ -4022,6 +4061,7 @@ pub enum DescribeInterconnectsError {
 impl DescribeInterconnectsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeInterconnectsError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "DirectConnectClientException" => {
                     return RusotoError::Service(DescribeInterconnectsError::DirectConnectClient(
@@ -4062,6 +4102,7 @@ pub enum DescribeLagsError {
 impl DescribeLagsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeLagsError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "DirectConnectClientException" => {
                     return RusotoError::Service(DescribeLagsError::DirectConnectClient(err.msg))
@@ -4098,6 +4139,7 @@ pub enum DescribeLoaError {
 impl DescribeLoaError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeLoaError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "DirectConnectClientException" => {
                     return RusotoError::Service(DescribeLoaError::DirectConnectClient(err.msg))
@@ -4134,6 +4176,7 @@ pub enum DescribeLocationsError {
 impl DescribeLocationsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeLocationsError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "DirectConnectClientException" => {
                     return RusotoError::Service(DescribeLocationsError::DirectConnectClient(
@@ -4174,6 +4217,7 @@ pub enum DescribeTagsError {
 impl DescribeTagsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeTagsError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "DirectConnectClientException" => {
                     return RusotoError::Service(DescribeTagsError::DirectConnectClient(err.msg))
@@ -4210,6 +4254,7 @@ pub enum DescribeVirtualGatewaysError {
 impl DescribeVirtualGatewaysError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeVirtualGatewaysError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "DirectConnectClientException" => {
                     return RusotoError::Service(DescribeVirtualGatewaysError::DirectConnectClient(
@@ -4250,6 +4295,7 @@ pub enum DescribeVirtualInterfacesError {
 impl DescribeVirtualInterfacesError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeVirtualInterfacesError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "DirectConnectClientException" => {
                     return RusotoError::Service(
@@ -4296,6 +4342,7 @@ impl DisassociateConnectionFromLagError {
         res: BufferedHttpResponse,
     ) -> RusotoError<DisassociateConnectionFromLagError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "DirectConnectClientException" => {
                     return RusotoError::Service(
@@ -4342,6 +4389,7 @@ impl ListVirtualInterfaceTestHistoryError {
         res: BufferedHttpResponse,
     ) -> RusotoError<ListVirtualInterfaceTestHistoryError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "DirectConnectClientException" => {
                     return RusotoError::Service(
@@ -4386,6 +4434,7 @@ pub enum StartBgpFailoverTestError {
 impl StartBgpFailoverTestError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<StartBgpFailoverTestError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "DirectConnectClientException" => {
                     return RusotoError::Service(StartBgpFailoverTestError::DirectConnectClient(
@@ -4426,6 +4475,7 @@ pub enum StopBgpFailoverTestError {
 impl StopBgpFailoverTestError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<StopBgpFailoverTestError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "DirectConnectClientException" => {
                     return RusotoError::Service(StopBgpFailoverTestError::DirectConnectClient(
@@ -4470,6 +4520,7 @@ pub enum TagResourceError {
 impl TagResourceError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<TagResourceError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "DirectConnectClientException" => {
                     return RusotoError::Service(TagResourceError::DirectConnectClient(err.msg))
@@ -4514,6 +4565,7 @@ pub enum UntagResourceError {
 impl UntagResourceError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UntagResourceError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "DirectConnectClientException" => {
                     return RusotoError::Service(UntagResourceError::DirectConnectClient(err.msg))
@@ -4552,6 +4604,7 @@ impl UpdateDirectConnectGatewayAssociationError {
         res: BufferedHttpResponse,
     ) -> RusotoError<UpdateDirectConnectGatewayAssociationError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "DirectConnectClientException" => {
                     return RusotoError::Service(
@@ -4596,6 +4649,7 @@ pub enum UpdateLagError {
 impl UpdateLagError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateLagError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "DirectConnectClientException" => {
                     return RusotoError::Service(UpdateLagError::DirectConnectClient(err.msg))
@@ -4634,6 +4688,7 @@ impl UpdateVirtualInterfaceAttributesError {
         res: BufferedHttpResponse,
     ) -> RusotoError<UpdateVirtualInterfaceAttributesError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "DirectConnectClientException" => {
                     return RusotoError::Service(

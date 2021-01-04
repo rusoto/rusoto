@@ -12,6 +12,7 @@ pub fn generate_deserializer(name: &str, ty: &str, shape: &Shape, service: &Serv
                 #[allow(dead_code, unused_variables)]
                 fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T)
                 -> Result<{ty}, XmlParseError> {{
+                    #![allow(clippy::field_reassign_with_default, clippy::needless_update)]
                     {deserializer_body}
                 }}
             }}",
@@ -330,7 +331,7 @@ fn generate_map_deserializer(shape: &Shape) -> String {
         "" => match shape.flattened {
             // if flatten, use tag_name
             Some(true) => "tag_name".to_string(),
-            _ => format!("\"entry\""),
+            _ => "\"entry\"".to_string(),
         },
         _ => format!("\"{}\"", entry_location),
     };

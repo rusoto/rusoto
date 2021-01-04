@@ -49,7 +49,6 @@ impl DynamoDbClient {
     }
 }
 
-use serde_json;
 /// <p>Contains details of a table archival operation.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
@@ -3559,6 +3558,7 @@ pub enum BatchExecuteStatementError {
 impl BatchExecuteStatementError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<BatchExecuteStatementError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalServerError" => {
                     return RusotoError::Service(BatchExecuteStatementError::InternalServerError(
@@ -3603,6 +3603,7 @@ pub enum BatchGetItemError {
 impl BatchGetItemError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<BatchGetItemError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalServerError" => {
                     return RusotoError::Service(BatchGetItemError::InternalServerError(err.msg))
@@ -3655,6 +3656,7 @@ pub enum BatchWriteItemError {
 impl BatchWriteItemError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<BatchWriteItemError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalServerError" => {
                     return RusotoError::Service(BatchWriteItemError::InternalServerError(err.msg))
@@ -3717,6 +3719,7 @@ pub enum CreateBackupError {
 impl CreateBackupError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateBackupError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BackupInUseException" => {
                     return RusotoError::Service(CreateBackupError::BackupInUse(err.msg))
@@ -3775,6 +3778,7 @@ pub enum CreateGlobalTableError {
 impl CreateGlobalTableError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateGlobalTableError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "GlobalTableAlreadyExistsException" => {
                     return RusotoError::Service(CreateGlobalTableError::GlobalTableAlreadyExists(
@@ -3825,6 +3829,7 @@ pub enum CreateTableError {
 impl CreateTableError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateTableError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalServerError" => {
                     return RusotoError::Service(CreateTableError::InternalServerError(err.msg))
@@ -3869,6 +3874,7 @@ pub enum DeleteBackupError {
 impl DeleteBackupError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteBackupError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BackupInUseException" => {
                     return RusotoError::Service(DeleteBackupError::BackupInUse(err.msg))
@@ -3923,6 +3929,7 @@ pub enum DeleteItemError {
 impl DeleteItemError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteItemError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ConditionalCheckFailedException" => {
                     return RusotoError::Service(DeleteItemError::ConditionalCheckFailed(err.msg))
@@ -3987,6 +3994,7 @@ pub enum DeleteTableError {
 impl DeleteTableError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteTableError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalServerError" => {
                     return RusotoError::Service(DeleteTableError::InternalServerError(err.msg))
@@ -4031,6 +4039,7 @@ pub enum DescribeBackupError {
 impl DescribeBackupError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeBackupError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BackupNotFoundException" => {
                     return RusotoError::Service(DescribeBackupError::BackupNotFound(err.msg))
@@ -4067,6 +4076,7 @@ pub enum DescribeContinuousBackupsError {
 impl DescribeContinuousBackupsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeContinuousBackupsError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalServerError" => {
                     return RusotoError::Service(
@@ -4111,6 +4121,7 @@ impl DescribeContributorInsightsError {
         res: BufferedHttpResponse,
     ) -> RusotoError<DescribeContributorInsightsError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalServerError" => {
                     return RusotoError::Service(
@@ -4148,6 +4159,7 @@ pub enum DescribeEndpointsError {}
 impl DescribeEndpointsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeEndpointsError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
@@ -4177,6 +4189,7 @@ pub enum DescribeExportError {
 impl DescribeExportError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeExportError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ExportNotFoundException" => {
                     return RusotoError::Service(DescribeExportError::ExportNotFound(err.msg))
@@ -4217,6 +4230,7 @@ pub enum DescribeGlobalTableError {
 impl DescribeGlobalTableError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeGlobalTableError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "GlobalTableNotFoundException" => {
                     return RusotoError::Service(DescribeGlobalTableError::GlobalTableNotFound(
@@ -4259,6 +4273,7 @@ impl DescribeGlobalTableSettingsError {
         res: BufferedHttpResponse,
     ) -> RusotoError<DescribeGlobalTableSettingsError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "GlobalTableNotFoundException" => {
                     return RusotoError::Service(
@@ -4305,6 +4320,7 @@ impl DescribeKinesisStreamingDestinationError {
         res: BufferedHttpResponse,
     ) -> RusotoError<DescribeKinesisStreamingDestinationError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalServerError" => {
                     return RusotoError::Service(
@@ -4347,6 +4363,7 @@ pub enum DescribeLimitsError {
 impl DescribeLimitsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeLimitsError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalServerError" => {
                     return RusotoError::Service(DescribeLimitsError::InternalServerError(err.msg))
@@ -4379,6 +4396,7 @@ pub enum DescribeTableError {
 impl DescribeTableError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeTableError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalServerError" => {
                     return RusotoError::Service(DescribeTableError::InternalServerError(err.msg))
@@ -4417,6 +4435,7 @@ impl DescribeTableReplicaAutoScalingError {
         res: BufferedHttpResponse,
     ) -> RusotoError<DescribeTableReplicaAutoScalingError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalServerError" => {
                     return RusotoError::Service(
@@ -4461,6 +4480,7 @@ pub enum DescribeTimeToLiveError {
 impl DescribeTimeToLiveError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeTimeToLiveError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalServerError" => {
                     return RusotoError::Service(DescribeTimeToLiveError::InternalServerError(
@@ -4505,6 +4525,7 @@ impl DisableKinesisStreamingDestinationError {
         res: BufferedHttpResponse,
     ) -> RusotoError<DisableKinesisStreamingDestinationError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalServerError" => {
                     return RusotoError::Service(
@@ -4571,6 +4592,7 @@ impl EnableKinesisStreamingDestinationError {
         res: BufferedHttpResponse,
     ) -> RusotoError<EnableKinesisStreamingDestinationError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalServerError" => {
                     return RusotoError::Service(
@@ -4643,6 +4665,7 @@ pub enum ExecuteStatementError {
 impl ExecuteStatementError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ExecuteStatementError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ConditionalCheckFailedException" => {
                     return RusotoError::Service(ExecuteStatementError::ConditionalCheckFailed(
@@ -4729,6 +4752,7 @@ pub enum ExecuteTransactionError {
 impl ExecuteTransactionError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ExecuteTransactionError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "IdempotentParameterMismatchException" => {
                     return RusotoError::Service(
@@ -4809,6 +4833,7 @@ pub enum ExportTableToPointInTimeError {
 impl ExportTableToPointInTimeError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ExportTableToPointInTimeError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ExportConflictException" => {
                     return RusotoError::Service(ExportTableToPointInTimeError::ExportConflict(
@@ -4879,6 +4904,7 @@ pub enum GetItemError {
 impl GetItemError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetItemError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalServerError" => {
                     return RusotoError::Service(GetItemError::InternalServerError(err.msg))
@@ -4923,6 +4949,7 @@ pub enum ListBackupsError {
 impl ListBackupsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListBackupsError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalServerError" => {
                     return RusotoError::Service(ListBackupsError::InternalServerError(err.msg))
@@ -4955,6 +4982,7 @@ pub enum ListContributorInsightsError {
 impl ListContributorInsightsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListContributorInsightsError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalServerError" => {
                     return RusotoError::Service(ListContributorInsightsError::InternalServerError(
@@ -4995,6 +5023,7 @@ pub enum ListExportsError {
 impl ListExportsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListExportsError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalServerError" => {
                     return RusotoError::Service(ListExportsError::InternalServerError(err.msg))
@@ -5029,6 +5058,7 @@ pub enum ListGlobalTablesError {
 impl ListGlobalTablesError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListGlobalTablesError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalServerError" => {
                     return RusotoError::Service(ListGlobalTablesError::InternalServerError(
@@ -5061,6 +5091,7 @@ pub enum ListTablesError {
 impl ListTablesError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListTablesError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalServerError" => {
                     return RusotoError::Service(ListTablesError::InternalServerError(err.msg))
@@ -5093,6 +5124,7 @@ pub enum ListTagsOfResourceError {
 impl ListTagsOfResourceError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListTagsOfResourceError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalServerError" => {
                     return RusotoError::Service(ListTagsOfResourceError::InternalServerError(
@@ -5141,6 +5173,7 @@ pub enum PutItemError {
 impl PutItemError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<PutItemError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ConditionalCheckFailedException" => {
                     return RusotoError::Service(PutItemError::ConditionalCheckFailed(err.msg))
@@ -5205,6 +5238,7 @@ pub enum QueryError {
 impl QueryError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<QueryError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalServerError" => {
                     return RusotoError::Service(QueryError::InternalServerError(err.msg))
@@ -5257,6 +5291,7 @@ pub enum RestoreTableFromBackupError {
 impl RestoreTableFromBackupError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<RestoreTableFromBackupError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "BackupInUseException" => {
                     return RusotoError::Service(RestoreTableFromBackupError::BackupInUse(err.msg))
@@ -5327,6 +5362,7 @@ pub enum RestoreTableToPointInTimeError {
 impl RestoreTableToPointInTimeError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<RestoreTableToPointInTimeError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalServerError" => {
                     return RusotoError::Service(
@@ -5405,6 +5441,7 @@ pub enum ScanError {
 impl ScanError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ScanError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalServerError" => {
                     return RusotoError::Service(ScanError::InternalServerError(err.msg))
@@ -5453,6 +5490,7 @@ pub enum TagResourceError {
 impl TagResourceError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<TagResourceError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalServerError" => {
                     return RusotoError::Service(TagResourceError::InternalServerError(err.msg))
@@ -5503,6 +5541,7 @@ pub enum TransactGetItemsError {
 impl TransactGetItemsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<TransactGetItemsError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalServerError" => {
                     return RusotoError::Service(TransactGetItemsError::InternalServerError(
@@ -5571,6 +5610,7 @@ pub enum TransactWriteItemsError {
 impl TransactWriteItemsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<TransactWriteItemsError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "IdempotentParameterMismatchException" => {
                     return RusotoError::Service(
@@ -5647,6 +5687,7 @@ pub enum UntagResourceError {
 impl UntagResourceError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UntagResourceError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalServerError" => {
                     return RusotoError::Service(UntagResourceError::InternalServerError(err.msg))
@@ -5693,6 +5734,7 @@ pub enum UpdateContinuousBackupsError {
 impl UpdateContinuousBackupsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateContinuousBackupsError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ContinuousBackupsUnavailableException" => {
                     return RusotoError::Service(
@@ -5741,6 +5783,7 @@ pub enum UpdateContributorInsightsError {
 impl UpdateContributorInsightsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateContributorInsightsError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalServerError" => {
                     return RusotoError::Service(
@@ -5789,6 +5832,7 @@ pub enum UpdateGlobalTableError {
 impl UpdateGlobalTableError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateGlobalTableError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "GlobalTableNotFoundException" => {
                     return RusotoError::Service(UpdateGlobalTableError::GlobalTableNotFound(
@@ -5851,6 +5895,7 @@ pub enum UpdateGlobalTableSettingsError {
 impl UpdateGlobalTableSettingsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateGlobalTableSettingsError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "GlobalTableNotFoundException" => {
                     return RusotoError::Service(
@@ -5929,6 +5974,7 @@ pub enum UpdateItemError {
 impl UpdateItemError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateItemError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ConditionalCheckFailedException" => {
                     return RusotoError::Service(UpdateItemError::ConditionalCheckFailed(err.msg))
@@ -5993,6 +6039,7 @@ pub enum UpdateTableError {
 impl UpdateTableError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateTableError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalServerError" => {
                     return RusotoError::Service(UpdateTableError::InternalServerError(err.msg))
@@ -6043,6 +6090,7 @@ impl UpdateTableReplicaAutoScalingError {
         res: BufferedHttpResponse,
     ) -> RusotoError<UpdateTableReplicaAutoScalingError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalServerError" => {
                     return RusotoError::Service(
@@ -6103,6 +6151,7 @@ pub enum UpdateTimeToLiveError {
 impl UpdateTimeToLiveError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateTimeToLiveError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalServerError" => {
                     return RusotoError::Service(UpdateTimeToLiveError::InternalServerError(

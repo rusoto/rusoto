@@ -24,7 +24,6 @@ use rusoto_core::proto;
 use rusoto_core::signature::SignedRequest;
 #[allow(unused_imports)]
 use serde::{Deserialize, Serialize};
-use serde_json;
 /// <p> Details of an EC2 AMI. </p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
@@ -2697,6 +2696,7 @@ pub enum CancelImageCreationError {
 impl CancelImageCreationError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CancelImageCreationError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "CallRateLimitExceededException" => {
                     return RusotoError::Service(CancelImageCreationError::CallRateLimitExceeded(
@@ -2783,6 +2783,7 @@ pub enum CreateComponentError {
 impl CreateComponentError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateComponentError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "CallRateLimitExceededException" => {
                     return RusotoError::Service(CreateComponentError::CallRateLimitExceeded(
@@ -2883,6 +2884,7 @@ pub enum CreateContainerRecipeError {
 impl CreateContainerRecipeError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateContainerRecipeError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "CallRateLimitExceededException" => {
                     return RusotoError::Service(CreateContainerRecipeError::CallRateLimitExceeded(
@@ -2991,6 +2993,7 @@ impl CreateDistributionConfigurationError {
         res: BufferedHttpResponse,
     ) -> RusotoError<CreateDistributionConfigurationError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "CallRateLimitExceededException" => {
                     return RusotoError::Service(
@@ -3115,6 +3118,7 @@ pub enum CreateImageError {
 impl CreateImageError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateImageError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "CallRateLimitExceededException" => {
                     return RusotoError::Service(CreateImageError::CallRateLimitExceeded(err.msg))
@@ -3197,6 +3201,7 @@ pub enum CreateImagePipelineError {
 impl CreateImagePipelineError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateImagePipelineError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "CallRateLimitExceededException" => {
                     return RusotoError::Service(CreateImagePipelineError::CallRateLimitExceeded(
@@ -3295,6 +3300,7 @@ pub enum CreateImageRecipeError {
 impl CreateImageRecipeError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateImageRecipeError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "CallRateLimitExceededException" => {
                     return RusotoError::Service(CreateImageRecipeError::CallRateLimitExceeded(
@@ -3399,6 +3405,7 @@ impl CreateInfrastructureConfigurationError {
         res: BufferedHttpResponse,
     ) -> RusotoError<CreateInfrastructureConfigurationError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "CallRateLimitExceededException" => {
                     return RusotoError::Service(
@@ -3513,6 +3520,7 @@ pub enum DeleteComponentError {
 impl DeleteComponentError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteComponentError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "CallRateLimitExceededException" => {
                     return RusotoError::Service(DeleteComponentError::CallRateLimitExceeded(
@@ -3581,6 +3589,7 @@ pub enum DeleteContainerRecipeError {
 impl DeleteContainerRecipeError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteContainerRecipeError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "CallRateLimitExceededException" => {
                     return RusotoError::Service(DeleteContainerRecipeError::CallRateLimitExceeded(
@@ -3657,6 +3666,7 @@ impl DeleteDistributionConfigurationError {
         res: BufferedHttpResponse,
     ) -> RusotoError<DeleteDistributionConfigurationError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "CallRateLimitExceededException" => {
                     return RusotoError::Service(
@@ -3745,6 +3755,7 @@ pub enum DeleteImageError {
 impl DeleteImageError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteImageError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "CallRateLimitExceededException" => {
                     return RusotoError::Service(DeleteImageError::CallRateLimitExceeded(err.msg))
@@ -3811,6 +3822,7 @@ pub enum DeleteImagePipelineError {
 impl DeleteImagePipelineError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteImagePipelineError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "CallRateLimitExceededException" => {
                     return RusotoError::Service(DeleteImagePipelineError::CallRateLimitExceeded(
@@ -3883,6 +3895,7 @@ pub enum DeleteImageRecipeError {
 impl DeleteImageRecipeError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteImageRecipeError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "CallRateLimitExceededException" => {
                     return RusotoError::Service(DeleteImageRecipeError::CallRateLimitExceeded(
@@ -3957,6 +3970,7 @@ impl DeleteInfrastructureConfigurationError {
         res: BufferedHttpResponse,
     ) -> RusotoError<DeleteInfrastructureConfigurationError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "CallRateLimitExceededException" => {
                     return RusotoError::Service(
@@ -4043,6 +4057,7 @@ pub enum GetComponentError {
 impl GetComponentError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetComponentError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "CallRateLimitExceededException" => {
                     return RusotoError::Service(GetComponentError::CallRateLimitExceeded(err.msg))
@@ -4103,6 +4118,7 @@ pub enum GetComponentPolicyError {
 impl GetComponentPolicyError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetComponentPolicyError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "CallRateLimitExceededException" => {
                     return RusotoError::Service(GetComponentPolicyError::CallRateLimitExceeded(
@@ -4167,6 +4183,7 @@ pub enum GetContainerRecipeError {
 impl GetContainerRecipeError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetContainerRecipeError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "CallRateLimitExceededException" => {
                     return RusotoError::Service(GetContainerRecipeError::CallRateLimitExceeded(
@@ -4231,6 +4248,7 @@ pub enum GetContainerRecipePolicyError {
 impl GetContainerRecipePolicyError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetContainerRecipePolicyError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "CallRateLimitExceededException" => {
                     return RusotoError::Service(
@@ -4303,6 +4321,7 @@ impl GetDistributionConfigurationError {
         res: BufferedHttpResponse,
     ) -> RusotoError<GetDistributionConfigurationError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "CallRateLimitExceededException" => {
                     return RusotoError::Service(
@@ -4377,6 +4396,7 @@ pub enum GetImageError {
 impl GetImageError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetImageError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "CallRateLimitExceededException" => {
                     return RusotoError::Service(GetImageError::CallRateLimitExceeded(err.msg))
@@ -4433,6 +4453,7 @@ pub enum GetImagePipelineError {
 impl GetImagePipelineError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetImagePipelineError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "CallRateLimitExceededException" => {
                     return RusotoError::Service(GetImagePipelineError::CallRateLimitExceeded(
@@ -4495,6 +4516,7 @@ pub enum GetImagePolicyError {
 impl GetImagePolicyError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetImagePolicyError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "CallRateLimitExceededException" => {
                     return RusotoError::Service(GetImagePolicyError::CallRateLimitExceeded(
@@ -4557,6 +4579,7 @@ pub enum GetImageRecipeError {
 impl GetImageRecipeError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetImageRecipeError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "CallRateLimitExceededException" => {
                     return RusotoError::Service(GetImageRecipeError::CallRateLimitExceeded(
@@ -4619,6 +4642,7 @@ pub enum GetImageRecipePolicyError {
 impl GetImageRecipePolicyError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetImageRecipePolicyError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "CallRateLimitExceededException" => {
                     return RusotoError::Service(GetImageRecipePolicyError::CallRateLimitExceeded(
@@ -4687,6 +4711,7 @@ impl GetInfrastructureConfigurationError {
         res: BufferedHttpResponse,
     ) -> RusotoError<GetInfrastructureConfigurationError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "CallRateLimitExceededException" => {
                     return RusotoError::Service(
@@ -4773,6 +4798,7 @@ pub enum ImportComponentError {
 impl ImportComponentError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ImportComponentError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "CallRateLimitExceededException" => {
                     return RusotoError::Service(ImportComponentError::CallRateLimitExceeded(
@@ -4861,6 +4887,7 @@ impl ListComponentBuildVersionsError {
         res: BufferedHttpResponse,
     ) -> RusotoError<ListComponentBuildVersionsError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "CallRateLimitExceededException" => {
                     return RusotoError::Service(
@@ -4943,6 +4970,7 @@ pub enum ListComponentsError {
 impl ListComponentsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListComponentsError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "CallRateLimitExceededException" => {
                     return RusotoError::Service(ListComponentsError::CallRateLimitExceeded(
@@ -5013,6 +5041,7 @@ pub enum ListContainerRecipesError {
 impl ListContainerRecipesError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListContainerRecipesError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "CallRateLimitExceededException" => {
                     return RusotoError::Service(ListContainerRecipesError::CallRateLimitExceeded(
@@ -5087,6 +5116,7 @@ impl ListDistributionConfigurationsError {
         res: BufferedHttpResponse,
     ) -> RusotoError<ListDistributionConfigurationsError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "CallRateLimitExceededException" => {
                     return RusotoError::Service(
@@ -5175,6 +5205,7 @@ pub enum ListImageBuildVersionsError {
 impl ListImageBuildVersionsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListImageBuildVersionsError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "CallRateLimitExceededException" => {
                     return RusotoError::Service(
@@ -5253,6 +5284,7 @@ pub enum ListImagePipelineImagesError {
 impl ListImagePipelineImagesError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListImagePipelineImagesError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "CallRateLimitExceededException" => {
                     return RusotoError::Service(
@@ -5337,6 +5369,7 @@ pub enum ListImagePipelinesError {
 impl ListImagePipelinesError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListImagePipelinesError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "CallRateLimitExceededException" => {
                     return RusotoError::Service(ListImagePipelinesError::CallRateLimitExceeded(
@@ -5409,6 +5442,7 @@ pub enum ListImageRecipesError {
 impl ListImageRecipesError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListImageRecipesError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "CallRateLimitExceededException" => {
                     return RusotoError::Service(ListImageRecipesError::CallRateLimitExceeded(
@@ -5479,6 +5513,7 @@ pub enum ListImagesError {
 impl ListImagesError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListImagesError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "CallRateLimitExceededException" => {
                     return RusotoError::Service(ListImagesError::CallRateLimitExceeded(err.msg))
@@ -5545,6 +5580,7 @@ impl ListInfrastructureConfigurationsError {
         res: BufferedHttpResponse,
     ) -> RusotoError<ListInfrastructureConfigurationsError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "CallRateLimitExceededException" => {
                     return RusotoError::Service(
@@ -5625,6 +5661,7 @@ pub enum ListTagsForResourceError {
 impl ListTagsForResourceError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListTagsForResourceError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidParameterException" => {
                     return RusotoError::Service(ListTagsForResourceError::InvalidParameter(
@@ -5681,6 +5718,7 @@ pub enum PutComponentPolicyError {
 impl PutComponentPolicyError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<PutComponentPolicyError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "CallRateLimitExceededException" => {
                     return RusotoError::Service(PutComponentPolicyError::CallRateLimitExceeded(
@@ -5759,6 +5797,7 @@ pub enum PutContainerRecipePolicyError {
 impl PutContainerRecipePolicyError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<PutContainerRecipePolicyError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "CallRateLimitExceededException" => {
                     return RusotoError::Service(
@@ -5845,6 +5884,7 @@ pub enum PutImagePolicyError {
 impl PutImagePolicyError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<PutImagePolicyError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "CallRateLimitExceededException" => {
                     return RusotoError::Service(PutImagePolicyError::CallRateLimitExceeded(
@@ -5921,6 +5961,7 @@ pub enum PutImageRecipePolicyError {
 impl PutImageRecipePolicyError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<PutImageRecipePolicyError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "CallRateLimitExceededException" => {
                     return RusotoError::Service(PutImageRecipePolicyError::CallRateLimitExceeded(
@@ -6005,6 +6046,7 @@ impl StartImagePipelineExecutionError {
         res: BufferedHttpResponse,
     ) -> RusotoError<StartImagePipelineExecutionError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "CallRateLimitExceededException" => {
                     return RusotoError::Service(
@@ -6091,6 +6133,7 @@ pub enum TagResourceError {
 impl TagResourceError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<TagResourceError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidParameterException" => {
                     return RusotoError::Service(TagResourceError::InvalidParameter(err.msg))
@@ -6133,6 +6176,7 @@ pub enum UntagResourceError {
 impl UntagResourceError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UntagResourceError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidParameterException" => {
                     return RusotoError::Service(UntagResourceError::InvalidParameter(err.msg))
@@ -6189,6 +6233,7 @@ impl UpdateDistributionConfigurationError {
         res: BufferedHttpResponse,
     ) -> RusotoError<UpdateDistributionConfigurationError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "CallRateLimitExceededException" => {
                     return RusotoError::Service(
@@ -6295,6 +6340,7 @@ pub enum UpdateImagePipelineError {
 impl UpdateImagePipelineError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateImagePipelineError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "CallRateLimitExceededException" => {
                     return RusotoError::Service(UpdateImagePipelineError::CallRateLimitExceeded(
@@ -6377,6 +6423,7 @@ impl UpdateInfrastructureConfigurationError {
         res: BufferedHttpResponse,
     ) -> RusotoError<UpdateInfrastructureConfigurationError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "CallRateLimitExceededException" => {
                     return RusotoError::Service(
@@ -6817,6 +6864,7 @@ impl ImageBuilder for ImageBuilderClient {
         &self,
         input: CancelImageCreationRequest,
     ) -> Result<CancelImageCreationResponse, RusotoError<CancelImageCreationError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/CancelImageCreation";
 
         let mut request = SignedRequest::new("PUT", "imagebuilder", &self.region, &request_uri);
@@ -6848,6 +6896,7 @@ impl ImageBuilder for ImageBuilderClient {
         &self,
         input: CreateComponentRequest,
     ) -> Result<CreateComponentResponse, RusotoError<CreateComponentError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/CreateComponent";
 
         let mut request = SignedRequest::new("PUT", "imagebuilder", &self.region, &request_uri);
@@ -6879,6 +6928,7 @@ impl ImageBuilder for ImageBuilderClient {
         &self,
         input: CreateContainerRecipeRequest,
     ) -> Result<CreateContainerRecipeResponse, RusotoError<CreateContainerRecipeError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/CreateContainerRecipe";
 
         let mut request = SignedRequest::new("PUT", "imagebuilder", &self.region, &request_uri);
@@ -6913,6 +6963,7 @@ impl ImageBuilder for ImageBuilderClient {
         CreateDistributionConfigurationResponse,
         RusotoError<CreateDistributionConfigurationError>,
     > {
+        #![allow(clippy::needless_update)]
         let request_uri = "/CreateDistributionConfiguration";
 
         let mut request = SignedRequest::new("PUT", "imagebuilder", &self.region, &request_uri);
@@ -6946,6 +6997,7 @@ impl ImageBuilder for ImageBuilderClient {
         &self,
         input: CreateImageRequest,
     ) -> Result<CreateImageResponse, RusotoError<CreateImageError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/CreateImage";
 
         let mut request = SignedRequest::new("PUT", "imagebuilder", &self.region, &request_uri);
@@ -6977,6 +7029,7 @@ impl ImageBuilder for ImageBuilderClient {
         &self,
         input: CreateImagePipelineRequest,
     ) -> Result<CreateImagePipelineResponse, RusotoError<CreateImagePipelineError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/CreateImagePipeline";
 
         let mut request = SignedRequest::new("PUT", "imagebuilder", &self.region, &request_uri);
@@ -7008,6 +7061,7 @@ impl ImageBuilder for ImageBuilderClient {
         &self,
         input: CreateImageRecipeRequest,
     ) -> Result<CreateImageRecipeResponse, RusotoError<CreateImageRecipeError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/CreateImageRecipe";
 
         let mut request = SignedRequest::new("PUT", "imagebuilder", &self.region, &request_uri);
@@ -7042,6 +7096,7 @@ impl ImageBuilder for ImageBuilderClient {
         CreateInfrastructureConfigurationResponse,
         RusotoError<CreateInfrastructureConfigurationError>,
     > {
+        #![allow(clippy::needless_update)]
         let request_uri = "/CreateInfrastructureConfiguration";
 
         let mut request = SignedRequest::new("PUT", "imagebuilder", &self.region, &request_uri);
@@ -7075,6 +7130,7 @@ impl ImageBuilder for ImageBuilderClient {
         &self,
         input: DeleteComponentRequest,
     ) -> Result<DeleteComponentResponse, RusotoError<DeleteComponentError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/DeleteComponent";
 
         let mut request = SignedRequest::new("DELETE", "imagebuilder", &self.region, &request_uri);
@@ -7110,6 +7166,7 @@ impl ImageBuilder for ImageBuilderClient {
         &self,
         input: DeleteContainerRecipeRequest,
     ) -> Result<DeleteContainerRecipeResponse, RusotoError<DeleteContainerRecipeError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/DeleteContainerRecipe";
 
         let mut request = SignedRequest::new("DELETE", "imagebuilder", &self.region, &request_uri);
@@ -7145,6 +7202,7 @@ impl ImageBuilder for ImageBuilderClient {
         DeleteDistributionConfigurationResponse,
         RusotoError<DeleteDistributionConfigurationError>,
     > {
+        #![allow(clippy::needless_update)]
         let request_uri = "/DeleteDistributionConfiguration";
 
         let mut request = SignedRequest::new("DELETE", "imagebuilder", &self.region, &request_uri);
@@ -7182,6 +7240,7 @@ impl ImageBuilder for ImageBuilderClient {
         &self,
         input: DeleteImageRequest,
     ) -> Result<DeleteImageResponse, RusotoError<DeleteImageError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/DeleteImage";
 
         let mut request = SignedRequest::new("DELETE", "imagebuilder", &self.region, &request_uri);
@@ -7214,6 +7273,7 @@ impl ImageBuilder for ImageBuilderClient {
         &self,
         input: DeleteImagePipelineRequest,
     ) -> Result<DeleteImagePipelineResponse, RusotoError<DeleteImagePipelineError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/DeleteImagePipeline";
 
         let mut request = SignedRequest::new("DELETE", "imagebuilder", &self.region, &request_uri);
@@ -7246,6 +7306,7 @@ impl ImageBuilder for ImageBuilderClient {
         &self,
         input: DeleteImageRecipeRequest,
     ) -> Result<DeleteImageRecipeResponse, RusotoError<DeleteImageRecipeError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/DeleteImageRecipe";
 
         let mut request = SignedRequest::new("DELETE", "imagebuilder", &self.region, &request_uri);
@@ -7281,6 +7342,7 @@ impl ImageBuilder for ImageBuilderClient {
         DeleteInfrastructureConfigurationResponse,
         RusotoError<DeleteInfrastructureConfigurationError>,
     > {
+        #![allow(clippy::needless_update)]
         let request_uri = "/DeleteInfrastructureConfiguration";
 
         let mut request = SignedRequest::new("DELETE", "imagebuilder", &self.region, &request_uri);
@@ -7318,6 +7380,7 @@ impl ImageBuilder for ImageBuilderClient {
         &self,
         input: GetComponentRequest,
     ) -> Result<GetComponentResponse, RusotoError<GetComponentError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/GetComponent";
 
         let mut request = SignedRequest::new("GET", "imagebuilder", &self.region, &request_uri);
@@ -7353,6 +7416,7 @@ impl ImageBuilder for ImageBuilderClient {
         &self,
         input: GetComponentPolicyRequest,
     ) -> Result<GetComponentPolicyResponse, RusotoError<GetComponentPolicyError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/GetComponentPolicy";
 
         let mut request = SignedRequest::new("GET", "imagebuilder", &self.region, &request_uri);
@@ -7385,6 +7449,7 @@ impl ImageBuilder for ImageBuilderClient {
         &self,
         input: GetContainerRecipeRequest,
     ) -> Result<GetContainerRecipeResponse, RusotoError<GetContainerRecipeError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/GetContainerRecipe";
 
         let mut request = SignedRequest::new("GET", "imagebuilder", &self.region, &request_uri);
@@ -7417,6 +7482,7 @@ impl ImageBuilder for ImageBuilderClient {
         &self,
         input: GetContainerRecipePolicyRequest,
     ) -> Result<GetContainerRecipePolicyResponse, RusotoError<GetContainerRecipePolicyError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/GetContainerRecipePolicy";
 
         let mut request = SignedRequest::new("GET", "imagebuilder", &self.region, &request_uri);
@@ -7450,6 +7516,7 @@ impl ImageBuilder for ImageBuilderClient {
         input: GetDistributionConfigurationRequest,
     ) -> Result<GetDistributionConfigurationResponse, RusotoError<GetDistributionConfigurationError>>
     {
+        #![allow(clippy::needless_update)]
         let request_uri = "/GetDistributionConfiguration";
 
         let mut request = SignedRequest::new("GET", "imagebuilder", &self.region, &request_uri);
@@ -7485,6 +7552,7 @@ impl ImageBuilder for ImageBuilderClient {
         &self,
         input: GetImageRequest,
     ) -> Result<GetImageResponse, RusotoError<GetImageError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/GetImage";
 
         let mut request = SignedRequest::new("GET", "imagebuilder", &self.region, &request_uri);
@@ -7517,6 +7585,7 @@ impl ImageBuilder for ImageBuilderClient {
         &self,
         input: GetImagePipelineRequest,
     ) -> Result<GetImagePipelineResponse, RusotoError<GetImagePipelineError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/GetImagePipeline";
 
         let mut request = SignedRequest::new("GET", "imagebuilder", &self.region, &request_uri);
@@ -7549,6 +7618,7 @@ impl ImageBuilder for ImageBuilderClient {
         &self,
         input: GetImagePolicyRequest,
     ) -> Result<GetImagePolicyResponse, RusotoError<GetImagePolicyError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/GetImagePolicy";
 
         let mut request = SignedRequest::new("GET", "imagebuilder", &self.region, &request_uri);
@@ -7581,6 +7651,7 @@ impl ImageBuilder for ImageBuilderClient {
         &self,
         input: GetImageRecipeRequest,
     ) -> Result<GetImageRecipeResponse, RusotoError<GetImageRecipeError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/GetImageRecipe";
 
         let mut request = SignedRequest::new("GET", "imagebuilder", &self.region, &request_uri);
@@ -7613,6 +7684,7 @@ impl ImageBuilder for ImageBuilderClient {
         &self,
         input: GetImageRecipePolicyRequest,
     ) -> Result<GetImageRecipePolicyResponse, RusotoError<GetImageRecipePolicyError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/GetImageRecipePolicy";
 
         let mut request = SignedRequest::new("GET", "imagebuilder", &self.region, &request_uri);
@@ -7648,6 +7720,7 @@ impl ImageBuilder for ImageBuilderClient {
         GetInfrastructureConfigurationResponse,
         RusotoError<GetInfrastructureConfigurationError>,
     > {
+        #![allow(clippy::needless_update)]
         let request_uri = "/GetInfrastructureConfiguration";
 
         let mut request = SignedRequest::new("GET", "imagebuilder", &self.region, &request_uri);
@@ -7683,6 +7756,7 @@ impl ImageBuilder for ImageBuilderClient {
         &self,
         input: ImportComponentRequest,
     ) -> Result<ImportComponentResponse, RusotoError<ImportComponentError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/ImportComponent";
 
         let mut request = SignedRequest::new("PUT", "imagebuilder", &self.region, &request_uri);
@@ -7715,6 +7789,7 @@ impl ImageBuilder for ImageBuilderClient {
         input: ListComponentBuildVersionsRequest,
     ) -> Result<ListComponentBuildVersionsResponse, RusotoError<ListComponentBuildVersionsError>>
     {
+        #![allow(clippy::needless_update)]
         let request_uri = "/ListComponentBuildVersions";
 
         let mut request = SignedRequest::new("POST", "imagebuilder", &self.region, &request_uri);
@@ -7746,6 +7821,7 @@ impl ImageBuilder for ImageBuilderClient {
         &self,
         input: ListComponentsRequest,
     ) -> Result<ListComponentsResponse, RusotoError<ListComponentsError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/ListComponents";
 
         let mut request = SignedRequest::new("POST", "imagebuilder", &self.region, &request_uri);
@@ -7777,6 +7853,7 @@ impl ImageBuilder for ImageBuilderClient {
         &self,
         input: ListContainerRecipesRequest,
     ) -> Result<ListContainerRecipesResponse, RusotoError<ListContainerRecipesError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/ListContainerRecipes";
 
         let mut request = SignedRequest::new("POST", "imagebuilder", &self.region, &request_uri);
@@ -7811,6 +7888,7 @@ impl ImageBuilder for ImageBuilderClient {
         ListDistributionConfigurationsResponse,
         RusotoError<ListDistributionConfigurationsError>,
     > {
+        #![allow(clippy::needless_update)]
         let request_uri = "/ListDistributionConfigurations";
 
         let mut request = SignedRequest::new("POST", "imagebuilder", &self.region, &request_uri);
@@ -7842,6 +7920,7 @@ impl ImageBuilder for ImageBuilderClient {
         &self,
         input: ListImageBuildVersionsRequest,
     ) -> Result<ListImageBuildVersionsResponse, RusotoError<ListImageBuildVersionsError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/ListImageBuildVersions";
 
         let mut request = SignedRequest::new("POST", "imagebuilder", &self.region, &request_uri);
@@ -7873,6 +7952,7 @@ impl ImageBuilder for ImageBuilderClient {
         &self,
         input: ListImagePipelineImagesRequest,
     ) -> Result<ListImagePipelineImagesResponse, RusotoError<ListImagePipelineImagesError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/ListImagePipelineImages";
 
         let mut request = SignedRequest::new("POST", "imagebuilder", &self.region, &request_uri);
@@ -7904,6 +7984,7 @@ impl ImageBuilder for ImageBuilderClient {
         &self,
         input: ListImagePipelinesRequest,
     ) -> Result<ListImagePipelinesResponse, RusotoError<ListImagePipelinesError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/ListImagePipelines";
 
         let mut request = SignedRequest::new("POST", "imagebuilder", &self.region, &request_uri);
@@ -7935,6 +8016,7 @@ impl ImageBuilder for ImageBuilderClient {
         &self,
         input: ListImageRecipesRequest,
     ) -> Result<ListImageRecipesResponse, RusotoError<ListImageRecipesError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/ListImageRecipes";
 
         let mut request = SignedRequest::new("POST", "imagebuilder", &self.region, &request_uri);
@@ -7966,6 +8048,7 @@ impl ImageBuilder for ImageBuilderClient {
         &self,
         input: ListImagesRequest,
     ) -> Result<ListImagesResponse, RusotoError<ListImagesError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/ListImages";
 
         let mut request = SignedRequest::new("POST", "imagebuilder", &self.region, &request_uri);
@@ -8000,6 +8083,7 @@ impl ImageBuilder for ImageBuilderClient {
         ListInfrastructureConfigurationsResponse,
         RusotoError<ListInfrastructureConfigurationsError>,
     > {
+        #![allow(clippy::needless_update)]
         let request_uri = "/ListInfrastructureConfigurations";
 
         let mut request = SignedRequest::new("POST", "imagebuilder", &self.region, &request_uri);
@@ -8033,6 +8117,7 @@ impl ImageBuilder for ImageBuilderClient {
         &self,
         input: ListTagsForResourceRequest,
     ) -> Result<ListTagsForResourceResponse, RusotoError<ListTagsForResourceError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!("/tags/{resource_arn}", resource_arn = input.resource_arn);
 
         let mut request = SignedRequest::new("GET", "imagebuilder", &self.region, &request_uri);
@@ -8061,6 +8146,7 @@ impl ImageBuilder for ImageBuilderClient {
         &self,
         input: PutComponentPolicyRequest,
     ) -> Result<PutComponentPolicyResponse, RusotoError<PutComponentPolicyError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/PutComponentPolicy";
 
         let mut request = SignedRequest::new("PUT", "imagebuilder", &self.region, &request_uri);
@@ -8092,6 +8178,7 @@ impl ImageBuilder for ImageBuilderClient {
         &self,
         input: PutContainerRecipePolicyRequest,
     ) -> Result<PutContainerRecipePolicyResponse, RusotoError<PutContainerRecipePolicyError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/PutContainerRecipePolicy";
 
         let mut request = SignedRequest::new("PUT", "imagebuilder", &self.region, &request_uri);
@@ -8123,6 +8210,7 @@ impl ImageBuilder for ImageBuilderClient {
         &self,
         input: PutImagePolicyRequest,
     ) -> Result<PutImagePolicyResponse, RusotoError<PutImagePolicyError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/PutImagePolicy";
 
         let mut request = SignedRequest::new("PUT", "imagebuilder", &self.region, &request_uri);
@@ -8154,6 +8242,7 @@ impl ImageBuilder for ImageBuilderClient {
         &self,
         input: PutImageRecipePolicyRequest,
     ) -> Result<PutImageRecipePolicyResponse, RusotoError<PutImageRecipePolicyError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/PutImageRecipePolicy";
 
         let mut request = SignedRequest::new("PUT", "imagebuilder", &self.region, &request_uri);
@@ -8186,6 +8275,7 @@ impl ImageBuilder for ImageBuilderClient {
         input: StartImagePipelineExecutionRequest,
     ) -> Result<StartImagePipelineExecutionResponse, RusotoError<StartImagePipelineExecutionError>>
     {
+        #![allow(clippy::needless_update)]
         let request_uri = "/StartImagePipelineExecution";
 
         let mut request = SignedRequest::new("PUT", "imagebuilder", &self.region, &request_uri);
@@ -8217,6 +8307,7 @@ impl ImageBuilder for ImageBuilderClient {
         &self,
         input: TagResourceRequest,
     ) -> Result<TagResourceResponse, RusotoError<TagResourceError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!("/tags/{resource_arn}", resource_arn = input.resource_arn);
 
         let mut request = SignedRequest::new("POST", "imagebuilder", &self.region, &request_uri);
@@ -8248,6 +8339,7 @@ impl ImageBuilder for ImageBuilderClient {
         &self,
         input: UntagResourceRequest,
     ) -> Result<UntagResourceResponse, RusotoError<UntagResourceError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!("/tags/{resource_arn}", resource_arn = input.resource_arn);
 
         let mut request = SignedRequest::new("DELETE", "imagebuilder", &self.region, &request_uri);
@@ -8285,6 +8377,7 @@ impl ImageBuilder for ImageBuilderClient {
         UpdateDistributionConfigurationResponse,
         RusotoError<UpdateDistributionConfigurationError>,
     > {
+        #![allow(clippy::needless_update)]
         let request_uri = "/UpdateDistributionConfiguration";
 
         let mut request = SignedRequest::new("PUT", "imagebuilder", &self.region, &request_uri);
@@ -8318,6 +8411,7 @@ impl ImageBuilder for ImageBuilderClient {
         &self,
         input: UpdateImagePipelineRequest,
     ) -> Result<UpdateImagePipelineResponse, RusotoError<UpdateImagePipelineError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/UpdateImagePipeline";
 
         let mut request = SignedRequest::new("PUT", "imagebuilder", &self.region, &request_uri);
@@ -8352,6 +8446,7 @@ impl ImageBuilder for ImageBuilderClient {
         UpdateInfrastructureConfigurationResponse,
         RusotoError<UpdateInfrastructureConfigurationError>,
     > {
+        #![allow(clippy::needless_update)]
         let request_uri = "/UpdateInfrastructureConfiguration";
 
         let mut request = SignedRequest::new("PUT", "imagebuilder", &self.region, &request_uri);

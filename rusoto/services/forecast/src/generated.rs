@@ -49,7 +49,6 @@ impl ForecastClient {
     }
 }
 
-use serde_json;
 /// <p>Specifies a categorical hyperparameter and it's range of tunable values. This object is part of the <a>ParameterRanges</a> object.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct CategoricalParameterRange {
@@ -1681,6 +1680,7 @@ pub enum CreateDatasetError {
 impl CreateDatasetError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateDatasetError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidInputException" => {
                     return RusotoError::Service(CreateDatasetError::InvalidInput(err.msg))
@@ -1727,6 +1727,7 @@ pub enum CreateDatasetGroupError {
 impl CreateDatasetGroupError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateDatasetGroupError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidInputException" => {
                     return RusotoError::Service(CreateDatasetGroupError::InvalidInput(err.msg))
@@ -1783,6 +1784,7 @@ pub enum CreateDatasetImportJobError {
 impl CreateDatasetImportJobError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateDatasetImportJobError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidInputException" => {
                     return RusotoError::Service(CreateDatasetImportJobError::InvalidInput(err.msg))
@@ -1845,6 +1847,7 @@ pub enum CreateForecastError {
 impl CreateForecastError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateForecastError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidInputException" => {
                     return RusotoError::Service(CreateForecastError::InvalidInput(err.msg))
@@ -1901,6 +1904,7 @@ pub enum CreateForecastExportJobError {
 impl CreateForecastExportJobError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateForecastExportJobError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidInputException" => {
                     return RusotoError::Service(CreateForecastExportJobError::InvalidInput(
@@ -1967,6 +1971,7 @@ pub enum CreatePredictorError {
 impl CreatePredictorError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreatePredictorError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidInputException" => {
                     return RusotoError::Service(CreatePredictorError::InvalidInput(err.msg))
@@ -2025,6 +2030,7 @@ impl CreatePredictorBacktestExportJobError {
         res: BufferedHttpResponse,
     ) -> RusotoError<CreatePredictorBacktestExportJobError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidInputException" => {
                     return RusotoError::Service(
@@ -2095,6 +2101,7 @@ pub enum DeleteDatasetError {
 impl DeleteDatasetError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteDatasetError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidInputException" => {
                     return RusotoError::Service(DeleteDatasetError::InvalidInput(err.msg))
@@ -2137,6 +2144,7 @@ pub enum DeleteDatasetGroupError {
 impl DeleteDatasetGroupError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteDatasetGroupError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidInputException" => {
                     return RusotoError::Service(DeleteDatasetGroupError::InvalidInput(err.msg))
@@ -2179,6 +2187,7 @@ pub enum DeleteDatasetImportJobError {
 impl DeleteDatasetImportJobError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteDatasetImportJobError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidInputException" => {
                     return RusotoError::Service(DeleteDatasetImportJobError::InvalidInput(err.msg))
@@ -2225,6 +2234,7 @@ pub enum DeleteForecastError {
 impl DeleteForecastError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteForecastError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidInputException" => {
                     return RusotoError::Service(DeleteForecastError::InvalidInput(err.msg))
@@ -2267,6 +2277,7 @@ pub enum DeleteForecastExportJobError {
 impl DeleteForecastExportJobError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteForecastExportJobError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidInputException" => {
                     return RusotoError::Service(DeleteForecastExportJobError::InvalidInput(
@@ -2315,6 +2326,7 @@ pub enum DeletePredictorError {
 impl DeletePredictorError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeletePredictorError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidInputException" => {
                     return RusotoError::Service(DeletePredictorError::InvalidInput(err.msg))
@@ -2359,6 +2371,7 @@ impl DeletePredictorBacktestExportJobError {
         res: BufferedHttpResponse,
     ) -> RusotoError<DeletePredictorBacktestExportJobError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidInputException" => {
                     return RusotoError::Service(
@@ -2411,6 +2424,7 @@ pub enum DescribeDatasetError {
 impl DescribeDatasetError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeDatasetError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidInputException" => {
                     return RusotoError::Service(DescribeDatasetError::InvalidInput(err.msg))
@@ -2447,6 +2461,7 @@ pub enum DescribeDatasetGroupError {
 impl DescribeDatasetGroupError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeDatasetGroupError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidInputException" => {
                     return RusotoError::Service(DescribeDatasetGroupError::InvalidInput(err.msg))
@@ -2485,6 +2500,7 @@ pub enum DescribeDatasetImportJobError {
 impl DescribeDatasetImportJobError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeDatasetImportJobError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidInputException" => {
                     return RusotoError::Service(DescribeDatasetImportJobError::InvalidInput(
@@ -2525,6 +2541,7 @@ pub enum DescribeForecastError {
 impl DescribeForecastError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeForecastError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidInputException" => {
                     return RusotoError::Service(DescribeForecastError::InvalidInput(err.msg))
@@ -2561,6 +2578,7 @@ pub enum DescribeForecastExportJobError {
 impl DescribeForecastExportJobError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeForecastExportJobError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidInputException" => {
                     return RusotoError::Service(DescribeForecastExportJobError::InvalidInput(
@@ -2601,6 +2619,7 @@ pub enum DescribePredictorError {
 impl DescribePredictorError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribePredictorError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidInputException" => {
                     return RusotoError::Service(DescribePredictorError::InvalidInput(err.msg))
@@ -2639,6 +2658,7 @@ impl DescribePredictorBacktestExportJobError {
         res: BufferedHttpResponse,
     ) -> RusotoError<DescribePredictorBacktestExportJobError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidInputException" => {
                     return RusotoError::Service(
@@ -2685,6 +2705,7 @@ pub enum GetAccuracyMetricsError {
 impl GetAccuracyMetricsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetAccuracyMetricsError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidInputException" => {
                     return RusotoError::Service(GetAccuracyMetricsError::InvalidInput(err.msg))
@@ -2723,6 +2744,7 @@ pub enum ListDatasetGroupsError {
 impl ListDatasetGroupsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListDatasetGroupsError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidNextTokenException" => {
                     return RusotoError::Service(ListDatasetGroupsError::InvalidNextToken(err.msg))
@@ -2755,6 +2777,7 @@ pub enum ListDatasetImportJobsError {
 impl ListDatasetImportJobsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListDatasetImportJobsError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidInputException" => {
                     return RusotoError::Service(ListDatasetImportJobsError::InvalidInput(err.msg))
@@ -2791,6 +2814,7 @@ pub enum ListDatasetsError {
 impl ListDatasetsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListDatasetsError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidNextTokenException" => {
                     return RusotoError::Service(ListDatasetsError::InvalidNextToken(err.msg))
@@ -2823,6 +2847,7 @@ pub enum ListForecastExportJobsError {
 impl ListForecastExportJobsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListForecastExportJobsError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidInputException" => {
                     return RusotoError::Service(ListForecastExportJobsError::InvalidInput(err.msg))
@@ -2861,6 +2886,7 @@ pub enum ListForecastsError {
 impl ListForecastsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListForecastsError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidInputException" => {
                     return RusotoError::Service(ListForecastsError::InvalidInput(err.msg))
@@ -2899,6 +2925,7 @@ impl ListPredictorBacktestExportJobsError {
         res: BufferedHttpResponse,
     ) -> RusotoError<ListPredictorBacktestExportJobsError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidInputException" => {
                     return RusotoError::Service(
@@ -2941,6 +2968,7 @@ pub enum ListPredictorsError {
 impl ListPredictorsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListPredictorsError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidInputException" => {
                     return RusotoError::Service(ListPredictorsError::InvalidInput(err.msg))
@@ -2977,6 +3005,7 @@ pub enum ListTagsForResourceError {
 impl ListTagsForResourceError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListTagsForResourceError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidInputException" => {
                     return RusotoError::Service(ListTagsForResourceError::InvalidInput(err.msg))
@@ -3017,6 +3046,7 @@ pub enum TagResourceError {
 impl TagResourceError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<TagResourceError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidInputException" => {
                     return RusotoError::Service(TagResourceError::InvalidInput(err.msg))
@@ -3057,6 +3087,7 @@ pub enum UntagResourceError {
 impl UntagResourceError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UntagResourceError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidInputException" => {
                     return RusotoError::Service(UntagResourceError::InvalidInput(err.msg))
@@ -3095,6 +3126,7 @@ pub enum UpdateDatasetGroupError {
 impl UpdateDatasetGroupError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateDatasetGroupError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidInputException" => {
                     return RusotoError::Service(UpdateDatasetGroupError::InvalidInput(err.msg))

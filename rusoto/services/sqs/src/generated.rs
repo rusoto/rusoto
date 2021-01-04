@@ -31,7 +31,6 @@ use rusoto_core::signature::SignedRequest;
 use serde::Deserialize;
 #[cfg(feature = "serialize_structs")]
 use serde::Serialize;
-use serde_urlencoded;
 use std::str::FromStr;
 use xml::EventReader;
 
@@ -63,6 +62,7 @@ impl SqsClient {
 /// Serialize `AWSAccountIdList` contents to a `SignedRequest`.
 struct AWSAccountIdListSerializer;
 impl AWSAccountIdListSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &Vec<String>) {
         for (index, obj) in obj.iter().enumerate() {
             let key = format!("{}.{}", name, index + 1);
@@ -74,6 +74,7 @@ impl AWSAccountIdListSerializer {
 /// Serialize `ActionNameList` contents to a `SignedRequest`.
 struct ActionNameListSerializer;
 impl ActionNameListSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &Vec<String>) {
         for (index, obj) in obj.iter().enumerate() {
             let key = format!("{}.{}", name, index + 1);
@@ -99,10 +100,11 @@ pub struct AddPermissionRequest {
 /// Serialize `AddPermissionRequest` contents to a `SignedRequest`.
 struct AddPermissionRequestSerializer;
 impl AddPermissionRequestSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &AddPermissionRequest) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         AWSAccountIdListSerializer::serialize(
@@ -123,6 +125,7 @@ impl AddPermissionRequestSerializer {
 /// Serialize `AttributeNameList` contents to a `SignedRequest`.
 struct AttributeNameListSerializer;
 impl AttributeNameListSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &Vec<String>) {
         for (index, obj) in obj.iter().enumerate() {
             let key = format!("{}.{}", name, index + 1);
@@ -148,11 +151,12 @@ pub struct BatchResultErrorEntry {
 #[allow(dead_code)]
 struct BatchResultErrorEntryDeserializer;
 impl BatchResultErrorEntryDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<BatchResultErrorEntry, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, BatchResultErrorEntry, _>(tag_name, stack, |name, stack, obj| {
             match name {
                 "Code" => {
@@ -176,11 +180,13 @@ impl BatchResultErrorEntryDeserializer {
 #[allow(dead_code)]
 struct BatchResultErrorEntryListDeserializer;
 impl BatchResultErrorEntryListDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<BatchResultErrorEntry>, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
+
         let mut obj = vec![];
 
         loop {
@@ -206,22 +212,25 @@ impl BatchResultErrorEntryListDeserializer {
 #[allow(dead_code)]
 struct BinaryDeserializer;
 impl BinaryDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<bytes::Bytes, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::deserialize_primitive(tag_name, stack, |s| Ok(s.into()))
     }
 }
 #[allow(dead_code)]
 struct BinaryListDeserializer;
 impl BinaryListDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<bytes::Bytes>, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
+
         deserialize_elements::<_, Vec<_>, _>(tag_name, stack, |name, stack, obj| {
             if name == "BinaryListValue" {
                 obj.push(BinaryDeserializer::deserialize("BinaryListValue", stack)?);
@@ -236,6 +245,7 @@ impl BinaryListDeserializer {
 /// Serialize `BinaryList` contents to a `SignedRequest`.
 struct BinaryListSerializer;
 impl BinaryListSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &Vec<bytes::Bytes>) {
         for (index, obj) in obj.iter().enumerate() {
             let key = format!("{}.member.{}", name, index + 1);
@@ -247,8 +257,9 @@ impl BinaryListSerializer {
 #[allow(dead_code)]
 struct BooleanDeserializer;
 impl BooleanDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<bool, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::deserialize_primitive(tag_name, stack, |s| Ok(bool::from_str(&s).unwrap()))
     }
 }
@@ -265,10 +276,11 @@ pub struct ChangeMessageVisibilityBatchRequest {
 /// Serialize `ChangeMessageVisibilityBatchRequest` contents to a `SignedRequest`.
 struct ChangeMessageVisibilityBatchRequestSerializer;
 impl ChangeMessageVisibilityBatchRequestSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &ChangeMessageVisibilityBatchRequest) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         ChangeMessageVisibilityBatchRequestEntryListSerializer::serialize(
@@ -295,10 +307,11 @@ pub struct ChangeMessageVisibilityBatchRequestEntry {
 /// Serialize `ChangeMessageVisibilityBatchRequestEntry` contents to a `SignedRequest`.
 struct ChangeMessageVisibilityBatchRequestEntrySerializer;
 impl ChangeMessageVisibilityBatchRequestEntrySerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &ChangeMessageVisibilityBatchRequestEntry) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         params.put(&format!("{}{}", prefix, "Id"), &obj.id);
@@ -315,6 +328,7 @@ impl ChangeMessageVisibilityBatchRequestEntrySerializer {
 /// Serialize `ChangeMessageVisibilityBatchRequestEntryList` contents to a `SignedRequest`.
 struct ChangeMessageVisibilityBatchRequestEntryListSerializer;
 impl ChangeMessageVisibilityBatchRequestEntryListSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(
         params: &mut Params,
         name: &str,
@@ -340,11 +354,12 @@ pub struct ChangeMessageVisibilityBatchResult {
 #[allow(dead_code)]
 struct ChangeMessageVisibilityBatchResultDeserializer;
 impl ChangeMessageVisibilityBatchResultDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<ChangeMessageVisibilityBatchResult, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, ChangeMessageVisibilityBatchResult, _>(
             tag_name,
             stack,
@@ -383,11 +398,12 @@ pub struct ChangeMessageVisibilityBatchResultEntry {
 #[allow(dead_code)]
 struct ChangeMessageVisibilityBatchResultEntryDeserializer;
 impl ChangeMessageVisibilityBatchResultEntryDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<ChangeMessageVisibilityBatchResultEntry, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, ChangeMessageVisibilityBatchResultEntry, _>(
             tag_name,
             stack,
@@ -406,11 +422,13 @@ impl ChangeMessageVisibilityBatchResultEntryDeserializer {
 #[allow(dead_code)]
 struct ChangeMessageVisibilityBatchResultEntryListDeserializer;
 impl ChangeMessageVisibilityBatchResultEntryListDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<ChangeMessageVisibilityBatchResultEntry>, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
+
         let mut obj = vec![];
 
         loop {
@@ -449,10 +467,11 @@ pub struct ChangeMessageVisibilityRequest {
 /// Serialize `ChangeMessageVisibilityRequest` contents to a `SignedRequest`.
 struct ChangeMessageVisibilityRequestSerializer;
 impl ChangeMessageVisibilityRequestSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &ChangeMessageVisibilityRequest) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         params.put(&format!("{}{}", prefix, "QueueUrl"), &obj.queue_url);
@@ -482,10 +501,11 @@ pub struct CreateQueueRequest {
 /// Serialize `CreateQueueRequest` contents to a `SignedRequest`.
 struct CreateQueueRequestSerializer;
 impl CreateQueueRequestSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &CreateQueueRequest) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         if let Some(ref field_value) = obj.attributes {
@@ -513,11 +533,12 @@ pub struct CreateQueueResult {
 #[allow(dead_code)]
 struct CreateQueueResultDeserializer;
 impl CreateQueueResultDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<CreateQueueResult, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, CreateQueueResult, _>(tag_name, stack, |name, stack, obj| {
             match name {
                 "QueueUrl" => {
@@ -542,10 +563,11 @@ pub struct DeleteMessageBatchRequest {
 /// Serialize `DeleteMessageBatchRequest` contents to a `SignedRequest`.
 struct DeleteMessageBatchRequestSerializer;
 impl DeleteMessageBatchRequestSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &DeleteMessageBatchRequest) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         DeleteMessageBatchRequestEntryListSerializer::serialize(
@@ -570,10 +592,11 @@ pub struct DeleteMessageBatchRequestEntry {
 /// Serialize `DeleteMessageBatchRequestEntry` contents to a `SignedRequest`.
 struct DeleteMessageBatchRequestEntrySerializer;
 impl DeleteMessageBatchRequestEntrySerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &DeleteMessageBatchRequestEntry) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         params.put(&format!("{}{}", prefix, "Id"), &obj.id);
@@ -587,6 +610,7 @@ impl DeleteMessageBatchRequestEntrySerializer {
 /// Serialize `DeleteMessageBatchRequestEntryList` contents to a `SignedRequest`.
 struct DeleteMessageBatchRequestEntryListSerializer;
 impl DeleteMessageBatchRequestEntryListSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &Vec<DeleteMessageBatchRequestEntry>) {
         for (index, obj) in obj.iter().enumerate() {
             let key = format!("{}.{}", name, index + 1);
@@ -608,11 +632,12 @@ pub struct DeleteMessageBatchResult {
 #[allow(dead_code)]
 struct DeleteMessageBatchResultDeserializer;
 impl DeleteMessageBatchResultDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<DeleteMessageBatchResult, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, DeleteMessageBatchResult, _>(
             tag_name,
             stack,
@@ -651,11 +676,12 @@ pub struct DeleteMessageBatchResultEntry {
 #[allow(dead_code)]
 struct DeleteMessageBatchResultEntryDeserializer;
 impl DeleteMessageBatchResultEntryDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<DeleteMessageBatchResultEntry, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, DeleteMessageBatchResultEntry, _>(
             tag_name,
             stack,
@@ -674,11 +700,13 @@ impl DeleteMessageBatchResultEntryDeserializer {
 #[allow(dead_code)]
 struct DeleteMessageBatchResultEntryListDeserializer;
 impl DeleteMessageBatchResultEntryListDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<DeleteMessageBatchResultEntry>, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
+
         let mut obj = vec![];
 
         loop {
@@ -714,10 +742,11 @@ pub struct DeleteMessageRequest {
 /// Serialize `DeleteMessageRequest` contents to a `SignedRequest`.
 struct DeleteMessageRequestSerializer;
 impl DeleteMessageRequestSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &DeleteMessageRequest) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         params.put(&format!("{}{}", prefix, "QueueUrl"), &obj.queue_url);
@@ -739,10 +768,11 @@ pub struct DeleteQueueRequest {
 /// Serialize `DeleteQueueRequest` contents to a `SignedRequest`.
 struct DeleteQueueRequestSerializer;
 impl DeleteQueueRequestSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &DeleteQueueRequest) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         params.put(&format!("{}{}", prefix, "QueueUrl"), &obj.queue_url);
@@ -762,10 +792,11 @@ pub struct GetQueueAttributesRequest {
 /// Serialize `GetQueueAttributesRequest` contents to a `SignedRequest`.
 struct GetQueueAttributesRequestSerializer;
 impl GetQueueAttributesRequestSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &GetQueueAttributesRequest) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         if let Some(ref field_value) = obj.attribute_names {
@@ -790,11 +821,12 @@ pub struct GetQueueAttributesResult {
 #[allow(dead_code)]
 struct GetQueueAttributesResultDeserializer;
 impl GetQueueAttributesResultDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<GetQueueAttributesResult, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, GetQueueAttributesResult, _>(
             tag_name,
             stack,
@@ -826,10 +858,11 @@ pub struct GetQueueUrlRequest {
 /// Serialize `GetQueueUrlRequest` contents to a `SignedRequest`.
 struct GetQueueUrlRequestSerializer;
 impl GetQueueUrlRequestSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &GetQueueUrlRequest) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         params.put(&format!("{}{}", prefix, "QueueName"), &obj.queue_name);
@@ -853,11 +886,12 @@ pub struct GetQueueUrlResult {
 #[allow(dead_code)]
 struct GetQueueUrlResultDeserializer;
 impl GetQueueUrlResultDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<GetQueueUrlResult, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, GetQueueUrlResult, _>(tag_name, stack, |name, stack, obj| {
             match name {
                 "QueueUrl" => {
@@ -884,10 +918,11 @@ pub struct ListDeadLetterSourceQueuesRequest {
 /// Serialize `ListDeadLetterSourceQueuesRequest` contents to a `SignedRequest`.
 struct ListDeadLetterSourceQueuesRequestSerializer;
 impl ListDeadLetterSourceQueuesRequestSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &ListDeadLetterSourceQueuesRequest) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         if let Some(ref field_value) = obj.max_results {
@@ -913,11 +948,12 @@ pub struct ListDeadLetterSourceQueuesResult {
 #[allow(dead_code)]
 struct ListDeadLetterSourceQueuesResultDeserializer;
 impl ListDeadLetterSourceQueuesResultDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<ListDeadLetterSourceQueuesResult, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, ListDeadLetterSourceQueuesResult, _>(
             tag_name,
             stack,
@@ -947,10 +983,11 @@ pub struct ListQueueTagsRequest {
 /// Serialize `ListQueueTagsRequest` contents to a `SignedRequest`.
 struct ListQueueTagsRequestSerializer;
 impl ListQueueTagsRequestSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &ListQueueTagsRequest) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         params.put(&format!("{}{}", prefix, "QueueUrl"), &obj.queue_url);
@@ -967,11 +1004,12 @@ pub struct ListQueueTagsResult {
 #[allow(dead_code)]
 struct ListQueueTagsResultDeserializer;
 impl ListQueueTagsResultDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<ListQueueTagsResult, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, ListQueueTagsResult, _>(tag_name, stack, |name, stack, obj| {
             match name {
                 "Tag" => {
@@ -998,10 +1036,11 @@ pub struct ListQueuesRequest {
 /// Serialize `ListQueuesRequest` contents to a `SignedRequest`.
 struct ListQueuesRequestSerializer;
 impl ListQueuesRequestSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &ListQueuesRequest) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         if let Some(ref field_value) = obj.max_results {
@@ -1029,11 +1068,12 @@ pub struct ListQueuesResult {
 #[allow(dead_code)]
 struct ListQueuesResultDeserializer;
 impl ListQueuesResultDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<ListQueuesResult, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, ListQueuesResult, _>(tag_name, stack, |name, stack, obj| {
             match name {
                 "NextToken" => {
@@ -1073,11 +1113,12 @@ pub struct Message {
 #[allow(dead_code)]
 struct MessageDeserializer;
 impl MessageDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Message, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, Message, _>(tag_name, stack, |name, stack, obj| {
             match name {
                 "Attribute" => {
@@ -1122,6 +1163,7 @@ impl MessageDeserializer {
 /// Serialize `MessageAttributeNameList` contents to a `SignedRequest`.
 struct MessageAttributeNameListSerializer;
 impl MessageAttributeNameListSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &Vec<String>) {
         for (index, obj) in obj.iter().enumerate() {
             let key = format!("{}.{}", name, index + 1);
@@ -1150,11 +1192,12 @@ pub struct MessageAttributeValue {
 #[allow(dead_code)]
 struct MessageAttributeValueDeserializer;
 impl MessageAttributeValueDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<MessageAttributeValue, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, MessageAttributeValue, _>(tag_name, stack, |name, stack, obj| {
             match name {
                 "BinaryListValue" => {
@@ -1186,10 +1229,11 @@ impl MessageAttributeValueDeserializer {
 /// Serialize `MessageAttributeValue` contents to a `SignedRequest`.
 struct MessageAttributeValueSerializer;
 impl MessageAttributeValueSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &MessageAttributeValue) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         if let Some(ref field_value) = obj.binary_list_values {
@@ -1222,11 +1266,13 @@ impl MessageAttributeValueSerializer {
 #[allow(dead_code)]
 struct MessageBodyAttributeMapDeserializer;
 impl MessageBodyAttributeMapDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<::std::collections::HashMap<String, MessageAttributeValue>, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
+
         let mut obj = ::std::collections::HashMap::new();
 
         while xml_util::peek_at_name(stack)? == tag_name {
@@ -1244,6 +1290,7 @@ impl MessageBodyAttributeMapDeserializer {
 /// Serialize `MessageBodyAttributeMap` contents to a `SignedRequest`.
 struct MessageBodyAttributeMapSerializer;
 impl MessageBodyAttributeMapSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(
         params: &mut Params,
         name: &str,
@@ -1264,6 +1311,7 @@ impl MessageBodyAttributeMapSerializer {
 /// Serialize `MessageBodySystemAttributeMap` contents to a `SignedRequest`.
 struct MessageBodySystemAttributeMapSerializer;
 impl MessageBodySystemAttributeMapSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(
         params: &mut Params,
         name: &str,
@@ -1284,11 +1332,13 @@ impl MessageBodySystemAttributeMapSerializer {
 #[allow(dead_code)]
 struct MessageListDeserializer;
 impl MessageListDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<Message>, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
+
         let mut obj = vec![];
 
         loop {
@@ -1312,11 +1362,13 @@ impl MessageListDeserializer {
 #[allow(dead_code)]
 struct MessageSystemAttributeMapDeserializer;
 impl MessageSystemAttributeMapDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<::std::collections::HashMap<String, String>, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
+
         let mut obj = ::std::collections::HashMap::new();
 
         while xml_util::peek_at_name(stack)? == "Attribute" {
@@ -1333,8 +1385,9 @@ impl MessageSystemAttributeMapDeserializer {
 #[allow(dead_code)]
 struct MessageSystemAttributeNameDeserializer;
 impl MessageSystemAttributeNameDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
@@ -1357,10 +1410,11 @@ pub struct MessageSystemAttributeValue {
 /// Serialize `MessageSystemAttributeValue` contents to a `SignedRequest`.
 struct MessageSystemAttributeValueSerializer;
 impl MessageSystemAttributeValueSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &MessageSystemAttributeValue) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         if let Some(ref field_value) = obj.binary_list_values {
@@ -1401,10 +1455,11 @@ pub struct PurgeQueueRequest {
 /// Serialize `PurgeQueueRequest` contents to a `SignedRequest`.
 struct PurgeQueueRequestSerializer;
 impl PurgeQueueRequestSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &PurgeQueueRequest) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         params.put(&format!("{}{}", prefix, "QueueUrl"), &obj.queue_url);
@@ -1414,11 +1469,13 @@ impl PurgeQueueRequestSerializer {
 #[allow(dead_code)]
 struct QueueAttributeMapDeserializer;
 impl QueueAttributeMapDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<::std::collections::HashMap<String, String>, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
+
         let mut obj = ::std::collections::HashMap::new();
 
         while xml_util::peek_at_name(stack)? == "Attribute" {
@@ -1436,6 +1493,7 @@ impl QueueAttributeMapDeserializer {
 /// Serialize `QueueAttributeMap` contents to a `SignedRequest`.
 struct QueueAttributeMapSerializer;
 impl QueueAttributeMapSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(
         params: &mut Params,
         name: &str,
@@ -1452,19 +1510,22 @@ impl QueueAttributeMapSerializer {
 #[allow(dead_code)]
 struct QueueAttributeNameDeserializer;
 impl QueueAttributeNameDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 #[allow(dead_code)]
 struct QueueUrlListDeserializer;
 impl QueueUrlListDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<String>, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
+
         let mut obj = vec![];
 
         loop {
@@ -1508,10 +1569,11 @@ pub struct ReceiveMessageRequest {
 /// Serialize `ReceiveMessageRequest` contents to a `SignedRequest`.
 struct ReceiveMessageRequestSerializer;
 impl ReceiveMessageRequestSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &ReceiveMessageRequest) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         if let Some(ref field_value) = obj.attribute_names {
@@ -1561,11 +1623,12 @@ pub struct ReceiveMessageResult {
 #[allow(dead_code)]
 struct ReceiveMessageResultDeserializer;
 impl ReceiveMessageResultDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<ReceiveMessageResult, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, ReceiveMessageResult, _>(tag_name, stack, |name, stack, obj| {
             match name {
                 "Message" => {
@@ -1592,10 +1655,11 @@ pub struct RemovePermissionRequest {
 /// Serialize `RemovePermissionRequest` contents to a `SignedRequest`.
 struct RemovePermissionRequestSerializer;
 impl RemovePermissionRequestSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &RemovePermissionRequest) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         params.put(&format!("{}{}", prefix, "Label"), &obj.label);
@@ -1616,10 +1680,11 @@ pub struct SendMessageBatchRequest {
 /// Serialize `SendMessageBatchRequest` contents to a `SignedRequest`.
 struct SendMessageBatchRequestSerializer;
 impl SendMessageBatchRequestSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &SendMessageBatchRequest) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         SendMessageBatchRequestEntryListSerializer::serialize(
@@ -1655,10 +1720,11 @@ pub struct SendMessageBatchRequestEntry {
 /// Serialize `SendMessageBatchRequestEntry` contents to a `SignedRequest`.
 struct SendMessageBatchRequestEntrySerializer;
 impl SendMessageBatchRequestEntrySerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &SendMessageBatchRequestEntry) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         if let Some(ref field_value) = obj.delay_seconds {
@@ -1695,6 +1761,7 @@ impl SendMessageBatchRequestEntrySerializer {
 /// Serialize `SendMessageBatchRequestEntryList` contents to a `SignedRequest`.
 struct SendMessageBatchRequestEntryListSerializer;
 impl SendMessageBatchRequestEntryListSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &Vec<SendMessageBatchRequestEntry>) {
         for (index, obj) in obj.iter().enumerate() {
             let key = format!("{}.{}", name, index + 1);
@@ -1716,11 +1783,12 @@ pub struct SendMessageBatchResult {
 #[allow(dead_code)]
 struct SendMessageBatchResultDeserializer;
 impl SendMessageBatchResultDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<SendMessageBatchResult, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, SendMessageBatchResult, _>(tag_name, stack, |name, stack, obj| {
             match name {
                 "BatchResultErrorEntry" => {
@@ -1765,11 +1833,12 @@ pub struct SendMessageBatchResultEntry {
 #[allow(dead_code)]
 struct SendMessageBatchResultEntryDeserializer;
 impl SendMessageBatchResultEntryDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<SendMessageBatchResultEntry, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, SendMessageBatchResultEntry, _>(
             tag_name,
             stack,
@@ -1810,11 +1879,13 @@ impl SendMessageBatchResultEntryDeserializer {
 #[allow(dead_code)]
 struct SendMessageBatchResultEntryListDeserializer;
 impl SendMessageBatchResultEntryListDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<SendMessageBatchResultEntry>, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
+
         let mut obj = vec![];
 
         loop {
@@ -1861,10 +1932,11 @@ pub struct SendMessageRequest {
 /// Serialize `SendMessageRequest` contents to a `SignedRequest`.
 struct SendMessageRequestSerializer;
 impl SendMessageRequestSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &SendMessageRequest) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         if let Some(ref field_value) = obj.delay_seconds {
@@ -1917,11 +1989,12 @@ pub struct SendMessageResult {
 #[allow(dead_code)]
 struct SendMessageResultDeserializer;
 impl SendMessageResultDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<SendMessageResult, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, SendMessageResult, _>(tag_name, stack, |name, stack, obj| {
             match name {
                 "MD5OfMessageAttributes" => {
@@ -1966,10 +2039,11 @@ pub struct SetQueueAttributesRequest {
 /// Serialize `SetQueueAttributesRequest` contents to a `SignedRequest`.
 struct SetQueueAttributesRequestSerializer;
 impl SetQueueAttributesRequestSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &SetQueueAttributesRequest) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         QueueAttributeMapSerializer::serialize(
@@ -1984,19 +2058,22 @@ impl SetQueueAttributesRequestSerializer {
 #[allow(dead_code)]
 struct StringDeserializer;
 impl StringDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 #[allow(dead_code)]
 struct StringListDeserializer;
 impl StringListDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<String>, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
+
         deserialize_elements::<_, Vec<_>, _>(tag_name, stack, |name, stack, obj| {
             if name == "StringListValue" {
                 obj.push(StringDeserializer::deserialize("StringListValue", stack)?);
@@ -2011,6 +2088,7 @@ impl StringListDeserializer {
 /// Serialize `StringList` contents to a `SignedRequest`.
 struct StringListSerializer;
 impl StringListSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &Vec<String>) {
         for (index, obj) in obj.iter().enumerate() {
             let key = format!("{}.member.{}", name, index + 1);
@@ -2022,8 +2100,9 @@ impl StringListSerializer {
 #[allow(dead_code)]
 struct TagKeyDeserializer;
 impl TagKeyDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
@@ -2031,6 +2110,7 @@ impl TagKeyDeserializer {
 /// Serialize `TagKeyList` contents to a `SignedRequest`.
 struct TagKeyListSerializer;
 impl TagKeyListSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &Vec<String>) {
         for (index, obj) in obj.iter().enumerate() {
             let key = format!("{}.{}", name, index + 1);
@@ -2042,11 +2122,13 @@ impl TagKeyListSerializer {
 #[allow(dead_code)]
 struct TagMapDeserializer;
 impl TagMapDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<::std::collections::HashMap<String, String>, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
+
         let mut obj = ::std::collections::HashMap::new();
 
         while xml_util::peek_at_name(stack)? == "Tag" {
@@ -2064,6 +2146,7 @@ impl TagMapDeserializer {
 /// Serialize `TagMap` contents to a `SignedRequest`.
 struct TagMapSerializer;
 impl TagMapSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(
         params: &mut Params,
         name: &str,
@@ -2089,10 +2172,11 @@ pub struct TagQueueRequest {
 /// Serialize `TagQueueRequest` contents to a `SignedRequest`.
 struct TagQueueRequestSerializer;
 impl TagQueueRequestSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &TagQueueRequest) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         params.put(&format!("{}{}", prefix, "QueueUrl"), &obj.queue_url);
@@ -2103,16 +2187,18 @@ impl TagQueueRequestSerializer {
 #[allow(dead_code)]
 struct TagValueDeserializer;
 impl TagValueDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 #[allow(dead_code)]
 struct TokenDeserializer;
 impl TokenDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
@@ -2128,10 +2214,11 @@ pub struct UntagQueueRequest {
 /// Serialize `UntagQueueRequest` contents to a `SignedRequest`.
 struct UntagQueueRequestSerializer;
 impl UntagQueueRequestSerializer {
+    #[allow(clippy::ptr_arg)]
     fn serialize(params: &mut Params, name: &str, obj: &UntagQueueRequest) {
         let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
+        if !prefix.is_empty() {
+            prefix.push('.');
         }
 
         params.put(&format!("{}{}", prefix, "QueueUrl"), &obj.queue_url);
@@ -2152,14 +2239,17 @@ impl AddPermissionError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    "OverLimit" => {
-                        return RusotoError::Service(AddPermissionError::OverLimit(
-                            parsed_error.message,
-                        ))
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {
+                        "OverLimit" => {
+                            return RusotoError::Service(AddPermissionError::OverLimit(
+                                parsed_error.message,
+                            ))
+                        }
+                        _ => {}
                     }
-                    _ => {}
                 }
             }
         }
@@ -2198,21 +2288,26 @@ impl ChangeMessageVisibilityError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    "AWS.SimpleQueueService.MessageNotInflight" => {
-                        return RusotoError::Service(
-                            ChangeMessageVisibilityError::MessageNotInflight(parsed_error.message),
-                        )
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {
+                        "AWS.SimpleQueueService.MessageNotInflight" => {
+                            return RusotoError::Service(
+                                ChangeMessageVisibilityError::MessageNotInflight(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "ReceiptHandleIsInvalid" => {
+                            return RusotoError::Service(
+                                ChangeMessageVisibilityError::ReceiptHandleIsInvalid(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        _ => {}
                     }
-                    "ReceiptHandleIsInvalid" => {
-                        return RusotoError::Service(
-                            ChangeMessageVisibilityError::ReceiptHandleIsInvalid(
-                                parsed_error.message,
-                            ),
-                        )
-                    }
-                    _ => {}
                 }
             }
         }
@@ -2260,37 +2355,40 @@ impl ChangeMessageVisibilityBatchError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    "AWS.SimpleQueueService.BatchEntryIdsNotDistinct" => {
-                        return RusotoError::Service(
-                            ChangeMessageVisibilityBatchError::BatchEntryIdsNotDistinct(
-                                parsed_error.message,
-                            ),
-                        )
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {
+                        "AWS.SimpleQueueService.BatchEntryIdsNotDistinct" => {
+                            return RusotoError::Service(
+                                ChangeMessageVisibilityBatchError::BatchEntryIdsNotDistinct(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "AWS.SimpleQueueService.EmptyBatchRequest" => {
+                            return RusotoError::Service(
+                                ChangeMessageVisibilityBatchError::EmptyBatchRequest(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "AWS.SimpleQueueService.InvalidBatchEntryId" => {
+                            return RusotoError::Service(
+                                ChangeMessageVisibilityBatchError::InvalidBatchEntryId(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "AWS.SimpleQueueService.TooManyEntriesInBatchRequest" => {
+                            return RusotoError::Service(
+                                ChangeMessageVisibilityBatchError::TooManyEntriesInBatchRequest(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        _ => {}
                     }
-                    "AWS.SimpleQueueService.EmptyBatchRequest" => {
-                        return RusotoError::Service(
-                            ChangeMessageVisibilityBatchError::EmptyBatchRequest(
-                                parsed_error.message,
-                            ),
-                        )
-                    }
-                    "AWS.SimpleQueueService.InvalidBatchEntryId" => {
-                        return RusotoError::Service(
-                            ChangeMessageVisibilityBatchError::InvalidBatchEntryId(
-                                parsed_error.message,
-                            ),
-                        )
-                    }
-                    "AWS.SimpleQueueService.TooManyEntriesInBatchRequest" => {
-                        return RusotoError::Service(
-                            ChangeMessageVisibilityBatchError::TooManyEntriesInBatchRequest(
-                                parsed_error.message,
-                            ),
-                        )
-                    }
-                    _ => {}
                 }
             }
         }
@@ -2340,19 +2438,22 @@ impl CreateQueueError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    "AWS.SimpleQueueService.QueueDeletedRecently" => {
-                        return RusotoError::Service(CreateQueueError::QueueDeletedRecently(
-                            parsed_error.message,
-                        ))
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {
+                        "AWS.SimpleQueueService.QueueDeletedRecently" => {
+                            return RusotoError::Service(CreateQueueError::QueueDeletedRecently(
+                                parsed_error.message,
+                            ))
+                        }
+                        "QueueAlreadyExists" => {
+                            return RusotoError::Service(CreateQueueError::QueueNameExists(
+                                parsed_error.message,
+                            ))
+                        }
+                        _ => {}
                     }
-                    "QueueAlreadyExists" => {
-                        return RusotoError::Service(CreateQueueError::QueueNameExists(
-                            parsed_error.message,
-                        ))
-                    }
-                    _ => {}
                 }
             }
         }
@@ -2392,19 +2493,22 @@ impl DeleteMessageError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    "InvalidIdFormat" => {
-                        return RusotoError::Service(DeleteMessageError::InvalidIdFormat(
-                            parsed_error.message,
-                        ))
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {
+                        "InvalidIdFormat" => {
+                            return RusotoError::Service(DeleteMessageError::InvalidIdFormat(
+                                parsed_error.message,
+                            ))
+                        }
+                        "ReceiptHandleIsInvalid" => {
+                            return RusotoError::Service(
+                                DeleteMessageError::ReceiptHandleIsInvalid(parsed_error.message),
+                            )
+                        }
+                        _ => {}
                     }
-                    "ReceiptHandleIsInvalid" => {
-                        return RusotoError::Service(DeleteMessageError::ReceiptHandleIsInvalid(
-                            parsed_error.message,
-                        ))
-                    }
-                    _ => {}
                 }
             }
         }
@@ -2448,31 +2552,36 @@ impl DeleteMessageBatchError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    "AWS.SimpleQueueService.BatchEntryIdsNotDistinct" => {
-                        return RusotoError::Service(
-                            DeleteMessageBatchError::BatchEntryIdsNotDistinct(parsed_error.message),
-                        )
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {
+                        "AWS.SimpleQueueService.BatchEntryIdsNotDistinct" => {
+                            return RusotoError::Service(
+                                DeleteMessageBatchError::BatchEntryIdsNotDistinct(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "AWS.SimpleQueueService.EmptyBatchRequest" => {
+                            return RusotoError::Service(
+                                DeleteMessageBatchError::EmptyBatchRequest(parsed_error.message),
+                            )
+                        }
+                        "AWS.SimpleQueueService.InvalidBatchEntryId" => {
+                            return RusotoError::Service(
+                                DeleteMessageBatchError::InvalidBatchEntryId(parsed_error.message),
+                            )
+                        }
+                        "AWS.SimpleQueueService.TooManyEntriesInBatchRequest" => {
+                            return RusotoError::Service(
+                                DeleteMessageBatchError::TooManyEntriesInBatchRequest(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        _ => {}
                     }
-                    "AWS.SimpleQueueService.EmptyBatchRequest" => {
-                        return RusotoError::Service(DeleteMessageBatchError::EmptyBatchRequest(
-                            parsed_error.message,
-                        ))
-                    }
-                    "AWS.SimpleQueueService.InvalidBatchEntryId" => {
-                        return RusotoError::Service(DeleteMessageBatchError::InvalidBatchEntryId(
-                            parsed_error.message,
-                        ))
-                    }
-                    "AWS.SimpleQueueService.TooManyEntriesInBatchRequest" => {
-                        return RusotoError::Service(
-                            DeleteMessageBatchError::TooManyEntriesInBatchRequest(
-                                parsed_error.message,
-                            ),
-                        )
-                    }
-                    _ => {}
                 }
             }
         }
@@ -2511,11 +2620,7 @@ impl DeleteQueueError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    _ => {}
-                }
-            }
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {}
         }
         RusotoError::Unknown(res)
     }
@@ -2548,14 +2653,17 @@ impl GetQueueAttributesError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    "InvalidAttributeName" => {
-                        return RusotoError::Service(GetQueueAttributesError::InvalidAttributeName(
-                            parsed_error.message,
-                        ))
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {
+                        "InvalidAttributeName" => {
+                            return RusotoError::Service(
+                                GetQueueAttributesError::InvalidAttributeName(parsed_error.message),
+                            )
+                        }
+                        _ => {}
                     }
-                    _ => {}
                 }
             }
         }
@@ -2592,14 +2700,17 @@ impl GetQueueUrlError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    "AWS.SimpleQueueService.NonExistentQueue" => {
-                        return RusotoError::Service(GetQueueUrlError::QueueDoesNotExist(
-                            parsed_error.message,
-                        ))
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {
+                        "AWS.SimpleQueueService.NonExistentQueue" => {
+                            return RusotoError::Service(GetQueueUrlError::QueueDoesNotExist(
+                                parsed_error.message,
+                            ))
+                        }
+                        _ => {}
                     }
-                    _ => {}
                 }
             }
         }
@@ -2638,16 +2749,19 @@ impl ListDeadLetterSourceQueuesError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    "AWS.SimpleQueueService.NonExistentQueue" => {
-                        return RusotoError::Service(
-                            ListDeadLetterSourceQueuesError::QueueDoesNotExist(
-                                parsed_error.message,
-                            ),
-                        )
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {
+                        "AWS.SimpleQueueService.NonExistentQueue" => {
+                            return RusotoError::Service(
+                                ListDeadLetterSourceQueuesError::QueueDoesNotExist(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        _ => {}
                     }
-                    _ => {}
                 }
             }
         }
@@ -2681,11 +2795,7 @@ impl ListQueueTagsError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    _ => {}
-                }
-            }
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {}
         }
         RusotoError::Unknown(res)
     }
@@ -2715,11 +2825,7 @@ impl ListQueuesError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    _ => {}
-                }
-            }
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {}
         }
         RusotoError::Unknown(res)
     }
@@ -2754,19 +2860,22 @@ impl PurgeQueueError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    "AWS.SimpleQueueService.PurgeQueueInProgress" => {
-                        return RusotoError::Service(PurgeQueueError::PurgeQueueInProgress(
-                            parsed_error.message,
-                        ))
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {
+                        "AWS.SimpleQueueService.PurgeQueueInProgress" => {
+                            return RusotoError::Service(PurgeQueueError::PurgeQueueInProgress(
+                                parsed_error.message,
+                            ))
+                        }
+                        "AWS.SimpleQueueService.NonExistentQueue" => {
+                            return RusotoError::Service(PurgeQueueError::QueueDoesNotExist(
+                                parsed_error.message,
+                            ))
+                        }
+                        _ => {}
                     }
-                    "AWS.SimpleQueueService.NonExistentQueue" => {
-                        return RusotoError::Service(PurgeQueueError::QueueDoesNotExist(
-                            parsed_error.message,
-                        ))
-                    }
-                    _ => {}
                 }
             }
         }
@@ -2804,14 +2913,17 @@ impl ReceiveMessageError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    "OverLimit" => {
-                        return RusotoError::Service(ReceiveMessageError::OverLimit(
-                            parsed_error.message,
-                        ))
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {
+                        "OverLimit" => {
+                            return RusotoError::Service(ReceiveMessageError::OverLimit(
+                                parsed_error.message,
+                            ))
+                        }
+                        _ => {}
                     }
-                    _ => {}
                 }
             }
         }
@@ -2845,11 +2957,7 @@ impl RemovePermissionError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    _ => {}
-                }
-            }
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {}
         }
         RusotoError::Unknown(res)
     }
@@ -2884,19 +2992,22 @@ impl SendMessageError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    "InvalidMessageContents" => {
-                        return RusotoError::Service(SendMessageError::InvalidMessageContents(
-                            parsed_error.message,
-                        ))
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {
+                        "InvalidMessageContents" => {
+                            return RusotoError::Service(SendMessageError::InvalidMessageContents(
+                                parsed_error.message,
+                            ))
+                        }
+                        "AWS.SimpleQueueService.UnsupportedOperation" => {
+                            return RusotoError::Service(SendMessageError::UnsupportedOperation(
+                                parsed_error.message,
+                            ))
+                        }
+                        _ => {}
                     }
-                    "AWS.SimpleQueueService.UnsupportedOperation" => {
-                        return RusotoError::Service(SendMessageError::UnsupportedOperation(
-                            parsed_error.message,
-                        ))
-                    }
-                    _ => {}
                 }
             }
         }
@@ -2944,41 +3055,46 @@ impl SendMessageBatchError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    "AWS.SimpleQueueService.BatchEntryIdsNotDistinct" => {
-                        return RusotoError::Service(
-                            SendMessageBatchError::BatchEntryIdsNotDistinct(parsed_error.message),
-                        )
-                    }
-                    "AWS.SimpleQueueService.BatchRequestTooLong" => {
-                        return RusotoError::Service(SendMessageBatchError::BatchRequestTooLong(
-                            parsed_error.message,
-                        ))
-                    }
-                    "AWS.SimpleQueueService.EmptyBatchRequest" => {
-                        return RusotoError::Service(SendMessageBatchError::EmptyBatchRequest(
-                            parsed_error.message,
-                        ))
-                    }
-                    "AWS.SimpleQueueService.InvalidBatchEntryId" => {
-                        return RusotoError::Service(SendMessageBatchError::InvalidBatchEntryId(
-                            parsed_error.message,
-                        ))
-                    }
-                    "AWS.SimpleQueueService.TooManyEntriesInBatchRequest" => {
-                        return RusotoError::Service(
-                            SendMessageBatchError::TooManyEntriesInBatchRequest(
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {
+                        "AWS.SimpleQueueService.BatchEntryIdsNotDistinct" => {
+                            return RusotoError::Service(
+                                SendMessageBatchError::BatchEntryIdsNotDistinct(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "AWS.SimpleQueueService.BatchRequestTooLong" => {
+                            return RusotoError::Service(
+                                SendMessageBatchError::BatchRequestTooLong(parsed_error.message),
+                            )
+                        }
+                        "AWS.SimpleQueueService.EmptyBatchRequest" => {
+                            return RusotoError::Service(SendMessageBatchError::EmptyBatchRequest(
                                 parsed_error.message,
-                            ),
-                        )
+                            ))
+                        }
+                        "AWS.SimpleQueueService.InvalidBatchEntryId" => {
+                            return RusotoError::Service(
+                                SendMessageBatchError::InvalidBatchEntryId(parsed_error.message),
+                            )
+                        }
+                        "AWS.SimpleQueueService.TooManyEntriesInBatchRequest" => {
+                            return RusotoError::Service(
+                                SendMessageBatchError::TooManyEntriesInBatchRequest(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "AWS.SimpleQueueService.UnsupportedOperation" => {
+                            return RusotoError::Service(
+                                SendMessageBatchError::UnsupportedOperation(parsed_error.message),
+                            )
+                        }
+                        _ => {}
                     }
-                    "AWS.SimpleQueueService.UnsupportedOperation" => {
-                        return RusotoError::Service(SendMessageBatchError::UnsupportedOperation(
-                            parsed_error.message,
-                        ))
-                    }
-                    _ => {}
                 }
             }
         }
@@ -3022,14 +3138,17 @@ impl SetQueueAttributesError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    "InvalidAttributeName" => {
-                        return RusotoError::Service(SetQueueAttributesError::InvalidAttributeName(
-                            parsed_error.message,
-                        ))
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {
+                        "InvalidAttributeName" => {
+                            return RusotoError::Service(
+                                SetQueueAttributesError::InvalidAttributeName(parsed_error.message),
+                            )
+                        }
+                        _ => {}
                     }
-                    _ => {}
                 }
             }
         }
@@ -3063,11 +3182,7 @@ impl TagQueueError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    _ => {}
-                }
-            }
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {}
         }
         RusotoError::Unknown(res)
     }
@@ -3097,11 +3212,7 @@ impl UntagQueueError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    _ => {}
-                }
-            }
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {}
         }
         RusotoError::Unknown(res)
     }

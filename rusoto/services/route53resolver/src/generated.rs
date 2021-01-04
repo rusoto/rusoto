@@ -50,7 +50,6 @@ impl Route53ResolverClient {
     }
 }
 
-use serde_json;
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct AssociateResolverEndpointIpAddressRequest {
@@ -1273,6 +1272,7 @@ impl AssociateResolverEndpointIpAddressError {
         res: BufferedHttpResponse,
     ) -> RusotoError<AssociateResolverEndpointIpAddressError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalServiceErrorException" => {
                     return RusotoError::Service(
@@ -1371,6 +1371,7 @@ impl AssociateResolverQueryLogConfigError {
         res: BufferedHttpResponse,
     ) -> RusotoError<AssociateResolverQueryLogConfigError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(
@@ -1471,6 +1472,7 @@ pub enum AssociateResolverRuleError {
 impl AssociateResolverRuleError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<AssociateResolverRuleError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalServiceErrorException" => {
                     return RusotoError::Service(AssociateResolverRuleError::InternalServiceError(
@@ -1553,6 +1555,7 @@ pub enum CreateResolverEndpointError {
 impl CreateResolverEndpointError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateResolverEndpointError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalServiceErrorException" => {
                     return RusotoError::Service(CreateResolverEndpointError::InternalServiceError(
@@ -1635,6 +1638,7 @@ impl CreateResolverQueryLogConfigError {
         res: BufferedHttpResponse,
     ) -> RusotoError<CreateResolverQueryLogConfigError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(CreateResolverQueryLogConfigError::AccessDenied(
@@ -1729,6 +1733,7 @@ pub enum CreateResolverRuleError {
 impl CreateResolverRuleError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateResolverRuleError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalServiceErrorException" => {
                     return RusotoError::Service(CreateResolverRuleError::InternalServiceError(
@@ -1799,6 +1804,7 @@ pub enum DeleteResolverEndpointError {
 impl DeleteResolverEndpointError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteResolverEndpointError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalServiceErrorException" => {
                     return RusotoError::Service(DeleteResolverEndpointError::InternalServiceError(
@@ -1865,6 +1871,7 @@ impl DeleteResolverQueryLogConfigError {
         res: BufferedHttpResponse,
     ) -> RusotoError<DeleteResolverQueryLogConfigError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(DeleteResolverQueryLogConfigError::AccessDenied(
@@ -1941,6 +1948,7 @@ pub enum DeleteResolverRuleError {
 impl DeleteResolverRuleError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteResolverRuleError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalServiceErrorException" => {
                     return RusotoError::Service(DeleteResolverRuleError::InternalServiceError(
@@ -2001,6 +2009,7 @@ impl DisassociateResolverEndpointIpAddressError {
         res: BufferedHttpResponse,
     ) -> RusotoError<DisassociateResolverEndpointIpAddressError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalServiceErrorException" => {
                     return RusotoError::Service(
@@ -2087,6 +2096,7 @@ impl DisassociateResolverQueryLogConfigError {
         res: BufferedHttpResponse,
     ) -> RusotoError<DisassociateResolverQueryLogConfigError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(
@@ -2167,6 +2177,7 @@ pub enum DisassociateResolverRuleError {
 impl DisassociateResolverRuleError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DisassociateResolverRuleError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalServiceErrorException" => {
                     return RusotoError::Service(
@@ -2227,6 +2238,7 @@ pub enum GetResolverDnssecConfigError {
 impl GetResolverDnssecConfigError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetResolverDnssecConfigError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(GetResolverDnssecConfigError::AccessDenied(
@@ -2293,6 +2305,7 @@ pub enum GetResolverEndpointError {
 impl GetResolverEndpointError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetResolverEndpointError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalServiceErrorException" => {
                     return RusotoError::Service(GetResolverEndpointError::InternalServiceError(
@@ -2351,6 +2364,7 @@ pub enum GetResolverQueryLogConfigError {
 impl GetResolverQueryLogConfigError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetResolverQueryLogConfigError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(GetResolverQueryLogConfigError::AccessDenied(
@@ -2427,6 +2441,7 @@ impl GetResolverQueryLogConfigAssociationError {
         res: BufferedHttpResponse,
     ) -> RusotoError<GetResolverQueryLogConfigAssociationError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(
@@ -2511,6 +2526,7 @@ impl GetResolverQueryLogConfigPolicyError {
         res: BufferedHttpResponse,
     ) -> RusotoError<GetResolverQueryLogConfigPolicyError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(
@@ -2581,6 +2597,7 @@ pub enum GetResolverRuleError {
 impl GetResolverRuleError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetResolverRuleError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalServiceErrorException" => {
                     return RusotoError::Service(GetResolverRuleError::InternalServiceError(
@@ -2633,6 +2650,7 @@ impl GetResolverRuleAssociationError {
         res: BufferedHttpResponse,
     ) -> RusotoError<GetResolverRuleAssociationError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalServiceErrorException" => {
                     return RusotoError::Service(
@@ -2689,6 +2707,7 @@ pub enum GetResolverRulePolicyError {
 impl GetResolverRulePolicyError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetResolverRulePolicyError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalServiceErrorException" => {
                     return RusotoError::Service(GetResolverRulePolicyError::InternalServiceError(
@@ -2743,6 +2762,7 @@ pub enum ListResolverDnssecConfigsError {
 impl ListResolverDnssecConfigsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListResolverDnssecConfigsError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(ListResolverDnssecConfigsError::AccessDenied(
@@ -2817,6 +2837,7 @@ impl ListResolverEndpointIpAddressesError {
         res: BufferedHttpResponse,
     ) -> RusotoError<ListResolverEndpointIpAddressesError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalServiceErrorException" => {
                     return RusotoError::Service(
@@ -2889,6 +2910,7 @@ pub enum ListResolverEndpointsError {
 impl ListResolverEndpointsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListResolverEndpointsError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalServiceErrorException" => {
                     return RusotoError::Service(ListResolverEndpointsError::InternalServiceError(
@@ -2955,6 +2977,7 @@ impl ListResolverQueryLogConfigAssociationsError {
         res: BufferedHttpResponse,
     ) -> RusotoError<ListResolverQueryLogConfigAssociationsError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(
@@ -3041,6 +3064,7 @@ impl ListResolverQueryLogConfigsError {
         res: BufferedHttpResponse,
     ) -> RusotoError<ListResolverQueryLogConfigsError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(ListResolverQueryLogConfigsError::AccessDenied(
@@ -3115,6 +3139,7 @@ impl ListResolverRuleAssociationsError {
         res: BufferedHttpResponse,
     ) -> RusotoError<ListResolverRuleAssociationsError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalServiceErrorException" => {
                     return RusotoError::Service(
@@ -3185,6 +3210,7 @@ pub enum ListResolverRulesError {
 impl ListResolverRulesError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListResolverRulesError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalServiceErrorException" => {
                     return RusotoError::Service(ListResolverRulesError::InternalServiceError(
@@ -3243,6 +3269,7 @@ pub enum ListTagsForResourceError {
 impl ListTagsForResourceError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListTagsForResourceError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalServiceErrorException" => {
                     return RusotoError::Service(ListTagsForResourceError::InternalServiceError(
@@ -3313,6 +3340,7 @@ impl PutResolverQueryLogConfigPolicyError {
         res: BufferedHttpResponse,
     ) -> RusotoError<PutResolverQueryLogConfigPolicyError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(
@@ -3391,6 +3419,7 @@ pub enum PutResolverRulePolicyError {
 impl PutResolverRulePolicyError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<PutResolverRulePolicyError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalServiceErrorException" => {
                     return RusotoError::Service(PutResolverRulePolicyError::InternalServiceError(
@@ -3453,6 +3482,7 @@ pub enum TagResourceError {
 impl TagResourceError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<TagResourceError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalServiceErrorException" => {
                     return RusotoError::Service(TagResourceError::InternalServiceError(err.msg))
@@ -3515,6 +3545,7 @@ pub enum UntagResourceError {
 impl UntagResourceError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UntagResourceError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalServiceErrorException" => {
                     return RusotoError::Service(UntagResourceError::InternalServiceError(err.msg))
@@ -3573,6 +3604,7 @@ impl UpdateResolverDnssecConfigError {
         res: BufferedHttpResponse,
     ) -> RusotoError<UpdateResolverDnssecConfigError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(UpdateResolverDnssecConfigError::AccessDenied(
@@ -3645,6 +3677,7 @@ pub enum UpdateResolverEndpointError {
 impl UpdateResolverEndpointError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateResolverEndpointError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalServiceErrorException" => {
                     return RusotoError::Service(UpdateResolverEndpointError::InternalServiceError(
@@ -3711,6 +3744,7 @@ pub enum UpdateResolverRuleError {
 impl UpdateResolverRuleError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateResolverRuleError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalServiceErrorException" => {
                     return RusotoError::Service(UpdateResolverRuleError::InternalServiceError(

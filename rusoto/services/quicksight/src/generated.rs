@@ -24,7 +24,6 @@ use rusoto_core::proto;
 use rusoto_core::signature::SignedRequest;
 #[allow(unused_imports)]
 use serde::{Deserialize, Serialize};
-use serde_json;
 /// <p>The Amazon QuickSight customizations associated with your AWS account or a QuickSight namespace in a specific AWS Region.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct AccountCustomization {
@@ -6271,6 +6270,7 @@ pub enum CancelIngestionError {
 impl CancelIngestionError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CancelIngestionError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(CancelIngestionError::AccessDenied(err.msg))
@@ -6337,6 +6337,7 @@ impl CreateAccountCustomizationError {
         res: BufferedHttpResponse,
     ) -> RusotoError<CreateAccountCustomizationError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(CreateAccountCustomizationError::AccessDenied(
@@ -6421,6 +6422,7 @@ pub enum CreateAnalysisError {
 impl CreateAnalysisError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateAnalysisError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ConflictException" => {
                     return RusotoError::Service(CreateAnalysisError::Conflict(err.msg))
@@ -6491,6 +6493,7 @@ pub enum CreateDashboardError {
 impl CreateDashboardError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateDashboardError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ConflictException" => {
                     return RusotoError::Service(CreateDashboardError::Conflict(err.msg))
@@ -6565,6 +6568,7 @@ pub enum CreateDataSetError {
 impl CreateDataSetError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateDataSetError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(CreateDataSetError::AccessDenied(err.msg))
@@ -6643,6 +6647,7 @@ pub enum CreateDataSourceError {
 impl CreateDataSourceError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateDataSourceError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(CreateDataSourceError::AccessDenied(err.msg))
@@ -6719,6 +6724,7 @@ pub enum CreateGroupError {
 impl CreateGroupError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateGroupError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(CreateGroupError::AccessDenied(err.msg))
@@ -6793,6 +6799,7 @@ pub enum CreateGroupMembershipError {
 impl CreateGroupMembershipError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateGroupMembershipError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(CreateGroupMembershipError::AccessDenied(err.msg))
@@ -6869,6 +6876,7 @@ pub enum CreateIAMPolicyAssignmentError {
 impl CreateIAMPolicyAssignmentError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateIAMPolicyAssignmentError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(CreateIAMPolicyAssignmentError::AccessDenied(
@@ -6951,6 +6959,7 @@ pub enum CreateIngestionError {
 impl CreateIngestionError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateIngestionError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(CreateIngestionError::AccessDenied(err.msg))
@@ -7025,6 +7034,7 @@ pub enum CreateNamespaceError {
 impl CreateNamespaceError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateNamespaceError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(CreateNamespaceError::AccessDenied(err.msg))
@@ -7109,6 +7119,7 @@ pub enum CreateTemplateError {
 impl CreateTemplateError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateTemplateError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(CreateTemplateError::AccessDenied(err.msg))
@@ -7187,6 +7198,7 @@ pub enum CreateTemplateAliasError {
 impl CreateTemplateAliasError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateTemplateAliasError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ConflictException" => {
                     return RusotoError::Service(CreateTemplateAliasError::Conflict(err.msg))
@@ -7259,6 +7271,7 @@ pub enum CreateThemeError {
 impl CreateThemeError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateThemeError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(CreateThemeError::AccessDenied(err.msg))
@@ -7331,6 +7344,7 @@ pub enum CreateThemeAliasError {
 impl CreateThemeAliasError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateThemeAliasError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ConflictException" => {
                     return RusotoError::Service(CreateThemeAliasError::Conflict(err.msg))
@@ -7405,6 +7419,7 @@ impl DeleteAccountCustomizationError {
         res: BufferedHttpResponse,
     ) -> RusotoError<DeleteAccountCustomizationError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(DeleteAccountCustomizationError::AccessDenied(
@@ -7481,6 +7496,7 @@ pub enum DeleteAnalysisError {
 impl DeleteAnalysisError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteAnalysisError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ConflictException" => {
                     return RusotoError::Service(DeleteAnalysisError::Conflict(err.msg))
@@ -7545,6 +7561,7 @@ pub enum DeleteDashboardError {
 impl DeleteDashboardError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteDashboardError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ConflictException" => {
                     return RusotoError::Service(DeleteDashboardError::Conflict(err.msg))
@@ -7607,6 +7624,7 @@ pub enum DeleteDataSetError {
 impl DeleteDataSetError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteDataSetError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(DeleteDataSetError::AccessDenied(err.msg))
@@ -7661,6 +7679,7 @@ pub enum DeleteDataSourceError {
 impl DeleteDataSourceError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteDataSourceError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(DeleteDataSourceError::AccessDenied(err.msg))
@@ -7721,6 +7740,7 @@ pub enum DeleteGroupError {
 impl DeleteGroupError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteGroupError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(DeleteGroupError::AccessDenied(err.msg))
@@ -7787,6 +7807,7 @@ pub enum DeleteGroupMembershipError {
 impl DeleteGroupMembershipError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteGroupMembershipError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(DeleteGroupMembershipError::AccessDenied(err.msg))
@@ -7863,6 +7884,7 @@ pub enum DeleteIAMPolicyAssignmentError {
 impl DeleteIAMPolicyAssignmentError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteIAMPolicyAssignmentError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(DeleteIAMPolicyAssignmentError::AccessDenied(
@@ -7945,6 +7967,7 @@ pub enum DeleteNamespaceError {
 impl DeleteNamespaceError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteNamespaceError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(DeleteNamespaceError::AccessDenied(err.msg))
@@ -8013,6 +8036,7 @@ pub enum DeleteTemplateError {
 impl DeleteTemplateError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteTemplateError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ConflictException" => {
                     return RusotoError::Service(DeleteTemplateError::Conflict(err.msg))
@@ -8079,6 +8103,7 @@ pub enum DeleteTemplateAliasError {
 impl DeleteTemplateAliasError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteTemplateAliasError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ConflictException" => {
                     return RusotoError::Service(DeleteTemplateAliasError::Conflict(err.msg))
@@ -8141,6 +8166,7 @@ pub enum DeleteThemeError {
 impl DeleteThemeError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteThemeError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(DeleteThemeError::AccessDenied(err.msg))
@@ -8205,6 +8231,7 @@ pub enum DeleteThemeAliasError {
 impl DeleteThemeAliasError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteThemeAliasError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ConflictException" => {
                     return RusotoError::Service(DeleteThemeAliasError::Conflict(err.msg))
@@ -8271,6 +8298,7 @@ pub enum DeleteUserError {
 impl DeleteUserError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteUserError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(DeleteUserError::AccessDenied(err.msg))
@@ -8337,6 +8365,7 @@ pub enum DeleteUserByPrincipalIdError {
 impl DeleteUserByPrincipalIdError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteUserByPrincipalIdError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(DeleteUserByPrincipalIdError::AccessDenied(
@@ -8417,6 +8446,7 @@ impl DescribeAccountCustomizationError {
         res: BufferedHttpResponse,
     ) -> RusotoError<DescribeAccountCustomizationError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(DescribeAccountCustomizationError::AccessDenied(
@@ -8495,6 +8525,7 @@ pub enum DescribeAccountSettingsError {
 impl DescribeAccountSettingsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeAccountSettingsError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(DescribeAccountSettingsError::AccessDenied(
@@ -8567,6 +8598,7 @@ pub enum DescribeAnalysisError {
 impl DescribeAnalysisError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeAnalysisError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(DescribeAnalysisError::AccessDenied(err.msg))
@@ -8631,6 +8663,7 @@ impl DescribeAnalysisPermissionsError {
         res: BufferedHttpResponse,
     ) -> RusotoError<DescribeAnalysisPermissionsError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalFailureException" => {
                     return RusotoError::Service(DescribeAnalysisPermissionsError::InternalFailure(
@@ -8701,6 +8734,7 @@ pub enum DescribeDashboardError {
 impl DescribeDashboardError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeDashboardError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(DescribeDashboardError::AccessDenied(err.msg))
@@ -8765,6 +8799,7 @@ impl DescribeDashboardPermissionsError {
         res: BufferedHttpResponse,
     ) -> RusotoError<DescribeDashboardPermissionsError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalFailureException" => {
                     return RusotoError::Service(
@@ -8835,6 +8870,7 @@ pub enum DescribeDataSetError {
 impl DescribeDataSetError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeDataSetError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(DescribeDataSetError::AccessDenied(err.msg))
@@ -8893,6 +8929,7 @@ impl DescribeDataSetPermissionsError {
         res: BufferedHttpResponse,
     ) -> RusotoError<DescribeDataSetPermissionsError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(DescribeDataSetPermissionsError::AccessDenied(
@@ -8959,6 +8996,7 @@ pub enum DescribeDataSourceError {
 impl DescribeDataSourceError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeDataSourceError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(DescribeDataSourceError::AccessDenied(err.msg))
@@ -9017,6 +9055,7 @@ impl DescribeDataSourcePermissionsError {
         res: BufferedHttpResponse,
     ) -> RusotoError<DescribeDataSourcePermissionsError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(DescribeDataSourcePermissionsError::AccessDenied(
@@ -9091,6 +9130,7 @@ pub enum DescribeGroupError {
 impl DescribeGroupError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeGroupError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(DescribeGroupError::AccessDenied(err.msg))
@@ -9157,6 +9197,7 @@ impl DescribeIAMPolicyAssignmentError {
         res: BufferedHttpResponse,
     ) -> RusotoError<DescribeIAMPolicyAssignmentError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(DescribeIAMPolicyAssignmentError::AccessDenied(
@@ -9231,6 +9272,7 @@ pub enum DescribeIngestionError {
 impl DescribeIngestionError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeIngestionError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(DescribeIngestionError::AccessDenied(err.msg))
@@ -9293,6 +9335,7 @@ pub enum DescribeNamespaceError {
 impl DescribeNamespaceError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeNamespaceError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(DescribeNamespaceError::AccessDenied(err.msg))
@@ -9361,6 +9404,7 @@ pub enum DescribeTemplateError {
 impl DescribeTemplateError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeTemplateError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(DescribeTemplateError::AccessDenied(err.msg))
@@ -9429,6 +9473,7 @@ pub enum DescribeTemplateAliasError {
 impl DescribeTemplateAliasError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeTemplateAliasError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalFailureException" => {
                     return RusotoError::Service(DescribeTemplateAliasError::InternalFailure(
@@ -9489,6 +9534,7 @@ impl DescribeTemplatePermissionsError {
         res: BufferedHttpResponse,
     ) -> RusotoError<DescribeTemplatePermissionsError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ConflictException" => {
                     return RusotoError::Service(DescribeTemplatePermissionsError::Conflict(
@@ -9567,6 +9613,7 @@ pub enum DescribeThemeError {
 impl DescribeThemeError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeThemeError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(DescribeThemeError::AccessDenied(err.msg))
@@ -9633,6 +9680,7 @@ pub enum DescribeThemeAliasError {
 impl DescribeThemeAliasError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeThemeAliasError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ConflictException" => {
                     return RusotoError::Service(DescribeThemeAliasError::Conflict(err.msg))
@@ -9697,6 +9745,7 @@ pub enum DescribeThemePermissionsError {
 impl DescribeThemePermissionsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeThemePermissionsError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(DescribeThemePermissionsError::AccessDenied(
@@ -9773,6 +9822,7 @@ pub enum DescribeUserError {
 impl DescribeUserError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeUserError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(DescribeUserError::AccessDenied(err.msg))
@@ -9849,6 +9899,7 @@ pub enum GetDashboardEmbedUrlError {
 impl GetDashboardEmbedUrlError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetDashboardEmbedUrlError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(GetDashboardEmbedUrlError::AccessDenied(err.msg))
@@ -9961,6 +10012,7 @@ pub enum GetSessionEmbedUrlError {
 impl GetSessionEmbedUrlError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetSessionEmbedUrlError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(GetSessionEmbedUrlError::AccessDenied(err.msg))
@@ -10039,6 +10091,7 @@ pub enum ListAnalysesError {
 impl ListAnalysesError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListAnalysesError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalFailureException" => {
                     return RusotoError::Service(ListAnalysesError::InternalFailure(err.msg))
@@ -10091,6 +10144,7 @@ pub enum ListDashboardVersionsError {
 impl ListDashboardVersionsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListDashboardVersionsError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalFailureException" => {
                     return RusotoError::Service(ListDashboardVersionsError::InternalFailure(
@@ -10157,6 +10211,7 @@ pub enum ListDashboardsError {
 impl ListDashboardsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListDashboardsError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalFailureException" => {
                     return RusotoError::Service(ListDashboardsError::InternalFailure(err.msg))
@@ -10209,6 +10264,7 @@ pub enum ListDataSetsError {
 impl ListDataSetsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListDataSetsError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(ListDataSetsError::AccessDenied(err.msg))
@@ -10263,6 +10319,7 @@ pub enum ListDataSourcesError {
 impl ListDataSourcesError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListDataSourcesError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(ListDataSourcesError::AccessDenied(err.msg))
@@ -10325,6 +10382,7 @@ pub enum ListGroupMembershipsError {
 impl ListGroupMembershipsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListGroupMembershipsError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(ListGroupMembershipsError::AccessDenied(err.msg))
@@ -10409,6 +10467,7 @@ pub enum ListGroupsError {
 impl ListGroupsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListGroupsError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(ListGroupsError::AccessDenied(err.msg))
@@ -10477,6 +10536,7 @@ pub enum ListIAMPolicyAssignmentsError {
 impl ListIAMPolicyAssignmentsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListIAMPolicyAssignmentsError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(ListIAMPolicyAssignmentsError::AccessDenied(
@@ -10553,6 +10613,7 @@ impl ListIAMPolicyAssignmentsForUserError {
         res: BufferedHttpResponse,
     ) -> RusotoError<ListIAMPolicyAssignmentsForUserError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(
@@ -10643,6 +10704,7 @@ pub enum ListIngestionsError {
 impl ListIngestionsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListIngestionsError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(ListIngestionsError::AccessDenied(err.msg))
@@ -10713,6 +10775,7 @@ pub enum ListNamespacesError {
 impl ListNamespacesError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListNamespacesError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(ListNamespacesError::AccessDenied(err.msg))
@@ -10781,6 +10844,7 @@ pub enum ListTagsForResourceError {
 impl ListTagsForResourceError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListTagsForResourceError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(ListTagsForResourceError::AccessDenied(err.msg))
@@ -10839,6 +10903,7 @@ pub enum ListTemplateAliasesError {
 impl ListTemplateAliasesError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListTemplateAliasesError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalFailureException" => {
                     return RusotoError::Service(ListTemplateAliasesError::InternalFailure(err.msg))
@@ -10901,6 +10966,7 @@ pub enum ListTemplateVersionsError {
 impl ListTemplateVersionsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListTemplateVersionsError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalFailureException" => {
                     return RusotoError::Service(ListTemplateVersionsError::InternalFailure(
@@ -10971,6 +11037,7 @@ pub enum ListTemplatesError {
 impl ListTemplatesError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListTemplatesError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalFailureException" => {
                     return RusotoError::Service(ListTemplatesError::InternalFailure(err.msg))
@@ -11035,6 +11102,7 @@ pub enum ListThemeAliasesError {
 impl ListThemeAliasesError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListThemeAliasesError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ConflictException" => {
                     return RusotoError::Service(ListThemeAliasesError::Conflict(err.msg))
@@ -11105,6 +11173,7 @@ pub enum ListThemeVersionsError {
 impl ListThemeVersionsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListThemeVersionsError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(ListThemeVersionsError::AccessDenied(err.msg))
@@ -11175,6 +11244,7 @@ pub enum ListThemesError {
 impl ListThemesError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListThemesError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(ListThemesError::AccessDenied(err.msg))
@@ -11241,6 +11311,7 @@ pub enum ListUserGroupsError {
 impl ListUserGroupsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListUserGroupsError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(ListUserGroupsError::AccessDenied(err.msg))
@@ -11311,6 +11382,7 @@ pub enum ListUsersError {
 impl ListUsersError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListUsersError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(ListUsersError::AccessDenied(err.msg))
@@ -11385,6 +11457,7 @@ pub enum RegisterUserError {
 impl RegisterUserError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<RegisterUserError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(RegisterUserError::AccessDenied(err.msg))
@@ -11457,6 +11530,7 @@ pub enum RestoreAnalysisError {
 impl RestoreAnalysisError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<RestoreAnalysisError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ConflictException" => {
                     return RusotoError::Service(RestoreAnalysisError::Conflict(err.msg))
@@ -11521,6 +11595,7 @@ pub enum SearchAnalysesError {
 impl SearchAnalysesError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<SearchAnalysesError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalFailureException" => {
                     return RusotoError::Service(SearchAnalysesError::InternalFailure(err.msg))
@@ -11585,6 +11660,7 @@ pub enum SearchDashboardsError {
 impl SearchDashboardsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<SearchDashboardsError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalFailureException" => {
                     return RusotoError::Service(SearchDashboardsError::InternalFailure(err.msg))
@@ -11649,6 +11725,7 @@ pub enum TagResourceError {
 impl TagResourceError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<TagResourceError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(TagResourceError::AccessDenied(err.msg))
@@ -11707,6 +11784,7 @@ pub enum UntagResourceError {
 impl UntagResourceError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UntagResourceError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(UntagResourceError::AccessDenied(err.msg))
@@ -11765,6 +11843,7 @@ impl UpdateAccountCustomizationError {
         res: BufferedHttpResponse,
     ) -> RusotoError<UpdateAccountCustomizationError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(UpdateAccountCustomizationError::AccessDenied(
@@ -11841,6 +11920,7 @@ pub enum UpdateAccountSettingsError {
 impl UpdateAccountSettingsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateAccountSettingsError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(UpdateAccountSettingsError::AccessDenied(err.msg))
@@ -11911,6 +11991,7 @@ pub enum UpdateAnalysisError {
 impl UpdateAnalysisError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateAnalysisError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ConflictException" => {
                     return RusotoError::Service(UpdateAnalysisError::Conflict(err.msg))
@@ -11979,6 +12060,7 @@ pub enum UpdateAnalysisPermissionsError {
 impl UpdateAnalysisPermissionsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateAnalysisPermissionsError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ConflictException" => {
                     return RusotoError::Service(UpdateAnalysisPermissionsError::Conflict(err.msg))
@@ -12055,6 +12137,7 @@ pub enum UpdateDashboardError {
 impl UpdateDashboardError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateDashboardError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ConflictException" => {
                     return RusotoError::Service(UpdateDashboardError::Conflict(err.msg))
@@ -12125,6 +12208,7 @@ impl UpdateDashboardPermissionsError {
         res: BufferedHttpResponse,
     ) -> RusotoError<UpdateDashboardPermissionsError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ConflictException" => {
                     return RusotoError::Service(UpdateDashboardPermissionsError::Conflict(err.msg))
@@ -12201,6 +12285,7 @@ impl UpdateDashboardPublishedVersionError {
         res: BufferedHttpResponse,
     ) -> RusotoError<UpdateDashboardPublishedVersionError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ConflictException" => {
                     return RusotoError::Service(UpdateDashboardPublishedVersionError::Conflict(
@@ -12285,6 +12370,7 @@ pub enum UpdateDataSetError {
 impl UpdateDataSetError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateDataSetError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(UpdateDataSetError::AccessDenied(err.msg))
@@ -12355,6 +12441,7 @@ pub enum UpdateDataSetPermissionsError {
 impl UpdateDataSetPermissionsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateDataSetPermissionsError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(UpdateDataSetPermissionsError::AccessDenied(
@@ -12425,6 +12512,7 @@ pub enum UpdateDataSourceError {
 impl UpdateDataSourceError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateDataSourceError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(UpdateDataSourceError::AccessDenied(err.msg))
@@ -12489,6 +12577,7 @@ impl UpdateDataSourcePermissionsError {
         res: BufferedHttpResponse,
     ) -> RusotoError<UpdateDataSourcePermissionsError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(UpdateDataSourcePermissionsError::AccessDenied(
@@ -12565,6 +12654,7 @@ pub enum UpdateGroupError {
 impl UpdateGroupError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateGroupError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(UpdateGroupError::AccessDenied(err.msg))
@@ -12631,6 +12721,7 @@ pub enum UpdateIAMPolicyAssignmentError {
 impl UpdateIAMPolicyAssignmentError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateIAMPolicyAssignmentError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(UpdateIAMPolicyAssignmentError::AccessDenied(
@@ -12715,6 +12806,7 @@ pub enum UpdateTemplateError {
 impl UpdateTemplateError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateTemplateError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ConflictException" => {
                     return RusotoError::Service(UpdateTemplateError::Conflict(err.msg))
@@ -12785,6 +12877,7 @@ pub enum UpdateTemplateAliasError {
 impl UpdateTemplateAliasError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateTemplateAliasError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ConflictException" => {
                     return RusotoError::Service(UpdateTemplateAliasError::Conflict(err.msg))
@@ -12845,6 +12938,7 @@ pub enum UpdateTemplatePermissionsError {
 impl UpdateTemplatePermissionsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateTemplatePermissionsError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ConflictException" => {
                     return RusotoError::Service(UpdateTemplatePermissionsError::Conflict(err.msg))
@@ -12923,6 +13017,7 @@ pub enum UpdateThemeError {
 impl UpdateThemeError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateThemeError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(UpdateThemeError::AccessDenied(err.msg))
@@ -12993,6 +13088,7 @@ pub enum UpdateThemeAliasError {
 impl UpdateThemeAliasError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateThemeAliasError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ConflictException" => {
                     return RusotoError::Service(UpdateThemeAliasError::Conflict(err.msg))
@@ -13061,6 +13157,7 @@ pub enum UpdateThemePermissionsError {
 impl UpdateThemePermissionsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateThemePermissionsError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(UpdateThemePermissionsError::AccessDenied(err.msg))
@@ -13133,6 +13230,7 @@ pub enum UpdateUserError {
 impl UpdateUserError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateUserError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(UpdateUserError::AccessDenied(err.msg))
@@ -13829,6 +13927,7 @@ impl Quicksight for QuicksightClient {
         &self,
         input: CancelIngestionRequest,
     ) -> Result<CancelIngestionResponse, RusotoError<CancelIngestionError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/accounts/{aws_account_id}/data-sets/{data_set_id}/ingestions/{ingestion_id}",
             aws_account_id = input.aws_account_id,
@@ -13864,6 +13963,7 @@ impl Quicksight for QuicksightClient {
         input: CreateAccountCustomizationRequest,
     ) -> Result<CreateAccountCustomizationResponse, RusotoError<CreateAccountCustomizationError>>
     {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/accounts/{aws_account_id}/customizations",
             aws_account_id = input.aws_account_id
@@ -13905,6 +14005,7 @@ impl Quicksight for QuicksightClient {
         &self,
         input: CreateAnalysisRequest,
     ) -> Result<CreateAnalysisResponse, RusotoError<CreateAnalysisError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/accounts/{aws_account_id}/analyses/{analysis_id}",
             analysis_id = input.analysis_id,
@@ -13941,6 +14042,7 @@ impl Quicksight for QuicksightClient {
         &self,
         input: CreateDashboardRequest,
     ) -> Result<CreateDashboardResponse, RusotoError<CreateDashboardError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/accounts/{aws_account_id}/dashboards/{dashboard_id}",
             aws_account_id = input.aws_account_id,
@@ -13977,6 +14079,7 @@ impl Quicksight for QuicksightClient {
         &self,
         input: CreateDataSetRequest,
     ) -> Result<CreateDataSetResponse, RusotoError<CreateDataSetError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/accounts/{aws_account_id}/data-sets",
             aws_account_id = input.aws_account_id
@@ -14012,6 +14115,7 @@ impl Quicksight for QuicksightClient {
         &self,
         input: CreateDataSourceRequest,
     ) -> Result<CreateDataSourceResponse, RusotoError<CreateDataSourceError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/accounts/{aws_account_id}/data-sources",
             aws_account_id = input.aws_account_id
@@ -14047,6 +14151,7 @@ impl Quicksight for QuicksightClient {
         &self,
         input: CreateGroupRequest,
     ) -> Result<CreateGroupResponse, RusotoError<CreateGroupError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/accounts/{aws_account_id}/namespaces/{namespace}/groups",
             aws_account_id = input.aws_account_id,
@@ -14083,6 +14188,7 @@ impl Quicksight for QuicksightClient {
         &self,
         input: CreateGroupMembershipRequest,
     ) -> Result<CreateGroupMembershipResponse, RusotoError<CreateGroupMembershipError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!("/accounts/{aws_account_id}/namespaces/{namespace}/groups/{group_name}/members/{member_name}", aws_account_id = input.aws_account_id, group_name = input.group_name, member_name = input.member_name, namespace = input.namespace);
 
         let mut request = SignedRequest::new("PUT", "quicksight", &self.region, &request_uri);
@@ -14113,6 +14219,7 @@ impl Quicksight for QuicksightClient {
         input: CreateIAMPolicyAssignmentRequest,
     ) -> Result<CreateIAMPolicyAssignmentResponse, RusotoError<CreateIAMPolicyAssignmentError>>
     {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/accounts/{aws_account_id}/namespaces/{namespace}/iam-policy-assignments/",
             aws_account_id = input.aws_account_id,
@@ -14149,6 +14256,7 @@ impl Quicksight for QuicksightClient {
         &self,
         input: CreateIngestionRequest,
     ) -> Result<CreateIngestionResponse, RusotoError<CreateIngestionError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/accounts/{aws_account_id}/data-sets/{data_set_id}/ingestions/{ingestion_id}",
             aws_account_id = input.aws_account_id,
@@ -14183,6 +14291,7 @@ impl Quicksight for QuicksightClient {
         &self,
         input: CreateNamespaceRequest,
     ) -> Result<CreateNamespaceResponse, RusotoError<CreateNamespaceError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/accounts/{aws_account_id}",
             aws_account_id = input.aws_account_id
@@ -14218,6 +14327,7 @@ impl Quicksight for QuicksightClient {
         &self,
         input: CreateTemplateRequest,
     ) -> Result<CreateTemplateResponse, RusotoError<CreateTemplateError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/accounts/{aws_account_id}/templates/{template_id}",
             aws_account_id = input.aws_account_id,
@@ -14254,6 +14364,7 @@ impl Quicksight for QuicksightClient {
         &self,
         input: CreateTemplateAliasRequest,
     ) -> Result<CreateTemplateAliasResponse, RusotoError<CreateTemplateAliasError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/accounts/{aws_account_id}/templates/{template_id}/aliases/{alias_name}",
             alias_name = input.alias_name,
@@ -14291,6 +14402,7 @@ impl Quicksight for QuicksightClient {
         &self,
         input: CreateThemeRequest,
     ) -> Result<CreateThemeResponse, RusotoError<CreateThemeError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/accounts/{aws_account_id}/themes/{theme_id}",
             aws_account_id = input.aws_account_id,
@@ -14327,6 +14439,7 @@ impl Quicksight for QuicksightClient {
         &self,
         input: CreateThemeAliasRequest,
     ) -> Result<CreateThemeAliasResponse, RusotoError<CreateThemeAliasError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/accounts/{aws_account_id}/themes/{theme_id}/aliases/{alias_name}",
             alias_name = input.alias_name,
@@ -14365,6 +14478,7 @@ impl Quicksight for QuicksightClient {
         input: DeleteAccountCustomizationRequest,
     ) -> Result<DeleteAccountCustomizationResponse, RusotoError<DeleteAccountCustomizationError>>
     {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/accounts/{aws_account_id}/customizations",
             aws_account_id = input.aws_account_id
@@ -14403,6 +14517,7 @@ impl Quicksight for QuicksightClient {
         &self,
         input: DeleteAnalysisRequest,
     ) -> Result<DeleteAnalysisResponse, RusotoError<DeleteAnalysisError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/accounts/{aws_account_id}/analyses/{analysis_id}",
             analysis_id = input.analysis_id,
@@ -14445,6 +14560,7 @@ impl Quicksight for QuicksightClient {
         &self,
         input: DeleteDashboardRequest,
     ) -> Result<DeleteDashboardResponse, RusotoError<DeleteDashboardError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/accounts/{aws_account_id}/dashboards/{dashboard_id}",
             aws_account_id = input.aws_account_id,
@@ -14484,6 +14600,7 @@ impl Quicksight for QuicksightClient {
         &self,
         input: DeleteDataSetRequest,
     ) -> Result<DeleteDataSetResponse, RusotoError<DeleteDataSetError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/accounts/{aws_account_id}/data-sets/{data_set_id}",
             aws_account_id = input.aws_account_id,
@@ -14517,6 +14634,7 @@ impl Quicksight for QuicksightClient {
         &self,
         input: DeleteDataSourceRequest,
     ) -> Result<DeleteDataSourceResponse, RusotoError<DeleteDataSourceError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/accounts/{aws_account_id}/data-sources/{data_source_id}",
             aws_account_id = input.aws_account_id,
@@ -14550,6 +14668,7 @@ impl Quicksight for QuicksightClient {
         &self,
         input: DeleteGroupRequest,
     ) -> Result<DeleteGroupResponse, RusotoError<DeleteGroupError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/accounts/{aws_account_id}/namespaces/{namespace}/groups/{group_name}",
             aws_account_id = input.aws_account_id,
@@ -14584,6 +14703,7 @@ impl Quicksight for QuicksightClient {
         &self,
         input: DeleteGroupMembershipRequest,
     ) -> Result<DeleteGroupMembershipResponse, RusotoError<DeleteGroupMembershipError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!("/accounts/{aws_account_id}/namespaces/{namespace}/groups/{group_name}/members/{member_name}", aws_account_id = input.aws_account_id, group_name = input.group_name, member_name = input.member_name, namespace = input.namespace);
 
         let mut request = SignedRequest::new("DELETE", "quicksight", &self.region, &request_uri);
@@ -14614,6 +14734,7 @@ impl Quicksight for QuicksightClient {
         input: DeleteIAMPolicyAssignmentRequest,
     ) -> Result<DeleteIAMPolicyAssignmentResponse, RusotoError<DeleteIAMPolicyAssignmentError>>
     {
+        #![allow(clippy::needless_update)]
         let request_uri = format!("/accounts/{aws_account_id}/namespace/{namespace}/iam-policy-assignments/{assignment_name}", assignment_name = input.assignment_name, aws_account_id = input.aws_account_id, namespace = input.namespace);
 
         let mut request = SignedRequest::new("DELETE", "quicksight", &self.region, &request_uri);
@@ -14643,6 +14764,7 @@ impl Quicksight for QuicksightClient {
         &self,
         input: DeleteNamespaceRequest,
     ) -> Result<DeleteNamespaceResponse, RusotoError<DeleteNamespaceError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/accounts/{aws_account_id}/namespaces/{namespace}",
             aws_account_id = input.aws_account_id,
@@ -14676,6 +14798,7 @@ impl Quicksight for QuicksightClient {
         &self,
         input: DeleteTemplateRequest,
     ) -> Result<DeleteTemplateResponse, RusotoError<DeleteTemplateError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/accounts/{aws_account_id}/templates/{template_id}",
             aws_account_id = input.aws_account_id,
@@ -14715,6 +14838,7 @@ impl Quicksight for QuicksightClient {
         &self,
         input: DeleteTemplateAliasRequest,
     ) -> Result<DeleteTemplateAliasResponse, RusotoError<DeleteTemplateAliasError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/accounts/{aws_account_id}/templates/{template_id}/aliases/{alias_name}",
             alias_name = input.alias_name,
@@ -14749,6 +14873,7 @@ impl Quicksight for QuicksightClient {
         &self,
         input: DeleteThemeRequest,
     ) -> Result<DeleteThemeResponse, RusotoError<DeleteThemeError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/accounts/{aws_account_id}/themes/{theme_id}",
             aws_account_id = input.aws_account_id,
@@ -14788,6 +14913,7 @@ impl Quicksight for QuicksightClient {
         &self,
         input: DeleteThemeAliasRequest,
     ) -> Result<DeleteThemeAliasResponse, RusotoError<DeleteThemeAliasError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/accounts/{aws_account_id}/themes/{theme_id}/aliases/{alias_name}",
             alias_name = input.alias_name,
@@ -14822,6 +14948,7 @@ impl Quicksight for QuicksightClient {
         &self,
         input: DeleteUserRequest,
     ) -> Result<DeleteUserResponse, RusotoError<DeleteUserError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/accounts/{aws_account_id}/namespaces/{namespace}/users/{user_name}",
             aws_account_id = input.aws_account_id,
@@ -14856,6 +14983,7 @@ impl Quicksight for QuicksightClient {
         &self,
         input: DeleteUserByPrincipalIdRequest,
     ) -> Result<DeleteUserByPrincipalIdResponse, RusotoError<DeleteUserByPrincipalIdError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/accounts/{aws_account_id}/namespaces/{namespace}/user-principals/{principal_id}",
             aws_account_id = input.aws_account_id,
@@ -14891,6 +15019,7 @@ impl Quicksight for QuicksightClient {
         input: DescribeAccountCustomizationRequest,
     ) -> Result<DescribeAccountCustomizationResponse, RusotoError<DescribeAccountCustomizationError>>
     {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/accounts/{aws_account_id}/customizations",
             aws_account_id = input.aws_account_id
@@ -14932,6 +15061,7 @@ impl Quicksight for QuicksightClient {
         &self,
         input: DescribeAccountSettingsRequest,
     ) -> Result<DescribeAccountSettingsResponse, RusotoError<DescribeAccountSettingsError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/accounts/{aws_account_id}/settings",
             aws_account_id = input.aws_account_id
@@ -14964,6 +15094,7 @@ impl Quicksight for QuicksightClient {
         &self,
         input: DescribeAnalysisRequest,
     ) -> Result<DescribeAnalysisResponse, RusotoError<DescribeAnalysisError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/accounts/{aws_account_id}/analyses/{analysis_id}",
             analysis_id = input.analysis_id,
@@ -14998,6 +15129,7 @@ impl Quicksight for QuicksightClient {
         input: DescribeAnalysisPermissionsRequest,
     ) -> Result<DescribeAnalysisPermissionsResponse, RusotoError<DescribeAnalysisPermissionsError>>
     {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/accounts/{aws_account_id}/analyses/{analysis_id}/permissions",
             analysis_id = input.analysis_id,
@@ -15031,6 +15163,7 @@ impl Quicksight for QuicksightClient {
         &self,
         input: DescribeDashboardRequest,
     ) -> Result<DescribeDashboardResponse, RusotoError<DescribeDashboardError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/accounts/{aws_account_id}/dashboards/{dashboard_id}",
             aws_account_id = input.aws_account_id,
@@ -15074,6 +15207,7 @@ impl Quicksight for QuicksightClient {
         input: DescribeDashboardPermissionsRequest,
     ) -> Result<DescribeDashboardPermissionsResponse, RusotoError<DescribeDashboardPermissionsError>>
     {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/accounts/{aws_account_id}/dashboards/{dashboard_id}/permissions",
             aws_account_id = input.aws_account_id,
@@ -15107,6 +15241,7 @@ impl Quicksight for QuicksightClient {
         &self,
         input: DescribeDataSetRequest,
     ) -> Result<DescribeDataSetResponse, RusotoError<DescribeDataSetError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/accounts/{aws_account_id}/data-sets/{data_set_id}",
             aws_account_id = input.aws_account_id,
@@ -15141,6 +15276,7 @@ impl Quicksight for QuicksightClient {
         input: DescribeDataSetPermissionsRequest,
     ) -> Result<DescribeDataSetPermissionsResponse, RusotoError<DescribeDataSetPermissionsError>>
     {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/accounts/{aws_account_id}/data-sets/{data_set_id}/permissions",
             aws_account_id = input.aws_account_id,
@@ -15174,6 +15310,7 @@ impl Quicksight for QuicksightClient {
         &self,
         input: DescribeDataSourceRequest,
     ) -> Result<DescribeDataSourceResponse, RusotoError<DescribeDataSourceError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/accounts/{aws_account_id}/data-sources/{data_source_id}",
             aws_account_id = input.aws_account_id,
@@ -15210,6 +15347,7 @@ impl Quicksight for QuicksightClient {
         DescribeDataSourcePermissionsResponse,
         RusotoError<DescribeDataSourcePermissionsError>,
     > {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/accounts/{aws_account_id}/data-sources/{data_source_id}/permissions",
             aws_account_id = input.aws_account_id,
@@ -15243,6 +15381,7 @@ impl Quicksight for QuicksightClient {
         &self,
         input: DescribeGroupRequest,
     ) -> Result<DescribeGroupResponse, RusotoError<DescribeGroupError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/accounts/{aws_account_id}/namespaces/{namespace}/groups/{group_name}",
             aws_account_id = input.aws_account_id,
@@ -15278,6 +15417,7 @@ impl Quicksight for QuicksightClient {
         input: DescribeIAMPolicyAssignmentRequest,
     ) -> Result<DescribeIAMPolicyAssignmentResponse, RusotoError<DescribeIAMPolicyAssignmentError>>
     {
+        #![allow(clippy::needless_update)]
         let request_uri = format!("/accounts/{aws_account_id}/namespaces/{namespace}/iam-policy-assignments/{assignment_name}", assignment_name = input.assignment_name, aws_account_id = input.aws_account_id, namespace = input.namespace);
 
         let mut request = SignedRequest::new("GET", "quicksight", &self.region, &request_uri);
@@ -15307,6 +15447,7 @@ impl Quicksight for QuicksightClient {
         &self,
         input: DescribeIngestionRequest,
     ) -> Result<DescribeIngestionResponse, RusotoError<DescribeIngestionError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/accounts/{aws_account_id}/data-sets/{data_set_id}/ingestions/{ingestion_id}",
             aws_account_id = input.aws_account_id,
@@ -15341,6 +15482,7 @@ impl Quicksight for QuicksightClient {
         &self,
         input: DescribeNamespaceRequest,
     ) -> Result<DescribeNamespaceResponse, RusotoError<DescribeNamespaceError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/accounts/{aws_account_id}/namespaces/{namespace}",
             aws_account_id = input.aws_account_id,
@@ -15374,6 +15516,7 @@ impl Quicksight for QuicksightClient {
         &self,
         input: DescribeTemplateRequest,
     ) -> Result<DescribeTemplateResponse, RusotoError<DescribeTemplateError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/accounts/{aws_account_id}/templates/{template_id}",
             aws_account_id = input.aws_account_id,
@@ -15416,6 +15559,7 @@ impl Quicksight for QuicksightClient {
         &self,
         input: DescribeTemplateAliasRequest,
     ) -> Result<DescribeTemplateAliasResponse, RusotoError<DescribeTemplateAliasError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/accounts/{aws_account_id}/templates/{template_id}/aliases/{alias_name}",
             alias_name = input.alias_name,
@@ -15451,6 +15595,7 @@ impl Quicksight for QuicksightClient {
         input: DescribeTemplatePermissionsRequest,
     ) -> Result<DescribeTemplatePermissionsResponse, RusotoError<DescribeTemplatePermissionsError>>
     {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/accounts/{aws_account_id}/templates/{template_id}/permissions",
             aws_account_id = input.aws_account_id,
@@ -15484,6 +15629,7 @@ impl Quicksight for QuicksightClient {
         &self,
         input: DescribeThemeRequest,
     ) -> Result<DescribeThemeResponse, RusotoError<DescribeThemeError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/accounts/{aws_account_id}/themes/{theme_id}",
             aws_account_id = input.aws_account_id,
@@ -15526,6 +15672,7 @@ impl Quicksight for QuicksightClient {
         &self,
         input: DescribeThemeAliasRequest,
     ) -> Result<DescribeThemeAliasResponse, RusotoError<DescribeThemeAliasError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/accounts/{aws_account_id}/themes/{theme_id}/aliases/{alias_name}",
             alias_name = input.alias_name,
@@ -15560,6 +15707,7 @@ impl Quicksight for QuicksightClient {
         &self,
         input: DescribeThemePermissionsRequest,
     ) -> Result<DescribeThemePermissionsResponse, RusotoError<DescribeThemePermissionsError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/accounts/{aws_account_id}/themes/{theme_id}/permissions",
             aws_account_id = input.aws_account_id,
@@ -15593,6 +15741,7 @@ impl Quicksight for QuicksightClient {
         &self,
         input: DescribeUserRequest,
     ) -> Result<DescribeUserResponse, RusotoError<DescribeUserError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/accounts/{aws_account_id}/namespaces/{namespace}/users/{user_name}",
             aws_account_id = input.aws_account_id,
@@ -15627,6 +15776,7 @@ impl Quicksight for QuicksightClient {
         &self,
         input: GetDashboardEmbedUrlRequest,
     ) -> Result<GetDashboardEmbedUrlResponse, RusotoError<GetDashboardEmbedUrlError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/accounts/{aws_account_id}/dashboards/{dashboard_id}/embed-url",
             aws_account_id = input.aws_account_id,
@@ -15687,6 +15837,7 @@ impl Quicksight for QuicksightClient {
         &self,
         input: GetSessionEmbedUrlRequest,
     ) -> Result<GetSessionEmbedUrlResponse, RusotoError<GetSessionEmbedUrlError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/accounts/{aws_account_id}/session-embed-url",
             aws_account_id = input.aws_account_id
@@ -15731,6 +15882,7 @@ impl Quicksight for QuicksightClient {
         &self,
         input: ListAnalysesRequest,
     ) -> Result<ListAnalysesResponse, RusotoError<ListAnalysesError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/accounts/{aws_account_id}/analyses",
             aws_account_id = input.aws_account_id
@@ -15772,6 +15924,7 @@ impl Quicksight for QuicksightClient {
         &self,
         input: ListDashboardVersionsRequest,
     ) -> Result<ListDashboardVersionsResponse, RusotoError<ListDashboardVersionsError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/accounts/{aws_account_id}/dashboards/{dashboard_id}/versions",
             aws_account_id = input.aws_account_id,
@@ -15814,6 +15967,7 @@ impl Quicksight for QuicksightClient {
         &self,
         input: ListDashboardsRequest,
     ) -> Result<ListDashboardsResponse, RusotoError<ListDashboardsError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/accounts/{aws_account_id}/dashboards",
             aws_account_id = input.aws_account_id
@@ -15855,6 +16009,7 @@ impl Quicksight for QuicksightClient {
         &self,
         input: ListDataSetsRequest,
     ) -> Result<ListDataSetsResponse, RusotoError<ListDataSetsError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/accounts/{aws_account_id}/data-sets",
             aws_account_id = input.aws_account_id
@@ -15896,6 +16051,7 @@ impl Quicksight for QuicksightClient {
         &self,
         input: ListDataSourcesRequest,
     ) -> Result<ListDataSourcesResponse, RusotoError<ListDataSourcesError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/accounts/{aws_account_id}/data-sources",
             aws_account_id = input.aws_account_id
@@ -15937,6 +16093,7 @@ impl Quicksight for QuicksightClient {
         &self,
         input: ListGroupMembershipsRequest,
     ) -> Result<ListGroupMembershipsResponse, RusotoError<ListGroupMembershipsError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/accounts/{aws_account_id}/namespaces/{namespace}/groups/{group_name}/members",
             aws_account_id = input.aws_account_id,
@@ -15980,6 +16137,7 @@ impl Quicksight for QuicksightClient {
         &self,
         input: ListGroupsRequest,
     ) -> Result<ListGroupsResponse, RusotoError<ListGroupsError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/accounts/{aws_account_id}/namespaces/{namespace}/groups",
             aws_account_id = input.aws_account_id,
@@ -16022,6 +16180,7 @@ impl Quicksight for QuicksightClient {
         &self,
         input: ListIAMPolicyAssignmentsRequest,
     ) -> Result<ListIAMPolicyAssignmentsResponse, RusotoError<ListIAMPolicyAssignmentsError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/accounts/{aws_account_id}/namespaces/{namespace}/iam-policy-assignments",
             aws_account_id = input.aws_account_id,
@@ -16070,6 +16229,7 @@ impl Quicksight for QuicksightClient {
         ListIAMPolicyAssignmentsForUserResponse,
         RusotoError<ListIAMPolicyAssignmentsForUserError>,
     > {
+        #![allow(clippy::needless_update)]
         let request_uri = format!("/accounts/{aws_account_id}/namespaces/{namespace}/users/{user_name}/iam-policy-assignments", aws_account_id = input.aws_account_id, namespace = input.namespace, user_name = input.user_name);
 
         let mut request = SignedRequest::new("GET", "quicksight", &self.region, &request_uri);
@@ -16110,6 +16270,7 @@ impl Quicksight for QuicksightClient {
         &self,
         input: ListIngestionsRequest,
     ) -> Result<ListIngestionsResponse, RusotoError<ListIngestionsError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/accounts/{aws_account_id}/data-sets/{data_set_id}/ingestions",
             aws_account_id = input.aws_account_id,
@@ -16152,6 +16313,7 @@ impl Quicksight for QuicksightClient {
         &self,
         input: ListNamespacesRequest,
     ) -> Result<ListNamespacesResponse, RusotoError<ListNamespacesError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/accounts/{aws_account_id}/namespaces",
             aws_account_id = input.aws_account_id
@@ -16193,6 +16355,7 @@ impl Quicksight for QuicksightClient {
         &self,
         input: ListTagsForResourceRequest,
     ) -> Result<ListTagsForResourceResponse, RusotoError<ListTagsForResourceError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/resources/{resource_arn}/tags",
             resource_arn = input.resource_arn
@@ -16225,6 +16388,7 @@ impl Quicksight for QuicksightClient {
         &self,
         input: ListTemplateAliasesRequest,
     ) -> Result<ListTemplateAliasesResponse, RusotoError<ListTemplateAliasesError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/accounts/{aws_account_id}/templates/{template_id}/aliases",
             aws_account_id = input.aws_account_id,
@@ -16267,6 +16431,7 @@ impl Quicksight for QuicksightClient {
         &self,
         input: ListTemplateVersionsRequest,
     ) -> Result<ListTemplateVersionsResponse, RusotoError<ListTemplateVersionsError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/accounts/{aws_account_id}/templates/{template_id}/versions",
             aws_account_id = input.aws_account_id,
@@ -16309,6 +16474,7 @@ impl Quicksight for QuicksightClient {
         &self,
         input: ListTemplatesRequest,
     ) -> Result<ListTemplatesResponse, RusotoError<ListTemplatesError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/accounts/{aws_account_id}/templates",
             aws_account_id = input.aws_account_id
@@ -16350,6 +16516,7 @@ impl Quicksight for QuicksightClient {
         &self,
         input: ListThemeAliasesRequest,
     ) -> Result<ListThemeAliasesResponse, RusotoError<ListThemeAliasesError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/accounts/{aws_account_id}/themes/{theme_id}/aliases",
             aws_account_id = input.aws_account_id,
@@ -16392,6 +16559,7 @@ impl Quicksight for QuicksightClient {
         &self,
         input: ListThemeVersionsRequest,
     ) -> Result<ListThemeVersionsResponse, RusotoError<ListThemeVersionsError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/accounts/{aws_account_id}/themes/{theme_id}/versions",
             aws_account_id = input.aws_account_id,
@@ -16434,6 +16602,7 @@ impl Quicksight for QuicksightClient {
         &self,
         input: ListThemesRequest,
     ) -> Result<ListThemesResponse, RusotoError<ListThemesError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/accounts/{aws_account_id}/themes",
             aws_account_id = input.aws_account_id
@@ -16478,6 +16647,7 @@ impl Quicksight for QuicksightClient {
         &self,
         input: ListUserGroupsRequest,
     ) -> Result<ListUserGroupsResponse, RusotoError<ListUserGroupsError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/accounts/{aws_account_id}/namespaces/{namespace}/users/{user_name}/groups",
             aws_account_id = input.aws_account_id,
@@ -16521,6 +16691,7 @@ impl Quicksight for QuicksightClient {
         &self,
         input: ListUsersRequest,
     ) -> Result<ListUsersResponse, RusotoError<ListUsersError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/accounts/{aws_account_id}/namespaces/{namespace}/users",
             aws_account_id = input.aws_account_id,
@@ -16563,6 +16734,7 @@ impl Quicksight for QuicksightClient {
         &self,
         input: RegisterUserRequest,
     ) -> Result<RegisterUserResponse, RusotoError<RegisterUserError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/accounts/{aws_account_id}/namespaces/{namespace}/users",
             aws_account_id = input.aws_account_id,
@@ -16599,6 +16771,7 @@ impl Quicksight for QuicksightClient {
         &self,
         input: RestoreAnalysisRequest,
     ) -> Result<RestoreAnalysisResponse, RusotoError<RestoreAnalysisError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/accounts/{aws_account_id}/restore/analyses/{analysis_id}",
             analysis_id = input.analysis_id,
@@ -16632,6 +16805,7 @@ impl Quicksight for QuicksightClient {
         &self,
         input: SearchAnalysesRequest,
     ) -> Result<SearchAnalysesResponse, RusotoError<SearchAnalysesError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/accounts/{aws_account_id}/search/analyses",
             aws_account_id = input.aws_account_id
@@ -16667,6 +16841,7 @@ impl Quicksight for QuicksightClient {
         &self,
         input: SearchDashboardsRequest,
     ) -> Result<SearchDashboardsResponse, RusotoError<SearchDashboardsError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/accounts/{aws_account_id}/search/dashboards",
             aws_account_id = input.aws_account_id
@@ -16702,6 +16877,7 @@ impl Quicksight for QuicksightClient {
         &self,
         input: TagResourceRequest,
     ) -> Result<TagResourceResponse, RusotoError<TagResourceError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/resources/{resource_arn}/tags",
             resource_arn = input.resource_arn
@@ -16737,6 +16913,7 @@ impl Quicksight for QuicksightClient {
         &self,
         input: UntagResourceRequest,
     ) -> Result<UntagResourceResponse, RusotoError<UntagResourceError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/resources/{resource_arn}/tags",
             resource_arn = input.resource_arn
@@ -16776,6 +16953,7 @@ impl Quicksight for QuicksightClient {
         input: UpdateAccountCustomizationRequest,
     ) -> Result<UpdateAccountCustomizationResponse, RusotoError<UpdateAccountCustomizationError>>
     {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/accounts/{aws_account_id}/customizations",
             aws_account_id = input.aws_account_id
@@ -16817,6 +16995,7 @@ impl Quicksight for QuicksightClient {
         &self,
         input: UpdateAccountSettingsRequest,
     ) -> Result<UpdateAccountSettingsResponse, RusotoError<UpdateAccountSettingsError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/accounts/{aws_account_id}/settings",
             aws_account_id = input.aws_account_id
@@ -16852,6 +17031,7 @@ impl Quicksight for QuicksightClient {
         &self,
         input: UpdateAnalysisRequest,
     ) -> Result<UpdateAnalysisResponse, RusotoError<UpdateAnalysisError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/accounts/{aws_account_id}/analyses/{analysis_id}",
             analysis_id = input.analysis_id,
@@ -16889,6 +17069,7 @@ impl Quicksight for QuicksightClient {
         input: UpdateAnalysisPermissionsRequest,
     ) -> Result<UpdateAnalysisPermissionsResponse, RusotoError<UpdateAnalysisPermissionsError>>
     {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/accounts/{aws_account_id}/analyses/{analysis_id}/permissions",
             analysis_id = input.analysis_id,
@@ -16925,6 +17106,7 @@ impl Quicksight for QuicksightClient {
         &self,
         input: UpdateDashboardRequest,
     ) -> Result<UpdateDashboardResponse, RusotoError<UpdateDashboardError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/accounts/{aws_account_id}/dashboards/{dashboard_id}",
             aws_account_id = input.aws_account_id,
@@ -16961,6 +17143,7 @@ impl Quicksight for QuicksightClient {
         input: UpdateDashboardPermissionsRequest,
     ) -> Result<UpdateDashboardPermissionsResponse, RusotoError<UpdateDashboardPermissionsError>>
     {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/accounts/{aws_account_id}/dashboards/{dashboard_id}/permissions",
             aws_account_id = input.aws_account_id,
@@ -17000,6 +17183,7 @@ impl Quicksight for QuicksightClient {
         UpdateDashboardPublishedVersionResponse,
         RusotoError<UpdateDashboardPublishedVersionError>,
     > {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/accounts/{aws_account_id}/dashboards/{dashboard_id}/versions/{version_number}",
             aws_account_id = input.aws_account_id,
@@ -17036,6 +17220,7 @@ impl Quicksight for QuicksightClient {
         &self,
         input: UpdateDataSetRequest,
     ) -> Result<UpdateDataSetResponse, RusotoError<UpdateDataSetError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/accounts/{aws_account_id}/data-sets/{data_set_id}",
             aws_account_id = input.aws_account_id,
@@ -17072,6 +17257,7 @@ impl Quicksight for QuicksightClient {
         &self,
         input: UpdateDataSetPermissionsRequest,
     ) -> Result<UpdateDataSetPermissionsResponse, RusotoError<UpdateDataSetPermissionsError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/accounts/{aws_account_id}/data-sets/{data_set_id}/permissions",
             aws_account_id = input.aws_account_id,
@@ -17108,6 +17294,7 @@ impl Quicksight for QuicksightClient {
         &self,
         input: UpdateDataSourceRequest,
     ) -> Result<UpdateDataSourceResponse, RusotoError<UpdateDataSourceError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/accounts/{aws_account_id}/data-sources/{data_source_id}",
             aws_account_id = input.aws_account_id,
@@ -17145,6 +17332,7 @@ impl Quicksight for QuicksightClient {
         input: UpdateDataSourcePermissionsRequest,
     ) -> Result<UpdateDataSourcePermissionsResponse, RusotoError<UpdateDataSourcePermissionsError>>
     {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/accounts/{aws_account_id}/data-sources/{data_source_id}/permissions",
             aws_account_id = input.aws_account_id,
@@ -17181,6 +17369,7 @@ impl Quicksight for QuicksightClient {
         &self,
         input: UpdateGroupRequest,
     ) -> Result<UpdateGroupResponse, RusotoError<UpdateGroupError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/accounts/{aws_account_id}/namespaces/{namespace}/groups/{group_name}",
             aws_account_id = input.aws_account_id,
@@ -17219,6 +17408,7 @@ impl Quicksight for QuicksightClient {
         input: UpdateIAMPolicyAssignmentRequest,
     ) -> Result<UpdateIAMPolicyAssignmentResponse, RusotoError<UpdateIAMPolicyAssignmentError>>
     {
+        #![allow(clippy::needless_update)]
         let request_uri = format!("/accounts/{aws_account_id}/namespaces/{namespace}/iam-policy-assignments/{assignment_name}", assignment_name = input.assignment_name, aws_account_id = input.aws_account_id, namespace = input.namespace);
 
         let mut request = SignedRequest::new("PUT", "quicksight", &self.region, &request_uri);
@@ -17251,6 +17441,7 @@ impl Quicksight for QuicksightClient {
         &self,
         input: UpdateTemplateRequest,
     ) -> Result<UpdateTemplateResponse, RusotoError<UpdateTemplateError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/accounts/{aws_account_id}/templates/{template_id}",
             aws_account_id = input.aws_account_id,
@@ -17287,6 +17478,7 @@ impl Quicksight for QuicksightClient {
         &self,
         input: UpdateTemplateAliasRequest,
     ) -> Result<UpdateTemplateAliasResponse, RusotoError<UpdateTemplateAliasError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/accounts/{aws_account_id}/templates/{template_id}/aliases/{alias_name}",
             alias_name = input.alias_name,
@@ -17325,6 +17517,7 @@ impl Quicksight for QuicksightClient {
         input: UpdateTemplatePermissionsRequest,
     ) -> Result<UpdateTemplatePermissionsResponse, RusotoError<UpdateTemplatePermissionsError>>
     {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/accounts/{aws_account_id}/templates/{template_id}/permissions",
             aws_account_id = input.aws_account_id,
@@ -17361,6 +17554,7 @@ impl Quicksight for QuicksightClient {
         &self,
         input: UpdateThemeRequest,
     ) -> Result<UpdateThemeResponse, RusotoError<UpdateThemeError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/accounts/{aws_account_id}/themes/{theme_id}",
             aws_account_id = input.aws_account_id,
@@ -17397,6 +17591,7 @@ impl Quicksight for QuicksightClient {
         &self,
         input: UpdateThemeAliasRequest,
     ) -> Result<UpdateThemeAliasResponse, RusotoError<UpdateThemeAliasError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/accounts/{aws_account_id}/themes/{theme_id}/aliases/{alias_name}",
             alias_name = input.alias_name,
@@ -17434,6 +17629,7 @@ impl Quicksight for QuicksightClient {
         &self,
         input: UpdateThemePermissionsRequest,
     ) -> Result<UpdateThemePermissionsResponse, RusotoError<UpdateThemePermissionsError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/accounts/{aws_account_id}/themes/{theme_id}/permissions",
             aws_account_id = input.aws_account_id,
@@ -17470,6 +17666,7 @@ impl Quicksight for QuicksightClient {
         &self,
         input: UpdateUserRequest,
     ) -> Result<UpdateUserResponse, RusotoError<UpdateUserError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/accounts/{aws_account_id}/namespaces/{namespace}/users/{user_name}",
             aws_account_id = input.aws_account_id,

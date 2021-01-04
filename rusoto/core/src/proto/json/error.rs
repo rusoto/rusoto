@@ -42,7 +42,7 @@ impl Error {
                 Some(raw_error_type) => raw_error_type
                     .split(':')
                     .next()
-                    .unwrap_or_else(|| "Unknown"),
+                    .unwrap_or("Unknown"),
                 _ => json
                     .get("code")
                     .or_else(|| json.get("Code"))

@@ -51,7 +51,6 @@ impl MarketplaceEntitlementClient {
     }
 }
 
-use serde_json;
 /// <p>An entitlement represents capacity in a product owned by the customer. For example, a customer might own some number of users or seats in an SaaS application or some amount of data capacity in a multi-tenant database.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
@@ -149,6 +148,7 @@ pub enum GetEntitlementsError {
 impl GetEntitlementsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetEntitlementsError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalServiceErrorException" => {
                     return RusotoError::Service(GetEntitlementsError::InternalServiceError(

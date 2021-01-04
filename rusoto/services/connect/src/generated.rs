@@ -24,7 +24,6 @@ use rusoto_core::proto;
 use rusoto_core::signature::SignedRequest;
 #[allow(unused_imports)]
 use serde::{Deserialize, Serialize};
-use serde_json;
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct AssociateApprovedOriginRequest {
@@ -3137,6 +3136,7 @@ pub enum AssociateApprovedOriginError {
 impl AssociateApprovedOriginError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<AssociateApprovedOriginError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalServiceException" => {
                     return RusotoError::Service(AssociateApprovedOriginError::InternalService(
@@ -3215,6 +3215,7 @@ impl AssociateInstanceStorageConfigError {
         res: BufferedHttpResponse,
     ) -> RusotoError<AssociateInstanceStorageConfigError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalServiceException" => {
                     return RusotoError::Service(
@@ -3299,6 +3300,7 @@ pub enum AssociateLambdaFunctionError {
 impl AssociateLambdaFunctionError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<AssociateLambdaFunctionError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalServiceException" => {
                     return RusotoError::Service(AssociateLambdaFunctionError::InternalService(
@@ -3377,6 +3379,7 @@ pub enum AssociateLexBotError {
 impl AssociateLexBotError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<AssociateLexBotError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalServiceException" => {
                     return RusotoError::Service(AssociateLexBotError::InternalService(err.msg))
@@ -3443,6 +3446,7 @@ impl AssociateRoutingProfileQueuesError {
         res: BufferedHttpResponse,
     ) -> RusotoError<AssociateRoutingProfileQueuesError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalServiceException" => {
                     return RusotoError::Service(
@@ -3517,6 +3521,7 @@ pub enum AssociateSecurityKeyError {
 impl AssociateSecurityKeyError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<AssociateSecurityKeyError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalServiceException" => {
                     return RusotoError::Service(AssociateSecurityKeyError::InternalService(
@@ -3595,6 +3600,7 @@ pub enum CreateContactFlowError {
 impl CreateContactFlowError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateContactFlowError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "DuplicateResourceException" => {
                     return RusotoError::Service(CreateContactFlowError::DuplicateResource(err.msg))
@@ -3663,6 +3669,7 @@ pub enum CreateInstanceError {
 impl CreateInstanceError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateInstanceError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalServiceException" => {
                     return RusotoError::Service(CreateInstanceError::InternalService(err.msg))
@@ -3719,6 +3726,7 @@ impl CreateIntegrationAssociationError {
         res: BufferedHttpResponse,
     ) -> RusotoError<CreateIntegrationAssociationError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "DuplicateResourceException" => {
                     return RusotoError::Service(
@@ -3791,6 +3799,7 @@ pub enum CreateQuickConnectError {
 impl CreateQuickConnectError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateQuickConnectError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "DuplicateResourceException" => {
                     return RusotoError::Service(CreateQuickConnectError::DuplicateResource(
@@ -3859,6 +3868,7 @@ pub enum CreateRoutingProfileError {
 impl CreateRoutingProfileError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateRoutingProfileError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "DuplicateResourceException" => {
                     return RusotoError::Service(CreateRoutingProfileError::DuplicateResource(
@@ -3929,6 +3939,7 @@ pub enum CreateUseCaseError {
 impl CreateUseCaseError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateUseCaseError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "DuplicateResourceException" => {
                     return RusotoError::Service(CreateUseCaseError::DuplicateResource(err.msg))
@@ -3987,6 +3998,7 @@ pub enum CreateUserError {
 impl CreateUserError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateUserError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "DuplicateResourceException" => {
                     return RusotoError::Service(CreateUserError::DuplicateResource(err.msg))
@@ -4053,6 +4065,7 @@ pub enum CreateUserHierarchyGroupError {
 impl CreateUserHierarchyGroupError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateUserHierarchyGroupError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "DuplicateResourceException" => {
                     return RusotoError::Service(CreateUserHierarchyGroupError::DuplicateResource(
@@ -4123,6 +4136,7 @@ pub enum DeleteInstanceError {
 impl DeleteInstanceError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteInstanceError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalServiceException" => {
                     return RusotoError::Service(DeleteInstanceError::InternalService(err.msg))
@@ -4169,6 +4183,7 @@ impl DeleteIntegrationAssociationError {
         res: BufferedHttpResponse,
     ) -> RusotoError<DeleteIntegrationAssociationError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalServiceException" => {
                     return RusotoError::Service(
@@ -4229,6 +4244,7 @@ pub enum DeleteQuickConnectError {
 impl DeleteQuickConnectError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteQuickConnectError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalServiceException" => {
                     return RusotoError::Service(DeleteQuickConnectError::InternalService(err.msg))
@@ -4281,6 +4297,7 @@ pub enum DeleteUseCaseError {
 impl DeleteUseCaseError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteUseCaseError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalServiceException" => {
                     return RusotoError::Service(DeleteUseCaseError::InternalService(err.msg))
@@ -4331,6 +4348,7 @@ pub enum DeleteUserError {
 impl DeleteUserError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteUserError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalServiceException" => {
                     return RusotoError::Service(DeleteUserError::InternalService(err.msg))
@@ -4387,6 +4405,7 @@ pub enum DeleteUserHierarchyGroupError {
 impl DeleteUserHierarchyGroupError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteUserHierarchyGroupError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalServiceException" => {
                     return RusotoError::Service(DeleteUserHierarchyGroupError::InternalService(
@@ -4457,6 +4476,7 @@ pub enum DescribeContactFlowError {
 impl DescribeContactFlowError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeContactFlowError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ContactFlowNotPublishedException" => {
                     return RusotoError::Service(DescribeContactFlowError::ContactFlowNotPublished(
@@ -4517,6 +4537,7 @@ pub enum DescribeInstanceError {
 impl DescribeInstanceError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeInstanceError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalServiceException" => {
                     return RusotoError::Service(DescribeInstanceError::InternalService(err.msg))
@@ -4563,6 +4584,7 @@ pub enum DescribeInstanceAttributeError {
 impl DescribeInstanceAttributeError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeInstanceAttributeError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalServiceException" => {
                     return RusotoError::Service(DescribeInstanceAttributeError::InternalService(
@@ -4629,6 +4651,7 @@ impl DescribeInstanceStorageConfigError {
         res: BufferedHttpResponse,
     ) -> RusotoError<DescribeInstanceStorageConfigError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalServiceException" => {
                     return RusotoError::Service(
@@ -4699,6 +4722,7 @@ pub enum DescribeQuickConnectError {
 impl DescribeQuickConnectError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeQuickConnectError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalServiceException" => {
                     return RusotoError::Service(DescribeQuickConnectError::InternalService(
@@ -4759,6 +4783,7 @@ pub enum DescribeRoutingProfileError {
 impl DescribeRoutingProfileError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeRoutingProfileError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalServiceException" => {
                     return RusotoError::Service(DescribeRoutingProfileError::InternalService(
@@ -4821,6 +4846,7 @@ pub enum DescribeUserError {
 impl DescribeUserError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeUserError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalServiceException" => {
                     return RusotoError::Service(DescribeUserError::InternalService(err.msg))
@@ -4877,6 +4903,7 @@ impl DescribeUserHierarchyGroupError {
         res: BufferedHttpResponse,
     ) -> RusotoError<DescribeUserHierarchyGroupError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalServiceException" => {
                     return RusotoError::Service(DescribeUserHierarchyGroupError::InternalService(
@@ -4943,6 +4970,7 @@ impl DescribeUserHierarchyStructureError {
         res: BufferedHttpResponse,
     ) -> RusotoError<DescribeUserHierarchyStructureError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalServiceException" => {
                     return RusotoError::Service(
@@ -5017,6 +5045,7 @@ impl DisassociateApprovedOriginError {
         res: BufferedHttpResponse,
     ) -> RusotoError<DisassociateApprovedOriginError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalServiceException" => {
                     return RusotoError::Service(DisassociateApprovedOriginError::InternalService(
@@ -5083,6 +5112,7 @@ impl DisassociateInstanceStorageConfigError {
         res: BufferedHttpResponse,
     ) -> RusotoError<DisassociateInstanceStorageConfigError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalServiceException" => {
                     return RusotoError::Service(
@@ -5157,6 +5187,7 @@ impl DisassociateLambdaFunctionError {
         res: BufferedHttpResponse,
     ) -> RusotoError<DisassociateLambdaFunctionError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalServiceException" => {
                     return RusotoError::Service(DisassociateLambdaFunctionError::InternalService(
@@ -5221,6 +5252,7 @@ pub enum DisassociateLexBotError {
 impl DisassociateLexBotError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DisassociateLexBotError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalServiceException" => {
                     return RusotoError::Service(DisassociateLexBotError::InternalService(err.msg))
@@ -5277,6 +5309,7 @@ impl DisassociateRoutingProfileQueuesError {
         res: BufferedHttpResponse,
     ) -> RusotoError<DisassociateRoutingProfileQueuesError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalServiceException" => {
                     return RusotoError::Service(
@@ -5349,6 +5382,7 @@ pub enum DisassociateSecurityKeyError {
 impl DisassociateSecurityKeyError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DisassociateSecurityKeyError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalServiceException" => {
                     return RusotoError::Service(DisassociateSecurityKeyError::InternalService(
@@ -5407,6 +5441,7 @@ pub enum GetContactAttributesError {
 impl GetContactAttributesError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetContactAttributesError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalServiceException" => {
                     return RusotoError::Service(GetContactAttributesError::InternalService(
@@ -5457,6 +5492,7 @@ pub enum GetCurrentMetricDataError {
 impl GetCurrentMetricDataError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetCurrentMetricDataError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalServiceException" => {
                     return RusotoError::Service(GetCurrentMetricDataError::InternalService(
@@ -5519,6 +5555,7 @@ pub enum GetFederationTokenError {
 impl GetFederationTokenError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetFederationTokenError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "DuplicateResourceException" => {
                     return RusotoError::Service(GetFederationTokenError::DuplicateResource(
@@ -5579,6 +5616,7 @@ pub enum GetMetricDataError {
 impl GetMetricDataError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetMetricDataError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalServiceException" => {
                     return RusotoError::Service(GetMetricDataError::InternalService(err.msg))
@@ -5633,6 +5671,7 @@ pub enum ListApprovedOriginsError {
 impl ListApprovedOriginsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListApprovedOriginsError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalServiceException" => {
                     return RusotoError::Service(ListApprovedOriginsError::InternalService(err.msg))
@@ -5691,6 +5730,7 @@ pub enum ListContactFlowsError {
 impl ListContactFlowsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListContactFlowsError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalServiceException" => {
                     return RusotoError::Service(ListContactFlowsError::InternalService(err.msg))
@@ -5745,6 +5785,7 @@ pub enum ListHoursOfOperationsError {
 impl ListHoursOfOperationsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListHoursOfOperationsError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalServiceException" => {
                     return RusotoError::Service(ListHoursOfOperationsError::InternalService(
@@ -5807,6 +5848,7 @@ pub enum ListInstanceAttributesError {
 impl ListInstanceAttributesError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListInstanceAttributesError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalServiceException" => {
                     return RusotoError::Service(ListInstanceAttributesError::InternalService(
@@ -5871,6 +5913,7 @@ impl ListInstanceStorageConfigsError {
         res: BufferedHttpResponse,
     ) -> RusotoError<ListInstanceStorageConfigsError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalServiceException" => {
                     return RusotoError::Service(ListInstanceStorageConfigsError::InternalService(
@@ -5929,6 +5972,7 @@ pub enum ListInstancesError {
 impl ListInstancesError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListInstancesError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalServiceException" => {
                     return RusotoError::Service(ListInstancesError::InternalService(err.msg))
@@ -5971,6 +6015,7 @@ impl ListIntegrationAssociationsError {
         res: BufferedHttpResponse,
     ) -> RusotoError<ListIntegrationAssociationsError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalServiceException" => {
                     return RusotoError::Service(ListIntegrationAssociationsError::InternalService(
@@ -6029,6 +6074,7 @@ pub enum ListLambdaFunctionsError {
 impl ListLambdaFunctionsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListLambdaFunctionsError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalServiceException" => {
                     return RusotoError::Service(ListLambdaFunctionsError::InternalService(err.msg))
@@ -6087,6 +6133,7 @@ pub enum ListLexBotsError {
 impl ListLexBotsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListLexBotsError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalServiceException" => {
                     return RusotoError::Service(ListLexBotsError::InternalService(err.msg))
@@ -6141,6 +6188,7 @@ pub enum ListPhoneNumbersError {
 impl ListPhoneNumbersError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListPhoneNumbersError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalServiceException" => {
                     return RusotoError::Service(ListPhoneNumbersError::InternalService(err.msg))
@@ -6195,6 +6243,7 @@ pub enum ListPromptsError {
 impl ListPromptsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListPromptsError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalServiceException" => {
                     return RusotoError::Service(ListPromptsError::InternalService(err.msg))
@@ -6249,6 +6298,7 @@ pub enum ListQueuesError {
 impl ListQueuesError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListQueuesError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalServiceException" => {
                     return RusotoError::Service(ListQueuesError::InternalService(err.msg))
@@ -6303,6 +6353,7 @@ pub enum ListQuickConnectsError {
 impl ListQuickConnectsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListQuickConnectsError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalServiceException" => {
                     return RusotoError::Service(ListQuickConnectsError::InternalService(err.msg))
@@ -6357,6 +6408,7 @@ pub enum ListRoutingProfileQueuesError {
 impl ListRoutingProfileQueuesError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListRoutingProfileQueuesError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalServiceException" => {
                     return RusotoError::Service(ListRoutingProfileQueuesError::InternalService(
@@ -6419,6 +6471,7 @@ pub enum ListRoutingProfilesError {
 impl ListRoutingProfilesError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListRoutingProfilesError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalServiceException" => {
                     return RusotoError::Service(ListRoutingProfilesError::InternalService(err.msg))
@@ -6477,6 +6530,7 @@ pub enum ListSecurityKeysError {
 impl ListSecurityKeysError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListSecurityKeysError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalServiceException" => {
                     return RusotoError::Service(ListSecurityKeysError::InternalService(err.msg))
@@ -6531,6 +6585,7 @@ pub enum ListSecurityProfilesError {
 impl ListSecurityProfilesError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListSecurityProfilesError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalServiceException" => {
                     return RusotoError::Service(ListSecurityProfilesError::InternalService(
@@ -6591,6 +6646,7 @@ pub enum ListTagsForResourceError {
 impl ListTagsForResourceError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListTagsForResourceError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalServiceException" => {
                     return RusotoError::Service(ListTagsForResourceError::InternalService(err.msg))
@@ -6647,6 +6703,7 @@ pub enum ListUseCasesError {
 impl ListUseCasesError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListUseCasesError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalServiceException" => {
                     return RusotoError::Service(ListUseCasesError::InternalService(err.msg))
@@ -6697,6 +6754,7 @@ pub enum ListUserHierarchyGroupsError {
 impl ListUserHierarchyGroupsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListUserHierarchyGroupsError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalServiceException" => {
                     return RusotoError::Service(ListUserHierarchyGroupsError::InternalService(
@@ -6759,6 +6817,7 @@ pub enum ListUsersError {
 impl ListUsersError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListUsersError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalServiceException" => {
                     return RusotoError::Service(ListUsersError::InternalService(err.msg))
@@ -6809,6 +6868,7 @@ pub enum ResumeContactRecordingError {
 impl ResumeContactRecordingError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ResumeContactRecordingError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalServiceException" => {
                     return RusotoError::Service(ResumeContactRecordingError::InternalService(
@@ -6861,6 +6921,7 @@ pub enum StartChatContactError {
 impl StartChatContactError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<StartChatContactError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalServiceException" => {
                     return RusotoError::Service(StartChatContactError::InternalService(err.msg))
@@ -6913,6 +6974,7 @@ pub enum StartContactRecordingError {
 impl StartContactRecordingError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<StartContactRecordingError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalServiceException" => {
                     return RusotoError::Service(StartContactRecordingError::InternalService(
@@ -6975,6 +7037,7 @@ pub enum StartOutboundVoiceContactError {
 impl StartOutboundVoiceContactError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<StartOutboundVoiceContactError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "DestinationNotAllowedException" => {
                     return RusotoError::Service(
@@ -7057,6 +7120,7 @@ pub enum StartTaskContactError {
 impl StartTaskContactError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<StartTaskContactError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalServiceException" => {
                     return RusotoError::Service(StartTaskContactError::InternalService(err.msg))
@@ -7117,6 +7181,7 @@ pub enum StopContactError {
 impl StopContactError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<StopContactError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ContactNotFoundException" => {
                     return RusotoError::Service(StopContactError::ContactNotFound(err.msg))
@@ -7167,6 +7232,7 @@ pub enum StopContactRecordingError {
 impl StopContactRecordingError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<StopContactRecordingError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalServiceException" => {
                     return RusotoError::Service(StopContactRecordingError::InternalService(
@@ -7213,6 +7279,7 @@ pub enum SuspendContactRecordingError {
 impl SuspendContactRecordingError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<SuspendContactRecordingError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalServiceException" => {
                     return RusotoError::Service(SuspendContactRecordingError::InternalService(
@@ -7265,6 +7332,7 @@ pub enum TagResourceError {
 impl TagResourceError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<TagResourceError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalServiceException" => {
                     return RusotoError::Service(TagResourceError::InternalService(err.msg))
@@ -7319,6 +7387,7 @@ pub enum UntagResourceError {
 impl UntagResourceError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UntagResourceError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalServiceException" => {
                     return RusotoError::Service(UntagResourceError::InternalService(err.msg))
@@ -7371,6 +7440,7 @@ pub enum UpdateContactAttributesError {
 impl UpdateContactAttributesError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateContactAttributesError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalServiceException" => {
                     return RusotoError::Service(UpdateContactAttributesError::InternalService(
@@ -7431,6 +7501,7 @@ pub enum UpdateContactFlowContentError {
 impl UpdateContactFlowContentError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateContactFlowContentError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalServiceException" => {
                     return RusotoError::Service(UpdateContactFlowContentError::InternalService(
@@ -7501,6 +7572,7 @@ pub enum UpdateContactFlowNameError {
 impl UpdateContactFlowNameError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateContactFlowNameError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "DuplicateResourceException" => {
                     return RusotoError::Service(UpdateContactFlowNameError::DuplicateResource(
@@ -7569,6 +7641,7 @@ pub enum UpdateInstanceAttributeError {
 impl UpdateInstanceAttributeError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateInstanceAttributeError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalServiceException" => {
                     return RusotoError::Service(UpdateInstanceAttributeError::InternalService(
@@ -7633,6 +7706,7 @@ impl UpdateInstanceStorageConfigError {
         res: BufferedHttpResponse,
     ) -> RusotoError<UpdateInstanceStorageConfigError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalServiceException" => {
                     return RusotoError::Service(UpdateInstanceStorageConfigError::InternalService(
@@ -7697,6 +7771,7 @@ pub enum UpdateQuickConnectConfigError {
 impl UpdateQuickConnectConfigError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateQuickConnectConfigError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalServiceException" => {
                     return RusotoError::Service(UpdateQuickConnectConfigError::InternalService(
@@ -7759,6 +7834,7 @@ pub enum UpdateQuickConnectNameError {
 impl UpdateQuickConnectNameError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateQuickConnectNameError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalServiceException" => {
                     return RusotoError::Service(UpdateQuickConnectNameError::InternalService(
@@ -7823,6 +7899,7 @@ impl UpdateRoutingProfileConcurrencyError {
         res: BufferedHttpResponse,
     ) -> RusotoError<UpdateRoutingProfileConcurrencyError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalServiceException" => {
                     return RusotoError::Service(
@@ -7897,6 +7974,7 @@ impl UpdateRoutingProfileDefaultOutboundQueueError {
         res: BufferedHttpResponse,
     ) -> RusotoError<UpdateRoutingProfileDefaultOutboundQueueError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalServiceException" => {
                     return RusotoError::Service(
@@ -7973,6 +8051,7 @@ pub enum UpdateRoutingProfileNameError {
 impl UpdateRoutingProfileNameError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateRoutingProfileNameError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "DuplicateResourceException" => {
                     return RusotoError::Service(UpdateRoutingProfileNameError::DuplicateResource(
@@ -8043,6 +8122,7 @@ impl UpdateRoutingProfileQueuesError {
         res: BufferedHttpResponse,
     ) -> RusotoError<UpdateRoutingProfileQueuesError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalServiceException" => {
                     return RusotoError::Service(UpdateRoutingProfileQueuesError::InternalService(
@@ -8107,6 +8187,7 @@ pub enum UpdateUserHierarchyError {
 impl UpdateUserHierarchyError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateUserHierarchyError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalServiceException" => {
                     return RusotoError::Service(UpdateUserHierarchyError::InternalService(err.msg))
@@ -8169,6 +8250,7 @@ impl UpdateUserHierarchyGroupNameError {
         res: BufferedHttpResponse,
     ) -> RusotoError<UpdateUserHierarchyGroupNameError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "DuplicateResourceException" => {
                     return RusotoError::Service(
@@ -8249,6 +8331,7 @@ impl UpdateUserHierarchyStructureError {
         res: BufferedHttpResponse,
     ) -> RusotoError<UpdateUserHierarchyStructureError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalServiceException" => {
                     return RusotoError::Service(
@@ -8323,6 +8406,7 @@ pub enum UpdateUserIdentityInfoError {
 impl UpdateUserIdentityInfoError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateUserIdentityInfoError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalServiceException" => {
                     return RusotoError::Service(UpdateUserIdentityInfoError::InternalService(
@@ -8385,6 +8469,7 @@ pub enum UpdateUserPhoneConfigError {
 impl UpdateUserPhoneConfigError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateUserPhoneConfigError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalServiceException" => {
                     return RusotoError::Service(UpdateUserPhoneConfigError::InternalService(
@@ -8447,6 +8532,7 @@ pub enum UpdateUserRoutingProfileError {
 impl UpdateUserRoutingProfileError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateUserRoutingProfileError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalServiceException" => {
                     return RusotoError::Service(UpdateUserRoutingProfileError::InternalService(
@@ -8511,6 +8597,7 @@ impl UpdateUserSecurityProfilesError {
         res: BufferedHttpResponse,
     ) -> RusotoError<UpdateUserSecurityProfilesError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalServiceException" => {
                     return RusotoError::Service(UpdateUserSecurityProfilesError::InternalService(
@@ -9143,6 +9230,7 @@ impl Connect for ConnectClient {
         &self,
         input: AssociateApprovedOriginRequest,
     ) -> Result<(), RusotoError<AssociateApprovedOriginError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/instance/{instance_id}/approved-origin",
             instance_id = input.instance_id
@@ -9161,9 +9249,9 @@ impl Connect for ConnectClient {
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
             let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = ::std::mem::drop(response);
+            let _result = ::std::mem::drop(response);
 
-            Ok(result)
+            Ok(())
         } else {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             Err(AssociateApprovedOriginError::from_response(response))
@@ -9179,6 +9267,7 @@ impl Connect for ConnectClient {
         AssociateInstanceStorageConfigResponse,
         RusotoError<AssociateInstanceStorageConfigError>,
     > {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/instance/{instance_id}/storage-config",
             instance_id = input.instance_id
@@ -9213,6 +9302,7 @@ impl Connect for ConnectClient {
         &self,
         input: AssociateLambdaFunctionRequest,
     ) -> Result<(), RusotoError<AssociateLambdaFunctionError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/instance/{instance_id}/lambda-function",
             instance_id = input.instance_id
@@ -9231,9 +9321,9 @@ impl Connect for ConnectClient {
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
             let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = ::std::mem::drop(response);
+            let _result = ::std::mem::drop(response);
 
-            Ok(result)
+            Ok(())
         } else {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             Err(AssociateLambdaFunctionError::from_response(response))
@@ -9246,6 +9336,7 @@ impl Connect for ConnectClient {
         &self,
         input: AssociateLexBotRequest,
     ) -> Result<(), RusotoError<AssociateLexBotError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/instance/{instance_id}/lex-bot",
             instance_id = input.instance_id
@@ -9264,9 +9355,9 @@ impl Connect for ConnectClient {
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
             let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = ::std::mem::drop(response);
+            let _result = ::std::mem::drop(response);
 
-            Ok(result)
+            Ok(())
         } else {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             Err(AssociateLexBotError::from_response(response))
@@ -9279,6 +9370,7 @@ impl Connect for ConnectClient {
         &self,
         input: AssociateRoutingProfileQueuesRequest,
     ) -> Result<(), RusotoError<AssociateRoutingProfileQueuesError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/routing-profiles/{instance_id}/{routing_profile_id}/associate-queues",
             instance_id = input.instance_id,
@@ -9298,9 +9390,9 @@ impl Connect for ConnectClient {
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
             let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = ::std::mem::drop(response);
+            let _result = ::std::mem::drop(response);
 
-            Ok(result)
+            Ok(())
         } else {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             Err(AssociateRoutingProfileQueuesError::from_response(response))
@@ -9313,6 +9405,7 @@ impl Connect for ConnectClient {
         &self,
         input: AssociateSecurityKeyRequest,
     ) -> Result<AssociateSecurityKeyResponse, RusotoError<AssociateSecurityKeyError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/instance/{instance_id}/security-key",
             instance_id = input.instance_id
@@ -9347,6 +9440,7 @@ impl Connect for ConnectClient {
         &self,
         input: CreateContactFlowRequest,
     ) -> Result<CreateContactFlowResponse, RusotoError<CreateContactFlowError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/contact-flows/{instance_id}",
             instance_id = input.instance_id
@@ -9381,6 +9475,7 @@ impl Connect for ConnectClient {
         &self,
         input: CreateInstanceRequest,
     ) -> Result<CreateInstanceResponse, RusotoError<CreateInstanceError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/instance";
 
         let mut request = SignedRequest::new("PUT", "connect", &self.region, &request_uri);
@@ -9413,6 +9508,7 @@ impl Connect for ConnectClient {
         input: CreateIntegrationAssociationRequest,
     ) -> Result<CreateIntegrationAssociationResponse, RusotoError<CreateIntegrationAssociationError>>
     {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/instance/{instance_id}/integration-associations",
             instance_id = input.instance_id
@@ -9447,6 +9543,7 @@ impl Connect for ConnectClient {
         &self,
         input: CreateQuickConnectRequest,
     ) -> Result<CreateQuickConnectResponse, RusotoError<CreateQuickConnectError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/quick-connects/{instance_id}",
             instance_id = input.instance_id
@@ -9481,6 +9578,7 @@ impl Connect for ConnectClient {
         &self,
         input: CreateRoutingProfileRequest,
     ) -> Result<CreateRoutingProfileResponse, RusotoError<CreateRoutingProfileError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/routing-profiles/{instance_id}",
             instance_id = input.instance_id
@@ -9515,6 +9613,7 @@ impl Connect for ConnectClient {
         &self,
         input: CreateUseCaseRequest,
     ) -> Result<CreateUseCaseResponse, RusotoError<CreateUseCaseError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!("/instance/{instance_id}/integration-associations/{integration_association_id}/use-cases", instance_id = input.instance_id, integration_association_id = input.integration_association_id);
 
         let mut request = SignedRequest::new("PUT", "connect", &self.region, &request_uri);
@@ -9546,6 +9645,7 @@ impl Connect for ConnectClient {
         &self,
         input: CreateUserRequest,
     ) -> Result<CreateUserResponse, RusotoError<CreateUserError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!("/users/{instance_id}", instance_id = input.instance_id);
 
         let mut request = SignedRequest::new("PUT", "connect", &self.region, &request_uri);
@@ -9577,6 +9677,7 @@ impl Connect for ConnectClient {
         &self,
         input: CreateUserHierarchyGroupRequest,
     ) -> Result<CreateUserHierarchyGroupResponse, RusotoError<CreateUserHierarchyGroupError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/user-hierarchy-groups/{instance_id}",
             instance_id = input.instance_id
@@ -9611,6 +9712,7 @@ impl Connect for ConnectClient {
         &self,
         input: DeleteInstanceRequest,
     ) -> Result<(), RusotoError<DeleteInstanceError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!("/instance/{instance_id}", instance_id = input.instance_id);
 
         let mut request = SignedRequest::new("DELETE", "connect", &self.region, &request_uri);
@@ -9623,9 +9725,9 @@ impl Connect for ConnectClient {
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
             let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = ::std::mem::drop(response);
+            let _result = ::std::mem::drop(response);
 
-            Ok(result)
+            Ok(())
         } else {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             Err(DeleteInstanceError::from_response(response))
@@ -9638,6 +9740,7 @@ impl Connect for ConnectClient {
         &self,
         input: DeleteIntegrationAssociationRequest,
     ) -> Result<(), RusotoError<DeleteIntegrationAssociationError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/instance/{instance_id}/integration-associations/{integration_association_id}",
             instance_id = input.instance_id,
@@ -9654,9 +9757,9 @@ impl Connect for ConnectClient {
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
             let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = ::std::mem::drop(response);
+            let _result = ::std::mem::drop(response);
 
-            Ok(result)
+            Ok(())
         } else {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             Err(DeleteIntegrationAssociationError::from_response(response))
@@ -9669,6 +9772,7 @@ impl Connect for ConnectClient {
         &self,
         input: DeleteQuickConnectRequest,
     ) -> Result<(), RusotoError<DeleteQuickConnectError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/quick-connects/{instance_id}/{quick_connect_id}",
             instance_id = input.instance_id,
@@ -9685,9 +9789,9 @@ impl Connect for ConnectClient {
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
             let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = ::std::mem::drop(response);
+            let _result = ::std::mem::drop(response);
 
-            Ok(result)
+            Ok(())
         } else {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             Err(DeleteQuickConnectError::from_response(response))
@@ -9700,6 +9804,7 @@ impl Connect for ConnectClient {
         &self,
         input: DeleteUseCaseRequest,
     ) -> Result<(), RusotoError<DeleteUseCaseError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!("/instance/{instance_id}/integration-associations/{integration_association_id}/use-cases/{use_case_id}", instance_id = input.instance_id, integration_association_id = input.integration_association_id, use_case_id = input.use_case_id);
 
         let mut request = SignedRequest::new("DELETE", "connect", &self.region, &request_uri);
@@ -9712,9 +9817,9 @@ impl Connect for ConnectClient {
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
             let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = ::std::mem::drop(response);
+            let _result = ::std::mem::drop(response);
 
-            Ok(result)
+            Ok(())
         } else {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             Err(DeleteUseCaseError::from_response(response))
@@ -9727,6 +9832,7 @@ impl Connect for ConnectClient {
         &self,
         input: DeleteUserRequest,
     ) -> Result<(), RusotoError<DeleteUserError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/users/{instance_id}/{user_id}",
             instance_id = input.instance_id,
@@ -9743,9 +9849,9 @@ impl Connect for ConnectClient {
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
             let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = ::std::mem::drop(response);
+            let _result = ::std::mem::drop(response);
 
-            Ok(result)
+            Ok(())
         } else {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             Err(DeleteUserError::from_response(response))
@@ -9758,6 +9864,7 @@ impl Connect for ConnectClient {
         &self,
         input: DeleteUserHierarchyGroupRequest,
     ) -> Result<(), RusotoError<DeleteUserHierarchyGroupError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/user-hierarchy-groups/{instance_id}/{hierarchy_group_id}",
             hierarchy_group_id = input.hierarchy_group_id,
@@ -9774,9 +9881,9 @@ impl Connect for ConnectClient {
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
             let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = ::std::mem::drop(response);
+            let _result = ::std::mem::drop(response);
 
-            Ok(result)
+            Ok(())
         } else {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             Err(DeleteUserHierarchyGroupError::from_response(response))
@@ -9789,6 +9896,7 @@ impl Connect for ConnectClient {
         &self,
         input: DescribeContactFlowRequest,
     ) -> Result<DescribeContactFlowResponse, RusotoError<DescribeContactFlowError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/contact-flows/{instance_id}/{contact_flow_id}",
             contact_flow_id = input.contact_flow_id,
@@ -9821,6 +9929,7 @@ impl Connect for ConnectClient {
         &self,
         input: DescribeInstanceRequest,
     ) -> Result<DescribeInstanceResponse, RusotoError<DescribeInstanceError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!("/instance/{instance_id}", instance_id = input.instance_id);
 
         let mut request = SignedRequest::new("GET", "connect", &self.region, &request_uri);
@@ -9850,6 +9959,7 @@ impl Connect for ConnectClient {
         input: DescribeInstanceAttributeRequest,
     ) -> Result<DescribeInstanceAttributeResponse, RusotoError<DescribeInstanceAttributeError>>
     {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/instance/{instance_id}/attribute/{attribute_type}",
             attribute_type = input.attribute_type,
@@ -9885,6 +9995,7 @@ impl Connect for ConnectClient {
         DescribeInstanceStorageConfigResponse,
         RusotoError<DescribeInstanceStorageConfigError>,
     > {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/instance/{instance_id}/storage-config/{association_id}",
             association_id = input.association_id,
@@ -9921,6 +10032,7 @@ impl Connect for ConnectClient {
         &self,
         input: DescribeQuickConnectRequest,
     ) -> Result<DescribeQuickConnectResponse, RusotoError<DescribeQuickConnectError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/quick-connects/{instance_id}/{quick_connect_id}",
             instance_id = input.instance_id,
@@ -9953,6 +10065,7 @@ impl Connect for ConnectClient {
         &self,
         input: DescribeRoutingProfileRequest,
     ) -> Result<DescribeRoutingProfileResponse, RusotoError<DescribeRoutingProfileError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/routing-profiles/{instance_id}/{routing_profile_id}",
             instance_id = input.instance_id,
@@ -9985,6 +10098,7 @@ impl Connect for ConnectClient {
         &self,
         input: DescribeUserRequest,
     ) -> Result<DescribeUserResponse, RusotoError<DescribeUserError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/users/{instance_id}/{user_id}",
             instance_id = input.instance_id,
@@ -10018,6 +10132,7 @@ impl Connect for ConnectClient {
         input: DescribeUserHierarchyGroupRequest,
     ) -> Result<DescribeUserHierarchyGroupResponse, RusotoError<DescribeUserHierarchyGroupError>>
     {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/user-hierarchy-groups/{instance_id}/{hierarchy_group_id}",
             hierarchy_group_id = input.hierarchy_group_id,
@@ -10053,6 +10168,7 @@ impl Connect for ConnectClient {
         DescribeUserHierarchyStructureResponse,
         RusotoError<DescribeUserHierarchyStructureError>,
     > {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/user-hierarchy-structure/{instance_id}",
             instance_id = input.instance_id
@@ -10084,6 +10200,7 @@ impl Connect for ConnectClient {
         &self,
         input: DisassociateApprovedOriginRequest,
     ) -> Result<(), RusotoError<DisassociateApprovedOriginError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/instance/{instance_id}/approved-origin",
             instance_id = input.instance_id
@@ -10103,9 +10220,9 @@ impl Connect for ConnectClient {
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
             let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = ::std::mem::drop(response);
+            let _result = ::std::mem::drop(response);
 
-            Ok(result)
+            Ok(())
         } else {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             Err(DisassociateApprovedOriginError::from_response(response))
@@ -10118,6 +10235,7 @@ impl Connect for ConnectClient {
         &self,
         input: DisassociateInstanceStorageConfigRequest,
     ) -> Result<(), RusotoError<DisassociateInstanceStorageConfigError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/instance/{instance_id}/storage-config/{association_id}",
             association_id = input.association_id,
@@ -10138,9 +10256,9 @@ impl Connect for ConnectClient {
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
             let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = ::std::mem::drop(response);
+            let _result = ::std::mem::drop(response);
 
-            Ok(result)
+            Ok(())
         } else {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             Err(DisassociateInstanceStorageConfigError::from_response(
@@ -10155,6 +10273,7 @@ impl Connect for ConnectClient {
         &self,
         input: DisassociateLambdaFunctionRequest,
     ) -> Result<(), RusotoError<DisassociateLambdaFunctionError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/instance/{instance_id}/lambda-function",
             instance_id = input.instance_id
@@ -10174,9 +10293,9 @@ impl Connect for ConnectClient {
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
             let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = ::std::mem::drop(response);
+            let _result = ::std::mem::drop(response);
 
-            Ok(result)
+            Ok(())
         } else {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             Err(DisassociateLambdaFunctionError::from_response(response))
@@ -10189,6 +10308,7 @@ impl Connect for ConnectClient {
         &self,
         input: DisassociateLexBotRequest,
     ) -> Result<(), RusotoError<DisassociateLexBotError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/instance/{instance_id}/lex-bot",
             instance_id = input.instance_id
@@ -10209,9 +10329,9 @@ impl Connect for ConnectClient {
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
             let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = ::std::mem::drop(response);
+            let _result = ::std::mem::drop(response);
 
-            Ok(result)
+            Ok(())
         } else {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             Err(DisassociateLexBotError::from_response(response))
@@ -10224,6 +10344,7 @@ impl Connect for ConnectClient {
         &self,
         input: DisassociateRoutingProfileQueuesRequest,
     ) -> Result<(), RusotoError<DisassociateRoutingProfileQueuesError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/routing-profiles/{instance_id}/{routing_profile_id}/disassociate-queues",
             instance_id = input.instance_id,
@@ -10243,9 +10364,9 @@ impl Connect for ConnectClient {
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
             let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = ::std::mem::drop(response);
+            let _result = ::std::mem::drop(response);
 
-            Ok(result)
+            Ok(())
         } else {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             Err(DisassociateRoutingProfileQueuesError::from_response(
@@ -10260,6 +10381,7 @@ impl Connect for ConnectClient {
         &self,
         input: DisassociateSecurityKeyRequest,
     ) -> Result<(), RusotoError<DisassociateSecurityKeyError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/instance/{instance_id}/security-key/{association_id}",
             association_id = input.association_id,
@@ -10276,9 +10398,9 @@ impl Connect for ConnectClient {
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
             let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = ::std::mem::drop(response);
+            let _result = ::std::mem::drop(response);
 
-            Ok(result)
+            Ok(())
         } else {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             Err(DisassociateSecurityKeyError::from_response(response))
@@ -10291,6 +10413,7 @@ impl Connect for ConnectClient {
         &self,
         input: GetContactAttributesRequest,
     ) -> Result<GetContactAttributesResponse, RusotoError<GetContactAttributesError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/contact/attributes/{instance_id}/{initial_contact_id}",
             initial_contact_id = input.initial_contact_id,
@@ -10323,6 +10446,7 @@ impl Connect for ConnectClient {
         &self,
         input: GetCurrentMetricDataRequest,
     ) -> Result<GetCurrentMetricDataResponse, RusotoError<GetCurrentMetricDataError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/metrics/current/{instance_id}",
             instance_id = input.instance_id
@@ -10357,6 +10481,7 @@ impl Connect for ConnectClient {
         &self,
         input: GetFederationTokenRequest,
     ) -> Result<GetFederationTokenResponse, RusotoError<GetFederationTokenError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/user/federate/{instance_id}",
             instance_id = input.instance_id
@@ -10388,6 +10513,7 @@ impl Connect for ConnectClient {
         &self,
         input: GetMetricDataRequest,
     ) -> Result<GetMetricDataResponse, RusotoError<GetMetricDataError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/metrics/historical/{instance_id}",
             instance_id = input.instance_id
@@ -10422,6 +10548,7 @@ impl Connect for ConnectClient {
         &self,
         input: ListApprovedOriginsRequest,
     ) -> Result<ListApprovedOriginsResponse, RusotoError<ListApprovedOriginsError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/instance/{instance_id}/approved-origins",
             instance_id = input.instance_id
@@ -10462,6 +10589,7 @@ impl Connect for ConnectClient {
         &self,
         input: ListContactFlowsRequest,
     ) -> Result<ListContactFlowsResponse, RusotoError<ListContactFlowsError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/contact-flows-summary/{instance_id}",
             instance_id = input.instance_id
@@ -10507,6 +10635,7 @@ impl Connect for ConnectClient {
         &self,
         input: ListHoursOfOperationsRequest,
     ) -> Result<ListHoursOfOperationsResponse, RusotoError<ListHoursOfOperationsError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/hours-of-operations-summary/{instance_id}",
             instance_id = input.instance_id
@@ -10547,6 +10676,7 @@ impl Connect for ConnectClient {
         &self,
         input: ListInstanceAttributesRequest,
     ) -> Result<ListInstanceAttributesResponse, RusotoError<ListInstanceAttributesError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/instance/{instance_id}/attributes",
             instance_id = input.instance_id
@@ -10588,6 +10718,7 @@ impl Connect for ConnectClient {
         input: ListInstanceStorageConfigsRequest,
     ) -> Result<ListInstanceStorageConfigsResponse, RusotoError<ListInstanceStorageConfigsError>>
     {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/instance/{instance_id}/storage-configs",
             instance_id = input.instance_id
@@ -10629,6 +10760,7 @@ impl Connect for ConnectClient {
         &self,
         input: ListInstancesRequest,
     ) -> Result<ListInstancesResponse, RusotoError<ListInstancesError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/instance";
 
         let mut request = SignedRequest::new("GET", "connect", &self.region, &request_uri);
@@ -10667,6 +10799,7 @@ impl Connect for ConnectClient {
         input: ListIntegrationAssociationsRequest,
     ) -> Result<ListIntegrationAssociationsResponse, RusotoError<ListIntegrationAssociationsError>>
     {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/instance/{instance_id}/integration-associations",
             instance_id = input.instance_id
@@ -10707,6 +10840,7 @@ impl Connect for ConnectClient {
         &self,
         input: ListLambdaFunctionsRequest,
     ) -> Result<ListLambdaFunctionsResponse, RusotoError<ListLambdaFunctionsError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/instance/{instance_id}/lambda-functions",
             instance_id = input.instance_id
@@ -10747,6 +10881,7 @@ impl Connect for ConnectClient {
         &self,
         input: ListLexBotsRequest,
     ) -> Result<ListLexBotsResponse, RusotoError<ListLexBotsError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/instance/{instance_id}/lex-bots",
             instance_id = input.instance_id
@@ -10787,6 +10922,7 @@ impl Connect for ConnectClient {
         &self,
         input: ListPhoneNumbersRequest,
     ) -> Result<ListPhoneNumbersResponse, RusotoError<ListPhoneNumbersError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/phone-numbers-summary/{instance_id}",
             instance_id = input.instance_id
@@ -10837,6 +10973,7 @@ impl Connect for ConnectClient {
         &self,
         input: ListPromptsRequest,
     ) -> Result<ListPromptsResponse, RusotoError<ListPromptsError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/prompts-summary/{instance_id}",
             instance_id = input.instance_id
@@ -10877,6 +11014,7 @@ impl Connect for ConnectClient {
         &self,
         input: ListQueuesRequest,
     ) -> Result<ListQueuesResponse, RusotoError<ListQueuesError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/queues-summary/{instance_id}",
             instance_id = input.instance_id
@@ -10922,6 +11060,7 @@ impl Connect for ConnectClient {
         &self,
         input: ListQuickConnectsRequest,
     ) -> Result<ListQuickConnectsResponse, RusotoError<ListQuickConnectsError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/quick-connects/{instance_id}",
             instance_id = input.instance_id
@@ -10967,6 +11106,7 @@ impl Connect for ConnectClient {
         &self,
         input: ListRoutingProfileQueuesRequest,
     ) -> Result<ListRoutingProfileQueuesResponse, RusotoError<ListRoutingProfileQueuesError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/routing-profiles/{instance_id}/{routing_profile_id}/queues",
             instance_id = input.instance_id,
@@ -11008,6 +11148,7 @@ impl Connect for ConnectClient {
         &self,
         input: ListRoutingProfilesRequest,
     ) -> Result<ListRoutingProfilesResponse, RusotoError<ListRoutingProfilesError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/routing-profiles-summary/{instance_id}",
             instance_id = input.instance_id
@@ -11048,6 +11189,7 @@ impl Connect for ConnectClient {
         &self,
         input: ListSecurityKeysRequest,
     ) -> Result<ListSecurityKeysResponse, RusotoError<ListSecurityKeysError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/instance/{instance_id}/security-keys",
             instance_id = input.instance_id
@@ -11088,6 +11230,7 @@ impl Connect for ConnectClient {
         &self,
         input: ListSecurityProfilesRequest,
     ) -> Result<ListSecurityProfilesResponse, RusotoError<ListSecurityProfilesError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/security-profiles-summary/{instance_id}",
             instance_id = input.instance_id
@@ -11128,6 +11271,7 @@ impl Connect for ConnectClient {
         &self,
         input: ListTagsForResourceRequest,
     ) -> Result<ListTagsForResourceResponse, RusotoError<ListTagsForResourceError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!("/tags/{resource_arn}", resource_arn = input.resource_arn);
 
         let mut request = SignedRequest::new("GET", "connect", &self.region, &request_uri);
@@ -11156,6 +11300,7 @@ impl Connect for ConnectClient {
         &self,
         input: ListUseCasesRequest,
     ) -> Result<ListUseCasesResponse, RusotoError<ListUseCasesError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!("/instance/{instance_id}/integration-associations/{integration_association_id}/use-cases", instance_id = input.instance_id, integration_association_id = input.integration_association_id);
 
         let mut request = SignedRequest::new("GET", "connect", &self.region, &request_uri);
@@ -11193,6 +11338,7 @@ impl Connect for ConnectClient {
         &self,
         input: ListUserHierarchyGroupsRequest,
     ) -> Result<ListUserHierarchyGroupsResponse, RusotoError<ListUserHierarchyGroupsError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/user-hierarchy-groups-summary/{instance_id}",
             instance_id = input.instance_id
@@ -11233,6 +11379,7 @@ impl Connect for ConnectClient {
         &self,
         input: ListUsersRequest,
     ) -> Result<ListUsersResponse, RusotoError<ListUsersError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/users-summary/{instance_id}",
             instance_id = input.instance_id
@@ -11273,6 +11420,7 @@ impl Connect for ConnectClient {
         &self,
         input: ResumeContactRecordingRequest,
     ) -> Result<ResumeContactRecordingResponse, RusotoError<ResumeContactRecordingError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/contact/resume-recording";
 
         let mut request = SignedRequest::new("POST", "connect", &self.region, &request_uri);
@@ -11304,6 +11452,7 @@ impl Connect for ConnectClient {
         &self,
         input: StartChatContactRequest,
     ) -> Result<StartChatContactResponse, RusotoError<StartChatContactError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/contact/chat";
 
         let mut request = SignedRequest::new("PUT", "connect", &self.region, &request_uri);
@@ -11335,6 +11484,7 @@ impl Connect for ConnectClient {
         &self,
         input: StartContactRecordingRequest,
     ) -> Result<StartContactRecordingResponse, RusotoError<StartContactRecordingError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/contact/start-recording";
 
         let mut request = SignedRequest::new("POST", "connect", &self.region, &request_uri);
@@ -11367,6 +11517,7 @@ impl Connect for ConnectClient {
         input: StartOutboundVoiceContactRequest,
     ) -> Result<StartOutboundVoiceContactResponse, RusotoError<StartOutboundVoiceContactError>>
     {
+        #![allow(clippy::needless_update)]
         let request_uri = "/contact/outbound-voice";
 
         let mut request = SignedRequest::new("PUT", "connect", &self.region, &request_uri);
@@ -11398,6 +11549,7 @@ impl Connect for ConnectClient {
         &self,
         input: StartTaskContactRequest,
     ) -> Result<StartTaskContactResponse, RusotoError<StartTaskContactError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/contact/task";
 
         let mut request = SignedRequest::new("PUT", "connect", &self.region, &request_uri);
@@ -11429,6 +11581,7 @@ impl Connect for ConnectClient {
         &self,
         input: StopContactRequest,
     ) -> Result<StopContactResponse, RusotoError<StopContactError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/contact/stop";
 
         let mut request = SignedRequest::new("POST", "connect", &self.region, &request_uri);
@@ -11460,6 +11613,7 @@ impl Connect for ConnectClient {
         &self,
         input: StopContactRecordingRequest,
     ) -> Result<StopContactRecordingResponse, RusotoError<StopContactRecordingError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/contact/stop-recording";
 
         let mut request = SignedRequest::new("POST", "connect", &self.region, &request_uri);
@@ -11491,6 +11645,7 @@ impl Connect for ConnectClient {
         &self,
         input: SuspendContactRecordingRequest,
     ) -> Result<SuspendContactRecordingResponse, RusotoError<SuspendContactRecordingError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/contact/suspend-recording";
 
         let mut request = SignedRequest::new("POST", "connect", &self.region, &request_uri);
@@ -11522,6 +11677,7 @@ impl Connect for ConnectClient {
         &self,
         input: TagResourceRequest,
     ) -> Result<(), RusotoError<TagResourceError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!("/tags/{resource_arn}", resource_arn = input.resource_arn);
 
         let mut request = SignedRequest::new("POST", "connect", &self.region, &request_uri);
@@ -11537,9 +11693,9 @@ impl Connect for ConnectClient {
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
             let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = ::std::mem::drop(response);
+            let _result = ::std::mem::drop(response);
 
-            Ok(result)
+            Ok(())
         } else {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             Err(TagResourceError::from_response(response))
@@ -11552,6 +11708,7 @@ impl Connect for ConnectClient {
         &self,
         input: UntagResourceRequest,
     ) -> Result<(), RusotoError<UntagResourceError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!("/tags/{resource_arn}", resource_arn = input.resource_arn);
 
         let mut request = SignedRequest::new("DELETE", "connect", &self.region, &request_uri);
@@ -11570,9 +11727,9 @@ impl Connect for ConnectClient {
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
             let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = ::std::mem::drop(response);
+            let _result = ::std::mem::drop(response);
 
-            Ok(result)
+            Ok(())
         } else {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             Err(UntagResourceError::from_response(response))
@@ -11585,6 +11742,7 @@ impl Connect for ConnectClient {
         &self,
         input: UpdateContactAttributesRequest,
     ) -> Result<UpdateContactAttributesResponse, RusotoError<UpdateContactAttributesError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/contact/attributes";
 
         let mut request = SignedRequest::new("POST", "connect", &self.region, &request_uri);
@@ -11616,6 +11774,7 @@ impl Connect for ConnectClient {
         &self,
         input: UpdateContactFlowContentRequest,
     ) -> Result<(), RusotoError<UpdateContactFlowContentError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/contact-flows/{instance_id}/{contact_flow_id}/content",
             contact_flow_id = input.contact_flow_id,
@@ -11635,9 +11794,9 @@ impl Connect for ConnectClient {
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
             let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = ::std::mem::drop(response);
+            let _result = ::std::mem::drop(response);
 
-            Ok(result)
+            Ok(())
         } else {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             Err(UpdateContactFlowContentError::from_response(response))
@@ -11650,6 +11809,7 @@ impl Connect for ConnectClient {
         &self,
         input: UpdateContactFlowNameRequest,
     ) -> Result<(), RusotoError<UpdateContactFlowNameError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/contact-flows/{instance_id}/{contact_flow_id}/name",
             contact_flow_id = input.contact_flow_id,
@@ -11669,9 +11829,9 @@ impl Connect for ConnectClient {
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
             let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = ::std::mem::drop(response);
+            let _result = ::std::mem::drop(response);
 
-            Ok(result)
+            Ok(())
         } else {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             Err(UpdateContactFlowNameError::from_response(response))
@@ -11684,6 +11844,7 @@ impl Connect for ConnectClient {
         &self,
         input: UpdateInstanceAttributeRequest,
     ) -> Result<(), RusotoError<UpdateInstanceAttributeError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/instance/{instance_id}/attribute/{attribute_type}",
             attribute_type = input.attribute_type,
@@ -11703,9 +11864,9 @@ impl Connect for ConnectClient {
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
             let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = ::std::mem::drop(response);
+            let _result = ::std::mem::drop(response);
 
-            Ok(result)
+            Ok(())
         } else {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             Err(UpdateInstanceAttributeError::from_response(response))
@@ -11718,6 +11879,7 @@ impl Connect for ConnectClient {
         &self,
         input: UpdateInstanceStorageConfigRequest,
     ) -> Result<(), RusotoError<UpdateInstanceStorageConfigError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/instance/{instance_id}/storage-config/{association_id}",
             association_id = input.association_id,
@@ -11741,9 +11903,9 @@ impl Connect for ConnectClient {
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
             let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = ::std::mem::drop(response);
+            let _result = ::std::mem::drop(response);
 
-            Ok(result)
+            Ok(())
         } else {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             Err(UpdateInstanceStorageConfigError::from_response(response))
@@ -11756,6 +11918,7 @@ impl Connect for ConnectClient {
         &self,
         input: UpdateQuickConnectConfigRequest,
     ) -> Result<(), RusotoError<UpdateQuickConnectConfigError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/quick-connects/{instance_id}/{quick_connect_id}/config",
             instance_id = input.instance_id,
@@ -11775,9 +11938,9 @@ impl Connect for ConnectClient {
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
             let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = ::std::mem::drop(response);
+            let _result = ::std::mem::drop(response);
 
-            Ok(result)
+            Ok(())
         } else {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             Err(UpdateQuickConnectConfigError::from_response(response))
@@ -11790,6 +11953,7 @@ impl Connect for ConnectClient {
         &self,
         input: UpdateQuickConnectNameRequest,
     ) -> Result<(), RusotoError<UpdateQuickConnectNameError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/quick-connects/{instance_id}/{quick_connect_id}/name",
             instance_id = input.instance_id,
@@ -11809,9 +11973,9 @@ impl Connect for ConnectClient {
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
             let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = ::std::mem::drop(response);
+            let _result = ::std::mem::drop(response);
 
-            Ok(result)
+            Ok(())
         } else {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             Err(UpdateQuickConnectNameError::from_response(response))
@@ -11824,6 +11988,7 @@ impl Connect for ConnectClient {
         &self,
         input: UpdateRoutingProfileConcurrencyRequest,
     ) -> Result<(), RusotoError<UpdateRoutingProfileConcurrencyError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/routing-profiles/{instance_id}/{routing_profile_id}/concurrency",
             instance_id = input.instance_id,
@@ -11843,9 +12008,9 @@ impl Connect for ConnectClient {
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
             let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = ::std::mem::drop(response);
+            let _result = ::std::mem::drop(response);
 
-            Ok(result)
+            Ok(())
         } else {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             Err(UpdateRoutingProfileConcurrencyError::from_response(
@@ -11860,6 +12025,7 @@ impl Connect for ConnectClient {
         &self,
         input: UpdateRoutingProfileDefaultOutboundQueueRequest,
     ) -> Result<(), RusotoError<UpdateRoutingProfileDefaultOutboundQueueError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/routing-profiles/{instance_id}/{routing_profile_id}/default-outbound-queue",
             instance_id = input.instance_id,
@@ -11879,9 +12045,9 @@ impl Connect for ConnectClient {
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
             let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = ::std::mem::drop(response);
+            let _result = ::std::mem::drop(response);
 
-            Ok(result)
+            Ok(())
         } else {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             Err(UpdateRoutingProfileDefaultOutboundQueueError::from_response(response))
@@ -11894,6 +12060,7 @@ impl Connect for ConnectClient {
         &self,
         input: UpdateRoutingProfileNameRequest,
     ) -> Result<(), RusotoError<UpdateRoutingProfileNameError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/routing-profiles/{instance_id}/{routing_profile_id}/name",
             instance_id = input.instance_id,
@@ -11913,9 +12080,9 @@ impl Connect for ConnectClient {
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
             let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = ::std::mem::drop(response);
+            let _result = ::std::mem::drop(response);
 
-            Ok(result)
+            Ok(())
         } else {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             Err(UpdateRoutingProfileNameError::from_response(response))
@@ -11928,6 +12095,7 @@ impl Connect for ConnectClient {
         &self,
         input: UpdateRoutingProfileQueuesRequest,
     ) -> Result<(), RusotoError<UpdateRoutingProfileQueuesError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/routing-profiles/{instance_id}/{routing_profile_id}/queues",
             instance_id = input.instance_id,
@@ -11947,9 +12115,9 @@ impl Connect for ConnectClient {
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
             let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = ::std::mem::drop(response);
+            let _result = ::std::mem::drop(response);
 
-            Ok(result)
+            Ok(())
         } else {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             Err(UpdateRoutingProfileQueuesError::from_response(response))
@@ -11962,6 +12130,7 @@ impl Connect for ConnectClient {
         &self,
         input: UpdateUserHierarchyRequest,
     ) -> Result<(), RusotoError<UpdateUserHierarchyError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/users/{instance_id}/{user_id}/hierarchy",
             instance_id = input.instance_id,
@@ -11981,9 +12150,9 @@ impl Connect for ConnectClient {
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
             let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = ::std::mem::drop(response);
+            let _result = ::std::mem::drop(response);
 
-            Ok(result)
+            Ok(())
         } else {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             Err(UpdateUserHierarchyError::from_response(response))
@@ -11996,6 +12165,7 @@ impl Connect for ConnectClient {
         &self,
         input: UpdateUserHierarchyGroupNameRequest,
     ) -> Result<(), RusotoError<UpdateUserHierarchyGroupNameError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/user-hierarchy-groups/{instance_id}/{hierarchy_group_id}/name",
             hierarchy_group_id = input.hierarchy_group_id,
@@ -12015,9 +12185,9 @@ impl Connect for ConnectClient {
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
             let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = ::std::mem::drop(response);
+            let _result = ::std::mem::drop(response);
 
-            Ok(result)
+            Ok(())
         } else {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             Err(UpdateUserHierarchyGroupNameError::from_response(response))
@@ -12030,6 +12200,7 @@ impl Connect for ConnectClient {
         &self,
         input: UpdateUserHierarchyStructureRequest,
     ) -> Result<(), RusotoError<UpdateUserHierarchyStructureError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/user-hierarchy-structure/{instance_id}",
             instance_id = input.instance_id
@@ -12048,9 +12219,9 @@ impl Connect for ConnectClient {
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
             let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = ::std::mem::drop(response);
+            let _result = ::std::mem::drop(response);
 
-            Ok(result)
+            Ok(())
         } else {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             Err(UpdateUserHierarchyStructureError::from_response(response))
@@ -12063,6 +12234,7 @@ impl Connect for ConnectClient {
         &self,
         input: UpdateUserIdentityInfoRequest,
     ) -> Result<(), RusotoError<UpdateUserIdentityInfoError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/users/{instance_id}/{user_id}/identity-info",
             instance_id = input.instance_id,
@@ -12082,9 +12254,9 @@ impl Connect for ConnectClient {
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
             let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = ::std::mem::drop(response);
+            let _result = ::std::mem::drop(response);
 
-            Ok(result)
+            Ok(())
         } else {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             Err(UpdateUserIdentityInfoError::from_response(response))
@@ -12097,6 +12269,7 @@ impl Connect for ConnectClient {
         &self,
         input: UpdateUserPhoneConfigRequest,
     ) -> Result<(), RusotoError<UpdateUserPhoneConfigError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/users/{instance_id}/{user_id}/phone-config",
             instance_id = input.instance_id,
@@ -12116,9 +12289,9 @@ impl Connect for ConnectClient {
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
             let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = ::std::mem::drop(response);
+            let _result = ::std::mem::drop(response);
 
-            Ok(result)
+            Ok(())
         } else {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             Err(UpdateUserPhoneConfigError::from_response(response))
@@ -12131,6 +12304,7 @@ impl Connect for ConnectClient {
         &self,
         input: UpdateUserRoutingProfileRequest,
     ) -> Result<(), RusotoError<UpdateUserRoutingProfileError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/users/{instance_id}/{user_id}/routing-profile",
             instance_id = input.instance_id,
@@ -12150,9 +12324,9 @@ impl Connect for ConnectClient {
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
             let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = ::std::mem::drop(response);
+            let _result = ::std::mem::drop(response);
 
-            Ok(result)
+            Ok(())
         } else {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             Err(UpdateUserRoutingProfileError::from_response(response))
@@ -12165,6 +12339,7 @@ impl Connect for ConnectClient {
         &self,
         input: UpdateUserSecurityProfilesRequest,
     ) -> Result<(), RusotoError<UpdateUserSecurityProfilesError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/users/{instance_id}/{user_id}/security-profiles",
             instance_id = input.instance_id,
@@ -12184,9 +12359,9 @@ impl Connect for ConnectClient {
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
             let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = ::std::mem::drop(response);
+            let _result = ::std::mem::drop(response);
 
-            Ok(result)
+            Ok(())
         } else {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             Err(UpdateUserSecurityProfilesError::from_response(response))

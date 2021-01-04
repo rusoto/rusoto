@@ -91,6 +91,7 @@ pub enum InvokeEndpointError {
 impl InvokeEndpointError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<InvokeEndpointError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalFailure" => {
                     return RusotoError::Service(InvokeEndpointError::InternalFailure(err.msg))
@@ -178,6 +179,7 @@ impl SageMakerRuntime for SageMakerRuntimeClient {
         &self,
         input: InvokeEndpointInput,
     ) -> Result<InvokeEndpointOutput, RusotoError<InvokeEndpointError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/endpoints/{endpoint_name}/invocations",
             endpoint_name = input.endpoint_name
@@ -212,8 +214,10 @@ impl SageMakerRuntime for SageMakerRuntimeClient {
         if response.status.is_success() {
             let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
 
-            let mut result = InvokeEndpointOutput::default();
-            result.body = response.body;
+            let mut result = InvokeEndpointOutput {
+                body: response.body,
+                ..InvokeEndpointOutput::default()
+            };
 
             result.content_type = response.headers.remove("Content-Type");
             result.custom_attributes = response

@@ -24,7 +24,6 @@ use rusoto_core::proto;
 use rusoto_core::signature::SignedRequest;
 #[allow(unused_imports)]
 use serde::{Deserialize, Serialize};
-use serde_json;
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct AcceptInvitationRequest {
@@ -6877,6 +6876,7 @@ pub enum AcceptInvitationError {
 impl AcceptInvitationError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<AcceptInvitationError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalException" => {
                     return RusotoError::Service(AcceptInvitationError::Internal(err.msg))
@@ -6929,6 +6929,7 @@ pub enum BatchDisableStandardsError {
 impl BatchDisableStandardsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<BatchDisableStandardsError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalException" => {
                     return RusotoError::Service(BatchDisableStandardsError::Internal(err.msg))
@@ -6977,6 +6978,7 @@ pub enum BatchEnableStandardsError {
 impl BatchEnableStandardsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<BatchEnableStandardsError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalException" => {
                     return RusotoError::Service(BatchEnableStandardsError::Internal(err.msg))
@@ -7025,6 +7027,7 @@ pub enum BatchImportFindingsError {
 impl BatchImportFindingsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<BatchImportFindingsError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalException" => {
                     return RusotoError::Service(BatchImportFindingsError::Internal(err.msg))
@@ -7073,6 +7076,7 @@ pub enum BatchUpdateFindingsError {
 impl BatchUpdateFindingsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<BatchUpdateFindingsError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalException" => {
                     return RusotoError::Service(BatchUpdateFindingsError::Internal(err.msg))
@@ -7123,6 +7127,7 @@ pub enum CreateActionTargetError {
 impl CreateActionTargetError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateActionTargetError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalException" => {
                     return RusotoError::Service(CreateActionTargetError::Internal(err.msg))
@@ -7177,6 +7182,7 @@ pub enum CreateInsightError {
 impl CreateInsightError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateInsightError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalException" => {
                     return RusotoError::Service(CreateInsightError::Internal(err.msg))
@@ -7231,6 +7237,7 @@ pub enum CreateMembersError {
 impl CreateMembersError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateMembersError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalException" => {
                     return RusotoError::Service(CreateMembersError::Internal(err.msg))
@@ -7283,6 +7290,7 @@ pub enum DeclineInvitationsError {
 impl DeclineInvitationsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeclineInvitationsError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalException" => {
                     return RusotoError::Service(DeclineInvitationsError::Internal(err.msg))
@@ -7331,6 +7339,7 @@ pub enum DeleteActionTargetError {
 impl DeleteActionTargetError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteActionTargetError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalException" => {
                     return RusotoError::Service(DeleteActionTargetError::Internal(err.msg))
@@ -7381,6 +7390,7 @@ pub enum DeleteInsightError {
 impl DeleteInsightError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteInsightError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalException" => {
                     return RusotoError::Service(DeleteInsightError::Internal(err.msg))
@@ -7435,6 +7445,7 @@ pub enum DeleteInvitationsError {
 impl DeleteInvitationsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteInvitationsError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalException" => {
                     return RusotoError::Service(DeleteInvitationsError::Internal(err.msg))
@@ -7489,6 +7500,7 @@ pub enum DeleteMembersError {
 impl DeleteMembersError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteMembersError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalException" => {
                     return RusotoError::Service(DeleteMembersError::Internal(err.msg))
@@ -7541,6 +7553,7 @@ pub enum DescribeActionTargetsError {
 impl DescribeActionTargetsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeActionTargetsError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalException" => {
                     return RusotoError::Service(DescribeActionTargetsError::Internal(err.msg))
@@ -7593,6 +7606,7 @@ pub enum DescribeHubError {
 impl DescribeHubError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeHubError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalException" => {
                     return RusotoError::Service(DescribeHubError::Internal(err.msg))
@@ -7647,6 +7661,7 @@ impl DescribeOrganizationConfigurationError {
         res: BufferedHttpResponse,
     ) -> RusotoError<DescribeOrganizationConfigurationError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalException" => {
                     return RusotoError::Service(DescribeOrganizationConfigurationError::Internal(
@@ -7709,6 +7724,7 @@ pub enum DescribeProductsError {
 impl DescribeProductsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeProductsError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalException" => {
                     return RusotoError::Service(DescribeProductsError::Internal(err.msg))
@@ -7755,6 +7771,7 @@ pub enum DescribeStandardsError {
 impl DescribeStandardsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeStandardsError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalException" => {
                     return RusotoError::Service(DescribeStandardsError::Internal(err.msg))
@@ -7799,6 +7816,7 @@ pub enum DescribeStandardsControlsError {
 impl DescribeStandardsControlsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeStandardsControlsError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalException" => {
                     return RusotoError::Service(DescribeStandardsControlsError::Internal(err.msg))
@@ -7857,6 +7875,7 @@ impl DisableImportFindingsForProductError {
         res: BufferedHttpResponse,
     ) -> RusotoError<DisableImportFindingsForProductError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalException" => {
                     return RusotoError::Service(DisableImportFindingsForProductError::Internal(
@@ -7927,6 +7946,7 @@ impl DisableOrganizationAdminAccountError {
         res: BufferedHttpResponse,
     ) -> RusotoError<DisableOrganizationAdminAccountError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalException" => {
                     return RusotoError::Service(DisableOrganizationAdminAccountError::Internal(
@@ -7987,6 +8007,7 @@ pub enum DisableSecurityHubError {
 impl DisableSecurityHubError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DisableSecurityHubError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalException" => {
                     return RusotoError::Service(DisableSecurityHubError::Internal(err.msg))
@@ -8039,6 +8060,7 @@ impl DisassociateFromMasterAccountError {
         res: BufferedHttpResponse,
     ) -> RusotoError<DisassociateFromMasterAccountError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalException" => {
                     return RusotoError::Service(DisassociateFromMasterAccountError::Internal(
@@ -8105,6 +8127,7 @@ pub enum DisassociateMembersError {
 impl DisassociateMembersError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DisassociateMembersError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalException" => {
                     return RusotoError::Service(DisassociateMembersError::Internal(err.msg))
@@ -8163,6 +8186,7 @@ impl EnableImportFindingsForProductError {
         res: BufferedHttpResponse,
     ) -> RusotoError<EnableImportFindingsForProductError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalException" => {
                     return RusotoError::Service(EnableImportFindingsForProductError::Internal(
@@ -8229,6 +8253,7 @@ impl EnableOrganizationAdminAccountError {
         res: BufferedHttpResponse,
     ) -> RusotoError<EnableOrganizationAdminAccountError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalException" => {
                     return RusotoError::Service(EnableOrganizationAdminAccountError::Internal(
@@ -8287,6 +8312,7 @@ pub enum EnableSecurityHubError {
 impl EnableSecurityHubError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<EnableSecurityHubError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(EnableSecurityHubError::AccessDenied(err.msg))
@@ -8339,6 +8365,7 @@ pub enum GetEnabledStandardsError {
 impl GetEnabledStandardsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetEnabledStandardsError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalException" => {
                     return RusotoError::Service(GetEnabledStandardsError::Internal(err.msg))
@@ -8387,6 +8414,7 @@ pub enum GetFindingsError {
 impl GetFindingsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetFindingsError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalException" => {
                     return RusotoError::Service(GetFindingsError::Internal(err.msg))
@@ -8437,6 +8465,7 @@ pub enum GetInsightResultsError {
 impl GetInsightResultsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetInsightResultsError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalException" => {
                     return RusotoError::Service(GetInsightResultsError::Internal(err.msg))
@@ -8491,6 +8520,7 @@ pub enum GetInsightsError {
 impl GetInsightsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetInsightsError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalException" => {
                     return RusotoError::Service(GetInsightsError::Internal(err.msg))
@@ -8543,6 +8573,7 @@ pub enum GetInvitationsCountError {
 impl GetInvitationsCountError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetInvitationsCountError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalException" => {
                     return RusotoError::Service(GetInvitationsCountError::Internal(err.msg))
@@ -8593,6 +8624,7 @@ pub enum GetMasterAccountError {
 impl GetMasterAccountError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetMasterAccountError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalException" => {
                     return RusotoError::Service(GetMasterAccountError::Internal(err.msg))
@@ -8647,6 +8679,7 @@ pub enum GetMembersError {
 impl GetMembersError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetMembersError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalException" => {
                     return RusotoError::Service(GetMembersError::Internal(err.msg))
@@ -8701,6 +8734,7 @@ pub enum InviteMembersError {
 impl InviteMembersError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<InviteMembersError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalException" => {
                     return RusotoError::Service(InviteMembersError::Internal(err.msg))
@@ -8753,6 +8787,7 @@ impl ListEnabledProductsForImportError {
         res: BufferedHttpResponse,
     ) -> RusotoError<ListEnabledProductsForImportError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalException" => {
                     return RusotoError::Service(ListEnabledProductsForImportError::Internal(
@@ -8803,6 +8838,7 @@ pub enum ListInvitationsError {
 impl ListInvitationsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListInvitationsError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalException" => {
                     return RusotoError::Service(ListInvitationsError::Internal(err.msg))
@@ -8851,6 +8887,7 @@ pub enum ListMembersError {
 impl ListMembersError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListMembersError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalException" => {
                     return RusotoError::Service(ListMembersError::Internal(err.msg))
@@ -8901,6 +8938,7 @@ impl ListOrganizationAdminAccountsError {
         res: BufferedHttpResponse,
     ) -> RusotoError<ListOrganizationAdminAccountsError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalException" => {
                     return RusotoError::Service(ListOrganizationAdminAccountsError::Internal(
@@ -8955,6 +8993,7 @@ pub enum ListTagsForResourceError {
 impl ListTagsForResourceError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListTagsForResourceError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalException" => {
                     return RusotoError::Service(ListTagsForResourceError::Internal(err.msg))
@@ -8999,6 +9038,7 @@ pub enum TagResourceError {
 impl TagResourceError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<TagResourceError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalException" => {
                     return RusotoError::Service(TagResourceError::Internal(err.msg))
@@ -9041,6 +9081,7 @@ pub enum UntagResourceError {
 impl UntagResourceError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UntagResourceError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalException" => {
                     return RusotoError::Service(UntagResourceError::Internal(err.msg))
@@ -9085,6 +9126,7 @@ pub enum UpdateActionTargetError {
 impl UpdateActionTargetError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateActionTargetError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalException" => {
                     return RusotoError::Service(UpdateActionTargetError::Internal(err.msg))
@@ -9135,6 +9177,7 @@ pub enum UpdateFindingsError {
 impl UpdateFindingsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateFindingsError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalException" => {
                     return RusotoError::Service(UpdateFindingsError::Internal(err.msg))
@@ -9189,6 +9232,7 @@ pub enum UpdateInsightError {
 impl UpdateInsightError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateInsightError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalException" => {
                     return RusotoError::Service(UpdateInsightError::Internal(err.msg))
@@ -9243,6 +9287,7 @@ impl UpdateOrganizationConfigurationError {
         res: BufferedHttpResponse,
     ) -> RusotoError<UpdateOrganizationConfigurationError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalException" => {
                     return RusotoError::Service(UpdateOrganizationConfigurationError::Internal(
@@ -9307,6 +9352,7 @@ impl UpdateSecurityHubConfigurationError {
         res: BufferedHttpResponse,
     ) -> RusotoError<UpdateSecurityHubConfigurationError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalException" => {
                     return RusotoError::Service(UpdateSecurityHubConfigurationError::Internal(
@@ -9371,6 +9417,7 @@ pub enum UpdateStandardsControlError {
 impl UpdateStandardsControlError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateStandardsControlError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InternalException" => {
                     return RusotoError::Service(UpdateStandardsControlError::Internal(err.msg))
@@ -9766,6 +9813,7 @@ impl SecurityHub for SecurityHubClient {
         &self,
         input: AcceptInvitationRequest,
     ) -> Result<AcceptInvitationResponse, RusotoError<AcceptInvitationError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/master";
 
         let mut request = SignedRequest::new("POST", "securityhub", &self.region, &request_uri);
@@ -9797,6 +9845,7 @@ impl SecurityHub for SecurityHubClient {
         &self,
         input: BatchDisableStandardsRequest,
     ) -> Result<BatchDisableStandardsResponse, RusotoError<BatchDisableStandardsError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/standards/deregister";
 
         let mut request = SignedRequest::new("POST", "securityhub", &self.region, &request_uri);
@@ -9828,6 +9877,7 @@ impl SecurityHub for SecurityHubClient {
         &self,
         input: BatchEnableStandardsRequest,
     ) -> Result<BatchEnableStandardsResponse, RusotoError<BatchEnableStandardsError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/standards/register";
 
         let mut request = SignedRequest::new("POST", "securityhub", &self.region, &request_uri);
@@ -9859,6 +9909,7 @@ impl SecurityHub for SecurityHubClient {
         &self,
         input: BatchImportFindingsRequest,
     ) -> Result<BatchImportFindingsResponse, RusotoError<BatchImportFindingsError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/findings/import";
 
         let mut request = SignedRequest::new("POST", "securityhub", &self.region, &request_uri);
@@ -9890,6 +9941,7 @@ impl SecurityHub for SecurityHubClient {
         &self,
         input: BatchUpdateFindingsRequest,
     ) -> Result<BatchUpdateFindingsResponse, RusotoError<BatchUpdateFindingsError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/findings/batchupdate";
 
         let mut request = SignedRequest::new("PATCH", "securityhub", &self.region, &request_uri);
@@ -9921,6 +9973,7 @@ impl SecurityHub for SecurityHubClient {
         &self,
         input: CreateActionTargetRequest,
     ) -> Result<CreateActionTargetResponse, RusotoError<CreateActionTargetError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/actionTargets";
 
         let mut request = SignedRequest::new("POST", "securityhub", &self.region, &request_uri);
@@ -9952,6 +10005,7 @@ impl SecurityHub for SecurityHubClient {
         &self,
         input: CreateInsightRequest,
     ) -> Result<CreateInsightResponse, RusotoError<CreateInsightError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/insights";
 
         let mut request = SignedRequest::new("POST", "securityhub", &self.region, &request_uri);
@@ -9983,6 +10037,7 @@ impl SecurityHub for SecurityHubClient {
         &self,
         input: CreateMembersRequest,
     ) -> Result<CreateMembersResponse, RusotoError<CreateMembersError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/members";
 
         let mut request = SignedRequest::new("POST", "securityhub", &self.region, &request_uri);
@@ -10014,6 +10069,7 @@ impl SecurityHub for SecurityHubClient {
         &self,
         input: DeclineInvitationsRequest,
     ) -> Result<DeclineInvitationsResponse, RusotoError<DeclineInvitationsError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/invitations/decline";
 
         let mut request = SignedRequest::new("POST", "securityhub", &self.region, &request_uri);
@@ -10045,6 +10101,7 @@ impl SecurityHub for SecurityHubClient {
         &self,
         input: DeleteActionTargetRequest,
     ) -> Result<DeleteActionTargetResponse, RusotoError<DeleteActionTargetError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/actionTargets/{action_target_arn}",
             action_target_arn = input.action_target_arn
@@ -10076,6 +10133,7 @@ impl SecurityHub for SecurityHubClient {
         &self,
         input: DeleteInsightRequest,
     ) -> Result<DeleteInsightResponse, RusotoError<DeleteInsightError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!("/insights/{insight_arn}", insight_arn = input.insight_arn);
 
         let mut request = SignedRequest::new("DELETE", "securityhub", &self.region, &request_uri);
@@ -10104,6 +10162,7 @@ impl SecurityHub for SecurityHubClient {
         &self,
         input: DeleteInvitationsRequest,
     ) -> Result<DeleteInvitationsResponse, RusotoError<DeleteInvitationsError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/invitations/delete";
 
         let mut request = SignedRequest::new("POST", "securityhub", &self.region, &request_uri);
@@ -10135,6 +10194,7 @@ impl SecurityHub for SecurityHubClient {
         &self,
         input: DeleteMembersRequest,
     ) -> Result<DeleteMembersResponse, RusotoError<DeleteMembersError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/members/delete";
 
         let mut request = SignedRequest::new("POST", "securityhub", &self.region, &request_uri);
@@ -10166,6 +10226,7 @@ impl SecurityHub for SecurityHubClient {
         &self,
         input: DescribeActionTargetsRequest,
     ) -> Result<DescribeActionTargetsResponse, RusotoError<DescribeActionTargetsError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/actionTargets/get";
 
         let mut request = SignedRequest::new("POST", "securityhub", &self.region, &request_uri);
@@ -10197,6 +10258,7 @@ impl SecurityHub for SecurityHubClient {
         &self,
         input: DescribeHubRequest,
     ) -> Result<DescribeHubResponse, RusotoError<DescribeHubError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/accounts";
 
         let mut request = SignedRequest::new("GET", "securityhub", &self.region, &request_uri);
@@ -10233,6 +10295,7 @@ impl SecurityHub for SecurityHubClient {
         DescribeOrganizationConfigurationResponse,
         RusotoError<DescribeOrganizationConfigurationError>,
     > {
+        #![allow(clippy::needless_update)]
         let request_uri = "/organization/configuration";
 
         let mut request = SignedRequest::new("GET", "securityhub", &self.region, &request_uri);
@@ -10263,6 +10326,7 @@ impl SecurityHub for SecurityHubClient {
         &self,
         input: DescribeProductsRequest,
     ) -> Result<DescribeProductsResponse, RusotoError<DescribeProductsError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/products";
 
         let mut request = SignedRequest::new("GET", "securityhub", &self.region, &request_uri);
@@ -10300,6 +10364,7 @@ impl SecurityHub for SecurityHubClient {
         &self,
         input: DescribeStandardsRequest,
     ) -> Result<DescribeStandardsResponse, RusotoError<DescribeStandardsError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/standards";
 
         let mut request = SignedRequest::new("GET", "securityhub", &self.region, &request_uri);
@@ -10338,6 +10403,7 @@ impl SecurityHub for SecurityHubClient {
         input: DescribeStandardsControlsRequest,
     ) -> Result<DescribeStandardsControlsResponse, RusotoError<DescribeStandardsControlsError>>
     {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/standards/controls/{standards_subscription_arn}",
             standards_subscription_arn = input.standards_subscription_arn
@@ -10381,6 +10447,7 @@ impl SecurityHub for SecurityHubClient {
         DisableImportFindingsForProductResponse,
         RusotoError<DisableImportFindingsForProductError>,
     > {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/productSubscriptions/{product_subscription_arn}",
             product_subscription_arn = input.product_subscription_arn
@@ -10417,6 +10484,7 @@ impl SecurityHub for SecurityHubClient {
         DisableOrganizationAdminAccountResponse,
         RusotoError<DisableOrganizationAdminAccountError>,
     > {
+        #![allow(clippy::needless_update)]
         let request_uri = "/organization/admin/disable";
 
         let mut request = SignedRequest::new("POST", "securityhub", &self.region, &request_uri);
@@ -10449,6 +10517,7 @@ impl SecurityHub for SecurityHubClient {
     async fn disable_security_hub(
         &self,
     ) -> Result<DisableSecurityHubResponse, RusotoError<DisableSecurityHubError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/accounts";
 
         let mut request = SignedRequest::new("DELETE", "securityhub", &self.region, &request_uri);
@@ -10479,6 +10548,7 @@ impl SecurityHub for SecurityHubClient {
         DisassociateFromMasterAccountResponse,
         RusotoError<DisassociateFromMasterAccountError>,
     > {
+        #![allow(clippy::needless_update)]
         let request_uri = "/master/disassociate";
 
         let mut request = SignedRequest::new("POST", "securityhub", &self.region, &request_uri);
@@ -10507,6 +10577,7 @@ impl SecurityHub for SecurityHubClient {
         &self,
         input: DisassociateMembersRequest,
     ) -> Result<DisassociateMembersResponse, RusotoError<DisassociateMembersError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/members/disassociate";
 
         let mut request = SignedRequest::new("POST", "securityhub", &self.region, &request_uri);
@@ -10541,6 +10612,7 @@ impl SecurityHub for SecurityHubClient {
         EnableImportFindingsForProductResponse,
         RusotoError<EnableImportFindingsForProductError>,
     > {
+        #![allow(clippy::needless_update)]
         let request_uri = "/productSubscriptions";
 
         let mut request = SignedRequest::new("POST", "securityhub", &self.region, &request_uri);
@@ -10575,6 +10647,7 @@ impl SecurityHub for SecurityHubClient {
         EnableOrganizationAdminAccountResponse,
         RusotoError<EnableOrganizationAdminAccountError>,
     > {
+        #![allow(clippy::needless_update)]
         let request_uri = "/organization/admin/enable";
 
         let mut request = SignedRequest::new("POST", "securityhub", &self.region, &request_uri);
@@ -10606,6 +10679,7 @@ impl SecurityHub for SecurityHubClient {
         &self,
         input: EnableSecurityHubRequest,
     ) -> Result<EnableSecurityHubResponse, RusotoError<EnableSecurityHubError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/accounts";
 
         let mut request = SignedRequest::new("POST", "securityhub", &self.region, &request_uri);
@@ -10637,6 +10711,7 @@ impl SecurityHub for SecurityHubClient {
         &self,
         input: GetEnabledStandardsRequest,
     ) -> Result<GetEnabledStandardsResponse, RusotoError<GetEnabledStandardsError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/standards/get";
 
         let mut request = SignedRequest::new("POST", "securityhub", &self.region, &request_uri);
@@ -10668,6 +10743,7 @@ impl SecurityHub for SecurityHubClient {
         &self,
         input: GetFindingsRequest,
     ) -> Result<GetFindingsResponse, RusotoError<GetFindingsError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/findings";
 
         let mut request = SignedRequest::new("POST", "securityhub", &self.region, &request_uri);
@@ -10699,6 +10775,7 @@ impl SecurityHub for SecurityHubClient {
         &self,
         input: GetInsightResultsRequest,
     ) -> Result<GetInsightResultsResponse, RusotoError<GetInsightResultsError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/insights/results/{insight_arn}",
             insight_arn = input.insight_arn
@@ -10730,6 +10807,7 @@ impl SecurityHub for SecurityHubClient {
         &self,
         input: GetInsightsRequest,
     ) -> Result<GetInsightsResponse, RusotoError<GetInsightsError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/insights/get";
 
         let mut request = SignedRequest::new("POST", "securityhub", &self.region, &request_uri);
@@ -10760,6 +10838,7 @@ impl SecurityHub for SecurityHubClient {
     async fn get_invitations_count(
         &self,
     ) -> Result<GetInvitationsCountResponse, RusotoError<GetInvitationsCountError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/invitations/count";
 
         let mut request = SignedRequest::new("GET", "securityhub", &self.region, &request_uri);
@@ -10787,6 +10866,7 @@ impl SecurityHub for SecurityHubClient {
     async fn get_master_account(
         &self,
     ) -> Result<GetMasterAccountResponse, RusotoError<GetMasterAccountError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/master";
 
         let mut request = SignedRequest::new("GET", "securityhub", &self.region, &request_uri);
@@ -10815,6 +10895,7 @@ impl SecurityHub for SecurityHubClient {
         &self,
         input: GetMembersRequest,
     ) -> Result<GetMembersResponse, RusotoError<GetMembersError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/members/get";
 
         let mut request = SignedRequest::new("POST", "securityhub", &self.region, &request_uri);
@@ -10846,6 +10927,7 @@ impl SecurityHub for SecurityHubClient {
         &self,
         input: InviteMembersRequest,
     ) -> Result<InviteMembersResponse, RusotoError<InviteMembersError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/members/invite";
 
         let mut request = SignedRequest::new("POST", "securityhub", &self.region, &request_uri);
@@ -10878,6 +10960,7 @@ impl SecurityHub for SecurityHubClient {
         input: ListEnabledProductsForImportRequest,
     ) -> Result<ListEnabledProductsForImportResponse, RusotoError<ListEnabledProductsForImportError>>
     {
+        #![allow(clippy::needless_update)]
         let request_uri = "/productSubscriptions";
 
         let mut request = SignedRequest::new("GET", "securityhub", &self.region, &request_uri);
@@ -10915,6 +10998,7 @@ impl SecurityHub for SecurityHubClient {
         &self,
         input: ListInvitationsRequest,
     ) -> Result<ListInvitationsResponse, RusotoError<ListInvitationsError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/invitations";
 
         let mut request = SignedRequest::new("GET", "securityhub", &self.region, &request_uri);
@@ -10952,6 +11036,7 @@ impl SecurityHub for SecurityHubClient {
         &self,
         input: ListMembersRequest,
     ) -> Result<ListMembersResponse, RusotoError<ListMembersError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/members";
 
         let mut request = SignedRequest::new("GET", "securityhub", &self.region, &request_uri);
@@ -10995,6 +11080,7 @@ impl SecurityHub for SecurityHubClient {
         ListOrganizationAdminAccountsResponse,
         RusotoError<ListOrganizationAdminAccountsError>,
     > {
+        #![allow(clippy::needless_update)]
         let request_uri = "/organization/admin";
 
         let mut request = SignedRequest::new("GET", "securityhub", &self.region, &request_uri);
@@ -11032,6 +11118,7 @@ impl SecurityHub for SecurityHubClient {
         &self,
         input: ListTagsForResourceRequest,
     ) -> Result<ListTagsForResourceResponse, RusotoError<ListTagsForResourceError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!("/tags/{resource_arn}", resource_arn = input.resource_arn);
 
         let mut request = SignedRequest::new("GET", "securityhub", &self.region, &request_uri);
@@ -11060,6 +11147,7 @@ impl SecurityHub for SecurityHubClient {
         &self,
         input: TagResourceRequest,
     ) -> Result<TagResourceResponse, RusotoError<TagResourceError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!("/tags/{resource_arn}", resource_arn = input.resource_arn);
 
         let mut request = SignedRequest::new("POST", "securityhub", &self.region, &request_uri);
@@ -11091,6 +11179,7 @@ impl SecurityHub for SecurityHubClient {
         &self,
         input: UntagResourceRequest,
     ) -> Result<UntagResourceResponse, RusotoError<UntagResourceError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!("/tags/{resource_arn}", resource_arn = input.resource_arn);
 
         let mut request = SignedRequest::new("DELETE", "securityhub", &self.region, &request_uri);
@@ -11125,6 +11214,7 @@ impl SecurityHub for SecurityHubClient {
         &self,
         input: UpdateActionTargetRequest,
     ) -> Result<UpdateActionTargetResponse, RusotoError<UpdateActionTargetError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/actionTargets/{action_target_arn}",
             action_target_arn = input.action_target_arn
@@ -11159,6 +11249,7 @@ impl SecurityHub for SecurityHubClient {
         &self,
         input: UpdateFindingsRequest,
     ) -> Result<UpdateFindingsResponse, RusotoError<UpdateFindingsError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = "/findings";
 
         let mut request = SignedRequest::new("PATCH", "securityhub", &self.region, &request_uri);
@@ -11190,6 +11281,7 @@ impl SecurityHub for SecurityHubClient {
         &self,
         input: UpdateInsightRequest,
     ) -> Result<UpdateInsightResponse, RusotoError<UpdateInsightError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!("/insights/{insight_arn}", insight_arn = input.insight_arn);
 
         let mut request = SignedRequest::new("PATCH", "securityhub", &self.region, &request_uri);
@@ -11224,6 +11316,7 @@ impl SecurityHub for SecurityHubClient {
         UpdateOrganizationConfigurationResponse,
         RusotoError<UpdateOrganizationConfigurationError>,
     > {
+        #![allow(clippy::needless_update)]
         let request_uri = "/organization/configuration";
 
         let mut request = SignedRequest::new("POST", "securityhub", &self.region, &request_uri);
@@ -11260,6 +11353,7 @@ impl SecurityHub for SecurityHubClient {
         UpdateSecurityHubConfigurationResponse,
         RusotoError<UpdateSecurityHubConfigurationError>,
     > {
+        #![allow(clippy::needless_update)]
         let request_uri = "/accounts";
 
         let mut request = SignedRequest::new("PATCH", "securityhub", &self.region, &request_uri);
@@ -11291,6 +11385,7 @@ impl SecurityHub for SecurityHubClient {
         &self,
         input: UpdateStandardsControlRequest,
     ) -> Result<UpdateStandardsControlResponse, RusotoError<UpdateStandardsControlError>> {
+        #![allow(clippy::needless_update)]
         let request_uri = format!(
             "/standards/control/{standards_control_arn}",
             standards_control_arn = input.standards_control_arn

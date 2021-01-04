@@ -33,7 +33,6 @@ use serde::Deserialize;
 use serde::Serialize;
 use std::io::Write;
 use std::str::FromStr;
-use xml;
 use xml::EventReader;
 use xml::EventWriter;
 
@@ -67,11 +66,12 @@ pub struct ActiveTrustedKeyGroups {
 #[allow(dead_code)]
 struct ActiveTrustedKeyGroupsDeserializer;
 impl ActiveTrustedKeyGroupsDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<ActiveTrustedKeyGroups, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, ActiveTrustedKeyGroups, _>(tag_name, stack, |name, stack, obj| {
             match name {
                 "Enabled" => {
@@ -106,11 +106,12 @@ pub struct ActiveTrustedSigners {
 #[allow(dead_code)]
 struct ActiveTrustedSignersDeserializer;
 impl ActiveTrustedSignersDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<ActiveTrustedSigners, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, ActiveTrustedSigners, _>(tag_name, stack, |name, stack, obj| {
             match name {
                 "Enabled" => {
@@ -143,11 +144,12 @@ pub struct AliasICPRecordal {
 #[allow(dead_code)]
 struct AliasICPRecordalDeserializer;
 impl AliasICPRecordalDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<AliasICPRecordal, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, AliasICPRecordal, _>(tag_name, stack, |name, stack, obj| {
             match name {
                 "CNAME" => {
@@ -168,11 +170,13 @@ impl AliasICPRecordalDeserializer {
 #[allow(dead_code)]
 struct AliasICPRecordalsDeserializer;
 impl AliasICPRecordalsDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<AliasICPRecordal>, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
+
         deserialize_elements::<_, Vec<_>, _>(tag_name, stack, |name, stack, obj| {
             if name == "AliasICPRecordal" {
                 obj.push(AliasICPRecordalDeserializer::deserialize(
@@ -189,11 +193,13 @@ impl AliasICPRecordalsDeserializer {
 #[allow(dead_code)]
 struct AliasListDeserializer;
 impl AliasListDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<String>, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
+
         deserialize_elements::<_, Vec<_>, _>(tag_name, stack, |name, stack, obj| {
             if name == "CNAME" {
                 obj.push(StringDeserializer::deserialize("CNAME", stack)?);
@@ -239,11 +245,12 @@ pub struct Aliases {
 #[allow(dead_code)]
 struct AliasesDeserializer;
 impl AliasesDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Aliases, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, Aliases, _>(tag_name, stack, |name, stack, obj| {
             match name {
                 "Items" => {
@@ -296,11 +303,12 @@ pub struct AllowedMethods {
 #[allow(dead_code)]
 struct AllowedMethodsDeserializer;
 impl AllowedMethodsDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<AllowedMethods, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, AllowedMethods, _>(tag_name, stack, |name, stack, obj| {
             match name {
                 "CachedMethods" => {
@@ -347,11 +355,13 @@ impl AllowedMethodsSerializer {
 #[allow(dead_code)]
 struct AwsAccountNumberListDeserializer;
 impl AwsAccountNumberListDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<String>, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
+
         deserialize_elements::<_, Vec<_>, _>(tag_name, stack, |name, stack, obj| {
             if name == "AwsAccountNumber" {
                 obj.push(StringDeserializer::deserialize("AwsAccountNumber", stack)?);
@@ -386,8 +396,9 @@ impl AwsAccountNumberListSerializer {
 #[allow(dead_code)]
 struct BooleanDeserializer;
 impl BooleanDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<bool, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::deserialize_primitive(tag_name, stack, |s| Ok(bool::from_str(&s).unwrap()))
     }
 }
@@ -442,11 +453,12 @@ pub struct CacheBehavior {
 #[allow(dead_code)]
 struct CacheBehaviorDeserializer;
 impl CacheBehaviorDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<CacheBehavior, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, CacheBehavior, _>(tag_name, stack, |name, stack, obj| {
             match name {
                 "AllowedMethods" => {
@@ -583,11 +595,13 @@ impl CacheBehaviorSerializer {
 #[allow(dead_code)]
 struct CacheBehaviorListDeserializer;
 impl CacheBehaviorListDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<CacheBehavior>, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
+
         deserialize_elements::<_, Vec<_>, _>(tag_name, stack, |name, stack, obj| {
             if name == "CacheBehavior" {
                 obj.push(CacheBehaviorDeserializer::deserialize(
@@ -636,11 +650,12 @@ pub struct CacheBehaviors {
 #[allow(dead_code)]
 struct CacheBehaviorsDeserializer;
 impl CacheBehaviorsDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<CacheBehaviors, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, CacheBehaviors, _>(tag_name, stack, |name, stack, obj| {
             match name {
                 "Items" => {
@@ -693,11 +708,12 @@ pub struct CachePolicy {
 #[allow(dead_code)]
 struct CachePolicyDeserializer;
 impl CachePolicyDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<CachePolicy, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, CachePolicy, _>(tag_name, stack, |name, stack, obj| {
             match name {
                 "CachePolicyConfig" => {
@@ -740,11 +756,12 @@ pub struct CachePolicyConfig {
 #[allow(dead_code)]
 struct CachePolicyConfigDeserializer;
 impl CachePolicyConfigDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<CachePolicyConfig, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, CachePolicyConfig, _>(tag_name, stack, |name, stack, obj| {
             match name {
                 "Comment" => {
@@ -814,8 +831,9 @@ impl CachePolicyConfigSerializer {
 #[allow(dead_code)]
 struct CachePolicyCookieBehaviorDeserializer;
 impl CachePolicyCookieBehaviorDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
@@ -848,11 +866,12 @@ pub struct CachePolicyCookiesConfig {
 #[allow(dead_code)]
 struct CachePolicyCookiesConfigDeserializer;
 impl CachePolicyCookiesConfigDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<CachePolicyCookiesConfig, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, CachePolicyCookiesConfig, _>(
             tag_name,
             stack,
@@ -898,8 +917,9 @@ impl CachePolicyCookiesConfigSerializer {
 #[allow(dead_code)]
 struct CachePolicyHeaderBehaviorDeserializer;
 impl CachePolicyHeaderBehaviorDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
@@ -932,11 +952,12 @@ pub struct CachePolicyHeadersConfig {
 #[allow(dead_code)]
 struct CachePolicyHeadersConfigDeserializer;
 impl CachePolicyHeadersConfigDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<CachePolicyHeadersConfig, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, CachePolicyHeadersConfig, _>(
             tag_name,
             stack,
@@ -996,11 +1017,12 @@ pub struct CachePolicyList {
 #[allow(dead_code)]
 struct CachePolicyListDeserializer;
 impl CachePolicyListDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<CachePolicyList, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, CachePolicyList, _>(tag_name, stack, |name, stack, obj| {
             match name {
                 "Items" => {
@@ -1026,8 +1048,9 @@ impl CachePolicyListDeserializer {
 #[allow(dead_code)]
 struct CachePolicyQueryStringBehaviorDeserializer;
 impl CachePolicyQueryStringBehaviorDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
@@ -1061,11 +1084,12 @@ pub struct CachePolicyQueryStringsConfig {
 #[allow(dead_code)]
 struct CachePolicyQueryStringsConfigDeserializer;
 impl CachePolicyQueryStringsConfigDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<CachePolicyQueryStringsConfig, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, CachePolicyQueryStringsConfig, _>(
             tag_name,
             stack,
@@ -1129,11 +1153,12 @@ pub struct CachePolicySummary {
 #[allow(dead_code)]
 struct CachePolicySummaryDeserializer;
 impl CachePolicySummaryDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<CachePolicySummary, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, CachePolicySummary, _>(tag_name, stack, |name, stack, obj| {
             match name {
                 "CachePolicy" => {
@@ -1151,11 +1176,13 @@ impl CachePolicySummaryDeserializer {
 #[allow(dead_code)]
 struct CachePolicySummaryListDeserializer;
 impl CachePolicySummaryListDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<CachePolicySummary>, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
+
         deserialize_elements::<_, Vec<_>, _>(tag_name, stack, |name, stack, obj| {
             if name == "CachePolicySummary" {
                 obj.push(CachePolicySummaryDeserializer::deserialize(
@@ -1172,8 +1199,9 @@ impl CachePolicySummaryListDeserializer {
 #[allow(dead_code)]
 struct CachePolicyTypeDeserializer;
 impl CachePolicyTypeDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
@@ -1207,11 +1235,12 @@ pub struct CachedMethods {
 #[allow(dead_code)]
 struct CachedMethodsDeserializer;
 impl CachedMethodsDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<CachedMethods, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, CachedMethods, _>(tag_name, stack, |name, stack, obj| {
             match name {
                 "Items" => {
@@ -1261,11 +1290,12 @@ pub struct CloudFrontOriginAccessIdentity {
 #[allow(dead_code)]
 struct CloudFrontOriginAccessIdentityDeserializer;
 impl CloudFrontOriginAccessIdentityDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<CloudFrontOriginAccessIdentity, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, CloudFrontOriginAccessIdentity, _>(
             tag_name,
             stack,
@@ -1307,11 +1337,12 @@ pub struct CloudFrontOriginAccessIdentityConfig {
 #[allow(dead_code)]
 struct CloudFrontOriginAccessIdentityConfigDeserializer;
 impl CloudFrontOriginAccessIdentityConfigDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<CloudFrontOriginAccessIdentityConfig, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, CloudFrontOriginAccessIdentityConfig, _>(
             tag_name,
             stack,
@@ -1371,11 +1402,12 @@ pub struct CloudFrontOriginAccessIdentityList {
 #[allow(dead_code)]
 struct CloudFrontOriginAccessIdentityListDeserializer;
 impl CloudFrontOriginAccessIdentityListDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<CloudFrontOriginAccessIdentityList, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, CloudFrontOriginAccessIdentityList, _>(
             tag_name,
             stack,
@@ -1426,11 +1458,12 @@ pub struct CloudFrontOriginAccessIdentitySummary {
 #[allow(dead_code)]
 struct CloudFrontOriginAccessIdentitySummaryDeserializer;
 impl CloudFrontOriginAccessIdentitySummaryDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<CloudFrontOriginAccessIdentitySummary, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, CloudFrontOriginAccessIdentitySummary, _>(
             tag_name,
             stack,
@@ -1456,11 +1489,13 @@ impl CloudFrontOriginAccessIdentitySummaryDeserializer {
 #[allow(dead_code)]
 struct CloudFrontOriginAccessIdentitySummaryListDeserializer;
 impl CloudFrontOriginAccessIdentitySummaryListDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<CloudFrontOriginAccessIdentitySummary>, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
+
         deserialize_elements::<_, Vec<_>, _>(tag_name, stack, |name, stack, obj| {
             if name == "CloudFrontOriginAccessIdentitySummary" {
                 obj.push(
@@ -1479,8 +1514,9 @@ impl CloudFrontOriginAccessIdentitySummaryListDeserializer {
 #[allow(dead_code)]
 struct CommentTypeDeserializer;
 impl CommentTypeDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
@@ -1516,11 +1552,12 @@ pub struct ContentTypeProfile {
 #[allow(dead_code)]
 struct ContentTypeProfileDeserializer;
 impl ContentTypeProfileDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<ContentTypeProfile, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, ContentTypeProfile, _>(tag_name, stack, |name, stack, obj| {
             match name {
                 "ContentType" => {
@@ -1574,11 +1611,12 @@ pub struct ContentTypeProfileConfig {
 #[allow(dead_code)]
 struct ContentTypeProfileConfigDeserializer;
 impl ContentTypeProfileConfigDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<ContentTypeProfileConfig, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, ContentTypeProfileConfig, _>(
             tag_name,
             stack,
@@ -1633,11 +1671,13 @@ impl ContentTypeProfileConfigSerializer {
 #[allow(dead_code)]
 struct ContentTypeProfileListDeserializer;
 impl ContentTypeProfileListDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<ContentTypeProfile>, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
+
         deserialize_elements::<_, Vec<_>, _>(tag_name, stack, |name, stack, obj| {
             if name == "ContentTypeProfile" {
                 obj.push(ContentTypeProfileDeserializer::deserialize(
@@ -1686,11 +1726,12 @@ pub struct ContentTypeProfiles {
 #[allow(dead_code)]
 struct ContentTypeProfilesDeserializer;
 impl ContentTypeProfilesDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<ContentTypeProfiles, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, ContentTypeProfiles, _>(tag_name, stack, |name, stack, obj| {
             match name {
                 "Items" => {
@@ -1731,11 +1772,13 @@ impl ContentTypeProfilesSerializer {
 #[allow(dead_code)]
 struct CookieNameListDeserializer;
 impl CookieNameListDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<String>, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
+
         deserialize_elements::<_, Vec<_>, _>(tag_name, stack, |name, stack, obj| {
             if name == "Name" {
                 obj.push(StringDeserializer::deserialize("Name", stack)?);
@@ -1781,11 +1824,12 @@ pub struct CookieNames {
 #[allow(dead_code)]
 struct CookieNamesDeserializer;
 impl CookieNamesDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<CookieNames, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, CookieNames, _>(tag_name, stack, |name, stack, obj| {
             match name {
                 "Items" => {
@@ -1853,11 +1897,13 @@ pub struct CreateCachePolicyResult {
 #[allow(dead_code)]
 struct CreateCachePolicyResultDeserializer;
 impl CreateCachePolicyResultDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<CreateCachePolicyResult, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
+
         Ok(CreateCachePolicyResult {
             cache_policy: Some(CachePolicyDeserializer::deserialize("CachePolicy", stack)?),
             ..CreateCachePolicyResult::default()
@@ -1887,11 +1933,13 @@ pub struct CreateCloudFrontOriginAccessIdentityResult {
 #[allow(dead_code)]
 struct CreateCloudFrontOriginAccessIdentityResultDeserializer;
 impl CreateCloudFrontOriginAccessIdentityResultDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<CreateCloudFrontOriginAccessIdentityResult, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
+
         Ok(CreateCloudFrontOriginAccessIdentityResult {
             cloud_front_origin_access_identity: Some(
                 CloudFrontOriginAccessIdentityDeserializer::deserialize(
@@ -1926,11 +1974,13 @@ pub struct CreateDistributionResult {
 #[allow(dead_code)]
 struct CreateDistributionResultDeserializer;
 impl CreateDistributionResultDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<CreateDistributionResult, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
+
         Ok(CreateDistributionResult {
             distribution: Some(DistributionDeserializer::deserialize(
                 "Distribution",
@@ -1963,11 +2013,13 @@ pub struct CreateDistributionWithTagsResult {
 #[allow(dead_code)]
 struct CreateDistributionWithTagsResultDeserializer;
 impl CreateDistributionWithTagsResultDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<CreateDistributionWithTagsResult, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
+
         Ok(CreateDistributionWithTagsResult {
             distribution: Some(DistributionDeserializer::deserialize(
                 "Distribution",
@@ -1998,11 +2050,13 @@ pub struct CreateFieldLevelEncryptionConfigResult {
 #[allow(dead_code)]
 struct CreateFieldLevelEncryptionConfigResultDeserializer;
 impl CreateFieldLevelEncryptionConfigResultDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<CreateFieldLevelEncryptionConfigResult, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
+
         Ok(CreateFieldLevelEncryptionConfigResult {
             field_level_encryption: Some(FieldLevelEncryptionDeserializer::deserialize(
                 "FieldLevelEncryption",
@@ -2033,11 +2087,13 @@ pub struct CreateFieldLevelEncryptionProfileResult {
 #[allow(dead_code)]
 struct CreateFieldLevelEncryptionProfileResultDeserializer;
 impl CreateFieldLevelEncryptionProfileResultDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<CreateFieldLevelEncryptionProfileResult, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
+
         Ok(CreateFieldLevelEncryptionProfileResult {
             field_level_encryption_profile: Some(
                 FieldLevelEncryptionProfileDeserializer::deserialize(
@@ -2072,11 +2128,13 @@ pub struct CreateInvalidationResult {
 #[allow(dead_code)]
 struct CreateInvalidationResultDeserializer;
 impl CreateInvalidationResultDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<CreateInvalidationResult, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
+
         Ok(CreateInvalidationResult {
             invalidation: Some(InvalidationDeserializer::deserialize(
                 "Invalidation",
@@ -2107,11 +2165,13 @@ pub struct CreateKeyGroupResult {
 #[allow(dead_code)]
 struct CreateKeyGroupResultDeserializer;
 impl CreateKeyGroupResultDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<CreateKeyGroupResult, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
+
         Ok(CreateKeyGroupResult {
             key_group: Some(KeyGroupDeserializer::deserialize("KeyGroup", stack)?),
             ..CreateKeyGroupResult::default()
@@ -2137,11 +2197,13 @@ pub struct CreateMonitoringSubscriptionResult {
 #[allow(dead_code)]
 struct CreateMonitoringSubscriptionResultDeserializer;
 impl CreateMonitoringSubscriptionResultDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<CreateMonitoringSubscriptionResult, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
+
         Ok(CreateMonitoringSubscriptionResult {
             monitoring_subscription: Some(MonitoringSubscriptionDeserializer::deserialize(
                 "MonitoringSubscription",
@@ -2172,11 +2234,13 @@ pub struct CreateOriginRequestPolicyResult {
 #[allow(dead_code)]
 struct CreateOriginRequestPolicyResultDeserializer;
 impl CreateOriginRequestPolicyResultDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<CreateOriginRequestPolicyResult, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
+
         Ok(CreateOriginRequestPolicyResult {
             origin_request_policy: Some(OriginRequestPolicyDeserializer::deserialize(
                 "OriginRequestPolicy",
@@ -2207,11 +2271,13 @@ pub struct CreatePublicKeyResult {
 #[allow(dead_code)]
 struct CreatePublicKeyResultDeserializer;
 impl CreatePublicKeyResultDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<CreatePublicKeyResult, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
+
         Ok(CreatePublicKeyResult {
             public_key: Some(PublicKeyDeserializer::deserialize("PublicKey", stack)?),
             ..CreatePublicKeyResult::default()
@@ -2261,11 +2327,12 @@ pub struct CreateRealtimeLogConfigResult {
 #[allow(dead_code)]
 struct CreateRealtimeLogConfigResultDeserializer;
 impl CreateRealtimeLogConfigResultDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<CreateRealtimeLogConfigResult, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, CreateRealtimeLogConfigResult, _>(
             tag_name,
             stack,
@@ -2307,11 +2374,13 @@ pub struct CreateStreamingDistributionResult {
 #[allow(dead_code)]
 struct CreateStreamingDistributionResultDeserializer;
 impl CreateStreamingDistributionResultDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<CreateStreamingDistributionResult, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
+
         Ok(CreateStreamingDistributionResult {
             streaming_distribution: Some(StreamingDistributionDeserializer::deserialize(
                 "StreamingDistribution",
@@ -2344,11 +2413,13 @@ pub struct CreateStreamingDistributionWithTagsResult {
 #[allow(dead_code)]
 struct CreateStreamingDistributionWithTagsResultDeserializer;
 impl CreateStreamingDistributionWithTagsResultDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<CreateStreamingDistributionWithTagsResult, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
+
         Ok(CreateStreamingDistributionWithTagsResult {
             streaming_distribution: Some(StreamingDistributionDeserializer::deserialize(
                 "StreamingDistribution",
@@ -2376,11 +2447,12 @@ pub struct CustomErrorResponse {
 #[allow(dead_code)]
 struct CustomErrorResponseDeserializer;
 impl CustomErrorResponseDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<CustomErrorResponse, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, CustomErrorResponse, _>(tag_name, stack, |name, stack, obj| {
             match name {
                 "ErrorCachingMinTTL" => {
@@ -2434,11 +2506,13 @@ impl CustomErrorResponseSerializer {
 #[allow(dead_code)]
 struct CustomErrorResponseListDeserializer;
 impl CustomErrorResponseListDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<CustomErrorResponse>, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
+
         deserialize_elements::<_, Vec<_>, _>(tag_name, stack, |name, stack, obj| {
             if name == "CustomErrorResponse" {
                 obj.push(CustomErrorResponseDeserializer::deserialize(
@@ -2487,11 +2561,12 @@ pub struct CustomErrorResponses {
 #[allow(dead_code)]
 struct CustomErrorResponsesDeserializer;
 impl CustomErrorResponsesDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<CustomErrorResponses, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, CustomErrorResponses, _>(tag_name, stack, |name, stack, obj| {
             match name {
                 "Items" => {
@@ -2543,11 +2618,12 @@ pub struct CustomHeaders {
 #[allow(dead_code)]
 struct CustomHeadersDeserializer;
 impl CustomHeadersDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<CustomHeaders, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, CustomHeaders, _>(tag_name, stack, |name, stack, obj| {
             match name {
                 "Items" => {
@@ -2607,11 +2683,12 @@ pub struct CustomOriginConfig {
 #[allow(dead_code)]
 struct CustomOriginConfigDeserializer;
 impl CustomOriginConfigDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<CustomOriginConfig, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, CustomOriginConfig, _>(tag_name, stack, |name, stack, obj| {
             match name {
                 "HTTPPort" => {
@@ -2716,11 +2793,12 @@ pub struct DefaultCacheBehavior {
 #[allow(dead_code)]
 struct DefaultCacheBehaviorDeserializer;
 impl DefaultCacheBehaviorDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<DefaultCacheBehavior, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, DefaultCacheBehavior, _>(tag_name, stack, |name, stack, obj| {
             match name {
                 "AllowedMethods" => {
@@ -2920,11 +2998,12 @@ pub struct DeleteMonitoringSubscriptionResult {}
 #[allow(dead_code)]
 struct DeleteMonitoringSubscriptionResultDeserializer;
 impl DeleteMonitoringSubscriptionResultDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<DeleteMonitoringSubscriptionResult, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::start_element(tag_name, stack)?;
 
         let obj = DeleteMonitoringSubscriptionResult::default();
@@ -3022,11 +3101,12 @@ pub struct Distribution {
 #[allow(dead_code)]
 struct DistributionDeserializer;
 impl DistributionDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Distribution, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, Distribution, _>(tag_name, stack, |name, stack, obj| {
             match name {
                 "ARN" => {
@@ -3122,11 +3202,12 @@ pub struct DistributionConfig {
 #[allow(dead_code)]
 struct DistributionConfigDeserializer;
 impl DistributionConfigDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<DistributionConfig, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, DistributionConfig, _>(tag_name, stack, |name, stack, obj| {
             match name {
                 "Aliases" => {
@@ -3325,11 +3406,12 @@ pub struct DistributionIdList {
 #[allow(dead_code)]
 struct DistributionIdListDeserializer;
 impl DistributionIdListDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<DistributionIdList, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, DistributionIdList, _>(tag_name, stack, |name, stack, obj| {
             match name {
                 "IsTruncated" => {
@@ -3361,11 +3443,13 @@ impl DistributionIdListDeserializer {
 #[allow(dead_code)]
 struct DistributionIdListSummaryDeserializer;
 impl DistributionIdListSummaryDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<String>, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
+
         deserialize_elements::<_, Vec<_>, _>(tag_name, stack, |name, stack, obj| {
             if name == "DistributionId" {
                 obj.push(StringDeserializer::deserialize("DistributionId", stack)?);
@@ -3397,11 +3481,12 @@ pub struct DistributionList {
 #[allow(dead_code)]
 struct DistributionListDeserializer;
 impl DistributionListDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<DistributionList, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, DistributionList, _>(tag_name, stack, |name, stack, obj| {
             match name {
                 "IsTruncated" => {
@@ -3479,11 +3564,12 @@ pub struct DistributionSummary {
 #[allow(dead_code)]
 struct DistributionSummaryDeserializer;
 impl DistributionSummaryDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<DistributionSummary, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, DistributionSummary, _>(tag_name, stack, |name, stack, obj| {
             match name {
                 "ARN" => {
@@ -3570,11 +3656,13 @@ impl DistributionSummaryDeserializer {
 #[allow(dead_code)]
 struct DistributionSummaryListDeserializer;
 impl DistributionSummaryListDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<DistributionSummary>, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
+
         deserialize_elements::<_, Vec<_>, _>(tag_name, stack, |name, stack, obj| {
             if name == "DistributionSummary" {
                 obj.push(DistributionSummaryDeserializer::deserialize(
@@ -3602,11 +3690,12 @@ pub struct EncryptionEntities {
 #[allow(dead_code)]
 struct EncryptionEntitiesDeserializer;
 impl EncryptionEntitiesDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<EncryptionEntities, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, EncryptionEntities, _>(tag_name, stack, |name, stack, obj| {
             match name {
                 "Items" => {
@@ -3660,11 +3749,12 @@ pub struct EncryptionEntity {
 #[allow(dead_code)]
 struct EncryptionEntityDeserializer;
 impl EncryptionEntityDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<EncryptionEntity, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, EncryptionEntity, _>(tag_name, stack, |name, stack, obj| {
             match name {
                 "FieldPatterns" => {
@@ -3706,11 +3796,13 @@ impl EncryptionEntitySerializer {
 #[allow(dead_code)]
 struct EncryptionEntityListDeserializer;
 impl EncryptionEntityListDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<EncryptionEntity>, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
+
         deserialize_elements::<_, Vec<_>, _>(tag_name, stack, |name, stack, obj| {
             if name == "EncryptionEntity" {
                 obj.push(EncryptionEntityDeserializer::deserialize(
@@ -3759,11 +3851,12 @@ pub struct EndPoint {
 #[allow(dead_code)]
 struct EndPointDeserializer;
 impl EndPointDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<EndPoint, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, EndPoint, _>(tag_name, stack, |name, stack, obj| {
             match name {
                 "KinesisStreamConfig" => {
@@ -3805,11 +3898,13 @@ impl EndPointSerializer {
 #[allow(dead_code)]
 struct EndPointListDeserializer;
 impl EndPointListDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<EndPoint>, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
+
         deserialize_elements::<_, Vec<_>, _>(tag_name, stack, |name, stack, obj| {
             if name == "member" {
                 obj.push(EndPointDeserializer::deserialize("member", stack)?);
@@ -3844,8 +3939,9 @@ impl EndPointListSerializer {
 #[allow(dead_code)]
 struct EventTypeDeserializer;
 impl EventTypeDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
@@ -3880,11 +3976,12 @@ pub struct FieldLevelEncryption {
 #[allow(dead_code)]
 struct FieldLevelEncryptionDeserializer;
 impl FieldLevelEncryptionDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<FieldLevelEncryption, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, FieldLevelEncryption, _>(tag_name, stack, |name, stack, obj| {
             match name {
                 "FieldLevelEncryptionConfig" => {
@@ -3925,11 +4022,12 @@ pub struct FieldLevelEncryptionConfig {
 #[allow(dead_code)]
 struct FieldLevelEncryptionConfigDeserializer;
 impl FieldLevelEncryptionConfigDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<FieldLevelEncryptionConfig, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, FieldLevelEncryptionConfig, _>(
             tag_name,
             stack,
@@ -4015,11 +4113,12 @@ pub struct FieldLevelEncryptionList {
 #[allow(dead_code)]
 struct FieldLevelEncryptionListDeserializer;
 impl FieldLevelEncryptionListDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<FieldLevelEncryptionList, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, FieldLevelEncryptionList, _>(
             tag_name,
             stack,
@@ -4064,11 +4163,12 @@ pub struct FieldLevelEncryptionProfile {
 #[allow(dead_code)]
 struct FieldLevelEncryptionProfileDeserializer;
 impl FieldLevelEncryptionProfileDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<FieldLevelEncryptionProfile, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, FieldLevelEncryptionProfile, _>(
             tag_name,
             stack,
@@ -4113,11 +4213,12 @@ pub struct FieldLevelEncryptionProfileConfig {
 #[allow(dead_code)]
 struct FieldLevelEncryptionProfileConfigDeserializer;
 impl FieldLevelEncryptionProfileConfigDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<FieldLevelEncryptionProfileConfig, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, FieldLevelEncryptionProfileConfig, _>(
             tag_name,
             stack,
@@ -4190,11 +4291,12 @@ pub struct FieldLevelEncryptionProfileList {
 #[allow(dead_code)]
 struct FieldLevelEncryptionProfileListDeserializer;
 impl FieldLevelEncryptionProfileListDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<FieldLevelEncryptionProfileList, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, FieldLevelEncryptionProfileList, _>(
             tag_name,
             stack,
@@ -4243,11 +4345,12 @@ pub struct FieldLevelEncryptionProfileSummary {
 #[allow(dead_code)]
 struct FieldLevelEncryptionProfileSummaryDeserializer;
 impl FieldLevelEncryptionProfileSummaryDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<FieldLevelEncryptionProfileSummary, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, FieldLevelEncryptionProfileSummary, _>(
             tag_name,
             stack,
@@ -4282,11 +4385,13 @@ impl FieldLevelEncryptionProfileSummaryDeserializer {
 #[allow(dead_code)]
 struct FieldLevelEncryptionProfileSummaryListDeserializer;
 impl FieldLevelEncryptionProfileSummaryListDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<FieldLevelEncryptionProfileSummary>, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
+
         deserialize_elements::<_, Vec<_>, _>(tag_name, stack, |name, stack, obj| {
             if name == "FieldLevelEncryptionProfileSummary" {
                 obj.push(FieldLevelEncryptionProfileSummaryDeserializer::deserialize(
@@ -4319,11 +4424,12 @@ pub struct FieldLevelEncryptionSummary {
 #[allow(dead_code)]
 struct FieldLevelEncryptionSummaryDeserializer;
 impl FieldLevelEncryptionSummaryDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<FieldLevelEncryptionSummary, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, FieldLevelEncryptionSummary, _>(
             tag_name,
             stack,
@@ -4363,11 +4469,13 @@ impl FieldLevelEncryptionSummaryDeserializer {
 #[allow(dead_code)]
 struct FieldLevelEncryptionSummaryListDeserializer;
 impl FieldLevelEncryptionSummaryListDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<FieldLevelEncryptionSummary>, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
+
         deserialize_elements::<_, Vec<_>, _>(tag_name, stack, |name, stack, obj| {
             if name == "FieldLevelEncryptionSummary" {
                 obj.push(FieldLevelEncryptionSummaryDeserializer::deserialize(
@@ -4384,11 +4492,13 @@ impl FieldLevelEncryptionSummaryListDeserializer {
 #[allow(dead_code)]
 struct FieldListDeserializer;
 impl FieldListDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<String>, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
+
         deserialize_elements::<_, Vec<_>, _>(tag_name, stack, |name, stack, obj| {
             if name == "Field" {
                 obj.push(StringDeserializer::deserialize("Field", stack)?);
@@ -4423,11 +4533,13 @@ impl FieldListSerializer {
 #[allow(dead_code)]
 struct FieldPatternListDeserializer;
 impl FieldPatternListDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<String>, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
+
         deserialize_elements::<_, Vec<_>, _>(tag_name, stack, |name, stack, obj| {
             if name == "FieldPattern" {
                 obj.push(StringDeserializer::deserialize("FieldPattern", stack)?);
@@ -4473,11 +4585,12 @@ pub struct FieldPatterns {
 #[allow(dead_code)]
 struct FieldPatternsDeserializer;
 impl FieldPatternsDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<FieldPatterns, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, FieldPatterns, _>(tag_name, stack, |name, stack, obj| {
             match name {
                 "Items" => {
@@ -4518,8 +4631,9 @@ impl FieldPatternsSerializer {
 #[allow(dead_code)]
 struct FormatDeserializer;
 impl FormatDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
@@ -4568,11 +4682,12 @@ pub struct GeoRestriction {
 #[allow(dead_code)]
 struct GeoRestrictionDeserializer;
 impl GeoRestrictionDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<GeoRestriction, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, GeoRestriction, _>(tag_name, stack, |name, stack, obj| {
             match name {
                 "Items" => {
@@ -4618,8 +4733,9 @@ impl GeoRestrictionSerializer {
 #[allow(dead_code)]
 struct GeoRestrictionTypeDeserializer;
 impl GeoRestrictionTypeDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
@@ -4658,11 +4774,13 @@ pub struct GetCachePolicyConfigResult {
 #[allow(dead_code)]
 struct GetCachePolicyConfigResultDeserializer;
 impl GetCachePolicyConfigResultDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<GetCachePolicyConfigResult, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
+
         Ok(GetCachePolicyConfigResult {
             cache_policy_config: Some(CachePolicyConfigDeserializer::deserialize(
                 "CachePolicyConfig",
@@ -4691,11 +4809,13 @@ pub struct GetCachePolicyResult {
 #[allow(dead_code)]
 struct GetCachePolicyResultDeserializer;
 impl GetCachePolicyResultDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<GetCachePolicyResult, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
+
         Ok(GetCachePolicyResult {
             cache_policy: Some(CachePolicyDeserializer::deserialize("CachePolicy", stack)?),
             ..GetCachePolicyResult::default()
@@ -4723,11 +4843,13 @@ pub struct GetCloudFrontOriginAccessIdentityConfigResult {
 #[allow(dead_code)]
 struct GetCloudFrontOriginAccessIdentityConfigResultDeserializer;
 impl GetCloudFrontOriginAccessIdentityConfigResultDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<GetCloudFrontOriginAccessIdentityConfigResult, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
+
         Ok(GetCloudFrontOriginAccessIdentityConfigResult {
             cloud_front_origin_access_identity_config: Some(
                 CloudFrontOriginAccessIdentityConfigDeserializer::deserialize(
@@ -4760,11 +4882,13 @@ pub struct GetCloudFrontOriginAccessIdentityResult {
 #[allow(dead_code)]
 struct GetCloudFrontOriginAccessIdentityResultDeserializer;
 impl GetCloudFrontOriginAccessIdentityResultDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<GetCloudFrontOriginAccessIdentityResult, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
+
         Ok(GetCloudFrontOriginAccessIdentityResult {
             cloud_front_origin_access_identity: Some(
                 CloudFrontOriginAccessIdentityDeserializer::deserialize(
@@ -4797,11 +4921,13 @@ pub struct GetDistributionConfigResult {
 #[allow(dead_code)]
 struct GetDistributionConfigResultDeserializer;
 impl GetDistributionConfigResultDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<GetDistributionConfigResult, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
+
         Ok(GetDistributionConfigResult {
             distribution_config: Some(DistributionConfigDeserializer::deserialize(
                 "DistributionConfig",
@@ -4832,11 +4958,13 @@ pub struct GetDistributionResult {
 #[allow(dead_code)]
 struct GetDistributionResultDeserializer;
 impl GetDistributionResultDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<GetDistributionResult, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
+
         Ok(GetDistributionResult {
             distribution: Some(DistributionDeserializer::deserialize(
                 "Distribution",
@@ -4865,11 +4993,13 @@ pub struct GetFieldLevelEncryptionConfigResult {
 #[allow(dead_code)]
 struct GetFieldLevelEncryptionConfigResultDeserializer;
 impl GetFieldLevelEncryptionConfigResultDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<GetFieldLevelEncryptionConfigResult, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
+
         Ok(GetFieldLevelEncryptionConfigResult {
             field_level_encryption_config: Some(
                 FieldLevelEncryptionConfigDeserializer::deserialize(
@@ -4900,11 +5030,13 @@ pub struct GetFieldLevelEncryptionProfileConfigResult {
 #[allow(dead_code)]
 struct GetFieldLevelEncryptionProfileConfigResultDeserializer;
 impl GetFieldLevelEncryptionProfileConfigResultDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<GetFieldLevelEncryptionProfileConfigResult, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
+
         Ok(GetFieldLevelEncryptionProfileConfigResult {
             field_level_encryption_profile_config: Some(
                 FieldLevelEncryptionProfileConfigDeserializer::deserialize(
@@ -4935,11 +5067,13 @@ pub struct GetFieldLevelEncryptionProfileResult {
 #[allow(dead_code)]
 struct GetFieldLevelEncryptionProfileResultDeserializer;
 impl GetFieldLevelEncryptionProfileResultDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<GetFieldLevelEncryptionProfileResult, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
+
         Ok(GetFieldLevelEncryptionProfileResult {
             field_level_encryption_profile: Some(
                 FieldLevelEncryptionProfileDeserializer::deserialize(
@@ -4970,11 +5104,13 @@ pub struct GetFieldLevelEncryptionResult {
 #[allow(dead_code)]
 struct GetFieldLevelEncryptionResultDeserializer;
 impl GetFieldLevelEncryptionResultDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<GetFieldLevelEncryptionResult, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
+
         Ok(GetFieldLevelEncryptionResult {
             field_level_encryption: Some(FieldLevelEncryptionDeserializer::deserialize(
                 "FieldLevelEncryption",
@@ -5005,11 +5141,13 @@ pub struct GetInvalidationResult {
 #[allow(dead_code)]
 struct GetInvalidationResultDeserializer;
 impl GetInvalidationResultDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<GetInvalidationResult, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
+
         Ok(GetInvalidationResult {
             invalidation: Some(InvalidationDeserializer::deserialize(
                 "Invalidation",
@@ -5038,11 +5176,13 @@ pub struct GetKeyGroupConfigResult {
 #[allow(dead_code)]
 struct GetKeyGroupConfigResultDeserializer;
 impl GetKeyGroupConfigResultDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<GetKeyGroupConfigResult, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
+
         Ok(GetKeyGroupConfigResult {
             key_group_config: Some(KeyGroupConfigDeserializer::deserialize(
                 "KeyGroupConfig",
@@ -5071,11 +5211,13 @@ pub struct GetKeyGroupResult {
 #[allow(dead_code)]
 struct GetKeyGroupResultDeserializer;
 impl GetKeyGroupResultDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<GetKeyGroupResult, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
+
         Ok(GetKeyGroupResult {
             key_group: Some(KeyGroupDeserializer::deserialize("KeyGroup", stack)?),
             ..GetKeyGroupResult::default()
@@ -5099,11 +5241,13 @@ pub struct GetMonitoringSubscriptionResult {
 #[allow(dead_code)]
 struct GetMonitoringSubscriptionResultDeserializer;
 impl GetMonitoringSubscriptionResultDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<GetMonitoringSubscriptionResult, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
+
         Ok(GetMonitoringSubscriptionResult {
             monitoring_subscription: Some(MonitoringSubscriptionDeserializer::deserialize(
                 "MonitoringSubscription",
@@ -5132,11 +5276,13 @@ pub struct GetOriginRequestPolicyConfigResult {
 #[allow(dead_code)]
 struct GetOriginRequestPolicyConfigResultDeserializer;
 impl GetOriginRequestPolicyConfigResultDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<GetOriginRequestPolicyConfigResult, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
+
         Ok(GetOriginRequestPolicyConfigResult {
             origin_request_policy_config: Some(OriginRequestPolicyConfigDeserializer::deserialize(
                 "OriginRequestPolicyConfig",
@@ -5165,11 +5311,13 @@ pub struct GetOriginRequestPolicyResult {
 #[allow(dead_code)]
 struct GetOriginRequestPolicyResultDeserializer;
 impl GetOriginRequestPolicyResultDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<GetOriginRequestPolicyResult, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
+
         Ok(GetOriginRequestPolicyResult {
             origin_request_policy: Some(OriginRequestPolicyDeserializer::deserialize(
                 "OriginRequestPolicy",
@@ -5198,11 +5346,13 @@ pub struct GetPublicKeyConfigResult {
 #[allow(dead_code)]
 struct GetPublicKeyConfigResultDeserializer;
 impl GetPublicKeyConfigResultDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<GetPublicKeyConfigResult, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
+
         Ok(GetPublicKeyConfigResult {
             public_key_config: Some(PublicKeyConfigDeserializer::deserialize(
                 "PublicKeyConfig",
@@ -5231,11 +5381,13 @@ pub struct GetPublicKeyResult {
 #[allow(dead_code)]
 struct GetPublicKeyResultDeserializer;
 impl GetPublicKeyResultDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<GetPublicKeyResult, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
+
         Ok(GetPublicKeyResult {
             public_key: Some(PublicKeyDeserializer::deserialize("PublicKey", stack)?),
             ..GetPublicKeyResult::default()
@@ -5283,11 +5435,12 @@ pub struct GetRealtimeLogConfigResult {
 #[allow(dead_code)]
 struct GetRealtimeLogConfigResultDeserializer;
 impl GetRealtimeLogConfigResultDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<GetRealtimeLogConfigResult, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, GetRealtimeLogConfigResult, _>(
             tag_name,
             stack,
@@ -5327,11 +5480,13 @@ pub struct GetStreamingDistributionConfigResult {
 #[allow(dead_code)]
 struct GetStreamingDistributionConfigResultDeserializer;
 impl GetStreamingDistributionConfigResultDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<GetStreamingDistributionConfigResult, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
+
         Ok(GetStreamingDistributionConfigResult {
             streaming_distribution_config: Some(
                 StreamingDistributionConfigDeserializer::deserialize(
@@ -5364,11 +5519,13 @@ pub struct GetStreamingDistributionResult {
 #[allow(dead_code)]
 struct GetStreamingDistributionResultDeserializer;
 impl GetStreamingDistributionResultDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<GetStreamingDistributionResult, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
+
         Ok(GetStreamingDistributionResult {
             streaming_distribution: Some(StreamingDistributionDeserializer::deserialize(
                 "StreamingDistribution",
@@ -5381,11 +5538,13 @@ impl GetStreamingDistributionResultDeserializer {
 #[allow(dead_code)]
 struct HeaderListDeserializer;
 impl HeaderListDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<String>, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
+
         deserialize_elements::<_, Vec<_>, _>(tag_name, stack, |name, stack, obj| {
             if name == "Name" {
                 obj.push(StringDeserializer::deserialize("Name", stack)?);
@@ -5431,11 +5590,12 @@ pub struct Headers {
 #[allow(dead_code)]
 struct HeadersDeserializer;
 impl HeadersDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Headers, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, Headers, _>(tag_name, stack, |name, stack, obj| {
             match name {
                 "Items" => {
@@ -5476,8 +5636,9 @@ impl HeadersSerializer {
 #[allow(dead_code)]
 struct HttpVersionDeserializer;
 impl HttpVersionDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
@@ -5500,16 +5661,18 @@ impl HttpVersionSerializer {
 #[allow(dead_code)]
 struct ICPRecordalStatusDeserializer;
 impl ICPRecordalStatusDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 #[allow(dead_code)]
 struct IntegerDeserializer;
 impl IntegerDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<i64, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::deserialize_primitive(tag_name, stack, |s| Ok(i64::from_str(&s).unwrap()))
     }
 }
@@ -5546,11 +5709,12 @@ pub struct Invalidation {
 #[allow(dead_code)]
 struct InvalidationDeserializer;
 impl InvalidationDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Invalidation, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, Invalidation, _>(tag_name, stack, |name, stack, obj| {
             match name {
                 "CreateTime" => {
@@ -5586,11 +5750,12 @@ pub struct InvalidationBatch {
 #[allow(dead_code)]
 struct InvalidationBatchDeserializer;
 impl InvalidationBatchDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<InvalidationBatch, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, InvalidationBatch, _>(tag_name, stack, |name, stack, obj| {
             match name {
                 "CallerReference" => {
@@ -5646,11 +5811,12 @@ pub struct InvalidationList {
 #[allow(dead_code)]
 struct InvalidationListDeserializer;
 impl InvalidationListDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<InvalidationList, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, InvalidationList, _>(tag_name, stack, |name, stack, obj| {
             match name {
                 "IsTruncated" => {
@@ -5694,11 +5860,12 @@ pub struct InvalidationSummary {
 #[allow(dead_code)]
 struct InvalidationSummaryDeserializer;
 impl InvalidationSummaryDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<InvalidationSummary, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, InvalidationSummary, _>(tag_name, stack, |name, stack, obj| {
             match name {
                 "CreateTime" => {
@@ -5719,11 +5886,13 @@ impl InvalidationSummaryDeserializer {
 #[allow(dead_code)]
 struct InvalidationSummaryListDeserializer;
 impl InvalidationSummaryListDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<InvalidationSummary>, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
+
         deserialize_elements::<_, Vec<_>, _>(tag_name, stack, |name, stack, obj| {
             if name == "InvalidationSummary" {
                 obj.push(InvalidationSummaryDeserializer::deserialize(
@@ -5749,11 +5918,12 @@ pub struct KGKeyPairIds {
 #[allow(dead_code)]
 struct KGKeyPairIdsDeserializer;
 impl KGKeyPairIdsDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<KGKeyPairIds, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, KGKeyPairIds, _>(tag_name, stack, |name, stack, obj| {
             match name {
                 "KeyGroupId" => {
@@ -5772,11 +5942,13 @@ impl KGKeyPairIdsDeserializer {
 #[allow(dead_code)]
 struct KGKeyPairIdsListDeserializer;
 impl KGKeyPairIdsListDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<KGKeyPairIds>, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
+
         deserialize_elements::<_, Vec<_>, _>(tag_name, stack, |name, stack, obj| {
             if name == "KeyGroup" {
                 obj.push(KGKeyPairIdsDeserializer::deserialize("KeyGroup", stack)?);
@@ -5802,11 +5974,12 @@ pub struct KeyGroup {
 #[allow(dead_code)]
 struct KeyGroupDeserializer;
 impl KeyGroupDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<KeyGroup, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, KeyGroup, _>(tag_name, stack, |name, stack, obj| {
             match name {
                 "Id" => {
@@ -5842,11 +6015,12 @@ pub struct KeyGroupConfig {
 #[allow(dead_code)]
 struct KeyGroupConfigDeserializer;
 impl KeyGroupConfigDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<KeyGroupConfig, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, KeyGroupConfig, _>(tag_name, stack, |name, stack, obj| {
             match name {
                 "Comment" => {
@@ -5904,11 +6078,12 @@ pub struct KeyGroupList {
 #[allow(dead_code)]
 struct KeyGroupListDeserializer;
 impl KeyGroupListDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<KeyGroupList, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, KeyGroupList, _>(tag_name, stack, |name, stack, obj| {
             match name {
                 "Items" => {
@@ -5942,11 +6117,12 @@ pub struct KeyGroupSummary {
 #[allow(dead_code)]
 struct KeyGroupSummaryDeserializer;
 impl KeyGroupSummaryDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<KeyGroupSummary, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, KeyGroupSummary, _>(tag_name, stack, |name, stack, obj| {
             match name {
                 "KeyGroup" => {
@@ -5961,11 +6137,13 @@ impl KeyGroupSummaryDeserializer {
 #[allow(dead_code)]
 struct KeyGroupSummaryListDeserializer;
 impl KeyGroupSummaryListDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<KeyGroupSummary>, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
+
         deserialize_elements::<_, Vec<_>, _>(tag_name, stack, |name, stack, obj| {
             if name == "KeyGroupSummary" {
                 obj.push(KeyGroupSummaryDeserializer::deserialize(
@@ -5982,11 +6160,13 @@ impl KeyGroupSummaryListDeserializer {
 #[allow(dead_code)]
 struct KeyPairIdListDeserializer;
 impl KeyPairIdListDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<String>, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
+
         deserialize_elements::<_, Vec<_>, _>(tag_name, stack, |name, stack, obj| {
             if name == "KeyPairId" {
                 obj.push(StringDeserializer::deserialize("KeyPairId", stack)?);
@@ -6010,11 +6190,12 @@ pub struct KeyPairIds {
 #[allow(dead_code)]
 struct KeyPairIdsDeserializer;
 impl KeyPairIdsDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<KeyPairIds, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, KeyPairIds, _>(tag_name, stack, |name, stack, obj| {
             match name {
                 "Items" => {
@@ -6045,11 +6226,12 @@ pub struct KinesisStreamConfig {
 #[allow(dead_code)]
 struct KinesisStreamConfigDeserializer;
 impl KinesisStreamConfigDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<KinesisStreamConfig, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, KinesisStreamConfig, _>(tag_name, stack, |name, stack, obj| {
             match name {
                 "RoleARN" => {
@@ -6086,8 +6268,9 @@ impl KinesisStreamConfigSerializer {
 #[allow(dead_code)]
 struct LambdaFunctionARNDeserializer;
 impl LambdaFunctionARNDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
@@ -6123,11 +6306,12 @@ pub struct LambdaFunctionAssociation {
 #[allow(dead_code)]
 struct LambdaFunctionAssociationDeserializer;
 impl LambdaFunctionAssociationDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<LambdaFunctionAssociation, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, LambdaFunctionAssociation, _>(
             tag_name,
             stack,
@@ -6180,11 +6364,13 @@ impl LambdaFunctionAssociationSerializer {
 #[allow(dead_code)]
 struct LambdaFunctionAssociationListDeserializer;
 impl LambdaFunctionAssociationListDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<LambdaFunctionAssociation>, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
+
         deserialize_elements::<_, Vec<_>, _>(tag_name, stack, |name, stack, obj| {
             if name == "LambdaFunctionAssociation" {
                 obj.push(LambdaFunctionAssociationDeserializer::deserialize(
@@ -6237,11 +6423,12 @@ pub struct LambdaFunctionAssociations {
 #[allow(dead_code)]
 struct LambdaFunctionAssociationsDeserializer;
 impl LambdaFunctionAssociationsDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<LambdaFunctionAssociations, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, LambdaFunctionAssociations, _>(
             tag_name,
             stack,
@@ -6304,11 +6491,13 @@ pub struct ListCachePoliciesResult {
 #[allow(dead_code)]
 struct ListCachePoliciesResultDeserializer;
 impl ListCachePoliciesResultDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<ListCachePoliciesResult, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
+
         Ok(ListCachePoliciesResult {
             cache_policy_list: Some(CachePolicyListDeserializer::deserialize(
                 "CachePolicyList",
@@ -6339,11 +6528,13 @@ pub struct ListCloudFrontOriginAccessIdentitiesResult {
 #[allow(dead_code)]
 struct ListCloudFrontOriginAccessIdentitiesResultDeserializer;
 impl ListCloudFrontOriginAccessIdentitiesResultDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<ListCloudFrontOriginAccessIdentitiesResult, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
+
         Ok(ListCloudFrontOriginAccessIdentitiesResult {
             cloud_front_origin_access_identity_list: Some(
                 CloudFrontOriginAccessIdentityListDeserializer::deserialize(
@@ -6376,11 +6567,13 @@ pub struct ListDistributionsByCachePolicyIdResult {
 #[allow(dead_code)]
 struct ListDistributionsByCachePolicyIdResultDeserializer;
 impl ListDistributionsByCachePolicyIdResultDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<ListDistributionsByCachePolicyIdResult, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
+
         Ok(ListDistributionsByCachePolicyIdResult {
             distribution_id_list: Some(DistributionIdListDeserializer::deserialize(
                 "DistributionIdList",
@@ -6410,11 +6603,13 @@ pub struct ListDistributionsByKeyGroupResult {
 #[allow(dead_code)]
 struct ListDistributionsByKeyGroupResultDeserializer;
 impl ListDistributionsByKeyGroupResultDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<ListDistributionsByKeyGroupResult, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
+
         Ok(ListDistributionsByKeyGroupResult {
             distribution_id_list: Some(DistributionIdListDeserializer::deserialize(
                 "DistributionIdList",
@@ -6445,11 +6640,13 @@ pub struct ListDistributionsByOriginRequestPolicyIdResult {
 #[allow(dead_code)]
 struct ListDistributionsByOriginRequestPolicyIdResultDeserializer;
 impl ListDistributionsByOriginRequestPolicyIdResultDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<ListDistributionsByOriginRequestPolicyIdResult, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
+
         Ok(ListDistributionsByOriginRequestPolicyIdResult {
             distribution_id_list: Some(DistributionIdListDeserializer::deserialize(
                 "DistributionIdList",
@@ -6509,11 +6706,13 @@ pub struct ListDistributionsByRealtimeLogConfigResult {
 #[allow(dead_code)]
 struct ListDistributionsByRealtimeLogConfigResultDeserializer;
 impl ListDistributionsByRealtimeLogConfigResultDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<ListDistributionsByRealtimeLogConfigResult, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
+
         Ok(ListDistributionsByRealtimeLogConfigResult {
             distribution_list: Some(DistributionListDeserializer::deserialize(
                 "DistributionList",
@@ -6546,11 +6745,13 @@ pub struct ListDistributionsByWebACLIdResult {
 #[allow(dead_code)]
 struct ListDistributionsByWebACLIdResultDeserializer;
 impl ListDistributionsByWebACLIdResultDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<ListDistributionsByWebACLIdResult, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
+
         Ok(ListDistributionsByWebACLIdResult {
             distribution_list: Some(DistributionListDeserializer::deserialize(
                 "DistributionList",
@@ -6581,11 +6782,13 @@ pub struct ListDistributionsResult {
 #[allow(dead_code)]
 struct ListDistributionsResultDeserializer;
 impl ListDistributionsResultDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<ListDistributionsResult, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
+
         Ok(ListDistributionsResult {
             distribution_list: Some(DistributionListDeserializer::deserialize(
                 "DistributionList",
@@ -6614,11 +6817,13 @@ pub struct ListFieldLevelEncryptionConfigsResult {
 #[allow(dead_code)]
 struct ListFieldLevelEncryptionConfigsResultDeserializer;
 impl ListFieldLevelEncryptionConfigsResultDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<ListFieldLevelEncryptionConfigsResult, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
+
         Ok(ListFieldLevelEncryptionConfigsResult {
             field_level_encryption_list: Some(FieldLevelEncryptionListDeserializer::deserialize(
                 "FieldLevelEncryptionList",
@@ -6647,11 +6852,13 @@ pub struct ListFieldLevelEncryptionProfilesResult {
 #[allow(dead_code)]
 struct ListFieldLevelEncryptionProfilesResultDeserializer;
 impl ListFieldLevelEncryptionProfilesResultDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<ListFieldLevelEncryptionProfilesResult, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
+
         Ok(ListFieldLevelEncryptionProfilesResult {
             field_level_encryption_profile_list: Some(
                 FieldLevelEncryptionProfileListDeserializer::deserialize(
@@ -6686,11 +6893,13 @@ pub struct ListInvalidationsResult {
 #[allow(dead_code)]
 struct ListInvalidationsResultDeserializer;
 impl ListInvalidationsResultDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<ListInvalidationsResult, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
+
         Ok(ListInvalidationsResult {
             invalidation_list: Some(InvalidationListDeserializer::deserialize(
                 "InvalidationList",
@@ -6719,11 +6928,13 @@ pub struct ListKeyGroupsResult {
 #[allow(dead_code)]
 struct ListKeyGroupsResultDeserializer;
 impl ListKeyGroupsResultDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<ListKeyGroupsResult, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
+
         Ok(ListKeyGroupsResult {
             key_group_list: Some(KeyGroupListDeserializer::deserialize(
                 "KeyGroupList",
@@ -6754,11 +6965,13 @@ pub struct ListOriginRequestPoliciesResult {
 #[allow(dead_code)]
 struct ListOriginRequestPoliciesResultDeserializer;
 impl ListOriginRequestPoliciesResultDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<ListOriginRequestPoliciesResult, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
+
         Ok(ListOriginRequestPoliciesResult {
             origin_request_policy_list: Some(OriginRequestPolicyListDeserializer::deserialize(
                 "OriginRequestPolicyList",
@@ -6787,11 +7000,13 @@ pub struct ListPublicKeysResult {
 #[allow(dead_code)]
 struct ListPublicKeysResultDeserializer;
 impl ListPublicKeysResultDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<ListPublicKeysResult, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
+
         Ok(ListPublicKeysResult {
             public_key_list: Some(PublicKeyListDeserializer::deserialize(
                 "PublicKeyList",
@@ -6820,11 +7035,13 @@ pub struct ListRealtimeLogConfigsResult {
 #[allow(dead_code)]
 struct ListRealtimeLogConfigsResultDeserializer;
 impl ListRealtimeLogConfigsResultDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<ListRealtimeLogConfigsResult, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
+
         Ok(ListRealtimeLogConfigsResult {
             realtime_log_configs: Some(RealtimeLogConfigsDeserializer::deserialize(
                 "RealtimeLogConfigs",
@@ -6855,11 +7072,13 @@ pub struct ListStreamingDistributionsResult {
 #[allow(dead_code)]
 struct ListStreamingDistributionsResultDeserializer;
 impl ListStreamingDistributionsResultDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<ListStreamingDistributionsResult, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
+
         Ok(ListStreamingDistributionsResult {
             streaming_distribution_list: Some(StreamingDistributionListDeserializer::deserialize(
                 "StreamingDistributionList",
@@ -6888,11 +7107,13 @@ pub struct ListTagsForResourceResult {
 #[allow(dead_code)]
 struct ListTagsForResourceResultDeserializer;
 impl ListTagsForResourceResultDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<ListTagsForResourceResult, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
+
         Ok(ListTagsForResourceResult {
             tags: TagsDeserializer::deserialize("Tags", stack)?,
             ..ListTagsForResourceResult::default()
@@ -6902,11 +7123,13 @@ impl ListTagsForResourceResultDeserializer {
 #[allow(dead_code)]
 struct LocationListDeserializer;
 impl LocationListDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<String>, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
+
         deserialize_elements::<_, Vec<_>, _>(tag_name, stack, |name, stack, obj| {
             if name == "Location" {
                 obj.push(StringDeserializer::deserialize("Location", stack)?);
@@ -6956,11 +7179,12 @@ pub struct LoggingConfig {
 #[allow(dead_code)]
 struct LoggingConfigDeserializer;
 impl LoggingConfigDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<LoggingConfig, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, LoggingConfig, _>(tag_name, stack, |name, stack, obj| {
             match name {
                 "Bucket" => {
@@ -7006,8 +7230,9 @@ impl LoggingConfigSerializer {
 #[allow(dead_code)]
 struct LongDeserializer;
 impl LongDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<i64, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::deserialize_primitive(tag_name, stack, |s| Ok(i64::from_str(&s).unwrap()))
     }
 }
@@ -7030,8 +7255,9 @@ impl LongSerializer {
 #[allow(dead_code)]
 struct MethodDeserializer;
 impl MethodDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
@@ -7054,11 +7280,13 @@ impl MethodSerializer {
 #[allow(dead_code)]
 struct MethodsListDeserializer;
 impl MethodsListDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<String>, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
+
         deserialize_elements::<_, Vec<_>, _>(tag_name, stack, |name, stack, obj| {
             if name == "Method" {
                 obj.push(MethodDeserializer::deserialize("Method", stack)?);
@@ -7093,8 +7321,9 @@ impl MethodsListSerializer {
 #[allow(dead_code)]
 struct MinimumProtocolVersionDeserializer;
 impl MinimumProtocolVersionDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
@@ -7126,11 +7355,12 @@ pub struct MonitoringSubscription {
 #[allow(dead_code)]
 struct MonitoringSubscriptionDeserializer;
 impl MonitoringSubscriptionDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<MonitoringSubscription, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, MonitoringSubscription, _>(tag_name, stack, |name, stack, obj| {
             match name {
                 "RealtimeMetricsSubscriptionConfig" => {
@@ -7198,8 +7428,9 @@ pub struct Origin {
 #[allow(dead_code)]
 struct OriginDeserializer;
 impl OriginDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<Origin, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, Origin, _>(tag_name, stack, |name, stack, obj| {
             match name {
                 "ConnectionAttempts" => {
@@ -7307,11 +7538,12 @@ pub struct OriginCustomHeader {
 #[allow(dead_code)]
 struct OriginCustomHeaderDeserializer;
 impl OriginCustomHeaderDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<OriginCustomHeader, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, OriginCustomHeader, _>(tag_name, stack, |name, stack, obj| {
             match name {
                 "HeaderName" => {
@@ -7348,11 +7580,13 @@ impl OriginCustomHeaderSerializer {
 #[allow(dead_code)]
 struct OriginCustomHeadersListDeserializer;
 impl OriginCustomHeadersListDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<OriginCustomHeader>, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
+
         deserialize_elements::<_, Vec<_>, _>(tag_name, stack, |name, stack, obj| {
             if name == "OriginCustomHeader" {
                 obj.push(OriginCustomHeaderDeserializer::deserialize(
@@ -7403,11 +7637,12 @@ pub struct OriginGroup {
 #[allow(dead_code)]
 struct OriginGroupDeserializer;
 impl OriginGroupDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<OriginGroup, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, OriginGroup, _>(tag_name, stack, |name, stack, obj| {
             match name {
                 "FailoverCriteria" => {
@@ -7464,11 +7699,12 @@ pub struct OriginGroupFailoverCriteria {
 #[allow(dead_code)]
 struct OriginGroupFailoverCriteriaDeserializer;
 impl OriginGroupFailoverCriteriaDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<OriginGroupFailoverCriteria, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, OriginGroupFailoverCriteria, _>(
             tag_name,
             stack,
@@ -7506,11 +7742,13 @@ impl OriginGroupFailoverCriteriaSerializer {
 #[allow(dead_code)]
 struct OriginGroupListDeserializer;
 impl OriginGroupListDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<OriginGroup>, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
+
         deserialize_elements::<_, Vec<_>, _>(tag_name, stack, |name, stack, obj| {
             if name == "OriginGroup" {
                 obj.push(OriginGroupDeserializer::deserialize("OriginGroup", stack)?);
@@ -7554,11 +7792,12 @@ pub struct OriginGroupMember {
 #[allow(dead_code)]
 struct OriginGroupMemberDeserializer;
 impl OriginGroupMemberDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<OriginGroupMember, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, OriginGroupMember, _>(tag_name, stack, |name, stack, obj| {
             match name {
                 "OriginId" => {
@@ -7591,11 +7830,13 @@ impl OriginGroupMemberSerializer {
 #[allow(dead_code)]
 struct OriginGroupMemberListDeserializer;
 impl OriginGroupMemberListDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<OriginGroupMember>, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
+
         deserialize_elements::<_, Vec<_>, _>(tag_name, stack, |name, stack, obj| {
             if name == "OriginGroupMember" {
                 obj.push(OriginGroupMemberDeserializer::deserialize(
@@ -7644,11 +7885,12 @@ pub struct OriginGroupMembers {
 #[allow(dead_code)]
 struct OriginGroupMembersDeserializer;
 impl OriginGroupMembersDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<OriginGroupMembers, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, OriginGroupMembers, _>(tag_name, stack, |name, stack, obj| {
             match name {
                 "Items" => {
@@ -7699,11 +7941,12 @@ pub struct OriginGroups {
 #[allow(dead_code)]
 struct OriginGroupsDeserializer;
 impl OriginGroupsDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<OriginGroups, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, OriginGroups, _>(tag_name, stack, |name, stack, obj| {
             match name {
                 "Items" => {
@@ -7744,11 +7987,13 @@ impl OriginGroupsSerializer {
 #[allow(dead_code)]
 struct OriginListDeserializer;
 impl OriginListDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<Origin>, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
+
         deserialize_elements::<_, Vec<_>, _>(tag_name, stack, |name, stack, obj| {
             if name == "Origin" {
                 obj.push(OriginDeserializer::deserialize("Origin", stack)?);
@@ -7783,8 +8028,9 @@ impl OriginListSerializer {
 #[allow(dead_code)]
 struct OriginProtocolPolicyDeserializer;
 impl OriginProtocolPolicyDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
@@ -7819,11 +8065,12 @@ pub struct OriginRequestPolicy {
 #[allow(dead_code)]
 struct OriginRequestPolicyDeserializer;
 impl OriginRequestPolicyDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<OriginRequestPolicy, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, OriginRequestPolicy, _>(tag_name, stack, |name, stack, obj| {
             match name {
                 "Id" => {
@@ -7866,11 +8113,12 @@ pub struct OriginRequestPolicyConfig {
 #[allow(dead_code)]
 struct OriginRequestPolicyConfigDeserializer;
 impl OriginRequestPolicyConfigDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<OriginRequestPolicyConfig, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, OriginRequestPolicyConfig, _>(
             tag_name,
             stack,
@@ -7949,8 +8197,9 @@ impl OriginRequestPolicyConfigSerializer {
 #[allow(dead_code)]
 struct OriginRequestPolicyCookieBehaviorDeserializer;
 impl OriginRequestPolicyCookieBehaviorDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
@@ -7983,11 +8232,12 @@ pub struct OriginRequestPolicyCookiesConfig {
 #[allow(dead_code)]
 struct OriginRequestPolicyCookiesConfigDeserializer;
 impl OriginRequestPolicyCookiesConfigDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<OriginRequestPolicyCookiesConfig, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, OriginRequestPolicyCookiesConfig, _>(
             tag_name,
             stack,
@@ -8034,8 +8284,9 @@ impl OriginRequestPolicyCookiesConfigSerializer {
 #[allow(dead_code)]
 struct OriginRequestPolicyHeaderBehaviorDeserializer;
 impl OriginRequestPolicyHeaderBehaviorDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
@@ -8068,11 +8319,12 @@ pub struct OriginRequestPolicyHeadersConfig {
 #[allow(dead_code)]
 struct OriginRequestPolicyHeadersConfigDeserializer;
 impl OriginRequestPolicyHeadersConfigDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<OriginRequestPolicyHeadersConfig, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, OriginRequestPolicyHeadersConfig, _>(
             tag_name,
             stack,
@@ -8133,11 +8385,12 @@ pub struct OriginRequestPolicyList {
 #[allow(dead_code)]
 struct OriginRequestPolicyListDeserializer;
 impl OriginRequestPolicyListDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<OriginRequestPolicyList, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, OriginRequestPolicyList, _>(
             tag_name,
             stack,
@@ -8170,8 +8423,9 @@ impl OriginRequestPolicyListDeserializer {
 #[allow(dead_code)]
 struct OriginRequestPolicyQueryStringBehaviorDeserializer;
 impl OriginRequestPolicyQueryStringBehaviorDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
@@ -8205,11 +8459,12 @@ pub struct OriginRequestPolicyQueryStringsConfig {
 #[allow(dead_code)]
 struct OriginRequestPolicyQueryStringsConfigDeserializer;
 impl OriginRequestPolicyQueryStringsConfigDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<OriginRequestPolicyQueryStringsConfig, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, OriginRequestPolicyQueryStringsConfig, _>(
             tag_name,
             stack,
@@ -8273,11 +8528,12 @@ pub struct OriginRequestPolicySummary {
 #[allow(dead_code)]
 struct OriginRequestPolicySummaryDeserializer;
 impl OriginRequestPolicySummaryDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<OriginRequestPolicySummary, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, OriginRequestPolicySummary, _>(
             tag_name,
             stack,
@@ -8303,11 +8559,13 @@ impl OriginRequestPolicySummaryDeserializer {
 #[allow(dead_code)]
 struct OriginRequestPolicySummaryListDeserializer;
 impl OriginRequestPolicySummaryListDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<OriginRequestPolicySummary>, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
+
         deserialize_elements::<_, Vec<_>, _>(tag_name, stack, |name, stack, obj| {
             if name == "OriginRequestPolicySummary" {
                 obj.push(OriginRequestPolicySummaryDeserializer::deserialize(
@@ -8324,8 +8582,9 @@ impl OriginRequestPolicySummaryListDeserializer {
 #[allow(dead_code)]
 struct OriginRequestPolicyTypeDeserializer;
 impl OriginRequestPolicyTypeDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
@@ -8359,11 +8618,12 @@ pub struct OriginShield {
 #[allow(dead_code)]
 struct OriginShieldDeserializer;
 impl OriginShieldDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<OriginShield, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, OriginShield, _>(tag_name, stack, |name, stack, obj| {
             match name {
                 "Enabled" => {
@@ -8405,8 +8665,9 @@ impl OriginShieldSerializer {
 #[allow(dead_code)]
 struct OriginShieldRegionDeserializer;
 impl OriginShieldRegionDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
@@ -8440,11 +8701,12 @@ pub struct OriginSslProtocols {
 #[allow(dead_code)]
 struct OriginSslProtocolsDeserializer;
 impl OriginSslProtocolsDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<OriginSslProtocols, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, OriginSslProtocols, _>(tag_name, stack, |name, stack, obj| {
             match name {
                 "Items" => {
@@ -8493,11 +8755,12 @@ pub struct Origins {
 #[allow(dead_code)]
 struct OriginsDeserializer;
 impl OriginsDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Origins, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, Origins, _>(tag_name, stack, |name, stack, obj| {
             match name {
                 "Items" => {
@@ -8552,11 +8815,12 @@ pub struct ParametersInCacheKeyAndForwardedToOrigin {
 #[allow(dead_code)]
 struct ParametersInCacheKeyAndForwardedToOriginDeserializer;
 impl ParametersInCacheKeyAndForwardedToOriginDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<ParametersInCacheKeyAndForwardedToOrigin, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, ParametersInCacheKeyAndForwardedToOrigin, _>(
             tag_name,
             stack,
@@ -8641,11 +8905,13 @@ impl ParametersInCacheKeyAndForwardedToOriginSerializer {
 #[allow(dead_code)]
 struct PathListDeserializer;
 impl PathListDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<String>, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
+
         deserialize_elements::<_, Vec<_>, _>(tag_name, stack, |name, stack, obj| {
             if name == "Path" {
                 obj.push(StringDeserializer::deserialize("Path", stack)?);
@@ -8691,8 +8957,9 @@ pub struct Paths {
 #[allow(dead_code)]
 struct PathsDeserializer;
 impl PathsDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<Paths, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, Paths, _>(tag_name, stack, |name, stack, obj| {
             match name {
                 "Items" => {
@@ -8733,8 +9000,9 @@ impl PathsSerializer {
 #[allow(dead_code)]
 struct PriceClassDeserializer;
 impl PriceClassDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
@@ -8769,11 +9037,12 @@ pub struct PublicKey {
 #[allow(dead_code)]
 struct PublicKeyDeserializer;
 impl PublicKeyDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<PublicKey, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, PublicKey, _>(tag_name, stack, |name, stack, obj| {
             match name {
                 "CreatedTime" => {
@@ -8810,11 +9079,12 @@ pub struct PublicKeyConfig {
 #[allow(dead_code)]
 struct PublicKeyConfigDeserializer;
 impl PublicKeyConfigDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<PublicKeyConfig, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, PublicKeyConfig, _>(tag_name, stack, |name, stack, obj| {
             match name {
                 "CallerReference" => {
@@ -8862,11 +9132,13 @@ impl PublicKeyConfigSerializer {
 #[allow(dead_code)]
 struct PublicKeyIdListDeserializer;
 impl PublicKeyIdListDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<String>, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
+
         deserialize_elements::<_, Vec<_>, _>(tag_name, stack, |name, stack, obj| {
             if name == "PublicKey" {
                 obj.push(StringDeserializer::deserialize("PublicKey", stack)?);
@@ -8915,11 +9187,12 @@ pub struct PublicKeyList {
 #[allow(dead_code)]
 struct PublicKeyListDeserializer;
 impl PublicKeyListDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<PublicKeyList, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, PublicKeyList, _>(tag_name, stack, |name, stack, obj| {
             match name {
                 "Items" => {
@@ -8961,11 +9234,12 @@ pub struct PublicKeySummary {
 #[allow(dead_code)]
 struct PublicKeySummaryDeserializer;
 impl PublicKeySummaryDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<PublicKeySummary, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, PublicKeySummary, _>(tag_name, stack, |name, stack, obj| {
             match name {
                 "Comment" => {
@@ -8992,11 +9266,13 @@ impl PublicKeySummaryDeserializer {
 #[allow(dead_code)]
 struct PublicKeySummaryListDeserializer;
 impl PublicKeySummaryListDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<PublicKeySummary>, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
+
         deserialize_elements::<_, Vec<_>, _>(tag_name, stack, |name, stack, obj| {
             if name == "PublicKeySummary" {
                 obj.push(PublicKeySummaryDeserializer::deserialize(
@@ -9024,11 +9300,12 @@ pub struct QueryArgProfile {
 #[allow(dead_code)]
 struct QueryArgProfileDeserializer;
 impl QueryArgProfileDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<QueryArgProfile, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, QueryArgProfile, _>(tag_name, stack, |name, stack, obj| {
             match name {
                 "ProfileId" => {
@@ -9076,11 +9353,12 @@ pub struct QueryArgProfileConfig {
 #[allow(dead_code)]
 struct QueryArgProfileConfigDeserializer;
 impl QueryArgProfileConfigDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<QueryArgProfileConfig, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, QueryArgProfileConfig, _>(tag_name, stack, |name, stack, obj| {
             match name {
                 "ForwardWhenQueryArgProfileIsUnknown" => {
@@ -9130,11 +9408,13 @@ impl QueryArgProfileConfigSerializer {
 #[allow(dead_code)]
 struct QueryArgProfileListDeserializer;
 impl QueryArgProfileListDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<QueryArgProfile>, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
+
         deserialize_elements::<_, Vec<_>, _>(tag_name, stack, |name, stack, obj| {
             if name == "QueryArgProfile" {
                 obj.push(QueryArgProfileDeserializer::deserialize(
@@ -9183,11 +9463,12 @@ pub struct QueryArgProfiles {
 #[allow(dead_code)]
 struct QueryArgProfilesDeserializer;
 impl QueryArgProfilesDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<QueryArgProfiles, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, QueryArgProfiles, _>(tag_name, stack, |name, stack, obj| {
             match name {
                 "Items" => {
@@ -9248,11 +9529,12 @@ pub struct QueryStringNames {
 #[allow(dead_code)]
 struct QueryStringNamesDeserializer;
 impl QueryStringNamesDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<QueryStringNames, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, QueryStringNames, _>(tag_name, stack, |name, stack, obj| {
             match name {
                 "Items" => {
@@ -9293,11 +9575,13 @@ impl QueryStringNamesSerializer {
 #[allow(dead_code)]
 struct QueryStringNamesListDeserializer;
 impl QueryStringNamesListDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<String>, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
+
         deserialize_elements::<_, Vec<_>, _>(tag_name, stack, |name, stack, obj| {
             if name == "Name" {
                 obj.push(StringDeserializer::deserialize("Name", stack)?);
@@ -9348,11 +9632,12 @@ pub struct RealtimeLogConfig {
 #[allow(dead_code)]
 struct RealtimeLogConfigDeserializer;
 impl RealtimeLogConfigDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<RealtimeLogConfig, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, RealtimeLogConfig, _>(tag_name, stack, |name, stack, obj| {
             match name {
                 "ARN" => {
@@ -9381,11 +9666,13 @@ impl RealtimeLogConfigDeserializer {
 #[allow(dead_code)]
 struct RealtimeLogConfigListDeserializer;
 impl RealtimeLogConfigListDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<RealtimeLogConfig>, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
+
         deserialize_elements::<_, Vec<_>, _>(tag_name, stack, |name, stack, obj| {
             if name == "member" {
                 obj.push(RealtimeLogConfigDeserializer::deserialize("member", stack)?);
@@ -9415,11 +9702,12 @@ pub struct RealtimeLogConfigs {
 #[allow(dead_code)]
 struct RealtimeLogConfigsDeserializer;
 impl RealtimeLogConfigsDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<RealtimeLogConfigs, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, RealtimeLogConfigs, _>(tag_name, stack, |name, stack, obj| {
             match name {
                 "IsTruncated" => {
@@ -9457,11 +9745,12 @@ pub struct RealtimeMetricsSubscriptionConfig {
 #[allow(dead_code)]
 struct RealtimeMetricsSubscriptionConfigDeserializer;
 impl RealtimeMetricsSubscriptionConfigDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<RealtimeMetricsSubscriptionConfig, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, RealtimeMetricsSubscriptionConfig, _>(
             tag_name,
             stack,
@@ -9506,8 +9795,9 @@ impl RealtimeMetricsSubscriptionConfigSerializer {
 #[allow(dead_code)]
 struct RealtimeMetricsSubscriptionStatusDeserializer;
 impl RealtimeMetricsSubscriptionStatusDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
@@ -9554,11 +9844,12 @@ pub struct Restrictions {
 #[allow(dead_code)]
 struct RestrictionsDeserializer;
 impl RestrictionsDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Restrictions, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, Restrictions, _>(tag_name, stack, |name, stack, obj| {
             match name {
                 "GeoRestriction" => {
@@ -9603,11 +9894,12 @@ pub struct S3Origin {
 #[allow(dead_code)]
 struct S3OriginDeserializer;
 impl S3OriginDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<S3Origin, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, S3Origin, _>(tag_name, stack, |name, stack, obj| {
             match name {
                 "DomainName" => {
@@ -9658,11 +9950,12 @@ pub struct S3OriginConfig {
 #[allow(dead_code)]
 struct S3OriginConfigDeserializer;
 impl S3OriginConfigDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<S3OriginConfig, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, S3OriginConfig, _>(tag_name, stack, |name, stack, obj| {
             match name {
                 "OriginAccessIdentity" => {
@@ -9700,8 +9993,9 @@ impl S3OriginConfigSerializer {
 #[allow(dead_code)]
 struct SSLSupportMethodDeserializer;
 impl SSLSupportMethodDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
@@ -9734,8 +10028,9 @@ pub struct Signer {
 #[allow(dead_code)]
 struct SignerDeserializer;
 impl SignerDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<Signer, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, Signer, _>(tag_name, stack, |name, stack, obj| {
             match name {
                 "AwsAccountNumber" => {
@@ -9755,11 +10050,13 @@ impl SignerDeserializer {
 #[allow(dead_code)]
 struct SignerListDeserializer;
 impl SignerListDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<Signer>, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
+
         deserialize_elements::<_, Vec<_>, _>(tag_name, stack, |name, stack, obj| {
             if name == "Signer" {
                 obj.push(SignerDeserializer::deserialize("Signer", stack)?);
@@ -9773,8 +10070,9 @@ impl SignerListDeserializer {
 #[allow(dead_code)]
 struct SslProtocolDeserializer;
 impl SslProtocolDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
@@ -9797,11 +10095,13 @@ impl SslProtocolSerializer {
 #[allow(dead_code)]
 struct SslProtocolsListDeserializer;
 impl SslProtocolsListDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<String>, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
+
         deserialize_elements::<_, Vec<_>, _>(tag_name, stack, |name, stack, obj| {
             if name == "SslProtocol" {
                 obj.push(SslProtocolDeserializer::deserialize("SslProtocol", stack)?);
@@ -9836,11 +10136,13 @@ impl SslProtocolsListSerializer {
 #[allow(dead_code)]
 struct StatusCodeListDeserializer;
 impl StatusCodeListDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<i64>, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
+
         deserialize_elements::<_, Vec<_>, _>(tag_name, stack, |name, stack, obj| {
             if name == "StatusCode" {
                 obj.push(IntegerDeserializer::deserialize("StatusCode", stack)?);
@@ -9886,11 +10188,12 @@ pub struct StatusCodes {
 #[allow(dead_code)]
 struct StatusCodesDeserializer;
 impl StatusCodesDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<StatusCodes, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, StatusCodes, _>(tag_name, stack, |name, stack, obj| {
             match name {
                 "Items" => {
@@ -9948,11 +10251,12 @@ pub struct StreamingDistribution {
 #[allow(dead_code)]
 struct StreamingDistributionDeserializer;
 impl StreamingDistributionDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<StreamingDistribution, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, StreamingDistribution, _>(tag_name, stack, |name, stack, obj| {
             match name {
                 "ARN" => {
@@ -10018,11 +10322,12 @@ pub struct StreamingDistributionConfig {
 #[allow(dead_code)]
 struct StreamingDistributionConfigDeserializer;
 impl StreamingDistributionConfigDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<StreamingDistributionConfig, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, StreamingDistributionConfig, _>(
             tag_name,
             stack,
@@ -10148,11 +10453,12 @@ pub struct StreamingDistributionList {
 #[allow(dead_code)]
 struct StreamingDistributionListDeserializer;
 impl StreamingDistributionListDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<StreamingDistributionList, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, StreamingDistributionList, _>(
             tag_name,
             stack,
@@ -10219,11 +10525,12 @@ pub struct StreamingDistributionSummary {
 #[allow(dead_code)]
 struct StreamingDistributionSummaryDeserializer;
 impl StreamingDistributionSummaryDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<StreamingDistributionSummary, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, StreamingDistributionSummary, _>(
             tag_name,
             stack,
@@ -10274,11 +10581,13 @@ impl StreamingDistributionSummaryDeserializer {
 #[allow(dead_code)]
 struct StreamingDistributionSummaryListDeserializer;
 impl StreamingDistributionSummaryListDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<StreamingDistributionSummary>, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
+
         deserialize_elements::<_, Vec<_>, _>(tag_name, stack, |name, stack, obj| {
             if name == "StreamingDistributionSummary" {
                 obj.push(StreamingDistributionSummaryDeserializer::deserialize(
@@ -10308,11 +10617,12 @@ pub struct StreamingLoggingConfig {
 #[allow(dead_code)]
 struct StreamingLoggingConfigDeserializer;
 impl StreamingLoggingConfigDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<StreamingLoggingConfig, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, StreamingLoggingConfig, _>(tag_name, stack, |name, stack, obj| {
             match name {
                 "Bucket" => {
@@ -10353,8 +10663,9 @@ impl StreamingLoggingConfigSerializer {
 #[allow(dead_code)]
 struct StringDeserializer;
 impl StringDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
@@ -10388,8 +10699,9 @@ pub struct Tag {
 #[allow(dead_code)]
 struct TagDeserializer;
 impl TagDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<Tag, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, Tag, _>(tag_name, stack, |name, stack, obj| {
             match name {
                 "Key" => {
@@ -10428,8 +10740,9 @@ impl TagSerializer {
 #[allow(dead_code)]
 struct TagKeyDeserializer;
 impl TagKeyDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
@@ -10499,11 +10812,13 @@ impl TagKeysSerializer {
 #[allow(dead_code)]
 struct TagListDeserializer;
 impl TagListDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<Tag>, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
+
         deserialize_elements::<_, Vec<_>, _>(tag_name, stack, |name, stack, obj| {
             if name == "Tag" {
                 obj.push(TagDeserializer::deserialize("Tag", stack)?);
@@ -10548,8 +10863,9 @@ pub struct TagResourceRequest {
 #[allow(dead_code)]
 struct TagValueDeserializer;
 impl TagValueDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
@@ -10581,8 +10897,9 @@ pub struct Tags {
 #[allow(dead_code)]
 struct TagsDeserializer;
 impl TagsDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<Tags, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, Tags, _>(tag_name, stack, |name, stack, obj| {
             match name {
                 "Items" => {
@@ -10619,19 +10936,22 @@ impl TagsSerializer {
 #[allow(dead_code)]
 struct TimestampDeserializer;
 impl TimestampDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 #[allow(dead_code)]
 struct TrustedKeyGroupIdListDeserializer;
 impl TrustedKeyGroupIdListDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<String>, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
+
         deserialize_elements::<_, Vec<_>, _>(tag_name, stack, |name, stack, obj| {
             if name == "KeyGroup" {
                 obj.push(StringDeserializer::deserialize("KeyGroup", stack)?);
@@ -10679,11 +10999,12 @@ pub struct TrustedKeyGroups {
 #[allow(dead_code)]
 struct TrustedKeyGroupsDeserializer;
 impl TrustedKeyGroupsDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<TrustedKeyGroups, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, TrustedKeyGroups, _>(tag_name, stack, |name, stack, obj| {
             match name {
                 "Enabled" => {
@@ -10741,11 +11062,12 @@ pub struct TrustedSigners {
 #[allow(dead_code)]
 struct TrustedSignersDeserializer;
 impl TrustedSignersDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<TrustedSigners, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, TrustedSigners, _>(tag_name, stack, |name, stack, obj| {
             match name {
                 "Enabled" => {
@@ -10820,11 +11142,13 @@ pub struct UpdateCachePolicyResult {
 #[allow(dead_code)]
 struct UpdateCachePolicyResultDeserializer;
 impl UpdateCachePolicyResultDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<UpdateCachePolicyResult, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
+
         Ok(UpdateCachePolicyResult {
             cache_policy: Some(CachePolicyDeserializer::deserialize("CachePolicy", stack)?),
             ..UpdateCachePolicyResult::default()
@@ -10856,11 +11180,13 @@ pub struct UpdateCloudFrontOriginAccessIdentityResult {
 #[allow(dead_code)]
 struct UpdateCloudFrontOriginAccessIdentityResultDeserializer;
 impl UpdateCloudFrontOriginAccessIdentityResultDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<UpdateCloudFrontOriginAccessIdentityResult, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
+
         Ok(UpdateCloudFrontOriginAccessIdentityResult {
             cloud_front_origin_access_identity: Some(
                 CloudFrontOriginAccessIdentityDeserializer::deserialize(
@@ -10897,11 +11223,13 @@ pub struct UpdateDistributionResult {
 #[allow(dead_code)]
 struct UpdateDistributionResultDeserializer;
 impl UpdateDistributionResultDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<UpdateDistributionResult, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
+
         Ok(UpdateDistributionResult {
             distribution: Some(DistributionDeserializer::deserialize(
                 "Distribution",
@@ -10934,11 +11262,13 @@ pub struct UpdateFieldLevelEncryptionConfigResult {
 #[allow(dead_code)]
 struct UpdateFieldLevelEncryptionConfigResultDeserializer;
 impl UpdateFieldLevelEncryptionConfigResultDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<UpdateFieldLevelEncryptionConfigResult, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
+
         Ok(UpdateFieldLevelEncryptionConfigResult {
             field_level_encryption: Some(FieldLevelEncryptionDeserializer::deserialize(
                 "FieldLevelEncryption",
@@ -10971,11 +11301,13 @@ pub struct UpdateFieldLevelEncryptionProfileResult {
 #[allow(dead_code)]
 struct UpdateFieldLevelEncryptionProfileResultDeserializer;
 impl UpdateFieldLevelEncryptionProfileResultDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<UpdateFieldLevelEncryptionProfileResult, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
+
         Ok(UpdateFieldLevelEncryptionProfileResult {
             field_level_encryption_profile: Some(
                 FieldLevelEncryptionProfileDeserializer::deserialize(
@@ -11010,11 +11342,13 @@ pub struct UpdateKeyGroupResult {
 #[allow(dead_code)]
 struct UpdateKeyGroupResultDeserializer;
 impl UpdateKeyGroupResultDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<UpdateKeyGroupResult, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
+
         Ok(UpdateKeyGroupResult {
             key_group: Some(KeyGroupDeserializer::deserialize("KeyGroup", stack)?),
             ..UpdateKeyGroupResult::default()
@@ -11044,11 +11378,13 @@ pub struct UpdateOriginRequestPolicyResult {
 #[allow(dead_code)]
 struct UpdateOriginRequestPolicyResultDeserializer;
 impl UpdateOriginRequestPolicyResultDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<UpdateOriginRequestPolicyResult, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
+
         Ok(UpdateOriginRequestPolicyResult {
             origin_request_policy: Some(OriginRequestPolicyDeserializer::deserialize(
                 "OriginRequestPolicy",
@@ -11081,11 +11417,13 @@ pub struct UpdatePublicKeyResult {
 #[allow(dead_code)]
 struct UpdatePublicKeyResultDeserializer;
 impl UpdatePublicKeyResultDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<UpdatePublicKeyResult, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
+
         Ok(UpdatePublicKeyResult {
             public_key: Some(PublicKeyDeserializer::deserialize("PublicKey", stack)?),
             ..UpdatePublicKeyResult::default()
@@ -11148,11 +11486,12 @@ pub struct UpdateRealtimeLogConfigResult {
 #[allow(dead_code)]
 struct UpdateRealtimeLogConfigResultDeserializer;
 impl UpdateRealtimeLogConfigResultDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<UpdateRealtimeLogConfigResult, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, UpdateRealtimeLogConfigResult, _>(
             tag_name,
             stack,
@@ -11196,11 +11535,13 @@ pub struct UpdateStreamingDistributionResult {
 #[allow(dead_code)]
 struct UpdateStreamingDistributionResultDeserializer;
 impl UpdateStreamingDistributionResultDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<UpdateStreamingDistributionResult, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
+
         Ok(UpdateStreamingDistributionResult {
             streaming_distribution: Some(StreamingDistributionDeserializer::deserialize(
                 "StreamingDistribution",
@@ -11230,11 +11571,12 @@ pub struct ViewerCertificate {
 #[allow(dead_code)]
 struct ViewerCertificateDeserializer;
 impl ViewerCertificateDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<ViewerCertificate, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         deserialize_elements::<_, ViewerCertificate, _>(tag_name, stack, |name, stack, obj| {
             match name {
                 "ACMCertificateArn" => {
@@ -11305,8 +11647,9 @@ impl ViewerCertificateSerializer {
 #[allow(dead_code)]
 struct ViewerProtocolPolicyDeserializer;
 impl ViewerProtocolPolicyDeserializer {
-    #[allow(dead_code, unused_variables)]
+    #[allow(dead_code, unused_variables, clippy::needless_update)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
+        #![allow(clippy::field_reassign_with_default)]
         xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
@@ -11353,55 +11696,62 @@ impl CreateCachePolicyError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    "AccessDenied" => {
-                        return RusotoError::Service(CreateCachePolicyError::AccessDenied(
-                            parsed_error.message,
-                        ))
-                    }
-                    "CachePolicyAlreadyExists" => {
-                        return RusotoError::Service(
-                            CreateCachePolicyError::CachePolicyAlreadyExists(parsed_error.message),
-                        )
-                    }
-                    "InconsistentQuantities" => {
-                        return RusotoError::Service(
-                            CreateCachePolicyError::InconsistentQuantities(parsed_error.message),
-                        )
-                    }
-                    "InvalidArgument" => {
-                        return RusotoError::Service(CreateCachePolicyError::InvalidArgument(
-                            parsed_error.message,
-                        ))
-                    }
-                    "TooManyCachePolicies" => {
-                        return RusotoError::Service(CreateCachePolicyError::TooManyCachePolicies(
-                            parsed_error.message,
-                        ))
-                    }
-                    "TooManyCookiesInCachePolicy" => {
-                        return RusotoError::Service(
-                            CreateCachePolicyError::TooManyCookiesInCachePolicy(
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {
+                        "AccessDenied" => {
+                            return RusotoError::Service(CreateCachePolicyError::AccessDenied(
                                 parsed_error.message,
-                            ),
-                        )
-                    }
-                    "TooManyHeadersInCachePolicy" => {
-                        return RusotoError::Service(
-                            CreateCachePolicyError::TooManyHeadersInCachePolicy(
+                            ))
+                        }
+                        "CachePolicyAlreadyExists" => {
+                            return RusotoError::Service(
+                                CreateCachePolicyError::CachePolicyAlreadyExists(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "InconsistentQuantities" => {
+                            return RusotoError::Service(
+                                CreateCachePolicyError::InconsistentQuantities(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "InvalidArgument" => {
+                            return RusotoError::Service(CreateCachePolicyError::InvalidArgument(
                                 parsed_error.message,
-                            ),
-                        )
+                            ))
+                        }
+                        "TooManyCachePolicies" => {
+                            return RusotoError::Service(
+                                CreateCachePolicyError::TooManyCachePolicies(parsed_error.message),
+                            )
+                        }
+                        "TooManyCookiesInCachePolicy" => {
+                            return RusotoError::Service(
+                                CreateCachePolicyError::TooManyCookiesInCachePolicy(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "TooManyHeadersInCachePolicy" => {
+                            return RusotoError::Service(
+                                CreateCachePolicyError::TooManyHeadersInCachePolicy(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "TooManyQueryStringsInCachePolicy" => {
+                            return RusotoError::Service(
+                                CreateCachePolicyError::TooManyQueryStringsInCachePolicy(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        _ => {}
                     }
-                    "TooManyQueryStringsInCachePolicy" => {
-                        return RusotoError::Service(
-                            CreateCachePolicyError::TooManyQueryStringsInCachePolicy(
-                                parsed_error.message,
-                            ),
-                        )
-                    }
-                    _ => {}
                 }
             }
         }
@@ -11461,10 +11811,13 @@ impl CreateCloudFrontOriginAccessIdentityError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                                    "CloudFrontOriginAccessIdentityAlreadyExists" => return RusotoError::Service(CreateCloudFrontOriginAccessIdentityError::CloudFrontOriginAccessIdentityAlreadyExists(parsed_error.message)),"InconsistentQuantities" => return RusotoError::Service(CreateCloudFrontOriginAccessIdentityError::InconsistentQuantities(parsed_error.message)),"InvalidArgument" => return RusotoError::Service(CreateCloudFrontOriginAccessIdentityError::InvalidArgument(parsed_error.message)),"MissingBody" => return RusotoError::Service(CreateCloudFrontOriginAccessIdentityError::MissingBody(parsed_error.message)),"TooManyCloudFrontOriginAccessIdentities" => return RusotoError::Service(CreateCloudFrontOriginAccessIdentityError::TooManyCloudFrontOriginAccessIdentities(parsed_error.message)),_ => {}
-                                }
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {
+                        "CloudFrontOriginAccessIdentityAlreadyExists" => return RusotoError::Service(CreateCloudFrontOriginAccessIdentityError::CloudFrontOriginAccessIdentityAlreadyExists(parsed_error.message)),"InconsistentQuantities" => return RusotoError::Service(CreateCloudFrontOriginAccessIdentityError::InconsistentQuantities(parsed_error.message)),"InvalidArgument" => return RusotoError::Service(CreateCloudFrontOriginAccessIdentityError::InvalidArgument(parsed_error.message)),"MissingBody" => return RusotoError::Service(CreateCloudFrontOriginAccessIdentityError::MissingBody(parsed_error.message)),"TooManyCloudFrontOriginAccessIdentities" => return RusotoError::Service(CreateCloudFrontOriginAccessIdentityError::TooManyCloudFrontOriginAccessIdentities(parsed_error.message)),_ => {}
+                    }
+                }
             }
         }
         RusotoError::Unknown(res)
@@ -11606,10 +11959,13 @@ impl CreateDistributionError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                                    "AccessDenied" => return RusotoError::Service(CreateDistributionError::AccessDenied(parsed_error.message)),"CNAMEAlreadyExists" => return RusotoError::Service(CreateDistributionError::CNAMEAlreadyExists(parsed_error.message)),"DistributionAlreadyExists" => return RusotoError::Service(CreateDistributionError::DistributionAlreadyExists(parsed_error.message)),"IllegalFieldLevelEncryptionConfigAssociationWithCacheBehavior" => return RusotoError::Service(CreateDistributionError::IllegalFieldLevelEncryptionConfigAssociationWithCacheBehavior(parsed_error.message)),"InconsistentQuantities" => return RusotoError::Service(CreateDistributionError::InconsistentQuantities(parsed_error.message)),"InvalidArgument" => return RusotoError::Service(CreateDistributionError::InvalidArgument(parsed_error.message)),"InvalidDefaultRootObject" => return RusotoError::Service(CreateDistributionError::InvalidDefaultRootObject(parsed_error.message)),"InvalidErrorCode" => return RusotoError::Service(CreateDistributionError::InvalidErrorCode(parsed_error.message)),"InvalidForwardCookies" => return RusotoError::Service(CreateDistributionError::InvalidForwardCookies(parsed_error.message)),"InvalidGeoRestrictionParameter" => return RusotoError::Service(CreateDistributionError::InvalidGeoRestrictionParameter(parsed_error.message)),"InvalidHeadersForS3Origin" => return RusotoError::Service(CreateDistributionError::InvalidHeadersForS3Origin(parsed_error.message)),"InvalidLambdaFunctionAssociation" => return RusotoError::Service(CreateDistributionError::InvalidLambdaFunctionAssociation(parsed_error.message)),"InvalidLocationCode" => return RusotoError::Service(CreateDistributionError::InvalidLocationCode(parsed_error.message)),"InvalidMinimumProtocolVersion" => return RusotoError::Service(CreateDistributionError::InvalidMinimumProtocolVersion(parsed_error.message)),"InvalidOrigin" => return RusotoError::Service(CreateDistributionError::InvalidOrigin(parsed_error.message)),"InvalidOriginAccessIdentity" => return RusotoError::Service(CreateDistributionError::InvalidOriginAccessIdentity(parsed_error.message)),"InvalidOriginKeepaliveTimeout" => return RusotoError::Service(CreateDistributionError::InvalidOriginKeepaliveTimeout(parsed_error.message)),"InvalidOriginReadTimeout" => return RusotoError::Service(CreateDistributionError::InvalidOriginReadTimeout(parsed_error.message)),"InvalidProtocolSettings" => return RusotoError::Service(CreateDistributionError::InvalidProtocolSettings(parsed_error.message)),"InvalidQueryStringParameters" => return RusotoError::Service(CreateDistributionError::InvalidQueryStringParameters(parsed_error.message)),"InvalidRelativePath" => return RusotoError::Service(CreateDistributionError::InvalidRelativePath(parsed_error.message)),"InvalidRequiredProtocol" => return RusotoError::Service(CreateDistributionError::InvalidRequiredProtocol(parsed_error.message)),"InvalidResponseCode" => return RusotoError::Service(CreateDistributionError::InvalidResponseCode(parsed_error.message)),"InvalidTTLOrder" => return RusotoError::Service(CreateDistributionError::InvalidTTLOrder(parsed_error.message)),"InvalidViewerCertificate" => return RusotoError::Service(CreateDistributionError::InvalidViewerCertificate(parsed_error.message)),"InvalidWebACLId" => return RusotoError::Service(CreateDistributionError::InvalidWebACLId(parsed_error.message)),"MissingBody" => return RusotoError::Service(CreateDistributionError::MissingBody(parsed_error.message)),"NoSuchCachePolicy" => return RusotoError::Service(CreateDistributionError::NoSuchCachePolicy(parsed_error.message)),"NoSuchFieldLevelEncryptionConfig" => return RusotoError::Service(CreateDistributionError::NoSuchFieldLevelEncryptionConfig(parsed_error.message)),"NoSuchOrigin" => return RusotoError::Service(CreateDistributionError::NoSuchOrigin(parsed_error.message)),"NoSuchOriginRequestPolicy" => return RusotoError::Service(CreateDistributionError::NoSuchOriginRequestPolicy(parsed_error.message)),"TooManyCacheBehaviors" => return RusotoError::Service(CreateDistributionError::TooManyCacheBehaviors(parsed_error.message)),"TooManyCertificates" => return RusotoError::Service(CreateDistributionError::TooManyCertificates(parsed_error.message)),"TooManyCookieNamesInWhiteList" => return RusotoError::Service(CreateDistributionError::TooManyCookieNamesInWhiteList(parsed_error.message)),"TooManyDistributionCNAMEs" => return RusotoError::Service(CreateDistributionError::TooManyDistributionCNAMEs(parsed_error.message)),"TooManyDistributions" => return RusotoError::Service(CreateDistributionError::TooManyDistributions(parsed_error.message)),"TooManyDistributionsAssociatedToCachePolicy" => return RusotoError::Service(CreateDistributionError::TooManyDistributionsAssociatedToCachePolicy(parsed_error.message)),"TooManyDistributionsAssociatedToFieldLevelEncryptionConfig" => return RusotoError::Service(CreateDistributionError::TooManyDistributionsAssociatedToFieldLevelEncryptionConfig(parsed_error.message)),"TooManyDistributionsAssociatedToKeyGroup" => return RusotoError::Service(CreateDistributionError::TooManyDistributionsAssociatedToKeyGroup(parsed_error.message)),"TooManyDistributionsAssociatedToOriginRequestPolicy" => return RusotoError::Service(CreateDistributionError::TooManyDistributionsAssociatedToOriginRequestPolicy(parsed_error.message)),"TooManyDistributionsWithLambdaAssociations" => return RusotoError::Service(CreateDistributionError::TooManyDistributionsWithLambdaAssociations(parsed_error.message)),"TooManyDistributionsWithSingleFunctionARN" => return RusotoError::Service(CreateDistributionError::TooManyDistributionsWithSingleFunctionARN(parsed_error.message)),"TooManyHeadersInForwardedValues" => return RusotoError::Service(CreateDistributionError::TooManyHeadersInForwardedValues(parsed_error.message)),"TooManyKeyGroupsAssociatedToDistribution" => return RusotoError::Service(CreateDistributionError::TooManyKeyGroupsAssociatedToDistribution(parsed_error.message)),"TooManyLambdaFunctionAssociations" => return RusotoError::Service(CreateDistributionError::TooManyLambdaFunctionAssociations(parsed_error.message)),"TooManyOriginCustomHeaders" => return RusotoError::Service(CreateDistributionError::TooManyOriginCustomHeaders(parsed_error.message)),"TooManyOriginGroupsPerDistribution" => return RusotoError::Service(CreateDistributionError::TooManyOriginGroupsPerDistribution(parsed_error.message)),"TooManyOrigins" => return RusotoError::Service(CreateDistributionError::TooManyOrigins(parsed_error.message)),"TooManyQueryStringParameters" => return RusotoError::Service(CreateDistributionError::TooManyQueryStringParameters(parsed_error.message)),"TooManyTrustedSigners" => return RusotoError::Service(CreateDistributionError::TooManyTrustedSigners(parsed_error.message)),"TrustedKeyGroupDoesNotExist" => return RusotoError::Service(CreateDistributionError::TrustedKeyGroupDoesNotExist(parsed_error.message)),"TrustedSignerDoesNotExist" => return RusotoError::Service(CreateDistributionError::TrustedSignerDoesNotExist(parsed_error.message)),_ => {}
-                                }
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {
+                        "AccessDenied" => return RusotoError::Service(CreateDistributionError::AccessDenied(parsed_error.message)),"CNAMEAlreadyExists" => return RusotoError::Service(CreateDistributionError::CNAMEAlreadyExists(parsed_error.message)),"DistributionAlreadyExists" => return RusotoError::Service(CreateDistributionError::DistributionAlreadyExists(parsed_error.message)),"IllegalFieldLevelEncryptionConfigAssociationWithCacheBehavior" => return RusotoError::Service(CreateDistributionError::IllegalFieldLevelEncryptionConfigAssociationWithCacheBehavior(parsed_error.message)),"InconsistentQuantities" => return RusotoError::Service(CreateDistributionError::InconsistentQuantities(parsed_error.message)),"InvalidArgument" => return RusotoError::Service(CreateDistributionError::InvalidArgument(parsed_error.message)),"InvalidDefaultRootObject" => return RusotoError::Service(CreateDistributionError::InvalidDefaultRootObject(parsed_error.message)),"InvalidErrorCode" => return RusotoError::Service(CreateDistributionError::InvalidErrorCode(parsed_error.message)),"InvalidForwardCookies" => return RusotoError::Service(CreateDistributionError::InvalidForwardCookies(parsed_error.message)),"InvalidGeoRestrictionParameter" => return RusotoError::Service(CreateDistributionError::InvalidGeoRestrictionParameter(parsed_error.message)),"InvalidHeadersForS3Origin" => return RusotoError::Service(CreateDistributionError::InvalidHeadersForS3Origin(parsed_error.message)),"InvalidLambdaFunctionAssociation" => return RusotoError::Service(CreateDistributionError::InvalidLambdaFunctionAssociation(parsed_error.message)),"InvalidLocationCode" => return RusotoError::Service(CreateDistributionError::InvalidLocationCode(parsed_error.message)),"InvalidMinimumProtocolVersion" => return RusotoError::Service(CreateDistributionError::InvalidMinimumProtocolVersion(parsed_error.message)),"InvalidOrigin" => return RusotoError::Service(CreateDistributionError::InvalidOrigin(parsed_error.message)),"InvalidOriginAccessIdentity" => return RusotoError::Service(CreateDistributionError::InvalidOriginAccessIdentity(parsed_error.message)),"InvalidOriginKeepaliveTimeout" => return RusotoError::Service(CreateDistributionError::InvalidOriginKeepaliveTimeout(parsed_error.message)),"InvalidOriginReadTimeout" => return RusotoError::Service(CreateDistributionError::InvalidOriginReadTimeout(parsed_error.message)),"InvalidProtocolSettings" => return RusotoError::Service(CreateDistributionError::InvalidProtocolSettings(parsed_error.message)),"InvalidQueryStringParameters" => return RusotoError::Service(CreateDistributionError::InvalidQueryStringParameters(parsed_error.message)),"InvalidRelativePath" => return RusotoError::Service(CreateDistributionError::InvalidRelativePath(parsed_error.message)),"InvalidRequiredProtocol" => return RusotoError::Service(CreateDistributionError::InvalidRequiredProtocol(parsed_error.message)),"InvalidResponseCode" => return RusotoError::Service(CreateDistributionError::InvalidResponseCode(parsed_error.message)),"InvalidTTLOrder" => return RusotoError::Service(CreateDistributionError::InvalidTTLOrder(parsed_error.message)),"InvalidViewerCertificate" => return RusotoError::Service(CreateDistributionError::InvalidViewerCertificate(parsed_error.message)),"InvalidWebACLId" => return RusotoError::Service(CreateDistributionError::InvalidWebACLId(parsed_error.message)),"MissingBody" => return RusotoError::Service(CreateDistributionError::MissingBody(parsed_error.message)),"NoSuchCachePolicy" => return RusotoError::Service(CreateDistributionError::NoSuchCachePolicy(parsed_error.message)),"NoSuchFieldLevelEncryptionConfig" => return RusotoError::Service(CreateDistributionError::NoSuchFieldLevelEncryptionConfig(parsed_error.message)),"NoSuchOrigin" => return RusotoError::Service(CreateDistributionError::NoSuchOrigin(parsed_error.message)),"NoSuchOriginRequestPolicy" => return RusotoError::Service(CreateDistributionError::NoSuchOriginRequestPolicy(parsed_error.message)),"TooManyCacheBehaviors" => return RusotoError::Service(CreateDistributionError::TooManyCacheBehaviors(parsed_error.message)),"TooManyCertificates" => return RusotoError::Service(CreateDistributionError::TooManyCertificates(parsed_error.message)),"TooManyCookieNamesInWhiteList" => return RusotoError::Service(CreateDistributionError::TooManyCookieNamesInWhiteList(parsed_error.message)),"TooManyDistributionCNAMEs" => return RusotoError::Service(CreateDistributionError::TooManyDistributionCNAMEs(parsed_error.message)),"TooManyDistributions" => return RusotoError::Service(CreateDistributionError::TooManyDistributions(parsed_error.message)),"TooManyDistributionsAssociatedToCachePolicy" => return RusotoError::Service(CreateDistributionError::TooManyDistributionsAssociatedToCachePolicy(parsed_error.message)),"TooManyDistributionsAssociatedToFieldLevelEncryptionConfig" => return RusotoError::Service(CreateDistributionError::TooManyDistributionsAssociatedToFieldLevelEncryptionConfig(parsed_error.message)),"TooManyDistributionsAssociatedToKeyGroup" => return RusotoError::Service(CreateDistributionError::TooManyDistributionsAssociatedToKeyGroup(parsed_error.message)),"TooManyDistributionsAssociatedToOriginRequestPolicy" => return RusotoError::Service(CreateDistributionError::TooManyDistributionsAssociatedToOriginRequestPolicy(parsed_error.message)),"TooManyDistributionsWithLambdaAssociations" => return RusotoError::Service(CreateDistributionError::TooManyDistributionsWithLambdaAssociations(parsed_error.message)),"TooManyDistributionsWithSingleFunctionARN" => return RusotoError::Service(CreateDistributionError::TooManyDistributionsWithSingleFunctionARN(parsed_error.message)),"TooManyHeadersInForwardedValues" => return RusotoError::Service(CreateDistributionError::TooManyHeadersInForwardedValues(parsed_error.message)),"TooManyKeyGroupsAssociatedToDistribution" => return RusotoError::Service(CreateDistributionError::TooManyKeyGroupsAssociatedToDistribution(parsed_error.message)),"TooManyLambdaFunctionAssociations" => return RusotoError::Service(CreateDistributionError::TooManyLambdaFunctionAssociations(parsed_error.message)),"TooManyOriginCustomHeaders" => return RusotoError::Service(CreateDistributionError::TooManyOriginCustomHeaders(parsed_error.message)),"TooManyOriginGroupsPerDistribution" => return RusotoError::Service(CreateDistributionError::TooManyOriginGroupsPerDistribution(parsed_error.message)),"TooManyOrigins" => return RusotoError::Service(CreateDistributionError::TooManyOrigins(parsed_error.message)),"TooManyQueryStringParameters" => return RusotoError::Service(CreateDistributionError::TooManyQueryStringParameters(parsed_error.message)),"TooManyTrustedSigners" => return RusotoError::Service(CreateDistributionError::TooManyTrustedSigners(parsed_error.message)),"TrustedKeyGroupDoesNotExist" => return RusotoError::Service(CreateDistributionError::TrustedKeyGroupDoesNotExist(parsed_error.message)),"TrustedSignerDoesNotExist" => return RusotoError::Service(CreateDistributionError::TrustedSignerDoesNotExist(parsed_error.message)),_ => {}
+                    }
+                }
             }
         }
         RusotoError::Unknown(res)
@@ -11802,10 +12158,13 @@ impl CreateDistributionWithTagsError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                                    "AccessDenied" => return RusotoError::Service(CreateDistributionWithTagsError::AccessDenied(parsed_error.message)),"CNAMEAlreadyExists" => return RusotoError::Service(CreateDistributionWithTagsError::CNAMEAlreadyExists(parsed_error.message)),"DistributionAlreadyExists" => return RusotoError::Service(CreateDistributionWithTagsError::DistributionAlreadyExists(parsed_error.message)),"IllegalFieldLevelEncryptionConfigAssociationWithCacheBehavior" => return RusotoError::Service(CreateDistributionWithTagsError::IllegalFieldLevelEncryptionConfigAssociationWithCacheBehavior(parsed_error.message)),"InconsistentQuantities" => return RusotoError::Service(CreateDistributionWithTagsError::InconsistentQuantities(parsed_error.message)),"InvalidArgument" => return RusotoError::Service(CreateDistributionWithTagsError::InvalidArgument(parsed_error.message)),"InvalidDefaultRootObject" => return RusotoError::Service(CreateDistributionWithTagsError::InvalidDefaultRootObject(parsed_error.message)),"InvalidErrorCode" => return RusotoError::Service(CreateDistributionWithTagsError::InvalidErrorCode(parsed_error.message)),"InvalidForwardCookies" => return RusotoError::Service(CreateDistributionWithTagsError::InvalidForwardCookies(parsed_error.message)),"InvalidGeoRestrictionParameter" => return RusotoError::Service(CreateDistributionWithTagsError::InvalidGeoRestrictionParameter(parsed_error.message)),"InvalidHeadersForS3Origin" => return RusotoError::Service(CreateDistributionWithTagsError::InvalidHeadersForS3Origin(parsed_error.message)),"InvalidLambdaFunctionAssociation" => return RusotoError::Service(CreateDistributionWithTagsError::InvalidLambdaFunctionAssociation(parsed_error.message)),"InvalidLocationCode" => return RusotoError::Service(CreateDistributionWithTagsError::InvalidLocationCode(parsed_error.message)),"InvalidMinimumProtocolVersion" => return RusotoError::Service(CreateDistributionWithTagsError::InvalidMinimumProtocolVersion(parsed_error.message)),"InvalidOrigin" => return RusotoError::Service(CreateDistributionWithTagsError::InvalidOrigin(parsed_error.message)),"InvalidOriginAccessIdentity" => return RusotoError::Service(CreateDistributionWithTagsError::InvalidOriginAccessIdentity(parsed_error.message)),"InvalidOriginKeepaliveTimeout" => return RusotoError::Service(CreateDistributionWithTagsError::InvalidOriginKeepaliveTimeout(parsed_error.message)),"InvalidOriginReadTimeout" => return RusotoError::Service(CreateDistributionWithTagsError::InvalidOriginReadTimeout(parsed_error.message)),"InvalidProtocolSettings" => return RusotoError::Service(CreateDistributionWithTagsError::InvalidProtocolSettings(parsed_error.message)),"InvalidQueryStringParameters" => return RusotoError::Service(CreateDistributionWithTagsError::InvalidQueryStringParameters(parsed_error.message)),"InvalidRelativePath" => return RusotoError::Service(CreateDistributionWithTagsError::InvalidRelativePath(parsed_error.message)),"InvalidRequiredProtocol" => return RusotoError::Service(CreateDistributionWithTagsError::InvalidRequiredProtocol(parsed_error.message)),"InvalidResponseCode" => return RusotoError::Service(CreateDistributionWithTagsError::InvalidResponseCode(parsed_error.message)),"InvalidTTLOrder" => return RusotoError::Service(CreateDistributionWithTagsError::InvalidTTLOrder(parsed_error.message)),"InvalidTagging" => return RusotoError::Service(CreateDistributionWithTagsError::InvalidTagging(parsed_error.message)),"InvalidViewerCertificate" => return RusotoError::Service(CreateDistributionWithTagsError::InvalidViewerCertificate(parsed_error.message)),"InvalidWebACLId" => return RusotoError::Service(CreateDistributionWithTagsError::InvalidWebACLId(parsed_error.message)),"MissingBody" => return RusotoError::Service(CreateDistributionWithTagsError::MissingBody(parsed_error.message)),"NoSuchCachePolicy" => return RusotoError::Service(CreateDistributionWithTagsError::NoSuchCachePolicy(parsed_error.message)),"NoSuchFieldLevelEncryptionConfig" => return RusotoError::Service(CreateDistributionWithTagsError::NoSuchFieldLevelEncryptionConfig(parsed_error.message)),"NoSuchOrigin" => return RusotoError::Service(CreateDistributionWithTagsError::NoSuchOrigin(parsed_error.message)),"NoSuchOriginRequestPolicy" => return RusotoError::Service(CreateDistributionWithTagsError::NoSuchOriginRequestPolicy(parsed_error.message)),"TooManyCacheBehaviors" => return RusotoError::Service(CreateDistributionWithTagsError::TooManyCacheBehaviors(parsed_error.message)),"TooManyCertificates" => return RusotoError::Service(CreateDistributionWithTagsError::TooManyCertificates(parsed_error.message)),"TooManyCookieNamesInWhiteList" => return RusotoError::Service(CreateDistributionWithTagsError::TooManyCookieNamesInWhiteList(parsed_error.message)),"TooManyDistributionCNAMEs" => return RusotoError::Service(CreateDistributionWithTagsError::TooManyDistributionCNAMEs(parsed_error.message)),"TooManyDistributions" => return RusotoError::Service(CreateDistributionWithTagsError::TooManyDistributions(parsed_error.message)),"TooManyDistributionsAssociatedToCachePolicy" => return RusotoError::Service(CreateDistributionWithTagsError::TooManyDistributionsAssociatedToCachePolicy(parsed_error.message)),"TooManyDistributionsAssociatedToFieldLevelEncryptionConfig" => return RusotoError::Service(CreateDistributionWithTagsError::TooManyDistributionsAssociatedToFieldLevelEncryptionConfig(parsed_error.message)),"TooManyDistributionsAssociatedToKeyGroup" => return RusotoError::Service(CreateDistributionWithTagsError::TooManyDistributionsAssociatedToKeyGroup(parsed_error.message)),"TooManyDistributionsAssociatedToOriginRequestPolicy" => return RusotoError::Service(CreateDistributionWithTagsError::TooManyDistributionsAssociatedToOriginRequestPolicy(parsed_error.message)),"TooManyDistributionsWithLambdaAssociations" => return RusotoError::Service(CreateDistributionWithTagsError::TooManyDistributionsWithLambdaAssociations(parsed_error.message)),"TooManyDistributionsWithSingleFunctionARN" => return RusotoError::Service(CreateDistributionWithTagsError::TooManyDistributionsWithSingleFunctionARN(parsed_error.message)),"TooManyHeadersInForwardedValues" => return RusotoError::Service(CreateDistributionWithTagsError::TooManyHeadersInForwardedValues(parsed_error.message)),"TooManyKeyGroupsAssociatedToDistribution" => return RusotoError::Service(CreateDistributionWithTagsError::TooManyKeyGroupsAssociatedToDistribution(parsed_error.message)),"TooManyLambdaFunctionAssociations" => return RusotoError::Service(CreateDistributionWithTagsError::TooManyLambdaFunctionAssociations(parsed_error.message)),"TooManyOriginCustomHeaders" => return RusotoError::Service(CreateDistributionWithTagsError::TooManyOriginCustomHeaders(parsed_error.message)),"TooManyOriginGroupsPerDistribution" => return RusotoError::Service(CreateDistributionWithTagsError::TooManyOriginGroupsPerDistribution(parsed_error.message)),"TooManyOrigins" => return RusotoError::Service(CreateDistributionWithTagsError::TooManyOrigins(parsed_error.message)),"TooManyQueryStringParameters" => return RusotoError::Service(CreateDistributionWithTagsError::TooManyQueryStringParameters(parsed_error.message)),"TooManyTrustedSigners" => return RusotoError::Service(CreateDistributionWithTagsError::TooManyTrustedSigners(parsed_error.message)),"TrustedKeyGroupDoesNotExist" => return RusotoError::Service(CreateDistributionWithTagsError::TrustedKeyGroupDoesNotExist(parsed_error.message)),"TrustedSignerDoesNotExist" => return RusotoError::Service(CreateDistributionWithTagsError::TrustedSignerDoesNotExist(parsed_error.message)),_ => {}
-                                }
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {
+                        "AccessDenied" => return RusotoError::Service(CreateDistributionWithTagsError::AccessDenied(parsed_error.message)),"CNAMEAlreadyExists" => return RusotoError::Service(CreateDistributionWithTagsError::CNAMEAlreadyExists(parsed_error.message)),"DistributionAlreadyExists" => return RusotoError::Service(CreateDistributionWithTagsError::DistributionAlreadyExists(parsed_error.message)),"IllegalFieldLevelEncryptionConfigAssociationWithCacheBehavior" => return RusotoError::Service(CreateDistributionWithTagsError::IllegalFieldLevelEncryptionConfigAssociationWithCacheBehavior(parsed_error.message)),"InconsistentQuantities" => return RusotoError::Service(CreateDistributionWithTagsError::InconsistentQuantities(parsed_error.message)),"InvalidArgument" => return RusotoError::Service(CreateDistributionWithTagsError::InvalidArgument(parsed_error.message)),"InvalidDefaultRootObject" => return RusotoError::Service(CreateDistributionWithTagsError::InvalidDefaultRootObject(parsed_error.message)),"InvalidErrorCode" => return RusotoError::Service(CreateDistributionWithTagsError::InvalidErrorCode(parsed_error.message)),"InvalidForwardCookies" => return RusotoError::Service(CreateDistributionWithTagsError::InvalidForwardCookies(parsed_error.message)),"InvalidGeoRestrictionParameter" => return RusotoError::Service(CreateDistributionWithTagsError::InvalidGeoRestrictionParameter(parsed_error.message)),"InvalidHeadersForS3Origin" => return RusotoError::Service(CreateDistributionWithTagsError::InvalidHeadersForS3Origin(parsed_error.message)),"InvalidLambdaFunctionAssociation" => return RusotoError::Service(CreateDistributionWithTagsError::InvalidLambdaFunctionAssociation(parsed_error.message)),"InvalidLocationCode" => return RusotoError::Service(CreateDistributionWithTagsError::InvalidLocationCode(parsed_error.message)),"InvalidMinimumProtocolVersion" => return RusotoError::Service(CreateDistributionWithTagsError::InvalidMinimumProtocolVersion(parsed_error.message)),"InvalidOrigin" => return RusotoError::Service(CreateDistributionWithTagsError::InvalidOrigin(parsed_error.message)),"InvalidOriginAccessIdentity" => return RusotoError::Service(CreateDistributionWithTagsError::InvalidOriginAccessIdentity(parsed_error.message)),"InvalidOriginKeepaliveTimeout" => return RusotoError::Service(CreateDistributionWithTagsError::InvalidOriginKeepaliveTimeout(parsed_error.message)),"InvalidOriginReadTimeout" => return RusotoError::Service(CreateDistributionWithTagsError::InvalidOriginReadTimeout(parsed_error.message)),"InvalidProtocolSettings" => return RusotoError::Service(CreateDistributionWithTagsError::InvalidProtocolSettings(parsed_error.message)),"InvalidQueryStringParameters" => return RusotoError::Service(CreateDistributionWithTagsError::InvalidQueryStringParameters(parsed_error.message)),"InvalidRelativePath" => return RusotoError::Service(CreateDistributionWithTagsError::InvalidRelativePath(parsed_error.message)),"InvalidRequiredProtocol" => return RusotoError::Service(CreateDistributionWithTagsError::InvalidRequiredProtocol(parsed_error.message)),"InvalidResponseCode" => return RusotoError::Service(CreateDistributionWithTagsError::InvalidResponseCode(parsed_error.message)),"InvalidTTLOrder" => return RusotoError::Service(CreateDistributionWithTagsError::InvalidTTLOrder(parsed_error.message)),"InvalidTagging" => return RusotoError::Service(CreateDistributionWithTagsError::InvalidTagging(parsed_error.message)),"InvalidViewerCertificate" => return RusotoError::Service(CreateDistributionWithTagsError::InvalidViewerCertificate(parsed_error.message)),"InvalidWebACLId" => return RusotoError::Service(CreateDistributionWithTagsError::InvalidWebACLId(parsed_error.message)),"MissingBody" => return RusotoError::Service(CreateDistributionWithTagsError::MissingBody(parsed_error.message)),"NoSuchCachePolicy" => return RusotoError::Service(CreateDistributionWithTagsError::NoSuchCachePolicy(parsed_error.message)),"NoSuchFieldLevelEncryptionConfig" => return RusotoError::Service(CreateDistributionWithTagsError::NoSuchFieldLevelEncryptionConfig(parsed_error.message)),"NoSuchOrigin" => return RusotoError::Service(CreateDistributionWithTagsError::NoSuchOrigin(parsed_error.message)),"NoSuchOriginRequestPolicy" => return RusotoError::Service(CreateDistributionWithTagsError::NoSuchOriginRequestPolicy(parsed_error.message)),"TooManyCacheBehaviors" => return RusotoError::Service(CreateDistributionWithTagsError::TooManyCacheBehaviors(parsed_error.message)),"TooManyCertificates" => return RusotoError::Service(CreateDistributionWithTagsError::TooManyCertificates(parsed_error.message)),"TooManyCookieNamesInWhiteList" => return RusotoError::Service(CreateDistributionWithTagsError::TooManyCookieNamesInWhiteList(parsed_error.message)),"TooManyDistributionCNAMEs" => return RusotoError::Service(CreateDistributionWithTagsError::TooManyDistributionCNAMEs(parsed_error.message)),"TooManyDistributions" => return RusotoError::Service(CreateDistributionWithTagsError::TooManyDistributions(parsed_error.message)),"TooManyDistributionsAssociatedToCachePolicy" => return RusotoError::Service(CreateDistributionWithTagsError::TooManyDistributionsAssociatedToCachePolicy(parsed_error.message)),"TooManyDistributionsAssociatedToFieldLevelEncryptionConfig" => return RusotoError::Service(CreateDistributionWithTagsError::TooManyDistributionsAssociatedToFieldLevelEncryptionConfig(parsed_error.message)),"TooManyDistributionsAssociatedToKeyGroup" => return RusotoError::Service(CreateDistributionWithTagsError::TooManyDistributionsAssociatedToKeyGroup(parsed_error.message)),"TooManyDistributionsAssociatedToOriginRequestPolicy" => return RusotoError::Service(CreateDistributionWithTagsError::TooManyDistributionsAssociatedToOriginRequestPolicy(parsed_error.message)),"TooManyDistributionsWithLambdaAssociations" => return RusotoError::Service(CreateDistributionWithTagsError::TooManyDistributionsWithLambdaAssociations(parsed_error.message)),"TooManyDistributionsWithSingleFunctionARN" => return RusotoError::Service(CreateDistributionWithTagsError::TooManyDistributionsWithSingleFunctionARN(parsed_error.message)),"TooManyHeadersInForwardedValues" => return RusotoError::Service(CreateDistributionWithTagsError::TooManyHeadersInForwardedValues(parsed_error.message)),"TooManyKeyGroupsAssociatedToDistribution" => return RusotoError::Service(CreateDistributionWithTagsError::TooManyKeyGroupsAssociatedToDistribution(parsed_error.message)),"TooManyLambdaFunctionAssociations" => return RusotoError::Service(CreateDistributionWithTagsError::TooManyLambdaFunctionAssociations(parsed_error.message)),"TooManyOriginCustomHeaders" => return RusotoError::Service(CreateDistributionWithTagsError::TooManyOriginCustomHeaders(parsed_error.message)),"TooManyOriginGroupsPerDistribution" => return RusotoError::Service(CreateDistributionWithTagsError::TooManyOriginGroupsPerDistribution(parsed_error.message)),"TooManyOrigins" => return RusotoError::Service(CreateDistributionWithTagsError::TooManyOrigins(parsed_error.message)),"TooManyQueryStringParameters" => return RusotoError::Service(CreateDistributionWithTagsError::TooManyQueryStringParameters(parsed_error.message)),"TooManyTrustedSigners" => return RusotoError::Service(CreateDistributionWithTagsError::TooManyTrustedSigners(parsed_error.message)),"TrustedKeyGroupDoesNotExist" => return RusotoError::Service(CreateDistributionWithTagsError::TrustedKeyGroupDoesNotExist(parsed_error.message)),"TrustedSignerDoesNotExist" => return RusotoError::Service(CreateDistributionWithTagsError::TrustedSignerDoesNotExist(parsed_error.message)),_ => {}
+                    }
+                }
             }
         }
         RusotoError::Unknown(res)
@@ -11909,10 +12268,13 @@ impl CreateFieldLevelEncryptionConfigError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                                    "FieldLevelEncryptionConfigAlreadyExists" => return RusotoError::Service(CreateFieldLevelEncryptionConfigError::FieldLevelEncryptionConfigAlreadyExists(parsed_error.message)),"InconsistentQuantities" => return RusotoError::Service(CreateFieldLevelEncryptionConfigError::InconsistentQuantities(parsed_error.message)),"InvalidArgument" => return RusotoError::Service(CreateFieldLevelEncryptionConfigError::InvalidArgument(parsed_error.message)),"NoSuchFieldLevelEncryptionProfile" => return RusotoError::Service(CreateFieldLevelEncryptionConfigError::NoSuchFieldLevelEncryptionProfile(parsed_error.message)),"QueryArgProfileEmpty" => return RusotoError::Service(CreateFieldLevelEncryptionConfigError::QueryArgProfileEmpty(parsed_error.message)),"TooManyFieldLevelEncryptionConfigs" => return RusotoError::Service(CreateFieldLevelEncryptionConfigError::TooManyFieldLevelEncryptionConfigs(parsed_error.message)),"TooManyFieldLevelEncryptionContentTypeProfiles" => return RusotoError::Service(CreateFieldLevelEncryptionConfigError::TooManyFieldLevelEncryptionContentTypeProfiles(parsed_error.message)),"TooManyFieldLevelEncryptionQueryArgProfiles" => return RusotoError::Service(CreateFieldLevelEncryptionConfigError::TooManyFieldLevelEncryptionQueryArgProfiles(parsed_error.message)),_ => {}
-                                }
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {
+                        "FieldLevelEncryptionConfigAlreadyExists" => return RusotoError::Service(CreateFieldLevelEncryptionConfigError::FieldLevelEncryptionConfigAlreadyExists(parsed_error.message)),"InconsistentQuantities" => return RusotoError::Service(CreateFieldLevelEncryptionConfigError::InconsistentQuantities(parsed_error.message)),"InvalidArgument" => return RusotoError::Service(CreateFieldLevelEncryptionConfigError::InvalidArgument(parsed_error.message)),"NoSuchFieldLevelEncryptionProfile" => return RusotoError::Service(CreateFieldLevelEncryptionConfigError::NoSuchFieldLevelEncryptionProfile(parsed_error.message)),"QueryArgProfileEmpty" => return RusotoError::Service(CreateFieldLevelEncryptionConfigError::QueryArgProfileEmpty(parsed_error.message)),"TooManyFieldLevelEncryptionConfigs" => return RusotoError::Service(CreateFieldLevelEncryptionConfigError::TooManyFieldLevelEncryptionConfigs(parsed_error.message)),"TooManyFieldLevelEncryptionContentTypeProfiles" => return RusotoError::Service(CreateFieldLevelEncryptionConfigError::TooManyFieldLevelEncryptionContentTypeProfiles(parsed_error.message)),"TooManyFieldLevelEncryptionQueryArgProfiles" => return RusotoError::Service(CreateFieldLevelEncryptionConfigError::TooManyFieldLevelEncryptionQueryArgProfiles(parsed_error.message)),_ => {}
+                    }
+                }
             }
         }
         RusotoError::Unknown(res)
@@ -11971,10 +12333,13 @@ impl CreateFieldLevelEncryptionProfileError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                                    "FieldLevelEncryptionProfileAlreadyExists" => return RusotoError::Service(CreateFieldLevelEncryptionProfileError::FieldLevelEncryptionProfileAlreadyExists(parsed_error.message)),"FieldLevelEncryptionProfileSizeExceeded" => return RusotoError::Service(CreateFieldLevelEncryptionProfileError::FieldLevelEncryptionProfileSizeExceeded(parsed_error.message)),"InconsistentQuantities" => return RusotoError::Service(CreateFieldLevelEncryptionProfileError::InconsistentQuantities(parsed_error.message)),"InvalidArgument" => return RusotoError::Service(CreateFieldLevelEncryptionProfileError::InvalidArgument(parsed_error.message)),"NoSuchPublicKey" => return RusotoError::Service(CreateFieldLevelEncryptionProfileError::NoSuchPublicKey(parsed_error.message)),"TooManyFieldLevelEncryptionEncryptionEntities" => return RusotoError::Service(CreateFieldLevelEncryptionProfileError::TooManyFieldLevelEncryptionEncryptionEntities(parsed_error.message)),"TooManyFieldLevelEncryptionFieldPatterns" => return RusotoError::Service(CreateFieldLevelEncryptionProfileError::TooManyFieldLevelEncryptionFieldPatterns(parsed_error.message)),"TooManyFieldLevelEncryptionProfiles" => return RusotoError::Service(CreateFieldLevelEncryptionProfileError::TooManyFieldLevelEncryptionProfiles(parsed_error.message)),_ => {}
-                                }
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {
+                        "FieldLevelEncryptionProfileAlreadyExists" => return RusotoError::Service(CreateFieldLevelEncryptionProfileError::FieldLevelEncryptionProfileAlreadyExists(parsed_error.message)),"FieldLevelEncryptionProfileSizeExceeded" => return RusotoError::Service(CreateFieldLevelEncryptionProfileError::FieldLevelEncryptionProfileSizeExceeded(parsed_error.message)),"InconsistentQuantities" => return RusotoError::Service(CreateFieldLevelEncryptionProfileError::InconsistentQuantities(parsed_error.message)),"InvalidArgument" => return RusotoError::Service(CreateFieldLevelEncryptionProfileError::InvalidArgument(parsed_error.message)),"NoSuchPublicKey" => return RusotoError::Service(CreateFieldLevelEncryptionProfileError::NoSuchPublicKey(parsed_error.message)),"TooManyFieldLevelEncryptionEncryptionEntities" => return RusotoError::Service(CreateFieldLevelEncryptionProfileError::TooManyFieldLevelEncryptionEncryptionEntities(parsed_error.message)),"TooManyFieldLevelEncryptionFieldPatterns" => return RusotoError::Service(CreateFieldLevelEncryptionProfileError::TooManyFieldLevelEncryptionFieldPatterns(parsed_error.message)),"TooManyFieldLevelEncryptionProfiles" => return RusotoError::Service(CreateFieldLevelEncryptionProfileError::TooManyFieldLevelEncryptionProfiles(parsed_error.message)),_ => {}
+                    }
+                }
             }
         }
         RusotoError::Unknown(res)
@@ -12029,46 +12394,51 @@ impl CreateInvalidationError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    "AccessDenied" => {
-                        return RusotoError::Service(CreateInvalidationError::AccessDenied(
-                            parsed_error.message,
-                        ))
-                    }
-                    "BatchTooLarge" => {
-                        return RusotoError::Service(CreateInvalidationError::BatchTooLarge(
-                            parsed_error.message,
-                        ))
-                    }
-                    "InconsistentQuantities" => {
-                        return RusotoError::Service(
-                            CreateInvalidationError::InconsistentQuantities(parsed_error.message),
-                        )
-                    }
-                    "InvalidArgument" => {
-                        return RusotoError::Service(CreateInvalidationError::InvalidArgument(
-                            parsed_error.message,
-                        ))
-                    }
-                    "MissingBody" => {
-                        return RusotoError::Service(CreateInvalidationError::MissingBody(
-                            parsed_error.message,
-                        ))
-                    }
-                    "NoSuchDistribution" => {
-                        return RusotoError::Service(CreateInvalidationError::NoSuchDistribution(
-                            parsed_error.message,
-                        ))
-                    }
-                    "TooManyInvalidationsInProgress" => {
-                        return RusotoError::Service(
-                            CreateInvalidationError::TooManyInvalidationsInProgress(
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {
+                        "AccessDenied" => {
+                            return RusotoError::Service(CreateInvalidationError::AccessDenied(
                                 parsed_error.message,
-                            ),
-                        )
+                            ))
+                        }
+                        "BatchTooLarge" => {
+                            return RusotoError::Service(CreateInvalidationError::BatchTooLarge(
+                                parsed_error.message,
+                            ))
+                        }
+                        "InconsistentQuantities" => {
+                            return RusotoError::Service(
+                                CreateInvalidationError::InconsistentQuantities(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "InvalidArgument" => {
+                            return RusotoError::Service(CreateInvalidationError::InvalidArgument(
+                                parsed_error.message,
+                            ))
+                        }
+                        "MissingBody" => {
+                            return RusotoError::Service(CreateInvalidationError::MissingBody(
+                                parsed_error.message,
+                            ))
+                        }
+                        "NoSuchDistribution" => {
+                            return RusotoError::Service(
+                                CreateInvalidationError::NoSuchDistribution(parsed_error.message),
+                            )
+                        }
+                        "TooManyInvalidationsInProgress" => {
+                            return RusotoError::Service(
+                                CreateInvalidationError::TooManyInvalidationsInProgress(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        _ => {}
                     }
-                    _ => {}
                 }
             }
         }
@@ -12119,29 +12489,34 @@ impl CreateKeyGroupError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    "InvalidArgument" => {
-                        return RusotoError::Service(CreateKeyGroupError::InvalidArgument(
-                            parsed_error.message,
-                        ))
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {
+                        "InvalidArgument" => {
+                            return RusotoError::Service(CreateKeyGroupError::InvalidArgument(
+                                parsed_error.message,
+                            ))
+                        }
+                        "KeyGroupAlreadyExists" => {
+                            return RusotoError::Service(
+                                CreateKeyGroupError::KeyGroupAlreadyExists(parsed_error.message),
+                            )
+                        }
+                        "TooManyKeyGroups" => {
+                            return RusotoError::Service(CreateKeyGroupError::TooManyKeyGroups(
+                                parsed_error.message,
+                            ))
+                        }
+                        "TooManyPublicKeysInKeyGroup" => {
+                            return RusotoError::Service(
+                                CreateKeyGroupError::TooManyPublicKeysInKeyGroup(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        _ => {}
                     }
-                    "KeyGroupAlreadyExists" => {
-                        return RusotoError::Service(CreateKeyGroupError::KeyGroupAlreadyExists(
-                            parsed_error.message,
-                        ))
-                    }
-                    "TooManyKeyGroups" => {
-                        return RusotoError::Service(CreateKeyGroupError::TooManyKeyGroups(
-                            parsed_error.message,
-                        ))
-                    }
-                    "TooManyPublicKeysInKeyGroup" => {
-                        return RusotoError::Service(
-                            CreateKeyGroupError::TooManyPublicKeysInKeyGroup(parsed_error.message),
-                        )
-                    }
-                    _ => {}
                 }
             }
         }
@@ -12185,21 +12560,26 @@ impl CreateMonitoringSubscriptionError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    "AccessDenied" => {
-                        return RusotoError::Service(
-                            CreateMonitoringSubscriptionError::AccessDenied(parsed_error.message),
-                        )
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {
+                        "AccessDenied" => {
+                            return RusotoError::Service(
+                                CreateMonitoringSubscriptionError::AccessDenied(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "NoSuchDistribution" => {
+                            return RusotoError::Service(
+                                CreateMonitoringSubscriptionError::NoSuchDistribution(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        _ => {}
                     }
-                    "NoSuchDistribution" => {
-                        return RusotoError::Service(
-                            CreateMonitoringSubscriptionError::NoSuchDistribution(
-                                parsed_error.message,
-                            ),
-                        )
-                    }
-                    _ => {}
                 }
             }
         }
@@ -12253,59 +12633,12 @@ impl CreateOriginRequestPolicyError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    "AccessDenied" => {
-                        return RusotoError::Service(CreateOriginRequestPolicyError::AccessDenied(
-                            parsed_error.message,
-                        ))
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {
+                        "AccessDenied" => return RusotoError::Service(CreateOriginRequestPolicyError::AccessDenied(parsed_error.message)),"InconsistentQuantities" => return RusotoError::Service(CreateOriginRequestPolicyError::InconsistentQuantities(parsed_error.message)),"InvalidArgument" => return RusotoError::Service(CreateOriginRequestPolicyError::InvalidArgument(parsed_error.message)),"OriginRequestPolicyAlreadyExists" => return RusotoError::Service(CreateOriginRequestPolicyError::OriginRequestPolicyAlreadyExists(parsed_error.message)),"TooManyCookiesInOriginRequestPolicy" => return RusotoError::Service(CreateOriginRequestPolicyError::TooManyCookiesInOriginRequestPolicy(parsed_error.message)),"TooManyHeadersInOriginRequestPolicy" => return RusotoError::Service(CreateOriginRequestPolicyError::TooManyHeadersInOriginRequestPolicy(parsed_error.message)),"TooManyOriginRequestPolicies" => return RusotoError::Service(CreateOriginRequestPolicyError::TooManyOriginRequestPolicies(parsed_error.message)),"TooManyQueryStringsInOriginRequestPolicy" => return RusotoError::Service(CreateOriginRequestPolicyError::TooManyQueryStringsInOriginRequestPolicy(parsed_error.message)),_ => {}
                     }
-                    "InconsistentQuantities" => {
-                        return RusotoError::Service(
-                            CreateOriginRequestPolicyError::InconsistentQuantities(
-                                parsed_error.message,
-                            ),
-                        )
-                    }
-                    "InvalidArgument" => {
-                        return RusotoError::Service(
-                            CreateOriginRequestPolicyError::InvalidArgument(parsed_error.message),
-                        )
-                    }
-                    "OriginRequestPolicyAlreadyExists" => {
-                        return RusotoError::Service(
-                            CreateOriginRequestPolicyError::OriginRequestPolicyAlreadyExists(
-                                parsed_error.message,
-                            ),
-                        )
-                    }
-                    "TooManyCookiesInOriginRequestPolicy" => {
-                        return RusotoError::Service(
-                            CreateOriginRequestPolicyError::TooManyCookiesInOriginRequestPolicy(
-                                parsed_error.message,
-                            ),
-                        )
-                    }
-                    "TooManyHeadersInOriginRequestPolicy" => {
-                        return RusotoError::Service(
-                            CreateOriginRequestPolicyError::TooManyHeadersInOriginRequestPolicy(
-                                parsed_error.message,
-                            ),
-                        )
-                    }
-                    "TooManyOriginRequestPolicies" => {
-                        return RusotoError::Service(
-                            CreateOriginRequestPolicyError::TooManyOriginRequestPolicies(
-                                parsed_error.message,
-                            ),
-                        )
-                    }
-                    "TooManyQueryStringsInOriginRequestPolicy" => return RusotoError::Service(
-                        CreateOriginRequestPolicyError::TooManyQueryStringsInOriginRequestPolicy(
-                            parsed_error.message,
-                        ),
-                    ),
-                    _ => {}
                 }
             }
         }
@@ -12365,24 +12698,27 @@ impl CreatePublicKeyError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    "InvalidArgument" => {
-                        return RusotoError::Service(CreatePublicKeyError::InvalidArgument(
-                            parsed_error.message,
-                        ))
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {
+                        "InvalidArgument" => {
+                            return RusotoError::Service(CreatePublicKeyError::InvalidArgument(
+                                parsed_error.message,
+                            ))
+                        }
+                        "PublicKeyAlreadyExists" => {
+                            return RusotoError::Service(
+                                CreatePublicKeyError::PublicKeyAlreadyExists(parsed_error.message),
+                            )
+                        }
+                        "TooManyPublicKeys" => {
+                            return RusotoError::Service(CreatePublicKeyError::TooManyPublicKeys(
+                                parsed_error.message,
+                            ))
+                        }
+                        _ => {}
                     }
-                    "PublicKeyAlreadyExists" => {
-                        return RusotoError::Service(CreatePublicKeyError::PublicKeyAlreadyExists(
-                            parsed_error.message,
-                        ))
-                    }
-                    "TooManyPublicKeys" => {
-                        return RusotoError::Service(CreatePublicKeyError::TooManyPublicKeys(
-                            parsed_error.message,
-                        ))
-                    }
-                    _ => {}
                 }
             }
         }
@@ -12427,33 +12763,36 @@ impl CreateRealtimeLogConfigError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    "AccessDenied" => {
-                        return RusotoError::Service(CreateRealtimeLogConfigError::AccessDenied(
-                            parsed_error.message,
-                        ))
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {
+                        "AccessDenied" => {
+                            return RusotoError::Service(
+                                CreateRealtimeLogConfigError::AccessDenied(parsed_error.message),
+                            )
+                        }
+                        "InvalidArgument" => {
+                            return RusotoError::Service(
+                                CreateRealtimeLogConfigError::InvalidArgument(parsed_error.message),
+                            )
+                        }
+                        "RealtimeLogConfigAlreadyExists" => {
+                            return RusotoError::Service(
+                                CreateRealtimeLogConfigError::RealtimeLogConfigAlreadyExists(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "TooManyRealtimeLogConfigs" => {
+                            return RusotoError::Service(
+                                CreateRealtimeLogConfigError::TooManyRealtimeLogConfigs(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        _ => {}
                     }
-                    "InvalidArgument" => {
-                        return RusotoError::Service(CreateRealtimeLogConfigError::InvalidArgument(
-                            parsed_error.message,
-                        ))
-                    }
-                    "RealtimeLogConfigAlreadyExists" => {
-                        return RusotoError::Service(
-                            CreateRealtimeLogConfigError::RealtimeLogConfigAlreadyExists(
-                                parsed_error.message,
-                            ),
-                        )
-                    }
-                    "TooManyRealtimeLogConfigs" => {
-                        return RusotoError::Service(
-                            CreateRealtimeLogConfigError::TooManyRealtimeLogConfigs(
-                                parsed_error.message,
-                            ),
-                        )
-                    }
-                    _ => {}
                 }
             }
         }
@@ -12521,85 +12860,90 @@ impl CreateStreamingDistributionError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    "AccessDenied" => {
-                        return RusotoError::Service(
-                            CreateStreamingDistributionError::AccessDenied(parsed_error.message),
-                        )
-                    }
-                    "CNAMEAlreadyExists" => {
-                        return RusotoError::Service(
-                            CreateStreamingDistributionError::CNAMEAlreadyExists(
-                                parsed_error.message,
-                            ),
-                        )
-                    }
-                    "InconsistentQuantities" => {
-                        return RusotoError::Service(
-                            CreateStreamingDistributionError::InconsistentQuantities(
-                                parsed_error.message,
-                            ),
-                        )
-                    }
-                    "InvalidArgument" => {
-                        return RusotoError::Service(
-                            CreateStreamingDistributionError::InvalidArgument(parsed_error.message),
-                        )
-                    }
-                    "InvalidOrigin" => {
-                        return RusotoError::Service(
-                            CreateStreamingDistributionError::InvalidOrigin(parsed_error.message),
-                        )
-                    }
-                    "InvalidOriginAccessIdentity" => {
-                        return RusotoError::Service(
-                            CreateStreamingDistributionError::InvalidOriginAccessIdentity(
-                                parsed_error.message,
-                            ),
-                        )
-                    }
-                    "MissingBody" => {
-                        return RusotoError::Service(CreateStreamingDistributionError::MissingBody(
-                            parsed_error.message,
-                        ))
-                    }
-                    "StreamingDistributionAlreadyExists" => {
-                        return RusotoError::Service(
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {
+                        "AccessDenied" => {
+                            return RusotoError::Service(
+                                CreateStreamingDistributionError::AccessDenied(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "CNAMEAlreadyExists" => {
+                            return RusotoError::Service(
+                                CreateStreamingDistributionError::CNAMEAlreadyExists(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "InconsistentQuantities" => {
+                            return RusotoError::Service(
+                                CreateStreamingDistributionError::InconsistentQuantities(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "InvalidArgument" => {
+                            return RusotoError::Service(
+                                CreateStreamingDistributionError::InvalidArgument(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "InvalidOrigin" => {
+                            return RusotoError::Service(
+                                CreateStreamingDistributionError::InvalidOrigin(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "InvalidOriginAccessIdentity" => {
+                            return RusotoError::Service(
+                                CreateStreamingDistributionError::InvalidOriginAccessIdentity(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "MissingBody" => {
+                            return RusotoError::Service(
+                                CreateStreamingDistributionError::MissingBody(parsed_error.message),
+                            )
+                        }
+                        "StreamingDistributionAlreadyExists" => return RusotoError::Service(
                             CreateStreamingDistributionError::StreamingDistributionAlreadyExists(
                                 parsed_error.message,
                             ),
-                        )
-                    }
-                    "TooManyStreamingDistributionCNAMEs" => {
-                        return RusotoError::Service(
+                        ),
+                        "TooManyStreamingDistributionCNAMEs" => return RusotoError::Service(
                             CreateStreamingDistributionError::TooManyStreamingDistributionCNAMEs(
                                 parsed_error.message,
                             ),
-                        )
+                        ),
+                        "TooManyStreamingDistributions" => {
+                            return RusotoError::Service(
+                                CreateStreamingDistributionError::TooManyStreamingDistributions(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "TooManyTrustedSigners" => {
+                            return RusotoError::Service(
+                                CreateStreamingDistributionError::TooManyTrustedSigners(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "TrustedSignerDoesNotExist" => {
+                            return RusotoError::Service(
+                                CreateStreamingDistributionError::TrustedSignerDoesNotExist(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        _ => {}
                     }
-                    "TooManyStreamingDistributions" => {
-                        return RusotoError::Service(
-                            CreateStreamingDistributionError::TooManyStreamingDistributions(
-                                parsed_error.message,
-                            ),
-                        )
-                    }
-                    "TooManyTrustedSigners" => {
-                        return RusotoError::Service(
-                            CreateStreamingDistributionError::TooManyTrustedSigners(
-                                parsed_error.message,
-                            ),
-                        )
-                    }
-                    "TrustedSignerDoesNotExist" => {
-                        return RusotoError::Service(
-                            CreateStreamingDistributionError::TrustedSignerDoesNotExist(
-                                parsed_error.message,
-                            ),
-                        )
-                    }
-                    _ => {}
                 }
             }
         }
@@ -12689,10 +13033,13 @@ impl CreateStreamingDistributionWithTagsError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                                    "AccessDenied" => return RusotoError::Service(CreateStreamingDistributionWithTagsError::AccessDenied(parsed_error.message)),"CNAMEAlreadyExists" => return RusotoError::Service(CreateStreamingDistributionWithTagsError::CNAMEAlreadyExists(parsed_error.message)),"InconsistentQuantities" => return RusotoError::Service(CreateStreamingDistributionWithTagsError::InconsistentQuantities(parsed_error.message)),"InvalidArgument" => return RusotoError::Service(CreateStreamingDistributionWithTagsError::InvalidArgument(parsed_error.message)),"InvalidOrigin" => return RusotoError::Service(CreateStreamingDistributionWithTagsError::InvalidOrigin(parsed_error.message)),"InvalidOriginAccessIdentity" => return RusotoError::Service(CreateStreamingDistributionWithTagsError::InvalidOriginAccessIdentity(parsed_error.message)),"InvalidTagging" => return RusotoError::Service(CreateStreamingDistributionWithTagsError::InvalidTagging(parsed_error.message)),"MissingBody" => return RusotoError::Service(CreateStreamingDistributionWithTagsError::MissingBody(parsed_error.message)),"StreamingDistributionAlreadyExists" => return RusotoError::Service(CreateStreamingDistributionWithTagsError::StreamingDistributionAlreadyExists(parsed_error.message)),"TooManyStreamingDistributionCNAMEs" => return RusotoError::Service(CreateStreamingDistributionWithTagsError::TooManyStreamingDistributionCNAMEs(parsed_error.message)),"TooManyStreamingDistributions" => return RusotoError::Service(CreateStreamingDistributionWithTagsError::TooManyStreamingDistributions(parsed_error.message)),"TooManyTrustedSigners" => return RusotoError::Service(CreateStreamingDistributionWithTagsError::TooManyTrustedSigners(parsed_error.message)),"TrustedSignerDoesNotExist" => return RusotoError::Service(CreateStreamingDistributionWithTagsError::TrustedSignerDoesNotExist(parsed_error.message)),_ => {}
-                                }
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {
+                        "AccessDenied" => return RusotoError::Service(CreateStreamingDistributionWithTagsError::AccessDenied(parsed_error.message)),"CNAMEAlreadyExists" => return RusotoError::Service(CreateStreamingDistributionWithTagsError::CNAMEAlreadyExists(parsed_error.message)),"InconsistentQuantities" => return RusotoError::Service(CreateStreamingDistributionWithTagsError::InconsistentQuantities(parsed_error.message)),"InvalidArgument" => return RusotoError::Service(CreateStreamingDistributionWithTagsError::InvalidArgument(parsed_error.message)),"InvalidOrigin" => return RusotoError::Service(CreateStreamingDistributionWithTagsError::InvalidOrigin(parsed_error.message)),"InvalidOriginAccessIdentity" => return RusotoError::Service(CreateStreamingDistributionWithTagsError::InvalidOriginAccessIdentity(parsed_error.message)),"InvalidTagging" => return RusotoError::Service(CreateStreamingDistributionWithTagsError::InvalidTagging(parsed_error.message)),"MissingBody" => return RusotoError::Service(CreateStreamingDistributionWithTagsError::MissingBody(parsed_error.message)),"StreamingDistributionAlreadyExists" => return RusotoError::Service(CreateStreamingDistributionWithTagsError::StreamingDistributionAlreadyExists(parsed_error.message)),"TooManyStreamingDistributionCNAMEs" => return RusotoError::Service(CreateStreamingDistributionWithTagsError::TooManyStreamingDistributionCNAMEs(parsed_error.message)),"TooManyStreamingDistributions" => return RusotoError::Service(CreateStreamingDistributionWithTagsError::TooManyStreamingDistributions(parsed_error.message)),"TooManyTrustedSigners" => return RusotoError::Service(CreateStreamingDistributionWithTagsError::TooManyTrustedSigners(parsed_error.message)),"TrustedSignerDoesNotExist" => return RusotoError::Service(CreateStreamingDistributionWithTagsError::TrustedSignerDoesNotExist(parsed_error.message)),_ => {}
+                    }
+                }
             }
         }
         RusotoError::Unknown(res)
@@ -12776,39 +13123,42 @@ impl DeleteCachePolicyError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    "AccessDenied" => {
-                        return RusotoError::Service(DeleteCachePolicyError::AccessDenied(
-                            parsed_error.message,
-                        ))
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {
+                        "AccessDenied" => {
+                            return RusotoError::Service(DeleteCachePolicyError::AccessDenied(
+                                parsed_error.message,
+                            ))
+                        }
+                        "CachePolicyInUse" => {
+                            return RusotoError::Service(DeleteCachePolicyError::CachePolicyInUse(
+                                parsed_error.message,
+                            ))
+                        }
+                        "IllegalDelete" => {
+                            return RusotoError::Service(DeleteCachePolicyError::IllegalDelete(
+                                parsed_error.message,
+                            ))
+                        }
+                        "InvalidIfMatchVersion" => {
+                            return RusotoError::Service(
+                                DeleteCachePolicyError::InvalidIfMatchVersion(parsed_error.message),
+                            )
+                        }
+                        "NoSuchCachePolicy" => {
+                            return RusotoError::Service(DeleteCachePolicyError::NoSuchCachePolicy(
+                                parsed_error.message,
+                            ))
+                        }
+                        "PreconditionFailed" => {
+                            return RusotoError::Service(
+                                DeleteCachePolicyError::PreconditionFailed(parsed_error.message),
+                            )
+                        }
+                        _ => {}
                     }
-                    "CachePolicyInUse" => {
-                        return RusotoError::Service(DeleteCachePolicyError::CachePolicyInUse(
-                            parsed_error.message,
-                        ))
-                    }
-                    "IllegalDelete" => {
-                        return RusotoError::Service(DeleteCachePolicyError::IllegalDelete(
-                            parsed_error.message,
-                        ))
-                    }
-                    "InvalidIfMatchVersion" => {
-                        return RusotoError::Service(DeleteCachePolicyError::InvalidIfMatchVersion(
-                            parsed_error.message,
-                        ))
-                    }
-                    "NoSuchCachePolicy" => {
-                        return RusotoError::Service(DeleteCachePolicyError::NoSuchCachePolicy(
-                            parsed_error.message,
-                        ))
-                    }
-                    "PreconditionFailed" => {
-                        return RusotoError::Service(DeleteCachePolicyError::PreconditionFailed(
-                            parsed_error.message,
-                        ))
-                    }
-                    _ => {}
                 }
             }
         }
@@ -12860,10 +13210,13 @@ impl DeleteCloudFrontOriginAccessIdentityError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                                    "AccessDenied" => return RusotoError::Service(DeleteCloudFrontOriginAccessIdentityError::AccessDenied(parsed_error.message)),"CloudFrontOriginAccessIdentityInUse" => return RusotoError::Service(DeleteCloudFrontOriginAccessIdentityError::CloudFrontOriginAccessIdentityInUse(parsed_error.message)),"InvalidIfMatchVersion" => return RusotoError::Service(DeleteCloudFrontOriginAccessIdentityError::InvalidIfMatchVersion(parsed_error.message)),"NoSuchCloudFrontOriginAccessIdentity" => return RusotoError::Service(DeleteCloudFrontOriginAccessIdentityError::NoSuchCloudFrontOriginAccessIdentity(parsed_error.message)),"PreconditionFailed" => return RusotoError::Service(DeleteCloudFrontOriginAccessIdentityError::PreconditionFailed(parsed_error.message)),_ => {}
-                                }
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {
+                        "AccessDenied" => return RusotoError::Service(DeleteCloudFrontOriginAccessIdentityError::AccessDenied(parsed_error.message)),"CloudFrontOriginAccessIdentityInUse" => return RusotoError::Service(DeleteCloudFrontOriginAccessIdentityError::CloudFrontOriginAccessIdentityInUse(parsed_error.message)),"InvalidIfMatchVersion" => return RusotoError::Service(DeleteCloudFrontOriginAccessIdentityError::InvalidIfMatchVersion(parsed_error.message)),"NoSuchCloudFrontOriginAccessIdentity" => return RusotoError::Service(DeleteCloudFrontOriginAccessIdentityError::NoSuchCloudFrontOriginAccessIdentity(parsed_error.message)),"PreconditionFailed" => return RusotoError::Service(DeleteCloudFrontOriginAccessIdentityError::PreconditionFailed(parsed_error.message)),_ => {}
+                    }
+                }
             }
         }
         RusotoError::Unknown(res)
@@ -12921,34 +13274,41 @@ impl DeleteDistributionError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    "AccessDenied" => {
-                        return RusotoError::Service(DeleteDistributionError::AccessDenied(
-                            parsed_error.message,
-                        ))
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {
+                        "AccessDenied" => {
+                            return RusotoError::Service(DeleteDistributionError::AccessDenied(
+                                parsed_error.message,
+                            ))
+                        }
+                        "DistributionNotDisabled" => {
+                            return RusotoError::Service(
+                                DeleteDistributionError::DistributionNotDisabled(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "InvalidIfMatchVersion" => {
+                            return RusotoError::Service(
+                                DeleteDistributionError::InvalidIfMatchVersion(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "NoSuchDistribution" => {
+                            return RusotoError::Service(
+                                DeleteDistributionError::NoSuchDistribution(parsed_error.message),
+                            )
+                        }
+                        "PreconditionFailed" => {
+                            return RusotoError::Service(
+                                DeleteDistributionError::PreconditionFailed(parsed_error.message),
+                            )
+                        }
+                        _ => {}
                     }
-                    "DistributionNotDisabled" => {
-                        return RusotoError::Service(
-                            DeleteDistributionError::DistributionNotDisabled(parsed_error.message),
-                        )
-                    }
-                    "InvalidIfMatchVersion" => {
-                        return RusotoError::Service(
-                            DeleteDistributionError::InvalidIfMatchVersion(parsed_error.message),
-                        )
-                    }
-                    "NoSuchDistribution" => {
-                        return RusotoError::Service(DeleteDistributionError::NoSuchDistribution(
-                            parsed_error.message,
-                        ))
-                    }
-                    "PreconditionFailed" => {
-                        return RusotoError::Service(DeleteDistributionError::PreconditionFailed(
-                            parsed_error.message,
-                        ))
-                    }
-                    _ => {}
                 }
             }
         }
@@ -12999,44 +13359,43 @@ impl DeleteFieldLevelEncryptionConfigError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    "AccessDenied" => {
-                        return RusotoError::Service(
-                            DeleteFieldLevelEncryptionConfigError::AccessDenied(
-                                parsed_error.message,
-                            ),
-                        )
-                    }
-                    "FieldLevelEncryptionConfigInUse" => {
-                        return RusotoError::Service(
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {
+                        "AccessDenied" => {
+                            return RusotoError::Service(
+                                DeleteFieldLevelEncryptionConfigError::AccessDenied(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "FieldLevelEncryptionConfigInUse" => return RusotoError::Service(
                             DeleteFieldLevelEncryptionConfigError::FieldLevelEncryptionConfigInUse(
                                 parsed_error.message,
                             ),
-                        )
-                    }
-                    "InvalidIfMatchVersion" => {
-                        return RusotoError::Service(
-                            DeleteFieldLevelEncryptionConfigError::InvalidIfMatchVersion(
-                                parsed_error.message,
-                            ),
-                        )
-                    }
-                    "NoSuchFieldLevelEncryptionConfig" => {
-                        return RusotoError::Service(
+                        ),
+                        "InvalidIfMatchVersion" => {
+                            return RusotoError::Service(
+                                DeleteFieldLevelEncryptionConfigError::InvalidIfMatchVersion(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "NoSuchFieldLevelEncryptionConfig" => return RusotoError::Service(
                             DeleteFieldLevelEncryptionConfigError::NoSuchFieldLevelEncryptionConfig(
                                 parsed_error.message,
                             ),
-                        )
+                        ),
+                        "PreconditionFailed" => {
+                            return RusotoError::Service(
+                                DeleteFieldLevelEncryptionConfigError::PreconditionFailed(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        _ => {}
                     }
-                    "PreconditionFailed" => {
-                        return RusotoError::Service(
-                            DeleteFieldLevelEncryptionConfigError::PreconditionFailed(
-                                parsed_error.message,
-                            ),
-                        )
-                    }
-                    _ => {}
                 }
             }
         }
@@ -13097,40 +13456,12 @@ impl DeleteFieldLevelEncryptionProfileError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    "AccessDenied" => {
-                        return RusotoError::Service(
-                            DeleteFieldLevelEncryptionProfileError::AccessDenied(
-                                parsed_error.message,
-                            ),
-                        )
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {
+                        "AccessDenied" => return RusotoError::Service(DeleteFieldLevelEncryptionProfileError::AccessDenied(parsed_error.message)),"FieldLevelEncryptionProfileInUse" => return RusotoError::Service(DeleteFieldLevelEncryptionProfileError::FieldLevelEncryptionProfileInUse(parsed_error.message)),"InvalidIfMatchVersion" => return RusotoError::Service(DeleteFieldLevelEncryptionProfileError::InvalidIfMatchVersion(parsed_error.message)),"NoSuchFieldLevelEncryptionProfile" => return RusotoError::Service(DeleteFieldLevelEncryptionProfileError::NoSuchFieldLevelEncryptionProfile(parsed_error.message)),"PreconditionFailed" => return RusotoError::Service(DeleteFieldLevelEncryptionProfileError::PreconditionFailed(parsed_error.message)),_ => {}
                     }
-                    "FieldLevelEncryptionProfileInUse" => return RusotoError::Service(
-                        DeleteFieldLevelEncryptionProfileError::FieldLevelEncryptionProfileInUse(
-                            parsed_error.message,
-                        ),
-                    ),
-                    "InvalidIfMatchVersion" => {
-                        return RusotoError::Service(
-                            DeleteFieldLevelEncryptionProfileError::InvalidIfMatchVersion(
-                                parsed_error.message,
-                            ),
-                        )
-                    }
-                    "NoSuchFieldLevelEncryptionProfile" => return RusotoError::Service(
-                        DeleteFieldLevelEncryptionProfileError::NoSuchFieldLevelEncryptionProfile(
-                            parsed_error.message,
-                        ),
-                    ),
-                    "PreconditionFailed" => {
-                        return RusotoError::Service(
-                            DeleteFieldLevelEncryptionProfileError::PreconditionFailed(
-                                parsed_error.message,
-                            ),
-                        )
-                    }
-                    _ => {}
                 }
             }
         }
@@ -13187,29 +13518,32 @@ impl DeleteKeyGroupError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    "InvalidIfMatchVersion" => {
-                        return RusotoError::Service(DeleteKeyGroupError::InvalidIfMatchVersion(
-                            parsed_error.message,
-                        ))
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {
+                        "InvalidIfMatchVersion" => {
+                            return RusotoError::Service(
+                                DeleteKeyGroupError::InvalidIfMatchVersion(parsed_error.message),
+                            )
+                        }
+                        "NoSuchResource" => {
+                            return RusotoError::Service(DeleteKeyGroupError::NoSuchResource(
+                                parsed_error.message,
+                            ))
+                        }
+                        "PreconditionFailed" => {
+                            return RusotoError::Service(DeleteKeyGroupError::PreconditionFailed(
+                                parsed_error.message,
+                            ))
+                        }
+                        "ResourceInUse" => {
+                            return RusotoError::Service(DeleteKeyGroupError::ResourceInUse(
+                                parsed_error.message,
+                            ))
+                        }
+                        _ => {}
                     }
-                    "NoSuchResource" => {
-                        return RusotoError::Service(DeleteKeyGroupError::NoSuchResource(
-                            parsed_error.message,
-                        ))
-                    }
-                    "PreconditionFailed" => {
-                        return RusotoError::Service(DeleteKeyGroupError::PreconditionFailed(
-                            parsed_error.message,
-                        ))
-                    }
-                    "ResourceInUse" => {
-                        return RusotoError::Service(DeleteKeyGroupError::ResourceInUse(
-                            parsed_error.message,
-                        ))
-                    }
-                    _ => {}
                 }
             }
         }
@@ -13253,21 +13587,26 @@ impl DeleteMonitoringSubscriptionError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    "AccessDenied" => {
-                        return RusotoError::Service(
-                            DeleteMonitoringSubscriptionError::AccessDenied(parsed_error.message),
-                        )
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {
+                        "AccessDenied" => {
+                            return RusotoError::Service(
+                                DeleteMonitoringSubscriptionError::AccessDenied(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "NoSuchDistribution" => {
+                            return RusotoError::Service(
+                                DeleteMonitoringSubscriptionError::NoSuchDistribution(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        _ => {}
                     }
-                    "NoSuchDistribution" => {
-                        return RusotoError::Service(
-                            DeleteMonitoringSubscriptionError::NoSuchDistribution(
-                                parsed_error.message,
-                            ),
-                        )
-                    }
-                    _ => {}
                 }
             }
         }
@@ -13317,47 +13656,50 @@ impl DeleteOriginRequestPolicyError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    "AccessDenied" => {
-                        return RusotoError::Service(DeleteOriginRequestPolicyError::AccessDenied(
-                            parsed_error.message,
-                        ))
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {
+                        "AccessDenied" => {
+                            return RusotoError::Service(
+                                DeleteOriginRequestPolicyError::AccessDenied(parsed_error.message),
+                            )
+                        }
+                        "IllegalDelete" => {
+                            return RusotoError::Service(
+                                DeleteOriginRequestPolicyError::IllegalDelete(parsed_error.message),
+                            )
+                        }
+                        "InvalidIfMatchVersion" => {
+                            return RusotoError::Service(
+                                DeleteOriginRequestPolicyError::InvalidIfMatchVersion(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "NoSuchOriginRequestPolicy" => {
+                            return RusotoError::Service(
+                                DeleteOriginRequestPolicyError::NoSuchOriginRequestPolicy(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "OriginRequestPolicyInUse" => {
+                            return RusotoError::Service(
+                                DeleteOriginRequestPolicyError::OriginRequestPolicyInUse(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "PreconditionFailed" => {
+                            return RusotoError::Service(
+                                DeleteOriginRequestPolicyError::PreconditionFailed(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        _ => {}
                     }
-                    "IllegalDelete" => {
-                        return RusotoError::Service(DeleteOriginRequestPolicyError::IllegalDelete(
-                            parsed_error.message,
-                        ))
-                    }
-                    "InvalidIfMatchVersion" => {
-                        return RusotoError::Service(
-                            DeleteOriginRequestPolicyError::InvalidIfMatchVersion(
-                                parsed_error.message,
-                            ),
-                        )
-                    }
-                    "NoSuchOriginRequestPolicy" => {
-                        return RusotoError::Service(
-                            DeleteOriginRequestPolicyError::NoSuchOriginRequestPolicy(
-                                parsed_error.message,
-                            ),
-                        )
-                    }
-                    "OriginRequestPolicyInUse" => {
-                        return RusotoError::Service(
-                            DeleteOriginRequestPolicyError::OriginRequestPolicyInUse(
-                                parsed_error.message,
-                            ),
-                        )
-                    }
-                    "PreconditionFailed" => {
-                        return RusotoError::Service(
-                            DeleteOriginRequestPolicyError::PreconditionFailed(
-                                parsed_error.message,
-                            ),
-                        )
-                    }
-                    _ => {}
                 }
             }
         }
@@ -13413,34 +13755,37 @@ impl DeletePublicKeyError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    "AccessDenied" => {
-                        return RusotoError::Service(DeletePublicKeyError::AccessDenied(
-                            parsed_error.message,
-                        ))
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {
+                        "AccessDenied" => {
+                            return RusotoError::Service(DeletePublicKeyError::AccessDenied(
+                                parsed_error.message,
+                            ))
+                        }
+                        "InvalidIfMatchVersion" => {
+                            return RusotoError::Service(
+                                DeletePublicKeyError::InvalidIfMatchVersion(parsed_error.message),
+                            )
+                        }
+                        "NoSuchPublicKey" => {
+                            return RusotoError::Service(DeletePublicKeyError::NoSuchPublicKey(
+                                parsed_error.message,
+                            ))
+                        }
+                        "PreconditionFailed" => {
+                            return RusotoError::Service(DeletePublicKeyError::PreconditionFailed(
+                                parsed_error.message,
+                            ))
+                        }
+                        "PublicKeyInUse" => {
+                            return RusotoError::Service(DeletePublicKeyError::PublicKeyInUse(
+                                parsed_error.message,
+                            ))
+                        }
+                        _ => {}
                     }
-                    "InvalidIfMatchVersion" => {
-                        return RusotoError::Service(DeletePublicKeyError::InvalidIfMatchVersion(
-                            parsed_error.message,
-                        ))
-                    }
-                    "NoSuchPublicKey" => {
-                        return RusotoError::Service(DeletePublicKeyError::NoSuchPublicKey(
-                            parsed_error.message,
-                        ))
-                    }
-                    "PreconditionFailed" => {
-                        return RusotoError::Service(DeletePublicKeyError::PreconditionFailed(
-                            parsed_error.message,
-                        ))
-                    }
-                    "PublicKeyInUse" => {
-                        return RusotoError::Service(DeletePublicKeyError::PublicKeyInUse(
-                            parsed_error.message,
-                        ))
-                    }
-                    _ => {}
                 }
             }
         }
@@ -13487,33 +13832,36 @@ impl DeleteRealtimeLogConfigError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    "AccessDenied" => {
-                        return RusotoError::Service(DeleteRealtimeLogConfigError::AccessDenied(
-                            parsed_error.message,
-                        ))
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {
+                        "AccessDenied" => {
+                            return RusotoError::Service(
+                                DeleteRealtimeLogConfigError::AccessDenied(parsed_error.message),
+                            )
+                        }
+                        "InvalidArgument" => {
+                            return RusotoError::Service(
+                                DeleteRealtimeLogConfigError::InvalidArgument(parsed_error.message),
+                            )
+                        }
+                        "NoSuchRealtimeLogConfig" => {
+                            return RusotoError::Service(
+                                DeleteRealtimeLogConfigError::NoSuchRealtimeLogConfig(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "RealtimeLogConfigInUse" => {
+                            return RusotoError::Service(
+                                DeleteRealtimeLogConfigError::RealtimeLogConfigInUse(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        _ => {}
                     }
-                    "InvalidArgument" => {
-                        return RusotoError::Service(DeleteRealtimeLogConfigError::InvalidArgument(
-                            parsed_error.message,
-                        ))
-                    }
-                    "NoSuchRealtimeLogConfig" => {
-                        return RusotoError::Service(
-                            DeleteRealtimeLogConfigError::NoSuchRealtimeLogConfig(
-                                parsed_error.message,
-                            ),
-                        )
-                    }
-                    "RealtimeLogConfigInUse" => {
-                        return RusotoError::Service(
-                            DeleteRealtimeLogConfigError::RealtimeLogConfigInUse(
-                                parsed_error.message,
-                            ),
-                        )
-                    }
-                    _ => {}
                 }
             }
         }
@@ -13567,42 +13915,47 @@ impl DeleteStreamingDistributionError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    "AccessDenied" => {
-                        return RusotoError::Service(
-                            DeleteStreamingDistributionError::AccessDenied(parsed_error.message),
-                        )
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {
+                        "AccessDenied" => {
+                            return RusotoError::Service(
+                                DeleteStreamingDistributionError::AccessDenied(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "InvalidIfMatchVersion" => {
+                            return RusotoError::Service(
+                                DeleteStreamingDistributionError::InvalidIfMatchVersion(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "NoSuchStreamingDistribution" => {
+                            return RusotoError::Service(
+                                DeleteStreamingDistributionError::NoSuchStreamingDistribution(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "PreconditionFailed" => {
+                            return RusotoError::Service(
+                                DeleteStreamingDistributionError::PreconditionFailed(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "StreamingDistributionNotDisabled" => {
+                            return RusotoError::Service(
+                                DeleteStreamingDistributionError::StreamingDistributionNotDisabled(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        _ => {}
                     }
-                    "InvalidIfMatchVersion" => {
-                        return RusotoError::Service(
-                            DeleteStreamingDistributionError::InvalidIfMatchVersion(
-                                parsed_error.message,
-                            ),
-                        )
-                    }
-                    "NoSuchStreamingDistribution" => {
-                        return RusotoError::Service(
-                            DeleteStreamingDistributionError::NoSuchStreamingDistribution(
-                                parsed_error.message,
-                            ),
-                        )
-                    }
-                    "PreconditionFailed" => {
-                        return RusotoError::Service(
-                            DeleteStreamingDistributionError::PreconditionFailed(
-                                parsed_error.message,
-                            ),
-                        )
-                    }
-                    "StreamingDistributionNotDisabled" => {
-                        return RusotoError::Service(
-                            DeleteStreamingDistributionError::StreamingDistributionNotDisabled(
-                                parsed_error.message,
-                            ),
-                        )
-                    }
-                    _ => {}
                 }
             }
         }
@@ -13653,19 +14006,22 @@ impl GetCachePolicyError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    "AccessDenied" => {
-                        return RusotoError::Service(GetCachePolicyError::AccessDenied(
-                            parsed_error.message,
-                        ))
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {
+                        "AccessDenied" => {
+                            return RusotoError::Service(GetCachePolicyError::AccessDenied(
+                                parsed_error.message,
+                            ))
+                        }
+                        "NoSuchCachePolicy" => {
+                            return RusotoError::Service(GetCachePolicyError::NoSuchCachePolicy(
+                                parsed_error.message,
+                            ))
+                        }
+                        _ => {}
                     }
-                    "NoSuchCachePolicy" => {
-                        return RusotoError::Service(GetCachePolicyError::NoSuchCachePolicy(
-                            parsed_error.message,
-                        ))
-                    }
-                    _ => {}
                 }
             }
         }
@@ -13705,19 +14061,22 @@ impl GetCachePolicyConfigError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    "AccessDenied" => {
-                        return RusotoError::Service(GetCachePolicyConfigError::AccessDenied(
-                            parsed_error.message,
-                        ))
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {
+                        "AccessDenied" => {
+                            return RusotoError::Service(GetCachePolicyConfigError::AccessDenied(
+                                parsed_error.message,
+                            ))
+                        }
+                        "NoSuchCachePolicy" => {
+                            return RusotoError::Service(
+                                GetCachePolicyConfigError::NoSuchCachePolicy(parsed_error.message),
+                            )
+                        }
+                        _ => {}
                     }
-                    "NoSuchCachePolicy" => {
-                        return RusotoError::Service(GetCachePolicyConfigError::NoSuchCachePolicy(
-                            parsed_error.message,
-                        ))
-                    }
-                    _ => {}
                 }
             }
         }
@@ -13759,10 +14118,13 @@ impl GetCloudFrontOriginAccessIdentityError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                                    "AccessDenied" => return RusotoError::Service(GetCloudFrontOriginAccessIdentityError::AccessDenied(parsed_error.message)),"NoSuchCloudFrontOriginAccessIdentity" => return RusotoError::Service(GetCloudFrontOriginAccessIdentityError::NoSuchCloudFrontOriginAccessIdentity(parsed_error.message)),_ => {}
-                                }
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {
+                        "AccessDenied" => return RusotoError::Service(GetCloudFrontOriginAccessIdentityError::AccessDenied(parsed_error.message)),"NoSuchCloudFrontOriginAccessIdentity" => return RusotoError::Service(GetCloudFrontOriginAccessIdentityError::NoSuchCloudFrontOriginAccessIdentity(parsed_error.message)),_ => {}
+                    }
+                }
             }
         }
         RusotoError::Unknown(res)
@@ -13807,10 +14169,13 @@ impl GetCloudFrontOriginAccessIdentityConfigError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                                    "AccessDenied" => return RusotoError::Service(GetCloudFrontOriginAccessIdentityConfigError::AccessDenied(parsed_error.message)),"NoSuchCloudFrontOriginAccessIdentity" => return RusotoError::Service(GetCloudFrontOriginAccessIdentityConfigError::NoSuchCloudFrontOriginAccessIdentity(parsed_error.message)),_ => {}
-                                }
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {
+                        "AccessDenied" => return RusotoError::Service(GetCloudFrontOriginAccessIdentityConfigError::AccessDenied(parsed_error.message)),"NoSuchCloudFrontOriginAccessIdentity" => return RusotoError::Service(GetCloudFrontOriginAccessIdentityConfigError::NoSuchCloudFrontOriginAccessIdentity(parsed_error.message)),_ => {}
+                    }
+                }
             }
         }
         RusotoError::Unknown(res)
@@ -13853,19 +14218,22 @@ impl GetDistributionError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    "AccessDenied" => {
-                        return RusotoError::Service(GetDistributionError::AccessDenied(
-                            parsed_error.message,
-                        ))
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {
+                        "AccessDenied" => {
+                            return RusotoError::Service(GetDistributionError::AccessDenied(
+                                parsed_error.message,
+                            ))
+                        }
+                        "NoSuchDistribution" => {
+                            return RusotoError::Service(GetDistributionError::NoSuchDistribution(
+                                parsed_error.message,
+                            ))
+                        }
+                        _ => {}
                     }
-                    "NoSuchDistribution" => {
-                        return RusotoError::Service(GetDistributionError::NoSuchDistribution(
-                            parsed_error.message,
-                        ))
-                    }
-                    _ => {}
                 }
             }
         }
@@ -13905,19 +14273,24 @@ impl GetDistributionConfigError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    "AccessDenied" => {
-                        return RusotoError::Service(GetDistributionConfigError::AccessDenied(
-                            parsed_error.message,
-                        ))
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {
+                        "AccessDenied" => {
+                            return RusotoError::Service(GetDistributionConfigError::AccessDenied(
+                                parsed_error.message,
+                            ))
+                        }
+                        "NoSuchDistribution" => {
+                            return RusotoError::Service(
+                                GetDistributionConfigError::NoSuchDistribution(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        _ => {}
                     }
-                    "NoSuchDistribution" => {
-                        return RusotoError::Service(
-                            GetDistributionConfigError::NoSuchDistribution(parsed_error.message),
-                        )
-                    }
-                    _ => {}
                 }
             }
         }
@@ -13957,21 +14330,24 @@ impl GetFieldLevelEncryptionError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    "AccessDenied" => {
-                        return RusotoError::Service(GetFieldLevelEncryptionError::AccessDenied(
-                            parsed_error.message,
-                        ))
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {
+                        "AccessDenied" => {
+                            return RusotoError::Service(
+                                GetFieldLevelEncryptionError::AccessDenied(parsed_error.message),
+                            )
+                        }
+                        "NoSuchFieldLevelEncryptionConfig" => {
+                            return RusotoError::Service(
+                                GetFieldLevelEncryptionError::NoSuchFieldLevelEncryptionConfig(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        _ => {}
                     }
-                    "NoSuchFieldLevelEncryptionConfig" => {
-                        return RusotoError::Service(
-                            GetFieldLevelEncryptionError::NoSuchFieldLevelEncryptionConfig(
-                                parsed_error.message,
-                            ),
-                        )
-                    }
-                    _ => {}
                 }
             }
         }
@@ -14015,21 +14391,24 @@ impl GetFieldLevelEncryptionConfigError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    "AccessDenied" => {
-                        return RusotoError::Service(
-                            GetFieldLevelEncryptionConfigError::AccessDenied(parsed_error.message),
-                        )
-                    }
-                    "NoSuchFieldLevelEncryptionConfig" => {
-                        return RusotoError::Service(
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {
+                        "AccessDenied" => {
+                            return RusotoError::Service(
+                                GetFieldLevelEncryptionConfigError::AccessDenied(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "NoSuchFieldLevelEncryptionConfig" => return RusotoError::Service(
                             GetFieldLevelEncryptionConfigError::NoSuchFieldLevelEncryptionConfig(
                                 parsed_error.message,
                             ),
-                        )
+                        ),
+                        _ => {}
                     }
-                    _ => {}
                 }
             }
         }
@@ -14073,21 +14452,24 @@ impl GetFieldLevelEncryptionProfileError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    "AccessDenied" => {
-                        return RusotoError::Service(
-                            GetFieldLevelEncryptionProfileError::AccessDenied(parsed_error.message),
-                        )
-                    }
-                    "NoSuchFieldLevelEncryptionProfile" => {
-                        return RusotoError::Service(
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {
+                        "AccessDenied" => {
+                            return RusotoError::Service(
+                                GetFieldLevelEncryptionProfileError::AccessDenied(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "NoSuchFieldLevelEncryptionProfile" => return RusotoError::Service(
                             GetFieldLevelEncryptionProfileError::NoSuchFieldLevelEncryptionProfile(
                                 parsed_error.message,
                             ),
-                        )
+                        ),
+                        _ => {}
                     }
-                    _ => {}
                 }
             }
         }
@@ -14131,10 +14513,13 @@ impl GetFieldLevelEncryptionProfileConfigError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                                    "AccessDenied" => return RusotoError::Service(GetFieldLevelEncryptionProfileConfigError::AccessDenied(parsed_error.message)),"NoSuchFieldLevelEncryptionProfile" => return RusotoError::Service(GetFieldLevelEncryptionProfileConfigError::NoSuchFieldLevelEncryptionProfile(parsed_error.message)),_ => {}
-                                }
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {
+                        "AccessDenied" => return RusotoError::Service(GetFieldLevelEncryptionProfileConfigError::AccessDenied(parsed_error.message)),"NoSuchFieldLevelEncryptionProfile" => return RusotoError::Service(GetFieldLevelEncryptionProfileConfigError::NoSuchFieldLevelEncryptionProfile(parsed_error.message)),_ => {}
+                    }
+                }
             }
         }
         RusotoError::Unknown(res)
@@ -14179,24 +14564,27 @@ impl GetInvalidationError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    "AccessDenied" => {
-                        return RusotoError::Service(GetInvalidationError::AccessDenied(
-                            parsed_error.message,
-                        ))
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {
+                        "AccessDenied" => {
+                            return RusotoError::Service(GetInvalidationError::AccessDenied(
+                                parsed_error.message,
+                            ))
+                        }
+                        "NoSuchDistribution" => {
+                            return RusotoError::Service(GetInvalidationError::NoSuchDistribution(
+                                parsed_error.message,
+                            ))
+                        }
+                        "NoSuchInvalidation" => {
+                            return RusotoError::Service(GetInvalidationError::NoSuchInvalidation(
+                                parsed_error.message,
+                            ))
+                        }
+                        _ => {}
                     }
-                    "NoSuchDistribution" => {
-                        return RusotoError::Service(GetInvalidationError::NoSuchDistribution(
-                            parsed_error.message,
-                        ))
-                    }
-                    "NoSuchInvalidation" => {
-                        return RusotoError::Service(GetInvalidationError::NoSuchInvalidation(
-                            parsed_error.message,
-                        ))
-                    }
-                    _ => {}
                 }
             }
         }
@@ -14235,14 +14623,17 @@ impl GetKeyGroupError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    "NoSuchResource" => {
-                        return RusotoError::Service(GetKeyGroupError::NoSuchResource(
-                            parsed_error.message,
-                        ))
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {
+                        "NoSuchResource" => {
+                            return RusotoError::Service(GetKeyGroupError::NoSuchResource(
+                                parsed_error.message,
+                            ))
+                        }
+                        _ => {}
                     }
-                    _ => {}
                 }
             }
         }
@@ -14279,14 +14670,17 @@ impl GetKeyGroupConfigError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    "NoSuchResource" => {
-                        return RusotoError::Service(GetKeyGroupConfigError::NoSuchResource(
-                            parsed_error.message,
-                        ))
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {
+                        "NoSuchResource" => {
+                            return RusotoError::Service(GetKeyGroupConfigError::NoSuchResource(
+                                parsed_error.message,
+                            ))
+                        }
+                        _ => {}
                     }
-                    _ => {}
                 }
             }
         }
@@ -14325,21 +14719,24 @@ impl GetMonitoringSubscriptionError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    "AccessDenied" => {
-                        return RusotoError::Service(GetMonitoringSubscriptionError::AccessDenied(
-                            parsed_error.message,
-                        ))
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {
+                        "AccessDenied" => {
+                            return RusotoError::Service(
+                                GetMonitoringSubscriptionError::AccessDenied(parsed_error.message),
+                            )
+                        }
+                        "NoSuchDistribution" => {
+                            return RusotoError::Service(
+                                GetMonitoringSubscriptionError::NoSuchDistribution(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        _ => {}
                     }
-                    "NoSuchDistribution" => {
-                        return RusotoError::Service(
-                            GetMonitoringSubscriptionError::NoSuchDistribution(
-                                parsed_error.message,
-                            ),
-                        )
-                    }
-                    _ => {}
                 }
             }
         }
@@ -14379,21 +14776,24 @@ impl GetOriginRequestPolicyError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    "AccessDenied" => {
-                        return RusotoError::Service(GetOriginRequestPolicyError::AccessDenied(
-                            parsed_error.message,
-                        ))
-                    }
-                    "NoSuchOriginRequestPolicy" => {
-                        return RusotoError::Service(
-                            GetOriginRequestPolicyError::NoSuchOriginRequestPolicy(
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {
+                        "AccessDenied" => {
+                            return RusotoError::Service(GetOriginRequestPolicyError::AccessDenied(
                                 parsed_error.message,
-                            ),
-                        )
+                            ))
+                        }
+                        "NoSuchOriginRequestPolicy" => {
+                            return RusotoError::Service(
+                                GetOriginRequestPolicyError::NoSuchOriginRequestPolicy(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        _ => {}
                     }
-                    _ => {}
                 }
             }
         }
@@ -14437,21 +14837,26 @@ impl GetOriginRequestPolicyConfigError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    "AccessDenied" => {
-                        return RusotoError::Service(
-                            GetOriginRequestPolicyConfigError::AccessDenied(parsed_error.message),
-                        )
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {
+                        "AccessDenied" => {
+                            return RusotoError::Service(
+                                GetOriginRequestPolicyConfigError::AccessDenied(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "NoSuchOriginRequestPolicy" => {
+                            return RusotoError::Service(
+                                GetOriginRequestPolicyConfigError::NoSuchOriginRequestPolicy(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        _ => {}
                     }
-                    "NoSuchOriginRequestPolicy" => {
-                        return RusotoError::Service(
-                            GetOriginRequestPolicyConfigError::NoSuchOriginRequestPolicy(
-                                parsed_error.message,
-                            ),
-                        )
-                    }
-                    _ => {}
                 }
             }
         }
@@ -14493,19 +14898,22 @@ impl GetPublicKeyError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    "AccessDenied" => {
-                        return RusotoError::Service(GetPublicKeyError::AccessDenied(
-                            parsed_error.message,
-                        ))
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {
+                        "AccessDenied" => {
+                            return RusotoError::Service(GetPublicKeyError::AccessDenied(
+                                parsed_error.message,
+                            ))
+                        }
+                        "NoSuchPublicKey" => {
+                            return RusotoError::Service(GetPublicKeyError::NoSuchPublicKey(
+                                parsed_error.message,
+                            ))
+                        }
+                        _ => {}
                     }
-                    "NoSuchPublicKey" => {
-                        return RusotoError::Service(GetPublicKeyError::NoSuchPublicKey(
-                            parsed_error.message,
-                        ))
-                    }
-                    _ => {}
                 }
             }
         }
@@ -14545,19 +14953,22 @@ impl GetPublicKeyConfigError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    "AccessDenied" => {
-                        return RusotoError::Service(GetPublicKeyConfigError::AccessDenied(
-                            parsed_error.message,
-                        ))
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {
+                        "AccessDenied" => {
+                            return RusotoError::Service(GetPublicKeyConfigError::AccessDenied(
+                                parsed_error.message,
+                            ))
+                        }
+                        "NoSuchPublicKey" => {
+                            return RusotoError::Service(GetPublicKeyConfigError::NoSuchPublicKey(
+                                parsed_error.message,
+                            ))
+                        }
+                        _ => {}
                     }
-                    "NoSuchPublicKey" => {
-                        return RusotoError::Service(GetPublicKeyConfigError::NoSuchPublicKey(
-                            parsed_error.message,
-                        ))
-                    }
-                    _ => {}
                 }
             }
         }
@@ -14599,26 +15010,29 @@ impl GetRealtimeLogConfigError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    "AccessDenied" => {
-                        return RusotoError::Service(GetRealtimeLogConfigError::AccessDenied(
-                            parsed_error.message,
-                        ))
-                    }
-                    "InvalidArgument" => {
-                        return RusotoError::Service(GetRealtimeLogConfigError::InvalidArgument(
-                            parsed_error.message,
-                        ))
-                    }
-                    "NoSuchRealtimeLogConfig" => {
-                        return RusotoError::Service(
-                            GetRealtimeLogConfigError::NoSuchRealtimeLogConfig(
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {
+                        "AccessDenied" => {
+                            return RusotoError::Service(GetRealtimeLogConfigError::AccessDenied(
                                 parsed_error.message,
-                            ),
-                        )
+                            ))
+                        }
+                        "InvalidArgument" => {
+                            return RusotoError::Service(
+                                GetRealtimeLogConfigError::InvalidArgument(parsed_error.message),
+                            )
+                        }
+                        "NoSuchRealtimeLogConfig" => {
+                            return RusotoError::Service(
+                                GetRealtimeLogConfigError::NoSuchRealtimeLogConfig(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        _ => {}
                     }
-                    _ => {}
                 }
             }
         }
@@ -14659,21 +15073,24 @@ impl GetStreamingDistributionError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    "AccessDenied" => {
-                        return RusotoError::Service(GetStreamingDistributionError::AccessDenied(
-                            parsed_error.message,
-                        ))
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {
+                        "AccessDenied" => {
+                            return RusotoError::Service(
+                                GetStreamingDistributionError::AccessDenied(parsed_error.message),
+                            )
+                        }
+                        "NoSuchStreamingDistribution" => {
+                            return RusotoError::Service(
+                                GetStreamingDistributionError::NoSuchStreamingDistribution(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        _ => {}
                     }
-                    "NoSuchStreamingDistribution" => {
-                        return RusotoError::Service(
-                            GetStreamingDistributionError::NoSuchStreamingDistribution(
-                                parsed_error.message,
-                            ),
-                        )
-                    }
-                    _ => {}
                 }
             }
         }
@@ -14717,21 +15134,26 @@ impl GetStreamingDistributionConfigError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    "AccessDenied" => {
-                        return RusotoError::Service(
-                            GetStreamingDistributionConfigError::AccessDenied(parsed_error.message),
-                        )
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {
+                        "AccessDenied" => {
+                            return RusotoError::Service(
+                                GetStreamingDistributionConfigError::AccessDenied(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "NoSuchStreamingDistribution" => {
+                            return RusotoError::Service(
+                                GetStreamingDistributionConfigError::NoSuchStreamingDistribution(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        _ => {}
                     }
-                    "NoSuchStreamingDistribution" => {
-                        return RusotoError::Service(
-                            GetStreamingDistributionConfigError::NoSuchStreamingDistribution(
-                                parsed_error.message,
-                            ),
-                        )
-                    }
-                    _ => {}
                 }
             }
         }
@@ -14775,24 +15197,27 @@ impl ListCachePoliciesError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    "AccessDenied" => {
-                        return RusotoError::Service(ListCachePoliciesError::AccessDenied(
-                            parsed_error.message,
-                        ))
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {
+                        "AccessDenied" => {
+                            return RusotoError::Service(ListCachePoliciesError::AccessDenied(
+                                parsed_error.message,
+                            ))
+                        }
+                        "InvalidArgument" => {
+                            return RusotoError::Service(ListCachePoliciesError::InvalidArgument(
+                                parsed_error.message,
+                            ))
+                        }
+                        "NoSuchCachePolicy" => {
+                            return RusotoError::Service(ListCachePoliciesError::NoSuchCachePolicy(
+                                parsed_error.message,
+                            ))
+                        }
+                        _ => {}
                     }
-                    "InvalidArgument" => {
-                        return RusotoError::Service(ListCachePoliciesError::InvalidArgument(
-                            parsed_error.message,
-                        ))
-                    }
-                    "NoSuchCachePolicy" => {
-                        return RusotoError::Service(ListCachePoliciesError::NoSuchCachePolicy(
-                            parsed_error.message,
-                        ))
-                    }
-                    _ => {}
                 }
             }
         }
@@ -14833,16 +15258,19 @@ impl ListCloudFrontOriginAccessIdentitiesError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    "InvalidArgument" => {
-                        return RusotoError::Service(
-                            ListCloudFrontOriginAccessIdentitiesError::InvalidArgument(
-                                parsed_error.message,
-                            ),
-                        )
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {
+                        "InvalidArgument" => {
+                            return RusotoError::Service(
+                                ListCloudFrontOriginAccessIdentitiesError::InvalidArgument(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        _ => {}
                     }
-                    _ => {}
                 }
             }
         }
@@ -14881,14 +15309,17 @@ impl ListDistributionsError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    "InvalidArgument" => {
-                        return RusotoError::Service(ListDistributionsError::InvalidArgument(
-                            parsed_error.message,
-                        ))
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {
+                        "InvalidArgument" => {
+                            return RusotoError::Service(ListDistributionsError::InvalidArgument(
+                                parsed_error.message,
+                            ))
+                        }
+                        _ => {}
                     }
-                    _ => {}
                 }
             }
         }
@@ -14931,30 +15362,33 @@ impl ListDistributionsByCachePolicyIdError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    "AccessDenied" => {
-                        return RusotoError::Service(
-                            ListDistributionsByCachePolicyIdError::AccessDenied(
-                                parsed_error.message,
-                            ),
-                        )
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {
+                        "AccessDenied" => {
+                            return RusotoError::Service(
+                                ListDistributionsByCachePolicyIdError::AccessDenied(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "InvalidArgument" => {
+                            return RusotoError::Service(
+                                ListDistributionsByCachePolicyIdError::InvalidArgument(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "NoSuchCachePolicy" => {
+                            return RusotoError::Service(
+                                ListDistributionsByCachePolicyIdError::NoSuchCachePolicy(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        _ => {}
                     }
-                    "InvalidArgument" => {
-                        return RusotoError::Service(
-                            ListDistributionsByCachePolicyIdError::InvalidArgument(
-                                parsed_error.message,
-                            ),
-                        )
-                    }
-                    "NoSuchCachePolicy" => {
-                        return RusotoError::Service(
-                            ListDistributionsByCachePolicyIdError::NoSuchCachePolicy(
-                                parsed_error.message,
-                            ),
-                        )
-                    }
-                    _ => {}
                 }
             }
         }
@@ -15003,19 +15437,26 @@ impl ListDistributionsByKeyGroupError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    "InvalidArgument" => {
-                        return RusotoError::Service(
-                            ListDistributionsByKeyGroupError::InvalidArgument(parsed_error.message),
-                        )
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {
+                        "InvalidArgument" => {
+                            return RusotoError::Service(
+                                ListDistributionsByKeyGroupError::InvalidArgument(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "NoSuchResource" => {
+                            return RusotoError::Service(
+                                ListDistributionsByKeyGroupError::NoSuchResource(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        _ => {}
                     }
-                    "NoSuchResource" => {
-                        return RusotoError::Service(
-                            ListDistributionsByKeyGroupError::NoSuchResource(parsed_error.message),
-                        )
-                    }
-                    _ => {}
                 }
             }
         }
@@ -15059,28 +15500,12 @@ impl ListDistributionsByOriginRequestPolicyIdError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    "AccessDenied" => {
-                        return RusotoError::Service(
-                            ListDistributionsByOriginRequestPolicyIdError::AccessDenied(
-                                parsed_error.message,
-                            ),
-                        )
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {
+                        "AccessDenied" => return RusotoError::Service(ListDistributionsByOriginRequestPolicyIdError::AccessDenied(parsed_error.message)),"InvalidArgument" => return RusotoError::Service(ListDistributionsByOriginRequestPolicyIdError::InvalidArgument(parsed_error.message)),"NoSuchOriginRequestPolicy" => return RusotoError::Service(ListDistributionsByOriginRequestPolicyIdError::NoSuchOriginRequestPolicy(parsed_error.message)),_ => {}
                     }
-                    "InvalidArgument" => {
-                        return RusotoError::Service(
-                            ListDistributionsByOriginRequestPolicyIdError::InvalidArgument(
-                                parsed_error.message,
-                            ),
-                        )
-                    }
-                    "NoSuchOriginRequestPolicy" => return RusotoError::Service(
-                        ListDistributionsByOriginRequestPolicyIdError::NoSuchOriginRequestPolicy(
-                            parsed_error.message,
-                        ),
-                    ),
-                    _ => {}
                 }
             }
         }
@@ -15127,16 +15552,19 @@ impl ListDistributionsByRealtimeLogConfigError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    "InvalidArgument" => {
-                        return RusotoError::Service(
-                            ListDistributionsByRealtimeLogConfigError::InvalidArgument(
-                                parsed_error.message,
-                            ),
-                        )
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {
+                        "InvalidArgument" => {
+                            return RusotoError::Service(
+                                ListDistributionsByRealtimeLogConfigError::InvalidArgument(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        _ => {}
                     }
-                    _ => {}
                 }
             }
         }
@@ -15179,19 +15607,26 @@ impl ListDistributionsByWebACLIdError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    "InvalidArgument" => {
-                        return RusotoError::Service(
-                            ListDistributionsByWebACLIdError::InvalidArgument(parsed_error.message),
-                        )
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {
+                        "InvalidArgument" => {
+                            return RusotoError::Service(
+                                ListDistributionsByWebACLIdError::InvalidArgument(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "InvalidWebACLId" => {
+                            return RusotoError::Service(
+                                ListDistributionsByWebACLIdError::InvalidWebACLId(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        _ => {}
                     }
-                    "InvalidWebACLId" => {
-                        return RusotoError::Service(
-                            ListDistributionsByWebACLIdError::InvalidWebACLId(parsed_error.message),
-                        )
-                    }
-                    _ => {}
                 }
             }
         }
@@ -15231,16 +15666,19 @@ impl ListFieldLevelEncryptionConfigsError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    "InvalidArgument" => {
-                        return RusotoError::Service(
-                            ListFieldLevelEncryptionConfigsError::InvalidArgument(
-                                parsed_error.message,
-                            ),
-                        )
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {
+                        "InvalidArgument" => {
+                            return RusotoError::Service(
+                                ListFieldLevelEncryptionConfigsError::InvalidArgument(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        _ => {}
                     }
-                    _ => {}
                 }
             }
         }
@@ -15281,16 +15719,19 @@ impl ListFieldLevelEncryptionProfilesError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    "InvalidArgument" => {
-                        return RusotoError::Service(
-                            ListFieldLevelEncryptionProfilesError::InvalidArgument(
-                                parsed_error.message,
-                            ),
-                        )
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {
+                        "InvalidArgument" => {
+                            return RusotoError::Service(
+                                ListFieldLevelEncryptionProfilesError::InvalidArgument(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        _ => {}
                     }
-                    _ => {}
                 }
             }
         }
@@ -15333,24 +15774,27 @@ impl ListInvalidationsError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    "AccessDenied" => {
-                        return RusotoError::Service(ListInvalidationsError::AccessDenied(
-                            parsed_error.message,
-                        ))
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {
+                        "AccessDenied" => {
+                            return RusotoError::Service(ListInvalidationsError::AccessDenied(
+                                parsed_error.message,
+                            ))
+                        }
+                        "InvalidArgument" => {
+                            return RusotoError::Service(ListInvalidationsError::InvalidArgument(
+                                parsed_error.message,
+                            ))
+                        }
+                        "NoSuchDistribution" => {
+                            return RusotoError::Service(
+                                ListInvalidationsError::NoSuchDistribution(parsed_error.message),
+                            )
+                        }
+                        _ => {}
                     }
-                    "InvalidArgument" => {
-                        return RusotoError::Service(ListInvalidationsError::InvalidArgument(
-                            parsed_error.message,
-                        ))
-                    }
-                    "NoSuchDistribution" => {
-                        return RusotoError::Service(ListInvalidationsError::NoSuchDistribution(
-                            parsed_error.message,
-                        ))
-                    }
-                    _ => {}
                 }
             }
         }
@@ -15389,14 +15833,17 @@ impl ListKeyGroupsError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    "InvalidArgument" => {
-                        return RusotoError::Service(ListKeyGroupsError::InvalidArgument(
-                            parsed_error.message,
-                        ))
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {
+                        "InvalidArgument" => {
+                            return RusotoError::Service(ListKeyGroupsError::InvalidArgument(
+                                parsed_error.message,
+                            ))
+                        }
+                        _ => {}
                     }
-                    _ => {}
                 }
             }
         }
@@ -15437,26 +15884,31 @@ impl ListOriginRequestPoliciesError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    "AccessDenied" => {
-                        return RusotoError::Service(ListOriginRequestPoliciesError::AccessDenied(
-                            parsed_error.message,
-                        ))
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {
+                        "AccessDenied" => {
+                            return RusotoError::Service(
+                                ListOriginRequestPoliciesError::AccessDenied(parsed_error.message),
+                            )
+                        }
+                        "InvalidArgument" => {
+                            return RusotoError::Service(
+                                ListOriginRequestPoliciesError::InvalidArgument(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "NoSuchOriginRequestPolicy" => {
+                            return RusotoError::Service(
+                                ListOriginRequestPoliciesError::NoSuchOriginRequestPolicy(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        _ => {}
                     }
-                    "InvalidArgument" => {
-                        return RusotoError::Service(
-                            ListOriginRequestPoliciesError::InvalidArgument(parsed_error.message),
-                        )
-                    }
-                    "NoSuchOriginRequestPolicy" => {
-                        return RusotoError::Service(
-                            ListOriginRequestPoliciesError::NoSuchOriginRequestPolicy(
-                                parsed_error.message,
-                            ),
-                        )
-                    }
-                    _ => {}
                 }
             }
         }
@@ -15497,14 +15949,17 @@ impl ListPublicKeysError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    "InvalidArgument" => {
-                        return RusotoError::Service(ListPublicKeysError::InvalidArgument(
-                            parsed_error.message,
-                        ))
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {
+                        "InvalidArgument" => {
+                            return RusotoError::Service(ListPublicKeysError::InvalidArgument(
+                                parsed_error.message,
+                            ))
+                        }
+                        _ => {}
                     }
-                    _ => {}
                 }
             }
         }
@@ -15545,26 +16000,29 @@ impl ListRealtimeLogConfigsError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    "AccessDenied" => {
-                        return RusotoError::Service(ListRealtimeLogConfigsError::AccessDenied(
-                            parsed_error.message,
-                        ))
-                    }
-                    "InvalidArgument" => {
-                        return RusotoError::Service(ListRealtimeLogConfigsError::InvalidArgument(
-                            parsed_error.message,
-                        ))
-                    }
-                    "NoSuchRealtimeLogConfig" => {
-                        return RusotoError::Service(
-                            ListRealtimeLogConfigsError::NoSuchRealtimeLogConfig(
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {
+                        "AccessDenied" => {
+                            return RusotoError::Service(ListRealtimeLogConfigsError::AccessDenied(
                                 parsed_error.message,
-                            ),
-                        )
+                            ))
+                        }
+                        "InvalidArgument" => {
+                            return RusotoError::Service(
+                                ListRealtimeLogConfigsError::InvalidArgument(parsed_error.message),
+                            )
+                        }
+                        "NoSuchRealtimeLogConfig" => {
+                            return RusotoError::Service(
+                                ListRealtimeLogConfigsError::NoSuchRealtimeLogConfig(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        _ => {}
                     }
-                    _ => {}
                 }
             }
         }
@@ -15607,14 +16065,19 @@ impl ListStreamingDistributionsError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    "InvalidArgument" => {
-                        return RusotoError::Service(
-                            ListStreamingDistributionsError::InvalidArgument(parsed_error.message),
-                        )
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {
+                        "InvalidArgument" => {
+                            return RusotoError::Service(
+                                ListStreamingDistributionsError::InvalidArgument(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        _ => {}
                     }
-                    _ => {}
                 }
             }
         }
@@ -15657,29 +16120,32 @@ impl ListTagsForResourceError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    "AccessDenied" => {
-                        return RusotoError::Service(ListTagsForResourceError::AccessDenied(
-                            parsed_error.message,
-                        ))
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {
+                        "AccessDenied" => {
+                            return RusotoError::Service(ListTagsForResourceError::AccessDenied(
+                                parsed_error.message,
+                            ))
+                        }
+                        "InvalidArgument" => {
+                            return RusotoError::Service(ListTagsForResourceError::InvalidArgument(
+                                parsed_error.message,
+                            ))
+                        }
+                        "InvalidTagging" => {
+                            return RusotoError::Service(ListTagsForResourceError::InvalidTagging(
+                                parsed_error.message,
+                            ))
+                        }
+                        "NoSuchResource" => {
+                            return RusotoError::Service(ListTagsForResourceError::NoSuchResource(
+                                parsed_error.message,
+                            ))
+                        }
+                        _ => {}
                     }
-                    "InvalidArgument" => {
-                        return RusotoError::Service(ListTagsForResourceError::InvalidArgument(
-                            parsed_error.message,
-                        ))
-                    }
-                    "InvalidTagging" => {
-                        return RusotoError::Service(ListTagsForResourceError::InvalidTagging(
-                            parsed_error.message,
-                        ))
-                    }
-                    "NoSuchResource" => {
-                        return RusotoError::Service(ListTagsForResourceError::NoSuchResource(
-                            parsed_error.message,
-                        ))
-                    }
-                    _ => {}
                 }
             }
         }
@@ -15725,29 +16191,32 @@ impl TagResourceError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    "AccessDenied" => {
-                        return RusotoError::Service(TagResourceError::AccessDenied(
-                            parsed_error.message,
-                        ))
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {
+                        "AccessDenied" => {
+                            return RusotoError::Service(TagResourceError::AccessDenied(
+                                parsed_error.message,
+                            ))
+                        }
+                        "InvalidArgument" => {
+                            return RusotoError::Service(TagResourceError::InvalidArgument(
+                                parsed_error.message,
+                            ))
+                        }
+                        "InvalidTagging" => {
+                            return RusotoError::Service(TagResourceError::InvalidTagging(
+                                parsed_error.message,
+                            ))
+                        }
+                        "NoSuchResource" => {
+                            return RusotoError::Service(TagResourceError::NoSuchResource(
+                                parsed_error.message,
+                            ))
+                        }
+                        _ => {}
                     }
-                    "InvalidArgument" => {
-                        return RusotoError::Service(TagResourceError::InvalidArgument(
-                            parsed_error.message,
-                        ))
-                    }
-                    "InvalidTagging" => {
-                        return RusotoError::Service(TagResourceError::InvalidTagging(
-                            parsed_error.message,
-                        ))
-                    }
-                    "NoSuchResource" => {
-                        return RusotoError::Service(TagResourceError::NoSuchResource(
-                            parsed_error.message,
-                        ))
-                    }
-                    _ => {}
                 }
             }
         }
@@ -15793,29 +16262,32 @@ impl UntagResourceError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    "AccessDenied" => {
-                        return RusotoError::Service(UntagResourceError::AccessDenied(
-                            parsed_error.message,
-                        ))
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {
+                        "AccessDenied" => {
+                            return RusotoError::Service(UntagResourceError::AccessDenied(
+                                parsed_error.message,
+                            ))
+                        }
+                        "InvalidArgument" => {
+                            return RusotoError::Service(UntagResourceError::InvalidArgument(
+                                parsed_error.message,
+                            ))
+                        }
+                        "InvalidTagging" => {
+                            return RusotoError::Service(UntagResourceError::InvalidTagging(
+                                parsed_error.message,
+                            ))
+                        }
+                        "NoSuchResource" => {
+                            return RusotoError::Service(UntagResourceError::NoSuchResource(
+                                parsed_error.message,
+                            ))
+                        }
+                        _ => {}
                     }
-                    "InvalidArgument" => {
-                        return RusotoError::Service(UntagResourceError::InvalidArgument(
-                            parsed_error.message,
-                        ))
-                    }
-                    "InvalidTagging" => {
-                        return RusotoError::Service(UntagResourceError::InvalidTagging(
-                            parsed_error.message,
-                        ))
-                    }
-                    "NoSuchResource" => {
-                        return RusotoError::Service(UntagResourceError::NoSuchResource(
-                            parsed_error.message,
-                        ))
-                    }
-                    _ => {}
                 }
             }
         }
@@ -15875,70 +16347,77 @@ impl UpdateCachePolicyError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    "AccessDenied" => {
-                        return RusotoError::Service(UpdateCachePolicyError::AccessDenied(
-                            parsed_error.message,
-                        ))
-                    }
-                    "CachePolicyAlreadyExists" => {
-                        return RusotoError::Service(
-                            UpdateCachePolicyError::CachePolicyAlreadyExists(parsed_error.message),
-                        )
-                    }
-                    "IllegalUpdate" => {
-                        return RusotoError::Service(UpdateCachePolicyError::IllegalUpdate(
-                            parsed_error.message,
-                        ))
-                    }
-                    "InconsistentQuantities" => {
-                        return RusotoError::Service(
-                            UpdateCachePolicyError::InconsistentQuantities(parsed_error.message),
-                        )
-                    }
-                    "InvalidArgument" => {
-                        return RusotoError::Service(UpdateCachePolicyError::InvalidArgument(
-                            parsed_error.message,
-                        ))
-                    }
-                    "InvalidIfMatchVersion" => {
-                        return RusotoError::Service(UpdateCachePolicyError::InvalidIfMatchVersion(
-                            parsed_error.message,
-                        ))
-                    }
-                    "NoSuchCachePolicy" => {
-                        return RusotoError::Service(UpdateCachePolicyError::NoSuchCachePolicy(
-                            parsed_error.message,
-                        ))
-                    }
-                    "PreconditionFailed" => {
-                        return RusotoError::Service(UpdateCachePolicyError::PreconditionFailed(
-                            parsed_error.message,
-                        ))
-                    }
-                    "TooManyCookiesInCachePolicy" => {
-                        return RusotoError::Service(
-                            UpdateCachePolicyError::TooManyCookiesInCachePolicy(
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {
+                        "AccessDenied" => {
+                            return RusotoError::Service(UpdateCachePolicyError::AccessDenied(
                                 parsed_error.message,
-                            ),
-                        )
-                    }
-                    "TooManyHeadersInCachePolicy" => {
-                        return RusotoError::Service(
-                            UpdateCachePolicyError::TooManyHeadersInCachePolicy(
+                            ))
+                        }
+                        "CachePolicyAlreadyExists" => {
+                            return RusotoError::Service(
+                                UpdateCachePolicyError::CachePolicyAlreadyExists(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "IllegalUpdate" => {
+                            return RusotoError::Service(UpdateCachePolicyError::IllegalUpdate(
                                 parsed_error.message,
-                            ),
-                        )
-                    }
-                    "TooManyQueryStringsInCachePolicy" => {
-                        return RusotoError::Service(
-                            UpdateCachePolicyError::TooManyQueryStringsInCachePolicy(
+                            ))
+                        }
+                        "InconsistentQuantities" => {
+                            return RusotoError::Service(
+                                UpdateCachePolicyError::InconsistentQuantities(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "InvalidArgument" => {
+                            return RusotoError::Service(UpdateCachePolicyError::InvalidArgument(
                                 parsed_error.message,
-                            ),
-                        )
+                            ))
+                        }
+                        "InvalidIfMatchVersion" => {
+                            return RusotoError::Service(
+                                UpdateCachePolicyError::InvalidIfMatchVersion(parsed_error.message),
+                            )
+                        }
+                        "NoSuchCachePolicy" => {
+                            return RusotoError::Service(UpdateCachePolicyError::NoSuchCachePolicy(
+                                parsed_error.message,
+                            ))
+                        }
+                        "PreconditionFailed" => {
+                            return RusotoError::Service(
+                                UpdateCachePolicyError::PreconditionFailed(parsed_error.message),
+                            )
+                        }
+                        "TooManyCookiesInCachePolicy" => {
+                            return RusotoError::Service(
+                                UpdateCachePolicyError::TooManyCookiesInCachePolicy(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "TooManyHeadersInCachePolicy" => {
+                            return RusotoError::Service(
+                                UpdateCachePolicyError::TooManyHeadersInCachePolicy(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "TooManyQueryStringsInCachePolicy" => {
+                            return RusotoError::Service(
+                                UpdateCachePolicyError::TooManyQueryStringsInCachePolicy(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        _ => {}
                     }
-                    _ => {}
                 }
             }
         }
@@ -16007,10 +16486,13 @@ impl UpdateCloudFrontOriginAccessIdentityError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                                    "AccessDenied" => return RusotoError::Service(UpdateCloudFrontOriginAccessIdentityError::AccessDenied(parsed_error.message)),"IllegalUpdate" => return RusotoError::Service(UpdateCloudFrontOriginAccessIdentityError::IllegalUpdate(parsed_error.message)),"InconsistentQuantities" => return RusotoError::Service(UpdateCloudFrontOriginAccessIdentityError::InconsistentQuantities(parsed_error.message)),"InvalidArgument" => return RusotoError::Service(UpdateCloudFrontOriginAccessIdentityError::InvalidArgument(parsed_error.message)),"InvalidIfMatchVersion" => return RusotoError::Service(UpdateCloudFrontOriginAccessIdentityError::InvalidIfMatchVersion(parsed_error.message)),"MissingBody" => return RusotoError::Service(UpdateCloudFrontOriginAccessIdentityError::MissingBody(parsed_error.message)),"NoSuchCloudFrontOriginAccessIdentity" => return RusotoError::Service(UpdateCloudFrontOriginAccessIdentityError::NoSuchCloudFrontOriginAccessIdentity(parsed_error.message)),"PreconditionFailed" => return RusotoError::Service(UpdateCloudFrontOriginAccessIdentityError::PreconditionFailed(parsed_error.message)),_ => {}
-                                }
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {
+                        "AccessDenied" => return RusotoError::Service(UpdateCloudFrontOriginAccessIdentityError::AccessDenied(parsed_error.message)),"IllegalUpdate" => return RusotoError::Service(UpdateCloudFrontOriginAccessIdentityError::IllegalUpdate(parsed_error.message)),"InconsistentQuantities" => return RusotoError::Service(UpdateCloudFrontOriginAccessIdentityError::InconsistentQuantities(parsed_error.message)),"InvalidArgument" => return RusotoError::Service(UpdateCloudFrontOriginAccessIdentityError::InvalidArgument(parsed_error.message)),"InvalidIfMatchVersion" => return RusotoError::Service(UpdateCloudFrontOriginAccessIdentityError::InvalidIfMatchVersion(parsed_error.message)),"MissingBody" => return RusotoError::Service(UpdateCloudFrontOriginAccessIdentityError::MissingBody(parsed_error.message)),"NoSuchCloudFrontOriginAccessIdentity" => return RusotoError::Service(UpdateCloudFrontOriginAccessIdentityError::NoSuchCloudFrontOriginAccessIdentity(parsed_error.message)),"PreconditionFailed" => return RusotoError::Service(UpdateCloudFrontOriginAccessIdentityError::PreconditionFailed(parsed_error.message)),_ => {}
+                    }
+                }
             }
         }
         RusotoError::Unknown(res)
@@ -16171,10 +16653,13 @@ impl UpdateDistributionError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                                    "AccessDenied" => return RusotoError::Service(UpdateDistributionError::AccessDenied(parsed_error.message)),"CNAMEAlreadyExists" => return RusotoError::Service(UpdateDistributionError::CNAMEAlreadyExists(parsed_error.message)),"IllegalFieldLevelEncryptionConfigAssociationWithCacheBehavior" => return RusotoError::Service(UpdateDistributionError::IllegalFieldLevelEncryptionConfigAssociationWithCacheBehavior(parsed_error.message)),"IllegalUpdate" => return RusotoError::Service(UpdateDistributionError::IllegalUpdate(parsed_error.message)),"InconsistentQuantities" => return RusotoError::Service(UpdateDistributionError::InconsistentQuantities(parsed_error.message)),"InvalidArgument" => return RusotoError::Service(UpdateDistributionError::InvalidArgument(parsed_error.message)),"InvalidDefaultRootObject" => return RusotoError::Service(UpdateDistributionError::InvalidDefaultRootObject(parsed_error.message)),"InvalidErrorCode" => return RusotoError::Service(UpdateDistributionError::InvalidErrorCode(parsed_error.message)),"InvalidForwardCookies" => return RusotoError::Service(UpdateDistributionError::InvalidForwardCookies(parsed_error.message)),"InvalidGeoRestrictionParameter" => return RusotoError::Service(UpdateDistributionError::InvalidGeoRestrictionParameter(parsed_error.message)),"InvalidHeadersForS3Origin" => return RusotoError::Service(UpdateDistributionError::InvalidHeadersForS3Origin(parsed_error.message)),"InvalidIfMatchVersion" => return RusotoError::Service(UpdateDistributionError::InvalidIfMatchVersion(parsed_error.message)),"InvalidLambdaFunctionAssociation" => return RusotoError::Service(UpdateDistributionError::InvalidLambdaFunctionAssociation(parsed_error.message)),"InvalidLocationCode" => return RusotoError::Service(UpdateDistributionError::InvalidLocationCode(parsed_error.message)),"InvalidMinimumProtocolVersion" => return RusotoError::Service(UpdateDistributionError::InvalidMinimumProtocolVersion(parsed_error.message)),"InvalidOriginAccessIdentity" => return RusotoError::Service(UpdateDistributionError::InvalidOriginAccessIdentity(parsed_error.message)),"InvalidOriginKeepaliveTimeout" => return RusotoError::Service(UpdateDistributionError::InvalidOriginKeepaliveTimeout(parsed_error.message)),"InvalidOriginReadTimeout" => return RusotoError::Service(UpdateDistributionError::InvalidOriginReadTimeout(parsed_error.message)),"InvalidQueryStringParameters" => return RusotoError::Service(UpdateDistributionError::InvalidQueryStringParameters(parsed_error.message)),"InvalidRelativePath" => return RusotoError::Service(UpdateDistributionError::InvalidRelativePath(parsed_error.message)),"InvalidRequiredProtocol" => return RusotoError::Service(UpdateDistributionError::InvalidRequiredProtocol(parsed_error.message)),"InvalidResponseCode" => return RusotoError::Service(UpdateDistributionError::InvalidResponseCode(parsed_error.message)),"InvalidTTLOrder" => return RusotoError::Service(UpdateDistributionError::InvalidTTLOrder(parsed_error.message)),"InvalidViewerCertificate" => return RusotoError::Service(UpdateDistributionError::InvalidViewerCertificate(parsed_error.message)),"InvalidWebACLId" => return RusotoError::Service(UpdateDistributionError::InvalidWebACLId(parsed_error.message)),"MissingBody" => return RusotoError::Service(UpdateDistributionError::MissingBody(parsed_error.message)),"NoSuchCachePolicy" => return RusotoError::Service(UpdateDistributionError::NoSuchCachePolicy(parsed_error.message)),"NoSuchDistribution" => return RusotoError::Service(UpdateDistributionError::NoSuchDistribution(parsed_error.message)),"NoSuchFieldLevelEncryptionConfig" => return RusotoError::Service(UpdateDistributionError::NoSuchFieldLevelEncryptionConfig(parsed_error.message)),"NoSuchOrigin" => return RusotoError::Service(UpdateDistributionError::NoSuchOrigin(parsed_error.message)),"NoSuchOriginRequestPolicy" => return RusotoError::Service(UpdateDistributionError::NoSuchOriginRequestPolicy(parsed_error.message)),"PreconditionFailed" => return RusotoError::Service(UpdateDistributionError::PreconditionFailed(parsed_error.message)),"TooManyCacheBehaviors" => return RusotoError::Service(UpdateDistributionError::TooManyCacheBehaviors(parsed_error.message)),"TooManyCertificates" => return RusotoError::Service(UpdateDistributionError::TooManyCertificates(parsed_error.message)),"TooManyCookieNamesInWhiteList" => return RusotoError::Service(UpdateDistributionError::TooManyCookieNamesInWhiteList(parsed_error.message)),"TooManyDistributionCNAMEs" => return RusotoError::Service(UpdateDistributionError::TooManyDistributionCNAMEs(parsed_error.message)),"TooManyDistributionsAssociatedToCachePolicy" => return RusotoError::Service(UpdateDistributionError::TooManyDistributionsAssociatedToCachePolicy(parsed_error.message)),"TooManyDistributionsAssociatedToFieldLevelEncryptionConfig" => return RusotoError::Service(UpdateDistributionError::TooManyDistributionsAssociatedToFieldLevelEncryptionConfig(parsed_error.message)),"TooManyDistributionsAssociatedToKeyGroup" => return RusotoError::Service(UpdateDistributionError::TooManyDistributionsAssociatedToKeyGroup(parsed_error.message)),"TooManyDistributionsAssociatedToOriginRequestPolicy" => return RusotoError::Service(UpdateDistributionError::TooManyDistributionsAssociatedToOriginRequestPolicy(parsed_error.message)),"TooManyDistributionsWithLambdaAssociations" => return RusotoError::Service(UpdateDistributionError::TooManyDistributionsWithLambdaAssociations(parsed_error.message)),"TooManyDistributionsWithSingleFunctionARN" => return RusotoError::Service(UpdateDistributionError::TooManyDistributionsWithSingleFunctionARN(parsed_error.message)),"TooManyHeadersInForwardedValues" => return RusotoError::Service(UpdateDistributionError::TooManyHeadersInForwardedValues(parsed_error.message)),"TooManyKeyGroupsAssociatedToDistribution" => return RusotoError::Service(UpdateDistributionError::TooManyKeyGroupsAssociatedToDistribution(parsed_error.message)),"TooManyLambdaFunctionAssociations" => return RusotoError::Service(UpdateDistributionError::TooManyLambdaFunctionAssociations(parsed_error.message)),"TooManyOriginCustomHeaders" => return RusotoError::Service(UpdateDistributionError::TooManyOriginCustomHeaders(parsed_error.message)),"TooManyOriginGroupsPerDistribution" => return RusotoError::Service(UpdateDistributionError::TooManyOriginGroupsPerDistribution(parsed_error.message)),"TooManyOrigins" => return RusotoError::Service(UpdateDistributionError::TooManyOrigins(parsed_error.message)),"TooManyQueryStringParameters" => return RusotoError::Service(UpdateDistributionError::TooManyQueryStringParameters(parsed_error.message)),"TooManyTrustedSigners" => return RusotoError::Service(UpdateDistributionError::TooManyTrustedSigners(parsed_error.message)),"TrustedKeyGroupDoesNotExist" => return RusotoError::Service(UpdateDistributionError::TrustedKeyGroupDoesNotExist(parsed_error.message)),"TrustedSignerDoesNotExist" => return RusotoError::Service(UpdateDistributionError::TrustedSignerDoesNotExist(parsed_error.message)),_ => {}
-                                }
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {
+                        "AccessDenied" => return RusotoError::Service(UpdateDistributionError::AccessDenied(parsed_error.message)),"CNAMEAlreadyExists" => return RusotoError::Service(UpdateDistributionError::CNAMEAlreadyExists(parsed_error.message)),"IllegalFieldLevelEncryptionConfigAssociationWithCacheBehavior" => return RusotoError::Service(UpdateDistributionError::IllegalFieldLevelEncryptionConfigAssociationWithCacheBehavior(parsed_error.message)),"IllegalUpdate" => return RusotoError::Service(UpdateDistributionError::IllegalUpdate(parsed_error.message)),"InconsistentQuantities" => return RusotoError::Service(UpdateDistributionError::InconsistentQuantities(parsed_error.message)),"InvalidArgument" => return RusotoError::Service(UpdateDistributionError::InvalidArgument(parsed_error.message)),"InvalidDefaultRootObject" => return RusotoError::Service(UpdateDistributionError::InvalidDefaultRootObject(parsed_error.message)),"InvalidErrorCode" => return RusotoError::Service(UpdateDistributionError::InvalidErrorCode(parsed_error.message)),"InvalidForwardCookies" => return RusotoError::Service(UpdateDistributionError::InvalidForwardCookies(parsed_error.message)),"InvalidGeoRestrictionParameter" => return RusotoError::Service(UpdateDistributionError::InvalidGeoRestrictionParameter(parsed_error.message)),"InvalidHeadersForS3Origin" => return RusotoError::Service(UpdateDistributionError::InvalidHeadersForS3Origin(parsed_error.message)),"InvalidIfMatchVersion" => return RusotoError::Service(UpdateDistributionError::InvalidIfMatchVersion(parsed_error.message)),"InvalidLambdaFunctionAssociation" => return RusotoError::Service(UpdateDistributionError::InvalidLambdaFunctionAssociation(parsed_error.message)),"InvalidLocationCode" => return RusotoError::Service(UpdateDistributionError::InvalidLocationCode(parsed_error.message)),"InvalidMinimumProtocolVersion" => return RusotoError::Service(UpdateDistributionError::InvalidMinimumProtocolVersion(parsed_error.message)),"InvalidOriginAccessIdentity" => return RusotoError::Service(UpdateDistributionError::InvalidOriginAccessIdentity(parsed_error.message)),"InvalidOriginKeepaliveTimeout" => return RusotoError::Service(UpdateDistributionError::InvalidOriginKeepaliveTimeout(parsed_error.message)),"InvalidOriginReadTimeout" => return RusotoError::Service(UpdateDistributionError::InvalidOriginReadTimeout(parsed_error.message)),"InvalidQueryStringParameters" => return RusotoError::Service(UpdateDistributionError::InvalidQueryStringParameters(parsed_error.message)),"InvalidRelativePath" => return RusotoError::Service(UpdateDistributionError::InvalidRelativePath(parsed_error.message)),"InvalidRequiredProtocol" => return RusotoError::Service(UpdateDistributionError::InvalidRequiredProtocol(parsed_error.message)),"InvalidResponseCode" => return RusotoError::Service(UpdateDistributionError::InvalidResponseCode(parsed_error.message)),"InvalidTTLOrder" => return RusotoError::Service(UpdateDistributionError::InvalidTTLOrder(parsed_error.message)),"InvalidViewerCertificate" => return RusotoError::Service(UpdateDistributionError::InvalidViewerCertificate(parsed_error.message)),"InvalidWebACLId" => return RusotoError::Service(UpdateDistributionError::InvalidWebACLId(parsed_error.message)),"MissingBody" => return RusotoError::Service(UpdateDistributionError::MissingBody(parsed_error.message)),"NoSuchCachePolicy" => return RusotoError::Service(UpdateDistributionError::NoSuchCachePolicy(parsed_error.message)),"NoSuchDistribution" => return RusotoError::Service(UpdateDistributionError::NoSuchDistribution(parsed_error.message)),"NoSuchFieldLevelEncryptionConfig" => return RusotoError::Service(UpdateDistributionError::NoSuchFieldLevelEncryptionConfig(parsed_error.message)),"NoSuchOrigin" => return RusotoError::Service(UpdateDistributionError::NoSuchOrigin(parsed_error.message)),"NoSuchOriginRequestPolicy" => return RusotoError::Service(UpdateDistributionError::NoSuchOriginRequestPolicy(parsed_error.message)),"PreconditionFailed" => return RusotoError::Service(UpdateDistributionError::PreconditionFailed(parsed_error.message)),"TooManyCacheBehaviors" => return RusotoError::Service(UpdateDistributionError::TooManyCacheBehaviors(parsed_error.message)),"TooManyCertificates" => return RusotoError::Service(UpdateDistributionError::TooManyCertificates(parsed_error.message)),"TooManyCookieNamesInWhiteList" => return RusotoError::Service(UpdateDistributionError::TooManyCookieNamesInWhiteList(parsed_error.message)),"TooManyDistributionCNAMEs" => return RusotoError::Service(UpdateDistributionError::TooManyDistributionCNAMEs(parsed_error.message)),"TooManyDistributionsAssociatedToCachePolicy" => return RusotoError::Service(UpdateDistributionError::TooManyDistributionsAssociatedToCachePolicy(parsed_error.message)),"TooManyDistributionsAssociatedToFieldLevelEncryptionConfig" => return RusotoError::Service(UpdateDistributionError::TooManyDistributionsAssociatedToFieldLevelEncryptionConfig(parsed_error.message)),"TooManyDistributionsAssociatedToKeyGroup" => return RusotoError::Service(UpdateDistributionError::TooManyDistributionsAssociatedToKeyGroup(parsed_error.message)),"TooManyDistributionsAssociatedToOriginRequestPolicy" => return RusotoError::Service(UpdateDistributionError::TooManyDistributionsAssociatedToOriginRequestPolicy(parsed_error.message)),"TooManyDistributionsWithLambdaAssociations" => return RusotoError::Service(UpdateDistributionError::TooManyDistributionsWithLambdaAssociations(parsed_error.message)),"TooManyDistributionsWithSingleFunctionARN" => return RusotoError::Service(UpdateDistributionError::TooManyDistributionsWithSingleFunctionARN(parsed_error.message)),"TooManyHeadersInForwardedValues" => return RusotoError::Service(UpdateDistributionError::TooManyHeadersInForwardedValues(parsed_error.message)),"TooManyKeyGroupsAssociatedToDistribution" => return RusotoError::Service(UpdateDistributionError::TooManyKeyGroupsAssociatedToDistribution(parsed_error.message)),"TooManyLambdaFunctionAssociations" => return RusotoError::Service(UpdateDistributionError::TooManyLambdaFunctionAssociations(parsed_error.message)),"TooManyOriginCustomHeaders" => return RusotoError::Service(UpdateDistributionError::TooManyOriginCustomHeaders(parsed_error.message)),"TooManyOriginGroupsPerDistribution" => return RusotoError::Service(UpdateDistributionError::TooManyOriginGroupsPerDistribution(parsed_error.message)),"TooManyOrigins" => return RusotoError::Service(UpdateDistributionError::TooManyOrigins(parsed_error.message)),"TooManyQueryStringParameters" => return RusotoError::Service(UpdateDistributionError::TooManyQueryStringParameters(parsed_error.message)),"TooManyTrustedSigners" => return RusotoError::Service(UpdateDistributionError::TooManyTrustedSigners(parsed_error.message)),"TrustedKeyGroupDoesNotExist" => return RusotoError::Service(UpdateDistributionError::TrustedKeyGroupDoesNotExist(parsed_error.message)),"TrustedSignerDoesNotExist" => return RusotoError::Service(UpdateDistributionError::TrustedSignerDoesNotExist(parsed_error.message)),_ => {}
+                    }
+                }
             }
         }
         RusotoError::Unknown(res)
@@ -16283,10 +16768,13 @@ impl UpdateFieldLevelEncryptionConfigError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                                    "AccessDenied" => return RusotoError::Service(UpdateFieldLevelEncryptionConfigError::AccessDenied(parsed_error.message)),"IllegalUpdate" => return RusotoError::Service(UpdateFieldLevelEncryptionConfigError::IllegalUpdate(parsed_error.message)),"InconsistentQuantities" => return RusotoError::Service(UpdateFieldLevelEncryptionConfigError::InconsistentQuantities(parsed_error.message)),"InvalidArgument" => return RusotoError::Service(UpdateFieldLevelEncryptionConfigError::InvalidArgument(parsed_error.message)),"InvalidIfMatchVersion" => return RusotoError::Service(UpdateFieldLevelEncryptionConfigError::InvalidIfMatchVersion(parsed_error.message)),"NoSuchFieldLevelEncryptionConfig" => return RusotoError::Service(UpdateFieldLevelEncryptionConfigError::NoSuchFieldLevelEncryptionConfig(parsed_error.message)),"NoSuchFieldLevelEncryptionProfile" => return RusotoError::Service(UpdateFieldLevelEncryptionConfigError::NoSuchFieldLevelEncryptionProfile(parsed_error.message)),"PreconditionFailed" => return RusotoError::Service(UpdateFieldLevelEncryptionConfigError::PreconditionFailed(parsed_error.message)),"QueryArgProfileEmpty" => return RusotoError::Service(UpdateFieldLevelEncryptionConfigError::QueryArgProfileEmpty(parsed_error.message)),"TooManyFieldLevelEncryptionContentTypeProfiles" => return RusotoError::Service(UpdateFieldLevelEncryptionConfigError::TooManyFieldLevelEncryptionContentTypeProfiles(parsed_error.message)),"TooManyFieldLevelEncryptionQueryArgProfiles" => return RusotoError::Service(UpdateFieldLevelEncryptionConfigError::TooManyFieldLevelEncryptionQueryArgProfiles(parsed_error.message)),_ => {}
-                                }
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {
+                        "AccessDenied" => return RusotoError::Service(UpdateFieldLevelEncryptionConfigError::AccessDenied(parsed_error.message)),"IllegalUpdate" => return RusotoError::Service(UpdateFieldLevelEncryptionConfigError::IllegalUpdate(parsed_error.message)),"InconsistentQuantities" => return RusotoError::Service(UpdateFieldLevelEncryptionConfigError::InconsistentQuantities(parsed_error.message)),"InvalidArgument" => return RusotoError::Service(UpdateFieldLevelEncryptionConfigError::InvalidArgument(parsed_error.message)),"InvalidIfMatchVersion" => return RusotoError::Service(UpdateFieldLevelEncryptionConfigError::InvalidIfMatchVersion(parsed_error.message)),"NoSuchFieldLevelEncryptionConfig" => return RusotoError::Service(UpdateFieldLevelEncryptionConfigError::NoSuchFieldLevelEncryptionConfig(parsed_error.message)),"NoSuchFieldLevelEncryptionProfile" => return RusotoError::Service(UpdateFieldLevelEncryptionConfigError::NoSuchFieldLevelEncryptionProfile(parsed_error.message)),"PreconditionFailed" => return RusotoError::Service(UpdateFieldLevelEncryptionConfigError::PreconditionFailed(parsed_error.message)),"QueryArgProfileEmpty" => return RusotoError::Service(UpdateFieldLevelEncryptionConfigError::QueryArgProfileEmpty(parsed_error.message)),"TooManyFieldLevelEncryptionContentTypeProfiles" => return RusotoError::Service(UpdateFieldLevelEncryptionConfigError::TooManyFieldLevelEncryptionContentTypeProfiles(parsed_error.message)),"TooManyFieldLevelEncryptionQueryArgProfiles" => return RusotoError::Service(UpdateFieldLevelEncryptionConfigError::TooManyFieldLevelEncryptionQueryArgProfiles(parsed_error.message)),_ => {}
+                    }
+                }
             }
         }
         RusotoError::Unknown(res)
@@ -16356,10 +16844,13 @@ impl UpdateFieldLevelEncryptionProfileError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                                    "AccessDenied" => return RusotoError::Service(UpdateFieldLevelEncryptionProfileError::AccessDenied(parsed_error.message)),"FieldLevelEncryptionProfileAlreadyExists" => return RusotoError::Service(UpdateFieldLevelEncryptionProfileError::FieldLevelEncryptionProfileAlreadyExists(parsed_error.message)),"FieldLevelEncryptionProfileSizeExceeded" => return RusotoError::Service(UpdateFieldLevelEncryptionProfileError::FieldLevelEncryptionProfileSizeExceeded(parsed_error.message)),"IllegalUpdate" => return RusotoError::Service(UpdateFieldLevelEncryptionProfileError::IllegalUpdate(parsed_error.message)),"InconsistentQuantities" => return RusotoError::Service(UpdateFieldLevelEncryptionProfileError::InconsistentQuantities(parsed_error.message)),"InvalidArgument" => return RusotoError::Service(UpdateFieldLevelEncryptionProfileError::InvalidArgument(parsed_error.message)),"InvalidIfMatchVersion" => return RusotoError::Service(UpdateFieldLevelEncryptionProfileError::InvalidIfMatchVersion(parsed_error.message)),"NoSuchFieldLevelEncryptionProfile" => return RusotoError::Service(UpdateFieldLevelEncryptionProfileError::NoSuchFieldLevelEncryptionProfile(parsed_error.message)),"NoSuchPublicKey" => return RusotoError::Service(UpdateFieldLevelEncryptionProfileError::NoSuchPublicKey(parsed_error.message)),"PreconditionFailed" => return RusotoError::Service(UpdateFieldLevelEncryptionProfileError::PreconditionFailed(parsed_error.message)),"TooManyFieldLevelEncryptionEncryptionEntities" => return RusotoError::Service(UpdateFieldLevelEncryptionProfileError::TooManyFieldLevelEncryptionEncryptionEntities(parsed_error.message)),"TooManyFieldLevelEncryptionFieldPatterns" => return RusotoError::Service(UpdateFieldLevelEncryptionProfileError::TooManyFieldLevelEncryptionFieldPatterns(parsed_error.message)),_ => {}
-                                }
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {
+                        "AccessDenied" => return RusotoError::Service(UpdateFieldLevelEncryptionProfileError::AccessDenied(parsed_error.message)),"FieldLevelEncryptionProfileAlreadyExists" => return RusotoError::Service(UpdateFieldLevelEncryptionProfileError::FieldLevelEncryptionProfileAlreadyExists(parsed_error.message)),"FieldLevelEncryptionProfileSizeExceeded" => return RusotoError::Service(UpdateFieldLevelEncryptionProfileError::FieldLevelEncryptionProfileSizeExceeded(parsed_error.message)),"IllegalUpdate" => return RusotoError::Service(UpdateFieldLevelEncryptionProfileError::IllegalUpdate(parsed_error.message)),"InconsistentQuantities" => return RusotoError::Service(UpdateFieldLevelEncryptionProfileError::InconsistentQuantities(parsed_error.message)),"InvalidArgument" => return RusotoError::Service(UpdateFieldLevelEncryptionProfileError::InvalidArgument(parsed_error.message)),"InvalidIfMatchVersion" => return RusotoError::Service(UpdateFieldLevelEncryptionProfileError::InvalidIfMatchVersion(parsed_error.message)),"NoSuchFieldLevelEncryptionProfile" => return RusotoError::Service(UpdateFieldLevelEncryptionProfileError::NoSuchFieldLevelEncryptionProfile(parsed_error.message)),"NoSuchPublicKey" => return RusotoError::Service(UpdateFieldLevelEncryptionProfileError::NoSuchPublicKey(parsed_error.message)),"PreconditionFailed" => return RusotoError::Service(UpdateFieldLevelEncryptionProfileError::PreconditionFailed(parsed_error.message)),"TooManyFieldLevelEncryptionEncryptionEntities" => return RusotoError::Service(UpdateFieldLevelEncryptionProfileError::TooManyFieldLevelEncryptionEncryptionEntities(parsed_error.message)),"TooManyFieldLevelEncryptionFieldPatterns" => return RusotoError::Service(UpdateFieldLevelEncryptionProfileError::TooManyFieldLevelEncryptionFieldPatterns(parsed_error.message)),_ => {}
+                    }
+                }
             }
         }
         RusotoError::Unknown(res)
@@ -16416,39 +16907,44 @@ impl UpdateKeyGroupError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    "InvalidArgument" => {
-                        return RusotoError::Service(UpdateKeyGroupError::InvalidArgument(
-                            parsed_error.message,
-                        ))
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {
+                        "InvalidArgument" => {
+                            return RusotoError::Service(UpdateKeyGroupError::InvalidArgument(
+                                parsed_error.message,
+                            ))
+                        }
+                        "InvalidIfMatchVersion" => {
+                            return RusotoError::Service(
+                                UpdateKeyGroupError::InvalidIfMatchVersion(parsed_error.message),
+                            )
+                        }
+                        "KeyGroupAlreadyExists" => {
+                            return RusotoError::Service(
+                                UpdateKeyGroupError::KeyGroupAlreadyExists(parsed_error.message),
+                            )
+                        }
+                        "NoSuchResource" => {
+                            return RusotoError::Service(UpdateKeyGroupError::NoSuchResource(
+                                parsed_error.message,
+                            ))
+                        }
+                        "PreconditionFailed" => {
+                            return RusotoError::Service(UpdateKeyGroupError::PreconditionFailed(
+                                parsed_error.message,
+                            ))
+                        }
+                        "TooManyPublicKeysInKeyGroup" => {
+                            return RusotoError::Service(
+                                UpdateKeyGroupError::TooManyPublicKeysInKeyGroup(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        _ => {}
                     }
-                    "InvalidIfMatchVersion" => {
-                        return RusotoError::Service(UpdateKeyGroupError::InvalidIfMatchVersion(
-                            parsed_error.message,
-                        ))
-                    }
-                    "KeyGroupAlreadyExists" => {
-                        return RusotoError::Service(UpdateKeyGroupError::KeyGroupAlreadyExists(
-                            parsed_error.message,
-                        ))
-                    }
-                    "NoSuchResource" => {
-                        return RusotoError::Service(UpdateKeyGroupError::NoSuchResource(
-                            parsed_error.message,
-                        ))
-                    }
-                    "PreconditionFailed" => {
-                        return RusotoError::Service(UpdateKeyGroupError::PreconditionFailed(
-                            parsed_error.message,
-                        ))
-                    }
-                    "TooManyPublicKeysInKeyGroup" => {
-                        return RusotoError::Service(
-                            UpdateKeyGroupError::TooManyPublicKeysInKeyGroup(parsed_error.message),
-                        )
-                    }
-                    _ => {}
                 }
             }
         }
@@ -16510,78 +17006,12 @@ impl UpdateOriginRequestPolicyError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    "AccessDenied" => {
-                        return RusotoError::Service(UpdateOriginRequestPolicyError::AccessDenied(
-                            parsed_error.message,
-                        ))
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {
+                        "AccessDenied" => return RusotoError::Service(UpdateOriginRequestPolicyError::AccessDenied(parsed_error.message)),"IllegalUpdate" => return RusotoError::Service(UpdateOriginRequestPolicyError::IllegalUpdate(parsed_error.message)),"InconsistentQuantities" => return RusotoError::Service(UpdateOriginRequestPolicyError::InconsistentQuantities(parsed_error.message)),"InvalidArgument" => return RusotoError::Service(UpdateOriginRequestPolicyError::InvalidArgument(parsed_error.message)),"InvalidIfMatchVersion" => return RusotoError::Service(UpdateOriginRequestPolicyError::InvalidIfMatchVersion(parsed_error.message)),"NoSuchOriginRequestPolicy" => return RusotoError::Service(UpdateOriginRequestPolicyError::NoSuchOriginRequestPolicy(parsed_error.message)),"OriginRequestPolicyAlreadyExists" => return RusotoError::Service(UpdateOriginRequestPolicyError::OriginRequestPolicyAlreadyExists(parsed_error.message)),"PreconditionFailed" => return RusotoError::Service(UpdateOriginRequestPolicyError::PreconditionFailed(parsed_error.message)),"TooManyCookiesInOriginRequestPolicy" => return RusotoError::Service(UpdateOriginRequestPolicyError::TooManyCookiesInOriginRequestPolicy(parsed_error.message)),"TooManyHeadersInOriginRequestPolicy" => return RusotoError::Service(UpdateOriginRequestPolicyError::TooManyHeadersInOriginRequestPolicy(parsed_error.message)),"TooManyQueryStringsInOriginRequestPolicy" => return RusotoError::Service(UpdateOriginRequestPolicyError::TooManyQueryStringsInOriginRequestPolicy(parsed_error.message)),_ => {}
                     }
-                    "IllegalUpdate" => {
-                        return RusotoError::Service(UpdateOriginRequestPolicyError::IllegalUpdate(
-                            parsed_error.message,
-                        ))
-                    }
-                    "InconsistentQuantities" => {
-                        return RusotoError::Service(
-                            UpdateOriginRequestPolicyError::InconsistentQuantities(
-                                parsed_error.message,
-                            ),
-                        )
-                    }
-                    "InvalidArgument" => {
-                        return RusotoError::Service(
-                            UpdateOriginRequestPolicyError::InvalidArgument(parsed_error.message),
-                        )
-                    }
-                    "InvalidIfMatchVersion" => {
-                        return RusotoError::Service(
-                            UpdateOriginRequestPolicyError::InvalidIfMatchVersion(
-                                parsed_error.message,
-                            ),
-                        )
-                    }
-                    "NoSuchOriginRequestPolicy" => {
-                        return RusotoError::Service(
-                            UpdateOriginRequestPolicyError::NoSuchOriginRequestPolicy(
-                                parsed_error.message,
-                            ),
-                        )
-                    }
-                    "OriginRequestPolicyAlreadyExists" => {
-                        return RusotoError::Service(
-                            UpdateOriginRequestPolicyError::OriginRequestPolicyAlreadyExists(
-                                parsed_error.message,
-                            ),
-                        )
-                    }
-                    "PreconditionFailed" => {
-                        return RusotoError::Service(
-                            UpdateOriginRequestPolicyError::PreconditionFailed(
-                                parsed_error.message,
-                            ),
-                        )
-                    }
-                    "TooManyCookiesInOriginRequestPolicy" => {
-                        return RusotoError::Service(
-                            UpdateOriginRequestPolicyError::TooManyCookiesInOriginRequestPolicy(
-                                parsed_error.message,
-                            ),
-                        )
-                    }
-                    "TooManyHeadersInOriginRequestPolicy" => {
-                        return RusotoError::Service(
-                            UpdateOriginRequestPolicyError::TooManyHeadersInOriginRequestPolicy(
-                                parsed_error.message,
-                            ),
-                        )
-                    }
-                    "TooManyQueryStringsInOriginRequestPolicy" => return RusotoError::Service(
-                        UpdateOriginRequestPolicyError::TooManyQueryStringsInOriginRequestPolicy(
-                            parsed_error.message,
-                        ),
-                    ),
-                    _ => {}
                 }
             }
         }
@@ -16654,46 +17084,49 @@ impl UpdatePublicKeyError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    "AccessDenied" => {
-                        return RusotoError::Service(UpdatePublicKeyError::AccessDenied(
-                            parsed_error.message,
-                        ))
-                    }
-                    "CannotChangeImmutablePublicKeyFields" => {
-                        return RusotoError::Service(
-                            UpdatePublicKeyError::CannotChangeImmutablePublicKeyFields(
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {
+                        "AccessDenied" => {
+                            return RusotoError::Service(UpdatePublicKeyError::AccessDenied(
                                 parsed_error.message,
-                            ),
-                        )
+                            ))
+                        }
+                        "CannotChangeImmutablePublicKeyFields" => {
+                            return RusotoError::Service(
+                                UpdatePublicKeyError::CannotChangeImmutablePublicKeyFields(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "IllegalUpdate" => {
+                            return RusotoError::Service(UpdatePublicKeyError::IllegalUpdate(
+                                parsed_error.message,
+                            ))
+                        }
+                        "InvalidArgument" => {
+                            return RusotoError::Service(UpdatePublicKeyError::InvalidArgument(
+                                parsed_error.message,
+                            ))
+                        }
+                        "InvalidIfMatchVersion" => {
+                            return RusotoError::Service(
+                                UpdatePublicKeyError::InvalidIfMatchVersion(parsed_error.message),
+                            )
+                        }
+                        "NoSuchPublicKey" => {
+                            return RusotoError::Service(UpdatePublicKeyError::NoSuchPublicKey(
+                                parsed_error.message,
+                            ))
+                        }
+                        "PreconditionFailed" => {
+                            return RusotoError::Service(UpdatePublicKeyError::PreconditionFailed(
+                                parsed_error.message,
+                            ))
+                        }
+                        _ => {}
                     }
-                    "IllegalUpdate" => {
-                        return RusotoError::Service(UpdatePublicKeyError::IllegalUpdate(
-                            parsed_error.message,
-                        ))
-                    }
-                    "InvalidArgument" => {
-                        return RusotoError::Service(UpdatePublicKeyError::InvalidArgument(
-                            parsed_error.message,
-                        ))
-                    }
-                    "InvalidIfMatchVersion" => {
-                        return RusotoError::Service(UpdatePublicKeyError::InvalidIfMatchVersion(
-                            parsed_error.message,
-                        ))
-                    }
-                    "NoSuchPublicKey" => {
-                        return RusotoError::Service(UpdatePublicKeyError::NoSuchPublicKey(
-                            parsed_error.message,
-                        ))
-                    }
-                    "PreconditionFailed" => {
-                        return RusotoError::Service(UpdatePublicKeyError::PreconditionFailed(
-                            parsed_error.message,
-                        ))
-                    }
-                    _ => {}
                 }
             }
         }
@@ -16742,26 +17175,29 @@ impl UpdateRealtimeLogConfigError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    "AccessDenied" => {
-                        return RusotoError::Service(UpdateRealtimeLogConfigError::AccessDenied(
-                            parsed_error.message,
-                        ))
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {
+                        "AccessDenied" => {
+                            return RusotoError::Service(
+                                UpdateRealtimeLogConfigError::AccessDenied(parsed_error.message),
+                            )
+                        }
+                        "InvalidArgument" => {
+                            return RusotoError::Service(
+                                UpdateRealtimeLogConfigError::InvalidArgument(parsed_error.message),
+                            )
+                        }
+                        "NoSuchRealtimeLogConfig" => {
+                            return RusotoError::Service(
+                                UpdateRealtimeLogConfigError::NoSuchRealtimeLogConfig(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        _ => {}
                     }
-                    "InvalidArgument" => {
-                        return RusotoError::Service(UpdateRealtimeLogConfigError::InvalidArgument(
-                            parsed_error.message,
-                        ))
-                    }
-                    "NoSuchRealtimeLogConfig" => {
-                        return RusotoError::Service(
-                            UpdateRealtimeLogConfigError::NoSuchRealtimeLogConfig(
-                                parsed_error.message,
-                            ),
-                        )
-                    }
-                    _ => {}
                 }
             }
         }
@@ -16828,92 +17264,99 @@ impl UpdateStreamingDistributionError {
             let reader = EventReader::new(res.body.as_ref());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    "AccessDenied" => {
-                        return RusotoError::Service(
-                            UpdateStreamingDistributionError::AccessDenied(parsed_error.message),
-                        )
-                    }
-                    "CNAMEAlreadyExists" => {
-                        return RusotoError::Service(
-                            UpdateStreamingDistributionError::CNAMEAlreadyExists(
-                                parsed_error.message,
-                            ),
-                        )
-                    }
-                    "IllegalUpdate" => {
-                        return RusotoError::Service(
-                            UpdateStreamingDistributionError::IllegalUpdate(parsed_error.message),
-                        )
-                    }
-                    "InconsistentQuantities" => {
-                        return RusotoError::Service(
-                            UpdateStreamingDistributionError::InconsistentQuantities(
-                                parsed_error.message,
-                            ),
-                        )
-                    }
-                    "InvalidArgument" => {
-                        return RusotoError::Service(
-                            UpdateStreamingDistributionError::InvalidArgument(parsed_error.message),
-                        )
-                    }
-                    "InvalidIfMatchVersion" => {
-                        return RusotoError::Service(
-                            UpdateStreamingDistributionError::InvalidIfMatchVersion(
-                                parsed_error.message,
-                            ),
-                        )
-                    }
-                    "InvalidOriginAccessIdentity" => {
-                        return RusotoError::Service(
-                            UpdateStreamingDistributionError::InvalidOriginAccessIdentity(
-                                parsed_error.message,
-                            ),
-                        )
-                    }
-                    "MissingBody" => {
-                        return RusotoError::Service(UpdateStreamingDistributionError::MissingBody(
-                            parsed_error.message,
-                        ))
-                    }
-                    "NoSuchStreamingDistribution" => {
-                        return RusotoError::Service(
-                            UpdateStreamingDistributionError::NoSuchStreamingDistribution(
-                                parsed_error.message,
-                            ),
-                        )
-                    }
-                    "PreconditionFailed" => {
-                        return RusotoError::Service(
-                            UpdateStreamingDistributionError::PreconditionFailed(
-                                parsed_error.message,
-                            ),
-                        )
-                    }
-                    "TooManyStreamingDistributionCNAMEs" => {
-                        return RusotoError::Service(
+            if let Ok(_parsed_error) = Self::deserialize(&mut stack) {
+                if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                    #[allow(clippy::single_match)]
+                    match &parsed_error.code[..] {
+                        "AccessDenied" => {
+                            return RusotoError::Service(
+                                UpdateStreamingDistributionError::AccessDenied(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "CNAMEAlreadyExists" => {
+                            return RusotoError::Service(
+                                UpdateStreamingDistributionError::CNAMEAlreadyExists(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "IllegalUpdate" => {
+                            return RusotoError::Service(
+                                UpdateStreamingDistributionError::IllegalUpdate(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "InconsistentQuantities" => {
+                            return RusotoError::Service(
+                                UpdateStreamingDistributionError::InconsistentQuantities(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "InvalidArgument" => {
+                            return RusotoError::Service(
+                                UpdateStreamingDistributionError::InvalidArgument(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "InvalidIfMatchVersion" => {
+                            return RusotoError::Service(
+                                UpdateStreamingDistributionError::InvalidIfMatchVersion(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "InvalidOriginAccessIdentity" => {
+                            return RusotoError::Service(
+                                UpdateStreamingDistributionError::InvalidOriginAccessIdentity(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "MissingBody" => {
+                            return RusotoError::Service(
+                                UpdateStreamingDistributionError::MissingBody(parsed_error.message),
+                            )
+                        }
+                        "NoSuchStreamingDistribution" => {
+                            return RusotoError::Service(
+                                UpdateStreamingDistributionError::NoSuchStreamingDistribution(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "PreconditionFailed" => {
+                            return RusotoError::Service(
+                                UpdateStreamingDistributionError::PreconditionFailed(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "TooManyStreamingDistributionCNAMEs" => return RusotoError::Service(
                             UpdateStreamingDistributionError::TooManyStreamingDistributionCNAMEs(
                                 parsed_error.message,
                             ),
-                        )
+                        ),
+                        "TooManyTrustedSigners" => {
+                            return RusotoError::Service(
+                                UpdateStreamingDistributionError::TooManyTrustedSigners(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        "TrustedSignerDoesNotExist" => {
+                            return RusotoError::Service(
+                                UpdateStreamingDistributionError::TrustedSignerDoesNotExist(
+                                    parsed_error.message,
+                                ),
+                            )
+                        }
+                        _ => {}
                     }
-                    "TooManyTrustedSigners" => {
-                        return RusotoError::Service(
-                            UpdateStreamingDistributionError::TooManyTrustedSigners(
-                                parsed_error.message,
-                            ),
-                        )
-                    }
-                    "TrustedSignerDoesNotExist" => {
-                        return RusotoError::Service(
-                            UpdateStreamingDistributionError::TrustedSignerDoesNotExist(
-                                parsed_error.message,
-                            ),
-                        )
-                    }
-                    _ => {}
                 }
             }
         }

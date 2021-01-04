@@ -49,7 +49,6 @@ impl ConfigServiceClient {
     }
 }
 
-use serde_json;
 /// <p>A collection of accounts and regions.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct AccountAggregationSource {
@@ -3859,6 +3858,7 @@ impl BatchGetAggregateResourceConfigError {
         res: BufferedHttpResponse,
     ) -> RusotoError<BatchGetAggregateResourceConfigError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "NoSuchConfigurationAggregatorException" => {
                     return RusotoError::Service(
@@ -3895,6 +3895,7 @@ pub enum BatchGetResourceConfigError {
 impl BatchGetResourceConfigError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<BatchGetResourceConfigError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "NoAvailableConfigurationRecorderException" => {
                     return RusotoError::Service(
@@ -3931,6 +3932,7 @@ impl DeleteAggregationAuthorizationError {
         res: BufferedHttpResponse,
     ) -> RusotoError<DeleteAggregationAuthorizationError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidParameterValueException" => {
                     return RusotoError::Service(
@@ -3967,6 +3969,7 @@ pub enum DeleteConfigRuleError {
 impl DeleteConfigRuleError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteConfigRuleError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "NoSuchConfigRuleException" => {
                     return RusotoError::Service(DeleteConfigRuleError::NoSuchConfigRule(err.msg))
@@ -4003,6 +4006,7 @@ impl DeleteConfigurationAggregatorError {
         res: BufferedHttpResponse,
     ) -> RusotoError<DeleteConfigurationAggregatorError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "NoSuchConfigurationAggregatorException" => {
                     return RusotoError::Service(
@@ -4039,6 +4043,7 @@ impl DeleteConfigurationRecorderError {
         res: BufferedHttpResponse,
     ) -> RusotoError<DeleteConfigurationRecorderError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "NoSuchConfigurationRecorderException" => {
                     return RusotoError::Service(
@@ -4075,6 +4080,7 @@ pub enum DeleteConformancePackError {
 impl DeleteConformancePackError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteConformancePackError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "NoSuchConformancePackException" => {
                     return RusotoError::Service(DeleteConformancePackError::NoSuchConformancePack(
@@ -4113,6 +4119,7 @@ pub enum DeleteDeliveryChannelError {
 impl DeleteDeliveryChannelError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteDeliveryChannelError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "LastDeliveryChannelDeleteFailedException" => {
                     return RusotoError::Service(
@@ -4155,6 +4162,7 @@ pub enum DeleteEvaluationResultsError {
 impl DeleteEvaluationResultsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteEvaluationResultsError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "NoSuchConfigRuleException" => {
                     return RusotoError::Service(DeleteEvaluationResultsError::NoSuchConfigRule(
@@ -4199,6 +4207,7 @@ impl DeleteOrganizationConfigRuleError {
         res: BufferedHttpResponse,
     ) -> RusotoError<DeleteOrganizationConfigRuleError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "NoSuchOrganizationConfigRuleException" => {
                     return RusotoError::Service(
@@ -4253,6 +4262,7 @@ impl DeleteOrganizationConformancePackError {
         res: BufferedHttpResponse,
     ) -> RusotoError<DeleteOrganizationConformancePackError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "NoSuchOrganizationConformancePackException" => {
                     return RusotoError::Service(
@@ -4307,6 +4317,7 @@ impl DeletePendingAggregationRequestError {
         res: BufferedHttpResponse,
     ) -> RusotoError<DeletePendingAggregationRequestError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidParameterValueException" => {
                     return RusotoError::Service(
@@ -4347,6 +4358,7 @@ impl DeleteRemediationConfigurationError {
         res: BufferedHttpResponse,
     ) -> RusotoError<DeleteRemediationConfigurationError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InsufficientPermissionsException" => {
                     return RusotoError::Service(
@@ -4401,6 +4413,7 @@ impl DeleteRemediationExceptionsError {
         res: BufferedHttpResponse,
     ) -> RusotoError<DeleteRemediationExceptionsError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "NoSuchRemediationExceptionException" => {
                     return RusotoError::Service(
@@ -4435,6 +4448,7 @@ pub enum DeleteResourceConfigError {
 impl DeleteResourceConfigError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteResourceConfigError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "NoRunningConfigurationRecorderException" => {
                     return RusotoError::Service(
@@ -4473,6 +4487,7 @@ impl DeleteRetentionConfigurationError {
         res: BufferedHttpResponse,
     ) -> RusotoError<DeleteRetentionConfigurationError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidParameterValueException" => {
                     return RusotoError::Service(
@@ -4515,6 +4530,7 @@ pub enum DeleteStoredQueryError {
 impl DeleteStoredQueryError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteStoredQueryError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(DeleteStoredQueryError::ResourceNotFound(err.msg))
@@ -4549,6 +4565,7 @@ pub enum DeliverConfigSnapshotError {
 impl DeliverConfigSnapshotError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeliverConfigSnapshotError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "NoAvailableConfigurationRecorderException" => {
                     return RusotoError::Service(
@@ -4603,6 +4620,7 @@ impl DescribeAggregateComplianceByConfigRulesError {
         res: BufferedHttpResponse,
     ) -> RusotoError<DescribeAggregateComplianceByConfigRulesError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidLimitException" => {
                     return RusotoError::Service(
@@ -4659,6 +4677,7 @@ impl DescribeAggregationAuthorizationsError {
         res: BufferedHttpResponse,
     ) -> RusotoError<DescribeAggregationAuthorizationsError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidLimitException" => {
                     return RusotoError::Service(
@@ -4715,6 +4734,7 @@ impl DescribeComplianceByConfigRuleError {
         res: BufferedHttpResponse,
     ) -> RusotoError<DescribeComplianceByConfigRuleError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidNextTokenException" => {
                     return RusotoError::Service(
@@ -4769,6 +4789,7 @@ impl DescribeComplianceByResourceError {
         res: BufferedHttpResponse,
     ) -> RusotoError<DescribeComplianceByResourceError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidNextTokenException" => {
                     return RusotoError::Service(
@@ -4817,6 +4838,7 @@ impl DescribeConfigRuleEvaluationStatusError {
         res: BufferedHttpResponse,
     ) -> RusotoError<DescribeConfigRuleEvaluationStatusError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidNextTokenException" => {
                     return RusotoError::Service(
@@ -4869,6 +4891,7 @@ pub enum DescribeConfigRulesError {
 impl DescribeConfigRulesError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeConfigRulesError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidNextTokenException" => {
                     return RusotoError::Service(DescribeConfigRulesError::InvalidNextToken(
@@ -4915,14 +4938,15 @@ impl DescribeConfigurationAggregatorSourcesStatusError {
         res: BufferedHttpResponse,
     ) -> RusotoError<DescribeConfigurationAggregatorSourcesStatusError> {
         if let Some(err) = proto::json::Error::parse(&res) {
-            match err.typ.as_str() {
-                                "InvalidLimitException" => return RusotoError::Service(DescribeConfigurationAggregatorSourcesStatusError::InvalidLimit(err.msg)),
+            #[allow(clippy::single_match)]
+                match err.typ.as_str() {
+                    "InvalidLimitException" => return RusotoError::Service(DescribeConfigurationAggregatorSourcesStatusError::InvalidLimit(err.msg)),
 "InvalidNextTokenException" => return RusotoError::Service(DescribeConfigurationAggregatorSourcesStatusError::InvalidNextToken(err.msg)),
 "InvalidParameterValueException" => return RusotoError::Service(DescribeConfigurationAggregatorSourcesStatusError::InvalidParameterValue(err.msg)),
 "NoSuchConfigurationAggregatorException" => return RusotoError::Service(DescribeConfigurationAggregatorSourcesStatusError::NoSuchConfigurationAggregator(err.msg)),
 "ValidationException" => return RusotoError::Validation(err.msg),
 _ => {}
-                            }
+                }
         }
         RusotoError::Unknown(res)
     }
@@ -4965,6 +4989,7 @@ impl DescribeConfigurationAggregatorsError {
         res: BufferedHttpResponse,
     ) -> RusotoError<DescribeConfigurationAggregatorsError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidLimitException" => {
                     return RusotoError::Service(
@@ -5027,6 +5052,7 @@ impl DescribeConfigurationRecorderStatusError {
         res: BufferedHttpResponse,
     ) -> RusotoError<DescribeConfigurationRecorderStatusError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "NoSuchConfigurationRecorderException" => {
                     return RusotoError::Service(
@@ -5065,6 +5091,7 @@ impl DescribeConfigurationRecordersError {
         res: BufferedHttpResponse,
     ) -> RusotoError<DescribeConfigurationRecordersError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "NoSuchConfigurationRecorderException" => {
                     return RusotoError::Service(
@@ -5109,6 +5136,7 @@ impl DescribeConformancePackComplianceError {
         res: BufferedHttpResponse,
     ) -> RusotoError<DescribeConformancePackComplianceError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidLimitException" => {
                     return RusotoError::Service(
@@ -5183,6 +5211,7 @@ impl DescribeConformancePackStatusError {
         res: BufferedHttpResponse,
     ) -> RusotoError<DescribeConformancePackStatusError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidLimitException" => {
                     return RusotoError::Service(DescribeConformancePackStatusError::InvalidLimit(
@@ -5237,6 +5266,7 @@ pub enum DescribeConformancePacksError {
 impl DescribeConformancePacksError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeConformancePacksError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidLimitException" => {
                     return RusotoError::Service(DescribeConformancePacksError::InvalidLimit(
@@ -5293,6 +5323,7 @@ impl DescribeDeliveryChannelStatusError {
         res: BufferedHttpResponse,
     ) -> RusotoError<DescribeDeliveryChannelStatusError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "NoSuchDeliveryChannelException" => {
                     return RusotoError::Service(
@@ -5327,6 +5358,7 @@ pub enum DescribeDeliveryChannelsError {
 impl DescribeDeliveryChannelsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeDeliveryChannelsError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "NoSuchDeliveryChannelException" => {
                     return RusotoError::Service(
@@ -5369,6 +5401,7 @@ impl DescribeOrganizationConfigRuleStatusesError {
         res: BufferedHttpResponse,
     ) -> RusotoError<DescribeOrganizationConfigRuleStatusesError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidLimitException" => {
                     return RusotoError::Service(
@@ -5439,6 +5472,7 @@ impl DescribeOrganizationConfigRulesError {
         res: BufferedHttpResponse,
     ) -> RusotoError<DescribeOrganizationConfigRulesError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidLimitException" => {
                     return RusotoError::Service(
@@ -5503,14 +5537,15 @@ impl DescribeOrganizationConformancePackStatusesError {
         res: BufferedHttpResponse,
     ) -> RusotoError<DescribeOrganizationConformancePackStatusesError> {
         if let Some(err) = proto::json::Error::parse(&res) {
-            match err.typ.as_str() {
-                                "InvalidLimitException" => return RusotoError::Service(DescribeOrganizationConformancePackStatusesError::InvalidLimit(err.msg)),
+            #[allow(clippy::single_match)]
+                match err.typ.as_str() {
+                    "InvalidLimitException" => return RusotoError::Service(DescribeOrganizationConformancePackStatusesError::InvalidLimit(err.msg)),
 "InvalidNextTokenException" => return RusotoError::Service(DescribeOrganizationConformancePackStatusesError::InvalidNextToken(err.msg)),
 "NoSuchOrganizationConformancePackException" => return RusotoError::Service(DescribeOrganizationConformancePackStatusesError::NoSuchOrganizationConformancePack(err.msg)),
 "OrganizationAccessDeniedException" => return RusotoError::Service(DescribeOrganizationConformancePackStatusesError::OrganizationAccessDenied(err.msg)),
 "ValidationException" => return RusotoError::Validation(err.msg),
 _ => {}
-                            }
+                }
         }
         RusotoError::Unknown(res)
     }
@@ -5553,6 +5588,7 @@ impl DescribeOrganizationConformancePacksError {
         res: BufferedHttpResponse,
     ) -> RusotoError<DescribeOrganizationConformancePacksError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidLimitException" => {
                     return RusotoError::Service(
@@ -5619,6 +5655,7 @@ impl DescribePendingAggregationRequestsError {
         res: BufferedHttpResponse,
     ) -> RusotoError<DescribePendingAggregationRequestsError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidLimitException" => {
                     return RusotoError::Service(
@@ -5668,6 +5705,7 @@ impl DescribeRemediationConfigurationsError {
         res: BufferedHttpResponse,
     ) -> RusotoError<DescribeRemediationConfigurationsError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
@@ -5697,6 +5735,7 @@ impl DescribeRemediationExceptionsError {
         res: BufferedHttpResponse,
     ) -> RusotoError<DescribeRemediationExceptionsError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidNextTokenException" => {
                     return RusotoError::Service(
@@ -5743,6 +5782,7 @@ impl DescribeRemediationExecutionStatusError {
         res: BufferedHttpResponse,
     ) -> RusotoError<DescribeRemediationExecutionStatusError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidNextTokenException" => {
                     return RusotoError::Service(
@@ -5793,6 +5833,7 @@ impl DescribeRetentionConfigurationsError {
         res: BufferedHttpResponse,
     ) -> RusotoError<DescribeRetentionConfigurationsError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidNextTokenException" => {
                     return RusotoError::Service(
@@ -5849,6 +5890,7 @@ impl GetAggregateComplianceDetailsByConfigRuleError {
         res: BufferedHttpResponse,
     ) -> RusotoError<GetAggregateComplianceDetailsByConfigRuleError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidLimitException" => {
                     return RusotoError::Service(
@@ -5905,6 +5947,7 @@ impl GetAggregateConfigRuleComplianceSummaryError {
         res: BufferedHttpResponse,
     ) -> RusotoError<GetAggregateConfigRuleComplianceSummaryError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidLimitException" => {
                     return RusotoError::Service(
@@ -5963,6 +6006,7 @@ impl GetAggregateDiscoveredResourceCountsError {
         res: BufferedHttpResponse,
     ) -> RusotoError<GetAggregateDiscoveredResourceCountsError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidLimitException" => {
                     return RusotoError::Service(
@@ -6021,6 +6065,7 @@ impl GetAggregateResourceConfigError {
         res: BufferedHttpResponse,
     ) -> RusotoError<GetAggregateResourceConfigError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "NoSuchConfigurationAggregatorException" => {
                     return RusotoError::Service(
@@ -6077,6 +6122,7 @@ impl GetComplianceDetailsByConfigRuleError {
         res: BufferedHttpResponse,
     ) -> RusotoError<GetComplianceDetailsByConfigRuleError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidNextTokenException" => {
                     return RusotoError::Service(
@@ -6129,6 +6175,7 @@ impl GetComplianceDetailsByResourceError {
         res: BufferedHttpResponse,
     ) -> RusotoError<GetComplianceDetailsByResourceError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidParameterValueException" => {
                     return RusotoError::Service(
@@ -6162,6 +6209,7 @@ impl GetComplianceSummaryByConfigRuleError {
         res: BufferedHttpResponse,
     ) -> RusotoError<GetComplianceSummaryByConfigRuleError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
@@ -6189,6 +6237,7 @@ impl GetComplianceSummaryByResourceTypeError {
         res: BufferedHttpResponse,
     ) -> RusotoError<GetComplianceSummaryByResourceTypeError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidParameterValueException" => {
                     return RusotoError::Service(
@@ -6233,6 +6282,7 @@ impl GetConformancePackComplianceDetailsError {
         res: BufferedHttpResponse,
     ) -> RusotoError<GetConformancePackComplianceDetailsError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidLimitException" => {
                     return RusotoError::Service(
@@ -6307,6 +6357,7 @@ impl GetConformancePackComplianceSummaryError {
         res: BufferedHttpResponse,
     ) -> RusotoError<GetConformancePackComplianceSummaryError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidLimitException" => {
                     return RusotoError::Service(
@@ -6361,6 +6412,7 @@ impl GetDiscoveredResourceCountsError {
         res: BufferedHttpResponse,
     ) -> RusotoError<GetDiscoveredResourceCountsError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidLimitException" => {
                     return RusotoError::Service(GetDiscoveredResourceCountsError::InvalidLimit(
@@ -6407,6 +6459,7 @@ impl GetOrganizationConfigRuleDetailedStatusError {
         res: BufferedHttpResponse,
     ) -> RusotoError<GetOrganizationConfigRuleDetailedStatusError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidLimitException" => {
                     return RusotoError::Service(
@@ -6477,14 +6530,15 @@ impl GetOrganizationConformancePackDetailedStatusError {
         res: BufferedHttpResponse,
     ) -> RusotoError<GetOrganizationConformancePackDetailedStatusError> {
         if let Some(err) = proto::json::Error::parse(&res) {
-            match err.typ.as_str() {
-                                "InvalidLimitException" => return RusotoError::Service(GetOrganizationConformancePackDetailedStatusError::InvalidLimit(err.msg)),
+            #[allow(clippy::single_match)]
+                match err.typ.as_str() {
+                    "InvalidLimitException" => return RusotoError::Service(GetOrganizationConformancePackDetailedStatusError::InvalidLimit(err.msg)),
 "InvalidNextTokenException" => return RusotoError::Service(GetOrganizationConformancePackDetailedStatusError::InvalidNextToken(err.msg)),
 "NoSuchOrganizationConformancePackException" => return RusotoError::Service(GetOrganizationConformancePackDetailedStatusError::NoSuchOrganizationConformancePack(err.msg)),
 "OrganizationAccessDeniedException" => return RusotoError::Service(GetOrganizationConformancePackDetailedStatusError::OrganizationAccessDenied(err.msg)),
 "ValidationException" => return RusotoError::Validation(err.msg),
 _ => {}
-                            }
+                }
         }
         RusotoError::Unknown(res)
     }
@@ -6519,6 +6573,7 @@ pub enum GetResourceConfigHistoryError {
 impl GetResourceConfigHistoryError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetResourceConfigHistoryError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidLimitException" => {
                     return RusotoError::Service(GetResourceConfigHistoryError::InvalidLimit(
@@ -6579,6 +6634,7 @@ pub enum GetStoredQueryError {
 impl GetStoredQueryError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetStoredQueryError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(GetStoredQueryError::ResourceNotFound(err.msg))
@@ -6615,6 +6671,7 @@ impl ListAggregateDiscoveredResourcesError {
         res: BufferedHttpResponse,
     ) -> RusotoError<ListAggregateDiscoveredResourcesError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidLimitException" => {
                     return RusotoError::Service(
@@ -6671,6 +6728,7 @@ pub enum ListDiscoveredResourcesError {
 impl ListDiscoveredResourcesError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListDiscoveredResourcesError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidLimitException" => {
                     return RusotoError::Service(ListDiscoveredResourcesError::InvalidLimit(
@@ -6717,6 +6775,7 @@ pub enum ListStoredQueriesError {
 impl ListStoredQueriesError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListStoredQueriesError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidNextTokenException" => {
                     return RusotoError::Service(ListStoredQueriesError::InvalidNextToken(err.msg))
@@ -6751,6 +6810,7 @@ pub enum ListTagsForResourceError {
 impl ListTagsForResourceError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListTagsForResourceError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidLimitException" => {
                     return RusotoError::Service(ListTagsForResourceError::InvalidLimit(err.msg))
@@ -6795,6 +6855,7 @@ impl PutAggregationAuthorizationError {
         res: BufferedHttpResponse,
     ) -> RusotoError<PutAggregationAuthorizationError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidParameterValueException" => {
                     return RusotoError::Service(
@@ -6837,6 +6898,7 @@ pub enum PutConfigRuleError {
 impl PutConfigRuleError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<PutConfigRuleError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InsufficientPermissionsException" => {
                     return RusotoError::Service(PutConfigRuleError::InsufficientPermissions(
@@ -6903,6 +6965,7 @@ impl PutConfigurationAggregatorError {
         res: BufferedHttpResponse,
     ) -> RusotoError<PutConfigurationAggregatorError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidParameterValueException" => {
                     return RusotoError::Service(
@@ -6979,6 +7042,7 @@ pub enum PutConfigurationRecorderError {
 impl PutConfigurationRecorderError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<PutConfigurationRecorderError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidConfigurationRecorderNameException" => {
                     return RusotoError::Service(
@@ -7045,6 +7109,7 @@ pub enum PutConformancePackError {
 impl PutConformancePackError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<PutConformancePackError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ConformancePackTemplateValidationException" => {
                     return RusotoError::Service(
@@ -7115,6 +7180,7 @@ pub enum PutDeliveryChannelError {
 impl PutDeliveryChannelError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<PutDeliveryChannelError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InsufficientDeliveryPolicyException" => {
                     return RusotoError::Service(
@@ -7193,6 +7259,7 @@ pub enum PutEvaluationsError {
 impl PutEvaluationsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<PutEvaluationsError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidParameterValueException" => {
                     return RusotoError::Service(PutEvaluationsError::InvalidParameterValue(
@@ -7235,6 +7302,7 @@ pub enum PutExternalEvaluationError {
 impl PutExternalEvaluationError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<PutExternalEvaluationError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidParameterValueException" => {
                     return RusotoError::Service(PutExternalEvaluationError::InvalidParameterValue(
@@ -7285,6 +7353,7 @@ pub enum PutOrganizationConfigRuleError {
 impl PutOrganizationConfigRuleError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<PutOrganizationConfigRuleError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InsufficientPermissionsException" => {
                     return RusotoError::Service(
@@ -7381,8 +7450,9 @@ impl PutOrganizationConformancePackError {
         res: BufferedHttpResponse,
     ) -> RusotoError<PutOrganizationConformancePackError> {
         if let Some(err) = proto::json::Error::parse(&res) {
-            match err.typ.as_str() {
-                                "InsufficientPermissionsException" => return RusotoError::Service(PutOrganizationConformancePackError::InsufficientPermissions(err.msg)),
+            #[allow(clippy::single_match)]
+                match err.typ.as_str() {
+                    "InsufficientPermissionsException" => return RusotoError::Service(PutOrganizationConformancePackError::InsufficientPermissions(err.msg)),
 "MaxNumberOfOrganizationConformancePacksExceededException" => return RusotoError::Service(PutOrganizationConformancePackError::MaxNumberOfOrganizationConformancePacksExceeded(err.msg)),
 "NoAvailableOrganizationException" => return RusotoError::Service(PutOrganizationConformancePackError::NoAvailableOrganization(err.msg)),
 "OrganizationAccessDeniedException" => return RusotoError::Service(PutOrganizationConformancePackError::OrganizationAccessDenied(err.msg)),
@@ -7391,7 +7461,7 @@ impl PutOrganizationConformancePackError {
 "ResourceInUseException" => return RusotoError::Service(PutOrganizationConformancePackError::ResourceInUse(err.msg)),
 "ValidationException" => return RusotoError::Validation(err.msg),
 _ => {}
-                            }
+                }
         }
         RusotoError::Unknown(res)
     }
@@ -7425,6 +7495,7 @@ impl PutRemediationConfigurationsError {
         res: BufferedHttpResponse,
     ) -> RusotoError<PutRemediationConfigurationsError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InsufficientPermissionsException" => {
                     return RusotoError::Service(
@@ -7469,6 +7540,7 @@ pub enum PutRemediationExceptionsError {
 impl PutRemediationExceptionsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<PutRemediationExceptionsError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InsufficientPermissionsException" => {
                     return RusotoError::Service(
@@ -7515,6 +7587,7 @@ pub enum PutResourceConfigError {
 impl PutResourceConfigError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<PutResourceConfigError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InsufficientPermissionsException" => {
                     return RusotoError::Service(PutResourceConfigError::InsufficientPermissions(
@@ -7563,6 +7636,7 @@ pub enum PutRetentionConfigurationError {
 impl PutRetentionConfigurationError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<PutRetentionConfigurationError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidParameterValueException" => {
                     return RusotoError::Service(
@@ -7609,6 +7683,7 @@ pub enum PutStoredQueryError {
 impl PutStoredQueryError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<PutStoredQueryError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ResourceConcurrentModificationException" => {
                     return RusotoError::Service(
@@ -7655,6 +7730,7 @@ impl SelectAggregateResourceConfigError {
         res: BufferedHttpResponse,
     ) -> RusotoError<SelectAggregateResourceConfigError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidExpressionException" => {
                     return RusotoError::Service(
@@ -7715,6 +7791,7 @@ pub enum SelectResourceConfigError {
 impl SelectResourceConfigError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<SelectResourceConfigError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidExpressionException" => {
                     return RusotoError::Service(SelectResourceConfigError::InvalidExpression(
@@ -7765,6 +7842,7 @@ impl StartConfigRulesEvaluationError {
         res: BufferedHttpResponse,
     ) -> RusotoError<StartConfigRulesEvaluationError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InvalidParameterValueException" => {
                     return RusotoError::Service(
@@ -7821,6 +7899,7 @@ impl StartConfigurationRecorderError {
         res: BufferedHttpResponse,
     ) -> RusotoError<StartConfigurationRecorderError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "NoAvailableDeliveryChannelException" => {
                     return RusotoError::Service(
@@ -7867,6 +7946,7 @@ pub enum StartRemediationExecutionError {
 impl StartRemediationExecutionError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<StartRemediationExecutionError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "InsufficientPermissionsException" => {
                     return RusotoError::Service(
@@ -7917,6 +7997,7 @@ pub enum StopConfigurationRecorderError {
 impl StopConfigurationRecorderError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<StopConfigurationRecorderError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "NoSuchConfigurationRecorderException" => {
                     return RusotoError::Service(
@@ -7953,6 +8034,7 @@ pub enum TagResourceError {
 impl TagResourceError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<TagResourceError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(TagResourceError::ResourceNotFound(err.msg))
@@ -7987,6 +8069,7 @@ pub enum UntagResourceError {
 impl UntagResourceError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UntagResourceError> {
         if let Some(err) = proto::json::Error::parse(&res) {
+            #[allow(clippy::single_match)]
             match err.typ.as_str() {
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(UntagResourceError::ResourceNotFound(err.msg))
