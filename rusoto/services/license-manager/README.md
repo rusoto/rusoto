@@ -2,8 +2,8 @@
 # Rusoto LicenseManager
 Rust SDK for AWS License Manager
 
-<a href="https://docs.rs/rusoto_license_manager/0.45.0" title="API Docs"><img src="https://img.shields.io/badge/API-docs-blue.svg" alt="api-docs-badge"></img></a>
-<a href="https://crates.io/crates/rusoto_license_manager/0.45.0" title="Crates.io"><img src="https://img.shields.io/crates/v/rusoto_core.svg" alt="crates-io"></img></a>
+<a href="https://docs.rs/rusoto_license_manager/0.46.0" title="API Docs"><img src="https://img.shields.io/badge/API-docs-blue.svg" alt="api-docs-badge"></img></a>
+<a href="https://crates.io/crates/rusoto_license_manager/0.46.0" title="Crates.io"><img src="https://img.shields.io/crates/v/rusoto_core.svg" alt="crates-io"></img></a>
 <a href="#license" title="License: MIT"><img src="https://img.shields.io/badge/license-MIT-blue.svg" alt="license-badge"></img></a>
 <a href="https://discordapp.com/invite/WMJ4DWp"><img src="https://img.shields.io/discord/670751965273391124"></img></a>
 
@@ -28,7 +28,7 @@ To use `rusoto_license_manager` in your application, add it as a dependency in y
 
 ```toml
 [dependencies]
-rusoto_license_manager = "0.45.0"
+rusoto_license_manager = "0.46.0"
 ```
 
 ## Crate Features

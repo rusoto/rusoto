@@ -27,16 +27,16 @@ For example, to include only S3 and SQS:
 
 ```toml
 [dependencies]
-rusoto_core = "0.45.0"
-rusoto_sqs = "0.45.0"
-rusoto_s3 = "0.45.0"
+rusoto_core = "0.46.0"
+rusoto_sqs = "0.46.0"
+rusoto_s3 = "0.46.0"
 ```
 
 ## Migration notes
 
 Breaking changes and migration details are documented at [https://rusoto.org/migrations.html](https://rusoto.org/migrations.html).
 
-Note that from v0.43.0 onward, Rusoto uses Rust's `std::future::Future`, and the Tokio 0.2 ecosystem.
+Note that from v0.43.0 onward, Rusoto uses Rust's `std::future::Future`, and the Tokio 0.2 ecosystem. From v0.46.0 onward, Rusoto uses the Tokio 1.0 ecosystem.
 
 ## Usage
 
