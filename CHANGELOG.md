@@ -5,7 +5,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-(Please put changes here.)
+- Update to `serde_urlencoded` 0.7
+- Update to `rustc_version` 0.3
 
 ## [0.46.0] - 2021-01-05
 

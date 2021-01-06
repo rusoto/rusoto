@@ -19,7 +19,7 @@ targets = []
 [dependencies]
 async-trait = "0.1"
 bytes = "1.0"
-serde_urlencoded = "0.6"
+serde_urlencoded = "0.7"
 xml-rs = "0.8"
 
 [dependencies.futures]

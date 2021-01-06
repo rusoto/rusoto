@@ -17,7 +17,7 @@ homepage = "https://www.rusoto.org/"
 edition = "2018"
 
 [build-dependencies]
-rustc_version = "0.2"
+rustc_version = "0.3"
 
 [dependencies]
 bytes = "1.0"
