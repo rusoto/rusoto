@@ -21,6 +21,7 @@ rustc_version = "0.3"
 
 [dependencies]
 bytes = "1.0"
+chrono = { version = "0.4", default-features = false, features = ["clock"] }
 futures = "0.3"
 hmac = "0.10"
 http = "0.2"
@@ -31,7 +32,6 @@ base64 = "0.13"
 hex = "0.4"
 serde = "1"
 sha2 = "0.9"
-time = "0.2.11"
 percent-encoding = "2"
 pin-project-lite = "0.2"
 tokio = { version = "1.0", features = ["macros", "rt-multi-thread"] }

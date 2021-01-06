@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Update to `serde_urlencoded` 0.7
 - Update to `rustc_version` 0.3
+- Replace `time`-related types in `rusoto_signature` with `chrono` types, to
+  match `rusoto_credential`
 
 ## [0.46.0] - 2021-01-05
 
