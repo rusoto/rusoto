@@ -186,7 +186,7 @@ impl<'b> Service<'b> {
                 );
                 dependencies.insert(
                     "serde_urlencoded".to_owned(),
-                    cargo::Dependency::Simple("0.6".into()),
+                    cargo::Dependency::Simple("0.7".into()),
                 );
                 dependencies.insert("xml-rs".to_owned(), cargo::Dependency::Simple("0.8".into()));
             }
