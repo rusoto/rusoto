@@ -5,23 +5,25 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-(Please put changes here)
+(Please put changes here.)
+
+## [0.46.0] - 2021-01-05
 
 - Display `rusoto_core::Client` in docs
 - Fix unsoundness in `rusoto_mock::MultipleMockRequestDispatcher`
-- Swap the unmaintained `dirs` crate for its replacement `dirs-next`
-- Swap `pin-project` for the lighter weight `pin-project-lite`
+- Add ability to set local agent appended to the default User-Agent
 - Update to `base64` 0.13
+- Update to `bytes` 1.0
 - Update to `hmac` 0.10
 - Update to `hyper-rustls` 0.22
 - Update to `hyper-tls` 0.5
-- Update to `tokio` 1.0
-- Update to `bytes` 1.0
 - Update to `hyper` 0.14
+- Update to `tokio` 1.0
+- Update to botocore 1.19.42
+- Swap the unmaintained `dirs` crate for its replacement `dirs-next`
+- Swap `pin-project` for the lighter weight `pin-project-lite`
 - Disable `chrono`'s `oldtime` feature
 - Remove dependency on `regex`
-- Update to botocore 1.19.42
-- Add ability to set local agent appended to the default User-Agent
 
 ## [0.45.0] - 2020-07-22
 
@@ -397,7 +399,8 @@ such as an S3 key returned in `list_objects_v2`
 - Type aliases removed.  Example: we no longer use `BucketName` which was an alias for `String`.
 - travis-cargo from TravisCI builds
 
-[Unreleased]: https://github.com/rusoto/rusoto/compare/rusoto-v0.45.0...HEAD
+[Unreleased]: https://github.com/rusoto/rusoto/compare/rusoto-v0.46.0...HEAD
+[0.46.0]: https://github.com/rusoto/rusoto/compare/rusoto-v0.45.0...rusoto-v0.46.0
 [0.45.0]: https://github.com/rusoto/rusoto/compare/rusoto-v0.44.0...rusoto-v0.45.0
 [0.44.0]: https://github.com/rusoto/rusoto/compare/rusoto-v0.43.0...rusoto-v0.44.0
 [0.43.0]: https://github.com/rusoto/rusoto/compare/rusoto-v0.43.0-beta.1...rusoto-v0.43.0
