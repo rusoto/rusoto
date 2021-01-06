@@ -5,5 +5,5 @@ authors = ["Matthew Mayer <matthewkmayer@gmail.com>"]
 edition = "2018"
 
 [dependencies]
-tokio = { version = "0.2", features = ["macros"] }
-warp = "0.2"
+hyper = { version = "0.14", features = ["http1", "server", "tcp"] }
+tokio = { version = "1.0", features = ["macros", "rt-multi-thread"] }

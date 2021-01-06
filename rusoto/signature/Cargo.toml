@@ -20,11 +20,11 @@ edition = "2018"
 rustc_version = "0.2"
 
 [dependencies]
-bytes = "0.5"
+bytes = "1.0"
 futures = "0.3"
 hmac = "0.10"
 http = "0.2"
-hyper = "0.13.1"
+hyper = { version = "0.14", features = ["stream"] }
 log = "0.4.1"
 md5 = "0.7"
 base64 = "0.13"
@@ -34,7 +34,7 @@ sha2 = "0.9"
 time = "0.2.11"
 percent-encoding = "2"
 pin-project-lite = "0.2"
-tokio = { version = "0.2", features = ["macros"] }
+tokio = { version = "1.0", features = ["macros", "rt-multi-thread"] }
 
 [dependencies.rusoto_credential]
 version = "0.45.0"
@@ -43,6 +43,7 @@ path = "../credential"
 [dev-dependencies]
 serde_json = "1"
 serde_test = "1"
+tokio = { version = "1.0", features = ["io-util"] }
 
 [package.metadata.docs.rs]
 targets = []

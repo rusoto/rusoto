@@ -6,7 +6,7 @@ use std::task::{Context, Poll};
 use bytes::{BufMut, Bytes, BytesMut};
 use futures::{future, stream, Stream, StreamExt};
 use pin_project_lite::pin_project;
-use tokio::io::AsyncRead;
+use tokio::io::{AsyncRead, ReadBuf};
 
 pin_project! {
     /// Stream of bytes.
@@ -101,23 +101,22 @@ impl AsyncRead for ImplAsyncRead {
     fn poll_read(
         self: Pin<&mut Self>,
         cx: &mut Context<'_>,
-        buf: &mut [u8],
-    ) -> Poll<io::Result<usize>> {
+        buf: &mut ReadBuf,
+    ) -> Poll<io::Result<()>> {
         let this = self.project();
         if this.buffer.is_empty() {
             match futures::ready!(this.stream.poll_next(cx)) {
-                None => return Poll::Ready(Ok(0)),
+                None => return Poll::Ready(Ok(())),
                 Some(Err(e)) => return Poll::Ready(Err(e)),
                 Some(Ok(bytes)) => {
                     this.buffer.put(bytes);
                 }
             }
         }
-        let available = std::cmp::min(buf.len(), this.buffer.len());
+        let available = std::cmp::min(buf.remaining(), this.buffer.len());
         let bytes = this.buffer.split_to(available);
-        let (left, _) = buf.split_at_mut(available);
-        left.copy_from_slice(&bytes[..available]);
-        Poll::Ready(Ok(available))
+        buf.put_slice(&bytes);
+        Poll::Ready(Ok(()))
     }
 }
 
@@ -138,9 +137,11 @@ impl ImplBlockingRead {
 
 impl io::Read for ImplBlockingRead {
     fn read(&mut self, buf: &mut [u8]) -> io::Result<usize> {
-        let mut rt = tokio::runtime::Runtime::new()?;
+        let rt = tokio::runtime::Runtime::new()?;
         rt.block_on(future::poll_fn(|cx| {
-            tokio::io::AsyncRead::poll_read(Pin::new(&mut self.inner), cx, buf)
+            let mut buf = ReadBuf::new(buf);
+            futures::ready!(AsyncRead::poll_read(Pin::new(&mut self.inner), cx, &mut buf))?;
+            Poll::Ready(Ok(buf.filled().len()))
         }))
     }
 }

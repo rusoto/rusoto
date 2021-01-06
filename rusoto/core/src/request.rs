@@ -224,7 +224,7 @@ impl HttpClient {
         let connector = HttpsConnector::new();
 
         #[cfg(feature = "rustls")]
-        let connector = HttpsConnector::new();
+        let connector = HttpsConnector::with_native_roots();
 
         Ok(Self::from_connector(connector))
     }
@@ -235,7 +235,7 @@ impl HttpClient {
         let connector = HttpsConnector::new();
 
         #[cfg(feature = "rustls")]
-        let connector = HttpsConnector::new();
+        let connector = HttpsConnector::with_native_roots();
 
         Ok(Self::from_connector_with_config(connector, config))
     }

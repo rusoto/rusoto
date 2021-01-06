@@ -14,7 +14,7 @@ rusoto_sts = { path = "../rusoto/services/sts" }
 
 doc-comment = "0.3"
 env_logger = "0.5"
-tokio = "0.2"
+tokio = "1.0"
 
 [build-dependencies]
 glob = "0.3"
