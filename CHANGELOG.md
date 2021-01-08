@@ -9,6 +9,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Update to `rustc_version` 0.3
 - Replace `time`-related types in `rusoto_signature` with `chrono` types, to
   match `rusoto_credential`
+- Swap the non-RustCrypto `md5` crate for the RustCrypto `md-5` crate, to match
+  usage of RustCrypto `sha2` crate
 
 ## [0.46.0] - 2021-01-05
 
