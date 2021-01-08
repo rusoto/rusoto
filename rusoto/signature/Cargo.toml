@@ -22,12 +22,13 @@ rustc_version = "0.3"
 [dependencies]
 bytes = "1.0"
 chrono = { version = "0.4", default-features = false, features = ["clock"] }
+digest = "0.9.0"
 futures = "0.3"
 hmac = "0.10"
 http = "0.2"
 hyper = { version = "0.14", features = ["stream"] }
 log = "0.4.1"
-md5 = "0.7"
+md-5 = "0.9"
 base64 = "0.13"
 hex = "0.4"
 serde = "1"

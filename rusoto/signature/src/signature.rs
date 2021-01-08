@@ -20,15 +20,16 @@ use std::time::Duration;
 use base64;
 use bytes::Bytes;
 use chrono::{DateTime, Utc, NaiveDate};
+use digest::Digest;
 use hex;
 use hmac::{Hmac, Mac, NewMac};
 use http::header::{HeaderMap, HeaderName, HeaderValue};
 use http::{Method, Request};
 use hyper::Body;
 use log::{debug, log_enabled, Level::Debug};
-use md5;
+use md5::Md5;
 use percent_encoding::{percent_decode, utf8_percent_encode, AsciiSet, NON_ALPHANUMERIC};
-use sha2::{Digest, Sha256};
+use sha2::Sha256;
 
 use crate::credential::AwsCredentials;
 use crate::region::Region;
@@ -157,7 +158,7 @@ impl SignedRequest {
             return;
         }
         if let Some(SignedRequestPayload::Buffer(ref payload)) = self.payload {
-            let digest = md5::compute(payload);
+            let digest = Md5::digest(payload);
             self.add_header("Content-MD5", &base64::encode(&*digest));
         }
     }
