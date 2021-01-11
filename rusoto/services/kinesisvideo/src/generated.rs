@@ -679,20 +679,6 @@ impl CreateSignalingChannelError {
         }
         RusotoError::Unknown(res)
     }
-
-    fn refine(
-        err: RusotoError<std::convert::Infallible>,
-    ) -> RusotoError<CreateSignalingChannelError> {
-        match err {
-            RusotoError::Service(err) => match err {},
-            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
-            RusotoError::Credentials(err) => RusotoError::Credentials(err),
-            RusotoError::Validation(err) => RusotoError::Validation(err),
-            RusotoError::ParseError(err) => RusotoError::ParseError(err),
-            RusotoError::Unknown(res) => Self::from_response(res),
-            RusotoError::Blocking => RusotoError::Blocking,
-        }
-    }
 }
 impl fmt::Display for CreateSignalingChannelError {
     #[allow(unused_variables)]
@@ -768,18 +754,6 @@ impl CreateStreamError {
         }
         RusotoError::Unknown(res)
     }
-
-    fn refine(err: RusotoError<std::convert::Infallible>) -> RusotoError<CreateStreamError> {
-        match err {
-            RusotoError::Service(err) => match err {},
-            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
-            RusotoError::Credentials(err) => RusotoError::Credentials(err),
-            RusotoError::Validation(err) => RusotoError::Validation(err),
-            RusotoError::ParseError(err) => RusotoError::ParseError(err),
-            RusotoError::Unknown(res) => Self::from_response(res),
-            RusotoError::Blocking => RusotoError::Blocking,
-        }
-    }
 }
 impl fmt::Display for CreateStreamError {
     #[allow(unused_variables)]
@@ -851,20 +825,6 @@ impl DeleteSignalingChannelError {
         }
         RusotoError::Unknown(res)
     }
-
-    fn refine(
-        err: RusotoError<std::convert::Infallible>,
-    ) -> RusotoError<DeleteSignalingChannelError> {
-        match err {
-            RusotoError::Service(err) => match err {},
-            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
-            RusotoError::Credentials(err) => RusotoError::Credentials(err),
-            RusotoError::Validation(err) => RusotoError::Validation(err),
-            RusotoError::ParseError(err) => RusotoError::ParseError(err),
-            RusotoError::Unknown(res) => Self::from_response(res),
-            RusotoError::Blocking => RusotoError::Blocking,
-        }
-    }
 }
 impl fmt::Display for DeleteSignalingChannelError {
     #[allow(unused_variables)]
@@ -925,18 +885,6 @@ impl DeleteStreamError {
         }
         RusotoError::Unknown(res)
     }
-
-    fn refine(err: RusotoError<std::convert::Infallible>) -> RusotoError<DeleteStreamError> {
-        match err {
-            RusotoError::Service(err) => match err {},
-            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
-            RusotoError::Credentials(err) => RusotoError::Credentials(err),
-            RusotoError::Validation(err) => RusotoError::Validation(err),
-            RusotoError::ParseError(err) => RusotoError::ParseError(err),
-            RusotoError::Unknown(res) => Self::from_response(res),
-            RusotoError::Blocking => RusotoError::Blocking,
-        }
-    }
 }
 impl fmt::Display for DeleteStreamError {
     #[allow(unused_variables)]
@@ -995,20 +943,6 @@ impl DescribeSignalingChannelError {
         }
         RusotoError::Unknown(res)
     }
-
-    fn refine(
-        err: RusotoError<std::convert::Infallible>,
-    ) -> RusotoError<DescribeSignalingChannelError> {
-        match err {
-            RusotoError::Service(err) => match err {},
-            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
-            RusotoError::Credentials(err) => RusotoError::Credentials(err),
-            RusotoError::Validation(err) => RusotoError::Validation(err),
-            RusotoError::ParseError(err) => RusotoError::ParseError(err),
-            RusotoError::Unknown(res) => Self::from_response(res),
-            RusotoError::Blocking => RusotoError::Blocking,
-        }
-    }
 }
 impl fmt::Display for DescribeSignalingChannelError {
     #[allow(unused_variables)]
@@ -1057,18 +991,6 @@ impl DescribeStreamError {
         }
         RusotoError::Unknown(res)
     }
-
-    fn refine(err: RusotoError<std::convert::Infallible>) -> RusotoError<DescribeStreamError> {
-        match err {
-            RusotoError::Service(err) => match err {},
-            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
-            RusotoError::Credentials(err) => RusotoError::Credentials(err),
-            RusotoError::Validation(err) => RusotoError::Validation(err),
-            RusotoError::ParseError(err) => RusotoError::ParseError(err),
-            RusotoError::Unknown(res) => Self::from_response(res),
-            RusotoError::Blocking => RusotoError::Blocking,
-        }
-    }
 }
 impl fmt::Display for DescribeStreamError {
     #[allow(unused_variables)]
@@ -1116,18 +1038,6 @@ impl GetDataEndpointError {
             }
         }
         RusotoError::Unknown(res)
-    }
-
-    fn refine(err: RusotoError<std::convert::Infallible>) -> RusotoError<GetDataEndpointError> {
-        match err {
-            RusotoError::Service(err) => match err {},
-            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
-            RusotoError::Credentials(err) => RusotoError::Credentials(err),
-            RusotoError::Validation(err) => RusotoError::Validation(err),
-            RusotoError::ParseError(err) => RusotoError::ParseError(err),
-            RusotoError::Unknown(res) => Self::from_response(res),
-            RusotoError::Blocking => RusotoError::Blocking,
-        }
     }
 }
 impl fmt::Display for GetDataEndpointError {
@@ -1194,20 +1104,6 @@ impl GetSignalingChannelEndpointError {
         }
         RusotoError::Unknown(res)
     }
-
-    fn refine(
-        err: RusotoError<std::convert::Infallible>,
-    ) -> RusotoError<GetSignalingChannelEndpointError> {
-        match err {
-            RusotoError::Service(err) => match err {},
-            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
-            RusotoError::Credentials(err) => RusotoError::Credentials(err),
-            RusotoError::Validation(err) => RusotoError::Validation(err),
-            RusotoError::ParseError(err) => RusotoError::ParseError(err),
-            RusotoError::Unknown(res) => Self::from_response(res),
-            RusotoError::Blocking => RusotoError::Blocking,
-        }
-    }
 }
 impl fmt::Display for GetSignalingChannelEndpointError {
     #[allow(unused_variables)]
@@ -1258,20 +1154,6 @@ impl ListSignalingChannelsError {
         }
         RusotoError::Unknown(res)
     }
-
-    fn refine(
-        err: RusotoError<std::convert::Infallible>,
-    ) -> RusotoError<ListSignalingChannelsError> {
-        match err {
-            RusotoError::Service(err) => match err {},
-            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
-            RusotoError::Credentials(err) => RusotoError::Credentials(err),
-            RusotoError::Validation(err) => RusotoError::Validation(err),
-            RusotoError::ParseError(err) => RusotoError::ParseError(err),
-            RusotoError::Unknown(res) => Self::from_response(res),
-            RusotoError::Blocking => RusotoError::Blocking,
-        }
-    }
 }
 impl fmt::Display for ListSignalingChannelsError {
     #[allow(unused_variables)]
@@ -1308,18 +1190,6 @@ impl ListStreamsError {
             }
         }
         RusotoError::Unknown(res)
-    }
-
-    fn refine(err: RusotoError<std::convert::Infallible>) -> RusotoError<ListStreamsError> {
-        match err {
-            RusotoError::Service(err) => match err {},
-            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
-            RusotoError::Credentials(err) => RusotoError::Credentials(err),
-            RusotoError::Validation(err) => RusotoError::Validation(err),
-            RusotoError::ParseError(err) => RusotoError::ParseError(err),
-            RusotoError::Unknown(res) => Self::from_response(res),
-            RusotoError::Blocking => RusotoError::Blocking,
-        }
     }
 }
 impl fmt::Display for ListStreamsError {
@@ -1370,18 +1240,6 @@ impl ListTagsForResourceError {
             }
         }
         RusotoError::Unknown(res)
-    }
-
-    fn refine(err: RusotoError<std::convert::Infallible>) -> RusotoError<ListTagsForResourceError> {
-        match err {
-            RusotoError::Service(err) => match err {},
-            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
-            RusotoError::Credentials(err) => RusotoError::Credentials(err),
-            RusotoError::Validation(err) => RusotoError::Validation(err),
-            RusotoError::ParseError(err) => RusotoError::ParseError(err),
-            RusotoError::Unknown(res) => Self::from_response(res),
-            RusotoError::Blocking => RusotoError::Blocking,
-        }
     }
 }
 impl fmt::Display for ListTagsForResourceError {
@@ -1440,18 +1298,6 @@ impl ListTagsForStreamError {
         }
         RusotoError::Unknown(res)
     }
-
-    fn refine(err: RusotoError<std::convert::Infallible>) -> RusotoError<ListTagsForStreamError> {
-        match err {
-            RusotoError::Service(err) => match err {},
-            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
-            RusotoError::Credentials(err) => RusotoError::Credentials(err),
-            RusotoError::Validation(err) => RusotoError::Validation(err),
-            RusotoError::ParseError(err) => RusotoError::ParseError(err),
-            RusotoError::Unknown(res) => Self::from_response(res),
-            RusotoError::Blocking => RusotoError::Blocking,
-        }
-    }
 }
 impl fmt::Display for ListTagsForStreamError {
     #[allow(unused_variables)]
@@ -1507,18 +1353,6 @@ impl TagResourceError {
             }
         }
         RusotoError::Unknown(res)
-    }
-
-    fn refine(err: RusotoError<std::convert::Infallible>) -> RusotoError<TagResourceError> {
-        match err {
-            RusotoError::Service(err) => match err {},
-            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
-            RusotoError::Credentials(err) => RusotoError::Credentials(err),
-            RusotoError::Validation(err) => RusotoError::Validation(err),
-            RusotoError::ParseError(err) => RusotoError::ParseError(err),
-            RusotoError::Unknown(res) => Self::from_response(res),
-            RusotoError::Blocking => RusotoError::Blocking,
-        }
     }
 }
 impl fmt::Display for TagResourceError {
@@ -1581,18 +1415,6 @@ impl TagStreamError {
         }
         RusotoError::Unknown(res)
     }
-
-    fn refine(err: RusotoError<std::convert::Infallible>) -> RusotoError<TagStreamError> {
-        match err {
-            RusotoError::Service(err) => match err {},
-            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
-            RusotoError::Credentials(err) => RusotoError::Credentials(err),
-            RusotoError::Validation(err) => RusotoError::Validation(err),
-            RusotoError::ParseError(err) => RusotoError::ParseError(err),
-            RusotoError::Unknown(res) => Self::from_response(res),
-            RusotoError::Blocking => RusotoError::Blocking,
-        }
-    }
 }
 impl fmt::Display for TagStreamError {
     #[allow(unused_variables)]
@@ -1642,18 +1464,6 @@ impl UntagResourceError {
             }
         }
         RusotoError::Unknown(res)
-    }
-
-    fn refine(err: RusotoError<std::convert::Infallible>) -> RusotoError<UntagResourceError> {
-        match err {
-            RusotoError::Service(err) => match err {},
-            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
-            RusotoError::Credentials(err) => RusotoError::Credentials(err),
-            RusotoError::Validation(err) => RusotoError::Validation(err),
-            RusotoError::ParseError(err) => RusotoError::ParseError(err),
-            RusotoError::Unknown(res) => Self::from_response(res),
-            RusotoError::Blocking => RusotoError::Blocking,
-        }
     }
 }
 impl fmt::Display for UntagResourceError {
@@ -1707,18 +1517,6 @@ impl UntagStreamError {
             }
         }
         RusotoError::Unknown(res)
-    }
-
-    fn refine(err: RusotoError<std::convert::Infallible>) -> RusotoError<UntagStreamError> {
-        match err {
-            RusotoError::Service(err) => match err {},
-            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
-            RusotoError::Credentials(err) => RusotoError::Credentials(err),
-            RusotoError::Validation(err) => RusotoError::Validation(err),
-            RusotoError::ParseError(err) => RusotoError::ParseError(err),
-            RusotoError::Unknown(res) => Self::from_response(res),
-            RusotoError::Blocking => RusotoError::Blocking,
-        }
     }
 }
 impl fmt::Display for UntagStreamError {
@@ -1782,18 +1580,6 @@ impl UpdateDataRetentionError {
             }
         }
         RusotoError::Unknown(res)
-    }
-
-    fn refine(err: RusotoError<std::convert::Infallible>) -> RusotoError<UpdateDataRetentionError> {
-        match err {
-            RusotoError::Service(err) => match err {},
-            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
-            RusotoError::Credentials(err) => RusotoError::Credentials(err),
-            RusotoError::Validation(err) => RusotoError::Validation(err),
-            RusotoError::ParseError(err) => RusotoError::ParseError(err),
-            RusotoError::Unknown(res) => Self::from_response(res),
-            RusotoError::Blocking => RusotoError::Blocking,
-        }
     }
 }
 impl fmt::Display for UpdateDataRetentionError {
@@ -1865,20 +1651,6 @@ impl UpdateSignalingChannelError {
         }
         RusotoError::Unknown(res)
     }
-
-    fn refine(
-        err: RusotoError<std::convert::Infallible>,
-    ) -> RusotoError<UpdateSignalingChannelError> {
-        match err {
-            RusotoError::Service(err) => match err {},
-            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
-            RusotoError::Credentials(err) => RusotoError::Credentials(err),
-            RusotoError::Validation(err) => RusotoError::Validation(err),
-            RusotoError::ParseError(err) => RusotoError::ParseError(err),
-            RusotoError::Unknown(res) => Self::from_response(res),
-            RusotoError::Blocking => RusotoError::Blocking,
-        }
-    }
 }
 impl fmt::Display for UpdateSignalingChannelError {
     #[allow(unused_variables)]
@@ -1938,18 +1710,6 @@ impl UpdateStreamError {
             }
         }
         RusotoError::Unknown(res)
-    }
-
-    fn refine(err: RusotoError<std::convert::Infallible>) -> RusotoError<UpdateStreamError> {
-        match err {
-            RusotoError::Service(err) => match err {},
-            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
-            RusotoError::Credentials(err) => RusotoError::Credentials(err),
-            RusotoError::Validation(err) => RusotoError::Validation(err),
-            RusotoError::ParseError(err) => RusotoError::ParseError(err),
-            RusotoError::Unknown(res) => Self::from_response(res),
-            RusotoError::Blocking => RusotoError::Blocking,
-        }
     }
 }
 impl fmt::Display for UpdateStreamError {

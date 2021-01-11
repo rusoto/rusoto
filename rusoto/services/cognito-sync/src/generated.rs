@@ -734,18 +734,6 @@ impl BulkPublishError {
         }
         RusotoError::Unknown(res)
     }
-
-    fn refine(err: RusotoError<std::convert::Infallible>) -> RusotoError<BulkPublishError> {
-        match err {
-            RusotoError::Service(err) => match err {},
-            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
-            RusotoError::Credentials(err) => RusotoError::Credentials(err),
-            RusotoError::Validation(err) => RusotoError::Validation(err),
-            RusotoError::ParseError(err) => RusotoError::ParseError(err),
-            RusotoError::Unknown(res) => Self::from_response(res),
-            RusotoError::Blocking => RusotoError::Blocking,
-        }
-    }
 }
 impl fmt::Display for BulkPublishError {
     #[allow(unused_variables)]
@@ -806,18 +794,6 @@ impl DeleteDatasetError {
         }
         RusotoError::Unknown(res)
     }
-
-    fn refine(err: RusotoError<std::convert::Infallible>) -> RusotoError<DeleteDatasetError> {
-        match err {
-            RusotoError::Service(err) => match err {},
-            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
-            RusotoError::Credentials(err) => RusotoError::Credentials(err),
-            RusotoError::Validation(err) => RusotoError::Validation(err),
-            RusotoError::ParseError(err) => RusotoError::ParseError(err),
-            RusotoError::Unknown(res) => Self::from_response(res),
-            RusotoError::Blocking => RusotoError::Blocking,
-        }
-    }
 }
 impl fmt::Display for DeleteDatasetError {
     #[allow(unused_variables)]
@@ -872,18 +848,6 @@ impl DescribeDatasetError {
             }
         }
         RusotoError::Unknown(res)
-    }
-
-    fn refine(err: RusotoError<std::convert::Infallible>) -> RusotoError<DescribeDatasetError> {
-        match err {
-            RusotoError::Service(err) => match err {},
-            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
-            RusotoError::Credentials(err) => RusotoError::Credentials(err),
-            RusotoError::Validation(err) => RusotoError::Validation(err),
-            RusotoError::ParseError(err) => RusotoError::ParseError(err),
-            RusotoError::Unknown(res) => Self::from_response(res),
-            RusotoError::Blocking => RusotoError::Blocking,
-        }
     }
 }
 impl fmt::Display for DescribeDatasetError {
@@ -949,20 +913,6 @@ impl DescribeIdentityPoolUsageError {
         }
         RusotoError::Unknown(res)
     }
-
-    fn refine(
-        err: RusotoError<std::convert::Infallible>,
-    ) -> RusotoError<DescribeIdentityPoolUsageError> {
-        match err {
-            RusotoError::Service(err) => match err {},
-            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
-            RusotoError::Credentials(err) => RusotoError::Credentials(err),
-            RusotoError::Validation(err) => RusotoError::Validation(err),
-            RusotoError::ParseError(err) => RusotoError::ParseError(err),
-            RusotoError::Unknown(res) => Self::from_response(res),
-            RusotoError::Blocking => RusotoError::Blocking,
-        }
-    }
 }
 impl fmt::Display for DescribeIdentityPoolUsageError {
     #[allow(unused_variables)]
@@ -1023,20 +973,6 @@ impl DescribeIdentityUsageError {
         }
         RusotoError::Unknown(res)
     }
-
-    fn refine(
-        err: RusotoError<std::convert::Infallible>,
-    ) -> RusotoError<DescribeIdentityUsageError> {
-        match err {
-            RusotoError::Service(err) => match err {},
-            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
-            RusotoError::Credentials(err) => RusotoError::Credentials(err),
-            RusotoError::Validation(err) => RusotoError::Validation(err),
-            RusotoError::ParseError(err) => RusotoError::ParseError(err),
-            RusotoError::Unknown(res) => Self::from_response(res),
-            RusotoError::Blocking => RusotoError::Blocking,
-        }
-    }
 }
 impl fmt::Display for DescribeIdentityUsageError {
     #[allow(unused_variables)]
@@ -1090,20 +1026,6 @@ impl GetBulkPublishDetailsError {
         }
         RusotoError::Unknown(res)
     }
-
-    fn refine(
-        err: RusotoError<std::convert::Infallible>,
-    ) -> RusotoError<GetBulkPublishDetailsError> {
-        match err {
-            RusotoError::Service(err) => match err {},
-            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
-            RusotoError::Credentials(err) => RusotoError::Credentials(err),
-            RusotoError::Validation(err) => RusotoError::Validation(err),
-            RusotoError::ParseError(err) => RusotoError::ParseError(err),
-            RusotoError::Unknown(res) => Self::from_response(res),
-            RusotoError::Blocking => RusotoError::Blocking,
-        }
-    }
 }
 impl fmt::Display for GetBulkPublishDetailsError {
     #[allow(unused_variables)]
@@ -1156,18 +1078,6 @@ impl GetCognitoEventsError {
             }
         }
         RusotoError::Unknown(res)
-    }
-
-    fn refine(err: RusotoError<std::convert::Infallible>) -> RusotoError<GetCognitoEventsError> {
-        match err {
-            RusotoError::Service(err) => match err {},
-            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
-            RusotoError::Credentials(err) => RusotoError::Credentials(err),
-            RusotoError::Validation(err) => RusotoError::Validation(err),
-            RusotoError::ParseError(err) => RusotoError::ParseError(err),
-            RusotoError::Unknown(res) => Self::from_response(res),
-            RusotoError::Blocking => RusotoError::Blocking,
-        }
     }
 }
 impl fmt::Display for GetCognitoEventsError {
@@ -1235,20 +1145,6 @@ impl GetIdentityPoolConfigurationError {
         }
         RusotoError::Unknown(res)
     }
-
-    fn refine(
-        err: RusotoError<std::convert::Infallible>,
-    ) -> RusotoError<GetIdentityPoolConfigurationError> {
-        match err {
-            RusotoError::Service(err) => match err {},
-            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
-            RusotoError::Credentials(err) => RusotoError::Credentials(err),
-            RusotoError::Validation(err) => RusotoError::Validation(err),
-            RusotoError::ParseError(err) => RusotoError::ParseError(err),
-            RusotoError::Unknown(res) => Self::from_response(res),
-            RusotoError::Blocking => RusotoError::Blocking,
-        }
-    }
 }
 impl fmt::Display for GetIdentityPoolConfigurationError {
     #[allow(unused_variables)]
@@ -1302,18 +1198,6 @@ impl ListDatasetsError {
         }
         RusotoError::Unknown(res)
     }
-
-    fn refine(err: RusotoError<std::convert::Infallible>) -> RusotoError<ListDatasetsError> {
-        match err {
-            RusotoError::Service(err) => match err {},
-            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
-            RusotoError::Credentials(err) => RusotoError::Credentials(err),
-            RusotoError::Validation(err) => RusotoError::Validation(err),
-            RusotoError::ParseError(err) => RusotoError::ParseError(err),
-            RusotoError::Unknown(res) => Self::from_response(res),
-            RusotoError::Blocking => RusotoError::Blocking,
-        }
-    }
 }
 impl fmt::Display for ListDatasetsError {
     #[allow(unused_variables)]
@@ -1366,20 +1250,6 @@ impl ListIdentityPoolUsageError {
         }
         RusotoError::Unknown(res)
     }
-
-    fn refine(
-        err: RusotoError<std::convert::Infallible>,
-    ) -> RusotoError<ListIdentityPoolUsageError> {
-        match err {
-            RusotoError::Service(err) => match err {},
-            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
-            RusotoError::Credentials(err) => RusotoError::Credentials(err),
-            RusotoError::Validation(err) => RusotoError::Validation(err),
-            RusotoError::ParseError(err) => RusotoError::ParseError(err),
-            RusotoError::Unknown(res) => Self::from_response(res),
-            RusotoError::Blocking => RusotoError::Blocking,
-        }
-    }
 }
 impl fmt::Display for ListIdentityPoolUsageError {
     #[allow(unused_variables)]
@@ -1427,18 +1297,6 @@ impl ListRecordsError {
             }
         }
         RusotoError::Unknown(res)
-    }
-
-    fn refine(err: RusotoError<std::convert::Infallible>) -> RusotoError<ListRecordsError> {
-        match err {
-            RusotoError::Service(err) => match err {},
-            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
-            RusotoError::Credentials(err) => RusotoError::Credentials(err),
-            RusotoError::Validation(err) => RusotoError::Validation(err),
-            RusotoError::ParseError(err) => RusotoError::ParseError(err),
-            RusotoError::Unknown(res) => Self::from_response(res),
-            RusotoError::Blocking => RusotoError::Blocking,
-        }
     }
 }
 impl fmt::Display for ListRecordsError {
@@ -1498,18 +1356,6 @@ impl RegisterDeviceError {
         }
         RusotoError::Unknown(res)
     }
-
-    fn refine(err: RusotoError<std::convert::Infallible>) -> RusotoError<RegisterDeviceError> {
-        match err {
-            RusotoError::Service(err) => match err {},
-            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
-            RusotoError::Credentials(err) => RusotoError::Credentials(err),
-            RusotoError::Validation(err) => RusotoError::Validation(err),
-            RusotoError::ParseError(err) => RusotoError::ParseError(err),
-            RusotoError::Unknown(res) => Self::from_response(res),
-            RusotoError::Blocking => RusotoError::Blocking,
-        }
-    }
 }
 impl fmt::Display for RegisterDeviceError {
     #[allow(unused_variables)]
@@ -1564,18 +1410,6 @@ impl SetCognitoEventsError {
             }
         }
         RusotoError::Unknown(res)
-    }
-
-    fn refine(err: RusotoError<std::convert::Infallible>) -> RusotoError<SetCognitoEventsError> {
-        match err {
-            RusotoError::Service(err) => match err {},
-            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
-            RusotoError::Credentials(err) => RusotoError::Credentials(err),
-            RusotoError::Validation(err) => RusotoError::Validation(err),
-            RusotoError::ParseError(err) => RusotoError::ParseError(err),
-            RusotoError::Unknown(res) => Self::from_response(res),
-            RusotoError::Blocking => RusotoError::Blocking,
-        }
     }
 }
 impl fmt::Display for SetCognitoEventsError {
@@ -1650,20 +1484,6 @@ impl SetIdentityPoolConfigurationError {
         }
         RusotoError::Unknown(res)
     }
-
-    fn refine(
-        err: RusotoError<std::convert::Infallible>,
-    ) -> RusotoError<SetIdentityPoolConfigurationError> {
-        match err {
-            RusotoError::Service(err) => match err {},
-            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
-            RusotoError::Credentials(err) => RusotoError::Credentials(err),
-            RusotoError::Validation(err) => RusotoError::Validation(err),
-            RusotoError::ParseError(err) => RusotoError::ParseError(err),
-            RusotoError::Unknown(res) => Self::from_response(res),
-            RusotoError::Blocking => RusotoError::Blocking,
-        }
-    }
 }
 impl fmt::Display for SetIdentityPoolConfigurationError {
     #[allow(unused_variables)]
@@ -1731,18 +1551,6 @@ impl SubscribeToDatasetError {
             }
         }
         RusotoError::Unknown(res)
-    }
-
-    fn refine(err: RusotoError<std::convert::Infallible>) -> RusotoError<SubscribeToDatasetError> {
-        match err {
-            RusotoError::Service(err) => match err {},
-            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
-            RusotoError::Credentials(err) => RusotoError::Credentials(err),
-            RusotoError::Validation(err) => RusotoError::Validation(err),
-            RusotoError::ParseError(err) => RusotoError::ParseError(err),
-            RusotoError::Unknown(res) => Self::from_response(res),
-            RusotoError::Blocking => RusotoError::Blocking,
-        }
     }
 }
 impl fmt::Display for SubscribeToDatasetError {
@@ -1815,20 +1623,6 @@ impl UnsubscribeFromDatasetError {
             }
         }
         RusotoError::Unknown(res)
-    }
-
-    fn refine(
-        err: RusotoError<std::convert::Infallible>,
-    ) -> RusotoError<UnsubscribeFromDatasetError> {
-        match err {
-            RusotoError::Service(err) => match err {},
-            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
-            RusotoError::Credentials(err) => RusotoError::Credentials(err),
-            RusotoError::Validation(err) => RusotoError::Validation(err),
-            RusotoError::ParseError(err) => RusotoError::ParseError(err),
-            RusotoError::Unknown(res) => Self::from_response(res),
-            RusotoError::Blocking => RusotoError::Blocking,
-        }
     }
 }
 impl fmt::Display for UnsubscribeFromDatasetError {
@@ -1906,18 +1700,6 @@ impl UpdateRecordsError {
             }
         }
         RusotoError::Unknown(res)
-    }
-
-    fn refine(err: RusotoError<std::convert::Infallible>) -> RusotoError<UpdateRecordsError> {
-        match err {
-            RusotoError::Service(err) => match err {},
-            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
-            RusotoError::Credentials(err) => RusotoError::Credentials(err),
-            RusotoError::Validation(err) => RusotoError::Validation(err),
-            RusotoError::ParseError(err) => RusotoError::ParseError(err),
-            RusotoError::Unknown(res) => Self::from_response(res),
-            RusotoError::Blocking => RusotoError::Blocking,
-        }
     }
 }
 impl fmt::Display for UpdateRecordsError {

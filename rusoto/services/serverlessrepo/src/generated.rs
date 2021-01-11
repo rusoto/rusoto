@@ -1079,18 +1079,6 @@ impl CreateApplicationError {
         }
         RusotoError::Unknown(res)
     }
-
-    fn refine(err: RusotoError<std::convert::Infallible>) -> RusotoError<CreateApplicationError> {
-        match err {
-            RusotoError::Service(err) => match err {},
-            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
-            RusotoError::Credentials(err) => RusotoError::Credentials(err),
-            RusotoError::Validation(err) => RusotoError::Validation(err),
-            RusotoError::ParseError(err) => RusotoError::ParseError(err),
-            RusotoError::Unknown(res) => Self::from_response(res),
-            RusotoError::Blocking => RusotoError::Blocking,
-        }
-    }
 }
 impl fmt::Display for CreateApplicationError {
     #[allow(unused_variables)]
@@ -1148,20 +1136,6 @@ impl CreateApplicationVersionError {
             }
         }
         RusotoError::Unknown(res)
-    }
-
-    fn refine(
-        err: RusotoError<std::convert::Infallible>,
-    ) -> RusotoError<CreateApplicationVersionError> {
-        match err {
-            RusotoError::Service(err) => match err {},
-            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
-            RusotoError::Credentials(err) => RusotoError::Credentials(err),
-            RusotoError::Validation(err) => RusotoError::Validation(err),
-            RusotoError::ParseError(err) => RusotoError::ParseError(err),
-            RusotoError::Unknown(res) => Self::from_response(res),
-            RusotoError::Blocking => RusotoError::Blocking,
-        }
     }
 }
 impl fmt::Display for CreateApplicationVersionError {
@@ -1221,20 +1195,6 @@ impl CreateCloudFormationChangeSetError {
             }
         }
         RusotoError::Unknown(res)
-    }
-
-    fn refine(
-        err: RusotoError<std::convert::Infallible>,
-    ) -> RusotoError<CreateCloudFormationChangeSetError> {
-        match err {
-            RusotoError::Service(err) => match err {},
-            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
-            RusotoError::Credentials(err) => RusotoError::Credentials(err),
-            RusotoError::Validation(err) => RusotoError::Validation(err),
-            RusotoError::ParseError(err) => RusotoError::ParseError(err),
-            RusotoError::Unknown(res) => Self::from_response(res),
-            RusotoError::Blocking => RusotoError::Blocking,
-        }
     }
 }
 impl fmt::Display for CreateCloudFormationChangeSetError {
@@ -1305,20 +1265,6 @@ impl CreateCloudFormationTemplateError {
         }
         RusotoError::Unknown(res)
     }
-
-    fn refine(
-        err: RusotoError<std::convert::Infallible>,
-    ) -> RusotoError<CreateCloudFormationTemplateError> {
-        match err {
-            RusotoError::Service(err) => match err {},
-            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
-            RusotoError::Credentials(err) => RusotoError::Credentials(err),
-            RusotoError::Validation(err) => RusotoError::Validation(err),
-            RusotoError::ParseError(err) => RusotoError::ParseError(err),
-            RusotoError::Unknown(res) => Self::from_response(res),
-            RusotoError::Blocking => RusotoError::Blocking,
-        }
-    }
 }
 impl fmt::Display for CreateCloudFormationTemplateError {
     #[allow(unused_variables)]
@@ -1382,18 +1328,6 @@ impl DeleteApplicationError {
         }
         RusotoError::Unknown(res)
     }
-
-    fn refine(err: RusotoError<std::convert::Infallible>) -> RusotoError<DeleteApplicationError> {
-        match err {
-            RusotoError::Service(err) => match err {},
-            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
-            RusotoError::Credentials(err) => RusotoError::Credentials(err),
-            RusotoError::Validation(err) => RusotoError::Validation(err),
-            RusotoError::ParseError(err) => RusotoError::ParseError(err),
-            RusotoError::Unknown(res) => Self::from_response(res),
-            RusotoError::Blocking => RusotoError::Blocking,
-        }
-    }
 }
 impl fmt::Display for DeleteApplicationError {
     #[allow(unused_variables)]
@@ -1448,18 +1382,6 @@ impl GetApplicationError {
             }
         }
         RusotoError::Unknown(res)
-    }
-
-    fn refine(err: RusotoError<std::convert::Infallible>) -> RusotoError<GetApplicationError> {
-        match err {
-            RusotoError::Service(err) => match err {},
-            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
-            RusotoError::Credentials(err) => RusotoError::Credentials(err),
-            RusotoError::Validation(err) => RusotoError::Validation(err),
-            RusotoError::ParseError(err) => RusotoError::ParseError(err),
-            RusotoError::Unknown(res) => Self::from_response(res),
-            RusotoError::Blocking => RusotoError::Blocking,
-        }
     }
 }
 impl fmt::Display for GetApplicationError {
@@ -1518,20 +1440,6 @@ impl GetApplicationPolicyError {
             }
         }
         RusotoError::Unknown(res)
-    }
-
-    fn refine(
-        err: RusotoError<std::convert::Infallible>,
-    ) -> RusotoError<GetApplicationPolicyError> {
-        match err {
-            RusotoError::Service(err) => match err {},
-            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
-            RusotoError::Credentials(err) => RusotoError::Credentials(err),
-            RusotoError::Validation(err) => RusotoError::Validation(err),
-            RusotoError::ParseError(err) => RusotoError::ParseError(err),
-            RusotoError::Unknown(res) => Self::from_response(res),
-            RusotoError::Blocking => RusotoError::Blocking,
-        }
     }
 }
 impl fmt::Display for GetApplicationPolicyError {
@@ -1592,20 +1500,6 @@ impl GetCloudFormationTemplateError {
             }
         }
         RusotoError::Unknown(res)
-    }
-
-    fn refine(
-        err: RusotoError<std::convert::Infallible>,
-    ) -> RusotoError<GetCloudFormationTemplateError> {
-        match err {
-            RusotoError::Service(err) => match err {},
-            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
-            RusotoError::Credentials(err) => RusotoError::Credentials(err),
-            RusotoError::Validation(err) => RusotoError::Validation(err),
-            RusotoError::ParseError(err) => RusotoError::ParseError(err),
-            RusotoError::Unknown(res) => Self::from_response(res),
-            RusotoError::Blocking => RusotoError::Blocking,
-        }
     }
 }
 impl fmt::Display for GetCloudFormationTemplateError {
@@ -1675,20 +1569,6 @@ impl ListApplicationDependenciesError {
         }
         RusotoError::Unknown(res)
     }
-
-    fn refine(
-        err: RusotoError<std::convert::Infallible>,
-    ) -> RusotoError<ListApplicationDependenciesError> {
-        match err {
-            RusotoError::Service(err) => match err {},
-            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
-            RusotoError::Credentials(err) => RusotoError::Credentials(err),
-            RusotoError::Validation(err) => RusotoError::Validation(err),
-            RusotoError::ParseError(err) => RusotoError::ParseError(err),
-            RusotoError::Unknown(res) => Self::from_response(res),
-            RusotoError::Blocking => RusotoError::Blocking,
-        }
-    }
 }
 impl fmt::Display for ListApplicationDependenciesError {
     #[allow(unused_variables)]
@@ -1749,20 +1629,6 @@ impl ListApplicationVersionsError {
         }
         RusotoError::Unknown(res)
     }
-
-    fn refine(
-        err: RusotoError<std::convert::Infallible>,
-    ) -> RusotoError<ListApplicationVersionsError> {
-        match err {
-            RusotoError::Service(err) => match err {},
-            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
-            RusotoError::Credentials(err) => RusotoError::Credentials(err),
-            RusotoError::Validation(err) => RusotoError::Validation(err),
-            RusotoError::ParseError(err) => RusotoError::ParseError(err),
-            RusotoError::Unknown(res) => Self::from_response(res),
-            RusotoError::Blocking => RusotoError::Blocking,
-        }
-    }
 }
 impl fmt::Display for ListApplicationVersionsError {
     #[allow(unused_variables)]
@@ -1813,18 +1679,6 @@ impl ListApplicationsError {
             }
         }
         RusotoError::Unknown(res)
-    }
-
-    fn refine(err: RusotoError<std::convert::Infallible>) -> RusotoError<ListApplicationsError> {
-        match err {
-            RusotoError::Service(err) => match err {},
-            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
-            RusotoError::Credentials(err) => RusotoError::Credentials(err),
-            RusotoError::Validation(err) => RusotoError::Validation(err),
-            RusotoError::ParseError(err) => RusotoError::ParseError(err),
-            RusotoError::Unknown(res) => Self::from_response(res),
-            RusotoError::Blocking => RusotoError::Blocking,
-        }
     }
 }
 impl fmt::Display for ListApplicationsError {
@@ -1883,20 +1737,6 @@ impl PutApplicationPolicyError {
         }
         RusotoError::Unknown(res)
     }
-
-    fn refine(
-        err: RusotoError<std::convert::Infallible>,
-    ) -> RusotoError<PutApplicationPolicyError> {
-        match err {
-            RusotoError::Service(err) => match err {},
-            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
-            RusotoError::Credentials(err) => RusotoError::Credentials(err),
-            RusotoError::Validation(err) => RusotoError::Validation(err),
-            RusotoError::ParseError(err) => RusotoError::ParseError(err),
-            RusotoError::Unknown(res) => Self::from_response(res),
-            RusotoError::Blocking => RusotoError::Blocking,
-        }
-    }
 }
 impl fmt::Display for PutApplicationPolicyError {
     #[allow(unused_variables)]
@@ -1952,18 +1792,6 @@ impl UnshareApplicationError {
             }
         }
         RusotoError::Unknown(res)
-    }
-
-    fn refine(err: RusotoError<std::convert::Infallible>) -> RusotoError<UnshareApplicationError> {
-        match err {
-            RusotoError::Service(err) => match err {},
-            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
-            RusotoError::Credentials(err) => RusotoError::Credentials(err),
-            RusotoError::Validation(err) => RusotoError::Validation(err),
-            RusotoError::ParseError(err) => RusotoError::ParseError(err),
-            RusotoError::Unknown(res) => Self::from_response(res),
-            RusotoError::Blocking => RusotoError::Blocking,
-        }
     }
 }
 impl fmt::Display for UnshareApplicationError {
@@ -2025,18 +1853,6 @@ impl UpdateApplicationError {
             }
         }
         RusotoError::Unknown(res)
-    }
-
-    fn refine(err: RusotoError<std::convert::Infallible>) -> RusotoError<UpdateApplicationError> {
-        match err {
-            RusotoError::Service(err) => match err {},
-            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
-            RusotoError::Credentials(err) => RusotoError::Credentials(err),
-            RusotoError::Validation(err) => RusotoError::Validation(err),
-            RusotoError::ParseError(err) => RusotoError::ParseError(err),
-            RusotoError::Unknown(res) => Self::from_response(res),
-            RusotoError::Blocking => RusotoError::Blocking,
-        }
     }
 }
 impl fmt::Display for UpdateApplicationError {
